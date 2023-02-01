@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>docs/pangaea-mobile-app_user-manual_ru.pdf</file>
+        <file>docs/pangaea-mobile-app_user-manual.pdf</file>
+        <file>docs/pangaea-VC-16-user-manual.pdf</file>
+        <file>docs/pangaea-VC-16-user-manual_en.pdf</file>
+        <file>docs/pangaea-VC-16-user-manual_ru.pdf</file>
+    </qresource>
+</RCC>

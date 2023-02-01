@@ -1,0 +1,5 @@
+module ControlGroups
+
+DocumentationWindow 1.0 DocumentationWindow.qml
+MasterControls 1.0 MasterControls.qml
+PresetsWindow 1.0 PresetsWindow.qml
