@@ -1,0 +1,17 @@
+module Modules
+
+BaseModule 1.0 BaseModule.qml
+Cm 1.0 Cm.qml
+Eqs 1.0 Eqs.qml
+EqsMap 1.0 EqsMap.qml
+Er 1.0 Er.qml
+Ng 1.0 Ng.qml
+Hp 1.0 Hp.qml
+InOut 1.0 InOut.qml
+Ir 1.0 Ir.qml
+Lp 1.0 Lp.qml
+Map 1.0 Map.qml
+Pa 1.0 Pa.qml
+Pr 1.0 Pr.qml
+Ps 1.0 Ps.qml
+Vl 1.0 Vl.qml

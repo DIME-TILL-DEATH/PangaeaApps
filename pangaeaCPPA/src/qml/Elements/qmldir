@@ -1,0 +1,22 @@
+module Elements
+
+CheckText   1.0 CheckText.qml
+Dial        1.0 Dial.qml
+Eq          1.0 Eq.qml
+Logo        1.0 Logo.qml
+MapDelegate 1.0 MapDelegate.qml
+MapHeadBank 1.0 MapHeadBank.qml
+MapHeadPreset   1.0 MapHeadPreset.qml
+Material        1.0 Material.qml
+MButton         1.0 MButton.qml
+MText           1.0 MText.qml
+Pot             1.0 Pot.qml
+Presets         1.0 Presets.qml
+Switch2         1.0 Switch2.qml
+Switch3         1.0 Switch3.qml
+SwitchEqMap     1.0 SwitchEqMap.qml
+SwitchIr        1.0 SwitchIr.qml
+SwitchOutput    1.0 SwitchOutput.qml
+SwitchPostPre   1.0 SwitchPostPre.qml
+SwitchRoom      1.0 SwitchRoom.qml
+TypePA          1.0 TypePA.qml
