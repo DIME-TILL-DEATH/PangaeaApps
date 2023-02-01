@@ -1,3 +1,7 @@
+#Builds and copy from projects
+shared_libs/*
+WavConverterShell/output_bin/*
+
 # C++ objects and libs
 *.slo
 *.lo
