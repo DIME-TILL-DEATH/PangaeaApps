@@ -1,8 +1,8 @@
 desktop_bundle_output/release/*
 shared_libs/*
 WavConverterShell/output_bin/*
-
-#.exe
+*.exe
+*.zip
 
 # C++ objects and libs
 *.slo
