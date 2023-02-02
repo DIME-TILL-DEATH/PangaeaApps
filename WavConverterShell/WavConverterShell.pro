@@ -20,7 +20,7 @@ RESOURCES += qml.qrc
 
 
 win32:{
-    DESTDIR = $${PWD}\..\output_bin\
+    DESTDIR = $${PWD}\output_bin\
 
     RC_ICONS = $${PWD}\icons\spirit.ico
 
@@ -28,7 +28,7 @@ win32:{
         icons/spirit.ico \
         icons/suhr.ico
 
-    libsPath = $${PWD}/../../shared_libs/lib.win32
+    libsPath = $${PWD}/../shared_libs/lib.win32
 }
 
 mac:{
@@ -39,9 +39,9 @@ mac:{
 
     ICON = icons/spirit.icns
 
-    libsPath = $${PWD}/../../shared_libs/lib.mac
+    libsPath = $${PWD}/../shared_libs/lib.mac
 
-    destDir = $${PWD}/../output_bin/
+    destDir = $${PWD}/output_bin/
     # DESTDIR does not allow to run program without copying QT librarys
 #    QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/ -libpath=$${libsPath} $$escape_expand(\\n\\t)
 
@@ -50,7 +50,7 @@ mac:{
 
 }
 
-INCLUDEPATH += $${PWD}/../../shared_libs/include
+INCLUDEPATH += $${PWD}/../shared_libs/include
 LIBS += -L$${libsPath} -lWavConverterLib
 
 

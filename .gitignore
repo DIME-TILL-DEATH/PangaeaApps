@@ -1,6 +1,8 @@
-#Builds and copy from projects
+desktop_bundle_output/release/*
 shared_libs/*
 WavConverterShell/output_bin/*
+
+#.exe
 
 # C++ objects and libs
 *.slo

@@ -5,7 +5,7 @@
 #define ConverterName "IR converter tool"
 #define MyAppNameUn "Uninstall AMT Pangaea CP PA"
 
-#define MyAppVersion "1.0.1707.1"
+#define MyAppVersionREPLACE
 #define MyAppPublisher "AMT Electronics"
 #define MyAppURL "http://www.amtelectronics.com/"
 #define MyAppExeName "PangaeaCPPA.exe"
@@ -27,12 +27,12 @@ DefaultGroupName={#MyAppPublisher}
 ;DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename=PangaeaCPPA_Setup
-SetupIconFile=..\icons\pangaea_amt.ico
+SetupIconFile=.\resources\pangaea_amt.ico
 Compression=lzma
 SolidCompression=yes
 DisableDirPage=no
 
-WizardSmallImageFile=logo.bmp
+WizardSmallImageFile=.\resources\logo.bmp
 UninstallDisplayIcon={app}\{#MyAppExeName}
 ;WizardImageFile=image.bmp
 

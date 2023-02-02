@@ -7,14 +7,14 @@ QT += qml quick svg
 QT += serialport
 
 win32: {
-    VERSION = 1.0.1707.1
+    VERSION = 1.0.1708.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1707
+else: VERSION = 1.0.1708
 
 CONFIG += c++11
 
@@ -69,14 +69,14 @@ macx {
     QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
     ICON = icons/pangaea.icns
 
-    libsPath = $${PWD}/../../shared_libs/lib.mac   
+    libsPath = $${PWD}/../shared_libs/lib.mac
 }
 
 win32 {
-    libsPath = $${PWD}/../../shared_libs/lib.win32
+    libsPath = $${PWD}/../shared_libs/lib.win32
 }
 
-INCLUDEPATH += $${PWD}/../../shared_libs/include
+INCLUDEPATH += $${PWD}/../shared_libs/include
 LIBS += -L$${libsPath} -lWavConverterLib
 
 DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.00\\\"
@@ -98,29 +98,32 @@ dirDocs = $${PWD}/docs/
 CONFIG(release, debug|release) {
     win32 {
         appBinaryFile = release/$${TARGET}.exe
-        converterBinaryFile = $${PWD}/../../WavConverterShell/output_bin/IrConverter.exe
-        dirDeploy = ..\\src\\deploy\\release
+        converterBinaryFile = $${PWD}/../WavConverterShell/output_bin/IrConverter.exe
+        dirDeploy = $${PWD}/../desktop_bundle_output
+        dirDeployRelease = $${dirDeploy}/release
 
         # replace slashes in source path for Windows
         appBinaryFile ~= s,/,\\,g
         converterBinaryFile ~= s,/,\\,g
         libsPath ~= s,/,\\,g
         dirDocs ~= s,/,\\,g
+        dirDeploy ~= s,/,\\,g
+        dirDeployRelease ~= s,/,\\,g
 
 
-        QMAKE_POST_LINK += windeployqt.exe  release/$${TARGET}.exe -qmldir=$${PWD}/qml/ --dir $$shell_quote($$dirDeploy) $$escape_expand(\\n\\t)# $$RETURN
-        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${appBinaryFile}) $$shell_quote($${dirDeploy}) $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${converterBinaryFile}) $$shell_quote($${dirDeploy}) $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${dirDeploy}) $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${dirDocs}) $$shell_quote($${dirDeploy}\\docs\\) $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += windeployqt.exe  release/$${TARGET}.exe -qmldir=$${PWD}/qml/ --dir $$shell_quote($$dirDeployRelease) $$escape_expand(\\n\\t)# $$RETURN
+        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${appBinaryFile}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${converterBinaryFile}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${dirDocs}) $$shell_quote($${dirDeployRelease}\\docs\\) $$escape_expand(\\n\\t)
 
         #place version in template file and create Inno setup installer
-        QMAKE_POST_LINK += powershell.exe $$shell_quote(((Get-Content ../src/deploy/template_script.iss) -replace  \'MyAppVersionREPLACE\',  \'MyAppVersion \"$${VERSION}\"\' | Out-file ../src/deploy/installer_script.iss -encoding ascii)) $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += ISCC.exe /O../src/deploy/output ../src/deploy/installer_script.iss
+        QMAKE_POST_LINK += powershell.exe $$shell_quote(((Get-Content $${dirDeploy}/template_script.iss) -replace  \'MyAppVersionREPLACE\',  \'MyAppVersion \"$${VERSION}\"\' | Out-file $${dirDeploy}/installer_script.iss -encoding ascii)) $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += ISCC.exe /O$${dirDeploy}/bin $${dirDeploy}/installer_script.iss $$escape_expand(\\n\\t)
     }
 
     macx {
-        converterBinary = $${PWD}/../../WavConverterShell/output_bin/IrConverter.app/Contents/MacOS/IrConverter
+        converterBinary = $${PWD}/../WavConverterShell/output_bin/IrConverter.app/Contents/MacOS/IrConverter
 
         QMAKE_POST_LINK += cp -r $${converterBinary} PangaeaCPPA.app/Contents/MacOS/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += cp -r $${dirDocs} PangaeaCPPA.app/Contents/MacOS/docs $$escape_expand(\\n\\t)
