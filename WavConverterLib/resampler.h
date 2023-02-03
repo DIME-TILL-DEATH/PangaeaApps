@@ -12,7 +12,7 @@ struct WavFormat
     quint32 maxFileSize;
 };
 
-class Resampler
+class Q_DECL_EXPORT Resampler
 {
     Q_GADGET
 public:
@@ -40,5 +40,4 @@ private:
     QMetaEnum enumResultSox;
 
 };
-
 #endif // RESAMPLER_H

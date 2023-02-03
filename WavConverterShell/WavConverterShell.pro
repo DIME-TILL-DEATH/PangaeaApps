@@ -19,7 +19,7 @@ RESOURCES += qml.qrc
 
 
 
-win32:{
+win32{
     DESTDIR = $${PWD}\output_bin\
 
     RC_ICONS = $${PWD}\icons\spirit.ico
@@ -28,8 +28,9 @@ win32:{
         icons/spirit.ico \
         icons/suhr.ico
 
-    libsPath = $${PWD}/../shared_libs/lib.win32
 }
+win32-g++: libsPath = $${PWD}/../shared_libs/lib.mingw32
+win32-msvc: libsPath = $${PWD}/../shared_libs/lib.msvc2019
 
 mac:{
 

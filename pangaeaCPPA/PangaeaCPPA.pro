@@ -72,9 +72,9 @@ macx {
     libsPath = $${PWD}/../shared_libs/lib.mac
 }
 
-win32 {
-    libsPath = $${PWD}/../shared_libs/lib.win32
-}
+win32-g++: libsPath = $${PWD}/../shared_libs/lib.mingw32
+win32-msvc: libsPath = $${PWD}/../shared_libs/lib.msvc2019
+
 
 INCLUDEPATH += $${PWD}/../shared_libs/include
 LIBS += -L$${libsPath} -lWavConverterLib
@@ -110,11 +110,11 @@ CONFIG(release, debug|release) {
         dirDeploy ~= s,/,\\,g
         dirDeployRelease ~= s,/,\\,g
 
-
-        QMAKE_POST_LINK += windeployqt.exe  release/$${TARGET}.exe -qmldir=$${PWD}/qml/ --dir $$shell_quote($$dirDeployRelease) $$escape_expand(\\n\\t)# $$RETURN
+        QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/windeployqt.exe --force release/$${TARGET}.exe --qmldir=$${PWD}/qml/ --dir $$shell_quote($$dirDeployRelease) $$escape_expand(\\n\\t)# $$RETURN
         QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${appBinaryFile}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${converterBinaryFile}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
+        win32-g++: QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
+        win32-msvc: QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}\\WavConverterLib.dll) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${dirDocs}) $$shell_quote($${dirDeployRelease}\\docs\\) $$escape_expand(\\n\\t)
 
         #place version in template file and create Inno setup installer
