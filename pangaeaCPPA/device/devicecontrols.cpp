@@ -88,7 +88,7 @@ void DeviceControls::setParametersFromRaw(QByteArray ba)
     quint8 count=0;
     quint8 nomByte=0;
 
-    foreach (quint8 val, ba)
+    foreach (QChar val, ba) //quint8
     {
         if((nomByte&1)==0)
         {

@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
+//import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 import Qt.labs.settings 1.0
 
 import QtQuick.Window 2.15
@@ -41,7 +42,8 @@ ApplicationWindow
     Settings
     {
         category: "Current_folder"
-        property alias curFolder: fileOpen.folder
+//        property alias curFolder: fileOpen.folder
+        property alias curFolder: fileOpen.currentFolder
     }
 
     header: MainMenu{
@@ -128,45 +130,83 @@ ApplicationWindow
 
         property int saveParam: 0
 
-        icon: StandardIcon.Question
+        //icon: StandardIcon.Question
         text: qsTr("Do you want to save changes?")
         title: qsTr("Save preset")
 
         // TODO standardButtons resize bug in qml
-        standardButtons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
-        onAccepted:
-        {
-            _uiCore.setParameter("save_change", saveParam);
-            _uiCore.setParameter("do_preset_change", saveParam);
-        }
-        onNo:
-        {
-            _uiCore.restoreParameter("impulse")
-            _uiCore.setParameter("do_preset_change", saveParam);
-        }
-        onRejected:
-        {
-            saveParam = 0
-            _uiCore.restoreParameter("preset")
-            _uiCore.restoreParameter("bank")
+//        standardButtons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
+//        onAccepted:
+//        {
+//            _uiCore.setParameter("save_change", saveParam);
+//            _uiCore.setParameter("do_preset_change", saveParam);
+//        }
+//        onNo: //onNo:
+//        {
+//            _uiCore.restoreParameter("impulse")
+//            _uiCore.setParameter("do_preset_change", saveParam);
+//        }
+//        onRejected:
+//        {
+//            saveParam = 0
+//            _uiCore.restoreParameter("preset")
+//            _uiCore.restoreParameter("bank")
+//        }
+        buttons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
+        onButtonClicked: function(button, role){
+            switch(button)
+            {
+                case MessageDialog.Save:
+                {
+                    _uiCore.setParameter("save_change", saveParam);
+                    _uiCore.setParameter("do_preset_change", saveParam);
+                    break;
+                }
+                case MessageDialog.No:
+                {
+                    _uiCore.restoreParameter("impulse")
+                    _uiCore.setParameter("do_preset_change", saveParam);
+                    break;
+                }
+                case MessageDialog.Cancel:
+                {
+                    saveParam = 0
+                    _uiCore.restoreParameter("preset")
+                    _uiCore.restoreParameter("bank")
+                    break;
+                }
+            }
         }
     }
 
     MessageDialog{
         id: msgIncorretIR
 
-        icon: StandardIcon.Warning
+        //icon: StandardIcon.Warning
         title: qsTr("Incorrect wav format")
 
-        standardButtons: MessageDialog.Yes | MessageDialog.No
+//        standardButtons: MessageDialog.Yes | MessageDialog.No
 
-        onYes: {
+//        onYes: {
 
-            var cleanPath = fileOpen.fileUrl.toString();
-            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+//            var cleanPath = fileOpen.fileUrl.toString();
+//            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            console.log("accepted, path", cleanPath);
-            _uiCore.convertAndUploadImpulse(cleanPath);
+//            console.log("accepted, path", cleanPath);
+//            _uiCore.convertAndUploadImpulse(cleanPath);
+//        }
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes:
+                var cleanPath = fileOpen.fileUrl.toString();
+                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+
+                console.log("accepted, path", cleanPath);
+                _uiCore.convertAndUploadImpulse(cleanPath);
+                break;
+            }
         }
     }
 
@@ -174,7 +214,7 @@ ApplicationWindow
     {
         id: msgError
 
-        icon: StandardIcon.Critical
+        //icon: StandardIcon.Critical
         title: qsTr("Error")
         text: qsTr("Device is disconnected")
     }
@@ -183,7 +223,7 @@ ApplicationWindow
     {
         id: _msgVersionError
 
-        icon: StandardIcon.Warning
+        //icon: StandardIcon.Warning
         title: qsTr("Warning")
         text: qsTr("Version error!")
     }

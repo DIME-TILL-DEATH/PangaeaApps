@@ -2,7 +2,7 @@
 #define PARSER_H
 
 #include <QObject>
-#include <QRegExp>
+//#include <QRegExp>
 #include <QString>
 
 class Parser : public QObject

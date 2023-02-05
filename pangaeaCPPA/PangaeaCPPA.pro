@@ -7,14 +7,14 @@ QT += qml quick svg
 QT += serialport
 
 win32: {
-    VERSION = 1.0.1708.1
+    VERSION = 1.0.1709.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1708
+else: VERSION = 1.0.1709
 
 CONFIG += c++11
 

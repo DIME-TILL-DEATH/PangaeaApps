@@ -59,7 +59,8 @@ bool Core::setDestinationPath(QString newDestinationPath)
 
 void Core::startConvert(QStringList fileList)
 {
-        QtConcurrent::run(this, &Core::convertFiles, fileList);
+//        QtConcurrent::run(this, &Core::convertFiles, fileList);
+    QtConcurrent::run(&Core::convertFiles, this, fileList);
 }
 
 void Core::convertFiles(QStringList inputFiles)

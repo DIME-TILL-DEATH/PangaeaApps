@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QGuiApplication>
+#include <QStandardPaths>
 
 #include <QFile>
 

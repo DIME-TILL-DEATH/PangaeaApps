@@ -1,6 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs //1.3
 
 import QtQuick.Window 2.15
 
@@ -93,8 +93,10 @@ MenuBar{
     Settings
     {
         category: "Current_folder"
-        property alias importFolder: importPresetDialog.folder
-        property alias exportFolder: exportPresetDialog.folder
+       // property alias importFolder: importPresetDialog.folder
+      //  property alias exportFolder: exportPresetDialog.folder
+         property alias importFolder: importPresetDialog.currentFolder
+         property alias exportFolder: exportPresetDialog.currentFolder
     }
 
     FileDialog{
@@ -102,9 +104,11 @@ MenuBar{
 
         title: qsTr("Import preset file")
 
-        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+//        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
 
-        selectMultiple: false
+        //selectMultiple: false
+        //fileMode: FileDialog.OpenFile
 
         onAccepted: {
             var cleanPath = fileUrl.toString();
@@ -119,10 +123,12 @@ MenuBar{
         title: qsTr("Export preset file")
         nameFilters: [ "Pangaea preset files (*.pst)" ]
 
-        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+//        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
 
-        selectExisting: false
-        selectMultiple: false
+        fileMode: FileDialog.SaveFile
+        //selectExisting: false
+        //selectMultiple: false
 
         onAccepted: {
             var cleanPath = fileUrl.toString();
