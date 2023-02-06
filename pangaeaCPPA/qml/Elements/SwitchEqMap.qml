@@ -75,8 +75,8 @@ Item
                     main.map=false;
                 else
                 {
-                    eqOn ^= 1;
-                    _uiCore.setParameter("eq_on", eqOn);
+                    //eqOn ^= 1;
+                    _uiCore.setParameter("eq_on", !eqOn);
                 }
                 redraw();
             }
@@ -114,6 +114,15 @@ Item
         {
             if(nameParam === "eq_on")
             {
+                main.eqOn = value;
+                redraw();
+            }
+        }
+        function onSgSetParameter(nameParam, value)
+        {
+            if(nameParam === "eq_on")
+            {
+                main.eqOn = value;
                 redraw();
             }
         }

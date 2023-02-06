@@ -113,7 +113,7 @@ ApplicationWindow
         {
             //TODO нужно ли?
             //modules.irEnable(true);
-            var cleanPath = fileOpen.fileUrl.toString();
+            var cleanPath = fileOpen.currentFile.toString();//fileOpen.fileUrl.toString();
             //lastSelectFile=fileOpen.fileUrl;
             cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
             _uiCore.setImpuls(cleanPath);
@@ -200,7 +200,7 @@ ApplicationWindow
         onButtonClicked: function (button, role) {
             switch(button){
             case MessageDialog.Yes:
-                var cleanPath = fileOpen.fileUrl.toString();
+                var cleanPath = fileOpen.currentFile.toString();//fileOpen.fileUrl.toString();
                 cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
                 console.log("accepted, path", cleanPath);
@@ -301,11 +301,13 @@ ApplicationWindow
             if(nameParam === "window_width")
             {
                 main.width = value;
+                main.x = Screen.width/2 - main.width/2
             }
 
             if(nameParam === "window_height")
             {
                 main.height = value;
+                main.y = Screen.height/2 - main.height/2
             }
 
             if(nameParam === "preset_edited")

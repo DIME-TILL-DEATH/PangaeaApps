@@ -20,7 +20,7 @@ Item
     {
         id: common
         anchors.fill: parent
-        color: main.on?devColor:devColorDis
+        color: main.on ? devColor : devColorDis
 
         Column
         {

@@ -111,8 +111,8 @@ MenuBar{
         //fileMode: FileDialog.OpenFile
 
         onAccepted: {
-            var cleanPath = fileUrl.toString();
-            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+            var cleanPath = currentFile.toString();//fileUrl.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
             _uiCore.importPreset(cleanPath);
         }
     }
@@ -131,8 +131,8 @@ MenuBar{
         //selectMultiple: false
 
         onAccepted: {
-            var cleanPath = fileUrl.toString();
-            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+            var cleanPath = currentFile.toString();//fileUrl.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
             _uiCore.exportPreset(cleanPath);
         }
     }

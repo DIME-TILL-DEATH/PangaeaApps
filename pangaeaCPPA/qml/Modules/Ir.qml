@@ -46,8 +46,8 @@ Item
 
                 onChValue:
                 {
-                        _uiCore.setParameter(nameValue, !value);
-                    console.log("tumbler value, chValue", _baseModule.contentProperties.value)
+                    _uiCore.setParameter(nameValue, !value);
+                    //console.log("tumbler value, chValue", _baseModule.contentProperties.value)
                 }
             }
             Item

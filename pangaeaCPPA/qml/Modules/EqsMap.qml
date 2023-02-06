@@ -19,7 +19,7 @@ Item
         nameValue: main.nameValue
 
         isHeaderVisible: false
-        on: main.on
+        on: true//main.on
 
         contentItem: Column
         {
@@ -42,26 +42,26 @@ Item
             {
                 height: parent.height/1000*928
                 width:  parent.width
-                MouseArea
-                {
-                    anchors.fill: parent
-                    enabled: !switchEnMap.eqOn
-                    hoverEnabled: true
-                    cursorShape:  Qt.PointingHandCursor
-                    onClicked:
-                    {
-                        if(!switchEnMap.eqOn)
-                        {
-                            switchEnMap.eqOn = true;
-                            _uiCore.setParameter("eq_on", switchEnMap.eqOn);
-                            switchEnMap.redraw();
-                        }
-                    }
-                }
+//                MouseArea
+//                {
+//                    anchors.fill: parent
+//                    enabled: !switchEnMap.eqOn
+//                    hoverEnabled: true
+//                    cursorShape:  Qt.PointingHandCursor
+//                    onClicked:
+//                    {
+//                        if(!switchEnMap.eqOn)
+//                        {
+//                            switchEnMap.eqOn = true;
+//                            _uiCore.setParameter("eq_on", switchEnMap.eqOn);
+//                            switchEnMap.redraw();
+//                        }
+//                    }
+//                }
 
                 Eqs
                 {
-                    on: switchEnMap.eqOn
+                    on: main.on
                     visible: !switchEnMap.map
                     anchors.fill: parent
                 }
@@ -78,11 +78,20 @@ Item
     Connections
     {
         target: _uiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUIParameter(nameParam, value)
         {
             if((nameParam === main.nameValue))
             {
-                main.on=nameValue
+                main.on=value
+            }
+        }
+
+        function onSgSetParameter(nameParam, value)
+        {
+            if((nameParam === main.nameValue))
+            {
+                main.on=value
+                console.log("EQS changed")
             }
         }
     }
