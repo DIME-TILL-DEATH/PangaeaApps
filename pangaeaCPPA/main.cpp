@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("AMT");
     app.setApplicationName("Pangaea");
 
+
     Logger log;
     log.setAsMessageHandlerForApp();
     appLogger_ptr = &log;
@@ -43,7 +44,7 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------
-    QObject::connect(threadController.backendThread(), &QThread::finished, &core, &Core::stopTimer, Qt::QueuedConnection);
+    QObject::connect(threadController.backendThread(), &QThread::finished, &core, &Core::stopCore);
 
     QObject::connect(&uiCore, &UiDesktopCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
@@ -53,10 +54,11 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiDesktopCore::sgSetImpuls, &core, &Core::setImpulse);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetFirmware, &core, &Core::setFirmware, Qt::QueuedConnection);
     QObject::connect(&uiCore, &UiDesktopCore::sgEscImpuls, &core, &Core::escImpulse);
-    QObject::connect(&uiCore, &UiDesktopCore::sgSw4Enable, &core, &Core::sw4Enable);
     QObject::connect(&uiCore, &UiDesktopCore::sgTranslatorChanged, &core, &Core::pushReadPresetCommands);
     QObject::connect(&uiCore, &UiDesktopCore::sgExportPreset, &core, &Core::exportPreset);
     QObject::connect(&uiCore, &UiDesktopCore::sgImportPreset, &core, &Core::importPreset);
+    QObject::connect(&uiCore, &UiDesktopCore::sgSw4Enable, &core, &Core::sw4Enable);
+    QObject::connect(&uiCore, &UiDesktopCore::sgUiClosing, &core, &Core::stopCore);
 
 //    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, &core, &Core::setModuleName);
 //    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, &bleConnection, &BluetoothleUART::setModuleName);

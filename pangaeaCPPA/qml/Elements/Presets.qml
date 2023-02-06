@@ -68,7 +68,8 @@ Item
                     }
                 }
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
-                onClicked:
+//                onClicked:
+                onClicked: (mouse)=>
                 {
                     if( mouse.modifiers & Qt.ControlModifier )
                     {

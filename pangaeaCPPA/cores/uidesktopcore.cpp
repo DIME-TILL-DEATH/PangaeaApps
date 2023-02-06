@@ -114,11 +114,6 @@ void UiDesktopCore::saveSetting(QString settingName, QVariant settingValue)
     qDebug() << __FUNCTION__ << "Setting name: " << settingName << "Setting value:" << settingValue;
 }
 
-void UiDesktopCore::sw4Enable()
-{
-
-}
-
 void UiDesktopCore::openManualExternally(QString fileName)
 {
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();

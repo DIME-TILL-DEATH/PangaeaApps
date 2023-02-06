@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "threadcontroller.h"
 
 ThreadController::ThreadController(QThread *mainThread)
@@ -7,12 +8,14 @@ ThreadController::ThreadController(QThread *mainThread)
 
     m_backendThread->setObjectName("Backend thread");
     m_backendThread->start();
+
+
 }
 
 ThreadController::~ThreadController()
 {
     m_backendThread->quit();
-//    m_backendThread->wait();
+    m_backendThread->wait();
 }
 
 QThread *ThreadController::mainThread() const

@@ -16,7 +16,6 @@
 #include "devicecontrols.h"
 #include "preset.h"
 #include "presetlistmodel.h"
-#include "parser.h"
 #include "presetmanager.h"
 
 #include "abstractinterface.h"
@@ -29,7 +28,6 @@ class Core : public QObject
     Q_OBJECT
 public:
     explicit Core(QObject *parent = nullptr);
-    ~Core(void);
 
     void registerQmlObjects(QQmlContext* qmlContext);
 
@@ -61,7 +59,7 @@ public:
 
     void sw4Enable();
 
-    void stopTimer();
+    void stopCore();
 
     void setPresetData(const Preset& preset);
 

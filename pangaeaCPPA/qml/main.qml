@@ -343,13 +343,12 @@ ApplicationWindow
         _uiCore.setupApplication();
     }
 
-    onClosing:
+    onClosing: function(close)
     {
         _uiCore.saveSetting("window_width", main.width);
         _uiCore.saveSetting("window_height", main.height);
         _uiCore.saveSetting("modules_right_aligned", Style.modulesRightAligned);
 
-        _uiCore.sw4Enable();
 
         if(main.edit && main.connected)
         {

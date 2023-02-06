@@ -47,8 +47,6 @@ public:
     Q_INVOKABLE void setLanguage(QString languageCode);
     Q_INVOKABLE void saveSetting(QString settingName, QVariant settingValue);
 
-    Q_INVOKABLE void sw4Enable();
-
     Q_INVOKABLE void openManualExternally(QString fileName);
     Q_INVOKABLE void runIrConvertor();
 
@@ -105,6 +103,8 @@ signals:
     void sgEscImpuls();
     void sgSw4Enable();
     void sgModuleNameChanged(QString name);
+
+    void sgUiClosing();
 
     void sgDoOnlineFirmwareUpdate();
 

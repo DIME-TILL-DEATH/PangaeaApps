@@ -1141,12 +1141,8 @@ void Core::sw4Enable()
     processCommands();
 }
 
-void Core::stopTimer()
+void Core::stopCore()
 {
     timer->stop();
-}
-
-Core::~Core()
-{
     exchangeInterface->disconnect();
 }
