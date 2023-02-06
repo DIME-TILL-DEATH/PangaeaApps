@@ -19,7 +19,7 @@ Item
         nameValue: main.nameValue
 
         isHeaderVisible: false
-        on: true//main.on
+        on: true
 
         contentItem: Column
         {
@@ -37,27 +37,10 @@ Item
                 z: _baseModule.z+1
             }
 
-
             Item
             {
                 height: parent.height/1000*928
                 width:  parent.width
-//                MouseArea
-//                {
-//                    anchors.fill: parent
-//                    enabled: !switchEnMap.eqOn
-//                    hoverEnabled: true
-//                    cursorShape:  Qt.PointingHandCursor
-//                    onClicked:
-//                    {
-//                        if(!switchEnMap.eqOn)
-//                        {
-//                            switchEnMap.eqOn = true;
-//                            _uiCore.setParameter("eq_on", switchEnMap.eqOn);
-//                            switchEnMap.redraw();
-//                        }
-//                    }
-//                }
 
                 Eqs
                 {
@@ -91,7 +74,6 @@ Item
             if((nameParam === main.nameValue))
             {
                 main.on=value
-                console.log("EQS changed")
             }
         }
     }

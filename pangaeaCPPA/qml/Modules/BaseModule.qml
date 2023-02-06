@@ -1,5 +1,5 @@
 import QtQuick 2.15
-//import QtQuick.Controls 1.5
+import QtQuick.Controls 2.15
 
 import Elements 1.0
 
@@ -29,8 +29,8 @@ Rectangle {
     Material
     {
         id: material
+        on: root.on
     }
-
 
     Column{
         anchors.fill: parent
@@ -50,7 +50,7 @@ Rectangle {
                 font.family: "Arial Black"
                 font.bold: true
                 font.pixelSize: parent.height/1.7
-                color: root.on ? " salmon":fonColor
+                color: root.on ? "salmon" : fonColor
                 text: moduleName
 
                 z: _contentContainer.z+1

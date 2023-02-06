@@ -75,7 +75,6 @@ Item
                     main.map=false;
                 else
                 {
-                    //eqOn ^= 1;
                     _uiCore.setParameter("eq_on", !eqOn);
                 }
                 redraw();
