@@ -44,7 +44,7 @@ mac:{
 
     destDir = $${PWD}/output_bin/
     # DESTDIR does not allow to run program without copying QT librarys
-#    QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/ -libpath=$${libsPath} $$escape_expand(\\n\\t)
+    QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/ -libpath=$${libsPath} $$escape_expand(\\n\\t)
 
     QMAKE_POST_LINK += mkdir -p $${destDir} $$escape_expand(\n\t)
     QMAKE_POST_LINK += cp -pr $${OUT_PWD}/$${TARGET}.app $${destDir} $$escape_expand(\n\t)
