@@ -8,17 +8,17 @@ DeviceDescription::DeviceDescription(QString name, QString address, DeviceConnec
 
 }
 
-const QString &DeviceDescription::name() const
+QString DeviceDescription::name()
 {
     return m_name;
 }
 
-DeviceConnectionType DeviceDescription::connectionType() const
+DeviceDescription::DeviceConnectionType DeviceDescription::connectionType() const
 {
     return m_connectionType;
 }
 
-const QString &DeviceDescription::address() const
+QString DeviceDescription::address()
 {
     return m_address;
 }

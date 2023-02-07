@@ -28,13 +28,11 @@ public:
     void discoverDevices();
     QList<DeviceDescription> discoveredDevicesList();
 
-    bool connect(DeviceDescription device); //dummy
+    bool connect(DeviceDescription device);
     bool isConnected();
-    void checkConnection(); //dummy
 
     void write(QByteArray data);
     void disconnect(); //dummy
-    void flushBuffers(); //dummy
 
     QString connectionDescription(); //dummy
 

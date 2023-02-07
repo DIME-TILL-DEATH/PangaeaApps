@@ -10,6 +10,8 @@
 #include "uidesktopcore.h"
 #include "logger.h"
 
+#include "devicedescription.h"
+
 #include "threadcontroller.h"
 
 void manageSegFailure(int signalCode);
@@ -33,6 +35,9 @@ int main(int argc, char *argv[])
     UiDesktopCore uiCore;
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
+
+    qRegisterMetaType<DeviceDescription>();
+    qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
     core.registerQmlObjects();
 
     ThreadController threadController(QThread::currentThread());
@@ -64,6 +69,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
     QObject::connect(&core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
+    QObject::connect(&core, &Core::sgSetUIDataList, &uiCore, &UiDesktopCore::sgSetUIDataList);
 //    QObject::connect(&core, &Core::sgUpdateBLEDevicesList, &uiCore, &UiDesktopCore::sgUpdateBLEDevicesList);
 //    QObject::connect(&core, &Core::sgConnectReady, &uiCore, &UiDesktopCore::sgConnectReady);
     QObject::connect(&core, &Core::sgPresetChangeStage, &uiCore, &UiDesktopCore::sgPresetChangeStage);

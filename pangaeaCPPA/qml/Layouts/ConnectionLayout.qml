@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Controls
 
 import Elements
-
 import StyleSettings
+import CppObjects 1.0
 
 Column {
     id: root
@@ -137,6 +137,25 @@ Column {
             id: listView
 
             anchors.fill: parent
+
+            delegate: Rectangle{
+                width: listView.width*0.75
+                height: width/5
+                MText{
+                    text: modelData.name + modelData.address
+                }
+            }
+        }
+    }
+
+    Connections{
+        target: UiCore
+
+        function onSgSetUIDataList(nameParam, list)
+        {
+            listView.model = list
+
+            console.log(list)
         }
     }
 }

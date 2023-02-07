@@ -12,7 +12,6 @@ public:
     enum InterfaceState {
         Idle = 0,
         Scanning,
-        UpdateDeviceList,
         UpdateModuleName,
         Connecting,
         Connected,
@@ -27,14 +26,12 @@ public:
     virtual QList<DeviceDescription> discoveredDevicesList() = 0;
 
     virtual bool connect(DeviceDescription device) = 0;
-    virtual void checkConnection() = 0; //TODO only for USB
     virtual bool isConnected() = 0;
 
     virtual void write(QByteArray data) = 0;
 
     virtual void disconnect() = 0;
 
-    virtual void flushBuffers() = 0; // TODO only for USB
     virtual QString connectionDescription() = 0;
 
     void setState(InterfaceState newState);

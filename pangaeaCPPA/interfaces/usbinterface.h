@@ -1,6 +1,7 @@
 #ifndef USBINTERFACE_H
 #define USBINTERFACE_H
 
+#include <QTimer>
 #include <QSerialPort>
 #include <QSerialPortInfo>
 
@@ -24,7 +25,6 @@ public:
 
     void write(QByteArray data);
     void disconnect();
-    void flushBuffers();
 
     QString connectionDescription();
 private slots:
@@ -32,8 +32,12 @@ private slots:
     void slError(QSerialPort::SerialPortError error);
     void slDestroyed(QObject* obj);
 
+    void slPortTimer();
+
 private:
     QSerialPort* m_port;
+    QTimer* m_timer;
+
     QList<DeviceDescription> m_discoveredDevices;
 
     void loadSettings();

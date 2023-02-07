@@ -115,7 +115,7 @@ void BleInterface::scanTimeout()
     checkDevicesAvaliabliy();
     updateBLEDevicesList();
 
-    if((state() == InterfaceState::Scanning) || (state()==InterfaceState::UpdateDeviceList))
+    if(state() == InterfaceState::Scanning)
     {
         qDebug() << "Restart scan";
         startScan();
@@ -173,7 +173,6 @@ void BleInterface::updateBLEDevicesList()
       DeviceDescription currentDescription{currentDevice.name() + uniqueName, strAddress, DeviceConnectionType::BLE};
       m_qlFoundDevices.append(currentDescription);
   }
- // setState(UpdateDeviceList);
   emit sgDeviceListUpdated();
 }
 
@@ -229,7 +228,7 @@ bool BleInterface::connect(DeviceDescription device)
     if(state() == InterfaceState::AcquireData)
         return true;
 
-    if(state() == InterfaceState::Scanning || state() == InterfaceState::UpdateDeviceList)
+    if(state() == InterfaceState::Scanning)
     {
         doConnect(0, device.address());
         setState(InterfaceState::Connecting);
@@ -241,11 +240,6 @@ bool BleInterface::connect(DeviceDescription device)
 bool BleInterface::isConnected()
 {
     return (state() == InterfaceState::AcquireData);
-}
-
-void BleInterface::checkConnection()
-{
-
 }
 
 void BleInterface::doConnect(qint8 numDev, QString address)
@@ -380,8 +374,9 @@ void BleInterface::deviceDisconnected()
     qDebug() << "UART service disconnected";
     qWarning() << "Remote device disconnected";
 
-    emit sgErrorDisconnected();
-    emit sgLocalBluetoothNotReady("DeviceUnavaliable");
+  //  emit sgErrorDisconnected();
+  //  emit sgLocalBluetoothNotReady("DeviceUnavaliable");
+    emit sgInterfaceError("Device disconnected");
 }
 
 void BleInterface::controllerError(QLowEnergyController::Error error)
@@ -452,11 +447,6 @@ void BleInterface::write(QByteArray data)
 }
 
 void BleInterface::disconnect()
-{
-
-}
-
-void BleInterface::flushBuffers()
 {
 
 }

@@ -850,10 +850,19 @@ void Core::slDeviceListUpdated()
     {
         qDebug()<<"Device list updated";
 
-        if(exchangeInterface->discoveredDevicesList().size() != 0)
+        QVariantList devicesList;
+        for(auto deviceDescription : exchangeInterface->discoveredDevicesList())
         {
-            exchangeInterface->connect(exchangeInterface->discoveredDevicesList().at(0));
+            QVariant var;
+            var.setValue(deviceDescription);
+            devicesList.append(var);
         }
+        emit sgSetUIDataList("discovered_devices", devicesList);
+
+//        if(exchangeInterface->discoveredDevicesList().size() != 0)
+//        {
+//            exchangeInterface->connect(exchangeInterface->discoveredDevicesList().at(0));
+//        }
     }
 }
 

@@ -9,15 +9,22 @@ UsbInterface::UsbInterface(QObject *parent)
     loadSettings();
 
     m_port = new QSerialPort(this);
+
+    m_timer = new QTimer(this);
+    m_timer->setInterval(1000);
+    m_timer->start();
     QIODevice::connect(m_port,  &QSerialPort::readyRead, this, &UsbInterface::slReadyRead);
 
     //TODO обработчики ошибок
     QIODevice::connect(m_port,  &QSerialPort::errorOccurred, this, &UsbInterface::slError);
     QIODevice::connect(m_port,  &QSerialPort::destroyed, this, &UsbInterface::slDestroyed);
+
+    QTimer::connect(m_timer, &QTimer::timeout, this, &UsbInterface::slPortTimer);
 }
 
 void UsbInterface::discoverDevices()
 {
+    setState(InterfaceState::Scanning);
     m_discoveredDevices.clear();
 
     if(isManualConnectAllowed)
@@ -42,6 +49,7 @@ void UsbInterface::discoverDevices()
 
 bool UsbInterface::connect(DeviceDescription device)
 {
+    setState(InterfaceState::Connecting);
     qDebug() << "Connecting to device:" << device.name() << " on port: " << device.address();
 
     if(m_port->isOpen())
@@ -61,7 +69,13 @@ bool UsbInterface::connect(DeviceDescription device)
 
     if(isPortOpened)
     {
-        qDebug() << __FUNCTION__<<__LINE__<<"Port is opened";
+        qDebug() << __FUNCTION__<< "Serial port is opened";
+        emit sgInterfaceConnected();
+        setState(InterfaceState::AcquireData);
+    }
+    else
+    {
+        prevState();
     }
     return isPortOpened;
 }
@@ -84,7 +98,7 @@ QList<DeviceDescription> UsbInterface::discoveredDevicesList()
 
 void UsbInterface::checkConnection()
 {
-    // TODO legacy костыль. Так до меня ловили ошибку при отключении USB. Не убирать
+    // legacy костыль. Так до меня ловили ошибку при отключении USB. Не убирать
     m_port->setBaudRate(9600);
 }
 
@@ -94,12 +108,8 @@ void UsbInterface::disconnect()
     {
         m_port->close();
         qDebug()<<"CLOSE PORT";
+        setState(InterfaceState::Idle);
     }
-}
-
-void UsbInterface::flushBuffers()
-{
-    m_port->readAll();
 }
 
 QString UsbInterface::connectionDescription()
@@ -137,6 +147,24 @@ void UsbInterface::slDestroyed(QObject *obj)
         }
     }
     emit sgInterfaceError("port destroyed");
+}
+
+void UsbInterface::slPortTimer()
+{
+    if(!isConnected())
+    {
+        qDebug()<<"Serial port search timeout";
+
+        discoverDevices();
+        if(discoveredDevicesList().size() != 0)
+        {
+            emit sgDeviceListUpdated();
+        }
+    }
+    else
+    {
+        checkConnection();
+    }
 }
 
 void UsbInterface::loadSettings()

@@ -83,6 +83,7 @@ signals:
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);
+    void sgSetUIDataList(QString nameParam, QVariantList list);
     void sgUpdateAppSetting(QString settingName, QVariant settingValue);
 
     void sgPresetChangeStage (quint8 inChangePreset);
