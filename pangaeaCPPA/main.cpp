@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     app.setOrganizationName("AMT");
     app.setApplicationName("Pangaea");
 
-
     Logger log;
     log.setAsMessageHandlerForApp();
     appLogger_ptr = &log;
@@ -33,10 +32,8 @@ int main(int argc, char *argv[])
     Core core;
     UiDesktopCore uiCore;
 
-    QQmlContext *ctxt = engine.rootContext();
-    ctxt->setContextProperty("_uiCore", &uiCore);
-    ctxt->setContextProperty("applicationDirPath", QGuiApplication::applicationDirPath());
-    core.registerQmlObjects(ctxt);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
+    core.registerQmlObjects();
 
     ThreadController threadController(QThread::currentThread());
     core.moveToThread(threadController.backendThread());

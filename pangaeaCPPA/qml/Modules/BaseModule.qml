@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import Elements 1.0
 import StyleSettings 1.0
 
+import CppObjects 1.0
+
 Rectangle {
     id: root
     anchors.fill: parent
@@ -85,7 +87,7 @@ Rectangle {
         {
             material.start(mouseX, mouseY)
             sgModuleOnOf()
-            _uiCore.setParameter(root.parent.nameValue, root.parent.on) // Или хранить переменную внутри? Для меньшей связанности
+            UiCore.setParameter(root.parent.nameValue, root.parent.on) // Или хранить переменную внутри? Для меньшей связанности
         }
     }
 
@@ -108,7 +110,7 @@ Rectangle {
     }
 
     Connections{
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(parameterName, inValue)
         {

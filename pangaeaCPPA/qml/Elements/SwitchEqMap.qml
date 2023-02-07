@@ -3,6 +3,8 @@ import QtQuick.Controls
 
 import StyleSettings
 
+import CppObjects 1.0
+
 Item
 {
     id: main
@@ -17,7 +19,7 @@ Item
         onPaint:
         {
             var ctx = getContext("2d")
-            var colorEqTab = main.map ? fonColor
+            var colorEqTab = main.map ? Style.backgroundColor
                                       : (eqOn) ? Style.mainEnabledColor : Style.mainDisabledColor
             var colorMapTab = main.map ? Style.mainEnabledColor : Style.backgroundColor
 
@@ -74,7 +76,7 @@ Item
                     main.map=false;
                 else
                 {
-                    _uiCore.setParameter("eq_on", !eqOn);
+                    UiCore.setParameter("eq_on", !eqOn);
                 }
                 redraw();
             }
@@ -107,7 +109,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if(nameParam === "eq_on")

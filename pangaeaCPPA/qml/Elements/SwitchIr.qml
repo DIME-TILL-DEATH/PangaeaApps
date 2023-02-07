@@ -1,5 +1,7 @@
 import QtQuick
 
+import CppObjects 1.0
+
 Item
 {
     id: main
@@ -57,7 +59,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if((nameParam === "cabinet_enable"))

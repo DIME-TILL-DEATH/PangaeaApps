@@ -2,6 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
+import CppObjects 1.0
+
 Item
 {
     id : rWait
@@ -90,7 +92,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetProgress(val)
         {

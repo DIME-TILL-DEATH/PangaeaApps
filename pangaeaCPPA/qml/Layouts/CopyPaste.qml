@@ -2,6 +2,7 @@ import QtQuick
 
 import Elements
 import StyleSettings
+import CppObjects 1.0
 
 Item
 {
@@ -26,7 +27,7 @@ Item
                 {
                     text: "COPY"
                     enabled: editable & !compareState
-                    onClicked: {_uiCore.setParameter("copy", 0); copyFirst=true;}
+                    onClicked: {UiCore.setParameter("copy", 0); copyFirst=true;}
                 }
             }
 
@@ -39,7 +40,7 @@ Item
                     text: "PASTE"
                     scaleText: 0.88
                     enabled: editable & copyFirst & !compareState
-                    onClicked: _uiCore.setParameter("paste", 0)
+                    onClicked: UiCore.setParameter("paste", 0)
                 }
             }
         }
@@ -47,7 +48,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, value)
         {

@@ -8,6 +8,8 @@ import StyleSettings 1.0
 import Qt.labs.platform 1.1 as Labs
 import Qt.labs.settings 1.0
 
+import CppObjects 1.0
+
 MenuBar{
     Menu{
         title: qsTr("File")
@@ -52,7 +54,7 @@ MenuBar{
         MenuItem{
             text: qsTr("IR convertor")
 
-            onTriggered: _uiCore.runIrConvertor();
+            onTriggered: UiCore.runIrConvertor();
         }
     }
 
@@ -79,7 +81,7 @@ MenuBar{
             text: qsTr("Device manual")
 
             onTriggered: {
-                _uiCore.openManualExternally(strManualBaseName)
+                UiCore.openManualExternally(strManualBaseName)
             }
         }
         MenuSeparator{}
@@ -113,7 +115,7 @@ MenuBar{
         onAccepted: {
             var cleanPath = currentFile.toString();//fileUrl.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            _uiCore.importPreset(cleanPath);
+            UiCore.importPreset(cleanPath);
         }
     }
 
@@ -133,7 +135,7 @@ MenuBar{
         onAccepted: {
             var cleanPath = currentFile.toString();//fileUrl.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            _uiCore.exportPreset(cleanPath);
+            UiCore.exportPreset(cleanPath);
         }
     }
 
@@ -149,7 +151,7 @@ MenuBar{
     }
 
     Connections{
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, value)
         {

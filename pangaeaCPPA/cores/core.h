@@ -29,7 +29,7 @@ class Core : public QObject
 public:
     explicit Core(QObject *parent = nullptr);
 
-    void registerQmlObjects(QQmlContext* qmlContext);
+    void registerQmlObjects();
 
     void setParameter(QString name, quint8 value);
     // TODO: пока умеет только Preset и bank!!!! Дописать
@@ -128,8 +128,6 @@ public slots:
     void slDeviceListUpdated();
 
     void slReadyToDisconnect();
-
-    void slPortTimer();
 
     void parseInputData(const QByteArray &data);
     void processCommands();

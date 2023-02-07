@@ -2,6 +2,8 @@ import QtQuick
 
 import StyleSettings
 
+import CppObjects 1.0
+
 Item
 {
     id: main
@@ -92,14 +94,14 @@ Item
         value = value>=valueMax?valueMax:value;
         if(main.valueLastSend!=main.value)
         {
-            _uiCore.setParameter(main.nameValue, main.value);
+            UiCore.setParameter(main.nameValue, main.value);
             main.valueLastSend=main.value;
         }
     }
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if((main.nameValue.length>0)&&(nameParam===main.nameValue))

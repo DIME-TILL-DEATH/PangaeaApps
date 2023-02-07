@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import CppObjects 1.0
+
 Item{
     id: _root
 
@@ -28,9 +30,9 @@ Item{
             anchors.fill: parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
-            onClicked: _uiCore.setParameter("set_preset_change", presetDeviceIndex)
-//            onClicked:   _uiCore.setParameter("set_preset_change", nomRow*controlMultiplier+index)
-           // onClicked: _uiCore.setParameter("set_preset_change", 16*nomRow + index) // 4^4 packing (2^4=16 or <<4)
+            onClicked: UiCore.setParameter("set_preset_change", presetDeviceIndex)
+//            onClicked:   UiCore.setParameter("set_preset_change", nomRow*controlMultiplier+index)
+           // onClicked: UiCore.setParameter("set_preset_change", 16*nomRow + index) // 4^4 packing (2^4=16 or <<4)
             onEntered: tp.visible = (tp.text.length>0)
             onExited:  tp.visible = false
         }
@@ -46,7 +48,7 @@ Item{
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIText(nameParam, value)
         {
             if (nameParam==="impulse_name")

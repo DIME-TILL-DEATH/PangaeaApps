@@ -4,6 +4,8 @@ import QtQuick.Controls
 import Elements
 import StyleSettings
 
+import CppObjects 1.0
+
 Item
 {
     id: main
@@ -89,7 +91,7 @@ Item
 
                     }
 
-                    model: _presetListModel
+                    model: PresetListModel//_presetListModel
 
                     delegate: MapDelegate{
                         id: _root
@@ -107,7 +109,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if(nameParam === "bank")

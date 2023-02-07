@@ -54,5 +54,10 @@
         <file>qml/Layouts/MBusy.qml</file>
         <file>qml/Layouts/MainMenu.qml</file>
         <file>qml/Layouts/ConnectionLayout.qml</file>
+        <file>qml/Images/(V).svg</file>
+        <file>qml/Images/AMT.svg</file>
+        <file>qml/Images/Arrow Gear new.svg</file>
+        <file>qml/Images/Arrow Gear.svg</file>
+        <file>qml/Images/Connected.svg</file>
     </qresource>
 </RCC>

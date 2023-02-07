@@ -2,6 +2,7 @@ import QtQuick
 
 import Elements
 import StyleSettings
+import CppObjects 1.0
 
 Item
 {
@@ -46,7 +47,7 @@ Item
 
             text: "BANK"
             nameValue: "bank"
-            onChPreset: _uiCore.setParameter("set_preset_change", presetNom)
+            onChPreset: UiCore.setParameter("set_preset_change", presetNom)
             enabled: main.editable
         }
 
@@ -122,7 +123,7 @@ Item
 
             text: "PRESET"
             nameValue: "preset"
-            onChPreset: _uiCore.setParameter("set_preset_change", presetNom)
+            onChPreset: UiCore.setParameter("set_preset_change", presetNom)
             enabled: main.editable
         }
 
@@ -135,7 +136,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIText(nameParam, value)
         {
             if (nameParam==="impulse_name")

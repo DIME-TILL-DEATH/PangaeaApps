@@ -2,6 +2,8 @@ import QtQuick
 
 import Elements
 import StyleSettings
+import CppObjects 1.0
+
 Item
 {
     id: main
@@ -25,7 +27,7 @@ Item
                 {
                     text: "SAVE"
                     enabled: main.editable & main.edit & !main.compareState
-                    onClicked: _uiCore.setParameter("save_change", (-1))
+                    onClicked: UiCore.setParameter("save_change", (-1))
                 }
             }
 
@@ -42,7 +44,7 @@ Item
                     highlighted: main.compareState
 
                     onClicked: {
-                        _uiCore.setParameter("compare", 0);
+                        UiCore.setParameter("compare", 0);
                     }
                 }
             }
@@ -51,7 +53,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, value)
         {

@@ -1,6 +1,7 @@
 import QtQuick
 
 import StyleSettings
+import CppObjects 1.0
 
 Item
 {
@@ -85,13 +86,13 @@ Item
 
     function send()
     {
-        _uiCore.setParameter(main.nameValue, mSwitch.value)
+        UiCore.setParameter(main.nameValue, mSwitch.value)
     }
 
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if((main.nameValue.length>0)&&(nameParam===main.nameValue))

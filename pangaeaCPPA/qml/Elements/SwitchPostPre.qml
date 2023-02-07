@@ -1,6 +1,7 @@
 import QtQuick
 
 import StyleSettings
+import CppObjects 1.0
 
 Item
 {
@@ -33,7 +34,7 @@ Item
             width: parent.width
             height: parent.height/100*40
 
-            onChValue: _uiCore.setParameter(main.nameValue, mSwitch.value)
+            onChValue: UiCore.setParameter(main.nameValue, mSwitch.value)
 
             visible: isAvaliable
         }
@@ -53,7 +54,7 @@ Item
                 onClicked:
                 {
                     mSwitch.value = 0;
-                    _uiCore.setParameter(main.nameValue, mSwitch.value)
+                    UiCore.setParameter(main.nameValue, mSwitch.value)
                 }
             }
 
@@ -68,7 +69,7 @@ Item
                 onClicked:
                 {
                     mSwitch.value = 1;
-                    _uiCore.setParameter(main.nameValue, mSwitch.value)
+                    UiCore.setParameter(main.nameValue, mSwitch.value)
                 }
             }
         }
@@ -107,14 +108,14 @@ Item
         function onChValue(value)
         {
             mSwitch.value=value;
-            _uiCore.setParameter(main.nameValue, mSwitch.value)
+            UiCore.setParameter(main.nameValue, mSwitch.value)
 
         }
     }
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if((nameParam === "eq_pre"))

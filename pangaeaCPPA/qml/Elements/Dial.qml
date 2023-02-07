@@ -2,6 +2,8 @@ import QtQuick
 
 import StyleSettings
 
+import CppObjects
+
 Item
 {
     id: main
@@ -201,7 +203,7 @@ Item
             main.valueLastSend=main.value;
             main.chValue(main.value);
             if(main.nameValue.length>0)
-                _uiCore.setParameter(main.nameValue, main.value)
+                UiCore.setParameter(main.nameValue, main.value)
         }
     }
 
@@ -214,7 +216,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if((main.nameValue.length>0)&&(nameParam===main.nameValue))

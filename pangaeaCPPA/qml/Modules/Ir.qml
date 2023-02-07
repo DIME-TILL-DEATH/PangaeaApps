@@ -1,7 +1,8 @@
-import QtQuick 2.15
-//import QtQuick.Controls 1.5
+import QtQuick
 
 import Elements 1.0
+
+import CppObjects 1.0
 
 Item
 {
@@ -46,7 +47,7 @@ Item
 
                 onChValue:
                 {
-                    _uiCore.setParameter(nameValue, !value);
+                    UiCore.setParameter(nameValue, !value);
                     //console.log("tumbler value, chValue", _baseModule.contentProperties.value)
                 }
             }
@@ -60,7 +61,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if((nameParam === main.nameValue))

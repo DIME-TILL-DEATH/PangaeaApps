@@ -26,14 +26,14 @@ Core::Core(QObject *parent) : QObject(parent)
 
     timer = new QTimer(this);
     timer->setInterval(1000);
-    connect(timer, &QTimer::timeout, this, &Core::slPortTimer); // TODO отличается от мобильного. Поиск внутри интерфейса. и Ble и USB.
+    connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
     timer->start();
 
     m_presetListModel.refreshModel(&m_presetsList);
     connect(this, &Core::sgRefreshPresetList, &m_presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
 
     // TODO пользователь выбирает интерфес при старте
-    //exchangeInterface = new UsbInterface(this);
+//    exchangeInterface = new UsbInterface(this);
     exchangeInterface = new BleInterface(this);
     connect(exchangeInterface, &AbstractInterface::sgNewData, this, &Core::parseInputData);
     connect(exchangeInterface, &AbstractInterface::sgInterfaceError, this, &Core::slInterfaceError);
@@ -43,9 +43,9 @@ Core::Core(QObject *parent) : QObject(parent)
     exchangeInterface->discoverDevices();
 }
 
-void Core::registerQmlObjects(QQmlContext *qmlContext)
+void Core::registerQmlObjects()
 {
-    qmlContext->setContextProperty("_presetListModel", &m_presetListModel);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &m_presetListModel);
 }
 
 // TODO Отличие от мобильного
@@ -294,7 +294,6 @@ void Core::parseInputData(const QByteArray& ba)
                         currentPreset.setImpulseName(impulseName);
                     }
                 }
-                //currentPreset.setImpulseName(impulseName);
 
                 emit sgSetUIText("impulse_name", impulseName);
                 qInfo() << recievedCommand.description() << "impulse name:" << impulseName;
@@ -403,7 +402,6 @@ void Core::parseInputData(const QByteArray& ba)
                 timer->start();
 
                 qInfo() << recievedCommand.description();
-                //pushCommandToQueue("rn");
                 presetManager.returnToPreviousState();
                 break;
             }
@@ -729,7 +727,6 @@ void Core::comparePreset()
 {
     if(presetManager.currentState() != PresetState::Compare)
     {
-        //presetManager.setCurrentState(PresetState::Compare);
         emit sgSetUIParameter("compare_state", true);
         pushCommandToQueue("gs\r\n");
         pushCommandToQueue("esc\r\n");
@@ -841,36 +838,8 @@ void Core::pastePreset()
     emit sgSetUIParameter ("preset_edited", isPresetEdited);
 }
 
-// TODO отличие от мобильного
-void Core::slPortTimer()
-{
-//    if(!exchangeInterface->isConnected())
-//    {
-//        qDebug()<<"!OPEN";
-
-//        exchangeInterface->discoverDevices();
-//        if(exchangeInterface->discoveredDevicesList().size() != 0)
-//        {
-//            exchangeInterface->connect(exchangeInterface->discoveredDevicesList().at(0));
-
-//            if(exchangeInterface->isConnected())
-//            {
-//                readAllParameters();
-//                emit sgSetUIText("port_opened", exchangeInterface->connectionDescription());
-//            }
-//        }
-//    }
-//    else
-    if(exchangeInterface->isConnected())
-    {
-        exchangeInterface->checkConnection();
-        recieveTimeout();
-    }
-}
-
 void Core::slInterfaceConnected()
 {
-    qDebug() << "Read all parameters";
     readAllParameters();
     emit sgSetUIText("port_opened", exchangeInterface->connectionDescription());
 }
@@ -879,7 +848,7 @@ void Core::slDeviceListUpdated()
 {
     if(!exchangeInterface->isConnected())
     {
-        qDebug()<<"!OPEN";
+        qDebug()<<"Device list updated";
 
         if(exchangeInterface->discoveredDevicesList().size() != 0)
         {
@@ -1146,7 +1115,7 @@ void Core::updateProgressBar()
 void Core::sw4Enable()
 {
     //pushCommandToQueue("sw4 enable"); //CP100 не знает такой команды
-    processCommands();
+    //processCommands();
 }
 
 void Core::stopCore()

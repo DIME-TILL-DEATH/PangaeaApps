@@ -8,6 +8,8 @@ import QtQuick.Window 2.15
 import StyleSettings 1.0
 import Layouts 1.0
 
+import CppObjects 1.0
+
 ApplicationWindow
 {
     id: main
@@ -99,7 +101,7 @@ ApplicationWindow
         {
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            _uiCore.setImpuls(cleanPath);
+            UiCore.setImpuls(cleanPath);
         }
     }
 
@@ -118,21 +120,21 @@ ApplicationWindow
             {
                 case MessageDialog.Save:
                 {
-                    _uiCore.setParameter("save_change", saveParam);
-                    _uiCore.setParameter("do_preset_change", saveParam);
+                    UiCore.setParameter("save_change", saveParam);
+                    UiCore.setParameter("do_preset_change", saveParam);
                     break;
                 }
                 case MessageDialog.No:
                 {
-                    _uiCore.restoreParameter("impulse")
-                    _uiCore.setParameter("do_preset_change", saveParam);
+                    UiCore.restoreParameter("impulse")
+                    UiCore.setParameter("do_preset_change", saveParam);
                     break;
                 }
                 case MessageDialog.Cancel:
                 {
                     saveParam = 0
-                    _uiCore.restoreParameter("preset")
-                    _uiCore.restoreParameter("bank")
+                    UiCore.restoreParameter("preset")
+                    UiCore.restoreParameter("bank")
                     break;
                 }
             }
@@ -151,7 +153,7 @@ ApplicationWindow
             case MessageDialog.Yes:
                 var cleanPath = irFileDialog.currentFile.toString();
                 cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-                _uiCore.convertAndUploadImpulse(cleanPath);
+                UiCore.convertAndUploadImpulse(cleanPath);
                 break;
             }
         }
@@ -181,7 +183,7 @@ ApplicationWindow
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgPresetChangeStage(inChangePreset)
         {
@@ -289,15 +291,14 @@ ApplicationWindow
     }
 
     Component.onCompleted: {
-        _uiCore.setupApplication();
+        UiCore.setupApplication();
     }
 
     onClosing: function(close)
     {
-        _uiCore.saveSetting("window_width", main.width);
-        _uiCore.saveSetting("window_height", main.height);
-        _uiCore.saveSetting("modules_right_aligned", Style.modulesRightAligned);
-
+        UiCore.saveSetting("window_width", main.width);
+        UiCore.saveSetting("window_height", main.height);
+        UiCore.saveSetting("modules_right_aligned", Style.modulesRightAligned);
 
         if(main.edit && main.connected)
         {
