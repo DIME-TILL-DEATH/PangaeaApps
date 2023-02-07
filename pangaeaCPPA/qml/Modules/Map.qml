@@ -1,16 +1,14 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
-import Elements 1.0
+import Elements
+import StyleSettings
 
 Item
 {
     id: main
 
     anchors.fill: parent
-
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
 
     property int maxMapRow: 10
     property int currentBank: 0
@@ -19,7 +17,7 @@ Item
     Rectangle
     {
         anchors.fill: parent
-        color: devColor
+        color: Style.mainEnabledColor
 
         Row
         {

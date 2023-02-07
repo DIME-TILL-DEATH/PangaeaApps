@@ -1,12 +1,10 @@
-import QtQuick 2.15
-////import QtQuick.Controls 1.5
-import "../Elements/"
+import QtQuick
+
+import Elements
+import StyleSettings
 Item
 {
     id: main
-
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
 
     property bool editable: true
     property bool edit: true
@@ -15,7 +13,7 @@ Item
     Rectangle
     {
         anchors.fill: parent
-        color: devColor
+        color: Style.mainEnabledColor
         Column
         {
             anchors.fill: parent
@@ -27,7 +25,6 @@ Item
                 {
                     text: "SAVE"
                     enabled: main.editable & main.edit & !main.compareState
-//                    opacity: enabled?1:0.5
                     onClicked: _uiCore.setParameter("save_change", (-1))
                 }
             }

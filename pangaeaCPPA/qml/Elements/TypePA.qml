@@ -1,12 +1,11 @@
-import QtQuick 2.7
-//import QtQuick.Controls 1.5
-import "../Modules/"
+import QtQuick
+
+import Modules
 
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property string nameValue: "amp_type"
     property int value: 0
     Column

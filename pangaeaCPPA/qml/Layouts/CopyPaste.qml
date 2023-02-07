@@ -1,11 +1,12 @@
-import QtQuick 2.7
-//import QtQuick.Controls 1.5
-import "../Elements/"
+import QtQuick
+
+import Elements
+import StyleSettings
+
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property bool copyFirst: false
 
     property bool compareState: false
@@ -13,7 +14,7 @@ Item
     Rectangle
     {
         anchors.fill: parent
-        color: devColor
+        color: Style.mainEnabledColor
         Column
         {
             anchors.fill: parent

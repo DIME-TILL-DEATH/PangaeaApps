@@ -1,6 +1,7 @@
 import QtQuick 2.15
-//import QtQuick.Controls 1.5
-import "../Modules/"
+
+import Modules
+import StyleSettings
 
 Item
 {
@@ -10,9 +11,7 @@ Item
     height: parent.height
 
     property string dialFreq: "20 Hz 220"
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-    property string devColorDis: "#7E7991"
+
     property int nomBand: 1
     property bool on: false
 
@@ -20,7 +19,7 @@ Item
     {
         id: common
         anchors.fill: parent
-        color: main.on ? devColor : devColorDis
+        color: main.on ? Style.mainEnabledColor : Style.mainDisabledColor
 
         Column
         {

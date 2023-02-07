@@ -1,8 +1,9 @@
 module Layouts
 
-Head 1.0 Head.qml
-ModulesList 1.0 ModulesList.qml
+ConnectionLayout 1.0 ConnectionLayout.qml
 CopyPaste 1.0 CopyPaste.qml
-SaveCompare 1.0 SaveCompare.qml
-MBusy 1.0 MBusy.qml
+Head 1.0 Head.qml
 MainMenu 1.0 MainMenu.qml
+MBusy 1.0 MBusy.qml
+ModulesList 1.0 ModulesList.qml
+SaveCompare 1.0 SaveCompare.qml

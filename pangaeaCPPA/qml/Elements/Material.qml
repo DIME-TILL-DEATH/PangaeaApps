@@ -1,4 +1,5 @@
-import QtQuick 2.15
+import QtQuick
+import StyleSettings
 
 Item
 {
@@ -16,7 +17,7 @@ Item
         radius: topItem.parent.height*3
 
         //TODO: цвет что и у модуля при первом запуске анимации.В итоге эффект не виден
-        color: topItem.on ? devColor : devColorDis
+        color: topItem.on ? Style.mainEnabledColor : Style.mainDisabledColor
 
         transform: Translate
         {
@@ -34,7 +35,7 @@ Item
         to: topItem.parent.height*3
         duration: 300
         onStopped: {
-            topItem.parent.color = topItem.parent.on ? devColor : devColorDis
+            topItem.parent.color = topItem.parent.on ? Style.mainEnabledColor : Style.mainDisabledColor
         }
     }
 

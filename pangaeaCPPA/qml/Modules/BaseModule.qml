@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import Elements 1.0
+import StyleSettings 1.0
 
 Rectangle {
     id: root
@@ -17,14 +18,10 @@ Rectangle {
 
     property alias contentProperties: _loader.item
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-    property string devColorDis: "#7E7991"
-
     signal sgModuleOnOf()
 
     clip: true
-    color: on ? devColor : devColorDis
+    color: on ? Style.mainEnabledColor : Style.mainDisabledColor
 
     Material
     {
@@ -50,7 +47,7 @@ Rectangle {
                 font.family: "Arial Black"
                 font.bold: true
                 font.pixelSize: parent.height/1.7
-                color: root.on ? "salmon" : fonColor
+                color: root.on ? "salmon" : Style.backgroundColor
                 text: moduleName
 
                 z: _contentContainer.z+1

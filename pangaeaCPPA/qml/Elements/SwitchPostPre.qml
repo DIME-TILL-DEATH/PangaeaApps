@@ -1,14 +1,11 @@
-import QtQuick 2.15
-//import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
 
 Item
 {
     id: main
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-    property string devColorDis: "#7E7991"
-//    property int   value//: mSwitch.value
     property string nameValue: "eq_pre"
 
     property bool isAvaliable: true
@@ -16,7 +13,7 @@ Item
     Rectangle
     {
         anchors.fill:  parent
-        color: main.enabled?devColor:devColorDis
+        color: main.enabled  ? Style.mainEnabledColor : Style.mainDisabledColor
     }
 
     Column
@@ -35,8 +32,6 @@ Item
 
             width: parent.width
             height: parent.height/100*40
-
-            //value: main.value
 
             onChValue: _uiCore.setParameter(main.nameValue, mSwitch.value)
 
@@ -86,7 +81,7 @@ Item
             {
                 anchors.fill: parent
                 text: "EQ"
-                color: fonColor
+                color: Style.backgroundColor
                 font.family: "Arial Black"
                 font.bold: true
                 font.pixelSize: parent.height/1.5
@@ -101,7 +96,7 @@ Item
         {
             width: parent.width
             height: parent.height/100*15
-            color: main.enabled?devColor:devColorDis
+            color: main.enabled ? Style.mainEnabledColor : Style.mainDisabledColor
         }
     }
 

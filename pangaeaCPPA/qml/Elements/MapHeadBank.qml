@@ -1,5 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
+
+import StyleSettings
 
 Item
 {
@@ -18,13 +20,13 @@ Item
             width:  parent.width/2
             height: parent.height
 
-            color:  fonColor
+            color:  Style.backgroundColor
             radius: parent.height
             MText
             {
                 anchors.fill: parent
                 text: "BANK"
-                color: devColor
+                color: Style.mainEnabledColor
                 rotation: 270
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
@@ -49,7 +51,7 @@ Item
                     Rectangle
                     {
                         anchors.fill: parent
-                        color: devColor
+                        color: Style.mainEnabledColor
                     }
                     MText
                     {
@@ -57,7 +59,7 @@ Item
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment:   Qt.AlignVCenter
                         text: index
-                        color: index===curVal ? "Salmon":fonColor
+                        color: index===curVal ? Style.highlightColor : Style.backgroundColor
                         font.bold: true
                         font.pixelSize: parent.width/1.5
                     }

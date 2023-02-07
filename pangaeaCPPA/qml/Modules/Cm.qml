@@ -1,5 +1,4 @@
 import QtQuick 2.15
-//import QtQuick.Controls 1.5
 
 import Elements 1.0
 

@@ -1,11 +1,10 @@
-import QtQuick 2.7
-//import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
 
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
 
     property string name: "DIAL"
     property string nameValue: ""
@@ -46,7 +45,7 @@ Item
             {
                 anchors.fill: parent
                 radius: parent.width
-                color: fonColor
+                color: Style.backgroundColor
                 Item
                 {
                     height: parent.height
@@ -59,7 +58,7 @@ Item
                         height: Math.min(parent.height, parent.width)
                         width : Math.min(parent.height, parent.width)
                         radius: width
-                        color: devColor
+                        color: Style.mainEnabledColor
                     }
                     rotation:  dispAngle
                     Behavior on rotation  {NumberAnimation { duration: 200 }}
@@ -67,7 +66,7 @@ Item
                 MText
                 {
                     anchors.centerIn: parent
-                    color: devColor
+                    color: Style.mainEnabledColor
                     font.family: "Arial Black"
                     font.bold: true
                     font.pixelSize: parent.width/5
@@ -149,7 +148,7 @@ Item
                 anchors.verticalCenter:   parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenterOffset: -parent.width/30
-                color: main.checkable?(main.on?"Salmon":"Blue"):fonColor
+                color: main.checkable ? (main.on ? "Salmon"  :"Blue") : Style.backgroundColor
                 font.family: "Arial Black"
                 font.bold: true
                 font.pixelSize: parent.width/6

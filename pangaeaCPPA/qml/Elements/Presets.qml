@@ -1,5 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
+
+import StyleSettings
 
 Item
 {
@@ -68,7 +70,7 @@ Item
                     }
                 }
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
-//                onClicked:
+
                 onClicked: (mouse)=>
                 {
                     if( mouse.modifiers & Qt.ControlModifier )
@@ -114,7 +116,7 @@ Item
             ToolTip
             {
                 id: tp
-                text: (Qt.platform.os=="windows")?"Up - Mouse Click \r\nDown - Click + Ctrl":"Up - Mouse Click \r\nDown - Click + cmd"
+                text: (Qt.platform.os==="windows") ? qsTr("Up - Mouse Click \r\nDown - Click + Ctrl") : qsTr("Up - Mouse Click \r\nDown - Click + cmd")
                 visible: false
                 timeout: 2000
             }
@@ -127,7 +129,7 @@ Item
             MText
             {
                 anchors.fill:  parent
-                color:  devColor
+                color:  Style.mainEnabledColor
                 horizontalAlignment: Text.AlignHCenter
                 font.bold: true
                 font.pixelSize: parent.height/1.1

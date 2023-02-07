@@ -8,7 +8,7 @@ Item
 
     anchors.fill: parent
 
-    visible: true
+    visible: false
 
     property double  pbValue: 0
     property string strSearching: qsTr("Searching for devices....")
@@ -103,7 +103,7 @@ Item
             {
                 progressBar.visible = false
                 txt.text = rWait.strSearching
-                rWait.visible = true;
+               // rWait.visible = true;
             }
         }
 

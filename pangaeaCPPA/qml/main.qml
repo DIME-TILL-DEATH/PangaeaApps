@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-//import QtQuick.Dialogs 1.3
 import QtQuick.Dialogs
 import Qt.labs.settings 1.0
 
@@ -22,7 +21,7 @@ ApplicationWindow
     maximumWidth: width*1.25
     maximumHeight: height*1.25
 
-    color: "#EBECEC"
+    color: Style.backgroundColor
 
     property string markEdit: edit?" * ":" "
     property string devName: ""
@@ -42,8 +41,7 @@ ApplicationWindow
     Settings
     {
         category: "Current_folder"
-//        property alias curFolder: fileOpen.folder
-        property alias curFolder: fileOpen.currentFolder
+        property alias curFolder: irFileDialog.currentFolder
     }
 
     header: MainMenu{
@@ -51,11 +49,21 @@ ApplicationWindow
         enabled: !wait
     }
 
+    ConnectionLayout
+    {
+        id: connectionUi
+
+        visible: !mainUi.visible
+    }
+
     Column
     {
+        id: mainUi
         anchors.fill: parent
         focus: true
         spacing: 2
+
+        visible: false
 
         Head
         {
@@ -64,7 +72,7 @@ ApplicationWindow
             width:  parent.width
             height: parent.height/1000*150
 
-            onSetImpuls: fileOpen.open();
+            onSetImpuls: irFileDialog.open();
             editable: main.editable & (!main.wait)
             edit:     main.edit
         }
@@ -80,47 +88,18 @@ ApplicationWindow
         }
     }
 
-//    Timer
-//    {
-//        id: timer
-
-//        interval: 250
-//        repeat: true
-//        running: fileOpen.visible
-
-//        property string lastSelectFile: ""
-
-//        onTriggered:
-//        {
-//            if(lastSelectFile!=fileOpen.fileUrl)
-//            {
-//                var cleanPath;
-//                lastSelectFile=fileOpen.fileUrl;
-//                cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(lastSelectFile.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(lastSelectFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-//                _uiCore.setImpuls(cleanPath);
-//            }
-//        }
-//    }
-
     FileDialog
     {
-        id: fileOpen
+        id: irFileDialog
 
         title: qsTr("Select IR")
         nameFilters: [ "Wav files (*.wav)" ]
 
         onAccepted:
         {
-            //TODO нужно ли?
-            //modules.irEnable(true);
-            var cleanPath = fileOpen.currentFile.toString();//fileOpen.fileUrl.toString();
-            //lastSelectFile=fileOpen.fileUrl;
-            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+            var cleanPath = irFileDialog.currentFile.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
             _uiCore.setImpuls(cleanPath);
-        }
-        onRejected:
-        {
-            //_uiCore.escImpuls();
         }
     }
 
@@ -130,28 +109,9 @@ ApplicationWindow
 
         property int saveParam: 0
 
-        //icon: StandardIcon.Question
         text: qsTr("Do you want to save changes?")
         title: qsTr("Save preset")
 
-        // TODO standardButtons resize bug in qml
-//        standardButtons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
-//        onAccepted:
-//        {
-//            _uiCore.setParameter("save_change", saveParam);
-//            _uiCore.setParameter("do_preset_change", saveParam);
-//        }
-//        onNo: //onNo:
-//        {
-//            _uiCore.restoreParameter("impulse")
-//            _uiCore.setParameter("do_preset_change", saveParam);
-//        }
-//        onRejected:
-//        {
-//            saveParam = 0
-//            _uiCore.restoreParameter("preset")
-//            _uiCore.restoreParameter("bank")
-//        }
         buttons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
         onButtonClicked: function(button, role){
             switch(button)
@@ -182,28 +142,15 @@ ApplicationWindow
     MessageDialog{
         id: msgIncorretIR
 
-        //icon: StandardIcon.Warning
         title: qsTr("Incorrect wav format")
 
-//        standardButtons: MessageDialog.Yes | MessageDialog.No
-
-//        onYes: {
-
-//            var cleanPath = fileOpen.fileUrl.toString();
-//            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
-//            console.log("accepted, path", cleanPath);
-//            _uiCore.convertAndUploadImpulse(cleanPath);
-//        }
         buttons: MessageDialog.Yes | MessageDialog.No
 
         onButtonClicked: function (button, role) {
             switch(button){
             case MessageDialog.Yes:
-                var cleanPath = fileOpen.currentFile.toString();//fileOpen.fileUrl.toString();
+                var cleanPath = irFileDialog.currentFile.toString();
                 cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
-                console.log("accepted, path", cleanPath);
                 _uiCore.convertAndUploadImpulse(cleanPath);
                 break;
             }
@@ -214,7 +161,6 @@ ApplicationWindow
     {
         id: msgError
 
-        //icon: StandardIcon.Critical
         title: qsTr("Error")
         text: qsTr("Device is disconnected")
     }
@@ -223,7 +169,6 @@ ApplicationWindow
     {
         id: _msgVersionError
 
-        //icon: StandardIcon.Warning
         title: qsTr("Warning")
         text: qsTr("Version error!")
     }
@@ -250,6 +195,7 @@ ApplicationWindow
             {
                 connected = true;
                 interfaceDescription = inString
+                mainUi.visible = true;
                 msgError.close();
             }
 
@@ -257,6 +203,7 @@ ApplicationWindow
             {
                 connected = false;
                 main.editable = false;
+                mainUi.visible = false;
                 msgError.text = qsTr("Device disconnected")
                 msgError.open();
             }

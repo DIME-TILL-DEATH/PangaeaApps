@@ -1,15 +1,13 @@
-import QtQuick 2.7
-////import QtQuick.Controls 1.5
-import "../Elements/"
+import QtQuick
+
+import Elements
+import StyleSettings
 
 Item
 {
     id: main
 
-    visible: false
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
 
     property int  maxMapRow: 10
     property int controlMultiplier: 10
@@ -25,7 +23,6 @@ Item
     property bool irOn: true
 
     signal setImpuls()
-
 
     Row
     {
@@ -57,8 +54,6 @@ Item
         {
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-            property string fonColor: "#EBECEC"
-            property string devColor: "#5E5971"
         }
 
         SaveCompare
@@ -146,15 +141,6 @@ Item
             if (nameParam==="impulse_name")
             {
                 impulsTxt.text=value;
-            }
-
-            if(nameParam===("port_opened"))
-            {
-                main.visible = true;
-            }
-            if(nameParam===("port_closed"))
-            {
-                main.visible = false;
             }
         }
 

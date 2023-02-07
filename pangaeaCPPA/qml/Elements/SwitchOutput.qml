@@ -1,20 +1,19 @@
-import QtQuick 2.15
-////import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
 
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property int   value: mSwitch.value
     property string nameValue: "output_mode"
     
     Rectangle
     {
         anchors.fill:  parent
-        color: devColor
+        color: Style.mainEnabledColor
     }
-
 
     Column
     {

@@ -1,12 +1,10 @@
-import QtQuick 2.15
-//import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
 
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-//    property string devColorDis: "#7E7991"
 
     property int value:     15
     property int valueLast: 0
@@ -26,8 +24,6 @@ Item
     {
         anchors.centerIn: parent
         anchors.fill: parent
-//        color:   devColor  //main.enabled?devColor:devColorDis
-//        opacity: main.enabled?1:0.5
 
         Item
         {
@@ -35,8 +31,7 @@ Item
             anchors.centerIn: parent
             width:  parent.width
             height: parent.height*0.8
-//            color: devColor //main.enabled?devColor:devColorDis
-//            opacity: main.enabled?1:0.5
+
 
             Rectangle
             {
@@ -46,10 +41,10 @@ Item
                 width:  parent.width*0.7
                 height: parent.width*0.7/2
                 radius: parent.width*0.2
-                color: fonColor
+                color: Style.backgroundColor
                 MText
                 {
-                    color: devColor
+                    color: Style.mainEnabledColor
                     anchors.centerIn: parent
                     font.family: "Arial Black"
                     font.bold: true

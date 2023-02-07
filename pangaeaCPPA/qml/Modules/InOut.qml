@@ -1,18 +1,15 @@
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import Elements 1.0
+import Elements
+import StyleSettings
 
 Rectangle {
     id: root
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-    property string devColorDis: "#7E7991"
-
     property string text: ""
 
-    color: devColor
+    color: Style.mainEnabledColor
 
     ColumnLayout {
         id: _layout
@@ -41,7 +38,7 @@ Rectangle {
 
             Layout.fillWidth: true
 
-            color: "#EBECEC"
+            color: Style.backgroundColor
 
             font.family: "Arial Black"
             font.bold: true

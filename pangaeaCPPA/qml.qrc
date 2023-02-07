@@ -53,5 +53,6 @@
         <file>qml/Elements/qmldir</file>
         <file>qml/Layouts/MBusy.qml</file>
         <file>qml/Layouts/MainMenu.qml</file>
+        <file>qml/Layouts/ConnectionLayout.qml</file>
     </qresource>
 </RCC>

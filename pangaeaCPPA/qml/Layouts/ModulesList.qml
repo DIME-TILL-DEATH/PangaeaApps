@@ -230,7 +230,7 @@ Item
             {
                 modulesList.clear();
                 listViewModules.forceLayout();
-                main.moduleVisible = false
+               // main.moduleVisible = false
 
             }
         }
