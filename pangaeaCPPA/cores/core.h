@@ -123,10 +123,13 @@ signals:
 
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
 
-private slots:
-    void slPortTimer();
+public slots:
+    void slInterfaceConnected();
+    void slDeviceListUpdated();
 
     void slReadyToDisconnect();
+
+    void slPortTimer();
 
     void parseInputData(const QByteArray &data);
     void processCommands();

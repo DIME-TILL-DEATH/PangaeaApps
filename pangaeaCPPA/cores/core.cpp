@@ -10,6 +10,7 @@
 
 #include "core.h"
 #include "usbinterface.h"
+#include "bleinterface.h"
 
 Core::Core(QObject *parent) : QObject(parent)
 {
@@ -32,9 +33,14 @@ Core::Core(QObject *parent) : QObject(parent)
     connect(this, &Core::sgRefreshPresetList, &m_presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
 
     // TODO пользователь выбирает интерфес при старте
-    exchangeInterface = new UsbInterface(this);
+    //exchangeInterface = new UsbInterface(this);
+    exchangeInterface = new BleInterface(this);
     connect(exchangeInterface, &AbstractInterface::sgNewData, this, &Core::parseInputData);
     connect(exchangeInterface, &AbstractInterface::sgInterfaceError, this, &Core::slInterfaceError);
+    connect(exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &Core::slInterfaceConnected);
+    connect(exchangeInterface, &AbstractInterface::sgDeviceListUpdated, this, &Core::slDeviceListUpdated);
+
+    exchangeInterface->discoverDevices();
 }
 
 void Core::registerQmlObjects(QQmlContext *qmlContext)
@@ -447,25 +453,6 @@ void Core::parseInputData(const QByteArray& ba)
 
             case AnswerType::ackSavePreset:
             {
-//                if(currentPreset.waveData() == IRWorker::flatIr())
-//                {
-//                    if(controlledDevice.deviceType()==DeviceType::CP16 || controlledDevice.deviceType()==DeviceType::CP16PA)
-//                        pushCommandToQueue("preset_delete_wavs");
-//                    else
-//                        pushCommandToQueue("dcc");
-
-//                    currentPreset.clearWavData();
-//                }
-//                else
-//                {
-//                    uploadImpulseData(currentPreset.waveData(), false, currentPreset.impulseName());
-//                    enableRecieve = false;
-//                }
-               // enableRecieve = false; // ждём от девайса подтверждения сохранения
-
-
-//                pushReadPresetCommands();
-
                 qInfo() << "Preset data saved to device";
                 currentPreset.clearWavData();                                
                 break;
@@ -857,26 +844,47 @@ void Core::pastePreset()
 // TODO отличие от мобильного
 void Core::slPortTimer()
 {
+//    if(!exchangeInterface->isConnected())
+//    {
+//        qDebug()<<"!OPEN";
+
+//        exchangeInterface->discoverDevices();
+//        if(exchangeInterface->discoveredDevicesList().size() != 0)
+//        {
+//            exchangeInterface->connect(exchangeInterface->discoveredDevicesList().at(0));
+
+//            if(exchangeInterface->isConnected())
+//            {
+//                readAllParameters();
+//                emit sgSetUIText("port_opened", exchangeInterface->connectionDescription());
+//            }
+//        }
+//    }
+//    else
+    if(exchangeInterface->isConnected())
+    {
+        exchangeInterface->checkConnection();
+        recieveTimeout();
+    }
+}
+
+void Core::slInterfaceConnected()
+{
+    qDebug() << "Read all parameters";
+    readAllParameters();
+    emit sgSetUIText("port_opened", exchangeInterface->connectionDescription());
+}
+
+void Core::slDeviceListUpdated()
+{
     if(!exchangeInterface->isConnected())
     {
         qDebug()<<"!OPEN";
 
-        exchangeInterface->discoverDevices();
         if(exchangeInterface->discoveredDevicesList().size() != 0)
         {
             exchangeInterface->connect(exchangeInterface->discoveredDevicesList().at(0));
-
-            if(exchangeInterface->isConnected())
-            {
-                readAllParameters();
-                emit sgSetUIText("port_opened", exchangeInterface->connectionDescription());
-            }
         }
-    }
-    else
-    {
-        exchangeInterface->checkConnection();
-        recieveTimeout();
     }
 }
 

@@ -15,8 +15,6 @@ class UsbInterface : public AbstractInterface
 public:
     explicit UsbInterface(QObject *parent = nullptr);
 
-    // AbstractInterface interface
-public:
     void discoverDevices();
     QList<DeviceDescription> discoveredDevicesList();
 

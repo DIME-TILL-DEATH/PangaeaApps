@@ -5,6 +5,7 @@ QT += quick
 QT += quickcontrols2
 QT += qml quick svg
 QT += serialport
+QT += bluetooth
 
 win32: {
     VERSION = 1.0.1709.1
@@ -31,6 +32,7 @@ SOURCES += main.cpp \
     device/presetlistmodel.cpp \
     hardware/devicedescription.cpp \
     interfaces/abstractinterface.cpp \
+    interfaces/bleinterface.cpp \
     interfaces/usbinterface.cpp \
     threadcontroller.cpp \
     utils/irworker.cpp \
@@ -52,6 +54,7 @@ HEADERS += \
     device/presetlistmodel.h \
     hardware/devicedescription.h \
     interfaces/abstractinterface.h \
+    interfaces/bleinterface.h \
     interfaces/usbinterface.h \
     threadcontroller.h \
     utils/irworker.h \
