@@ -9,8 +9,8 @@
 #include <QFile>
 
 #include "core.h"
-#include "usbinterface.h"
-#include "bleinterface.h"
+//#include "usbinterface.h"
+//#include "bleinterface.h"
 
 Core::Core(QObject *parent) : QObject(parent)
 {
@@ -34,13 +34,13 @@ Core::Core(QObject *parent) : QObject(parent)
 
     // TODO пользователь выбирает интерфес при старте
 //    exchangeInterface = new UsbInterface(this);
-    exchangeInterface = new BleInterface(this);
-    connect(exchangeInterface, &AbstractInterface::sgNewData, this, &Core::parseInputData);
-    connect(exchangeInterface, &AbstractInterface::sgInterfaceError, this, &Core::slInterfaceError);
-    connect(exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &Core::slInterfaceConnected);
-    connect(exchangeInterface, &AbstractInterface::sgDeviceListUpdated, this, &Core::slDeviceListUpdated);
+//    exchangeInterface = new BleInterface(this);
+//    connect(exchangeInterface, &AbstractInterface::sgNewData, this, &Core::parseInputData);
+//    connect(exchangeInterface, &AbstractInterface::sgInterfaceError, this, &Core::slInterfaceError);
+//    connect(exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &Core::slInterfaceConnected);
+//    connect(exchangeInterface, &AbstractInterface::sgDeviceListUpdated, this, &Core::slDeviceListUpdated);
 
-    exchangeInterface->discoverDevices();
+//    exchangeInterface->discoverDevices();
 }
 
 void Core::registerQmlObjects()
@@ -838,32 +838,33 @@ void Core::pastePreset()
     emit sgSetUIParameter ("preset_edited", isPresetEdited);
 }
 
-void Core::slInterfaceConnected()
+void Core::slInterfaceConnected(DeviceDescription device)
 {
     readAllParameters();
-    emit sgSetUIText("port_opened", exchangeInterface->connectionDescription());
+    //TODO move to interface
+    emit sgSetUIText("port_opened", device.address());
 }
 
 void Core::slDeviceListUpdated()
 {
-    if(!exchangeInterface->isConnected())
-    {
-        qDebug()<<"Device list updated";
+//    if(!exchangeInterface->isConnected())
+//    {
+//        qDebug()<<"Device list updated";
 
-        QVariantList devicesList;
-        for(auto deviceDescription : exchangeInterface->discoveredDevicesList())
-        {
-            QVariant var;
-            var.setValue(deviceDescription);
-            devicesList.append(var);
-        }
-        emit sgSetUIDataList("discovered_devices", devicesList);
+//        QVariantList devicesList;
+//        for(auto deviceDescription : exchangeInterface->discoveredDevicesList())
+//        {
+//            QVariant var;
+//            var.setValue(deviceDescription);
+//            devicesList.append(var);
+//        }
+//        emit sgSetUIDataList("discovered_devices", devicesList);
 
 //        if(exchangeInterface->discoveredDevicesList().size() != 0)
 //        {
 //            exchangeInterface->connect(exchangeInterface->discoveredDevicesList().at(0));
 //        }
-    }
+ //   }
 }
 
 void Core::setParameter(QString name, quint8 value)
@@ -960,7 +961,8 @@ void Core::setParameter(QString name, quint8 value)
     if(sendStr.length()>0)
     {
         enableRecieve = false;
-        exchangeInterface->write(sendStr.toUtf8());
+        //exchangeInterface->write(sendStr.toUtf8());
+        emit sgWriteToInterface(sendStr.toUtf8());
     }
 }
 
@@ -1110,7 +1112,8 @@ void Core::sendCommand(QByteArray val)
 
     symbolsSended += val.size();
     enableRecieve = false;
-    exchangeInterface->write(val);
+    //exchangeInterface->write(val);
+    emit sgWriteToInterface(val);
 
     updateProgressBar();
 }
@@ -1130,5 +1133,5 @@ void Core::sw4Enable()
 void Core::stopCore()
 {
     timer->stop();
-    exchangeInterface->disconnect();
+    //exchangeInterface->disconnect();
 }

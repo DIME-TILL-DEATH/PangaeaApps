@@ -64,7 +64,7 @@ public:
     void setPresetData(const Preset& preset);
 
 private:
-    AbstractInterface* exchangeInterface;
+   // AbstractInterface* exchangeInterface;
     IRWorker irWorker;
     DeviceControls deviceControls;
     AnswerWorker commandWorker;
@@ -109,6 +109,7 @@ private:
     bool bEditable;
 
 signals:
+    void sgWriteToInterface(QByteArray data);
 
     void sgFirmwareVersionInsufficient(Firmware *minimalFirmware, Firmware *actualFirmware);
     void sgRequestNewestFirmware(Firmware* actualFirmware);
@@ -125,7 +126,7 @@ signals:
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
 
 public slots:
-    void slInterfaceConnected();
+    void slInterfaceConnected(DeviceDescription device);
     void slDeviceListUpdated();
 
     void slReadyToDisconnect();

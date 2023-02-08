@@ -48,8 +48,6 @@ Item
                 {
                     color: Style.mainEnabledColor
                     anchors.centerIn: parent
-                    font.family: "Arial Black"
-                    font.bold: true
                     font.pixelSize: parent.height/2.5
                     text: dispValue
                 }

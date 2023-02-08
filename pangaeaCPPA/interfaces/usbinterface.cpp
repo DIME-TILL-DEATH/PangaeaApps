@@ -70,7 +70,7 @@ bool UsbInterface::connect(DeviceDescription device)
     if(isPortOpened)
     {
         qDebug() << __FUNCTION__<< "Serial port is opened";
-        emit sgInterfaceConnected();
+        emit sgInterfaceConnected(device);
         setState(InterfaceState::AcquireData);
     }
     else
@@ -156,9 +156,9 @@ void UsbInterface::slPortTimer()
         qDebug()<<"Serial port search timeout";
 
         discoverDevices();
-        if(discoveredDevicesList().size() != 0)
+        if(m_discoveredDevices.size() != 0)
         {
-            emit sgDeviceListUpdated();
+            emit sgDeviceListUpdated(m_discoveredDevices);
         }
     }
     else

@@ -18,7 +18,7 @@ BleInterface::BleInterface(QObject *parent)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
 #else
-    appSettings = new QSettings(QSettings::UserScope);
+    appSettings = new QSettings(QSettings::UserScope, this);
 #endif
     appSettings->setFallbacksEnabled(false);
     appSettings->beginGroup("AutoconnectSettings");
@@ -173,7 +173,7 @@ void BleInterface::updateBLEDevicesList()
       DeviceDescription currentDescription{currentDevice.name() + uniqueName, strAddress, DeviceConnectionType::BLE};
       m_qlFoundDevices.append(currentDescription);
   }
-  emit sgDeviceListUpdated();
+  emit sgDeviceListUpdated(m_qlFoundDevices);
 }
 
 void BleInterface::checkDevicesAvaliabliy()
@@ -230,6 +230,7 @@ bool BleInterface::connect(DeviceDescription device)
 
     if(state() == InterfaceState::Scanning)
     {
+        m_connectedDevice = device;
         doConnect(0, device.address());
         setState(InterfaceState::Connecting);
     }
@@ -255,7 +256,6 @@ void BleInterface::doConnect(qint8 numDev, QString address)
 void BleInterface::slStartConnect(QString address)
 {
     qDebug() << "Trying to connect";
-    m_qvMeasurements.clear();
 
     const QBluetoothDeviceInfo* deviceToConnect = getDeviceByMAC(address);
 
@@ -433,7 +433,7 @@ void BleInterface::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
         }
     }
     setState(AcquireData);
-    emit sgInterfaceConnected();
+    emit sgInterfaceConnected(m_connectedDevice);
 }
 
 void BleInterface::write(QByteArray data)

@@ -30,8 +30,8 @@ SOURCES += main.cpp \
     device/firmware.cpp \
     device/preset.cpp \
     device/presetlistmodel.cpp \
-    hardware/devicedescription.cpp \
     interfaces/abstractinterface.cpp \
+    interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
     interfaces/usbinterface.cpp \
     threadcontroller.cpp \
@@ -52,8 +52,8 @@ HEADERS += \
     device/firmware.h \
     device/preset.h \
     device/presetlistmodel.h \
-    hardware/devicedescription.h \
     interfaces/abstractinterface.h \
+    interfaces/devicedescription.h \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
     threadcontroller.h \
@@ -65,7 +65,6 @@ HEADERS += \
 INCLUDEPATH += cores
 INCLUDEPATH += utils
 INCLUDEPATH += interfaces
-INCLUDEPATH += hardware
 INCLUDEPATH += device
 
 macx {

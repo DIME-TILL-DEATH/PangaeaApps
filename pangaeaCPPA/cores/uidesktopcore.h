@@ -7,8 +7,8 @@
 
 #include <QTranslator>
 
+#include "devicedescription.h"
 #include "firmware.h"
-#include "resampler.h"
 
 //TODO: class enum UIValueItem, UITextItem, UIErrorItem
 class UiDesktopCore : public QObject
@@ -30,7 +30,7 @@ public:
     //Q_INVOKABLE void connectToDevice(quint8 devNum);
     //Q_INVOKABLE void disconnectFromDevice(void);
 
-    //Q_INVOKABLE void doConnect(quint8 numDev, QString address);
+    Q_INVOKABLE void connectToDevice(DeviceDescription device);
     //Q_INVOKABLE void rescanDevices();
 
 
@@ -75,16 +75,18 @@ signals:
    // void sgStartScan();
    // void sgUpdateBLEDevicesList(QStringList str);
     void sgConnectReady(void);
-    void sgConnectToDevice(int numDevice);
-    void sgDoConnect(quint8 numDev, QString address);
+    void sgConnectToDevice(DeviceDescription device);
+//    void sgDoConnect(quint8 numDev, QString address);
     void sgDoDisconnect();
 
     void sgTranslatorChanged(QString langauageCode);
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);
-    void sgSetUIDataList(QString nameParam, QVariantList list);
+    //void sgSetUIDataList(QString nameParam, QVariantList list);
     void sgUpdateAppSetting(QString settingName, QVariant settingValue);
+
+    void sgDeviceListUpdated(QList<DeviceDescription> list);
 
     void sgPresetChangeStage (quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);

@@ -1,8 +1,13 @@
-import QtQuick 2.7
-////import QtQuick.Controls 1.5
-import "../Elements/"
+import QtQuick
+
+import Elements
+import StyleSettings
 
 Text
 {
-   renderType: Text.NativeRendering
+   font.bold: true
+   font.family: "Arial Black"
+
+   //renderType: Text.NativeRendering
+   color: Style.backgroundColor
 }

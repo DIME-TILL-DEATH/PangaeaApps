@@ -8,6 +8,7 @@
 #include <QCoreApplication>
 #include <QUrl>
 
+#include "resampler.h"
 #include "uidesktopcore.h"
 
 UiDesktopCore::UiDesktopCore(QObject *parent)
@@ -82,6 +83,11 @@ void UiDesktopCore::convertAndUploadImpulse(QString fullFilePath)
     Resampler().convertFile(fullFilePath, outpuFilePath);
 
     setImpuls(outpuFilePath);
+}
+
+void UiDesktopCore::connectToDevice(DeviceDescription device)
+{
+    emit sgConnectToDevice(device);
 }
 
 void UiDesktopCore::exportPreset(QString filePath)

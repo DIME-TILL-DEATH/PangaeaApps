@@ -133,7 +133,6 @@ Item
                 anchors.fill:  parent
                 color:  Style.mainEnabledColor
                 horizontalAlignment: Text.AlignHCenter
-                font.bold: true
                 font.pixelSize: parent.height/1.1
                 text: main.text
             }

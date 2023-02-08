@@ -60,7 +60,6 @@ Item
         height: parent.height
         anchors.left: parent.left
         text: "EQ"
-        font.bold: true
         font.pixelSize: parent.height/1.8
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment:   Text.AlignVCenter
@@ -89,7 +88,6 @@ Item
         height: parent.height
         anchors.right: parent.right
         text: "MAP"
-        font.bold: true
         font.pixelSize: parent.height/1.8
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment:   Text.AlignVCenter

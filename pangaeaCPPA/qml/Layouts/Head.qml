@@ -87,7 +87,9 @@ Item
                 text: "empty"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
-                font.bold: true
+
+                color: "black"
+
                 font.pixelSize: parent.height/4
                 wrapMode: Text.Wrap
             }

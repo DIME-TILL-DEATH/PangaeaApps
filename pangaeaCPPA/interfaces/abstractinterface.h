@@ -39,8 +39,8 @@ public:
     InterfaceState state() const;
 
 signals:
-    void sgDeviceListUpdated();
-    void sgInterfaceConnected();
+    void sgDeviceListUpdated(QList<DeviceDescription> list);
+    void sgInterfaceConnected(DeviceDescription device);
     void sgInterfaceError(QString errorDescription);
     void sgChangedState(AbstractInterface::InterfaceState newState);
     void sgNewData(QByteArray data);

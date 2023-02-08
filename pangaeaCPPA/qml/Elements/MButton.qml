@@ -70,8 +70,6 @@ Item
         MText
         {
             anchors.fill:  parent
-            font.family: "Arial Black"
-            font.bold: true
             font.pixelSize: parent.height/2*scaleText
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment:   Text.AlignVCenter

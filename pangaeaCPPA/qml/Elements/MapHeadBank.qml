@@ -30,7 +30,6 @@ Item
                 rotation: 270
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
-                font.bold: true
                 font.pixelSize: parent.width/1.5
             }
         }
@@ -60,7 +59,6 @@ Item
                         verticalAlignment:   Qt.AlignVCenter
                         text: index
                         color: index===curVal ? Style.highlightColor : Style.backgroundColor
-                        font.bold: true
                         font.pixelSize: parent.width/1.5
                     }
                 }

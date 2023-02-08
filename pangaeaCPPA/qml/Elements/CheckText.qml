@@ -14,7 +14,7 @@ MText
     text:  "TEXT"
     color: check ? "Salmon" : Style.backgroundColor
     horizontalAlignment: leftText?Text.AlignHLeft:Text.AlignHCenter
-    font.bold: true
+
     font.pixelSize: parent.height/1.5
     opacity: main.enabled?1:0.5
     MouseArea

@@ -14,6 +14,10 @@
 
 #include "threadcontroller.h"
 
+#include "abstractinterface.h"
+#include "usbinterface.h"
+#include "bleinterface.h"
+
 void manageSegFailure(int signalCode);
 Logger* Logger::currentHandler = nullptr;
 Logger* appLogger_ptr;
@@ -37,7 +41,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
 
     qRegisterMetaType<DeviceDescription>();
-    qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
+    qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
     core.registerQmlObjects();
 
     ThreadController threadController(QThread::currentThread());
@@ -69,7 +73,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
     QObject::connect(&core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
-    QObject::connect(&core, &Core::sgSetUIDataList, &uiCore, &UiDesktopCore::sgSetUIDataList);
+   // QObject::connect(&core, &Core::sgSetUIDataList, &uiCore, &UiDesktopCore::sgSetUIDataList);
 //    QObject::connect(&core, &Core::sgUpdateBLEDevicesList, &uiCore, &UiDesktopCore::sgUpdateBLEDevicesList);
 //    QObject::connect(&core, &Core::sgConnectReady, &uiCore, &UiDesktopCore::sgConnectReady);
     QObject::connect(&core, &Core::sgPresetChangeStage, &uiCore, &UiDesktopCore::sgPresetChangeStage);
@@ -82,6 +86,21 @@ int main(int argc, char *argv[])
 //    QObject::connect(&netCore, &NetCore::sgFirmwareDownloaded, &core, &Core::uploadFirmware);
 //    QObject::connect(&netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UICore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
 //    QObject::connect(&netCore, &NetCore::sgDownloadProgress, &uiCore, &UICore::sgDownloadProgress, Qt::QueuedConnection);
+
+    AbstractInterface* exchangeInterface = new BleInterface();
+//    AbstractInterface* exchangeInterface = new UsbInterface();
+    exchangeInterface->moveToThread(threadController.backendThread());
+
+    UiDesktopCore::connect(&uiCore, &UiDesktopCore::sgConnectToDevice, exchangeInterface, &AbstractInterface::connect);
+    UiDesktopCore::connect(&uiCore, &UiDesktopCore::sgUiClosing, exchangeInterface, &AbstractInterface::disconnect);
+    UiDesktopCore::connect(exchangeInterface, &AbstractInterface::sgDeviceListUpdated, &uiCore, &UiDesktopCore::sgDeviceListUpdated);
+
+    Core::connect(exchangeInterface, &AbstractInterface::sgNewData, &core, &Core::parseInputData);
+    Core::connect(exchangeInterface, &AbstractInterface::sgInterfaceError, &core, &Core::slInterfaceError);
+    Core::connect(exchangeInterface, &AbstractInterface::sgInterfaceConnected, &core, &Core::slInterfaceConnected);
+    Core::connect(&core, &Core::sgWriteToInterface, exchangeInterface, &AbstractInterface::write);
+
+    exchangeInterface->discoverDevices();
     //----------------------------------------------------------------
 
 

@@ -81,9 +81,10 @@ signals:
 
 private:
     QBluetoothDeviceDiscoveryAgent *m_deviceDiscoveryAgent{nullptr};
+
     QList<QBluetoothDeviceInfo> m_avaliableDevices;
     QList<DeviceDescription> m_qlFoundDevices;
-    QVector<quint16> m_qvMeasurements;
+
     QLowEnergyController *m_control;
     QLowEnergyService *m_service;
     QLowEnergyDescriptor m_notificationDescTx;
@@ -91,6 +92,7 @@ private:
     bool m_bFoundUARTService;
 
     QSettings* appSettings;
+    DeviceDescription m_connectedDevice;
 
     QString m_autoconnectDevicetMAC;
     QString m_moduleName;

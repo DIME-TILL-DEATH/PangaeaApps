@@ -46,8 +46,7 @@ Rectangle {
             {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.family: "Arial Black"
-                font.bold: true
+
                 font.pixelSize: parent.height/1.7
                 color: root.on ? "salmon" : Style.backgroundColor
                 text: moduleName

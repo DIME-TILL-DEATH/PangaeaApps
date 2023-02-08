@@ -37,11 +37,6 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             Layout.fillWidth: true
-
-            color: Style.backgroundColor
-
-            font.family: "Arial Black"
-            font.bold: true
             font.pixelSize: root.height/27
 
             text: root.text

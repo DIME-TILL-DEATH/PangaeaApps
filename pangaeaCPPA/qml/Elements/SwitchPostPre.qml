@@ -82,9 +82,7 @@ Item
             {
                 anchors.fill: parent
                 text: "EQ"
-                color: Style.backgroundColor
-                font.family: "Arial Black"
-                font.bold: true
+
                 font.pixelSize: parent.height/1.5
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignTop

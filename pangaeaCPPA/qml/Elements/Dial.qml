@@ -69,8 +69,6 @@ Item
                 {
                     anchors.centerIn: parent
                     color: Style.mainEnabledColor
-                    font.family: "Arial Black"
-                    font.bold: true
                     font.pixelSize: parent.width/5
                     text: dispValue
                 }
@@ -151,8 +149,6 @@ Item
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenterOffset: -parent.width/30
                 color: main.checkable ? (main.on ? "Salmon"  :"Blue") : Style.backgroundColor
-                font.family: "Arial Black"
-                font.bold: true
                 font.pixelSize: parent.width/6
                 text: main.name
                 MouseArea

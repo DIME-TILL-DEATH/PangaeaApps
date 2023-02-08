@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 import Elements
 import StyleSettings
@@ -17,6 +18,8 @@ Column {
     width: parent.width/2
     height: parent.height
 
+    spacing: height/50
+
     property double radius: width/20
  //   border.width: 2
 
@@ -24,7 +27,7 @@ Column {
         id: _scanContainerRect
 
         width: parent.width
-        height: parent.height*1/12//-parent.spacing*3
+        height: parent.height*9/50//-parent.spacing*3
 
         color: "blue"
         border.width: 1
@@ -98,7 +101,7 @@ Column {
             {
                 id: _mainText
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: Style.backgroundColor
+
                 text: isConnected ? qsTr("CONNECTED") : qsTr("Searching for devices...")
                 // text: isConnected ? "CONNECTED" : "SCANNING"
             }
@@ -106,29 +109,19 @@ Column {
             {
                 id: _auxText
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: Style.backgroundColor
+
                 font.pixelSize: _mainText.font.pixelSize*0.8
                 text: isConnected ? qsTr("(TAP to disconnect)") : ""
                 visible: isConnected
             }
         }
-
-//        MouseArea{
-//            anchors.fill: parent
-//            onClicked: {
-//                if(isConnected)
-//                {
-//                    messageAcceptDisconnect.open()
-//                }
-//            }
-//        }
     }
 
     Rectangle{
         color: Style.mainDisabledColor
 
         width: parent.width
-        height: parent.height*11/12
+        height: parent.height*40/50
 
         radius: root.radius
         border.width: 2
@@ -136,13 +129,87 @@ Column {
         ListView{
             id: listView
 
-            anchors.fill: parent
+            property int autoSelectedItem
+            currentIndex: (autoSelectedItem<count) ? autoSelectedItem : "0"
 
-            delegate: Rectangle{
-                width: listView.width*0.75
-                height: width/5
+            width: parent.width*0.9
+            height: parent.height*0.95
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+
+            enabled: !isConnected
+
+            focus: true
+
+            delegate: Item{
+                width: listView.width
+                height: listView.height/10
                 MText{
-                    text: modelData.name + modelData.address
+                    width: parent.width-40
+                    leftPadding: parent.width/20
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    text: modelData.name + "\n" + modelData.address
+                }
+
+                MouseArea
+                {
+                    anchors.fill: parent
+                    z: 1
+                    propagateComposedEvents: true
+
+                    onClicked:
+                    {
+                        listView.autoSelectedItem = index
+                    }
+                    onDoubleClicked:
+                    {
+                        listView.autoSelectedItem = index
+                        UiCore.connectToDevice(modelData)
+                    }
+                }
+            }
+
+            highlight: Rectangle
+            {
+                color: Style.highlightColor
+                opacity: 0.75
+
+                radius: listView.width/75
+
+                property int iconWidth: 50
+                property int iconHeight: 50
+                property bool iconVisible: false
+
+               // border.width:1
+                //border.color: Style.backgroundColor
+                Item{
+                    id: _vConatiner
+
+                    visible: iconVisible
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    x: parent.width - width*2
+
+                    width: iconWidth
+                    height: iconHeight
+                    Image
+                    {
+                        id: _vImg
+                        source: "qrc:/qml/Images/(V).svg"
+
+                        anchors.fill: parent
+
+                        fillMode: Image.PreserveAspectFit
+                        transformOrigin: Item.Center
+                        layer {
+                            enabled: true
+                            effect: ColorOverlay {
+                                color: "white"
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -151,11 +218,13 @@ Column {
     Connections{
         target: UiCore
 
-        function onSgSetUIDataList(nameParam, list)
+        //function onSgSetUIDataList(nameParam, list)
+        function onSgDeviceListUpdated(list)
         {
             listView.model = list
 
             console.log(list)
+            console.log(DeviceDescription.USBAuto)
         }
     }
 }

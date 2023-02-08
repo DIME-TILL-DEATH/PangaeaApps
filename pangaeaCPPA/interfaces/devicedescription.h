@@ -17,6 +17,7 @@ public:
         USBManual,
         BLE
     };
+    Q_ENUM(DeviceConnectionType)
 
     DeviceDescription() = default;
     DeviceDescription(QString name, QString address, DeviceConnectionType connectionType);
