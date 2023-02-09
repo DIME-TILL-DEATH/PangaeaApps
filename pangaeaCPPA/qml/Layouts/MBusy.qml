@@ -10,7 +10,7 @@ Item
 
     anchors.fill: parent
 
-    visible: false
+    //visible: true
 
     property double  pbValue: 0
     property string strSearching: qsTr("Searching for devices....")
@@ -40,6 +40,7 @@ Item
             Layout.preferredHeight: width
             Layout.fillWidth: true
 
+            opacity: 0 // hack. Иначе BusyIndicator не отрисовывается
         }
 
         ProgressBar
@@ -99,15 +100,15 @@ Item
             rWait.pbValue = val;
         }
 
-        function onSgSetUIText(nameParam, inString)
-        {
-            if(nameParam===("port_closed"))
-            {
-                progressBar.visible = false
-                txt.text = rWait.strSearching
-               // rWait.visible = true;
-            }
-        }
+//        function onSgSetUIText(nameParam, inString)
+//        {
+//            if(nameParam===("port_closed"))
+//            {
+//               // progressBar.visible = false
+//                txt.text = rWait.strSearching
+//               // rWait.visible = true;
+//            }
+//        }
 
         function onSgSetUIParameter(nameParam, inValue)
         {
@@ -138,6 +139,28 @@ Item
                 txt.text = qsTr("Applying impulse to device. Please wait...");
                 progressBar.visible = false
             }
+        }
+    }
+
+    Component.onCompleted: {
+        rWait.visible = false
+    }
+
+    Connections{
+        target: InterfaceManager
+
+        function onSgConnectionStarted()
+        {
+            bI.opacity = 1;
+            progressBar.visible = false;
+            txt.text = qsTr("Connecting to device...");
+            rWait.visible = true;
+        }
+
+        function onSgInterfaceError(errorDescription)
+        {
+            rWait.visible = false;
+          //  console.log("interface error:", errorDescription);
         }
     }
 }

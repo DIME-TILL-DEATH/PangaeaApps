@@ -29,10 +29,13 @@ SOURCES += main.cpp \
     device/deviceparameter.cpp \
     device/firmware.cpp \
     device/preset.cpp \
-    device/presetlistmodel.cpp \
+    models/interfacelistmodel.cpp \
+    models/presetlistmodel.cpp \
     interfaces/abstractinterface.cpp \
     interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
+    interfaces/interfacemanager.cpp \
+    interfaces/uiinterfacemanager.cpp \
     interfaces/usbinterface.cpp \
     threadcontroller.cpp \
     utils/irworker.cpp \
@@ -51,10 +54,13 @@ HEADERS += \
     device/deviceparameter.h \
     device/firmware.h \
     device/preset.h \
-    device/presetlistmodel.h \
+    models/interfacelistmodel.h \
+    models/presetlistmodel.h \
     interfaces/abstractinterface.h \
     interfaces/devicedescription.h \
     interfaces/bleinterface.h \
+    interfaces/interfacemanager.h \
+    interfaces/uiinterfacemanager.h \
     interfaces/usbinterface.h \
     threadcontroller.h \
     utils/irworker.h \
@@ -66,6 +72,7 @@ INCLUDEPATH += cores
 INCLUDEPATH += utils
 INCLUDEPATH += interfaces
 INCLUDEPATH += device
+INCLUDEPATH += models
 
 macx {
     QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist

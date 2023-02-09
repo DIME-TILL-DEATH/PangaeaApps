@@ -59,5 +59,7 @@
         <file>qml/Images/Arrow Gear new.svg</file>
         <file>qml/Images/Arrow Gear.svg</file>
         <file>qml/Images/Connected.svg</file>
+        <file>qml/Elements/ILDelegate.qml</file>
+        <file>qml/Elements/ILHighlight.qml</file>
     </qresource>
 </RCC>

@@ -22,32 +22,35 @@ public:
 
     explicit AbstractInterface(QObject *parent = nullptr);
 
-    virtual void discoverDevices() = 0;
+    virtual void startScan() = 0;
+    virtual void stopScan() = 0;
     virtual QList<DeviceDescription> discoveredDevicesList() = 0;
 
     virtual bool connect(DeviceDescription device) = 0;
-    virtual bool isConnected() = 0;
+    virtual void disconnectFromDevice() = 0;
 
     virtual void write(QByteArray data) = 0;
-
-    virtual void disconnect() = 0;
-
-    virtual QString connectionDescription() = 0;
 
     void setState(InterfaceState newState);
     void prevState();
     InterfaceState state() const;
 
 signals:
-    void sgDeviceListUpdated(QList<DeviceDescription> list);
-    void sgInterfaceConnected(DeviceDescription device);
+    void sgDeviceListUpdated(DeviceConnectionType senderType, QList<DeviceDescription>& list);
+    void sgConnectionStarted();
+    void sgInterfaceConnected(DeviceDescription& device);
     void sgInterfaceError(QString errorDescription);
-    void sgChangedState(AbstractInterface::InterfaceState newState);
     void sgNewData(QByteArray data);
+
+    void sgChangedState(AbstractInterface::InterfaceState newState);
+
+protected:
+    QString m_description{"abstract"};
 
 private:
     InterfaceState m_state{InterfaceState::Idle};
     InterfaceState m_prevState{InterfaceState::Idle};
+
 };
 
 #endif // ABSTRACTINTERFACE_H

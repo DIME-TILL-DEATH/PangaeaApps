@@ -25,20 +25,18 @@ class BleInterface : public AbstractInterface
 public:
     explicit BleInterface(QObject *parent = nullptr);
 
-    void discoverDevices();
+    void startScan();
+    void stopScan();
     QList<DeviceDescription> discoveredDevicesList();
 
     bool connect(DeviceDescription device);
-    bool isConnected();
+    void disconnectFromDevice();
 
     void write(QByteArray data);
-    void disconnect(); //dummy
-
-    QString connectionDescription(); //dummy
 
     //-------------------------------------------------------
-    void doDisconnect(void);
-    void doConnect(qint8 numDev, QString address);
+//    void doDisconnect(void);
+ //   void doConnect(qint8 numDev, QString address);
 
 //    void setAutoconnectState(bool newAutoconnect);
 //    bool AutoconnectState() const;
@@ -46,13 +44,12 @@ public:
     void setModuleName(QString name);
     const QString &moduleName() const;
 
-    const QBluetoothDeviceInfo* getDeviceByMAC(const QString& macAddress);
-
-public slots:
-    void startScan();
-    void updateBLEDevicesList();
 
 private slots:
+    void startDiscovering();
+    void updateBLEDevicesList();
+    const QBluetoothDeviceInfo* getDeviceByMAC(const QString& macAddress);
+
     /* Slots for QBluetothDeviceDiscoveryAgent */
     void addDevice(const QBluetoothDeviceInfo&);
     void deviceScanError(QBluetoothDeviceDiscoveryAgent::Error);
@@ -75,8 +72,8 @@ private slots:
     void checkDevicesAvaliabliy();
 
 signals:
-    void sgConnect(quint8 numDevice);
-    void sgErrorDisconnected();
+//    void sgConnect(quint8 numDevice);
+ //   void sgErrorDisconnected();
     void sgLocalBluetoothNotReady(QString reason);
 
 private:

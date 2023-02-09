@@ -226,16 +226,15 @@ Item
             }
         }
 
-        function onSgSetUIText(nameParam, inString)
-        {
-            if(nameParam===("port_closed"))
-            {
-                modulesList.clear();
-                listViewModules.forceLayout();
-               // main.moduleVisible = false
+//        function onSgSetUIText(nameParam, inString)
+//        {
+//            if(nameParam===("port_closed"))
+//            {
+//                modulesList.clear();
+//                listViewModules.forceLayout();
 
-            }
-        }
+//            }
+//        }
 
         // not set ui
         function onSgSetParameter(nameParam, value)
@@ -246,6 +245,22 @@ Item
             }
         }
 
+    }
+
+    Connections{
+        target: InterfaceManager
+
+        function onSgInterfaceError(errorDescription)
+        {
+            modulesList.clear();
+            listViewModules.forceLayout();
+        }
+
+        function onSgInterfaceDisconnected()
+        {
+            modulesList.clear();
+            listViewModules.forceLayout();
+        }
     }
 
 }

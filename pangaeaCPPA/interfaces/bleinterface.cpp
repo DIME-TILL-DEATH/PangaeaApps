@@ -35,17 +35,30 @@ BleInterface::BleInterface(QObject *parent)
         m_moduleUniqueNames.insert(MACAddress, name);
     }
     appSettings->endArray();
-}
 
-void BleInterface::discoverDevices()
-{
-    if(state() == InterfaceState::Idle)
-    {
-        startScan();
-    }
+    m_description = "BLE";
 }
 
 void BleInterface::startScan()
+{
+    qDebug() << "Start BLE scanning";
+    if(state() == InterfaceState::Idle)
+    {
+        startDiscovering();
+    }
+}
+
+void BleInterface::stopScan()
+{
+    if(m_deviceDiscoveryAgent)
+    {
+        m_deviceDiscoveryAgent->stop();
+    }
+//    m_avaliableDevices.clear();
+    setState(InterfaceState::Idle);
+}
+
+void BleInterface::startDiscovering()
 {
 #ifdef Q_OS_ANDROID
     QBluetoothLocalDevice device;
@@ -106,19 +119,19 @@ void BleInterface::startScan()
 
     setState(InterfaceState::Scanning);
 
-    qDebug()<< "Searching for low energy devices..." ;
+    //qDebug()<< "Searching for low energy devices..." ;
 }
 
 void BleInterface::scanTimeout()
 {
-    qInfo() << "Scan timeout";
+//    qInfo() << "BLE scan timeout";
     checkDevicesAvaliabliy();
     updateBLEDevicesList();
 
     if(state() == InterfaceState::Scanning)
     {
         qDebug() << "Restart scan";
-        startScan();
+        startDiscovering();
     }
     else
     {
@@ -129,11 +142,11 @@ void BleInterface::scanTimeout()
 
 void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
 {
-    if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
-    {
-        qInfo() << "Discovered LE Device name: " << device.name() << " Address: "
-                   << device.address().toString();
-    }
+//    if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
+//    {
+//        qInfo() << "Discovered LE Device name: " << device.name() << " Address: "
+//                   << device.address().toString();
+//    }
 
     bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
 
@@ -148,7 +161,11 @@ void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
               if(macAddress.indexOf(m_autoconnectDevicetMAC) == 0)
               {
                   qDebug() << "Autoconnecting";
-                  doConnect(m_avaliableDevices.count()-1, macAddress);
+                  m_connectedDevice = DeviceDescription(device.name(), macAddress, DeviceConnectionType::BLE);
+                  setState(InterfaceState::Connecting);
+
+                  slStartConnect(macAddress);
+                  emit sgConnectionStarted();
               }
             }
             updateBLEDevicesList();
@@ -173,7 +190,7 @@ void BleInterface::updateBLEDevicesList()
       DeviceDescription currentDescription{currentDevice.name() + uniqueName, strAddress, DeviceConnectionType::BLE};
       m_qlFoundDevices.append(currentDescription);
   }
-  emit sgDeviceListUpdated(m_qlFoundDevices);
+  emit sgDeviceListUpdated(DeviceConnectionType::BLE, m_qlFoundDevices);
 }
 
 void BleInterface::checkDevicesAvaliabliy()
@@ -225,33 +242,32 @@ QList<DeviceDescription> BleInterface::discoveredDevicesList()
 
 bool BleInterface::connect(DeviceDescription device)
 {
-    if(state() == InterfaceState::AcquireData)
-        return true;
+//    if(state() == InterfaceState::AcquireData)
+//        return true;
 
-    if(state() == InterfaceState::Scanning)
-    {
+//    if(state() == InterfaceState::Scanning)
+//    {
         m_connectedDevice = device;
-        doConnect(0, device.address());
+     //   doConnect(0, device.address());
         setState(InterfaceState::Connecting);
-    }
 
-    return false;
+        slStartConnect(device.address());
+        emit sgConnectionStarted();
+//    }
+
+//    return false;
+        return true;
 }
 
-bool BleInterface::isConnected()
-{
-    return (state() == InterfaceState::AcquireData);
-}
-
-void BleInterface::doConnect(qint8 numDev, QString address)
-{
-    if(numDev < m_avaliableDevices.count())
-    {
-        slStartConnect(address);
-        emit sgConnect(numDev);
-    }
-    else qDebug() << "devNumber is less than avaliable devices";
-}
+//void BleInterface::doConnect(qint8 numDev, QString address)
+//{
+////    if(numDev < m_avaliableDevices.count())
+////    {
+//        slStartConnect(address);
+//       // emit sgConnect(numDev);
+////    }
+////    else qDebug() << "devNumber is less than avaliable devices";
+//}
 
 void BleInterface::slStartConnect(QString address)
 {
@@ -352,23 +368,6 @@ void BleInterface::deviceConnected()
     setState(Connected);
 }
 
-void BleInterface::doDisconnect()
-{
-    qDebug() << "Disconnecting";
-
-    m_control->disconnectFromDevice();
-
-    QBluetoothDeviceDiscoveryAgent::disconnect(m_control, nullptr, nullptr, nullptr);
-    QBluetoothDeviceDiscoveryAgent::disconnect(m_service, nullptr, nullptr, nullptr);
-    QBluetoothDeviceDiscoveryAgent::disconnect(this, &BleInterface::sgNewData, nullptr, nullptr);
-
-    m_avaliableDevices.clear();
-
-    // Idle State????
-    startScan();
-    updateBLEDevicesList();
-}
-
 void BleInterface::deviceDisconnected()
 {
     qDebug() << "UART service disconnected";
@@ -376,7 +375,7 @@ void BleInterface::deviceDisconnected()
 
   //  emit sgErrorDisconnected();
   //  emit sgLocalBluetoothNotReady("DeviceUnavaliable");
-    emit sgInterfaceError("Device disconnected");
+    emit sgInterfaceError("BLE device disconnected");
 }
 
 void BleInterface::controllerError(QLowEnergyController::Error error)
@@ -446,14 +445,24 @@ void BleInterface::write(QByteArray data)
     m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithoutResponse);
 }
 
-void BleInterface::disconnect()
+void BleInterface::disconnectFromDevice()
 {
+    qDebug() << "BLE disconnecting from device";
 
-}
+    if (m_control)
+    {
+        m_control->disconnectFromDevice();
+        QBluetoothDeviceDiscoveryAgent::disconnect(m_control, nullptr, nullptr, nullptr);
+    }
 
-QString BleInterface::connectionDescription()
-{
-    return "description";
+    if(m_service)
+    {
+        QBluetoothDeviceDiscoveryAgent::disconnect(m_service, nullptr, nullptr, nullptr);
+    }
+    QBluetoothDeviceDiscoveryAgent::disconnect(this, &BleInterface::sgNewData, nullptr, nullptr);
+
+    setState(InterfaceState::Idle);
+    m_avaliableDevices.clear();
 }
 
 const QBluetoothDeviceInfo *BleInterface::getDeviceByMAC(const QString &macAddress)

@@ -7,7 +7,6 @@
 
 #include <QTranslator>
 
-#include "devicedescription.h"
 #include "firmware.h"
 
 //TODO: class enum UIValueItem, UITextItem, UIErrorItem
@@ -17,7 +16,6 @@ class UiDesktopCore : public QObject
 public:
     explicit UiDesktopCore(QObject *parent = nullptr);
 
-    //Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
     Q_INVOKABLE void setupApplication();
 
     Q_INVOKABLE void setParameter(QString name, quint8 val);
@@ -27,15 +25,7 @@ public:
     Q_INVOKABLE void escImpuls();
     Q_INVOKABLE void convertAndUploadImpulse(QString fullFilePath);
 
-    //Q_INVOKABLE void connectToDevice(quint8 devNum);
-    //Q_INVOKABLE void disconnectFromDevice(void);
-
-    Q_INVOKABLE void connectToDevice(DeviceDescription device);
-    //Q_INVOKABLE void rescanDevices();
-
-
-    //Q_INVOKABLE void readAll(void);
-
+    Q_INVOKABLE void readAllParameters();
 
     Q_INVOKABLE void exportPreset(QString filePath);
     Q_INVOKABLE void importPreset(QString filePath);
@@ -75,7 +65,7 @@ signals:
    // void sgStartScan();
    // void sgUpdateBLEDevicesList(QStringList str);
     void sgConnectReady(void);
-    void sgConnectToDevice(DeviceDescription device);
+   // void sgConnectToDevice(DeviceDescription device);
 //    void sgDoConnect(quint8 numDev, QString address);
     void sgDoDisconnect();
 
@@ -83,10 +73,7 @@ signals:
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);
-    //void sgSetUIDataList(QString nameParam, QVariantList list);
     void sgUpdateAppSetting(QString settingName, QVariant settingValue);
-
-    void sgDeviceListUpdated(QList<DeviceDescription> list);
 
     void sgPresetChangeStage (quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);
@@ -94,7 +81,7 @@ signals:
     //-----------------------------------------
     void sgLocalBluetoothNotReady(QString reason);
     //-----------------------------------------------
-    void sgReadAll();
+    void sgReadAllParameters();
     void sgSetParameter(QString name, quint8 value);
     void sgRestoreValue(QString name);
     void sgSetImpuls (QString filePath, QString fileName);
@@ -115,6 +102,5 @@ public slots:
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
 };
-
 
 #endif // UIDESKTOPCORE_H

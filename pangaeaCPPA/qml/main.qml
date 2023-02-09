@@ -165,6 +165,8 @@ ApplicationWindow
 
         title: qsTr("Error")
         text: qsTr("Device is disconnected")
+
+        modality: Qt.WindowModal
     }
 
     MessageDialog
@@ -193,22 +195,22 @@ ApplicationWindow
 
         function onSgSetUIText(nameParam, inString)
         {
-            if(nameParam === "port_opened")
-            {
-                connected = true;
-                interfaceDescription = inString
-                mainUi.visible = true;
-                msgError.close();
-            }
+//            if(nameParam === "port_opened")
+//            {
+//                connected = true;
+//                interfaceDescription = inString
+//                mainUi.visible = true;
+//                msgError.close();
+//            }
 
-            if(nameParam === "port_closed")
-            {
-                connected = false;
-                main.editable = false;
-                mainUi.visible = false;
-                msgError.text = qsTr("Device disconnected")
-                msgError.open();
-            }
+//            if(nameParam === "port_closed")
+//            {
+//                connected = false;
+//                main.editable = false;
+//                mainUi.visible = false;
+//                msgError.text = qsTr("Device disconnected")
+//                msgError.open();
+//            }
 
             if(nameParam === "not_supported_ir")
             {
@@ -290,8 +292,32 @@ ApplicationWindow
         }
     }
 
+    Connections{
+        target: InterfaceManager
+
+        function onSgInterfaceConnected(interfaceDescription)
+        {
+            connected = true;
+            interfaceDescription = interfaceDescription.address
+            mainUi.visible = true;
+            msgError.close();
+        }
+
+        function onSgInterfaceError(errorDescription)
+        {
+            connected = false;
+            main.editable = false;
+            mainUi.visible = false;
+            msgError.text = qsTr("Device disconnected")
+            msgError.open();
+
+            InterfaceManager.startScanning();
+        }
+    }
+
     Component.onCompleted: {
         UiCore.setupApplication();
+        InterfaceManager.startScanning();
     }
 
     onClosing: function(close)

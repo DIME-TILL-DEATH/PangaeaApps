@@ -13,21 +13,18 @@ Column {
 
     anchors.centerIn: parent
 
-  //  color: Style.mainDisabledColor
-
     width: parent.width/2
     height: parent.height
 
     spacing: height/50
 
-    property double radius: width/20
- //   border.width: 2
+    property double radius: width/50
 
     Rectangle{
         id: _scanContainerRect
 
         width: parent.width
-        height: parent.height*9/50//-parent.spacing*3
+        height: parent.height*7/50//-parent.spacing*3
 
         color: "blue"
         border.width: 1
@@ -121,7 +118,7 @@ Column {
         color: Style.mainDisabledColor
 
         width: parent.width
-        height: parent.height*40/50
+        height: parent.height*35/50
 
         radius: root.radius
         border.width: 2
@@ -140,91 +137,60 @@ Column {
 
             enabled: !isConnected
 
+            model: InterfaceListModel
+
             focus: true
+            clip: true
 
-            delegate: Item{
+            delegate: ILDelegate{
                 width: listView.width
-                height: listView.height/10
-                MText{
-                    width: parent.width-40
-                    leftPadding: parent.width/20
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    text: modelData.name + "\n" + modelData.address
-                }
-
-                MouseArea
-                {
-                    anchors.fill: parent
-                    z: 1
-                    propagateComposedEvents: true
-
-                    onClicked:
-                    {
-                        listView.autoSelectedItem = index
-                    }
-                    onDoubleClicked:
-                    {
-                        listView.autoSelectedItem = index
-                        UiCore.connectToDevice(modelData)
-                    }
-                }
+                height: listView.height/6
             }
 
-            highlight: Rectangle
-            {
-                color: Style.highlightColor
-                opacity: 0.75
+            highlight: ILHighlight{}
 
-                radius: listView.width/75
+            // Transitions
+            add: Transition {
+                 NumberAnimation { properties: "y"; from: listView.height; duration: 500 }
+             }
 
-                property int iconWidth: 50
-                property int iconHeight: 50
-                property bool iconVisible: false
-
-               // border.width:1
-                //border.color: Style.backgroundColor
-                Item{
-                    id: _vConatiner
-
-                    visible: iconVisible
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    x: parent.width - width*2
-
-                    width: iconWidth
-                    height: iconHeight
-                    Image
-                    {
-                        id: _vImg
-                        source: "qrc:/qml/Images/(V).svg"
-
-                        anchors.fill: parent
-
-                        fillMode: Image.PreserveAspectFit
-                        transformOrigin: Item.Center
-                        layer {
-                            enabled: true
-                            effect: ColorOverlay {
-                                color: "white"
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
-    Connections{
-        target: UiCore
+//    Rectangle{
+//        color: Style.mainDisabledColor
 
-        //function onSgSetUIDataList(nameParam, list)
-        function onSgDeviceListUpdated(list)
-        {
-            listView.model = list
+//        width: parent.width
+//        height: parent.height*6/50
 
-            console.log(list)
-            console.log(DeviceDescription.USBAuto)
-        }
-    }
+//        radius: root.radius
+//        border.width: 2
+
+//        ButtonGroup{
+//            buttons: row.children
+//        }
+
+//        Row{
+//            id: row
+//            anchors.centerIn: parent
+
+//            spacing: 5
+
+//            width: parent.width*0.75
+//            height: parent.height*0.9
+
+//            RadioButton{
+//                text: "USB"
+//                onClicked: {
+//                    InterfaceManager.setInterface(DeviceDescription.USBAuto);
+//                }
+//            }
+//            RadioButton{
+//                text: "Bluetooth"
+//                onClicked: {
+//                    InterfaceManager.setInterface(DeviceDescription.BLE);
+//                }
+//            }
+//        }
+//    }
 }

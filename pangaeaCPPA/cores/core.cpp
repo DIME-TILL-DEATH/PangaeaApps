@@ -9,8 +9,6 @@
 #include <QFile>
 
 #include "core.h"
-//#include "usbinterface.h"
-//#include "bleinterface.h"
 
 Core::Core(QObject *parent) : QObject(parent)
 {
@@ -31,31 +29,17 @@ Core::Core(QObject *parent) : QObject(parent)
 
     m_presetListModel.refreshModel(&m_presetsList);
     connect(this, &Core::sgRefreshPresetList, &m_presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
-
-    // TODO пользователь выбирает интерфес при старте
-//    exchangeInterface = new UsbInterface(this);
-//    exchangeInterface = new BleInterface(this);
-//    connect(exchangeInterface, &AbstractInterface::sgNewData, this, &Core::parseInputData);
-//    connect(exchangeInterface, &AbstractInterface::sgInterfaceError, this, &Core::slInterfaceError);
-//    connect(exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &Core::slInterfaceConnected);
-//    connect(exchangeInterface, &AbstractInterface::sgDeviceListUpdated, this, &Core::slDeviceListUpdated);
-
-//    exchangeInterface->discoverDevices();
-}
-
-void Core::registerQmlObjects()
-{
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &m_presetListModel);
 }
 
-// TODO Отличие от мобильного
-void Core::slInterfaceError(QString errorDescription)
-{
-    qDebug() << "Interface error: " << errorDescription;
+//// TODO Отличие от мобильного
+//void Core::slInterfaceError(QString errorDescription)
+//{
+//    qDebug() << "Interface error: " << errorDescription;
 
-    emit sgSetUIText("port_closed", "");
-    emit sgSetUIParameter ("type_dev", 0);
-}
+//    emit sgSetUIText("port_closed", "");
+//    emit sgSetUIParameter ("type_dev", 0);
+//}
 
 void Core::slReadyToDisconnect()
 {
@@ -838,34 +822,12 @@ void Core::pastePreset()
     emit sgSetUIParameter ("preset_edited", isPresetEdited);
 }
 
-void Core::slInterfaceConnected(DeviceDescription device)
-{
-    readAllParameters();
-    //TODO move to interface
-    emit sgSetUIText("port_opened", device.address());
-}
-
-void Core::slDeviceListUpdated()
-{
-//    if(!exchangeInterface->isConnected())
-//    {
-//        qDebug()<<"Device list updated";
-
-//        QVariantList devicesList;
-//        for(auto deviceDescription : exchangeInterface->discoveredDevicesList())
-//        {
-//            QVariant var;
-//            var.setValue(deviceDescription);
-//            devicesList.append(var);
-//        }
-//        emit sgSetUIDataList("discovered_devices", devicesList);
-
-//        if(exchangeInterface->discoveredDevicesList().size() != 0)
-//        {
-//            exchangeInterface->connect(exchangeInterface->discoveredDevicesList().at(0));
-//        }
- //   }
-}
+//void Core::slInterfaceConnected(DeviceDescription device)
+//{
+//    readAllParameters();
+//    //TODO move to interface
+//   // emit sgSetUIText("port_opened", device.address());
+//}
 
 void Core::setParameter(QString name, quint8 value)
 {
@@ -961,7 +923,6 @@ void Core::setParameter(QString name, quint8 value)
     if(sendStr.length()>0)
     {
         enableRecieve = false;
-        //exchangeInterface->write(sendStr.toUtf8());
         emit sgWriteToInterface(sendStr.toUtf8());
     }
 }
@@ -1085,6 +1046,7 @@ void Core::recieveTimeout()
             sendCount++;
             qDebug() << "!!!!!!!!!!!!!!!!! sendCount !!!!!!!!!!!!!!!!!" << sendCount;
             sendCommand(commandWithoutAnswer);
+            timer->setInterval(1000);
 
             if(sendCount>3)
             {
@@ -1112,7 +1074,6 @@ void Core::sendCommand(QByteArray val)
 
     symbolsSended += val.size();
     enableRecieve = false;
-    //exchangeInterface->write(val);
     emit sgWriteToInterface(val);
 
     updateProgressBar();
@@ -1133,5 +1094,4 @@ void Core::sw4Enable()
 void Core::stopCore()
 {
     timer->stop();
-    //exchangeInterface->disconnect();
 }

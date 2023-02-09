@@ -85,10 +85,11 @@ void UiDesktopCore::convertAndUploadImpulse(QString fullFilePath)
     setImpuls(outpuFilePath);
 }
 
-void UiDesktopCore::connectToDevice(DeviceDescription device)
+void UiDesktopCore::readAllParameters()
 {
-    emit sgConnectToDevice(device);
+    emit sgReadAllParameters();
 }
+
 
 void UiDesktopCore::exportPreset(QString filePath)
 {

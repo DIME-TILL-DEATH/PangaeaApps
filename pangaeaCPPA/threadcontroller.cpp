@@ -8,8 +8,6 @@ ThreadController::ThreadController(QThread *mainThread)
 
     m_backendThread->setObjectName("Backend thread");
     m_backendThread->start();
-
-
 }
 
 ThreadController::~ThreadController()

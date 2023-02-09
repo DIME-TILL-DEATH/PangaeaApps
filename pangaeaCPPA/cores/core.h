@@ -18,18 +18,13 @@
 #include "presetlistmodel.h"
 #include "presetmanager.h"
 
-#include "abstractinterface.h"
-
 #include "irworker.h"
-
 
 class Core : public QObject
 {
     Q_OBJECT
 public:
     explicit Core(QObject *parent = nullptr);
-
-    void registerQmlObjects();
 
     void setParameter(QString name, quint8 value);
     // TODO: пока умеет только Preset и bank!!!! Дописать
@@ -126,8 +121,7 @@ signals:
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
 
 public slots:
-    void slInterfaceConnected(DeviceDescription device);
-    void slDeviceListUpdated();
+//    void slInterfaceConnected(DeviceDescription device);
 
     void slReadyToDisconnect();
 
@@ -137,7 +131,7 @@ public slots:
 
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
 
-    void slInterfaceError(QString errorDescription);
+  //  void slInterfaceError(QString errorDescription);
 };
 
 #endif // CORE_H

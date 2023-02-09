@@ -1,6 +1,5 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
 
 #include <QDebug>
 
@@ -8,15 +7,13 @@
 
 #include "core.h"
 #include "uidesktopcore.h"
+#include "interfacemanager.h"
+#include "uiinterfacemanager.h"
 #include "logger.h"
 
 #include "devicedescription.h"
 
 #include "threadcontroller.h"
-
-#include "abstractinterface.h"
-#include "usbinterface.h"
-#include "bleinterface.h"
 
 void manageSegFailure(int signalCode);
 Logger* Logger::currentHandler = nullptr;
@@ -24,28 +21,38 @@ Logger* appLogger_ptr;
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
-    signal(SIGSEGV, manageSegFailure);
-
-    app.setOrganizationName("AMT");
-    app.setApplicationName("Pangaea");
-
     Logger log;
     log.setAsMessageHandlerForApp();
     appLogger_ptr = &log;
 
-    QQmlApplicationEngine engine;
     Core core;
-    UiDesktopCore uiCore;
-
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
-
-    qRegisterMetaType<DeviceDescription>();
-    qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
-    core.registerQmlObjects();
+    InterfaceManager interfaceManager;
 
     ThreadController threadController(QThread::currentThread());
     core.moveToThread(threadController.backendThread());
+    interfaceManager.moveToThread(threadController.backendThread());
+
+    QThread::connect(threadController.backendThread(), &QThread::finished, &interfaceManager, &InterfaceManager::stopScanning);
+
+    //-----------------------------------------------------------------
+    // UI creation
+    //----------------------------------------------------------------
+    QGuiApplication app(argc, argv);
+    signal(SIGSEGV, manageSegFailure);
+
+    UiInterfaceManager uiInterfaceManager;
+    UiDesktopCore uiCore;
+
+    app.setOrganizationName("AMT");
+    app.setApplicationName("Pangaea");
+
+    QQmlApplicationEngine engine;
+
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
+
+    qRegisterMetaType<DeviceDescription>();
+    qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
 
     //-------------------------------------------------------------------------------
     // connections
@@ -54,7 +61,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&uiCore, &UiDesktopCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    QObject::connect(&uiCore, &UiDesktopCore::sgReadAll, &core, &Core::readAllParameters);
+    QObject::connect(&uiCore, &UiDesktopCore::sgReadAllParameters, &core, &Core::readAllParameters);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetParameter, &core, &Core::setParameter);
     QObject::connect(&uiCore, &UiDesktopCore::sgRestoreValue, &core, &Core::restoreValue);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetImpuls, &core, &Core::setImpulse);
@@ -73,9 +80,6 @@ int main(int argc, char *argv[])
 
     QObject::connect(&core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
     QObject::connect(&core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
-   // QObject::connect(&core, &Core::sgSetUIDataList, &uiCore, &UiDesktopCore::sgSetUIDataList);
-//    QObject::connect(&core, &Core::sgUpdateBLEDevicesList, &uiCore, &UiDesktopCore::sgUpdateBLEDevicesList);
-//    QObject::connect(&core, &Core::sgConnectReady, &uiCore, &UiDesktopCore::sgConnectReady);
     QObject::connect(&core, &Core::sgPresetChangeStage, &uiCore, &UiDesktopCore::sgPresetChangeStage);
     QObject::connect(&core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);
     QObject::connect(&core, &Core::sgModuleNameUpdated, &uiCore, &UiDesktopCore::setModuleName);
@@ -87,20 +91,21 @@ int main(int argc, char *argv[])
 //    QObject::connect(&netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UICore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
 //    QObject::connect(&netCore, &NetCore::sgDownloadProgress, &uiCore, &UICore::sgDownloadProgress, Qt::QueuedConnection);
 
-    AbstractInterface* exchangeInterface = new BleInterface();
-//    AbstractInterface* exchangeInterface = new UsbInterface();
-    exchangeInterface->moveToThread(threadController.backendThread());
+   // UiDesktopCore::connect(&uiCore, &UiDesktopCore::sgUiClosing, &interfaceManager, &InterfaceManager::disconnectFromDevice, Qt::QueuedConnection);
 
-    UiDesktopCore::connect(&uiCore, &UiDesktopCore::sgConnectToDevice, exchangeInterface, &AbstractInterface::connect);
-    UiDesktopCore::connect(&uiCore, &UiDesktopCore::sgUiClosing, exchangeInterface, &AbstractInterface::disconnect);
-    UiDesktopCore::connect(exchangeInterface, &AbstractInterface::sgDeviceListUpdated, &uiCore, &UiDesktopCore::sgDeviceListUpdated);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, &interfaceManager, &InterfaceManager::connectToDevice, Qt::QueuedConnection);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, &interfaceManager, &InterfaceManager::startScanning, Qt::QueuedConnection);
 
-    Core::connect(exchangeInterface, &AbstractInterface::sgNewData, &core, &Core::parseInputData);
-    Core::connect(exchangeInterface, &AbstractInterface::sgInterfaceError, &core, &Core::slInterfaceError);
-    Core::connect(exchangeInterface, &AbstractInterface::sgInterfaceConnected, &core, &Core::slInterfaceConnected);
-    Core::connect(&core, &Core::sgWriteToInterface, exchangeInterface, &AbstractInterface::write);
+    InterfaceManager::connect(&interfaceManager, &InterfaceManager::sgDeviceListUpdated, &uiInterfaceManager, &UiInterfaceManager::updateDevicesList, Qt::QueuedConnection);
+    InterfaceManager::connect(&interfaceManager, &InterfaceManager::sgConnectionStarted, &uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted, Qt::QueuedConnection);
+    InterfaceManager::connect(&interfaceManager, &InterfaceManager::sgInterfaceConnected, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceConnected, Qt::QueuedConnection);
+    InterfaceManager::connect(&interfaceManager, &InterfaceManager::sgInterfaceError, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceError, Qt::QueuedConnection);
 
-    exchangeInterface->discoverDevices();
+    Core::connect(&interfaceManager, &InterfaceManager::sgNewData, &core, &Core::parseInputData);
+    //Core::connect(&interfaceManager, &InterfaceManager::sgInterfaceError, &core, &Core::slInterfaceError);
+    Core::connect(&interfaceManager, &InterfaceManager::sgInterfaceConnected, &core, &Core::readAllParameters);
+    Core::connect(&core, &Core::sgWriteToInterface, &interfaceManager, &InterfaceManager::writeToDevice);
+
     //----------------------------------------------------------------
 
 

@@ -26,12 +26,14 @@ public:
     DeviceConnectionType connectionType() const;
     QString address();
 
+    friend bool operator==(const DeviceDescription& lh, const DeviceDescription& rh);
 private:
     QString m_name;
     QString m_address;
     DeviceConnectionType m_connectionType{DeviceConnectionType::Unknown};
 };
 Q_DECLARE_METATYPE(DeviceDescription)
+
 
 typedef  DeviceDescription::DeviceConnectionType DeviceConnectionType;
 

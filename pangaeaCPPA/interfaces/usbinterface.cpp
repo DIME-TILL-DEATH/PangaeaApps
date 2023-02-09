@@ -12,7 +12,7 @@ UsbInterface::UsbInterface(QObject *parent)
 
     m_timer = new QTimer(this);
     m_timer->setInterval(1000);
-    m_timer->start();
+    //m_timer->start();
     QIODevice::connect(m_port,  &QSerialPort::readyRead, this, &UsbInterface::slReadyRead);
 
     //TODO обработчики ошибок
@@ -20,11 +20,41 @@ UsbInterface::UsbInterface(QObject *parent)
     QIODevice::connect(m_port,  &QSerialPort::destroyed, this, &UsbInterface::slDestroyed);
 
     QTimer::connect(m_timer, &QTimer::timeout, this, &UsbInterface::slPortTimer);
+
+    m_description = "USB";
+}
+
+void UsbInterface::startScan()
+{
+    if(state() != InterfaceState::Scanning)
+    {
+        qDebug() << "Start USB scanning";
+        m_timer->start();
+        setState(InterfaceState::Scanning);
+    }
+}
+
+void UsbInterface::stopScan()
+{
+    m_timer->stop();
+    setState(InterfaceState::Idle);
+}
+
+void UsbInterface::slPortTimer()
+{
+    if(!m_port->isOpen())
+    {
+        discoverDevices();
+        emit sgDeviceListUpdated(DeviceConnectionType::USBAuto, m_discoveredDevices);
+    }
+    else
+    {
+        checkConnection();
+    }
 }
 
 void UsbInterface::discoverDevices()
 {
-    setState(InterfaceState::Scanning);
     m_discoveredDevices.clear();
 
     if(isManualConnectAllowed)
@@ -40,9 +70,11 @@ void UsbInterface::discoverDevices()
                 ((info.vendorIdentifier()==0x0483)&&(info.productIdentifier()==0x5740))
           )
         {
-            qDebug()<<"vendor:"<<info.vendorIdentifier()<<" product: " <<info.productIdentifier() << " location: "<<info.systemLocation();
+            //qDebug()<<"vendor:"<<info.vendorIdentifier()<<" product: " <<info.productIdentifier() << " location: "<<info.systemLocation();
 
-            m_discoveredDevices.append(DeviceDescription(QString().setNum(info.productIdentifier(), 16), info.systemLocation(), DeviceConnectionType::USBAuto));
+            m_discoveredDevices.append(DeviceDescription("AMT pid:" + QString().setNum(info.productIdentifier(), 16) + " " + info.description(),
+                                                         info.systemLocation(),
+                                                         DeviceConnectionType::USBAuto));
         }
     }
 }
@@ -80,11 +112,6 @@ bool UsbInterface::connect(DeviceDescription device)
     return isPortOpened;
 }
 
-bool UsbInterface::isConnected()
-{
-    return m_port->isOpen();
-}
-
 void UsbInterface::write(QByteArray data)
 {
     m_port->readAll();
@@ -102,19 +129,15 @@ void UsbInterface::checkConnection()
     m_port->setBaudRate(9600);
 }
 
-void UsbInterface::disconnect()
+void UsbInterface::disconnectFromDevice()
 {
     if(m_port->isOpen())
     {
         m_port->close();
-        qDebug()<<"CLOSE PORT";
-        setState(InterfaceState::Idle);
+        m_timer->stop();
+        qDebug() << "Close serial port";
     }
-}
-
-QString UsbInterface::connectionDescription()
-{
-    return m_port->portName();
+    setState(InterfaceState::Idle);
 }
 
 void UsbInterface::slReadyRead()
@@ -147,24 +170,6 @@ void UsbInterface::slDestroyed(QObject *obj)
         }
     }
     emit sgInterfaceError("port destroyed");
-}
-
-void UsbInterface::slPortTimer()
-{
-    if(!isConnected())
-    {
-        qDebug()<<"Serial port search timeout";
-
-        discoverDevices();
-        if(m_discoveredDevices.size() != 0)
-        {
-            emit sgDeviceListUpdated(m_discoveredDevices);
-        }
-    }
-    else
-    {
-        checkConnection();
-    }
 }
 
 void UsbInterface::loadSettings()

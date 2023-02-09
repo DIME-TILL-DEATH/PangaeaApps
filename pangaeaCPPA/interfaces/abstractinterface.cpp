@@ -11,7 +11,9 @@ AbstractInterface::AbstractInterface(QObject *parent)
 void AbstractInterface::setState(AbstractInterface::InterfaceState newState)
 {
     QMetaEnum enumStates = QMetaEnum::fromType<AbstractInterface::InterfaceState >();
-    qDebug() << "State changed:" << enumStates.valueToKey(newState);
+  //  QMetaEnum enumTypes = QMetaEnum::fromType<DeviceConnectionType >();
+
+    qDebug() << "State changed" << m_description << ": " << enumStates.valueToKey(newState);
 
     if (m_state == newState)
             return;
@@ -31,5 +33,5 @@ void AbstractInterface::prevState()
     m_state = m_prevState;
 
     QMetaEnum enumStates = QMetaEnum::fromType<AbstractInterface::InterfaceState >();
-    qDebug() << "State changed. Return previous state" << enumStates.valueToKey(m_state);
+    qDebug() << "State changed. Return previous state" << m_description << ": " << enumStates.valueToKey(m_state);
 }
