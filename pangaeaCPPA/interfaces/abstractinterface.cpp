@@ -8,6 +8,12 @@ AbstractInterface::AbstractInterface(QObject *parent)
 
 }
 
+AbstractInterface::~AbstractInterface()
+{
+    qDebug() << "Absract interface deletion";
+   // this->dumpObjectTree();
+}
+
 void AbstractInterface::setState(AbstractInterface::InterfaceState newState)
 {
     QMetaEnum enumStates = QMetaEnum::fromType<AbstractInterface::InterfaceState >();

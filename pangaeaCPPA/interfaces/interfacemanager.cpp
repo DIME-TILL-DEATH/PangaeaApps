@@ -3,17 +3,22 @@
 
 #include "interfacemanager.h"
 
-InterfaceManager::InterfaceManager()
+InterfaceManager::InterfaceManager(QObject *parent)
+                : QObject{parent}
 {
+    m_usbInterface = new UsbInterface(this);
+    m_bleInterface = new BleInterface(this);
 
+//    connect(this, &QObject::destroyed, m_usbInterface, &QObject::deleteLater);
+//    connect(this, &QObject::destroyed, m_bleInterface, &QObject::deleteLater);
 }
 
 InterfaceManager::~InterfaceManager()
 {
-    disconnectFromDevice();
+    qDebug() << "Interface manager destructor" << this->thread();
 
-    m_usbInterface.stopScan();
-    m_bleInterface.stopScan();
+    if(m_exchangeInterface)
+        m_exchangeInterface->disconnectFromDevice();
 }
 
 bool InterfaceManager::connectToDevice(DeviceDescription device)
@@ -27,13 +32,13 @@ bool InterfaceManager::connectToDevice(DeviceDescription device)
         case DeviceConnectionType::BLE:
         {
             qDebug() << "Settling bluetooth interface";
-            m_exchangeInterface = &m_bleInterface;
+            m_exchangeInterface = m_bleInterface;
             break;
         }
         case DeviceConnectionType::USBAuto:
         {
             qDebug() << "Settling USB interface";
-            m_exchangeInterface = &m_usbInterface;
+            m_exchangeInterface = m_usbInterface;
             break;
         }
         default:
@@ -55,6 +60,7 @@ void InterfaceManager::disconnectFromDevice()
     m_exchangeInterface->disconnectFromDevice();
 
     QObject::disconnect(m_exchangeInterface, nullptr, this, nullptr);
+    m_exchangeInterface = nullptr;
 }
 
 void InterfaceManager::writeToDevice(QByteArray data)
@@ -64,17 +70,17 @@ void InterfaceManager::writeToDevice(QByteArray data)
 
 void InterfaceManager::startScanning()
 {
-    QObject::connect(&m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
-    QObject::connect(&m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
+    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
+    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
 
-    m_usbInterface.startScan();
-    m_bleInterface.startScan();
+    m_usbInterface->startScan();
+    m_bleInterface->startScan();
 }
 
 void InterfaceManager::stopScanning()
 {
-    m_usbInterface.stopScan();
-    m_bleInterface.stopScan();
+    m_usbInterface->stopScan();
+    m_bleInterface->stopScan();
 }
 
 void InterfaceManager::slInterfaceError(QString errorDescription)

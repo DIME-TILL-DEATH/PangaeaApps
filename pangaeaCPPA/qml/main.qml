@@ -37,8 +37,9 @@ ApplicationWindow
     property bool connected: false
     property bool wait: true
 
-    title: qsTr("AMT Pangaea " + devName +" (v." + devVersion +") " + " v." + Qt.application.version + " "
-                + markConnect + qsTr(" Bank ") + head.bank + qsTr(" Preset ") + head.preset + markEdit)
+    title: connected ? "AMT PangaeaCPPA " +  " v." + Qt.application.version + " "
+                + markConnect + devName + " (firmware v." + devVersion +") " + markEdit
+                : "AMT PangaeaCPPA " + " v." + Qt.application.version + " " + markConnect
 
     Settings
     {
@@ -292,6 +293,14 @@ ApplicationWindow
         }
     }
 
+    function clearHeader()
+    {
+        main.edit = false;
+        main.devName = ""
+        main.devVersion = ""
+        main.interfaceDescription = ""
+    }
+
     Connections{
         target: InterfaceManager
 
@@ -305,6 +314,7 @@ ApplicationWindow
 
         function onSgInterfaceError(errorDescription)
         {
+            clearHeader();
             connected = false;
             main.editable = false;
             mainUi.visible = false;

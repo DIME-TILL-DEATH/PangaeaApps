@@ -15,6 +15,7 @@ class UiDesktopCore : public QObject
     Q_OBJECT
 public:
     explicit UiDesktopCore(QObject *parent = nullptr);
+    ~UiDesktopCore();
 
     Q_INVOKABLE void setupApplication();
 

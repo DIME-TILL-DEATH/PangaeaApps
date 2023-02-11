@@ -11,6 +11,7 @@ class UiInterfaceManager : public QObject
     Q_OBJECT
 public:
     explicit UiInterfaceManager(QObject *parent = nullptr);
+    ~UiInterfaceManager();
 
     Q_INVOKABLE void startScanning();
     Q_INVOKABLE void connectToDevice(DeviceDescription device);

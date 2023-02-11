@@ -8,7 +8,7 @@ class ThreadController:public QObject
 {
     Q_OBJECT
 public:
-    ThreadController(QThread* mainThread);
+    explicit ThreadController(QThread* mainThread);
     ~ThreadController();
     QThread *mainThread() const;
     QThread *backendThread() const;

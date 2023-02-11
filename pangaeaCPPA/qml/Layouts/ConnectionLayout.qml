@@ -35,8 +35,8 @@ Column {
             running: !isConnected
             loops: Animation.Infinite
             alwaysRunToEnd: true
-            ColorAnimation {from: Style.mainEnabledColor; to: "gray"; duration: 1000}
-            ColorAnimation {from: "gray"; to: Style.mainEnabledColor; duration: 1000}
+            ColorAnimation {from: Style.mainEnabledColor; to: Style.headColor; duration: 1000}
+            ColorAnimation {from: Style.headColor; to: Style.mainEnabledColor; duration: 1000}
         }
 
         Item{
@@ -151,9 +151,16 @@ Column {
 
             // Transitions
             add: Transition {
-                 NumberAnimation { properties: "y"; from: listView.height; duration: 500 }
-             }
+                 NumberAnimation { properties: "y"; from: listView.height; duration: 250 }
+            }
 
+            displaced: Transition{
+                NumberAnimation { properties: "y"; duration: 300 }
+            }
+
+            remove: Transition {
+                 NumberAnimation { properties: "x"; to: listView.width; duration: 250 }
+            }
         }
     }
 

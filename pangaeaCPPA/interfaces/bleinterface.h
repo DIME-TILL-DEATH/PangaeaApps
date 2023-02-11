@@ -21,9 +21,9 @@
 class BleInterface : public AbstractInterface
 {
     Q_OBJECT
-
 public:
     explicit BleInterface(QObject *parent = nullptr);
+    ~BleInterface();
 
     void startScan();
     void stopScan();

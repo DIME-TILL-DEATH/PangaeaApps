@@ -23,13 +23,19 @@ Core::Core(QObject *parent) : QObject(parent)
     QObject::connect(&deviceControls, &DeviceControls::sgSetInterfaceValue, this, &Core::sgSetUIParameter);
 
     timer = new QTimer(this);
-    timer->setInterval(1000);
     connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
-    timer->start();
+//    connect(this, &QObject::destroyed, timer, &QObject::deleteLater);
+//    connect(this, &QObject::destroyed, timer, &QTimer::stop);
 
     m_presetListModel.refreshModel(&m_presetsList);
     connect(this, &Core::sgRefreshPresetList, &m_presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
+
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &m_presetListModel);
+}
+
+Core::~Core()
+{
+    qDebug() << "Core destructor";
 }
 
 //// TODO Отличие от мобильного
@@ -43,6 +49,7 @@ Core::Core(QObject *parent) : QObject(parent)
 
 void Core::slReadyToDisconnect()
 {
+    timer->stop();
     commandsPending.clear();
     enableRecieve = true;
 

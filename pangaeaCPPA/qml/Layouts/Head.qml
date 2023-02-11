@@ -73,7 +73,7 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*7+4
 
-            color: "MediumSeaGreen"
+            color: Style.headColor
 
             opacity: main.irOn ? 1:0.3
             Behavior on opacity{

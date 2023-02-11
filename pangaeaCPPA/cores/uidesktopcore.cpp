@@ -17,6 +17,10 @@ UiDesktopCore::UiDesktopCore(QObject *parent)
     appSettings = new QSettings(QSettings::UserScope);
 }
 
+UiDesktopCore::~UiDesktopCore()
+{
+}
+
 void UiDesktopCore::setupApplication()
 {
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();

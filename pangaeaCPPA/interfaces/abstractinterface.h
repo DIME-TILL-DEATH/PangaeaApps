@@ -21,6 +21,7 @@ public:
     Q_ENUM(InterfaceState)
 
     explicit AbstractInterface(QObject *parent = nullptr);
+    ~AbstractInterface();
 
     virtual void startScan() = 0;
     virtual void stopScan() = 0;

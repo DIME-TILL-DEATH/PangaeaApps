@@ -25,6 +25,7 @@ class Core : public QObject
     Q_OBJECT
 public:
     explicit Core(QObject *parent = nullptr);
+    ~Core();
 
     void setParameter(QString name, quint8 value);
     // TODO: пока умеет только Preset и bank!!!! Дописать

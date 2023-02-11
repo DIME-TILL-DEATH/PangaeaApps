@@ -13,8 +13,10 @@
 
 class UsbInterface : public AbstractInterface
 {
+    Q_OBJECT
 public:
     explicit UsbInterface(QObject *parent = nullptr);
+    ~UsbInterface();
 
     void startScan();
     void stopScan();
@@ -33,8 +35,8 @@ private slots:
     void slPortTimer();
 
 private:
-    QSerialPort* m_port;
-    QTimer* m_timer;
+    QSerialPort* m_port{nullptr};
+    QTimer* m_timer{nullptr};
 
     QList<DeviceDescription> m_discoveredDevices;
 
@@ -43,7 +45,7 @@ private:
     // settings
     void loadSettings();
     bool isManualConnectAllowed{false};
-    QString manualConnectionPortName{"COM3"};   
+    QString manualConnectionPortName{"COM3"};
 
     void checkConnection();
 };

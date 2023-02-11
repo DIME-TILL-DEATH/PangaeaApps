@@ -12,7 +12,7 @@ class InterfaceManager : public QObject
 {
     Q_OBJECT
 public:
-    InterfaceManager();
+    explicit InterfaceManager(QObject *parent = nullptr);
     ~InterfaceManager();
 
     bool connectToDevice(DeviceDescription device);
@@ -31,8 +31,8 @@ signals:
 
 private:
     AbstractInterface* m_exchangeInterface{nullptr};
-    BleInterface m_bleInterface{this};
-    UsbInterface m_usbInterface{this};
+    BleInterface* m_bleInterface{nullptr};
+    UsbInterface* m_usbInterface{nullptr};
 
 private slots:
     void slInterfaceError(QString errorDescription);

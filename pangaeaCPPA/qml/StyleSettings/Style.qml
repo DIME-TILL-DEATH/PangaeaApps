@@ -13,4 +13,5 @@ QtObject {
     readonly property color mainDisabledColor: "#7E7991"
 
     readonly property color highlightColor: "Salmon"
+    readonly property color headColor: "MediumSeaGreen"
 }

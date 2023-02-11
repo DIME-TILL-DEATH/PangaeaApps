@@ -36,7 +36,25 @@ BleInterface::BleInterface(QObject *parent)
     }
     appSettings->endArray();
 
+    m_deviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent(); // parent = this: Main COM uninit tried from another thread
+
+    QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
+            this, &BleInterface::addDevice);
+
+    QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
+            this, &BleInterface::deviceScanError);
+
+    QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
+            this, &BleInterface::scanTimeout);
+
+    QObject::connect(this, &QObject::destroyed, m_deviceDiscoveryAgent, &QObject::deleteLater);
+
     m_description = "BLE";
+}
+
+BleInterface::~BleInterface()
+{
+    qDebug() << "BLE interface destructor";
 }
 
 void BleInterface::startScan()
@@ -54,13 +72,11 @@ void BleInterface::stopScan()
     {
         m_deviceDiscoveryAgent->stop();
     }
-//    m_avaliableDevices.clear();
     setState(InterfaceState::Idle);
 }
 
 void BleInterface::startDiscovering()
 {
-#ifdef Q_OS_ANDROID
     QBluetoothLocalDevice device;
 
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
@@ -68,10 +84,10 @@ void BleInterface::startDiscovering()
         qDebug() << "Controller is powered off";
         emit sgLocalBluetoothNotReady("HostPoweredOff");
         device.powerOn();
-
         return;
     }
 
+#ifdef Q_OS_ANDROID
     bool result = AndroidUtils::checkPermission("android.permission.ACCESS_COARSE_LOCATION");
     if(!result)
     {
@@ -94,19 +110,7 @@ void BleInterface::startDiscovering()
     }
 
 #endif
-    if(m_deviceDiscoveryAgent == nullptr)
-    {
-        m_deviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
 
-        QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
-                this, &BleInterface::addDevice);
-
-        QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
-                this, &BleInterface::deviceScanError);
-
-        QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
-                this, &BleInterface::scanTimeout);
-    }
     #ifdef Q_OS_ANDROID
         m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
         m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
@@ -118,8 +122,6 @@ void BleInterface::startDiscovering()
     #endif
 
     setState(InterfaceState::Scanning);
-
-    //qDebug()<< "Searching for low energy devices..." ;
 }
 
 void BleInterface::scanTimeout()
@@ -362,16 +364,13 @@ void BleInterface::serviceScanDone()
 
 void BleInterface::deviceConnected()
 {
-    qDebug() << "Device connected";
-
-    m_control->discoverServices();
     setState(Connected);
+    m_control->discoverServices();
 }
 
 void BleInterface::deviceDisconnected()
 {
-    qDebug() << "UART service disconnected";
-    qWarning() << "Remote device disconnected";
+    qWarning() << "Remote device disconnected(UART service disconnected)";
 
   //  emit sgErrorDisconnected();
   //  emit sgLocalBluetoothNotReady("DeviceUnavaliable");
@@ -419,8 +418,6 @@ void BleInterface::updateData(const QLowEnergyCharacteristic &c,const QByteArray
 void BleInterface::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
                                          const QByteArray &value)
 {
-    qDebug() << "Confirmed descriptor written, disconnet from device";
-
     if (d.isValid() && d == m_notificationDescTx && value == QByteArray("0000"))
     {
         m_control->disconnectFromDevice();

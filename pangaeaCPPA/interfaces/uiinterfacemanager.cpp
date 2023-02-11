@@ -8,6 +8,10 @@ UiInterfaceManager::UiInterfaceManager(QObject *parent)
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceListModel", &m_interfaceListModel);
 }
 
+UiInterfaceManager::~UiInterfaceManager()
+{
+}
+
 void UiInterfaceManager::startScanning()
 {
     emit sgStartScanning();

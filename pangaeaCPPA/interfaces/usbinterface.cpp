@@ -1,5 +1,6 @@
 #include <qdebug.h>
 #include <QMetaEnum>
+#include <QThread>
 
 #include "usbinterface.h"
 
@@ -8,20 +9,33 @@ UsbInterface::UsbInterface(QObject *parent)
 {
     loadSettings();
 
-    m_port = new QSerialPort(this);
-
     m_timer = new QTimer(this);
     m_timer->setInterval(1000);
-    //m_timer->start();
-    QIODevice::connect(m_port,  &QSerialPort::readyRead, this, &UsbInterface::slReadyRead);
 
-    //TODO обработчики ошибок
+
+    m_port = new QSerialPort(this);
+    QIODevice::connect(m_port,  &QSerialPort::readyRead, this, &UsbInterface::slReadyRead);
     QIODevice::connect(m_port,  &QSerialPort::errorOccurred, this, &UsbInterface::slError);
     QIODevice::connect(m_port,  &QSerialPort::destroyed, this, &UsbInterface::slDestroyed);
 
     QTimer::connect(m_timer, &QTimer::timeout, this, &UsbInterface::slPortTimer);
 
+//    QObject::connect(this, &QObject::destroyed, m_timer, &QObject::deleteLater);
+//    QObject::connect(this, &QObject::destroyed, m_port, &QObject::deleteLater);
+
     m_description = "USB";
+}
+
+UsbInterface::~UsbInterface()
+{
+//    delete m_port;
+//    delete m_timer;
+//    m_timer->deleteLater();
+//    m_port->deleteLater();
+
+//    disconnectFromDevice();
+    qDebug() << "UsbInterface destructor" << this->thread();
+   // this->dumpObjectTree();
 }
 
 void UsbInterface::startScan()
