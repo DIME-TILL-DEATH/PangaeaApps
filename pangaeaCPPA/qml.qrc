@@ -62,5 +62,7 @@
         <file>qml/Elements/ILDelegate.qml</file>
         <file>qml/Elements/ILHighlight.qml</file>
         <file>qml/Elements/Indicator.qml</file>
+        <file>qml/Images/bluetooth-icon.svg</file>
+        <file>qml/Images/usb-icon.svg</file>
     </qresource>
 </RCC>

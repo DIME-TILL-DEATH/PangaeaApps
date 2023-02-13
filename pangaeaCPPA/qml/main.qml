@@ -213,12 +213,6 @@ ApplicationWindow
                 msgError.open();
             }
 
-//            if(nameParam === "exchange_error")
-//            {
-//                msgError.text = qsTr("Command exchange error")
-//                msgError.open();
-//            }
-
             if(nameParam === "devVersion")
             {
                 devVersion = inString;

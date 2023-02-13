@@ -2,11 +2,34 @@ import QtQuick
 import QtQuick.Layouts
 import StyleSettings
 
+import Qt5Compat.GraphicalEffects
+
 RowLayout{
     id: root
 
+    property url sourceImage
     property string indicatorText
-    property bool isOk
+    property bool isOk    
+
+    Item{
+        Layout.preferredHeight: root.height
+        Layout.preferredWidth: height
+        Image
+        {
+            id: image
+            source: root.sourceImage
+            anchors.fill: parent
+
+            fillMode: Image.PreserveAspectFit
+            transformOrigin: Item.Center
+        }
+
+        ColorOverlay {
+            anchors.fill: image
+            source: image
+            color: Style.backgroundColor
+        }
+    }
 
     Rectangle{
         id: indicator
@@ -23,7 +46,6 @@ RowLayout{
         Layout.preferredHeight: root.height
         Layout.preferredWidth: root.width * 0.6
         MText{
-    //        anchors.left: indicator.right
             anchors.verticalCenter: parent.verticalCenter
             verticalAlignment: Text.AlignVCenter
             text: root.indicatorText

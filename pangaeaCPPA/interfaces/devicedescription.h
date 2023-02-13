@@ -9,6 +9,7 @@ class DeviceDescription
     Q_GADGET
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString address READ address)
+    Q_PROPERTY(DeviceConnectionType connectionType READ connectionType)
 public:
     enum class DeviceConnectionType
     {

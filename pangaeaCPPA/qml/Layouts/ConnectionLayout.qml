@@ -1,26 +1,26 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
 import Elements
 import StyleSettings
 import CppObjects 1.0
 
-Row{
+RowLayout{
     id: root
 
     anchors.fill: parent
+    spacing: 2
 
     property bool isConnected: false
     property double radius: width/50
 
     Column {
-
-    //    anchors.centerIn: parent
-
-        width: parent.width/2
-        height: parent.height
-
+        Layout.preferredWidth: parent.width/2
+        Layout.preferredHeight: parent.height
+        Layout.margins: 2
+        Layout.fillWidth: true
         spacing: height/50
 
         Rectangle{
@@ -170,8 +170,11 @@ Row{
 
     Rectangle{
         color: Style.mainDisabledColor
+        Layout.preferredWidth: parent.width/2
+        Layout.preferredHeight: parent.height
+        Layout.fillWidth: true
+        Layout.margins: 2
 
-        width: parent.width/2
         height: parent.height
 
         radius: root.radius
@@ -186,7 +189,7 @@ Row{
             spacing: height/25
             Item{
                 width: parent.width
-                height: parent.height/10
+                height: parent.height/15
                 MText{
                     anchors.centerIn: parent
                     text: qsTr("Avaliable interfaces:")
@@ -197,55 +200,54 @@ Row{
                 isOk: true
                 indicatorText: "USB"
 
+                sourceImage: "qrc:/qml/Images/usb-icon.svg"
+
                 width: parent.width
-                height: parent.height/10
+                height: parent.height/15
             }
 
             Indicator{
                 isOk: InterfaceManager.isBleAvaliable
                 indicatorText: "Bluetooth LE"
 
+                sourceImage: "qrc:/qml/Images/bluetooth-icon.svg"
+
                 width: parent.width
-                height: parent.height/10
+                height: parent.height/15
+            }
+
+            Item{
+                width: parent.width
+                height: parent.height/15
+                MText{
+                    anchors.centerIn: parent
+                    text: qsTr("Services:")
+                }
+            }
+
+            Button{
+                text: qsTr("Run IR converter")
+                width: parent.width
+                height: parent.height/12
+
+                onClicked: UiCore.runIrConvertor();
+            }
+
+            Button{
+                text: qsTr("AMT electronics web-site")
+                width: parent.width
+                height: parent.height/12
+
+                onClicked: Qt.openUrlExternally("http://www.amtelectronics.com/");
+            }
+
+            Button{
+                text: qsTr("Pangaea web page")
+                width: parent.width
+                height: parent.height/12
+
+                onClicked: Qt.openUrlExternally("https://media.amt-sales.com/cat/cab-emulation/pangaea-series/")
             }
         }
     }
-
-//    Rectangle{
-//        color: Style.mainDisabledColor
-
-//        width: parent.width
-//        height: parent.height*6/50
-
-//        radius: root.radius
-//        border.width: 2
-
-//        ButtonGroup{
-//            buttons: row.children
-//        }
-
-//        Row{
-//            id: row
-//            anchors.centerIn: parent
-
-//            spacing: 5
-
-//            width: parent.width*0.75
-//            height: parent.height*0.9
-
-//            RadioButton{
-//                text: "USB"
-//                onClicked: {
-//                    InterfaceManager.setInterface(DeviceDescription.USBAuto);
-//                }
-//            }
-//            RadioButton{
-//                text: "Bluetooth"
-//                onClicked: {
-//                    InterfaceManager.setInterface(DeviceDescription.BLE);
-//                }
-//            }
-//        }
-//    }
-
 }
