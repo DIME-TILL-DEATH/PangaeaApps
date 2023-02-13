@@ -3,7 +3,8 @@ TEMPLATE = app
 
 QT += quick
 QT += quickcontrols2
-QT += qml quick svg
+QT += qml
+QT += svg
 QT += serialport
 QT += bluetooth
 

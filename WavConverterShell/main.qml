@@ -1,9 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQml.Models 2.11
-import Qt.labs.platform 1.0
+import QtQuick.Dialogs
+import Qt.labs.platform 1.0 as Labs
 import Qt.labs.settings 1.0
-import QtQuick.Dialogs  1.2
 
 ApplicationWindow
 {
@@ -29,8 +29,8 @@ ApplicationWindow
         property alias y: main.y
         property alias width: main.width
         property alias height: main.height
-        property alias fileFolder: fileDialog.folder
-        property alias destFolder: folderDialog.folder
+        property alias fileFolder: fileDialog.currentFolder
+        property alias destFolder: folderDialog.currentFolder
         property alias filePrefix: tfPrefix.text
         property alias fileSuffix: tfSuffix.text
         property alias maxFileSize: tfMaxFileSize.text
@@ -295,86 +295,72 @@ ApplicationWindow
             }
         }
 
-        Item
+        Button
         {
-            id: destBtItem
-            height: parent.height/10*1
+            id: btConvert
+
+            height: parent.height/10*1*0.75
             width: parent.width
-            ProgressBar
+            anchors.horizontalCenter : parent.horizontalCenter
+            text: "Start conversion "
+            enabled: sourceModel.count > 0
+
+            background: Rectangle
             {
-                id: prBar
-                width: parent.width
-                from: 0
-                to:   0
-                value: 1
+                id: recConvert
+                implicitWidth: 90
+                implicitHeight: 30
+                opacity: enabled ? 1 : 0.3
+                border.color: btConvert.down ? "#FA8072" : "#696969"
+                border.width: 2
+                radius: 4
             }
-
-            Button
+            onClicked:
             {
-                id: btConvert
-                height: parent.height/2
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter : parent.horizontalCenter
-                text: "Start conversion "
-                enabled: sourceModel.count > 0
-                background: Rectangle
+                var destPath;
+                var filesCount = sourceModel.rowCount();
+                var fileList = [];
+                fileList.length = filesCount;
+
+                for(var i=0; i < filesCount; i++)
                 {
-                    id: recConvert
-                    implicitWidth: 90
-                    implicitHeight: 30
-                    opacity: enabled ? 1 : 0.3
-                    border.color: btConvert.down ? "#FA8072" : "#696969"
-                    border.width: 2
-                    radius: 4
+                    fileList[i] = sourceModel.get(i).fileName;
                 }
-                onClicked:
+
+                fileOkCount = prBar.value = 0;
+                fileCount = prBar.to = filesCount;
+
+                if(_core.setDestinationPath(destFolder.text))
                 {
-                    var destPath;
-                    var filesCount = sourceModel.rowCount();
-                    var fileList = [];
-                    fileList.length = filesCount;
-
-                    for(var i=0; i < filesCount; i++)
-                    {
-                        fileList[i] = sourceModel.get(i).fileName;
-                    }
-
-                    fileOkCount = prBar.value = 0;
-                    fileCount = prBar.to = filesCount;
-
-                    if(_core.setDestinationPath(destFolder.text))
-                    {
-                        _core.setOutputFormat(cbSampleRate.currentText,
-                                              cbBitRate.currentText,
-                                              cbChanels.currentText,
-                                              tfMaxFileSize.text);
-                        _core.setPrefixSuffix(tfPrefix.text, tfSuffix.text);
-                        _core.startConvert(fileList);
-                        main.wait = true;
-                    }
+                    _core.setOutputFormat(cbSampleRate.currentText,
+                                          cbBitRate.currentText,
+                                          cbChanels.currentText,
+                                          tfMaxFileSize.text);
+                    _core.setPrefixSuffix(tfPrefix.text, tfSuffix.text);
+                    _core.startConvert(fileList);
+                    main.wait = true;
                 }
             }
         }
     }
 
+
     FileDialog
     {
         id: fileDialog
+
         visible: false
         title:  "Choose a file"
-        selectMultiple: true
-        nameFilters: [ "WAV files (*.wav)" ]
-        selectedNameFilter: "All files (*.wav)"
-        sidebarVisible: true
-        selectFolder: false
+        fileMode: FileDialog.OpenFiles
+        nameFilters: [ "WAV files (*.wav)", "All files (*.*)" ]
+
         onAccepted:
         {
-            for (var i = 0; i < fileUrls.length; ++i)
+            for (var i = 0; i < currentFiles.length; ++i)
             {
                 var filePresent = false;
-                var cleanPath =fileUrls[i].toString();
-                cleanPath = (Qt.platform.os=="windows") ? decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,""))
+                var cleanPath = currentFiles[i].toString();
+                cleanPath = (Qt.platform.os==="windows") ? decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,""))
                                                         : decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
                 for(var j=0; j<sourceModel.rowCount(); j++)
@@ -392,51 +378,38 @@ ApplicationWindow
         }
     }
 
-    FileDialog
+    FolderDialog
     {
         id: folderDialog
         visible: false
         title:  "Choose a dest folder"
 
-        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/convertedIR"
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/convertedIR"
 
-        selectFolder: true
         onAccepted:
         {
-            var cleanPath =fileUrl.toString();
-            cleanPath = (Qt.platform.os=="windows") ? decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,""))
+            var cleanPath = currentFolder.toString();
+            cleanPath = (Qt.platform.os==="windows") ? decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,""))
                                                     : decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
             destFolder.text = cleanPath;
         }
     }
+
     Component.onCompleted: {
-        var cleanPath = folderDialog.folder.toString();
-        cleanPath = (Qt.platform.os=="windows") ? decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,""))
+        var cleanPath = folderDialog.currentFolder.toString();
+        cleanPath = (Qt.platform.os==="windows") ? decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,""))
                                                 : decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
         destFolder.text = cleanPath;
     }
 
-    Dialog
+    MessageDialog
     {
         id: resultDialog
         title: "DONE!!!"
-        Column
-        {
-            Text
-            {
-                id: textConvert
-                text: "Converted files: " + fileOkCount
-            }
-            Text
-            {
-                id: textNoConvert
-                color: "red"
-                text: "Not converted files: " + (fileCount - fileOkCount)
-                visible: (fileCount - fileOkCount)
-            }
-        }
+
+        text: "Converted files: " + fileOkCount + "\n" + ((fileCount - fileOkCount) ? "Not converted files: " + (fileCount - fileOkCount) : "")
     }
 
     MessageDialog
@@ -444,7 +417,6 @@ ApplicationWindow
         id: errorMsg
 
         title: qsTr("Error")
-        icon: StandardIcon.Critical
     }
 
     Item
@@ -457,15 +429,31 @@ ApplicationWindow
         Rectangle{
             anchors.fill: parent
             opacity: 0.5
+
+            color: "grey"
         }
 
-        BusyIndicator
+        ProgressBar
         {
-            id : bI
-            width:  parent.width/10
-            height: parent.width/10
+            id: prBar
+            height: parent.height/10*1
+            width: parent.width*0.5
+
+            visible: rWait.visible
+
             anchors.centerIn: parent
+            value: 0
         }
+
+//        BusyIndicator
+//        {
+//            id : bI
+//            visible: rWait.visible
+
+//            width:  parent.width/10
+//            height: width
+//            anchors.centerIn: parent
+//        }
 
         MouseArea
         {
