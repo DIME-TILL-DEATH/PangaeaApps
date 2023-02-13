@@ -24,8 +24,6 @@ Core::Core(QObject *parent) : QObject(parent)
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
-//    connect(this, &QObject::destroyed, timer, &QObject::deleteLater);
-//    connect(this, &QObject::destroyed, timer, &QTimer::stop);
 
     m_presetListModel.refreshModel(&m_presetsList);
     connect(this, &Core::sgRefreshPresetList, &m_presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
@@ -33,10 +31,6 @@ Core::Core(QObject *parent) : QObject(parent)
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &m_presetListModel);
 }
 
-Core::~Core()
-{
-//    qDebug() << "Core destructor";
-}
 
 void Core::slReadyToDisconnect()
 {
@@ -1035,7 +1029,7 @@ void Core::recieveTimeout()
         else
         {
             sendCount++;
-            qDebug() << "!!!!!!!!!!!!!!!!! sendCount !!!!!!!!!!!!!!!!!" << sendCount;
+            qDebug() << "!!!!!!!!!!!!!!!!! recieve timeout !!!!!!!!!!!!!!!!!" << sendCount;
             sendCommand(commandWithoutAnswer);
             timer->setInterval(1000);
 
@@ -1046,10 +1040,12 @@ void Core::recieveTimeout()
                 if(fwUpdate)
                 {
                     fwUpdate = false;
+                    //TODO что за slider_enabled в мобильном? wait заменяет?
                     emit sgSetUIParameter("slider_enabled", 1);
                 }
 
-                emit sgSetUIText("exchange_error", commandWithoutAnswer);
+//                emit sgSetUIText("exchange_error", commandWithoutAnswer);
+                emit sgExchangeError();
 
                 commandsPending.clear();
                 commandsSended.clear();

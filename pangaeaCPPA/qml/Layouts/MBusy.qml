@@ -134,7 +134,6 @@ Item
         }
     }
 
-
     Connections{
         target: InterfaceManager
 

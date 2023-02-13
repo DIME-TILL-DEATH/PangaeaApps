@@ -25,7 +25,6 @@ class Core : public QObject
     Q_OBJECT
 public:
     explicit Core(QObject *parent = nullptr);
-    ~Core();
 
     void setParameter(QString name, quint8 value);
     // TODO: пока умеет только Preset и bank!!!! Дописать
@@ -105,13 +104,13 @@ private:
 
 signals:
     void sgWriteToInterface(QByteArray data);
+    void sgExchangeError();
 
     void sgFirmwareVersionInsufficient(Firmware *minimalFirmware, Firmware *actualFirmware);
     void sgRequestNewestFirmware(Firmware* actualFirmware);
 
     void sgSetUIParameter(QString nameParam, qint32 value);
     void sgSetUIText(QString nameParam, QString value);
-//    void sgSetUIDataList(QString nameParam, QVariantList list);
 
     void sgPresetChangeStage(quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);
@@ -119,6 +118,7 @@ signals:
 //    void sgModuleNameUpdated(QString name);
 
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
+
 
 public slots:
     void slReadyToDisconnect();
@@ -129,5 +129,4 @@ public slots:
 
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
 };
-
 #endif // CORE_H

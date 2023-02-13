@@ -35,6 +35,7 @@ signals:
     void sgConnectToDevice(DeviceDescription device);
     void sgDisconnectFromDevice();
     void sgDeviceUnavaliable(DeviceConnectionType senderType, QString reason);
+    void sgExchangeError();
 
     void sgConnectionStarted();
     void sgInterfaceConnected(DeviceDescription device);

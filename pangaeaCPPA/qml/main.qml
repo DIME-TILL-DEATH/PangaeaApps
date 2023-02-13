@@ -213,11 +213,11 @@ ApplicationWindow
                 msgError.open();
             }
 
-            if(nameParam === "exchange_error")
-            {
-                msgError.text = qsTr("Command exchange error")
-                msgError.open();
-            }
+//            if(nameParam === "exchange_error")
+//            {
+//                msgError.text = qsTr("Command exchange error")
+//                msgError.open();
+//            }
 
             if(nameParam === "devVersion")
             {
@@ -295,8 +295,13 @@ ApplicationWindow
             msgError.text = qsTr("Device is unavaliable")
             msgError.open();
             mBusy.visible = false;
+        }
 
-           // InterfaceManager.startScanning();
+        function onSgExchangeError()
+        {
+            msgError.text = qsTr("Command exchange error")
+            msgError.open();
+            mBusy.visible = false;
         }
 
         function onSgInterfaceConnected(interfaceDescription)

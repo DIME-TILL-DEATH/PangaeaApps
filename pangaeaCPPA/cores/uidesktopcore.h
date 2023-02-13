@@ -63,13 +63,6 @@ private:
     void loadDefaultTranslator();
 
 signals:
-   // void sgStartScan();
-   // void sgUpdateBLEDevicesList(QStringList str);
-    void sgConnectReady(void);
-   // void sgConnectToDevice(DeviceDescription device);
-//    void sgDoConnect(quint8 numDev, QString address);
-    void sgDoDisconnect();
-
     void sgTranslatorChanged(QString langauageCode);
     void sgApplicationSetupComplete();
 
@@ -80,9 +73,7 @@ signals:
     void sgPresetChangeStage (quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);
     void sgDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    //-----------------------------------------
-    void sgLocalBluetoothNotReady(QString reason);
-    //-----------------------------------------------
+
     void sgReadAllParameters();
     void sgSetParameter(QString name, quint8 value);
     void sgRestoreValue(QString name);
@@ -95,8 +86,6 @@ signals:
     void sgEscImpuls();
     void sgSw4Enable();
     void sgModuleNameChanged(QString name);
-
-    void sgUiClosing();
 
     void sgDoOnlineFirmwareUpdate();
 
