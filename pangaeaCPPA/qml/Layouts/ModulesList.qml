@@ -222,6 +222,7 @@ Item
 
             if(nameParam === "modules_right_aligned")
             {
+                console.log("Modules right aligned:", value)
                 Style.modulesRightAligned = value
             }
         }

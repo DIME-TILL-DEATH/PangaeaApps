@@ -39,27 +39,27 @@ BleInterface::BleInterface(QObject *parent)
     m_deviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent(); // parent = this: Main COM uninit tried from another thread
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
-            this, &BleInterface::addDevice);
+            this, &BleInterface::addDevice, Qt::QueuedConnection);
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
-            this, &BleInterface::deviceScanError);
+            this, &BleInterface::deviceScanError, Qt::QueuedConnection);
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
-            this, &BleInterface::scanTimeout);
+            this, &BleInterface::scanTimeout, Qt::QueuedConnection);
 
     QObject::connect(this, &QObject::destroyed, m_deviceDiscoveryAgent, &QObject::deleteLater);
 
     m_description = "BLE";
+    m_connectionType = DeviceConnectionType::BLE;
 }
 
 BleInterface::~BleInterface()
 {
-    qDebug() << "BLE interface destructor";
+//    qDebug() << "BLE interface destructor";
 }
 
 void BleInterface::startScan()
-{
-    qDebug() << "Start BLE scanning";
+{    
     if(state() == InterfaceState::Idle)
     {
         startDiscovering();
@@ -81,8 +81,15 @@ void BleInterface::startDiscovering()
 
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
     {
-        qDebug() << "Controller is powered off";
-        emit sgLocalBluetoothNotReady("HostPoweredOff");
+//        qDebug() << "Controller is powered off";
+        prevState();
+        isAvaliable = false;
+
+        m_qlFoundDevices.clear();
+        emit sgDeviceListUpdated(DeviceConnectionType::BLE, m_qlFoundDevices);
+
+        //emit sgLocalBluetoothNotReady("HostPoweredOff");
+        emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
         device.powerOn();
         return;
     }
@@ -95,6 +102,7 @@ void BleInterface::startDiscovering()
         if(!result)
         {
             qDebug() << "Geolocation permission denied";
+            isAvaliable = false;
             emit sgLocalBluetoothNotReady("GeolocationPermissionDenied");
             return;
         }
@@ -103,6 +111,7 @@ void BleInterface::startDiscovering()
             if(QGeoPositionInfoSource::createDefaultSource(this)->supportedPositioningMethods() == QGeoPositionInfoSource::NoPositioningMethods)
             {
                 qDebug() << "Geolocation is off";
+                isAvaliable = false;
                 emit sgLocalBluetoothNotReady("GeolocationIsOff");
                 return;
             }
@@ -121,7 +130,9 @@ void BleInterface::startDiscovering()
         m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
     #endif
 
+    isAvaliable = true;
     setState(InterfaceState::Scanning);
+   // qDebug() << "Start BLE scanning";
 }
 
 void BleInterface::scanTimeout()
@@ -144,11 +155,11 @@ void BleInterface::scanTimeout()
 
 void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
 {
-//    if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
-//    {
-//        qInfo() << "Discovered LE Device name: " << device.name() << " Address: "
-//                   << device.address().toString();
-//    }
+    if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
+    {
+        qInfo() << "Discovered LE Device name: " << device.name() << " Address: "
+                   << device.address().toString();
+    }
 
     bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
 
@@ -178,6 +189,8 @@ void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
 void BleInterface::updateBLEDevicesList()
 {
   m_qlFoundDevices.clear();
+
+  if(!isAvaliable) return;
 
   for (const QBluetoothDeviceInfo &currentDevice : m_avaliableDevices)
   {
@@ -213,13 +226,15 @@ void BleInterface::deviceScanError(QBluetoothDeviceDiscoveryAgent::Error error)
         case QBluetoothDeviceDiscoveryAgent::PoweredOffError:
         {
             qDebug() << __FUNCTION__ << "The Bluetooth adapter is powered off, power it on before doing discovery.";
-            emit sgLocalBluetoothNotReady("HostPoweredOff");
+            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
+            //emit sgLocalBluetoothNotReady("HostPoweredOff");
             break;
         }
         case QBluetoothDeviceDiscoveryAgent::UnknownError:
         {
             qDebug() << __FUNCTION__ << "An unknown error has occurred.";
-            emit sgLocalBluetoothNotReady("UnknownBleError");
+            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "UnknownBleError");
+//            emit sgLocalBluetoothNotReady("UnknownBleError");
             break;
         }
         default:
@@ -280,7 +295,10 @@ void BleInterface::slStartConnect(QString address)
     if(deviceToConnect == nullptr)
     {
         qDebug() << "Device is unavalibale";
-        emit sgLocalBluetoothNotReady("DeviceUnavaliable");
+        emit sgDeviceUnavaliable(DeviceConnectionType::BLE, "nullPointer");
+        prevState();
+        startScan();
+//        emit sgLocalBluetoothNotReady("DeviceUnavaliable");
         return;
     }
 
@@ -374,13 +392,14 @@ void BleInterface::deviceDisconnected()
 
   //  emit sgErrorDisconnected();
   //  emit sgLocalBluetoothNotReady("DeviceUnavaliable");
-    emit sgInterfaceError("BLE device disconnected");
+    emit sgInterfaceDisconnected(m_connectedDevice);
 }
 
 void BleInterface::controllerError(QLowEnergyController::Error error)
 {
     qDebug() << "Cannot connect to remote device.";
     qWarning() << "Controller Error:" << error;
+    emit sgInterfaceError("Controller error");
 }
 
 
@@ -456,7 +475,7 @@ void BleInterface::disconnectFromDevice()
     {
         QBluetoothDeviceDiscoveryAgent::disconnect(m_service, nullptr, nullptr, nullptr);
     }
-    QBluetoothDeviceDiscoveryAgent::disconnect(this, &BleInterface::sgNewData, nullptr, nullptr);
+   // QBluetoothDeviceDiscoveryAgent::disconnect(this, &BleInterface::sgNewData, nullptr, nullptr);
 
     setState(InterfaceState::Idle);
     m_avaliableDevices.clear();

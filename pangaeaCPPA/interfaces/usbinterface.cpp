@@ -20,22 +20,8 @@ UsbInterface::UsbInterface(QObject *parent)
 
     QTimer::connect(m_timer, &QTimer::timeout, this, &UsbInterface::slPortTimer);
 
-//    QObject::connect(this, &QObject::destroyed, m_timer, &QObject::deleteLater);
-//    QObject::connect(this, &QObject::destroyed, m_port, &QObject::deleteLater);
-
     m_description = "USB";
-}
-
-UsbInterface::~UsbInterface()
-{
-//    delete m_port;
-//    delete m_timer;
-//    m_timer->deleteLater();
-//    m_port->deleteLater();
-
-//    disconnectFromDevice();
-    qDebug() << "UsbInterface destructor" << this->thread();
-   // this->dumpObjectTree();
+    m_connectionType = DeviceConnectionType::USBAuto;
 }
 
 void UsbInterface::startScan()
@@ -116,6 +102,7 @@ bool UsbInterface::connect(DeviceDescription device)
     if(isPortOpened)
     {
         qDebug() << __FUNCTION__<< "Serial port is opened";
+        m_connectedDevice = device;
         emit sgInterfaceConnected(device);
         setState(InterfaceState::AcquireData);
     }
@@ -151,6 +138,7 @@ void UsbInterface::disconnectFromDevice()
         m_timer->stop();
         qDebug() << "Close serial port";
     }
+    emit sgInterfaceDisconnected(m_connectedDevice);
     setState(InterfaceState::Idle);
 }
 
@@ -166,6 +154,7 @@ void UsbInterface::slError(QSerialPort::SerialPortError error)
         m_port->close();
 
         QMetaEnum errorDescriptionType = QMetaEnum::fromType<QSerialPort::SerialPortError>();
+        emit sgInterfaceDisconnected(m_connectedDevice);
         emit sgInterfaceError(errorDescriptionType.valueToKey(error));
     }
 }

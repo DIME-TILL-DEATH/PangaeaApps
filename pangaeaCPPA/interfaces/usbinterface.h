@@ -16,7 +16,6 @@ class UsbInterface : public AbstractInterface
     Q_OBJECT
 public:
     explicit UsbInterface(QObject *parent = nullptr);
-    ~UsbInterface();
 
     void startScan();
     void stopScan();

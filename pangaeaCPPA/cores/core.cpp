@@ -35,17 +35,8 @@ Core::Core(QObject *parent) : QObject(parent)
 
 Core::~Core()
 {
-    qDebug() << "Core destructor";
+//    qDebug() << "Core destructor";
 }
-
-//// TODO Отличие от мобильного
-//void Core::slInterfaceError(QString errorDescription)
-//{
-//    qDebug() << "Interface error: " << errorDescription;
-
-//    emit sgSetUIText("port_closed", "");
-//    emit sgSetUIParameter ("type_dev", 0);
-//}
 
 void Core::slReadyToDisconnect()
 {
@@ -828,13 +819,6 @@ void Core::pastePreset()
     isPresetEdited = true;
     emit sgSetUIParameter ("preset_edited", isPresetEdited);
 }
-
-//void Core::slInterfaceConnected(DeviceDescription device)
-//{
-//    readAllParameters();
-//    //TODO move to interface
-//   // emit sgSetUIText("port_opened", device.address());
-//}
 
 void Core::setParameter(QString name, quint8 value)
 {

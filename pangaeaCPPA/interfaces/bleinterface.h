@@ -18,6 +18,7 @@
 #define RXUUID "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
 #define TXUUID "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 
+// TODO после переделки части под андроид подчистить комментарии и функции
 class BleInterface : public AbstractInterface
 {
     Q_OBJECT
@@ -71,12 +72,13 @@ private slots:
     void slStartConnect(QString address);
     void checkDevicesAvaliabliy();
 
-signals:
-//    void sgConnect(quint8 numDevice);
- //   void sgErrorDisconnected();
-    void sgLocalBluetoothNotReady(QString reason);
+//signals:
+
+//    void sgLocalBluetoothNotReady(QString reason);
 
 private:
+    bool isAvaliable;
+
     QBluetoothDeviceDiscoveryAgent *m_deviceDiscoveryAgent{nullptr};
 
     QList<QBluetoothDeviceInfo> m_avaliableDevices;
@@ -89,7 +91,6 @@ private:
     bool m_bFoundUARTService;
 
     QSettings* appSettings;
-    DeviceDescription m_connectedDevice;
 
     QString m_autoconnectDevicetMAC;
     QString m_moduleName;

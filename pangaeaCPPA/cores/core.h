@@ -60,7 +60,6 @@ public:
     void setPresetData(const Preset& preset);
 
 private:
-   // AbstractInterface* exchangeInterface;
     IRWorker irWorker;
     DeviceControls deviceControls;
     AnswerWorker commandWorker;
@@ -112,18 +111,16 @@ signals:
 
     void sgSetUIParameter(QString nameParam, qint32 value);
     void sgSetUIText(QString nameParam, QString value);
-    void sgSetUIDataList(QString nameParam, QVariantList list);
+//    void sgSetUIDataList(QString nameParam, QVariantList list);
 
     void sgPresetChangeStage(quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);
 
-    void sgModuleNameUpdated(QString name);
+//    void sgModuleNameUpdated(QString name);
 
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
 
 public slots:
-//    void slInterfaceConnected(DeviceDescription device);
-
     void slReadyToDisconnect();
 
     void parseInputData(const QByteArray &data);
@@ -131,8 +128,6 @@ public slots:
     void recieveTimeout();
 
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
-
-  //  void slInterfaceError(QString errorDescription);
 };
 
 #endif // CORE_H

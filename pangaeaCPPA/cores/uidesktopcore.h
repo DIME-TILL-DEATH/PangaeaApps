@@ -71,6 +71,7 @@ signals:
     void sgDoDisconnect();
 
     void sgTranslatorChanged(QString langauageCode);
+    void sgApplicationSetupComplete();
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);

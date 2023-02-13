@@ -6,110 +6,164 @@ import Elements
 import StyleSettings
 import CppObjects 1.0
 
-Column {
+Row{
     id: root
 
+    anchors.fill: parent
+
     property bool isConnected: false
-
-    anchors.centerIn: parent
-
-    width: parent.width/2
-    height: parent.height
-
-    spacing: height/50
-
     property double radius: width/50
 
-    Rectangle{
-        id: _scanContainerRect
+    Column {
 
-        width: parent.width
-        height: parent.height*7/50//-parent.spacing*3
+    //    anchors.centerIn: parent
 
-        color: "blue"
-        border.width: 1
-      //  border.color:  Style.currentTheme.colorBorderOn
-        radius: root.radius
+        width: parent.width/2
+        height: parent.height
 
-        SequentialAnimation on color{
-            running: !isConnected
-            loops: Animation.Infinite
-            alwaysRunToEnd: true
-            ColorAnimation {from: Style.mainEnabledColor; to: Style.headColor; duration: 1000}
-            ColorAnimation {from: Style.headColor; to: Style.mainEnabledColor; duration: 1000}
-        }
+        spacing: height/50
 
-        Item{
-            id: _imgContainer
+        Rectangle{
+            id: _scanContainerRect
 
-            width:  _scanContainerRect.height*0.6
-            height: _scanContainerRect.height*0.6
-            anchors.right: _textColumn.left
-            anchors.rightMargin: _scanContainerRect.height/10
-            anchors.verticalCenter: parent.verticalCenter
-            Image
-            {
-                id: _scanImg
-                source: "qrc:/qml/Images/Arrow Gear new.svg"
+            width: parent.width
+            height: parent.height*9/50//-parent.spacing*3
 
-                anchors.fill: parent
+            color: "blue"
+            border.width: 1
+          //  border.color:  Style.currentTheme.colorBorderOn
+            radius: root.radius
 
-                visible: !isConnected
-
-                fillMode: Image.PreserveAspectFit
-                transformOrigin: Item.Center
-            }
-            Image
-            {
-                id: _connectedImg
-                source: "qrc:/qml/Images/Connected.svg"
-
-                anchors.fill: parent
-
-                visible: isConnected
-
-                fillMode: Image.PreserveAspectFit
-                transformOrigin: Item.Center
-            }
-
-            SequentialAnimation on rotation{
+            SequentialAnimation on color{
                 running: !isConnected
                 loops: Animation.Infinite
                 alwaysRunToEnd: true
-                NumberAnimation {
-                    from: 0
-                    to: 360
-                    duration: 1500
+                ColorAnimation {from: Style.mainEnabledColor; to: Style.headColor; duration: 1000}
+                ColorAnimation {from: Style.headColor; to: Style.mainEnabledColor; duration: 1000}
+            }
+
+            Item{
+                id: _imgContainer
+
+                width:  _scanContainerRect.height*0.6
+                height: _scanContainerRect.height*0.6
+                anchors.right: _textColumn.left
+                anchors.rightMargin: _scanContainerRect.height/10
+                anchors.verticalCenter: parent.verticalCenter
+                Image
+                {
+                    id: _scanImg
+                    source: "qrc:/qml/Images/Arrow Gear new.svg"
+
+                    anchors.fill: parent
+
+                    visible: !isConnected
+
+                    fillMode: Image.PreserveAspectFit
+                    transformOrigin: Item.Center
+                }
+                Image
+                {
+                    id: _connectedImg
+                    source: "qrc:/qml/Images/Connected.svg"
+
+                    anchors.fill: parent
+
+                    visible: isConnected
+
+                    fillMode: Image.PreserveAspectFit
+                    transformOrigin: Item.Center
+                }
+
+                SequentialAnimation on rotation{
+                    running: !isConnected
+                    loops: Animation.Infinite
+                    alwaysRunToEnd: true
+                    NumberAnimation {
+                        from: 0
+                        to: 360
+                        duration: 1500
+                    }
+                }
+            }
+
+            Column{
+                id: _textColumn
+
+                x: (_scanContainerRect.width - width + _imgContainer.width)/2
+
+
+                width: (_mainText.textWidth > _auxText.textWidth) ?
+                           _mainText.textWidth : _auxText.textWidth
+
+                anchors.verticalCenter: parent.verticalCenter
+                MText
+                {
+                    id: _mainText
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    text: isConnected ? qsTr("CONNECTED") : qsTr("Searching for devices...")
+                    // text: isConnected ? "CONNECTED" : "SCANNING"
+                }
+                MText
+                {
+                    id: _auxText
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    font.pixelSize: _mainText.font.pixelSize*0.8
+                    text: isConnected ? qsTr("(TAP to disconnect)") : ""
+                    visible: isConnected
                 }
             }
         }
 
-        Column{
-            id: _textColumn
+        Rectangle{
+            color: Style.mainDisabledColor
 
-            x: (_scanContainerRect.width - width + _imgContainer.width)/2
+            width: parent.width
+            height: parent.height*40/50
 
+            radius: root.radius
+            border.width: 2
 
-            width: (_mainText.textWidth > _auxText.textWidth) ?
-                       _mainText.textWidth : _auxText.textWidth
+            ListView{
+                id: listView
 
-            anchors.verticalCenter: parent.verticalCenter
-            MText
-            {
-                id: _mainText
+                property int autoSelectedItem
+                currentIndex: (autoSelectedItem<count) ? autoSelectedItem : "0"
+
+                width: parent.width*0.9
+                height: parent.height*0.95
+
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
 
-                text: isConnected ? qsTr("CONNECTED") : qsTr("Searching for devices...")
-                // text: isConnected ? "CONNECTED" : "SCANNING"
-            }
-            MText
-            {
-                id: _auxText
-                anchors.horizontalCenter: parent.horizontalCenter
+                enabled: !isConnected
 
-                font.pixelSize: _mainText.font.pixelSize*0.8
-                text: isConnected ? qsTr("(TAP to disconnect)") : ""
-                visible: isConnected
+                model: InterfaceListModel
+
+                focus: true
+                clip: true
+
+                delegate: ILDelegate{
+                    width: listView.width
+                    height: listView.height/6
+                }
+
+                highlight: ILHighlight{}
+
+                // Transitions
+                add: Transition {
+                     NumberAnimation { properties: "y"; from: listView.height; duration: 250 }
+                }
+
+                displaced: Transition{
+                    NumberAnimation { properties: "y"; duration: 300 }
+                }
+
+                remove: Transition {
+                     NumberAnimation { properties: "x"; to: listView.width; duration: 250 }
+                }
             }
         }
     }
@@ -117,49 +171,42 @@ Column {
     Rectangle{
         color: Style.mainDisabledColor
 
-        width: parent.width
-        height: parent.height*35/50
+        width: parent.width/2
+        height: parent.height
 
         radius: root.radius
         border.width: 2
+        Column {
 
-        ListView{
-            id: listView
+            anchors.centerIn: parent
 
-            property int autoSelectedItem
-            currentIndex: (autoSelectedItem<count) ? autoSelectedItem : "0"
+            width: parent.width*0.7
+            height: parent.height*0.9
 
-            width: parent.width*0.9
-            height: parent.height*0.95
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-
-            enabled: !isConnected
-
-            model: InterfaceListModel
-
-            focus: true
-            clip: true
-
-            delegate: ILDelegate{
-                width: listView.width
-                height: listView.height/6
+            spacing: height/25
+            Item{
+                width: parent.width
+                height: parent.height/10
+                MText{
+                    anchors.centerIn: parent
+                    text: qsTr("Avaliable interfaces:")
+                }
             }
 
-            highlight: ILHighlight{}
+            Indicator{
+                isOk: true
+                indicatorText: "USB"
 
-            // Transitions
-            add: Transition {
-                 NumberAnimation { properties: "y"; from: listView.height; duration: 250 }
+                width: parent.width
+                height: parent.height/10
             }
 
-            displaced: Transition{
-                NumberAnimation { properties: "y"; duration: 300 }
-            }
+            Indicator{
+                isOk: InterfaceManager.isBleAvaliable
+                indicatorText: "Bluetooth LE"
 
-            remove: Transition {
-                 NumberAnimation { properties: "x"; to: listView.width; duration: 250 }
+                width: parent.width
+                height: parent.height/10
             }
         }
     }
@@ -200,4 +247,5 @@ Column {
 //            }
 //        }
 //    }
+
 }

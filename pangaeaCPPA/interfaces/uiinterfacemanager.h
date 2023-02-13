@@ -9,25 +9,43 @@
 class UiInterfaceManager : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool isBleAvaliable READ isBleAvaliable NOTIFY isBleAvaliableChanged)
 public:
     explicit UiInterfaceManager(QObject *parent = nullptr);
     ~UiInterfaceManager();
 
     Q_INVOKABLE void startScanning();
     Q_INVOKABLE void connectToDevice(DeviceDescription device);
+    Q_INVOKABLE void disconnectFromDevice();
 
     void updateDevicesList(DeviceConnectionType connectionType, QList<DeviceDescription> list);
 
+    InterfaceListModel interfaceListModel() const;
+
+    bool isBleAvaliable();
+
+public slots:
+    void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
+
 signals:
     void sgStartScanning();
+
+    void sgInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
     void sgConnectToDevice(DeviceDescription device);
+    void sgDisconnectFromDevice();
+    void sgDeviceUnavaliable(DeviceConnectionType senderType, QString reason);
 
     void sgConnectionStarted();
     void sgInterfaceConnected(DeviceDescription device);
-    void sgInterfaceDisconnected();
+    void sgInterfaceDisconnected(DeviceDescription device);
     void sgInterfaceError(QString errorDescription);
 
+    void isBleAvaliableChanged();
+
 private:
+    bool m_isBleAvaliable{true};
+
     InterfaceListModel m_interfaceListModel;
 };
 

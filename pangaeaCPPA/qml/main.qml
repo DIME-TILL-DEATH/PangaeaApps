@@ -168,6 +168,9 @@ ApplicationWindow
         text: qsTr("Device is disconnected")
 
         modality: Qt.WindowModal
+        onButtonClicked: {
+            mBusy.visible = false;
+        }
     }
 
     MessageDialog
@@ -196,23 +199,6 @@ ApplicationWindow
 
         function onSgSetUIText(nameParam, inString)
         {
-//            if(nameParam === "port_opened")
-//            {
-//                connected = true;
-//                interfaceDescription = inString
-//                mainUi.visible = true;
-//                msgError.close();
-//            }
-
-//            if(nameParam === "port_closed")
-//            {
-//                connected = false;
-//                main.editable = false;
-//                mainUi.visible = false;
-//                msgError.text = qsTr("Device disconnected")
-//                msgError.open();
-//            }
-
             if(nameParam === "not_supported_ir")
             {
                 msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:\n") +
@@ -304,6 +290,15 @@ ApplicationWindow
     Connections{
         target: InterfaceManager
 
+        function onSgDeviceUnavaliable(senderType, reason)
+        {
+            msgError.text = qsTr("Device is unavaliable")
+            msgError.open();
+            mBusy.visible = false;
+
+           // InterfaceManager.startScanning();
+        }
+
         function onSgInterfaceConnected(interfaceDescription)
         {
             connected = true;
@@ -320,6 +315,16 @@ ApplicationWindow
             mainUi.visible = false;
             msgError.text = qsTr("Device disconnected")
             msgError.open();
+
+            InterfaceManager.startScanning();
+        }        
+
+        function onSgInterfaceDisconnected()
+        {
+            clearHeader();
+            connected = false;
+            main.editable = false;
+            mainUi.visible = false;
 
             InterfaceManager.startScanning();
         }

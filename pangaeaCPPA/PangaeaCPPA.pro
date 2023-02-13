@@ -7,6 +7,8 @@ QT += qml quick svg
 QT += serialport
 QT += bluetooth
 
+DEFINES += PANGAEA_DESKTOP
+
 win32: {
     VERSION = 1.0.1709.1
 

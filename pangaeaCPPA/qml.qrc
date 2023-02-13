@@ -61,5 +61,6 @@
         <file>qml/Images/Connected.svg</file>
         <file>qml/Elements/ILDelegate.qml</file>
         <file>qml/Elements/ILHighlight.qml</file>
+        <file>qml/Elements/Indicator.qml</file>
     </qresource>
 </RCC>

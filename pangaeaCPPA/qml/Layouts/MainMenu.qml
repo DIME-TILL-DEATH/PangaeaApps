@@ -25,6 +25,12 @@ MenuBar{
         }
         MenuSeparator{}
         MenuItem{
+            text: qsTr("Disconnect from device")
+
+            onTriggered: disconnectDialog.open();
+        }
+        MenuSeparator{}
+        MenuItem{
             text: qsTr("Quit")
             onTriggered: {Window.window.close()}
         }
@@ -140,9 +146,26 @@ MenuBar{
     }
 
     MessageDialog{
-        id: aboutDialog
-        title: qsTr("About...")
+        id: disconnectDialog
 
+        title: qsTr("Disconnect?")
+        text: qsTr("Are you sure want to disconnect?")
+
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes:
+                InterfaceManager.disconnectFromDevice();
+                break;
+            }
+        }
+    }
+
+    MessageDialog{
+        id: aboutDialog
+
+        title: qsTr("About...")
         text: qsTr("AMT Pangaea CP-16/CP-100")
         informativeText: qsTr("Desktop application\n") +
               qsTr("Version: ") + Qt.application.version + "\n"

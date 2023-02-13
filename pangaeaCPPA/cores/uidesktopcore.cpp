@@ -48,6 +48,8 @@ void UiDesktopCore::setupApplication()
     bool firstRun = !appSettings->value("first_run", true).toBool();
     emit sgSetUIParameter("first_run", firstRun);
     appSettings->setValue("first_run", false);
+
+    emit sgApplicationSetupComplete();
 }
 
 void UiDesktopCore::setParameter(QString name, quint8 val)
@@ -93,7 +95,6 @@ void UiDesktopCore::readAllParameters()
 {
     emit sgReadAllParameters();
 }
-
 
 void UiDesktopCore::exportPreset(QString filePath)
 {

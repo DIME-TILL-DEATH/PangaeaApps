@@ -19,28 +19,16 @@ void manageSegFailure(int signalCode);
 Logger* Logger::currentHandler = nullptr;
 Logger* appLogger_ptr;
 
-//template <typename Func>
-//inline void runOnThread(QThread *qThread, Func &&func)
-//{
-//    QTimer *t = new QTimer();
-//    t->moveToThread(qThread);
-//    t->setSingleShot(true);
-//    QObject::connect(t, &QTimer::timeout, [=]()
-//    {
-//        func();
-//        t->deleteLater();
-//    });
-//    QMetaObject::invokeMethod(t, "start", Qt::QueuedConnection, Q_ARG(int, 0));
-//}
-
 int main(int argc, char *argv[])
 {
+    signal(SIGSEGV, manageSegFailure);
+    QGuiApplication app(argc, argv);
+    app.setOrganizationName("AMT");
+    app.setApplicationName("Pangaea");
+
     Logger log;
     log.setAsMessageHandlerForApp();
     appLogger_ptr = &log;
-
-    signal(SIGSEGV, manageSegFailure);
-    QGuiApplication app(argc, argv);
 
     Core* core = new Core();
     InterfaceManager* interfaceManager = new InterfaceManager();
@@ -50,16 +38,12 @@ int main(int argc, char *argv[])
     interfaceManager->moveToThread(threadController.backendThread());
     QObject::connect(threadController.backendThread(), &QThread::finished, core, &QObject::deleteLater);
     QObject::connect(threadController.backendThread(), &QThread::finished, interfaceManager, &QObject::deleteLater);
-//    QThread::connect(threadController.backendThread(), &QThread::finished, &interfaceManager, &InterfaceManager::stopScanning);
 
     //-----------------------------------------------------------------
     // UI creation
-    //----------------------------------------------------------------
+    //----------------------------------------------------------------   
     UiInterfaceManager uiInterfaceManager;
     UiDesktopCore uiCore;
-
-    app.setOrganizationName("AMT");
-    app.setApplicationName("Pangaea");
 
     QQmlApplicationEngine engine;
 
@@ -88,33 +72,30 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiDesktopCore::sgSw4Enable, core, &Core::sw4Enable);
     QObject::connect(&uiCore, &UiDesktopCore::sgUiClosing, core, &Core::stopCore);
 
-//    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, &core, &Core::setModuleName);
-//    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, &bleConnection, &BluetoothleUART::setModuleName);
-
-//    QObject::connect(&uiCore, &UICore::sgDoOnlineFirmwareUpdate, &netCore, &NetCore::requestFirmwareFile);
-
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
     QObject::connect(core, &Core::sgPresetChangeStage, &uiCore, &UiDesktopCore::sgPresetChangeStage);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);
-    QObject::connect(core, &Core::sgModuleNameUpdated, &uiCore, &UiDesktopCore::setModuleName);
+//    QObject::connect(core, &Core::sgModuleNameUpdated, &uiCore, &UiDesktopCore::setModuleName);
     QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiDesktopCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
 
+//    QObject::connect(&uiCore, &UICore::sgDoOnlineFirmwareUpdate, &netCore, &NetCore::requestFirmwareFile);
 //    QObject::connect(&core, &Core::sgRequestNewestFirmware, &netCore, &NetCore::requestNewestFirmware);
-
 //    QObject::connect(&netCore, &NetCore::sgFirmwareDownloaded, &core, &Core::uploadFirmware);
 //    QObject::connect(&netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UICore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
 //    QObject::connect(&netCore, &NetCore::sgDownloadProgress, &uiCore, &UICore::sgDownloadProgress, Qt::QueuedConnection);
 
-   // UiDesktopCore::connect(&uiCore, &UiDesktopCore::sgUiClosing, &interfaceManager, &InterfaceManager::disconnectFromDevice, Qt::QueuedConnection);
-
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceManager::connectToDevice, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, interfaceManager, &InterfaceManager::startScanning, Qt::QueuedConnection);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceManager::connectToDevice, Qt::QueuedConnection);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgDisconnectFromDevice, interfaceManager, &InterfaceManager::disconnectFromDevice, Qt::QueuedConnection);
 
     InterfaceManager::connect(interfaceManager, &InterfaceManager::sgDeviceListUpdated, &uiInterfaceManager, &UiInterfaceManager::updateDevicesList, Qt::QueuedConnection);
     InterfaceManager::connect(interfaceManager, &InterfaceManager::sgConnectionStarted, &uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted, Qt::QueuedConnection);
     InterfaceManager::connect(interfaceManager, &InterfaceManager::sgInterfaceConnected, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceConnected, Qt::QueuedConnection);
     InterfaceManager::connect(interfaceManager, &InterfaceManager::sgInterfaceError, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceError, Qt::QueuedConnection);
+    InterfaceManager::connect(interfaceManager, &InterfaceManager::sgInterfaceUnavaliable, &uiInterfaceManager, &UiInterfaceManager::slInterfaceUnavaliable, Qt::QueuedConnection);
+    InterfaceManager::connect(interfaceManager, &InterfaceManager::sgDeviceUnavaliable, &uiInterfaceManager, &UiInterfaceManager::sgDeviceUnavaliable, Qt::QueuedConnection);
+    InterfaceManager::connect(interfaceManager, &InterfaceManager::sgInterfaceDisconnected, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceDisconnected, Qt::QueuedConnection);
 
     Core::connect(interfaceManager, &InterfaceManager::sgNewData, core, &Core::parseInputData);
     //Core::connect(&interfaceManager, &InterfaceManager::sgInterfaceError, &core, &Core::slInterfaceError);

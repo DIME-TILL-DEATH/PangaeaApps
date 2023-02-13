@@ -23,9 +23,12 @@ public:
     void stopScanning();
 
 signals:
+    void sgInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
+    void sgDeviceUnavaliable(DeviceConnectionType senderType, QString reason);
     void sgDeviceListUpdated(DeviceConnectionType connectionType, QList<DeviceDescription> list);
     void sgConnectionStarted();
     void sgInterfaceConnected(DeviceDescription device);
+    void sgInterfaceDisconnected(DeviceDescription device);
     void sgInterfaceError(QString errorDescription);
     void sgNewData(QByteArray data);
 
@@ -36,6 +39,7 @@ private:
 
 private slots:
     void slInterfaceError(QString errorDescription);
+    void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
 };
 
 #endif // INTERFACEMANAGER_H

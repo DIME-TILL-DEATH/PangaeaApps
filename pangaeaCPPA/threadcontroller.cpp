@@ -13,7 +13,7 @@ ThreadController::ThreadController(QThread *mainThread)
 
 ThreadController::~ThreadController()
 {
-    qDebug() << "Thread controller destructor";
+//    qDebug() << "Thread controller destructor";
     m_backendThread->quit();
     m_backendThread->wait();
 }

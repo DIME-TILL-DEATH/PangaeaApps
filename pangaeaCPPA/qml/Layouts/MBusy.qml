@@ -1,6 +1,6 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import CppObjects 1.0
 
@@ -10,10 +10,10 @@ Item
 
     anchors.fill: parent
 
-    //visible: true
+    visible: false
 
     property double  pbValue: 0
-    property string strSearching: qsTr("Searching for devices....")
+    property string strSearching: qsTr("Loading application")
 
     Rectangle{
         id: background
@@ -29,6 +29,8 @@ Item
 
     ColumnLayout
     {
+        id: column
+
         width:  parent.width/5
         height: parent.height*0.8
         anchors.centerIn: parent
@@ -36,11 +38,11 @@ Item
         {
             id : bI
 
+            visible: rWait.visible
+
             Layout.preferredWidth: parent.width/3
             Layout.preferredHeight: width
             Layout.fillWidth: true
-
-            opacity: 0 // hack. Иначе BusyIndicator не отрисовывается
         }
 
         ProgressBar
@@ -100,16 +102,6 @@ Item
             rWait.pbValue = val;
         }
 
-//        function onSgSetUIText(nameParam, inString)
-//        {
-//            if(nameParam===("port_closed"))
-//            {
-//               // progressBar.visible = false
-//                txt.text = rWait.strSearching
-//               // rWait.visible = true;
-//            }
-//        }
-
         function onSgSetUIParameter(nameParam, inValue)
         {
             if(nameParam === ("wait"))
@@ -142,16 +134,12 @@ Item
         }
     }
 
-    Component.onCompleted: {
-        rWait.visible = false
-    }
 
     Connections{
         target: InterfaceManager
 
         function onSgConnectionStarted()
         {
-            bI.opacity = 1;
             progressBar.visible = false;
             txt.text = qsTr("Connecting to device...");
             rWait.visible = true;
@@ -160,7 +148,6 @@ Item
         function onSgInterfaceError(errorDescription)
         {
             rWait.visible = false;
-          //  console.log("interface error:", errorDescription);
         }
     }
 }

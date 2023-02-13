@@ -5,6 +5,7 @@ Dial        1.0 Dial.qml
 Eq          1.0 Eq.qml
 ILDelegate  1.0 ILDelegate.qml
 ILHighlight 1.0 ILHighlight.qml
+Indicator   1.0 Indicator.qml
 Logo        1.0 Logo.qml
 MapDelegate 1.0 MapDelegate.qml
 MapHeadBank 1.0 MapHeadBank.qml

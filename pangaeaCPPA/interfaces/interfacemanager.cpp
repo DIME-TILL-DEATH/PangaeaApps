@@ -9,13 +9,15 @@ InterfaceManager::InterfaceManager(QObject *parent)
     m_usbInterface = new UsbInterface(this);
     m_bleInterface = new BleInterface(this);
 
-//    connect(this, &QObject::destroyed, m_usbInterface, &QObject::deleteLater);
-//    connect(this, &QObject::destroyed, m_bleInterface, &QObject::deleteLater);
+    QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceManager::slInterfaceUnavaliable);
+
+    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
+    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
 }
 
 InterfaceManager::~InterfaceManager()
 {
-    qDebug() << "Interface manager destructor" << this->thread();
+//    qDebug() << "Interface manager destructor" << this->thread();
 
     if(m_exchangeInterface)
         m_exchangeInterface->disconnectFromDevice();
@@ -49,8 +51,10 @@ bool InterfaceManager::connectToDevice(DeviceDescription device)
     }
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceManager::sgNewData);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceManager::sgConnectionStarted);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceManager::sgDeviceUnavaliable);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceManager::slInterfaceError);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceManager::sgInterfaceConnected);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceManager::sgInterfaceDisconnected);
 
     return m_exchangeInterface->connect(device);
 }
@@ -58,9 +62,11 @@ bool InterfaceManager::connectToDevice(DeviceDescription device)
 void InterfaceManager::disconnectFromDevice()
 {
     m_exchangeInterface->disconnectFromDevice();
+  //  emit sgInterfaceDisconnected();
 
     QObject::disconnect(m_exchangeInterface, nullptr, this, nullptr);
     m_exchangeInterface = nullptr;
+
 }
 
 void InterfaceManager::writeToDevice(QByteArray data)
@@ -70,9 +76,6 @@ void InterfaceManager::writeToDevice(QByteArray data)
 
 void InterfaceManager::startScanning()
 {
-    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
-    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
-
     m_usbInterface->startScan();
     m_bleInterface->startScan();
 }
@@ -87,4 +90,23 @@ void InterfaceManager::slInterfaceError(QString errorDescription)
 {
     disconnectFromDevice();
     emit sgInterfaceError(errorDescription);
+}
+
+void InterfaceManager::slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason)
+{
+#ifdef PANGAEA_DESKTOP
+
+    AbstractInterface* interface_ptr = dynamic_cast<AbstractInterface*>(QObject::sender());
+    if(!interface_ptr)
+    {
+        qWarning() << "Sender dynamic cast failed";
+        return;
+    }
+
+    if(interface_ptr->connectionType() == DeviceConnectionType::BLE)
+    {
+        QTimer::singleShot(2500, m_bleInterface, &BleInterface::startScan);
+    }
+#endif
+    emit sgInterfaceUnavaliable(senderType, reason);
 }
