@@ -13,7 +13,6 @@ Item
 
     property bool  highlighted: false
     signal clicked();
-    anchors.fill:  parent
 
     Rectangle
     {

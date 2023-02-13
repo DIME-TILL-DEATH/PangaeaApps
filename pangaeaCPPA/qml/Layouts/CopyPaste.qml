@@ -19,29 +19,23 @@ Item
         Column
         {
             anchors.fill: parent
-            Item
+            MButton
             {
                 width:  parent.width
                 height: parent.height/2
-                MButton
-                {
-                    text: "COPY"
-                    enabled: editable & !compareState
-                    onClicked: {UiCore.setParameter("copy", 0); copyFirst=true;}
-                }
+                text: "COPY"
+                enabled: editable & !compareState
+                onClicked: {UiCore.setParameter("copy", 0); copyFirst=true;}
             }
 
-            Item
+            MButton
             {
                 width:  parent.width
                 height: parent.height/2
-                MButton
-                {
-                    text: "PASTE"
-                    scaleText: 0.88
-                    enabled: editable & copyFirst & !compareState
-                    onClicked: UiCore.setParameter("paste", 0)
-                }
+                text: "PASTE"
+                scaleText: 0.88
+                enabled: editable & copyFirst & !compareState
+                onClicked: UiCore.setParameter("paste", 0)
             }
         }
     }

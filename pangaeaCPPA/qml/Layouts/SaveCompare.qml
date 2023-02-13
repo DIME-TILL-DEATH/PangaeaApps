@@ -19,33 +19,27 @@ Item
         Column
         {
             anchors.fill: parent
-            Item
+            MButton
             {
                 width:  parent.width
                 height: parent.height/2
-                MButton
-                {
-                    text: "SAVE"
-                    enabled: main.editable & main.edit & !main.compareState
-                    onClicked: UiCore.setParameter("save_change", (-1))
-                }
+                text: "SAVE"
+                enabled: main.editable & main.edit & !main.compareState
+                onClicked: UiCore.setParameter("save_change", (-1))
             }
 
-            Item
+            MButton
             {
+                id: bComp
                 width:  parent.width
                 height: parent.height/2
-                MButton
-                {
-                    id: bComp
-                    text: "COMP"
+                text: "COMP"
 
-                    enabled:  main.edit
-                    highlighted: main.compareState
+                enabled:  main.edit
+                highlighted: main.compareState
 
-                    onClicked: {
-                        UiCore.setParameter("compare", 0);
-                    }
+                onClicked: {
+                    UiCore.setParameter("compare", 0);
                 }
             }
         }
