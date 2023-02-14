@@ -1,11 +1,13 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
-import "../Elements/"
+import QtQuick
+
+import Elements
+import StyleSettings
+import CppObjects 1.0
+
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property bool copyFirst: false
 
     property bool compareState: false
@@ -13,40 +15,34 @@ Item
     Rectangle
     {
         anchors.fill: parent
-        color: devColor
+        color: Style.mainEnabledColor
         Column
         {
             anchors.fill: parent
-            Item
+            MButton
             {
                 width:  parent.width
                 height: parent.height/2
-                MButton
-                {
-                    text: "COPY"
-                    enabled: editable & !compareState
-                    onClicked: {_uiCore.setParameter("copy", 0); copyFirst=true;}
-                }
+                text: "COPY"
+                enabled: editable & !compareState
+                onClicked: {UiCore.setParameter("copy", 0); copyFirst=true;}
             }
 
-            Item
+            MButton
             {
                 width:  parent.width
                 height: parent.height/2
-                MButton
-                {
-                    text: "PASTE"
-                    scaleText: 0.88
-                    enabled: editable & copyFirst & !compareState
-                    onClicked: _uiCore.setParameter("paste", 0)
-                }
+                text: "PASTE"
+                scaleText: 0.88
+                enabled: editable & copyFirst & !compareState
+                onClicked: UiCore.setParameter("paste", 0)
             }
         }
     }
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, value)
         {

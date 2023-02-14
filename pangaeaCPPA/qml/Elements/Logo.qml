@@ -1,5 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
+
+import CppObjects
 
 Item
 {
@@ -8,9 +10,14 @@ Item
 
     Image
     {
+        //QPen error on resize. В QT5 не было, в Qt6 появилось
         anchors.centerIn: parent
         width:  Math.min(parent.width, parent.height)*0.8
         height: Math.min(parent.width, parent.height)*0.8
+
+        fillMode: Image.PreserveAspectFit
+        mipmap: true
+        smooth: true
 
         source: (value==4) ? "qrc:/qml/Images/cp_100_pa.svg" : (value==3)
                            ? "qrc:/qml/Images/cp_16m_pa.svg" :(value==2)
@@ -22,7 +29,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if(nameParam===("type_dev"))

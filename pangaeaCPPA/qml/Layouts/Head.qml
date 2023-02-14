@@ -1,15 +1,14 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
-import "../Elements/"
+import QtQuick
+
+import Elements
+import StyleSettings
+import CppObjects 1.0
 
 Item
 {
     id: main
 
-    visible: false
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
 
     property int  maxMapRow: 10
     property int controlMultiplier: 10
@@ -25,7 +24,6 @@ Item
     property bool irOn: true
 
     signal setImpuls()
-
 
     Row
     {
@@ -49,7 +47,7 @@ Item
 
             text: "BANK"
             nameValue: "bank"
-            onChPreset: _uiCore.setParameter("set_preset_change", presetNom)
+            onChPreset: UiCore.setParameter("set_preset_change", presetNom)
             enabled: main.editable
         }
 
@@ -57,8 +55,6 @@ Item
         {
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-            property string fonColor: "#EBECEC"
-            property string devColor: "#5E5971"
         }
 
         SaveCompare
@@ -77,7 +73,7 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*7+4
 
-            color: "MediumSeaGreen"
+            color: Style.headColor
 
             opacity: main.irOn ? 1:0.3
             Behavior on opacity{
@@ -91,7 +87,9 @@ Item
                 text: "empty"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
-                font.bold: true
+
+                color: "black"
+
                 font.pixelSize: parent.height/4
                 wrapMode: Text.Wrap
             }
@@ -127,7 +125,7 @@ Item
 
             text: "PRESET"
             nameValue: "preset"
-            onChPreset: _uiCore.setParameter("set_preset_change", presetNom)
+            onChPreset: UiCore.setParameter("set_preset_change", presetNom)
             enabled: main.editable
         }
 
@@ -140,21 +138,12 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIText(nameParam, value)
         {
             if (nameParam==="impulse_name")
             {
                 impulsTxt.text=value;
-            }
-
-            if(nameParam===("port_opened"))
-            {
-                main.visible = true;
-            }
-            if(nameParam===("port_closed"))
-            {
-                main.visible = false;
             }
         }
 

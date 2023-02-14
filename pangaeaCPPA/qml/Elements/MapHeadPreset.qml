@@ -1,11 +1,11 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import StyleSettings
+
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
 
     property int curVal: -1
     property int maxPresetBank: 10
@@ -18,16 +18,15 @@ Item
             width:  parent.width
             height: parent.height / 2
 
-            color: fonColor
+            color: Style.backgroundColor
             radius: parent.height
             MText
             {
                 anchors.fill: parent
                 text: "PRESET"
-                color: devColor
+                color: Style.mainEnabledColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
-                font.bold: true
                 font.pixelSize: parent.height/1.5
             }
         }
@@ -48,7 +47,7 @@ Item
                     Rectangle
                     {
                         anchors.fill: parent
-                        color: devColor
+                        color: Style.mainEnabledColor
                     }
                     MText
                     {
@@ -56,8 +55,7 @@ Item
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment:   Qt.AlignVCenter
                         text: index
-                        color: index===curVal ? "Salmon":fonColor
-                        font.bold: true
+                        color: index === curVal ? Style.highlightColor : Style.backgroundColor
                         font.pixelSize: parent.height/1.5
                     }
                 }

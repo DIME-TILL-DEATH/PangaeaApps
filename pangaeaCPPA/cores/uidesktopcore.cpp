@@ -8,12 +8,17 @@
 #include <QCoreApplication>
 #include <QUrl>
 
+#include "resampler.h"
 #include "uidesktopcore.h"
 
 UiDesktopCore::UiDesktopCore(QObject *parent)
     : QObject{parent}
 {
     appSettings = new QSettings(QSettings::UserScope);
+}
+
+UiDesktopCore::~UiDesktopCore()
+{
 }
 
 void UiDesktopCore::setupApplication()
@@ -43,6 +48,8 @@ void UiDesktopCore::setupApplication()
     bool firstRun = !appSettings->value("first_run", true).toBool();
     emit sgSetUIParameter("first_run", firstRun);
     appSettings->setValue("first_run", false);
+
+    emit sgApplicationSetupComplete();
 }
 
 void UiDesktopCore::setParameter(QString name, quint8 val)
@@ -84,6 +91,11 @@ void UiDesktopCore::convertAndUploadImpulse(QString fullFilePath)
     setImpuls(outpuFilePath);
 }
 
+void UiDesktopCore::readAllParameters()
+{
+    emit sgReadAllParameters();
+}
+
 void UiDesktopCore::exportPreset(QString filePath)
 {
     QFileInfo fileInfo(filePath);
@@ -112,11 +124,6 @@ void UiDesktopCore::saveSetting(QString settingName, QVariant settingValue)
     appSettings->sync();
 
     qDebug() << __FUNCTION__ << "Setting name: " << settingName << "Setting value:" << settingValue;
-}
-
-void UiDesktopCore::sw4Enable()
-{
-
 }
 
 void UiDesktopCore::openManualExternally(QString fileName)

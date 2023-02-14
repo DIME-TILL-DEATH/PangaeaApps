@@ -8,7 +8,6 @@
 #include <QTranslator>
 
 #include "firmware.h"
-#include "resampler.h"
 
 //TODO: class enum UIValueItem, UITextItem, UIErrorItem
 class UiDesktopCore : public QObject
@@ -16,8 +15,8 @@ class UiDesktopCore : public QObject
     Q_OBJECT
 public:
     explicit UiDesktopCore(QObject *parent = nullptr);
+    ~UiDesktopCore();
 
-    //Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
     Q_INVOKABLE void setupApplication();
 
     Q_INVOKABLE void setParameter(QString name, quint8 val);
@@ -27,15 +26,7 @@ public:
     Q_INVOKABLE void escImpuls();
     Q_INVOKABLE void convertAndUploadImpulse(QString fullFilePath);
 
-    //Q_INVOKABLE void connectToDevice(quint8 devNum);
-    //Q_INVOKABLE void disconnectFromDevice(void);
-
-    //Q_INVOKABLE void doConnect(quint8 numDev, QString address);
-    //Q_INVOKABLE void rescanDevices();
-
-
-    //Q_INVOKABLE void readAll(void);
-
+    Q_INVOKABLE void readAllParameters();
 
     Q_INVOKABLE void exportPreset(QString filePath);
     Q_INVOKABLE void importPreset(QString filePath);
@@ -46,8 +37,6 @@ public:
 
     Q_INVOKABLE void setLanguage(QString languageCode);
     Q_INVOKABLE void saveSetting(QString settingName, QVariant settingValue);
-
-    Q_INVOKABLE void sw4Enable();
 
     Q_INVOKABLE void openManualExternally(QString fileName);
     Q_INVOKABLE void runIrConvertor();
@@ -74,14 +63,8 @@ private:
     void loadDefaultTranslator();
 
 signals:
-   // void sgStartScan();
-   // void sgUpdateBLEDevicesList(QStringList str);
-    void sgConnectReady(void);
-    void sgConnectToDevice(int numDevice);
-    void sgDoConnect(quint8 numDev, QString address);
-    void sgDoDisconnect();
-
     void sgTranslatorChanged(QString langauageCode);
+    void sgApplicationSetupComplete();
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);
@@ -90,10 +73,8 @@ signals:
     void sgPresetChangeStage (quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);
     void sgDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    //-----------------------------------------
-    void sgLocalBluetoothNotReady(QString reason);
-    //-----------------------------------------------
-    void sgReadAll();
+
+    void sgReadAllParameters();
     void sgSetParameter(QString name, quint8 value);
     void sgRestoreValue(QString name);
     void sgSetImpuls (QString filePath, QString fileName);
@@ -112,6 +93,5 @@ public slots:
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
 };
-
 
 #endif // UIDESKTOPCORE_H

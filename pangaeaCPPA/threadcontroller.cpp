@@ -1,7 +1,9 @@
+#include <QDebug>
 #include "threadcontroller.h"
 
 ThreadController::ThreadController(QThread *mainThread)
-    : m_mainThread{mainThread}
+    : QObject(nullptr),
+      m_mainThread{mainThread}
 {
     m_backendThread = new QThread();
 
@@ -11,8 +13,9 @@ ThreadController::ThreadController(QThread *mainThread)
 
 ThreadController::~ThreadController()
 {
+//    qDebug() << "Thread controller destructor";
     m_backendThread->quit();
-//    m_backendThread->wait();
+    m_backendThread->wait();
 }
 
 QThread *ThreadController::mainThread() const

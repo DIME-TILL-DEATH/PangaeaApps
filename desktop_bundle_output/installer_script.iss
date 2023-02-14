@@ -5,7 +5,7 @@
 #define ConverterName "IR converter tool"
 #define MyAppNameUn "Uninstall AMT Pangaea CP PA"
 
-#define MyAppVersion "1.0.1708.1"
+#define MyAppVersion "1.0.1709.1"
 #define MyAppPublisher "AMT Electronics"
 #define MyAppURL "http://www.amtelectronics.com/"
 #define MyAppExeName "PangaeaCPPA.exe"
@@ -22,7 +22,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={pf64}\{#MyAppName}
 DefaultGroupName={#MyAppPublisher}
 ;DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
@@ -45,6 +45,7 @@ Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:Ad
 
 [Files]
 Source: release\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "release\vc_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 [Icons]
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon
@@ -54,6 +55,11 @@ Name: {group}\{cm:ProgramOnTheWeb,{#MyAppName}}; Filename: {#MyAppURL}
 Name: {group}\{cm:UninstallProgram,{#MyAppName}}; Filename: {uninstallexe}
 Name: {group}\{#MyAppNameUn}; Filename: "{app}\unins000.exe";
 
+
 [Run]
+Filename: {tmp}\vc_redist.x64.exe; \
+    Parameters: "/q /passive /Q:a /c:""msiexec /q /i vcredist.msi"""; \
+    StatusMsg: "Installing VC++ 2019 Redistributables..."
+
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}; Flags: nowait postinstall skipifsilent
 

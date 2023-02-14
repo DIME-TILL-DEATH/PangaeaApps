@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 
 import Elements 1.0
 
+import CppObjects 1.0
+
 Item {
     id: main
 
@@ -73,7 +75,7 @@ Item {
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if((nameParam === main.nameValue))

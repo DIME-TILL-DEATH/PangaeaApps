@@ -1,9 +1,12 @@
+TEMPLATE = app
+
 QT += quick
+QT += quickcontrols2
+#QT += widgets
 
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 TARGET = IrConverter
-
 
 QMAKE_TARGET_COMPANY = AMT electronics
 QMAKE_TARGET_COPYRIGHT = AMT electronics
@@ -16,7 +19,6 @@ HEADERS += \
     core.h
 
 RESOURCES += qml.qrc
-
 
 
 win32{

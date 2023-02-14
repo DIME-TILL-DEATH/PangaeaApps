@@ -1,11 +1,12 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
+
+import CppObjects
 
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
 
     property string name: "DIAL"
     property string nameValue: ""
@@ -46,7 +47,7 @@ Item
             {
                 anchors.fill: parent
                 radius: parent.width
-                color: fonColor
+                color: Style.backgroundColor
                 Item
                 {
                     height: parent.height
@@ -59,7 +60,7 @@ Item
                         height: Math.min(parent.height, parent.width)
                         width : Math.min(parent.height, parent.width)
                         radius: width
-                        color: devColor
+                        color: Style.mainEnabledColor
                     }
                     rotation:  dispAngle
                     Behavior on rotation  {NumberAnimation { duration: 200 }}
@@ -67,9 +68,7 @@ Item
                 MText
                 {
                     anchors.centerIn: parent
-                    color: devColor
-                    font.family: "Arial Black"
-                    font.bold: true
+                    color: Style.mainEnabledColor
                     font.pixelSize: parent.width/5
                     text: dispValue
                 }
@@ -149,9 +148,7 @@ Item
                 anchors.verticalCenter:   parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenterOffset: -parent.width/30
-                color: main.checkable?(main.on?"Salmon":"Blue"):fonColor
-                font.family: "Arial Black"
-                font.bold: true
+                color: main.checkable ? (main.on ? "Salmon"  :"Blue") : Style.backgroundColor
                 font.pixelSize: parent.width/6
                 text: main.name
                 MouseArea
@@ -202,7 +199,7 @@ Item
             main.valueLastSend=main.value;
             main.chValue(main.value);
             if(main.nameValue.length>0)
-                _uiCore.setParameter(main.nameValue, main.value)
+                UiCore.setParameter(main.nameValue, main.value)
         }
     }
 
@@ -215,7 +212,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if((main.nameValue.length>0)&&(nameParam===main.nameValue))

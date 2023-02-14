@@ -8,11 +8,10 @@
 
 #include <QStandardPaths>
 
-class Logger : QObject
+class Logger
 {
-    Q_OBJECT
 public:
-    explicit Logger(QObject *parent = nullptr);
+    explicit Logger();
     ~Logger();
 
     static void messageOutputHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);

@@ -1,12 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 import Qt.labs.settings 1.0
 
 import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 import Layouts 1.0
+
+import CppObjects 1.0
 
 ApplicationWindow
 {
@@ -21,7 +23,7 @@ ApplicationWindow
     maximumWidth: width*1.25
     maximumHeight: height*1.25
 
-    color: "#EBECEC"
+    color: Style.backgroundColor
 
     property string markEdit: edit?" * ":" "
     property string devName: ""
@@ -35,13 +37,14 @@ ApplicationWindow
     property bool connected: false
     property bool wait: true
 
-    title: qsTr("AMT Pangaea " + devName +" (v." + devVersion +") " + " v." + Qt.application.version + " "
-                + markConnect + qsTr(" Bank ") + head.bank + qsTr(" Preset ") + head.preset + markEdit)
+    title: connected ? "AMT PangaeaCPPA " +  " v." + Qt.application.version + " "
+                + markConnect + devName + " (firmware v." + devVersion +") " + markEdit
+                : "AMT PangaeaCPPA " + " v." + Qt.application.version + " " + markConnect
 
     Settings
     {
         category: "Current_folder"
-        property alias curFolder: fileOpen.folder
+        property alias curFolder: irFileDialog.currentFolder
     }
 
     header: MainMenu{
@@ -49,11 +52,21 @@ ApplicationWindow
         enabled: !wait
     }
 
+    ConnectionLayout
+    {
+        id: connectionUi
+
+        visible: !mainUi.visible
+    }
+
     Column
     {
+        id: mainUi
         anchors.fill: parent
         focus: true
         spacing: 2
+
+        visible: false
 
         Head
         {
@@ -62,7 +75,7 @@ ApplicationWindow
             width:  parent.width
             height: parent.height/1000*150
 
-            onSetImpuls: fileOpen.open();
+            onSetImpuls: irFileDialog.open();
             editable: main.editable & (!main.wait)
             edit:     main.edit
         }
@@ -78,47 +91,18 @@ ApplicationWindow
         }
     }
 
-//    Timer
-//    {
-//        id: timer
-
-//        interval: 250
-//        repeat: true
-//        running: fileOpen.visible
-
-//        property string lastSelectFile: ""
-
-//        onTriggered:
-//        {
-//            if(lastSelectFile!=fileOpen.fileUrl)
-//            {
-//                var cleanPath;
-//                lastSelectFile=fileOpen.fileUrl;
-//                cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(lastSelectFile.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(lastSelectFile.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-//                _uiCore.setImpuls(cleanPath);
-//            }
-//        }
-//    }
-
     FileDialog
     {
-        id: fileOpen
+        id: irFileDialog
 
         title: qsTr("Select IR")
         nameFilters: [ "Wav files (*.wav)" ]
 
         onAccepted:
         {
-            //TODO нужно ли?
-            //modules.irEnable(true);
-            var cleanPath = fileOpen.fileUrl.toString();
-            //lastSelectFile=fileOpen.fileUrl;
-            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            _uiCore.setImpuls(cleanPath);
-        }
-        onRejected:
-        {
-            //_uiCore.escImpuls();
+            var cleanPath = irFileDialog.currentFile.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+            UiCore.setImpuls(cleanPath);
         }
     }
 
@@ -128,45 +112,51 @@ ApplicationWindow
 
         property int saveParam: 0
 
-        icon: StandardIcon.Question
         text: qsTr("Do you want to save changes?")
         title: qsTr("Save preset")
 
-        // TODO standardButtons resize bug in qml
-        standardButtons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
-        onAccepted:
-        {
-            _uiCore.setParameter("save_change", saveParam);
-            _uiCore.setParameter("do_preset_change", saveParam);
-        }
-        onNo:
-        {
-            _uiCore.restoreParameter("impulse")
-            _uiCore.setParameter("do_preset_change", saveParam);
-        }
-        onRejected:
-        {
-            saveParam = 0
-            _uiCore.restoreParameter("preset")
-            _uiCore.restoreParameter("bank")
+        buttons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
+        onButtonClicked: function(button, role){
+            switch(button)
+            {
+                case MessageDialog.Save:
+                {
+                    UiCore.setParameter("save_change", saveParam);
+                    UiCore.setParameter("do_preset_change", saveParam);
+                    break;
+                }
+                case MessageDialog.No:
+                {
+                    UiCore.restoreParameter("impulse")
+                    UiCore.setParameter("do_preset_change", saveParam);
+                    break;
+                }
+                case MessageDialog.Cancel:
+                {
+                    saveParam = 0
+                    UiCore.restoreParameter("preset")
+                    UiCore.restoreParameter("bank")
+                    break;
+                }
+            }
         }
     }
 
     MessageDialog{
         id: msgIncorretIR
 
-        icon: StandardIcon.Warning
         title: qsTr("Incorrect wav format")
 
-        standardButtons: MessageDialog.Yes | MessageDialog.No
+        buttons: MessageDialog.Yes | MessageDialog.No
 
-        onYes: {
-
-            var cleanPath = fileOpen.fileUrl.toString();
-            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
-            console.log("accepted, path", cleanPath);
-            _uiCore.convertAndUploadImpulse(cleanPath);
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes:
+                var cleanPath = irFileDialog.currentFile.toString();
+                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+                UiCore.convertAndUploadImpulse(cleanPath);
+                break;
+            }
         }
     }
 
@@ -174,16 +164,19 @@ ApplicationWindow
     {
         id: msgError
 
-        icon: StandardIcon.Critical
         title: qsTr("Error")
         text: qsTr("Device is disconnected")
+
+        modality: Qt.WindowModal
+        onButtonClicked: {
+            mBusy.visible = false;
+        }
     }
 
     MessageDialog
     {
         id: _msgVersionError
 
-        icon: StandardIcon.Warning
         title: qsTr("Warning")
         text: qsTr("Version error!")
     }
@@ -196,7 +189,7 @@ ApplicationWindow
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgPresetChangeStage(inChangePreset)
         {
@@ -206,21 +199,6 @@ ApplicationWindow
 
         function onSgSetUIText(nameParam, inString)
         {
-            if(nameParam === "port_opened")
-            {
-                connected = true;
-                interfaceDescription = inString
-                msgError.close();
-            }
-
-            if(nameParam === "port_closed")
-            {
-                connected = false;
-                main.editable = false;
-                msgError.text = qsTr("Device disconnected")
-                msgError.open();
-            }
-
             if(nameParam === "not_supported_ir")
             {
                 msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:\n") +
@@ -232,12 +210,6 @@ ApplicationWindow
             if(nameParam === "preset_import_unsuccecfull")
             {
                 msgError.text = qsTr("Not a Pangaea preset file!")
-                msgError.open();
-            }
-
-            if(nameParam === "exchange_error")
-            {
-                msgError.text = qsTr("Command exchange error")
                 msgError.open();
             }
 
@@ -261,11 +233,13 @@ ApplicationWindow
             if(nameParam === "window_width")
             {
                 main.width = value;
+                main.x = Screen.width/2 - main.width/2
             }
 
             if(nameParam === "window_height")
             {
                 main.height = value;
+                main.y = Screen.height/2 - main.height/2
             }
 
             if(nameParam === "preset_edited")
@@ -299,17 +273,72 @@ ApplicationWindow
         }
     }
 
-    Component.onCompleted: {
-        _uiCore.setupApplication();
+    function clearHeader()
+    {
+        main.edit = false;
+        main.devName = ""
+        main.devVersion = ""
+        main.interfaceDescription = ""
     }
 
-    onClosing:
-    {
-        _uiCore.saveSetting("window_width", main.width);
-        _uiCore.saveSetting("window_height", main.height);
-        _uiCore.saveSetting("modules_right_aligned", Style.modulesRightAligned);
+    Connections{
+        target: InterfaceManager
 
-        _uiCore.sw4Enable();
+        function onSgDeviceUnavaliable(senderType, reason)
+        {
+            msgError.text = qsTr("Device is unavaliable")
+            msgError.open();
+            mBusy.visible = false;
+        }
+
+        function onSgExchangeError()
+        {
+            msgError.text = qsTr("Command exchange error")
+            msgError.open();
+            mBusy.visible = false;
+        }
+
+        function onSgInterfaceConnected(interfaceDescription)
+        {
+            connected = true;
+            interfaceDescription = interfaceDescription.address
+            mainUi.visible = true;
+            msgError.close();
+        }
+
+        function onSgInterfaceError(errorDescription)
+        {
+            clearHeader();
+            connected = false;
+            main.editable = false;
+            mainUi.visible = false;
+            msgError.text = qsTr("Device disconnected")
+            msgError.open();
+
+            InterfaceManager.startScanning();
+        }        
+
+        function onSgInterfaceDisconnected()
+        {
+            clearHeader();
+            connected = false;
+            main.editable = false;
+            mainUi.visible = false;
+
+            InterfaceManager.startScanning();
+        }
+    }
+
+    Component.onCompleted: {
+        UiCore.setupApplication();
+        InterfaceManager.startScanning();
+    }
+
+    onClosing: function(close)
+    {
+        UiCore.saveSetting("window_width", main.width);
+        UiCore.saveSetting("window_height", main.height);
+        UiCore.saveSetting("modules_right_aligned", Style.modulesRightAligned);
 
         if(main.edit && main.connected)
         {

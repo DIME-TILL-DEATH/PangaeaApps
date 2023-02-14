@@ -1,19 +1,18 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
-import "../Elements/"
+import QtQuick
+
+import Elements
+import StyleSettings
 
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property string text: text
     property int    value: 0
     property double scaleText: 1
 
     property bool  highlighted: false
     signal clicked();
-    anchors.fill:  parent
 
     Rectangle
     {
@@ -22,7 +21,7 @@ Item
         width:  parent.width/1.5
         height: width/2
         radius: height/2
-        color:  main.highlighted ? "Salmon" : fonColor
+        color:  main.highlighted ? Style.highlightColor : Style.backgroundColor
         clip: true
 
         Item
@@ -70,13 +69,11 @@ Item
         MText
         {
             anchors.fill:  parent
-            font.family: "Arial Black"
-            font.bold: true
             font.pixelSize: parent.height/2*scaleText
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment:   Text.AlignVCenter
             text: main.text
-            color: devColor
+            color: Style.mainEnabledColor
             opacity: main.enabled?1:0.3
             Behavior on opacity  {NumberAnimation { duration:500 }}
         }

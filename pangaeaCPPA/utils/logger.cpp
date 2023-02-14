@@ -3,10 +3,8 @@
 #include <QDebug>
 #include "logger.h"
 
-Logger::Logger(QObject* parent)
+Logger::Logger()
 {
-    Q_UNUSED(parent)
-
     QString folderPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0)+"/AMT/pangaeaCPPA/";
 
     if(!QDir(folderPath).exists())
@@ -28,7 +26,6 @@ Logger::Logger(QObject* parent)
 
 Logger::~Logger()
 {
-    qDebug() << "Logger destructor. Closing Log file.";
     logFile.close();
 }
 

@@ -1,6 +1,7 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
-import "../Modules/"
+import QtQuick
+
+import Modules
+import StyleSettings
 
 MText
 {
@@ -11,9 +12,9 @@ MText
     property bool leftText: false
 
     text:  "TEXT"
-    color: check?"Salmon":fonColor
+    color: check ? "Salmon" : Style.backgroundColor
     horizontalAlignment: leftText?Text.AlignHLeft:Text.AlignHCenter
-    font.bold: true
+
     font.pixelSize: parent.height/1.5
     opacity: main.enabled?1:0.5
     MouseArea

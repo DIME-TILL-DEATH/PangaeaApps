@@ -1,12 +1,12 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
-import "../Elements/"
+import QtQuick
+
+import Elements
+import StyleSettings
+import CppObjects 1.0
+
 Item
 {
     id: main
-
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
 
     property bool editable: true
     property bool edit: true
@@ -15,38 +15,31 @@ Item
     Rectangle
     {
         anchors.fill: parent
-        color: devColor
+        color: Style.mainEnabledColor
         Column
         {
             anchors.fill: parent
-            Item
+            MButton
             {
                 width:  parent.width
                 height: parent.height/2
-                MButton
-                {
-                    text: "SAVE"
-                    enabled: main.editable & main.edit & !main.compareState
-//                    opacity: enabled?1:0.5
-                    onClicked: _uiCore.setParameter("save_change", (-1))
-                }
+                text: "SAVE"
+                enabled: main.editable & main.edit & !main.compareState
+                onClicked: UiCore.setParameter("save_change", (-1))
             }
 
-            Item
+            MButton
             {
+                id: bComp
                 width:  parent.width
                 height: parent.height/2
-                MButton
-                {
-                    id: bComp
-                    text: "COMP"
+                text: "COMP"
 
-                    enabled:  main.edit
-                    highlighted: main.compareState
+                enabled:  main.edit
+                highlighted: main.compareState
 
-                    onClicked: {
-                        _uiCore.setParameter("compare", 0);
-                    }
+                onClicked: {
+                    UiCore.setParameter("compare", 0);
                 }
             }
         }
@@ -54,7 +47,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, value)
         {

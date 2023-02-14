@@ -1,15 +1,24 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
+import QtQuick
+import StyleSettings
 
 Item
 {
+    id: topItem
     anchors.fill: parent
+
+    property bool on: false
 
     Rectangle
     {
         id: colorRect
 
-        color: main.on?devColor:devColorDis
+        width: topItem.parent.height*3
+        height: topItem.parent.height*3
+        radius: topItem.parent.height*3
+
+        //TODO: цвет что и у модуля при первом запуске анимации.В итоге эффект не виден
+        color: topItem.on ? Style.mainEnabledColor : Style.mainDisabledColor
+
         transform: Translate
         {
             x: -colorRect.width / 2
@@ -23,21 +32,17 @@ Item
         target: colorRect
         properties: "width,height,radius"
         from: 0
-        to: main.height*3
+        to: topItem.parent.height*3
         duration: 300
-        onStopped: parent.color = root.on ? devColor : devColorDis
+        onStopped: {
+            topItem.parent.color = topItem.parent.on ? Style.mainEnabledColor : Style.mainDisabledColor
+        }
     }
-
 
     function start(xM, yM)
     {
         colorRect.x = xM;
         colorRect.y = yM;
         circleAnimation.start();
-    }
-
-    function stop()
-    {
-        circleAnimation.stop();
     }
 }

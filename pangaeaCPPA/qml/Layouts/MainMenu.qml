@@ -1,12 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs //1.3
 
 import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 import Qt.labs.platform 1.1 as Labs
 import Qt.labs.settings 1.0
+
+import CppObjects 1.0
 
 MenuBar{
     Menu{
@@ -20,6 +22,12 @@ MenuBar{
             text: qsTr("Export preset")
 
             onTriggered: exportPresetDialog.open();
+        }
+        MenuSeparator{}
+        MenuItem{
+            text: qsTr("Disconnect from device")
+
+            onTriggered: disconnectDialog.open();
         }
         MenuSeparator{}
         MenuItem{
@@ -52,7 +60,7 @@ MenuBar{
         MenuItem{
             text: qsTr("IR convertor")
 
-            onTriggered: _uiCore.runIrConvertor();
+            onTriggered: UiCore.runIrConvertor();
         }
     }
 
@@ -79,7 +87,7 @@ MenuBar{
             text: qsTr("Device manual")
 
             onTriggered: {
-                _uiCore.openManualExternally(strManualBaseName)
+                UiCore.openManualExternally(strManualBaseName)
             }
         }
         MenuSeparator{}
@@ -93,8 +101,10 @@ MenuBar{
     Settings
     {
         category: "Current_folder"
-        property alias importFolder: importPresetDialog.folder
-        property alias exportFolder: exportPresetDialog.folder
+       // property alias importFolder: importPresetDialog.folder
+      //  property alias exportFolder: exportPresetDialog.folder
+         property alias importFolder: importPresetDialog.currentFolder
+         property alias exportFolder: exportPresetDialog.currentFolder
     }
 
     FileDialog{
@@ -102,14 +112,16 @@ MenuBar{
 
         title: qsTr("Import preset file")
 
-        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+//        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
 
-        selectMultiple: false
+        //selectMultiple: false
+        //fileMode: FileDialog.OpenFile
 
         onAccepted: {
-            var cleanPath = fileUrl.toString();
-            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            _uiCore.importPreset(cleanPath);
+            var cleanPath = currentFile.toString();//fileUrl.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+            UiCore.importPreset(cleanPath);
         }
     }
 
@@ -119,22 +131,41 @@ MenuBar{
         title: qsTr("Export preset file")
         nameFilters: [ "Pangaea preset files (*.pst)" ]
 
-        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+//        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
 
-        selectExisting: false
-        selectMultiple: false
+        fileMode: FileDialog.SaveFile
+        //selectExisting: false
+        //selectMultiple: false
 
         onAccepted: {
-            var cleanPath = fileUrl.toString();
-            cleanPath = (Qt.platform.os=="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            _uiCore.exportPreset(cleanPath);
+            var cleanPath = currentFile.toString();//fileUrl.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+            UiCore.exportPreset(cleanPath);
+        }
+    }
+
+    MessageDialog{
+        id: disconnectDialog
+
+        title: qsTr("Disconnect?")
+        text: qsTr("Are you sure want to disconnect?")
+
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes:
+                InterfaceManager.disconnectFromDevice();
+                break;
+            }
         }
     }
 
     MessageDialog{
         id: aboutDialog
-        title: qsTr("About...")
 
+        title: qsTr("About...")
         text: qsTr("AMT Pangaea CP-16/CP-100")
         informativeText: qsTr("Desktop application\n") +
               qsTr("Version: ") + Qt.application.version + "\n"
@@ -143,7 +174,7 @@ MenuBar{
     }
 
     Connections{
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, value)
         {

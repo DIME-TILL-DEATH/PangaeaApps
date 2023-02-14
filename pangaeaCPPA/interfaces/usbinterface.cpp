@@ -1,5 +1,6 @@
 #include <qdebug.h>
 #include <QMetaEnum>
+#include <QThread>
 
 #include "usbinterface.h"
 
@@ -8,12 +9,48 @@ UsbInterface::UsbInterface(QObject *parent)
 {
     loadSettings();
 
+    m_timer = new QTimer(this);
+    m_timer->setInterval(1000);
+
+
     m_port = new QSerialPort(this);
     QIODevice::connect(m_port,  &QSerialPort::readyRead, this, &UsbInterface::slReadyRead);
-
-    //TODO обработчики ошибок
     QIODevice::connect(m_port,  &QSerialPort::errorOccurred, this, &UsbInterface::slError);
     QIODevice::connect(m_port,  &QSerialPort::destroyed, this, &UsbInterface::slDestroyed);
+
+    QTimer::connect(m_timer, &QTimer::timeout, this, &UsbInterface::slPortTimer);
+
+    m_description = "USB";
+    m_connectionType = DeviceConnectionType::USBAuto;
+}
+
+void UsbInterface::startScan()
+{
+    if(state() != InterfaceState::Scanning)
+    {
+        qDebug() << "Start USB scanning";
+        m_timer->start();
+        setState(InterfaceState::Scanning);
+    }
+}
+
+void UsbInterface::stopScan()
+{
+    m_timer->stop();
+    setState(InterfaceState::Idle);
+}
+
+void UsbInterface::slPortTimer()
+{
+    if(!m_port->isOpen())
+    {
+        discoverDevices();
+        emit sgDeviceListUpdated(DeviceConnectionType::USBAuto, m_discoveredDevices);
+    }
+    else
+    {
+        checkConnection();
+    }
 }
 
 void UsbInterface::discoverDevices()
@@ -33,15 +70,18 @@ void UsbInterface::discoverDevices()
                 ((info.vendorIdentifier()==0x0483)&&(info.productIdentifier()==0x5740))
           )
         {
-            qDebug()<<"vendor:"<<info.vendorIdentifier()<<" product: " <<info.productIdentifier() << " location: "<<info.systemLocation();
+            //qDebug()<<"vendor:"<<info.vendorIdentifier()<<" product: " <<info.productIdentifier() << " location: "<<info.systemLocation();
 
-            m_discoveredDevices.append(DeviceDescription(QString().setNum(info.productIdentifier(), 16), info.systemLocation(), DeviceConnectionType::USBAuto));
+            m_discoveredDevices.append(DeviceDescription("AMT pid:" + QString().setNum(info.productIdentifier(), 16) + " " + info.description(),
+                                                         info.systemLocation(),
+                                                         DeviceConnectionType::USBAuto));
         }
     }
 }
 
 bool UsbInterface::connect(DeviceDescription device)
 {
+    setState(InterfaceState::Connecting);
     qDebug() << "Connecting to device:" << device.name() << " on port: " << device.address();
 
     if(m_port->isOpen())
@@ -61,14 +101,16 @@ bool UsbInterface::connect(DeviceDescription device)
 
     if(isPortOpened)
     {
-        qDebug() << __FUNCTION__<<__LINE__<<"Port is opened";
+        qDebug() << __FUNCTION__<< "Serial port is opened";
+        m_connectedDevice = device;
+        emit sgInterfaceConnected(device);
+        setState(InterfaceState::AcquireData);
+    }
+    else
+    {
+        prevState();
     }
     return isPortOpened;
-}
-
-bool UsbInterface::isConnected()
-{
-    return m_port->isOpen();
 }
 
 void UsbInterface::write(QByteArray data)
@@ -84,27 +126,20 @@ QList<DeviceDescription> UsbInterface::discoveredDevicesList()
 
 void UsbInterface::checkConnection()
 {
-    // TODO legacy костыль. Так до меня ловили ошибку при отключении USB. Не убирать
+    // legacy костыль. Так до меня ловили ошибку при отключении USB. Не убирать
     m_port->setBaudRate(9600);
 }
 
-void UsbInterface::disconnect()
+void UsbInterface::disconnectFromDevice()
 {
     if(m_port->isOpen())
     {
         m_port->close();
-        qDebug()<<"CLOSE PORT";
+        m_timer->stop();
+        qDebug() << "Close serial port";
     }
-}
-
-void UsbInterface::flushBuffers()
-{
-    m_port->readAll();
-}
-
-QString UsbInterface::connectionDescription()
-{
-    return m_port->portName();
+    emit sgInterfaceDisconnected(m_connectedDevice);
+    setState(InterfaceState::Idle);
 }
 
 void UsbInterface::slReadyRead()
@@ -119,6 +154,7 @@ void UsbInterface::slError(QSerialPort::SerialPortError error)
         m_port->close();
 
         QMetaEnum errorDescriptionType = QMetaEnum::fromType<QSerialPort::SerialPortError>();
+        emit sgInterfaceDisconnected(m_connectedDevice);
         emit sgInterfaceError(errorDescriptionType.valueToKey(error));
     }
 }

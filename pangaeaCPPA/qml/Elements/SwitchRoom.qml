@@ -1,12 +1,11 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
+import QtQuick
+
+import CppObjects 1.0
 
 Item
 {
-
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property int   value: mSwitch.value
 
     Column
@@ -19,7 +18,7 @@ Item
             width: parent.width
             height: parent.height/100*50
             opacity: main.enabled?1:0.5
-            onChValue: _uiCore.setParameter("early_type", mSwitch.value)
+            onChValue: UiCore.setParameter("early_type", mSwitch.value)
         }
 
         Column
@@ -33,7 +32,7 @@ Item
                 height: parent.height/3
                 text: "SHORT"
                 check: mSwitch.value==0
-                onClicked: {mSwitch.value = 0; _uiCore.setParameter("early_type", mSwitch.value)}
+                onClicked: {mSwitch.value = 0; UiCore.setParameter("early_type", mSwitch.value)}
                 font.pixelSize: height/1.4
                 horizontalAlignment: Text.AlignLeft
             }
@@ -44,7 +43,7 @@ Item
                 height: parent.height/3
                 text: "MEDIUM"
                 check: mSwitch.value==1
-                onClicked: {mSwitch.value = 1; _uiCore.setParameter("early_type", mSwitch.value)}
+                onClicked: {mSwitch.value = 1; UiCore.setParameter("early_type", mSwitch.value)}
                 font.pixelSize: height/1.4
             }
 
@@ -54,7 +53,7 @@ Item
                 height: parent.height/3
                 text: "LONG"
                 check: mSwitch.value==2
-                onClicked: {mSwitch.value = 2; _uiCore.setParameter("early_type", mSwitch.value)}
+                onClicked: {mSwitch.value = 2; UiCore.setParameter("early_type", mSwitch.value)}
                 font.pixelSize: height/1.4
                 horizontalAlignment: Text.AlignRight
             }
@@ -63,7 +62,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if((nameParam.indexOf("early_type")>=0))

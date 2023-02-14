@@ -1,10 +1,12 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.2
+import QtQuick
+import QtQuick.Controls
 
 import QtQml.Models 2.2
 
 import Modules 1.0
 import StyleSettings 1.0
+
+import CppObjects 1.0
 
 Item
 {
@@ -203,7 +205,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if(nameParam===("type_dev"))
@@ -220,20 +222,20 @@ Item
 
             if(nameParam === "modules_right_aligned")
             {
+                console.log("Modules right aligned:", value)
                 Style.modulesRightAligned = value
             }
         }
 
-        function onSgSetUIText(nameParam, inString)
-        {
-            if(nameParam===("port_closed"))
-            {
-                modulesList.clear();
-                listViewModules.forceLayout();
-                main.moduleVisible = false
+//        function onSgSetUIText(nameParam, inString)
+//        {
+//            if(nameParam===("port_closed"))
+//            {
+//                modulesList.clear();
+//                listViewModules.forceLayout();
 
-            }
-        }
+//            }
+//        }
 
         // not set ui
         function onSgSetParameter(nameParam, value)
@@ -244,6 +246,22 @@ Item
             }
         }
 
+    }
+
+    Connections{
+        target: InterfaceManager
+
+        function onSgInterfaceError(errorDescription)
+        {
+            modulesList.clear();
+            listViewModules.forceLayout();
+        }
+
+        function onSgInterfaceDisconnected()
+        {
+            modulesList.clear();
+            listViewModules.forceLayout();
+        }
     }
 
 }

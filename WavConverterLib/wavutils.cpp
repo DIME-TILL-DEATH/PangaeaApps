@@ -1,5 +1,6 @@
 #include "wavutils.h"
 #include <QDataStream>
+#include <QIODevice>
 
 WavUtils::WavUtils(QObject *parent) : QObject(parent)
 {

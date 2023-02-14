@@ -1,13 +1,14 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
+
+import StyleSettings
+
+import CppObjects 1.0
 
 Item
 {
     id: main
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-    property string devColorDis: "#7E7991"
     property bool   map: false
     property bool   eqOn: false
 
@@ -18,9 +19,9 @@ Item
         onPaint:
         {
             var ctx = getContext("2d")
-            var colorEqTab = main.map ? fonColor
-                                      : (eqOn) ? devColor : devColorDis
-            var colorMapTab = main.map ? devColor : fonColor
+            var colorEqTab = main.map ? Style.backgroundColor
+                                      : (eqOn) ? Style.mainEnabledColor : Style.mainDisabledColor
+            var colorMapTab = main.map ? Style.mainEnabledColor : Style.backgroundColor
 
             ctx.lineWidth = 4
 
@@ -59,11 +60,10 @@ Item
         height: parent.height
         anchors.left: parent.left
         text: "EQ"
-        font.bold: true
         font.pixelSize: parent.height/1.8
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment:   Text.AlignVCenter
-        color: eqOn ? "Salmon" : (main.map?devColor:fonColor)
+        color: eqOn ? Style.highlightColor : (main.map ? Style.mainEnabledColor : Style.backgroundColor)
         MouseArea
         {
             anchors.fill: parent
@@ -75,7 +75,7 @@ Item
                     main.map=false;
                 else
                 {
-                    _uiCore.setParameter("eq_on", !eqOn);
+                    UiCore.setParameter("eq_on", !eqOn);
                 }
                 redraw();
             }
@@ -88,11 +88,10 @@ Item
         height: parent.height
         anchors.right: parent.right
         text: "MAP"
-        font.bold: true
         font.pixelSize: parent.height/1.8
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment:   Text.AlignVCenter
-        color: main.map ? fonColor : devColor
+        color: main.map ? Style.backgroundColor : Style.mainEnabledColor
         MouseArea
         {
             anchors.fill: parent
@@ -108,7 +107,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if(nameParam === "eq_on")

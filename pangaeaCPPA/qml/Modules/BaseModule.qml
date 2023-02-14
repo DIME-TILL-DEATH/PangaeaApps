@@ -1,7 +1,10 @@
 import QtQuick 2.15
-import QtQuick.Controls 1.5
+import QtQuick.Controls 2.15
 
 import Elements 1.0
+import StyleSettings 1.0
+
+import CppObjects 1.0
 
 Rectangle {
     id: root
@@ -17,20 +20,16 @@ Rectangle {
 
     property alias contentProperties: _loader.item
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-    property string devColorDis: "#7E7991"
-
     signal sgModuleOnOf()
 
     clip: true
-    color: on ? devColor : devColorDis
+    color: on ? Style.mainEnabledColor : Style.mainDisabledColor
 
     Material
     {
         id: material
+        on: root.on
     }
-
 
     Column{
         anchors.fill: parent
@@ -47,10 +46,9 @@ Rectangle {
             {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.family: "Arial Black"
-                font.bold: true
+
                 font.pixelSize: parent.height/1.7
-                color: root.on ? " salmon":fonColor
+                color: root.on ? "salmon" : Style.backgroundColor
                 text: moduleName
 
                 z: _contentContainer.z+1
@@ -88,7 +86,7 @@ Rectangle {
         {
             material.start(mouseX, mouseY)
             sgModuleOnOf()
-            _uiCore.setParameter(root.parent.nameValue, root.parent.on) // Или хранить переменную внутри? Для меньшей связанности
+            UiCore.setParameter(root.parent.nameValue, root.parent.on) // Или хранить переменную внутри? Для меньшей связанности
         }
     }
 
@@ -111,7 +109,7 @@ Rectangle {
     }
 
     Connections{
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(parameterName, inValue)
         {

@@ -1,11 +1,11 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
+import QtQuick
+
+import CppObjects 1.0
 
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property int   value: 1
 
     //TODO вроде как и не нужен
@@ -59,7 +59,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if((nameParam === "cabinet_enable"))

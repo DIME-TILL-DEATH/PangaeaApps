@@ -1,20 +1,20 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
+import CppObjects 1.0
 
 Item
 {
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property int   value: mSwitch.value
     property string nameValue: "output_mode"
     
     Rectangle
     {
         anchors.fill:  parent
-        color: devColor
+        color: Style.mainEnabledColor
     }
-
 
     Column
     {
@@ -86,13 +86,13 @@ Item
 
     function send()
     {
-        _uiCore.setParameter(main.nameValue, mSwitch.value)
+        UiCore.setParameter(main.nameValue, mSwitch.value)
     }
 
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if((main.nameValue.length>0)&&(nameParam===main.nameValue))

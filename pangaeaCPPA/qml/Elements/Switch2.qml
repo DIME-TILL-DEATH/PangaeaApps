@@ -1,12 +1,11 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
 
 Item
 {
-
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property int   value: 0
     signal chValue(int value)
 
@@ -17,7 +16,7 @@ Item
         width: parent.width/1.5
         height: width/2
         radius: height/2
-        color: fonColor
+        color: Style.backgroundColor
         Rectangle
         {
             color: "Black"
@@ -40,8 +39,6 @@ Item
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    //value=0;
-                    //main.chValue(main.value);
                      main.chValue(0);
                 }
                 onWheel:   wheelChange(wheel.angleDelta.y);
@@ -53,8 +50,6 @@ Item
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    //value=1;
-                    //main.chValue(main.value);
                     main.chValue(1);
                 }
                 onWheel:   wheelChange(wheel.angleDelta.y);

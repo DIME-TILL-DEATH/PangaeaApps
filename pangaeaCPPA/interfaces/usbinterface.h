@@ -1,6 +1,7 @@
 #ifndef USBINTERFACE_H
 #define USBINTERFACE_H
 
+#include <QTimer>
 #include <QSerialPort>
 #include <QSerialPortInfo>
 
@@ -12,36 +13,40 @@
 
 class UsbInterface : public AbstractInterface
 {
+    Q_OBJECT
 public:
     explicit UsbInterface(QObject *parent = nullptr);
 
-    // AbstractInterface interface
-public:
-    void discoverDevices();
+    void startScan();
+    void stopScan();
     QList<DeviceDescription> discoveredDevicesList();
 
     bool connect(DeviceDescription device);
-    bool isConnected();
-    void checkConnection();
+    void disconnectFromDevice();
 
     void write(QByteArray data);
-    void disconnect();
-    void flushBuffers();
 
-    QString connectionDescription();
 private slots:
     void slReadyRead();
     void slError(QSerialPort::SerialPortError error);
     void slDestroyed(QObject* obj);
 
+    void slPortTimer();
+
 private:
-    QSerialPort* m_port;
+    QSerialPort* m_port{nullptr};
+    QTimer* m_timer{nullptr};
+
     QList<DeviceDescription> m_discoveredDevices;
 
-    void loadSettings();
+    void discoverDevices();
+
     // settings
+    void loadSettings();
     bool isManualConnectAllowed{false};
-    QString manualConnectionPortName{"COM3"};   
+    QString manualConnectionPortName{"COM3"};
+
+    void checkConnection();
 };
 
 #endif // USBINTERFACE_H

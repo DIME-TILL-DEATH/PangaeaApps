@@ -1,6 +1,8 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+
+import CppObjects 1.0
 
 Item
 {
@@ -8,10 +10,10 @@ Item
 
     anchors.fill: parent
 
-    visible: true
+    visible: false
 
     property double  pbValue: 0
-    property string strSearching: qsTr("Searching for devices....")
+    property string strSearching: qsTr("Loading application")
 
     Rectangle{
         id: background
@@ -27,6 +29,8 @@ Item
 
     ColumnLayout
     {
+        id: column
+
         width:  parent.width/5
         height: parent.height*0.8
         anchors.centerIn: parent
@@ -34,10 +38,11 @@ Item
         {
             id : bI
 
+            visible: rWait.visible
+
             Layout.preferredWidth: parent.width/3
             Layout.preferredHeight: width
             Layout.fillWidth: true
-
         }
 
         ProgressBar
@@ -90,21 +95,11 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetProgress(val)
         {
             rWait.pbValue = val;
-        }
-
-        function onSgSetUIText(nameParam, inString)
-        {
-            if(nameParam===("port_closed"))
-            {
-                progressBar.visible = false
-                txt.text = rWait.strSearching
-                rWait.visible = true;
-            }
         }
 
         function onSgSetUIParameter(nameParam, inValue)
@@ -136,6 +131,22 @@ Item
                 txt.text = qsTr("Applying impulse to device. Please wait...");
                 progressBar.visible = false
             }
+        }
+    }
+
+    Connections{
+        target: InterfaceManager
+
+        function onSgConnectionStarted()
+        {
+            progressBar.visible = false;
+            txt.text = qsTr("Connecting to device...");
+            rWait.visible = true;
+        }
+
+        function onSgInterfaceError(errorDescription)
+        {
+            rWait.visible = false;
         }
     }
 }

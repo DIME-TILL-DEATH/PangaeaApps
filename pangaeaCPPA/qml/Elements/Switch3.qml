@@ -1,12 +1,12 @@
-import QtQuick 2.7
-import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
 
 Item
 {
 
     id: main
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
+
     property int   value: 0
     signal chValue(int value)
 
@@ -18,7 +18,7 @@ Item
         width:  parent.width/1.5
         height: width/2
         radius: height/2
-        color: fonColor
+        color: Style.backgroundColor
         Rectangle
         {
             property int position: value-1
@@ -73,6 +73,4 @@ Item
             main.value--;
         main.chValue(main.value)
     }
-
-
 }

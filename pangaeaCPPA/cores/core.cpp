@@ -4,11 +4,11 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QGuiApplication>
+#include <QStandardPaths>
 
 #include <QFile>
 
 #include "core.h"
-#include "usbinterface.h"
 
 Core::Core(QObject *parent) : QObject(parent)
 {
@@ -23,35 +23,18 @@ Core::Core(QObject *parent) : QObject(parent)
     QObject::connect(&deviceControls, &DeviceControls::sgSetInterfaceValue, this, &Core::sgSetUIParameter);
 
     timer = new QTimer(this);
-    timer->setInterval(1000);
-    connect(timer, &QTimer::timeout, this, &Core::slPortTimer); // TODO отличается от мобильного. Поиск внутри интерфейса. и Ble и USB.
-    timer->start();
+    connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
 
     m_presetListModel.refreshModel(&m_presetsList);
     connect(this, &Core::sgRefreshPresetList, &m_presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
 
-    // TODO пользователь выбирает интерфес при старте
-    exchangeInterface = new UsbInterface(this);
-    connect(exchangeInterface, &AbstractInterface::sgNewData, this, &Core::parseInputData);
-    connect(exchangeInterface, &AbstractInterface::sgInterfaceError, this, &Core::slInterfaceError);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &m_presetListModel);
 }
 
-void Core::registerQmlObjects(QQmlContext *qmlContext)
-{
-    qmlContext->setContextProperty("_presetListModel", &m_presetListModel);
-}
-
-// TODO Отличие от мобильного
-void Core::slInterfaceError(QString errorDescription)
-{
-    qDebug() << "Interface error: " << errorDescription;
-
-    emit sgSetUIText("port_closed", "");
-    emit sgSetUIParameter ("type_dev", 0);
-}
 
 void Core::slReadyToDisconnect()
 {
+    timer->stop();
     commandsPending.clear();
     enableRecieve = true;
 
@@ -287,7 +270,6 @@ void Core::parseInputData(const QByteArray& ba)
                         currentPreset.setImpulseName(impulseName);
                     }
                 }
-                //currentPreset.setImpulseName(impulseName);
 
                 emit sgSetUIText("impulse_name", impulseName);
                 qInfo() << recievedCommand.description() << "impulse name:" << impulseName;
@@ -396,7 +378,6 @@ void Core::parseInputData(const QByteArray& ba)
                 timer->start();
 
                 qInfo() << recievedCommand.description();
-                //pushCommandToQueue("rn");
                 presetManager.returnToPreviousState();
                 break;
             }
@@ -446,25 +427,6 @@ void Core::parseInputData(const QByteArray& ba)
 
             case AnswerType::ackSavePreset:
             {
-//                if(currentPreset.waveData() == IRWorker::flatIr())
-//                {
-//                    if(controlledDevice.deviceType()==DeviceType::CP16 || controlledDevice.deviceType()==DeviceType::CP16PA)
-//                        pushCommandToQueue("preset_delete_wavs");
-//                    else
-//                        pushCommandToQueue("dcc");
-
-//                    currentPreset.clearWavData();
-//                }
-//                else
-//                {
-//                    uploadImpulseData(currentPreset.waveData(), false, currentPreset.impulseName());
-//                    enableRecieve = false;
-//                }
-               // enableRecieve = false; // ждём от девайса подтверждения сохранения
-
-
-//                pushReadPresetCommands();
-
                 qInfo() << "Preset data saved to device";
                 currentPreset.clearWavData();                                
                 break;
@@ -741,7 +703,6 @@ void Core::comparePreset()
 {
     if(presetManager.currentState() != PresetState::Compare)
     {
-        //presetManager.setCurrentState(PresetState::Compare);
         emit sgSetUIParameter("compare_state", true);
         pushCommandToQueue("gs\r\n");
         pushCommandToQueue("esc\r\n");
@@ -853,32 +814,6 @@ void Core::pastePreset()
     emit sgSetUIParameter ("preset_edited", isPresetEdited);
 }
 
-// TODO отличие от мобильного
-void Core::slPortTimer()
-{
-    if(!exchangeInterface->isConnected())
-    {
-        qDebug()<<"!OPEN";
-
-        exchangeInterface->discoverDevices();
-        if(exchangeInterface->discoveredDevicesList().size() != 0)
-        {
-            exchangeInterface->connect(exchangeInterface->discoveredDevicesList().at(0));
-
-            if(exchangeInterface->isConnected())
-            {
-                readAllParameters();
-                emit sgSetUIText("port_opened", exchangeInterface->connectionDescription());
-            }
-        }
-    }
-    else
-    {
-        exchangeInterface->checkConnection();
-        recieveTimeout();
-    }
-}
-
 void Core::setParameter(QString name, quint8 value)
 {
     qDebug()<<"setValue"<<name<<value;
@@ -973,7 +908,7 @@ void Core::setParameter(QString name, quint8 value)
     if(sendStr.length()>0)
     {
         enableRecieve = false;
-        exchangeInterface->write(sendStr.toUtf8());
+        emit sgWriteToInterface(sendStr.toUtf8());
     }
 }
 
@@ -1094,8 +1029,9 @@ void Core::recieveTimeout()
         else
         {
             sendCount++;
-            qDebug() << "!!!!!!!!!!!!!!!!! sendCount !!!!!!!!!!!!!!!!!" << sendCount;
+            qDebug() << "!!!!!!!!!!!!!!!!! recieve timeout !!!!!!!!!!!!!!!!!" << sendCount;
             sendCommand(commandWithoutAnswer);
+            timer->setInterval(1000);
 
             if(sendCount>3)
             {
@@ -1104,10 +1040,12 @@ void Core::recieveTimeout()
                 if(fwUpdate)
                 {
                     fwUpdate = false;
+                    //TODO что за slider_enabled в мобильном? wait заменяет?
                     emit sgSetUIParameter("slider_enabled", 1);
                 }
 
-                emit sgSetUIText("exchange_error", commandWithoutAnswer);
+//                emit sgSetUIText("exchange_error", commandWithoutAnswer);
+                emit sgExchangeError();
 
                 commandsPending.clear();
                 commandsSended.clear();
@@ -1123,7 +1061,7 @@ void Core::sendCommand(QByteArray val)
 
     symbolsSended += val.size();
     enableRecieve = false;
-    exchangeInterface->write(val);
+    emit sgWriteToInterface(val);
 
     updateProgressBar();
 }
@@ -1137,15 +1075,10 @@ void Core::updateProgressBar()
 void Core::sw4Enable()
 {
     //pushCommandToQueue("sw4 enable"); //CP100 не знает такой команды
-    processCommands();
+    //processCommands();
 }
 
-void Core::stopTimer()
+void Core::stopCore()
 {
     timer->stop();
-}
-
-Core::~Core()
-{
-    exchangeInterface->disconnect();
 }

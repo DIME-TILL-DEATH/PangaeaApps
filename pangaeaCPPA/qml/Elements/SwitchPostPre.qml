@@ -1,14 +1,12 @@
-import QtQuick 2.15
-import QtQuick.Controls 1.5
+import QtQuick
+
+import StyleSettings
+import CppObjects 1.0
 
 Item
 {
     id: main
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-    property string devColorDis: "#7E7991"
-//    property int   value//: mSwitch.value
     property string nameValue: "eq_pre"
 
     property bool isAvaliable: true
@@ -16,7 +14,7 @@ Item
     Rectangle
     {
         anchors.fill:  parent
-        color: main.enabled?devColor:devColorDis
+        color: main.enabled  ? Style.mainEnabledColor : Style.mainDisabledColor
     }
 
     Column
@@ -36,9 +34,7 @@ Item
             width: parent.width
             height: parent.height/100*40
 
-            //value: main.value
-
-            onChValue: _uiCore.setParameter(main.nameValue, mSwitch.value)
+            onChValue: UiCore.setParameter(main.nameValue, mSwitch.value)
 
             visible: isAvaliable
         }
@@ -58,7 +54,7 @@ Item
                 onClicked:
                 {
                     mSwitch.value = 0;
-                    _uiCore.setParameter(main.nameValue, mSwitch.value)
+                    UiCore.setParameter(main.nameValue, mSwitch.value)
                 }
             }
 
@@ -73,7 +69,7 @@ Item
                 onClicked:
                 {
                     mSwitch.value = 1;
-                    _uiCore.setParameter(main.nameValue, mSwitch.value)
+                    UiCore.setParameter(main.nameValue, mSwitch.value)
                 }
             }
         }
@@ -86,9 +82,7 @@ Item
             {
                 anchors.fill: parent
                 text: "EQ"
-                color: fonColor
-                font.family: "Arial Black"
-                font.bold: true
+
                 font.pixelSize: parent.height/1.5
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignTop
@@ -101,7 +95,7 @@ Item
         {
             width: parent.width
             height: parent.height/100*15
-            color: main.enabled?devColor:devColorDis
+            color: main.enabled ? Style.mainEnabledColor : Style.mainDisabledColor
         }
     }
 
@@ -112,14 +106,14 @@ Item
         function onChValue(value)
         {
             mSwitch.value=value;
-            _uiCore.setParameter(main.nameValue, mSwitch.value)
+            UiCore.setParameter(main.nameValue, mSwitch.value)
 
         }
     }
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, value)
         {
             if((nameParam === "eq_pre"))

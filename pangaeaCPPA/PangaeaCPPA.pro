@@ -3,18 +3,22 @@ TEMPLATE = app
 
 QT += quick
 QT += quickcontrols2
-QT += qml quick svg
+QT += qml
+QT += svg
 QT += serialport
+QT += bluetooth
+
+DEFINES += PANGAEA_DESKTOP
 
 win32: {
-    VERSION = 1.0.1708.1
+    VERSION = 1.0.1709.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1708
+else: VERSION = 1.0.1709
 
 CONFIG += c++11
 
@@ -28,9 +32,13 @@ SOURCES += main.cpp \
     device/deviceparameter.cpp \
     device/firmware.cpp \
     device/preset.cpp \
-    device/presetlistmodel.cpp \
-    hardware/devicedescription.cpp \
+    models/interfacelistmodel.cpp \
+    models/presetlistmodel.cpp \
     interfaces/abstractinterface.cpp \
+    interfaces/devicedescription.cpp \
+    interfaces/bleinterface.cpp \
+    interfaces/interfacemanager.cpp \
+    interfaces/uiinterfacemanager.cpp \
     interfaces/usbinterface.cpp \
     threadcontroller.cpp \
     utils/irworker.cpp \
@@ -49,9 +57,13 @@ HEADERS += \
     device/deviceparameter.h \
     device/firmware.h \
     device/preset.h \
-    device/presetlistmodel.h \
-    hardware/devicedescription.h \
+    models/interfacelistmodel.h \
+    models/presetlistmodel.h \
     interfaces/abstractinterface.h \
+    interfaces/devicedescription.h \
+    interfaces/bleinterface.h \
+    interfaces/interfacemanager.h \
+    interfaces/uiinterfacemanager.h \
     interfaces/usbinterface.h \
     threadcontroller.h \
     utils/irworker.h \
@@ -62,8 +74,8 @@ HEADERS += \
 INCLUDEPATH += cores
 INCLUDEPATH += utils
 INCLUDEPATH += interfaces
-INCLUDEPATH += hardware
 INCLUDEPATH += device
+INCLUDEPATH += models
 
 macx {
     QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist

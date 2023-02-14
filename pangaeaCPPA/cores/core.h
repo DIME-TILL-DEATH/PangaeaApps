@@ -16,22 +16,15 @@
 #include "devicecontrols.h"
 #include "preset.h"
 #include "presetlistmodel.h"
-#include "parser.h"
 #include "presetmanager.h"
 
-#include "abstractinterface.h"
-
 #include "irworker.h"
-
 
 class Core : public QObject
 {
     Q_OBJECT
 public:
     explicit Core(QObject *parent = nullptr);
-    ~Core(void);
-
-    void registerQmlObjects(QQmlContext* qmlContext);
 
     void setParameter(QString name, quint8 value);
     // TODO: пока умеет только Preset и bank!!!! Дописать
@@ -61,12 +54,11 @@ public:
 
     void sw4Enable();
 
-    void stopTimer();
+    void stopCore();
 
     void setPresetData(const Preset& preset);
 
 private:
-    AbstractInterface* exchangeInterface;
     IRWorker irWorker;
     DeviceControls deviceControls;
     AnswerWorker commandWorker;
@@ -111,6 +103,8 @@ private:
     bool bEditable;
 
 signals:
+    void sgWriteToInterface(QByteArray data);
+    void sgExchangeError();
 
     void sgFirmwareVersionInsufficient(Firmware *minimalFirmware, Firmware *actualFirmware);
     void sgRequestNewestFirmware(Firmware* actualFirmware);
@@ -121,13 +115,12 @@ signals:
     void sgPresetChangeStage(quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);
 
-    void sgModuleNameUpdated(QString name);
+//    void sgModuleNameUpdated(QString name);
 
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
 
-private slots:
-    void slPortTimer();
 
+public slots:
     void slReadyToDisconnect();
 
     void parseInputData(const QByteArray &data);
@@ -135,8 +128,5 @@ private slots:
     void recieveTimeout();
 
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
-
-    void slInterfaceError(QString errorDescription);
 };
-
 #endif // CORE_H
