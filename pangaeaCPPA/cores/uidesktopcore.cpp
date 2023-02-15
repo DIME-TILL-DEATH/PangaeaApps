@@ -152,11 +152,7 @@ void UiDesktopCore::runIrConvertor()
 #endif
 
 #ifdef Q_OS_MACOS
-    QDir appBundlePath(QCoreApplication::applicationDirPath());
-
-    irConvertorProcess.setWorkingDirectory(appBundlePath.absolutePath());
-    irConvertorProcess.setProgram("IrConverter");
-    irConvertorProcess.startDetached();
+    qDebug() << "Run converter" << irConvertorProcess.startDetached(QCoreApplication::applicationDirPath() + "/IrConverter");
 #endif
 }
 

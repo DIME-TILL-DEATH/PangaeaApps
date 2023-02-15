@@ -47,6 +47,8 @@ BleInterface::BleInterface(QObject *parent)
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
             this, &BleInterface::scanTimeout, Qt::QueuedConnection);
 
+//    QObject::connect(this, &BleInterface::sgStartSearch, m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::start, Qt::QueuedConnection);
+
     QObject::connect(this, &QObject::destroyed, m_deviceDiscoveryAgent, &QObject::deleteLater);
 
     m_description = "BLE";
@@ -125,9 +127,10 @@ void BleInterface::startDiscovering()
         m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
     #endif
 
-    #ifdef Q_OS_WINDOWS
+    #ifdef PANGAEA_DESKTOP
         m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
-        m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
+        m_deviceDiscoveryAgent->start(); //QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
+//        emit sgStartSearch();
     #endif
 
     isAvaliable = true;

@@ -73,6 +73,7 @@ private slots:
     void checkDevicesAvaliabliy();
 
 //signals:
+//    void sgStartSearch();
 
 //    void sgLocalBluetoothNotReady(QString reason);
 
