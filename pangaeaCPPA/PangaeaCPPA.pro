@@ -11,14 +11,14 @@ QT += bluetooth
 DEFINES += PANGAEA_DESKTOP
 
 win32: {
-    VERSION = 1.0.1709.1
+    VERSION = 1.0.1711.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1709
+else: VERSION = 1.0.1711
 
 CONFIG += c++11
 
@@ -77,6 +77,11 @@ INCLUDEPATH += interfaces
 INCLUDEPATH += device
 INCLUDEPATH += models
 
+TRANSLATIONS += translations/PangaeaCPPA_en.ts
+TRANSLATIONS += translations/PangaeaCPPA_ru.ts
+TRANSLATIONS += translations/PangaeaCPPA_de.ts
+TRANSLATIONS += translations/PangaeaCPPA_it.ts
+
 macx {
     QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
     ICON = icons/pangaea.icns
@@ -99,7 +104,8 @@ DEFINES += CP100PA_FIRMWARE_VERSION=\\\"6.08.04\\\"
 QML_IMPORT_PATH += $$PWD/qml/
 QML2_IMPORT_PATH += $$PWD/qml/
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    translations.qrc
 
 DISTFILES += \
     MacOS/Info.plist \

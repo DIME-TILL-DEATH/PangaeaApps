@@ -31,7 +31,6 @@ public:
     Q_INVOKABLE void exportPreset(QString filePath);
     Q_INVOKABLE void importPreset(QString filePath);
 
-    //Q_INVOKABLE void pickFirmwareFile();
     //Q_INVOKABLE void setFirmware (QString fullFilePath);
     //Q_INVOKABLE void doOnlineFirmwareUpdate();
 
@@ -54,10 +53,10 @@ private:
 
     QMap<QString, QString> pathFromCode
     {
-        {"en", ":/translations/pangaea_desktop_en.qm"},
-        {"ru", ":/translations/pangaea_desktop_ru.qm"},
-        {"it", ":/translations/pangaea_desktop_it.qm"},
-        {"de", ":/translations/pangaea_desktop_de.qm"}
+        {"en", ":/translations/PangaeaCPPA_en.qm"},
+        {"ru", ":/translations/PangaeaCPPA_ru.qm"},
+        {"it", ":/translations/PangaeaCPPA_it.qm"},
+        {"de", ":/translations/PangaeaCPPA_de.qm"}
     };
     void loadTranslator(QString languageCode);
     void loadDefaultTranslator();

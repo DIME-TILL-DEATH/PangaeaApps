@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>translations/PangaeaCPPA_de.qm</file>
+        <file>translations/PangaeaCPPA_en.qm</file>
+        <file>translations/PangaeaCPPA_it.qm</file>
+        <file>translations/PangaeaCPPA_ru.qm</file>
+    </qresource>
+</RCC>

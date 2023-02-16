@@ -15,6 +15,7 @@ UiDesktopCore::UiDesktopCore(QObject *parent)
     : QObject{parent}
 {
     appSettings = new QSettings(QSettings::UserScope);
+    loadDefaultTranslator();
 }
 
 UiDesktopCore::~UiDesktopCore()
@@ -25,6 +26,10 @@ void UiDesktopCore::setupApplication()
 {
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();
 
+    if(appLanguage=="autoselect")
+    {
+        appLanguage = QLocale().name().left(2);
+    }
     emit sgSetUIText("application_language", appLanguage);
 
 //    QString colorTheme = appSettings->value("color_theme", "dark_orange").toString();
@@ -179,7 +184,7 @@ void UiDesktopCore::loadTranslator(QString languageCode)
 
 void UiDesktopCore::loadDefaultTranslator()
 {
-    if (m_translator.load(QLocale(), QLatin1String("pangaea-mobile"),
+    if (m_translator.load(QLocale(), QLatin1String("PangaeaCPPA"),
                         QLatin1String("_"), ":/translations/"))
     {
         qDebug() << "Default ranslator loaded. Locale: " << QLocale();

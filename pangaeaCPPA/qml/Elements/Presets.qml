@@ -118,7 +118,8 @@ Item
             ToolTip
             {
                 id: tp
-                text: (Qt.platform.os==="windows") ? qsTr("Up - Mouse Click \r\nDown - Click + Ctrl") : qsTr("Up - Mouse Click \r\nDown - Click + cmd")
+                text: (Qt.platform.os==="windows") ? qsTr("Up - Mouse Click") + "\r\n" + qsTr("Down - Click + Ctrl")
+                                                   : qsTr("Up - Mouse Click") + "\r\n" + qsTr("Down - Click + cmd")
                 visible: false
                 timeout: 2000
             }

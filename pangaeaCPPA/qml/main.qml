@@ -52,9 +52,9 @@ ApplicationWindow
         enabled: !wait
     }
 
-    ConnectionLayout
+    StartLayout
     {
-        id: connectionUi
+        id: startUi
 
         visible: !mainUi.visible
     }
@@ -201,7 +201,7 @@ ApplicationWindow
         {
             if(nameParam === "not_supported_ir")
             {
-                msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:\n") +
+                msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
                                      inString + "\n" +
                                      qsTr("Do you want to convert it before upload?")
                 msgIncorretIR.open();
@@ -222,8 +222,8 @@ ApplicationWindow
             {
                  var versionArray = inString.split(',');
                 _msgVersionError.informativeText = qsTr("Firmware version of your device is ") +
-                        versionArray[0] +
-                        qsTr("\nMinimum requsted version is ") + versionArray[1]
+                        versionArray[0] + "\n" +
+                        qsTr("Minimum requsted version is ") + versionArray[1]
                 _msgVersionError.visible = true;
             }
         }

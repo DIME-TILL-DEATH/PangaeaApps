@@ -122,20 +122,17 @@ void BleInterface::startDiscovering()
 
 #endif
 
-    #ifdef Q_OS_ANDROID
-        m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
-        m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
-    #endif
 
-    #ifdef PANGAEA_DESKTOP
+    m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
+    m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
+
+    #ifdef Q_OS_MACOS
         m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
-        m_deviceDiscoveryAgent->start(); //QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
-//        emit sgStartSearch();
+        m_deviceDiscoveryAgent->start();
     #endif
 
     isAvaliable = true;
     setState(InterfaceState::Scanning);
-   // qDebug() << "Start BLE scanning";
 }
 
 void BleInterface::scanTimeout()

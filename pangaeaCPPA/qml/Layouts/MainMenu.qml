@@ -38,6 +38,7 @@ MenuBar{
 
     Menu{
         title: qsTr("View")
+
         Menu{
             title: qsTr("Modules direction")
             MenuItem{
@@ -131,12 +132,9 @@ MenuBar{
         title: qsTr("Export preset file")
         nameFilters: [ "Pangaea preset files (*.pst)" ]
 
-//        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
         currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
 
         fileMode: FileDialog.SaveFile
-        //selectExisting: false
-        //selectMultiple: false
 
         onAccepted: {
             var cleanPath = currentFile.toString();//fileUrl.toString();
@@ -167,7 +165,7 @@ MenuBar{
 
         title: qsTr("About...")
         text: qsTr("AMT Pangaea CP-16/CP-100")
-        informativeText: qsTr("Desktop application\n") +
+        informativeText: qsTr("Desktop application") + "\n" +
               qsTr("Version: ") + Qt.application.version + "\n"
               + qsTr("(c) 2023")
 

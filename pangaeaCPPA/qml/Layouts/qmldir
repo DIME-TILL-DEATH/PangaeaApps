@@ -7,3 +7,4 @@ MainMenu 1.0 MainMenu.qml
 MBusy 1.0 MBusy.qml
 ModulesList 1.0 ModulesList.qml
 SaveCompare 1.0 SaveCompare.qml
+StartLayout 1.0 StartLayout.qml
