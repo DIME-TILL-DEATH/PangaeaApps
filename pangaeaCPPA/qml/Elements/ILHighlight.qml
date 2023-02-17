@@ -7,7 +7,7 @@ import StyleSettings
 
 Rectangle
 {
-    color: Style.highlightColor
+    color: Style.headColor
     opacity: 0.75
 
     radius: listView.width/75

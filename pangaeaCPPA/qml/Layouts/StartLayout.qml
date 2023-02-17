@@ -14,18 +14,24 @@ RowLayout{
     spacing: 2
 
     property bool isConnected: false
-    property double radius: width/50
+    property double radius: width/150
 
     ConnectionLayout{
+        id: connectionLayout
 
+        Layout.preferredWidth: parent.width/2
+        Layout.margins: 2
+        Layout.fillWidth: true
+        Layout.fillHeight: true
     }
 
     Rectangle{
-        color: Style.mainDisabledColor
+        color: Style.mainEnabledColor
+
         Layout.preferredWidth: parent.width/2
-        Layout.preferredHeight: parent.height
-        Layout.fillWidth: true
         Layout.margins: 2
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
         height: parent.height
 
@@ -110,29 +116,29 @@ RowLayout{
                 }
             }
 
-//            Switch{
-//                id: control1
-//                height: parent.height/20
-//                text: qsTr("Autoconnect")
+            Switch{
+                id: control1
+                height: parent.height/20
+                text: qsTr("Autoconnect")
 
-//                contentItem: MText {
-//                         text: control1.text
-//                         verticalAlignment: Text.AlignVCenter
-//                         leftPadding: control1.indicator.width + control1.spacing
-//                     }
-//            }
+                contentItem: MText {
+                         text: control1.text
+                         verticalAlignment: Text.AlignVCenter
+                         leftPadding: control1.indicator.width + control1.spacing
+                     }
+            }
 
-//            Switch{
-//                id: control2
-//                height: parent.height/20
-//                text: qsTr("Check updates")
+            Switch{
+                id: control2
+                height: parent.height/20
+                text: qsTr("Check updates")
 
-//                contentItem: MText {
-//                         text: control2.text
-//                         verticalAlignment: Text.AlignVCenter
-//                         leftPadding: control2.indicator.width + control2.spacing
-//                     }
-//            }
+                contentItem: MText {
+                         text: control2.text
+                         verticalAlignment: Text.AlignVCenter
+                         leftPadding: control2.indicator.width + control2.spacing
+                     }
+            }
 
             Row{
                 Item{
@@ -171,8 +177,6 @@ RowLayout{
         function onSgSetUIText(nameParam, inString){
             if(nameParam === "application_language")
             {
-                UiCore.setLanguage(inString);
-
                 if(inString === "en") {languageCombo.currentIndex = 0; return;}
                 if(inString === "ru") {languageCombo.currentIndex = 1; return;}
                 if(inString === "it") {languageCombo.currentIndex = 2; return;}

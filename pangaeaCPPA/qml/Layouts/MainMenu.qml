@@ -37,7 +37,45 @@ MenuBar{
     }
 
     Menu{
-        title: qsTr("View")
+        title: qsTr("Interface")
+
+       Menu{
+           id: languageMenu
+           title: qsTr("Language")
+
+            ActionGroup{
+                id: languageGroup
+            }
+
+            Action{
+                id: menuEn
+                text: qsTr("English")
+                checkable: true
+                ActionGroup.group: languageGroup
+                onTriggered: UiCore.setLanguage("en");
+            }
+            Action{
+                id: menuRu
+                text: qsTr("Русский")
+                checkable: true
+                ActionGroup.group: languageGroup
+                onTriggered: UiCore.setLanguage("ru");
+            }
+            Action{
+                id: menuIt
+                text: qsTr("Italiano")
+                checkable: true
+                ActionGroup.group: languageGroup
+                onTriggered: UiCore.setLanguage("it");
+            }
+            Action{
+                id: menuDe
+                text: qsTr("Deutsch")
+                checkable: true
+                ActionGroup.group: languageGroup
+                onTriggered: UiCore.setLanguage("de");
+            }
+        }
 
         Menu{
             title: qsTr("Modules direction")
@@ -102,8 +140,6 @@ MenuBar{
     Settings
     {
         category: "Current_folder"
-       // property alias importFolder: importPresetDialog.folder
-      //  property alias exportFolder: exportPresetDialog.folder
          property alias importFolder: importPresetDialog.currentFolder
          property alias exportFolder: exportPresetDialog.currentFolder
     }
@@ -113,11 +149,7 @@ MenuBar{
 
         title: qsTr("Import preset file")
 
-//        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
         currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
-
-        //selectMultiple: false
-        //fileMode: FileDialog.OpenFile
 
         onAccepted: {
             var cleanPath = currentFile.toString();//fileUrl.toString();
@@ -173,6 +205,17 @@ MenuBar{
 
     Connections{
         target: UiCore
+
+        function onSgSetUIText(nameParam, inString){
+            if(nameParam === "application_language")
+            {
+                if(inString === "en") {menuEn.checked = true; return;}
+                if(inString === "ru") {menuRu.checked = true; return;}
+                if(inString === "it") {menuIt.checked = true; return;}
+                if(inString === "de") {menuDe.checked = true; return;}
+
+            }
+        }
 
         function onSgSetUIParameter(nameParam, value)
         {

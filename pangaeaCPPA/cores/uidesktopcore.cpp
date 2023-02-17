@@ -15,7 +15,7 @@ UiDesktopCore::UiDesktopCore(QObject *parent)
     : QObject{parent}
 {
     appSettings = new QSettings(QSettings::UserScope);
-    loadDefaultTranslator();
+    //loadDefaultTranslator();
 }
 
 UiDesktopCore::~UiDesktopCore()
@@ -30,7 +30,7 @@ void UiDesktopCore::setupApplication()
     {
         appLanguage = QLocale().name().left(2);
     }
-    emit sgSetUIText("application_language", appLanguage);
+    setLanguage(appLanguage);
 
 //    QString colorTheme = appSettings->value("color_theme", "dark_orange").toString();
 //    emit sgSetUIText("color_theme", colorTheme);
@@ -121,6 +121,7 @@ void UiDesktopCore::setLanguage(QString languageCode)
     appSettings->sync();
 
     loadTranslator(languageCode);
+    emit sgSetUIText("application_language", languageCode);
 }
 
 void UiDesktopCore::saveSetting(QString settingName, QVariant settingValue)

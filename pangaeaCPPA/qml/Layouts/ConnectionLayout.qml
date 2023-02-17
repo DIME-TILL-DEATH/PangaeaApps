@@ -7,29 +7,25 @@ import Elements
 import StyleSettings
 import CppObjects 1.0
 
-Column {
-    Layout.preferredWidth: parent.width/2
-    Layout.preferredHeight: parent.height
-    Layout.margins: 2
-    Layout.fillWidth: true
-    spacing: height/50
+Column{
+    spacing: height/100
 
     Rectangle{
         id: _scanContainerRect
 
         width: parent.width
-        height: parent.height*9/50
+        height: parent.height*12/100
 
-        color: "blue"
-        border.width: 1
+        //color: "blue"
+        border.width: 2
         radius: root.radius
 
         SequentialAnimation on color{
             running: !isConnected
             loops: Animation.Infinite
             alwaysRunToEnd: true
-            ColorAnimation {from: Style.mainEnabledColor; to: Style.headColor; duration: 1000}
-            ColorAnimation {from: Style.headColor; to: Style.mainEnabledColor; duration: 1000}
+            ColorAnimation {from: Style.highlightColor; to: Style.mainEnabledColor; duration: 1000}
+            ColorAnimation {from: Style.mainEnabledColor; to: Style.highlightColor; duration: 1000}
         }
 
         Item{
@@ -107,10 +103,10 @@ Column {
     }
 
     Rectangle{
-        color: Style.mainDisabledColor
+        color: Style.mainEnabledColor
 
         width: parent.width
-        height: parent.height*40/50
+        height: parent.height*74/100
 
         radius: root.radius
         border.width: 2
@@ -135,6 +131,8 @@ Column {
             clip: true
 
             delegate: ILDelegate{
+                property variant data: model
+
                 width: listView.width
                 height: listView.height/6
             }
@@ -152,6 +150,38 @@ Column {
 
             remove: Transition {
                  NumberAnimation { properties: "x"; to: listView.width; duration: 250 }
+            }
+        }
+    }
+
+    Rectangle{
+        id: connectButton
+
+        width: parent.width
+        height: parent.height*12/100
+
+        enabled: (listView.count > 0)
+
+        border.width: 2
+        radius: root.radius
+
+        opacity: mA.pressed ? 0.5 : 1
+
+        color: enabled ? Style.mainEnabledColor : "gray"
+
+        MText{
+            anchors.centerIn: parent
+            text: qsTr("Click to connect")
+        }
+
+        MouseArea{
+            id: mA
+
+            anchors.fill: parent
+            enabled: parent.enabled
+
+            onClicked: {
+                InterfaceManager.connectToDevice(listView.currentItem.data.deviceDescription,)
             }
         }
     }
