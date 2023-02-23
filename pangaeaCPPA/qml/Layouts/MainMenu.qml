@@ -49,28 +49,28 @@ MenuBar{
 
             Action{
                 id: menuEn
-                text: qsTr("English")
+                text: "English"
                 checkable: true
                 ActionGroup.group: languageGroup
                 onTriggered: UiCore.setLanguage("en");
             }
             Action{
                 id: menuRu
-                text: qsTr("Русский")
+                text: "Русский"
                 checkable: true
                 ActionGroup.group: languageGroup
                 onTriggered: UiCore.setLanguage("ru");
             }
             Action{
                 id: menuIt
-                text: qsTr("Italiano")
+                text: "Italiano"
                 checkable: true
                 ActionGroup.group: languageGroup
                 onTriggered: UiCore.setLanguage("it");
             }
             Action{
                 id: menuDe
-                text: qsTr("Deutsch")
+                text: "Deutsch"
                 checkable: true
                 ActionGroup.group: languageGroup
                 onTriggered: UiCore.setLanguage("de");

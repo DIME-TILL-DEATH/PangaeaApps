@@ -4,9 +4,14 @@
 <context>
     <name>ConnectionLayout</name>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="95"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="91"/>
         <source>Searching for devices...</source>
         <translation>Поиск доступных устройств...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="174"/>
+        <source>Click to connect</source>
+        <translation>Нажмите для подсоединения к устройству</translation>
     </message>
     <message>
         <source>Avaliable interfaces:</source>
@@ -90,88 +95,97 @@
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="40"/>
         <source>View</source>
-        <translation>Вид</translation>
+        <translation type="vanished">Вид</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="43"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="40"/>
+        <source>Interface</source>
+        <translation>Интерфейс</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="44"/>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="81"/>
         <source>Modules direction</source>
         <translation>Отображения модулей</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="45"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="83"/>
         <source>Left to right</source>
         <translation>Слева направо</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="51"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="89"/>
         <source>Right to left</source>
         <translation>Справа налево</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="60"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="98"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="62"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="100"/>
         <source>IR convertor</source>
         <translation>Конвертор импульсов</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="69"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="107"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="72"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="110"/>
         <source>AMT web site</source>
         <translation>Веб-сайт AMT</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="78"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="116"/>
         <source>Pangaea web page</source>
         <translation>Веб-сайт устройств Pangaea</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="88"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="126"/>
         <source>Device manual</source>
         <translation>Руководство Pangaea</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="97"/>
-        <location filename="../qml/Layouts/MainMenu.qml" line="166"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="135"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="198"/>
         <source>About...</source>
         <translation>О программе...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="114"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="150"/>
         <source>Import preset file</source>
         <translation>Импорт файла пресета</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="132"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="164"/>
         <source>Export preset file</source>
         <translation>Экспорт файла пресета</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="149"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="181"/>
         <source>Disconnect?</source>
         <translation>Отключить?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="150"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="182"/>
         <source>Are you sure want to disconnect?</source>
         <translation>Вы уверены что хотите отключить устройство?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="167"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="199"/>
         <source>AMT Pangaea CP-16/CP-100</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="168"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="200"/>
         <source>Desktop application</source>
         <translation>Стационарное приложение</translation>
     </message>
@@ -181,12 +195,12 @@
         <translation type="vanished">Стационарное приложение&lt;br/&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="169"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="201"/>
         <source>Version: </source>
         <translation>Версия: </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="170"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="202"/>
         <source>(c) 2023</source>
         <translation></translation>
     </message>
@@ -244,37 +258,47 @@ Down - Click + cmd</source>
 <context>
     <name>StartLayout</name>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="47"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="53"/>
         <source>Avaliable interfaces:</source>
         <translation>Доступные интерфейсы:</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="76"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="82"/>
         <source>Services:</source>
         <translation>Дополнительные сервисы:</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="81"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="87"/>
         <source>Run IR converter</source>
         <translation>Запустить конвертор импульсов</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="89"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="95"/>
         <source>AMT electronics web-site</source>
         <translation>Веб-сайт AMT electronics</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="97"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="103"/>
         <source>Pangaea web page</source>
         <translation>Веб-сайт устройств Pangaea</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="109"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="115"/>
         <source>Settings:</source>
         <translation>Настройки:</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="144"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="122"/>
+        <source>Autoconnect</source>
+        <translation>Автоподсоединение</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/StartLayout.qml" line="134"/>
+        <source>Check updates</source>
+        <translation>Проверка обновлений</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/StartLayout.qml" line="150"/>
         <source>Application language:</source>
         <translation>Язык приложения:</translation>
     </message>
