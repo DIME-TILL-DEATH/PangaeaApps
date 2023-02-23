@@ -35,10 +35,6 @@ public:
 
     void write(QByteArray data);
 
-    //-------------------------------------------------------
-//    void doDisconnect(void);
- //   void doConnect(qint8 numDev, QString address);
-
 //    void setAutoconnectState(bool newAutoconnect);
 //    bool AutoconnectState() const;
 
@@ -49,7 +45,7 @@ public:
 private slots:
     void startDiscovering();
     void updateBLEDevicesList();
-    const QBluetoothDeviceInfo* getDeviceByMAC(const QString& macAddress);
+    const QBluetoothDeviceInfo* getDeviceByAddress(const QString& address);
 
     /* Slots for QBluetothDeviceDiscoveryAgent */
     void addDevice(const QBluetoothDeviceInfo&);
@@ -71,11 +67,6 @@ private slots:
     /* Slots for user */
     void slStartConnect(QString address);
     void checkDevicesAvaliabliy();
-
-//signals:
-//    void sgStartSearch();
-
-//    void sgLocalBluetoothNotReady(QString reason);
 
 private:
     bool isAvaliable;

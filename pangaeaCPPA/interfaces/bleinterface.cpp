@@ -83,14 +83,12 @@ void BleInterface::startDiscovering()
 
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
     {
-//        qDebug() << "Controller is powered off";
         prevState();
         isAvaliable = false;
 
         m_qlFoundDevices.clear();
         emit sgDeviceListUpdated(DeviceConnectionType::BLE, m_qlFoundDevices);
 
-        //emit sgLocalBluetoothNotReady("HostPoweredOff");
         emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
         device.powerOn();
         return;
@@ -155,29 +153,36 @@ void BleInterface::scanTimeout()
 
 void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
 {
+    QString address;
+
+#ifdef Q_OS_MAC
+    address = device.deviceUuid().toString();
+#else
+    address = device.address().toString();
+#endif
+
     if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
     {
         qInfo() << "Discovered LE Device name: " << device.name() << " Address: "
-                   << device.address().toString();
+                   << address;
     }
 
     bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
 
     if(device.name().indexOf("AMT PANGAEA") == 0 )
     {
-        QString macAddress = device.address().toString();
         if(!m_avaliableDevices.contains(device))
         {
             m_avaliableDevices.append(device);
             if(isAutoconnectEnabled & (state() == InterfaceState::Scanning))
             {
-              if(macAddress.indexOf(m_autoconnectDevicetMAC) == 0)
+              if(address.indexOf(m_autoconnectDevicetMAC) == 0)
               {
                   qDebug() << "Autoconnecting";
-                  m_connectedDevice = DeviceDescription(device.name(), macAddress, DeviceConnectionType::BLE);
+                  m_connectedDevice = DeviceDescription(device.name(), address, DeviceConnectionType::BLE);
                   setState(InterfaceState::Connecting);
 
-                  slStartConnect(macAddress);
+                  slStartConnect(address);
                   emit sgConnectionStarted();
               }
             }
@@ -213,7 +218,7 @@ void BleInterface::checkDevicesAvaliabliy()
     for(int i=0; i < m_avaliableDevices.size(); i++)
     {
         QString macAddress = m_avaliableDevices.at(i).address().toString();
-        const QBluetoothDeviceInfo* dev_ptr = getDeviceByMAC(macAddress);
+        const QBluetoothDeviceInfo* dev_ptr = getDeviceByAddress(macAddress);
 
         if(dev_ptr == nullptr) m_avaliableDevices.removeAt(i);
     }
@@ -259,38 +264,21 @@ QList<DeviceDescription> BleInterface::discoveredDevicesList()
 
 bool BleInterface::connect(DeviceDescription device)
 {
-//    if(state() == InterfaceState::AcquireData)
-//        return true;
 
-//    if(state() == InterfaceState::Scanning)
-//    {
         m_connectedDevice = device;
-     //   doConnect(0, device.address());
         setState(InterfaceState::Connecting);
 
         slStartConnect(device.address());
         emit sgConnectionStarted();
-//    }
 
-//    return false;
         return true;
 }
-
-//void BleInterface::doConnect(qint8 numDev, QString address)
-//{
-////    if(numDev < m_avaliableDevices.count())
-////    {
-//        slStartConnect(address);
-//       // emit sgConnect(numDev);
-////    }
-////    else qDebug() << "devNumber is less than avaliable devices";
-//}
 
 void BleInterface::slStartConnect(QString address)
 {
     qDebug() << "Trying to connect";
 
-    const QBluetoothDeviceInfo* deviceToConnect = getDeviceByMAC(address);
+    const QBluetoothDeviceInfo* deviceToConnect = getDeviceByAddress(address);
 
     if(deviceToConnect == nullptr)
     {
@@ -298,7 +286,6 @@ void BleInterface::slStartConnect(QString address)
         emit sgDeviceUnavaliable(DeviceConnectionType::BLE, "nullPointer");
         prevState();
         startScan();
-//        emit sgLocalBluetoothNotReady("DeviceUnavaliable");
         return;
     }
 
@@ -390,8 +377,6 @@ void BleInterface::deviceDisconnected()
 {
     qWarning() << "Remote device disconnected(UART service disconnected)";
 
-  //  emit sgErrorDisconnected();
-  //  emit sgLocalBluetoothNotReady("DeviceUnavaliable");
     emit sgInterfaceDisconnected(m_connectedDevice);
 }
 
@@ -481,11 +466,11 @@ void BleInterface::disconnectFromDevice()
     m_avaliableDevices.clear();
 }
 
-const QBluetoothDeviceInfo *BleInterface::getDeviceByMAC(const QString &macAddress)
+const QBluetoothDeviceInfo *BleInterface::getDeviceByAddress(const QString &address)
 {
     for(int i=0; i< m_deviceDiscoveryAgent->discoveredDevices().size(); i++)
     {
-        if(m_deviceDiscoveryAgent->discoveredDevices().at(i).address().toString() == macAddress)
+        if(m_deviceDiscoveryAgent->discoveredDevices().at(i).address().toString() == address)
             return &m_deviceDiscoveryAgent->discoveredDevices().at(i);
     }
     return nullptr;
