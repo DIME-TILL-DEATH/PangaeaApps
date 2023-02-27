@@ -20,21 +20,21 @@ BleInterface::BleInterface(QObject *parent)
 #else
     appSettings = new QSettings(QSettings::UserScope, this);
 #endif
-    appSettings->setFallbacksEnabled(false);
-    appSettings->beginGroup("AutoconnectSettings");
-    m_autoconnectDevicetMAC = appSettings->value("MAC address", 0).toString();
-    appSettings->endGroup();
+//    appSettings->setFallbacksEnabled(false);
+//    appSettings->beginGroup("AutoconnectSettings");
+//    m_autoconnectDevicetMAC = appSettings->value("MAC address", 0).toString();
+//    appSettings->endGroup();
 
-    int size = appSettings->beginReadArray("Unique module names");
-    for(int i=0; i<size; ++i)
-    {
-        appSettings->setArrayIndex(i);
+//    int size = appSettings->beginReadArray("Unique module names");
+//    for(int i=0; i<size; ++i)
+//    {
+//        appSettings->setArrayIndex(i);
 
-        QString MACAddress = appSettings->value("MAC address").toString();
-        QString name = appSettings->value("Name").toString();
-        m_moduleUniqueNames.insert(MACAddress, name);
-    }
-    appSettings->endArray();
+//        QString MACAddress = appSettings->value("MAC address").toString();
+//        QString name = appSettings->value("Name").toString();
+//        m_moduleUniqueNames.insert(MACAddress, name);
+//    }
+//    appSettings->endArray();
 
     m_deviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent(); // parent = this: Main COM uninit tried from another thread
 
@@ -167,25 +167,25 @@ void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
                    << address;
     }
 
-    bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
+//    bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
 
     if(device.name().indexOf("AMT PANGAEA") == 0 )
     {
         if(!m_avaliableDevices.contains(device))
         {
             m_avaliableDevices.append(device);
-            if(isAutoconnectEnabled & (state() == InterfaceState::Scanning))
-            {
-              if(address.indexOf(m_autoconnectDevicetMAC) == 0)
-              {
-                  qDebug() << "Autoconnecting";
-                  m_connectedDevice = DeviceDescription(device.name(), address, DeviceConnectionType::BLE);
-                  setState(InterfaceState::Connecting);
+//            if(isAutoconnectEnabled & (state() == InterfaceState::Scanning))
+//            {
+//              if(address.indexOf(m_autoconnectDevicetMAC) == 0)
+//              {
+//                  qDebug() << "Autoconnecting";
+//                  m_connectedDevice = DeviceDescription(device.name(), address, DeviceConnectionType::BLE);
+//                  setState(InterfaceState::Connecting);
 
-                  slStartConnect(address);
-                  emit sgConnectionStarted();
-              }
-            }
+//                  slStartConnect(address);
+//                  emit sgConnectionStarted();
+//              }
+//            }
             updateBLEDevicesList();
         }
     }
@@ -289,14 +289,19 @@ void BleInterface::slStartConnect(QString address)
         return;
     }
 
-    m_autoconnectDevicetMAC = deviceToConnect->address().toString();
+#ifdef Q_OS_MAC
+    m_autoconnectDeviceAddress = deviceToConnect->deviceUuid().toString();
+#else
+    m_autoconnectDeviceAddress = deviceToConnect->address().toString();
+#endif
 
     appSettings->setFallbacksEnabled(false);
     appSettings->beginGroup("AutoconnectSettings");
-    appSettings->setValue("MAC address", m_autoconnectDevicetMAC);
+    appSettings->setValue("BLE_address", m_autoconnectDeviceAddress);
     appSettings->endGroup();
+    appSettings->sync();
 
-    m_moduleName = m_moduleUniqueNames.value(m_autoconnectDevicetMAC, "");
+    m_moduleName = m_moduleUniqueNames.value(m_autoconnectDeviceAddress, "");
 
     setState(InterfaceState::UpdateModuleName);
 
@@ -482,7 +487,7 @@ void BleInterface::setModuleName(QString name)
     {
         m_moduleName = name;
 
-        m_moduleUniqueNames.insert(m_autoconnectDevicetMAC, m_moduleName);
+        m_moduleUniqueNames.insert(m_autoconnectDeviceAddress, m_moduleName);
 
 #ifdef Q_OS_ANDROID
         QSettings settings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)

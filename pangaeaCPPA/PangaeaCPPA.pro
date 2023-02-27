@@ -24,7 +24,8 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     cores/core.cpp \
-    cores/uidesktopcore.cpp \
+    cores/interfacecore.cpp \
+    cores/netcore.cpp \
     device/answerworker.cpp \
     device/device.cpp \
     device/deviceanswer.cpp \
@@ -37,10 +38,10 @@ SOURCES += main.cpp \
     interfaces/abstractinterface.cpp \
     interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
-    interfaces/interfacemanager.cpp \
-    interfaces/uiinterfacemanager.cpp \
     interfaces/usbinterface.cpp \
     threadcontroller.cpp \
+    ui/uidesktopcore.cpp \
+    ui/uiinterfacemanager.cpp \
     utils/irworker.cpp \
     utils/logger.cpp \
     utils/parser.cpp \
@@ -48,7 +49,8 @@ SOURCES += main.cpp \
 
 HEADERS += \
     cores/core.h \
-    cores/uidesktopcore.h \
+    cores/interfacecore.h \
+    cores/netcore.h \
     device/answerworker.h \
     device/defines.h \
     device/device.h \
@@ -62,20 +64,21 @@ HEADERS += \
     interfaces/abstractinterface.h \
     interfaces/devicedescription.h \
     interfaces/bleinterface.h \
-    interfaces/interfacemanager.h \
-    interfaces/uiinterfacemanager.h \
     interfaces/usbinterface.h \
     threadcontroller.h \
+    ui/uidesktopcore.h \
+    ui/uiinterfacemanager.h \
     utils/irworker.h \
     utils/logger.h \
     utils/parser.h \
     utils/presetmanager.h
 
 INCLUDEPATH += cores
-INCLUDEPATH += utils
-INCLUDEPATH += interfaces
 INCLUDEPATH += device
+INCLUDEPATH += interfaces
 INCLUDEPATH += models
+INCLUDEPATH += ui
+INCLUDEPATH += utils
 
 TRANSLATIONS += translations/PangaeaCPPA_en.ts
 TRANSLATIONS += translations/PangaeaCPPA_ru.ts

@@ -1,21 +1,21 @@
 #include <QDebug>
 #include <QThread>
 
-#include "interfacemanager.h"
+#include "interfacecore.h"
 
-InterfaceManager::InterfaceManager(QObject *parent)
+InterfaceCore::InterfaceCore(QObject *parent)
                 : QObject{parent}
 {
     m_usbInterface = new UsbInterface(this);
     m_bleInterface = new BleInterface(this);
 
-    QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceManager::slInterfaceUnavaliable);
+    QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable);
 
-    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
-    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::sgDeviceListUpdated);
+    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::sgDeviceListUpdated);
+    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::sgDeviceListUpdated);
 }
 
-InterfaceManager::~InterfaceManager()
+InterfaceCore::~InterfaceCore()
 {
 //    qDebug() << "Interface manager destructor" << this->thread();
 
@@ -23,7 +23,7 @@ InterfaceManager::~InterfaceManager()
         m_exchangeInterface->disconnectFromDevice();
 }
 
-bool InterfaceManager::connectToDevice(DeviceDescription device)
+bool InterfaceCore::connectToDevice(DeviceDescription device)
 {
     stopScanning();
 
@@ -49,17 +49,17 @@ bool InterfaceManager::connectToDevice(DeviceDescription device)
             return false;
         }
     }
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceManager::sgNewData);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceManager::sgConnectionStarted);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceManager::sgDeviceUnavaliable);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceManager::slInterfaceError);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceManager::sgInterfaceConnected);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceManager::sgInterfaceDisconnected);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::sgNewData);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceCore::sgConnectionStarted);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceCore::sgDeviceUnavaliable);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceCore::slInterfaceError);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceCore::sgInterfaceConnected);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceCore::sgInterfaceDisconnected);
 
     return m_exchangeInterface->connect(device);
 }
 
-void InterfaceManager::disconnectFromDevice()
+void InterfaceCore::disconnectFromDevice()
 {
     m_exchangeInterface->disconnectFromDevice();
   //  emit sgInterfaceDisconnected();
@@ -69,30 +69,30 @@ void InterfaceManager::disconnectFromDevice()
 
 }
 
-void InterfaceManager::writeToDevice(QByteArray data)
+void InterfaceCore::writeToDevice(QByteArray data)
 {
     m_exchangeInterface->write(data);
 }
 
-void InterfaceManager::startScanning()
+void InterfaceCore::startScanning()
 {
     m_usbInterface->startScan();
     m_bleInterface->startScan();
 }
 
-void InterfaceManager::stopScanning()
+void InterfaceCore::stopScanning()
 {
     m_usbInterface->stopScan();
     m_bleInterface->stopScan();
 }
 
-void InterfaceManager::slInterfaceError(QString errorDescription)
+void InterfaceCore::slInterfaceError(QString errorDescription)
 {
     disconnectFromDevice();
     emit sgInterfaceError(errorDescription);
 }
 
-void InterfaceManager::slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason)
+void InterfaceCore::slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason)
 {
 #ifdef PANGAEA_DESKTOP
 

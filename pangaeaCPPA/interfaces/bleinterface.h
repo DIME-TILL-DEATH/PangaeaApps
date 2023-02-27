@@ -84,7 +84,7 @@ private:
 
     QSettings* appSettings;
 
-    QString m_autoconnectDevicetMAC;
+    QString m_autoconnectDeviceAddress;
     QString m_moduleName;
 
     QHash<QString, QString> m_moduleUniqueNames;

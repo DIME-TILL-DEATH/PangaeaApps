@@ -1,5 +1,5 @@
-#ifndef INTERFACEMANAGER_H
-#define INTERFACEMANAGER_H
+#ifndef INTERFACECORE_H
+#define INTERFACECORE_H
 
 #include <QObject>
 
@@ -8,12 +8,12 @@
 #include "bleinterface.h"
 #include "usbinterface.h"
 
-class InterfaceManager : public QObject
+class InterfaceCore : public QObject
 {
     Q_OBJECT
 public:
-    explicit InterfaceManager(QObject *parent = nullptr);
-    ~InterfaceManager();
+    explicit InterfaceCore(QObject *parent = nullptr);
+    ~InterfaceCore();
 
     bool connectToDevice(DeviceDescription device);
     void disconnectFromDevice();
@@ -42,4 +42,4 @@ private slots:
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
 };
 
-#endif // INTERFACEMANAGER_H
+#endif // INTERFACECORE_H

@@ -117,27 +117,35 @@ RowLayout{
             }
 
             Switch{
-                id: control1
+                id: swAutoconnect
                 height: parent.height/20
                 text: qsTr("Autoconnect")
 
                 contentItem: MText {
-                         text: control1.text
+                         text: swAutoconnect.text
                          verticalAlignment: Text.AlignVCenter
-                         leftPadding: control1.indicator.width + control1.spacing
+                         leftPadding: swAutoconnect.indicator.width + swAutoconnect.spacing
                      }
+
+                onCheckedChanged: {
+                    UiCore.saveSetting("autoconnect_enable", swAutoconnect.checked);
+                }
             }
 
             Switch{
-                id: control2
+                id: swCheckUpdates
                 height: parent.height/20
                 text: qsTr("Check updates")
 
                 contentItem: MText {
-                         text: control2.text
+                         text: swCheckUpdates.text
                          verticalAlignment: Text.AlignVCenter
-                         leftPadding: control2.indicator.width + control2.spacing
+                         leftPadding: swCheckUpdates.indicator.width + swCheckUpdates.spacing
                      }
+
+                onCheckedChanged: {
+                    UiCore.saveSetting("check_updates_enable", swCheckUpdates.checked);
+                }
             }
 
             Row{
@@ -183,6 +191,18 @@ RowLayout{
                 if(inString === "de") {languageCombo.currentIndex = 3; return;}
 
                 languageCombo.currentIndex = 0;
+            }
+        }
+
+        function onSgSetUIParameter(nameParam, inValue){
+            if(nameParam === "autoconnect_enable")
+            {
+                swAutoconnect.checked = inValue;
+            }
+
+            if(nameParam === "check_updates_enable")
+            {
+                swCheckUpdates.checked = inValue;
             }
         }
     }
