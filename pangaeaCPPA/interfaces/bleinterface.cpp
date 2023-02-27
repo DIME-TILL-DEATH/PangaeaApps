@@ -200,7 +200,13 @@ void BleInterface::updateBLEDevicesList()
   for (const QBluetoothDeviceInfo &currentDevice : m_avaliableDevices)
   {
       QString uniqueName;
-      QString strAddress = currentDevice.address().toString();
+      QString strAddress;
+#ifdef Q_OS_MAC
+      strAddress = currentDevice.deviceUuid().toString();
+#else
+     strAddress = currentDevice.address().toString();
+#endif
+
       QString strName = m_moduleUniqueNames.value(strAddress, "");
       if(m_moduleUniqueNames.contains(strAddress) && strName!="")
       {
@@ -276,7 +282,7 @@ bool BleInterface::connect(DeviceDescription device)
 
 void BleInterface::slStartConnect(QString address)
 {
-    qDebug() << "Trying to connect";
+    qDebug() << "Trying to connect, address: " << address;
 
     const QBluetoothDeviceInfo* deviceToConnect = getDeviceByAddress(address);
 
@@ -475,7 +481,13 @@ const QBluetoothDeviceInfo *BleInterface::getDeviceByAddress(const QString &addr
 {
     for(int i=0; i< m_deviceDiscoveryAgent->discoveredDevices().size(); i++)
     {
-        if(m_deviceDiscoveryAgent->discoveredDevices().at(i).address().toString() == address)
+        QString devAddress;
+#ifdef Q_OS_MAC
+        devAddress = m_deviceDiscoveryAgent->discoveredDevices().at(i).deviceUuid().toString();
+#else
+        devAddress = m_deviceDiscoveryAgent->discoveredDevices().at(i).address().toString();
+#endif
+        if(devAddress == address)
             return &m_deviceDiscoveryAgent->discoveredDevices().at(i);
     }
     return nullptr;

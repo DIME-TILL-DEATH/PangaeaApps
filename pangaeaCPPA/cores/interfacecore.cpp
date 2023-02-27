@@ -56,13 +56,15 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceCore::sgInterfaceConnected);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceCore::sgInterfaceDisconnected);
 
+    m_connectedDeviceDescription = device;
+
     return m_exchangeInterface->connect(device);
 }
 
 void InterfaceCore::disconnectFromDevice()
 {
     m_exchangeInterface->disconnectFromDevice();
-  //  emit sgInterfaceDisconnected();
+    emit sgInterfaceDisconnected(m_connectedDeviceDescription);
 
     QObject::disconnect(m_exchangeInterface, nullptr, this, nullptr);
     m_exchangeInterface = nullptr;

@@ -37,6 +37,8 @@ private:
     BleInterface* m_bleInterface{nullptr};
     UsbInterface* m_usbInterface{nullptr};
 
+    DeviceDescription m_connectedDeviceDescription;
+
 private slots:
     void slInterfaceError(QString errorDescription);
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
