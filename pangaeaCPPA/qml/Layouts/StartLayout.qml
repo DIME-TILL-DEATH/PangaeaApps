@@ -84,6 +84,8 @@ RowLayout{
             }
 
             Button{
+                id: control
+
                 text: qsTr("Run IR converter")
                 width: parent.width
                 height: parent.height/15
@@ -149,11 +151,13 @@ RowLayout{
             }
 
             Row{
+                height: parent.height/10
                 Item{
                     width: txt.contentWidth+txt.leftPadding*2
                     height: parent.height
                     MText{
                         id: txt
+                        anchors.fill: parent
                         leftPadding: 5
                         text: qsTr("Application language:")
                         verticalAlignment: Text.AlignVCenter
@@ -162,6 +166,11 @@ RowLayout{
 
                 ComboBox{
                     id: languageCombo
+
+                    height: parent.height
+
+                    anchors.verticalCenter: parent.verticalCenter
+
                     model: ["English", "Русский", "Italiano", "Deutsch"]
 
                     onActivated: function activated(index){
