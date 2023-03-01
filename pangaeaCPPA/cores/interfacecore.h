@@ -42,6 +42,7 @@ private:
 private slots:
     void slInterfaceError(QString errorDescription);
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
+    void slDeviceListUpdated(DeviceConnectionType connectionType, QList<DeviceDescription> list);
 };
 
 #endif // INTERFACECORE_H

@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QThread>
+#include <QSettings>
 
 #include "interfacecore.h"
 
@@ -11,8 +12,8 @@ InterfaceCore::InterfaceCore(QObject *parent)
 
     QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable);
 
-    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::sgDeviceListUpdated);
-    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::sgDeviceListUpdated);
+    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
+    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
 }
 
 InterfaceCore::~InterfaceCore()
@@ -111,4 +112,19 @@ void InterfaceCore::slInterfaceUnavaliable(DeviceConnectionType senderType, QStr
     }
 #endif
     emit sgInterfaceUnavaliable(senderType, reason);
+}
+
+void InterfaceCore::slDeviceListUpdated(DeviceConnectionType connectionType, QList<DeviceDescription> list)
+{
+    emit sgDeviceListUpdated(connectionType, list);
+
+    bool makeAutoconnect = QSettings(QSettings::UserScope).value("autoconnect_enable", false).toBool();
+
+    if(m_exchangeInterface == nullptr && makeAutoconnect)
+    {
+        if(!list.empty())
+        {
+            connectToDevice(list.first());
+        }
+    }
 }
