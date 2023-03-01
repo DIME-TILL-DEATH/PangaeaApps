@@ -6,8 +6,6 @@ import QtQuick.Controls
 QtObject {
     id: root
 
-    property bool modulesRightAligned: true
-
     readonly property color backgroundColor: "#EBECEC"
     readonly property color mainEnabledColor: "#5E5971"
     readonly property color mainDisabledColor: "#7E7991"

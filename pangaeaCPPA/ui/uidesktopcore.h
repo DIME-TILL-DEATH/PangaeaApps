@@ -13,6 +13,7 @@
 class UiDesktopCore : public QObject
 {
     Q_OBJECT
+
 public:
     explicit UiDesktopCore(QObject *parent = nullptr);
     ~UiDesktopCore();
@@ -31,11 +32,8 @@ public:
     Q_INVOKABLE void exportPreset(QString filePath);
     Q_INVOKABLE void importPreset(QString filePath);
 
-    //Q_INVOKABLE void setFirmware (QString fullFilePath);
-    //Q_INVOKABLE void doOnlineFirmwareUpdate();
-
+    // TODO to UiSettings
     Q_INVOKABLE void setLanguage(QString languageCode);
-    Q_INVOKABLE void saveSetting(QString settingName, QVariant settingValue);
 
     Q_INVOKABLE void openManualExternally(QString fileName);
     Q_INVOKABLE void runIrConvertor();

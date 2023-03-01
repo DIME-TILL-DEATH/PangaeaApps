@@ -336,9 +336,8 @@ ApplicationWindow
 
     onClosing: function(close)
     {
-        UiCore.saveSetting("window_width", main.width);
-        UiCore.saveSetting("window_height", main.height);
-        UiCore.saveSetting("modules_right_aligned", Style.modulesRightAligned);
+        UiSettings.saveSetting("window_width", main.width);
+        UiSettings.saveSetting("window_height", main.height);
 
         if(main.edit && main.connected)
         {

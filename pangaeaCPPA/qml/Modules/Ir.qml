@@ -45,10 +45,8 @@ Item
                 height: parent.height/1000*165
                 enabled: main.on
 
-                onChValue:
-                {
+                onChValue: value => {
                     UiCore.setParameter(nameValue, !value);
-                    //console.log("tumbler value, chValue", _baseModule.contentProperties.value)
                 }
             }
             Item

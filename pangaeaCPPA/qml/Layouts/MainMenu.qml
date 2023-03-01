@@ -82,15 +82,34 @@ MenuBar{
             MenuItem{
                 text: qsTr("Left to right")
                 checkable: true
-                checked: !Style.modulesRightAligned
-                onTriggered: Style.modulesRightAligned = false;
+                checked: !UiSettings.isModulesRightAligned
+                onTriggered: UiSettings.saveSetting("modules_right_aligned", false);
             }
             MenuItem{
                 text: qsTr("Right to left")
                 checkable: true
-                checked: Style.modulesRightAligned
-                onTriggered: Style.modulesRightAligned = true;
+                checked: UiSettings.isModulesRightAligned
+                onTriggered: UiSettings.saveSetting("modules_right_aligned", true);
             }
+        }
+
+        MenuItem{
+            id: menuAutoconnect
+
+            text: qsTr("Autoconnect")
+            checkable: true
+            checked: UiSettings.autoConnectEnabled
+
+            onTriggered: UiSettings.saveSetting("autoconnect_enable", checked);
+        }
+        MenuItem{
+            id: menuCheckUpdates
+
+            text: qsTr("Check updates")
+            checkable: true
+            checked: UiSettings.checkUpdatesEnabled
+
+            onTriggered: UiSettings.saveSetting("check_updates_enable", checked);
         }
     }
 
@@ -232,6 +251,16 @@ MenuBar{
 
                 console.log("Settling device path:", value, menuDeviceManual.strManualBaseName)
             }
+
+//            if(nameParam === "autoconnect_enable")
+//            {
+//                menuAutoconnect.checked = value;
+//            }
+
+//            if(nameParam === "check_updates_enable")
+//            {
+//                menuCheckUpdates.checked = value;
+//            }
         }
     }
 }

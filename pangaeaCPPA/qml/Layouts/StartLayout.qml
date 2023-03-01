@@ -123,14 +123,16 @@ RowLayout{
                 height: parent.height/20
                 text: qsTr("Autoconnect")
 
+                checked: UiSettings.autoConnectEnabled
+
                 contentItem: MText {
                          text: swAutoconnect.text
                          verticalAlignment: Text.AlignVCenter
                          leftPadding: swAutoconnect.indicator.width + swAutoconnect.spacing
                      }
 
-                onCheckedChanged: {
-                    UiCore.saveSetting("autoconnect_enable", swAutoconnect.checked);
+                onClicked: {
+                    UiSettings.saveSetting("autoconnect_enable", swAutoconnect.checked);
                 }
             }
 
@@ -139,14 +141,16 @@ RowLayout{
                 height: parent.height/20
                 text: qsTr("Check updates")
 
+                checked: UiSettings.checkUpdatesEnabled
+
                 contentItem: MText {
                          text: swCheckUpdates.text
                          verticalAlignment: Text.AlignVCenter
                          leftPadding: swCheckUpdates.indicator.width + swCheckUpdates.spacing
                      }
 
-                onCheckedChanged: {
-                    UiCore.saveSetting("check_updates_enable", swCheckUpdates.checked);
+                onClicked: {
+                    UiSettings.saveSetting("check_updates_enable", swCheckUpdates.checked);
                 }
             }
 
@@ -167,7 +171,7 @@ RowLayout{
                 ComboBox{
                     id: languageCombo
 
-                    height: parent.height
+                    //height: parent.height
 
                     anchors.verticalCenter: parent.verticalCenter
 
@@ -203,16 +207,16 @@ RowLayout{
             }
         }
 
-        function onSgSetUIParameter(nameParam, inValue){
-            if(nameParam === "autoconnect_enable")
-            {
-                swAutoconnect.checked = inValue;
-            }
+//        function onSgSetUIParameter(nameParam, inValue){
+//            if(nameParam === "autoconnect_enable")
+//            {
+//                swAutoconnect.checked = inValue;
+//            }
 
-            if(nameParam === "check_updates_enable")
-            {
-                swCheckUpdates.checked = inValue;
-            }
-        }
+//            if(nameParam === "check_updates_enable")
+//            {
+//                swCheckUpdates.checked = inValue;
+//            }
+//        }
     }
 }

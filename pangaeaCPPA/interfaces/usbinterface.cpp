@@ -70,9 +70,11 @@ void UsbInterface::discoverDevices()
                 ((info.vendorIdentifier()==0x0483)&&(info.productIdentifier()==0x5740))
           )
         {
-            //qDebug()<<"vendor:"<<info.vendorIdentifier()<<" product: " <<info.productIdentifier() << " location: "<<info.systemLocation();
+//            m_discoveredDevices.append(DeviceDescription("AMT pid:" + QString().setNum(info.productIdentifier(), 16) + " " + info.description(),
+//                                                         info.systemLocation(),
+//                                                         DeviceConnectionType::USBAuto));
 
-            m_discoveredDevices.append(DeviceDescription("AMT pid:" + QString().setNum(info.productIdentifier(), 16) + " " + info.description(),
+            m_discoveredDevices.append(DeviceDescription("AMT " + info.description(),
                                                          info.systemLocation(),
                                                          DeviceConnectionType::USBAuto));
         }

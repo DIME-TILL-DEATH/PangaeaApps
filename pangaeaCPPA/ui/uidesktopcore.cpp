@@ -15,7 +15,6 @@ UiDesktopCore::UiDesktopCore(QObject *parent)
     : QObject{parent}
 {
     appSettings = new QSettings(QSettings::UserScope);
-    //loadDefaultTranslator();
 }
 
 UiDesktopCore::~UiDesktopCore()
@@ -24,6 +23,7 @@ UiDesktopCore::~UiDesktopCore()
 
 void UiDesktopCore::setupApplication()
 {
+    //TODO to UiSettings
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();
 
     if(appLanguage=="autoselect")
@@ -35,24 +35,11 @@ void UiDesktopCore::setupApplication()
 //    QString colorTheme = appSettings->value("color_theme", "dark_orange").toString();
 //    emit sgSetUIText("color_theme", colorTheme);
 
-    bool isModulesRightAligned = appSettings->value("modules_right_aligned", true).toBool();
-    emit sgSetUIParameter("modules_right_aligned", isModulesRightAligned);
-
     quint16 windowWidth = appSettings->value("window_width").toUInt();
     if(windowWidth>0) emit sgSetUIParameter("window_width", windowWidth);
 
     quint16 windowHeight = appSettings->value("window_height").toUInt();
     if(windowHeight) emit sgSetUIParameter("window_height", windowHeight);
-
-    bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
-    emit sgSetUIParameter("autoconnect_enable", isAutoconnectEnabled);
-
-    bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable", true).toBool();
-    emit sgSetUIParameter("check_updates_enable", isCheckUpdatesEnabled);
-
-    bool firstRun = !appSettings->value("first_run", true).toBool();
-    emit sgSetUIParameter("first_run", firstRun);
-    appSettings->setValue("first_run", false);
 
     emit sgApplicationSetupComplete();
 }
@@ -124,14 +111,6 @@ void UiDesktopCore::setLanguage(QString languageCode)
     emit sgSetUIText("application_language", languageCode);
 }
 
-void UiDesktopCore::saveSetting(QString settingName, QVariant settingValue)
-{
-    appSettings->setValue(settingName, settingValue);
-    appSettings->sync();
-
-    qDebug() << __FUNCTION__ << "Setting name: " << settingName << "Setting value:" << settingValue;
-}
-
 void UiDesktopCore::openManualExternally(QString fileName)
 {
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();
@@ -176,7 +155,6 @@ void UiDesktopCore::loadTranslator(QString languageCode)
     {
         qDebug() << "Translator loaded. Language: " << m_translator.language();
         QCoreApplication::installTranslator(&m_translator);
-        //m_qmlEngine->retranslate();
 
         emit sgTranslatorChanged(languageCode);
     }

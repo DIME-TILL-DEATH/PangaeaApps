@@ -42,6 +42,7 @@ SOURCES += main.cpp \
     threadcontroller.cpp \
     ui/uidesktopcore.cpp \
     ui/uiinterfacemanager.cpp \
+    ui/uisettings.cpp \
     utils/irworker.cpp \
     utils/logger.cpp \
     utils/parser.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     threadcontroller.h \
     ui/uidesktopcore.h \
     ui/uiinterfacemanager.h \
+    ui/uisettings.h \
     utils/irworker.h \
     utils/logger.h \
     utils/parser.h \

@@ -16,7 +16,7 @@ Item
 
     property int modulesCount: 15
 
-    property bool moduleVisible: false // по старту не отображать, пока не загрузится устройство
+    property bool moduleVisible: false
 
     ListView
     {
@@ -28,7 +28,7 @@ Item
         interactive: false
         orientation: ListView.Horizontal
 
-        layoutDirection:  Style.modulesRightAligned ? Qt.RightToLeft : Qt.LeftToRight
+        layoutDirection:  UiSettings.isModulesRightAligned ? Qt.RightToLeft : Qt.LeftToRight
 
         model: modulesList
 
@@ -219,23 +219,7 @@ Item
             {
                 arrangePrePost(value);
             }
-
-            if(nameParam === "modules_right_aligned")
-            {
-                console.log("Modules right aligned:", value)
-                Style.modulesRightAligned = value
-            }
         }
-
-//        function onSgSetUIText(nameParam, inString)
-//        {
-//            if(nameParam===("port_closed"))
-//            {
-//                modulesList.clear();
-//                listViewModules.forceLayout();
-
-//            }
-//        }
 
         // not set ui
         function onSgSetParameter(nameParam, value)
@@ -245,7 +229,6 @@ Item
                 arrangePrePost(value);
             }
         }
-
     }
 
     Connections{
@@ -263,5 +246,4 @@ Item
             listViewModules.forceLayout();
         }
     }
-
 }

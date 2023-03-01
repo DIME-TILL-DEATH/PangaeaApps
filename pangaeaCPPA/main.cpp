@@ -8,6 +8,7 @@
 #include "core.h"
 #include "netcore.h"
 #include "uidesktopcore.h"
+#include "uisettings.h"
 #include "interfacecore.h"
 #include "uiinterfacemanager.h"
 #include "logger.h"
@@ -50,10 +51,12 @@ int main(int argc, char *argv[])
     //----------------------------------------------------------------   
     UiInterfaceManager uiInterfaceManager;
     UiDesktopCore uiCore;
+    UiSettings uiSettings;
 
     QQmlApplicationEngine engine;
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
 
     qRegisterMetaType<DeviceDescription>();

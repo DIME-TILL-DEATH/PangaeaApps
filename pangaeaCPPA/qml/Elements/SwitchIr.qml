@@ -8,7 +8,6 @@ Item
 
     property int   value: 1
 
-    //TODO вроде как и не нужен
     signal chValue(int value)
 
     Column
@@ -24,7 +23,7 @@ Item
 
             value: main.value
             opacity: main.enabled?1:0.5
-            onChValue: main.chValue(value)
+            onChValue: value => {main.chValue(value)}
         }
 
         Row
@@ -38,7 +37,7 @@ Item
                 height: parent.height
                 text: "On"
                 check: mSwitch.value==0
-                onClicked: {mSwitch.value = 0; main.chValie(value);}
+                onClicked: {mSwitch.value = 0; main.chValue(value);}
             }
 
             CheckText
@@ -47,7 +46,7 @@ Item
                 height: parent.height
                 text: "Off"
                 check: mSwitch.value==1
-                onClicked: {mSwitch.value =1; main.chValie(value)}
+                onClicked: {mSwitch.value =1; main.chValue(value)}
             }
         }
 
