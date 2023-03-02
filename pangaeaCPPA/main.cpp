@@ -65,14 +65,16 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------
-    QObject::connect(&uiCore, &UiDesktopCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
+    QObject::connect(&uiSettings, &UiSettings::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
+    QObject::connect(&uiSettings, &UiSettings::sgTranslatorChanged, core, &Core::pushReadPresetCommands);
+    QObject::connect(&uiSettings, &UiSettings::sgApplicationStarted, netCore, &NetCore::requestAppUpdates);
+
     QObject::connect(&uiCore, &UiDesktopCore::sgReadAllParameters, core, &Core::readAllParameters);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetParameter, core, &Core::setParameter);
     QObject::connect(&uiCore, &UiDesktopCore::sgRestoreValue, core, &Core::restoreValue);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetImpuls, core, &Core::setImpulse);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
     QObject::connect(&uiCore, &UiDesktopCore::sgEscImpuls, core, &Core::escImpulse);
-    QObject::connect(&uiCore, &UiDesktopCore::sgTranslatorChanged, core, &Core::pushReadPresetCommands);
     QObject::connect(&uiCore, &UiDesktopCore::sgExportPreset, core, &Core::exportPreset);
     QObject::connect(&uiCore, &UiDesktopCore::sgImportPreset, core, &Core::importPreset);
     QObject::connect(&uiCore, &UiDesktopCore::sgSw4Enable, core, &Core::sw4Enable);
@@ -83,10 +85,11 @@ int main(int argc, char *argv[])
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);
     QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiDesktopCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
 
+    NetCore::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
+    NetCore::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiDesktopCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
+    NetCore::connect(netCore, &NetCore::sgNewAppVersionAvaliable, &uiCore, &UiDesktopCore::slNewAppVersionAvaliable);
 //    QObject::connect(&uiCore, &UICore::sgDoOnlineFirmwareUpdate, &netCore, &NetCore::requestFirmwareFile);
-    QObject::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
 //    QObject::connect(&netCore, &NetCore::sgFirmwareDownloaded, &core, &Core::uploadFirmware);
-//    QObject::connect(&netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UICore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
 //    QObject::connect(&netCore, &NetCore::sgDownloadProgress, &uiCore, &UICore::sgDownloadProgress, Qt::QueuedConnection);
 
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, interfaceManager, &InterfaceCore::startScanning, Qt::QueuedConnection);

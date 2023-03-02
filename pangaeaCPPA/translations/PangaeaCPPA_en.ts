@@ -85,93 +85,103 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="81"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="93"/>
         <source>Modules direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="83"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="95"/>
         <source>Left to right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="89"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="101"/>
         <source>Right to left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="98"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="111"/>
+        <source>Autoconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="120"/>
+        <source>Check updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="129"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="100"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="131"/>
         <source>IR convertor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="107"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="138"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="110"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="141"/>
         <source>AMT web site</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="116"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="147"/>
         <source>Pangaea web page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="126"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="157"/>
         <source>Device manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="135"/>
-        <location filename="../qml/Layouts/MainMenu.qml" line="198"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="166"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="229"/>
         <source>About...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="150"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="181"/>
         <source>Import preset file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="164"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="195"/>
         <source>Export preset file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="181"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="212"/>
         <source>Disconnect?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="182"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="213"/>
         <source>Are you sure want to disconnect?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="199"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="230"/>
         <source>AMT Pangaea CP-16/CP-100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="200"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="231"/>
         <source>Desktop application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="201"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="232"/>
         <source>Version: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="202"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="233"/>
         <source>(c) 2023</source>
         <translation type="unfinished"></translation>
     </message>
@@ -229,37 +239,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="87"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="89"/>
         <source>Run IR converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="95"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="97"/>
         <source>AMT electronics web-site</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="103"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="105"/>
         <source>Pangaea web page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="115"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="117"/>
         <source>Settings:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="122"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="124"/>
         <source>Autoconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="134"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="142"/>
         <source>Check updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/StartLayout.qml" line="150"/>
+        <location filename="../qml/Layouts/StartLayout.qml" line="166"/>
         <source>Application language:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -307,52 +317,79 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="180"/>
+        <location filename="../qml/main.qml" line="222"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="181"/>
+        <location filename="../qml/main.qml" line="223"/>
         <source>Version error!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="204"/>
+        <location filename="../qml/main.qml" line="201"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="226"/>
+        <location filename="../qml/main.qml" line="227"/>
         <source>Minimum requsted version is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="206"/>
+        <location filename="../qml/main.qml" line="203"/>
         <source>Do you want to convert it before upload?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="212"/>
+        <location filename="../qml/main.qml" line="209"/>
         <source>Not a Pangaea preset file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="224"/>
+        <location filename="../qml/main.qml" line="225"/>
         <source>Firmware version of your device is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="289"/>
+        <location filename="../qml/main.qml" line="235"/>
+        <location filename="../qml/main.qml" line="245"/>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="236"/>
+        <source></source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="237"/>
+        <source>New firmware version(v.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="239"/>
+        <location filename="../qml/main.qml" line="249"/>
+        <source>) avaliable on the server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="247"/>
+        <source>New application version(v.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/main.qml" line="300"/>
         <source>Device is unavaliable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="296"/>
+        <location filename="../qml/main.qml" line="307"/>
         <source>Command exchange error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="315"/>
+        <location filename="../qml/main.qml" line="326"/>
         <source>Device disconnected</source>
         <translation type="unfinished"></translation>
     </message>

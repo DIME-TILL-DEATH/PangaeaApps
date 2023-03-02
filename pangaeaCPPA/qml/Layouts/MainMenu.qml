@@ -49,31 +49,43 @@ MenuBar{
 
             Action{
                 id: menuEn
+
                 text: "English"
                 checkable: true
+                checked: UiSettings.appLanguageCode === "en"
                 ActionGroup.group: languageGroup
-                onTriggered: UiCore.setLanguage("en");
+
+                onTriggered: UiSettings.setLanguage("en");
             }
             Action{
                 id: menuRu
+
                 text: "Русский"
                 checkable: true
+                checked: UiSettings.appLanguageCode === "ru"
                 ActionGroup.group: languageGroup
-                onTriggered: UiCore.setLanguage("ru");
+
+                onTriggered: UiSettings.setLanguage("ru");
             }
             Action{
                 id: menuIt
+
                 text: "Italiano"
                 checkable: true
+                checked: UiSettings.appLanguageCode === "it"
                 ActionGroup.group: languageGroup
-                onTriggered: UiCore.setLanguage("it");
+
+                onTriggered: UiSettings.setLanguage("it");
             }
             Action{
                 id: menuDe
+
                 text: "Deutsch"
                 checkable: true
+                checked: UiSettings.appLanguageCode === "de"
                 ActionGroup.group: languageGroup
-                onTriggered: UiCore.setLanguage("de");
+
+                onTriggered: UiSettings.setLanguage("de");
             }
         }
 
@@ -225,17 +237,6 @@ MenuBar{
     Connections{
         target: UiCore
 
-        function onSgSetUIText(nameParam, inString){
-            if(nameParam === "application_language")
-            {
-                if(inString === "en") {menuEn.checked = true; return;}
-                if(inString === "ru") {menuRu.checked = true; return;}
-                if(inString === "it") {menuIt.checked = true; return;}
-                if(inString === "de") {menuDe.checked = true; return;}
-
-            }
-        }
-
         function onSgSetUIParameter(nameParam, value)
         {
             if(nameParam === "type_dev")
@@ -248,19 +249,7 @@ MenuBar{
                     case 3: menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual"; break;
                     case 4: menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual"; break;
                 }
-
-                console.log("Settling device path:", value, menuDeviceManual.strManualBaseName)
             }
-
-//            if(nameParam === "autoconnect_enable")
-//            {
-//                menuAutoconnect.checked = value;
-//            }
-
-//            if(nameParam === "check_updates_enable")
-//            {
-//                menuCheckUpdates.checked = value;
-//            }
         }
     }
 }

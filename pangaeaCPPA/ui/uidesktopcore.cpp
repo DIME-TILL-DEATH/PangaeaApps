@@ -8,40 +8,15 @@
 #include <QCoreApplication>
 #include <QUrl>
 
+#include <QSettings>
+
 #include "resampler.h"
 #include "uidesktopcore.h"
 
 UiDesktopCore::UiDesktopCore(QObject *parent)
     : QObject{parent}
 {
-    appSettings = new QSettings(QSettings::UserScope);
-}
 
-UiDesktopCore::~UiDesktopCore()
-{
-}
-
-void UiDesktopCore::setupApplication()
-{
-    //TODO to UiSettings
-    QString appLanguage = appSettings->value("application_language", "autoselect").toString();
-
-    if(appLanguage=="autoselect")
-    {
-        appLanguage = QLocale().name().left(2);
-    }
-    setLanguage(appLanguage);
-
-//    QString colorTheme = appSettings->value("color_theme", "dark_orange").toString();
-//    emit sgSetUIText("color_theme", colorTheme);
-
-    quint16 windowWidth = appSettings->value("window_width").toUInt();
-    if(windowWidth>0) emit sgSetUIParameter("window_width", windowWidth);
-
-    quint16 windowHeight = appSettings->value("window_height").toUInt();
-    if(windowHeight) emit sgSetUIParameter("window_height", windowHeight);
-
-    emit sgApplicationSetupComplete();
 }
 
 void UiDesktopCore::setParameter(QString name, quint8 val)
@@ -102,18 +77,9 @@ void UiDesktopCore::importPreset(QString filePath)
     emit sgImportPreset(filePath, fileInfo.fileName());
 }
 
-void UiDesktopCore::setLanguage(QString languageCode)
-{
-    appSettings->setValue("application_language", languageCode);
-    appSettings->sync();
-
-    loadTranslator(languageCode);
-    emit sgSetUIText("application_language", languageCode);
-}
-
 void UiDesktopCore::openManualExternally(QString fileName)
 {
-    QString appLanguage = appSettings->value("application_language", "autoselect").toString();
+    QString appLanguage = QSettings(QSettings::UserScope).value("application_language", "autoselect").toString();
 
     if(appLanguage=="autoselect")
     {
@@ -141,37 +107,6 @@ void UiDesktopCore::runIrConvertor()
 #endif
 }
 
-void UiDesktopCore::loadTranslator(QString languageCode)
-{
-    if(QCoreApplication::removeTranslator(&m_translator)) qDebug() << "Old translator removed";
-
-    if(languageCode=="autoselect")
-    {
-        loadDefaultTranslator();
-        return;
-    }
-
-    if (m_translator.load(pathFromCode.value(languageCode)))
-    {
-        qDebug() << "Translator loaded. Language: " << m_translator.language();
-        QCoreApplication::installTranslator(&m_translator);
-
-        emit sgTranslatorChanged(languageCode);
-    }
-    else qDebug() << "Translator not found. Using english";
-}
-
-void UiDesktopCore::loadDefaultTranslator()
-{
-    if (m_translator.load(QLocale(), QLatin1String("PangaeaCPPA"),
-                        QLatin1String("_"), ":/translations/"))
-    {
-        qDebug() << "Default ranslator loaded. Locale: " << QLocale();
-        QCoreApplication::installTranslator(&m_translator);
-        emit sgTranslatorChanged(QLocale().nativeLanguageName());
-    }
-}
-
 void UiDesktopCore::slProposeNetFirmwareUpdate(Firmware *updateFirmware, Firmware *oldFirmware)
 {
     emit sgSetUIText("firmware_local_path", updateFirmware->path());
@@ -185,15 +120,7 @@ void UiDesktopCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Fi
     emit sgSetUIText("firmware_local_path", minimalFirmware->path());
 }
 
-const QString &UiDesktopCore::moduleName() const
+void UiDesktopCore::slNewAppVersionAvaliable(QString appVersion)
 {
-    return m_moduleName;
-}
-
-void UiDesktopCore::setModuleName(const QString &newModuleName)
-{
-    if (m_moduleName == newModuleName)
-        return;
-    m_moduleName = newModuleName;
-    emit sgModuleNameChanged(newModuleName);
+    emit sgSetUIText("new_app_version_avaliable", appVersion);
 }

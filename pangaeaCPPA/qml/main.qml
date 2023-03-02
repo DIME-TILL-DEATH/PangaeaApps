@@ -15,7 +15,7 @@ ApplicationWindow
     id: main
     visible: true
 
-    width:  Screen.width * 0.75
+    width: Screen.width * 0.75
     height: width * 0.4
 
     minimumWidth: width*0.75
@@ -175,10 +175,7 @@ ApplicationWindow
 
     MessageDialog
     {
-        id: _msgVersionError
-
-        title: qsTr("Warning")
-        text: qsTr("Version error!")
+        id: _msgVersionInform        
     }
 
     MBusy
@@ -221,27 +218,41 @@ ApplicationWindow
             if(nameParam === "version_error")
             {
                  var versionArray = inString.split(',');
-                _msgVersionError.informativeText = qsTr("Firmware version of your device is ") +
+
+                _msgVersionInform.title = qsTr("Warning")
+                _msgVersionInform.text = qsTr("Version error!")
+
+                _msgVersionInform.informativeText = qsTr("Firmware version of your device is ") +
                         versionArray[0] + "\n" +
                         qsTr("Minimum requsted version is ") + versionArray[1]
-                _msgVersionError.visible = true;
+                _msgVersionInform.visible = true;
+            }
+
+            if(nameParam === "new_firmware_avaliable")
+            {
+                versionArray = inString.split(',');
+
+                _msgVersionInform.title = qsTr("Info")
+                _msgVersionInform.text = ""
+                _msgVersionInform.informativeText = qsTr("New firmware version(v.") +
+                        versionArray[1] +
+                        qsTr(") avaliable on the server")
+                _msgVersionInform.visible = true;
+            }
+
+            if(nameParam === "new_app_version_avaliable")
+            {
+                _msgVersionInform.title = qsTr("Info")
+                _msgVersionInform.text = ""
+                _msgVersionInform.informativeText = qsTr("New application version(v.") +
+                        inString +
+                        qsTr(") avaliable on the server")
+                _msgVersionInform.visible = true;
             }
         }
 
         function onSgSetUIParameter(nameParam, value)
         {
-            if(nameParam === "window_width")
-            {
-                main.width = value;
-                main.x = Screen.width/2 - main.width/2
-            }
-
-            if(nameParam === "window_height")
-            {
-                main.height = value;
-                main.y = Screen.height/2 - main.height/2
-            }
-
             if(nameParam === "preset_edited")
             {
                 edit = value;
@@ -330,8 +341,17 @@ ApplicationWindow
     }
 
     Component.onCompleted: {
-        UiCore.setupApplication();
+        UiSettings.setupApplication();
         InterfaceManager.startScanning();
+
+        if(main.width!==0)
+        {
+            main.width = UiSettings.windowWidth
+            main.height = UiSettings.windowHeight
+        }
+
+        main.x = Screen.width/2 - main.width/2;
+        main.y = Screen.height/2 - main.height/2
     }
 
     onClosing: function(close)
@@ -347,4 +367,3 @@ ApplicationWindow
         }
     }
 }
-

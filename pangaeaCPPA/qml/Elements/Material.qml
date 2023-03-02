@@ -19,6 +19,7 @@ Item
         //TODO: цвет что и у модуля при первом запуске анимации.В итоге эффект не виден
         color: topItem.on ? Style.mainEnabledColor : Style.mainDisabledColor
 
+
         transform: Translate
         {
             x: -colorRect.width / 2

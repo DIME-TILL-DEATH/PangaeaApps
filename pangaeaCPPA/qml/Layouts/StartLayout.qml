@@ -171,52 +171,25 @@ RowLayout{
                 ComboBox{
                     id: languageCombo
 
-                    //height: parent.height
-
                     anchors.verticalCenter: parent.verticalCenter
 
+                    property var codesMap: {"en": 0, "ru": 1, "it": 2, "de": 3}
                     model: ["English", "Русский", "Italiano", "Deutsch"]
+
+                    currentIndex: codesMap[UiSettings.appLanguageCode]
 
                     onActivated: function activated(index){
                         var strLanguageCode;
-                            switch(index){
-                                case 0: strLanguageCode = "en"; break;
-                                case 1: strLanguageCode = "ru"; break;
-                                case 2: strLanguageCode = "it"; break;
-                                case 3: strLanguageCode = "de"; break;
-                            }
-                            UiCore.setLanguage(strLanguageCode);
+                        switch(index){
+                            case 0: strLanguageCode = "en"; break;
+                            case 1: strLanguageCode = "ru"; break;
+                            case 2: strLanguageCode = "it"; break;
+                            case 3: strLanguageCode = "de"; break;
+                        }
+                        UiSettings.setLanguage(strLanguageCode);
                     }
                 }
             }
         }
-    }
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIText(nameParam, inString){
-            if(nameParam === "application_language")
-            {
-                if(inString === "en") {languageCombo.currentIndex = 0; return;}
-                if(inString === "ru") {languageCombo.currentIndex = 1; return;}
-                if(inString === "it") {languageCombo.currentIndex = 2; return;}
-                if(inString === "de") {languageCombo.currentIndex = 3; return;}
-
-                languageCombo.currentIndex = 0;
-            }
-        }
-
-//        function onSgSetUIParameter(nameParam, inValue){
-//            if(nameParam === "autoconnect_enable")
-//            {
-//                swAutoconnect.checked = inValue;
-//            }
-
-//            if(nameParam === "check_updates_enable")
-//            {
-//                swCheckUpdates.checked = inValue;
-//            }
-//        }
     }
 }

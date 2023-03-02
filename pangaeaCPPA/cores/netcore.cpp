@@ -1,5 +1,9 @@
 #include <QMetaEnum>
 #include <QDebug>
+#include <QSysInfo>
+#include <QCoreApplication>
+
+#include <QVersionNumber>
 
 #include "netcore.h"
 
@@ -11,14 +15,13 @@ NetCore::NetCore(QObject *parent)
 
 void NetCore::requestAppUpdates()
 {
-
+    if(QSettings(QSettings::UserScope).value("check_updates_enable", false).toBool())
+    {
+        jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_applications.json"));
+        m_networkManager->get(jsonDataRequest);
+        connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnApplicationVersionReqResult);
+    }
 }
-
-//void NetCore::initialize()
-//{
-////    m_networkManager->moveToThread(this->thread());
-
-//}
 
 void NetCore::requestNewestFirmware(Firmware *actualFirmware)
 {
@@ -39,35 +42,20 @@ void NetCore::requestNewestFirmware(Firmware *actualFirmware)
 
     deviceFirmware = actualFirmware;
 
-    if(isAutocheckFirmwareEnabled)
+    if(QSettings(QSettings::UserScope).value("check_updates_enable", false).toBool())
     {
-//        requestJsonData();
         jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_firmwares.json"));
         m_networkManager->get(jsonDataRequest);
         connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFirmwareVersionReqResult);
     }
 }
 
-//void NetCore::requestJsonData()
-//{
-//    jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_firmwares.json"));
-//    m_networkManager->get(jsonDataRequest);
-//    connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFirmwareVersionReqResult);
-//}
-
-void NetCore::requestFirmwareFile()
-{
-    QNetworkReply* reply = m_networkManager->get(firmwareFileRequest);
-    connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFileReqResult);
-    connect(reply, &QNetworkReply::downloadProgress, this, &NetCore::sgDownloadProgress);
-}
-
 void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
 {
-    qDebug() << "Server answer for json request recieved";
+    qDebug() << "Server answer for firmware json request recieved";
     if(!reply->error())
     {
-        parseJsonAnswer(reply);
+        parseFirmwareJsonAnswer(reply);
 
         qDebug() << "actual: " << deviceFirmware->firmwareVersion() << " avaliable: " << newestFirmware->firmwareVersion();
 
@@ -86,6 +74,13 @@ void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
     disconnect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFirmwareVersionReqResult);
 }
 
+void NetCore::requestFirmwareFile()
+{
+    QNetworkReply* reply = m_networkManager->get(firmwareFileRequest);
+    connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFileReqResult);
+    connect(reply, &QNetworkReply::downloadProgress, this, &NetCore::sgDownloadProgress);
+}
+
 void NetCore::slOnFileReqResult(QNetworkReply *reply)
 {
     qDebug() << "Server answer for firmware file request recieved";
@@ -97,7 +92,23 @@ void NetCore::slOnFileReqResult(QNetworkReply *reply)
     disconnect(reply, &QNetworkReply::downloadProgress, this, &NetCore::sgDownloadProgress);
 }
 
-bool NetCore::parseJsonAnswer(QNetworkReply* reply)
+void NetCore::slOnApplicationVersionReqResult(QNetworkReply *reply)
+{
+    qDebug() << "Server answer for applications json request recieved";
+    if(!reply->error())
+    {
+        parseApplicationJsonAnswer(reply);
+    }
+    else
+    {
+        QMetaEnum errorString = QMetaEnum::fromType<QNetworkReply::NetworkError>();
+        qDebug() << "Server reply error" << errorString.valueToKey(reply->error());
+    }
+    reply->deleteLater();
+    disconnect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnApplicationVersionReqResult);
+}
+
+bool NetCore::parseFirmwareJsonAnswer(QNetworkReply* reply)
 { 
     QByteArray baReply = reply->readAll();
 
@@ -129,6 +140,38 @@ bool NetCore::parseJsonAnswer(QNetworkReply* reply)
         delete newestFirmware;
 
     newestFirmware = new Firmware(newestFirmwareVersionString, deviceFirmware->deviceType(), FirmwareType::NetworkUpdate, "net:/rawByteArray");
+
+    return true;
+}
+
+bool NetCore::parseApplicationJsonAnswer(QNetworkReply *reply)
+{
+    QByteArray baReply = reply->readAll();
+
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(baReply);
+    QJsonObject jsonRoot = jsonDocument.object();
+
+    QString osName = QSysInfo::productType();
+    qDebug() << "OS name: " << osName;
+
+    if(jsonRoot.contains(osName) && jsonRoot[osName].isObject())
+    {
+        QJsonObject jsonDeviceObject = jsonRoot[osName].toObject();
+
+        if(jsonDeviceObject.contains("version") && jsonDeviceObject["version"].isString())
+        {
+            QString newestApplicationVersionString = jsonDeviceObject["version"].toString();
+
+            QVersionNumber newestVersion = QVersionNumber::fromString(newestApplicationVersionString);
+            QVersionNumber currentVersion = QVersionNumber::fromString(QCoreApplication::applicationVersion());
+
+            qDebug() << "App versions, current: " << currentVersion << " newest: " << newestVersion;
+
+            if(newestVersion > currentVersion) emit sgNewAppVersionAvaliable(newestApplicationVersionString);
+        }
+        else return false;
+    }
+    else return false;
 
     return true;
 }
