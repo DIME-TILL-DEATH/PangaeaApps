@@ -8,7 +8,8 @@ import QtQuick.Window 2.15
 import StyleSettings 1.0
 import Layouts 1.0
 
-import CppObjects 1.0
+import CppObjects
+import CppEnums
 
 ApplicationWindow
 {
@@ -274,11 +275,11 @@ ApplicationWindow
             {
                 switch (value)
                 {
-                case 0: devName = "";  break;
-                case 1: devName = "CP-100";  break;
-                case 2: devName = "CP-16M";  break;
-                case 3: devName = "CP-16PA"; break;
-                case 4: devName = "CP-100PA"; break;
+                default: devName = "";  break;
+                case DeviceType.CP100: devName = "CP-100";  break;
+                case DeviceType.CP16: devName = "CP-16M";  break;
+                case DeviceType.CP16PA: devName = "CP-16PA"; break;
+                case DeviceType.CP100PA: devName = "CP-100PA"; break;
                 }
             }
         }

@@ -2,7 +2,8 @@ import QtQuick
 
 import Elements
 import StyleSettings
-import CppObjects 1.0
+import CppObjects
+import CppEnums
 
 Item
 {
@@ -153,27 +154,27 @@ Item
             {              
                 switch (value)
                 {
-                    case 1:
+                    case DeviceType.CP100:
                     {
                         maxMapRow = 10;
                         switchPostPre.isAvaliable = false;
                         break;
                     }
-                    case 2:
+                    case DeviceType.CP16:
                     {
                         controlMultiplier = 16;
                         maxMapRow = 4;
                         switchPostPre.isAvaliable = false;
                         break;
                     }
-                    case 3:
+                    case DeviceType.CP16PA:
                     {
                         controlMultiplier = 16;
                         maxMapRow = 4;
                         switchPostPre.isAvaliable = true;
                         break;
                     }
-                    case 4:
+                    case DeviceType.CP100PA:
                     {
                         maxMapRow = 10;
                         switchPostPre.isAvaliable = true;

@@ -17,6 +17,8 @@
 
 #include "threadcontroller.h"
 
+#include "devicetypeenum.h"
+
 void manageSegFailure(int signalCode);
 Logger* Logger::currentHandler = nullptr;
 Logger* appLogger_ptr;
@@ -62,6 +64,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<DeviceDescription>();
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
 
+    qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------

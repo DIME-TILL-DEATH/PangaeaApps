@@ -2,11 +2,12 @@ import QtQuick
 import QtQuick.Controls
 
 import CppObjects
+import CppEnums
 
 Item
 {
     id: main
-    property int value: 0
+    property int deviceType: 0
 
     Image
     {
@@ -19,10 +20,17 @@ Item
         mipmap: true
         smooth: true
 
-        source: (value==4) ? "qrc:/qml/Images/cp_100_pa.svg" : (value==3)
-                           ? "qrc:/qml/Images/cp_16m_pa.svg" :(value==2)
-                           ? "qrc:/qml/Images/cp_16m.svg" : (value==1)
-                           ? "qrc:/qml/Images/cp_100.svg" : ""
+        source: {
+            switch(deviceType)
+            {
+                case DeviceType.CP100: return "qrc:/qml/Images/cp_100.svg";
+                case DeviceType.CP100PA: return "qrc:/qml/Images/cp_100_pa.svg";
+                case DeviceType.CP16: return "qrc:/qml/Images/cp_16m.svg";
+                case DeviceType.CP16PA: return "qrc:/qml/Images/cp_16_pa.svg";
+                default: ""
+            }
+        }
+
         sourceSize.width:  width
         sourceSize.height: height
     }
@@ -33,7 +41,7 @@ Item
         function onSgSetUIParameter(nameParam, value)
         {
             if(nameParam===("type_dev"))
-                main.value = value
+                main.deviceType = value
         }
     }
 }

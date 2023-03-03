@@ -6,7 +6,8 @@ import QtQml.Models 2.2
 import Modules 1.0
 import StyleSettings 1.0
 
-import CppObjects 1.0
+import CppObjects
+import CppEnums
 
 Item
 {
@@ -210,7 +211,7 @@ Item
         {
             if(nameParam===("type_dev"))
             {
-                isPaFirmware = ((value===3)||(value===4));
+                isPaFirmware = ((value===DeviceType.CP16PA)||(value===DeviceType.CP100PA));
 
                 if(value>0) placeAllModuls();
             }

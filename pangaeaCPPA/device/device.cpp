@@ -15,19 +15,19 @@ void Device::setDeviceType(DeviceType newDeviceType)
     // TODO: не хардкодить пути и число банков
     switch(m_deviceType)
     {
-        case CP16:
+        case DeviceType::CP16:
             m_minimalFirmware = new Firmware(CP16_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
             m_maxBankPresetCount = 4;
         break;
-        case CP16PA:
+        case DeviceType::CP16PA:
             m_minimalFirmware = new Firmware(CP16PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
             m_maxBankPresetCount = 4;
         break;
-        case CP100:
+        case DeviceType::CP100:
             m_minimalFirmware = new Firmware(CP100_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
             m_maxBankPresetCount = 10;
         break;
-        case CP100PA:
+        case DeviceType::CP100PA:
             m_minimalFirmware = new Firmware(CP100PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
             m_maxBankPresetCount = 10;
         break;

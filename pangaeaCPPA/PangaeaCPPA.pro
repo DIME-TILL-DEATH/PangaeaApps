@@ -11,14 +11,14 @@ QT += bluetooth
 DEFINES += PANGAEA_DESKTOP
 
 win32: {
-    VERSION = 1.0.1713.1
+    VERSION = 1.0.1714.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1713
+else: VERSION = 1.0.1714
 
 CONFIG += c++11
 
@@ -66,6 +66,7 @@ HEADERS += \
     interfaces/devicedescription.h \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
+    qmlEnums/devicetypeenum.h \
     threadcontroller.h \
     ui/uidesktopcore.h \
     ui/uiinterfacemanager.h \
@@ -79,6 +80,7 @@ INCLUDEPATH += cores
 INCLUDEPATH += device
 INCLUDEPATH += interfaces
 INCLUDEPATH += models
+INCLUDEPATH += qmlEnums
 INCLUDEPATH += ui
 INCLUDEPATH += utils
 

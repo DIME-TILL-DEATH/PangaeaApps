@@ -132,6 +132,10 @@ MenuBar{
 
             onTriggered: UiCore.runIrConvertor();
         }
+
+        MenuItem{
+            text: qsTr("Update firmware")
+        }
     }
 
     Menu{

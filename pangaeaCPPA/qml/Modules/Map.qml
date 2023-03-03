@@ -4,7 +4,8 @@ import QtQuick.Controls
 import Elements
 import StyleSettings
 
-import CppObjects 1.0
+import CppObjects
+import CppEnums
 
 Item
 {
@@ -128,10 +129,10 @@ Item
             {
                 switch (value)
                 {
-                case 1: maxMapRow = 10;  break;
-                case 2: maxMapRow = 4;  break;
-                case 3: maxMapRow = 4; break;
-                case 4: maxMapRow = 10; break;
+                    case DeviceType.CP100: maxMapRow = 10;  break;
+                    case DeviceType.CP100PA: maxMapRow = 10;  break;
+                    case DeviceType.CP16: maxMapRow = 4; break;
+                    case DeviceType.CP16PA: maxMapRow = 4; break;
                 }
             }
         }

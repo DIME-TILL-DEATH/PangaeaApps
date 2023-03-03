@@ -3,16 +3,9 @@
 
 #include <QObject>
 
-class Firmware;
+#include "devicetypeenum.h"
 
-enum DeviceType
-{
-    UnknownDev=0,
-    CP100,
-    CP16,
-    CP16PA,
-    CP100PA
-};
+class Firmware;
 
 class Device
 {
