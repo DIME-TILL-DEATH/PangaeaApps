@@ -144,7 +144,7 @@ Item
         {
             if (nameParam==="impulse_name")
             {
-                impulsTxt.text=value;
+                impulsTxt.text = (value==="") ? qsTr("empty") : value;
             }
         }
 

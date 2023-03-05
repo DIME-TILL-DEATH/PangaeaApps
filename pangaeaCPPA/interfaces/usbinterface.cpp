@@ -105,8 +105,8 @@ bool UsbInterface::connect(DeviceDescription device)
     {
         qDebug() << __FUNCTION__<< "Serial port is opened";
         m_connectedDevice = device;
-        emit sgInterfaceConnected(device);
         setState(InterfaceState::AcquireData);
+        emit sgInterfaceConnected(device);
     }
     else
     {
@@ -130,6 +130,8 @@ void UsbInterface::checkConnection()
 {
     // legacy костыль. Так до меня ловили ошибку при отключении USB. Не убирать
     m_port->setBaudRate(9600);
+
+    qDebug() << "check connection" << m_port->bytesAvailable();
 }
 
 void UsbInterface::disconnectFromDevice()

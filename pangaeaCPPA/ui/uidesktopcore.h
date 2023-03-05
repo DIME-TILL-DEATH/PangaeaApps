@@ -29,6 +29,8 @@ public:
     Q_INVOKABLE void openManualExternally(QString fileName);
     Q_INVOKABLE void runIrConvertor();
 
+    Q_INVOKABLE void updateFirmware(QString filePath);
+
 signals:
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);

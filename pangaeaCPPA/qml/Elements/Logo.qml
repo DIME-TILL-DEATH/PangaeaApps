@@ -26,7 +26,7 @@ Item
                 case DeviceType.CP100: return "qrc:/qml/Images/cp_100.svg";
                 case DeviceType.CP100PA: return "qrc:/qml/Images/cp_100_pa.svg";
                 case DeviceType.CP16: return "qrc:/qml/Images/cp_16m.svg";
-                case DeviceType.CP16PA: return "qrc:/qml/Images/cp_16_pa.svg";
+                case DeviceType.CP16PA: return "qrc:/qml/Images/cp_16m_pa.svg";
                 default: ""
             }
         }

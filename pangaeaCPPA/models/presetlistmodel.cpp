@@ -17,6 +17,7 @@ QHash<int, QByteArray> PresetListModel::roleNames() const
     roles[ListRoles::PresetDeviceIndexRole] = "presetDeviceIndex";
     roles[ListRoles::PresetMapIndexRole] = "presetMapIndex";
     roles[ListRoles::ImpulseNameRole] = "impulseName";
+    roles[ListRoles::isImpulseEmptyRole] = "isImpulseEmpty";
     roles[ListRoles::ImpulseEnabledRole] = "isImpulseEnabled";
 
     return roles;
@@ -65,7 +66,15 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
 
         case ListRoles::ImpulseNameRole:
         {
-            return QVariant::fromValue(m_presetList->at(index.row()).impulseName());
+            QString impulseName = m_presetList->at(index.row()).impulseName();
+            if(impulseName == "") impulseName = QObject::tr("empty");
+
+            return QVariant::fromValue(impulseName);
+        }
+
+        case ListRoles::isImpulseEmptyRole:
+        {
+            return QVariant::fromValue(m_presetList->at(index.row()).impulseName() == "");
         }
 
         case ListRoles::ImpulseEnabledRole:

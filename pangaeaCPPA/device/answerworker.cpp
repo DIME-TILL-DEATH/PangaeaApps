@@ -52,6 +52,8 @@ AnswerWorker::AnswerWorker()
 
     m_devCommandList.append(DeviceAnswer(new Parser("dcc\rEND\n", "11111111"), AnswerType::ackDcc, "delete wav in preset directory"));
     m_devCommandList.append(DeviceAnswer(new Parser("preset_delete_wavs\rEND\n", "11111111"), AnswerType::ackDcc, "delete wav in preset directory"));
+    m_devCommandList.append(DeviceAnswer(new Parser("pwsd\rEND\n", "111111111"), AnswerType::ackDcc, "delete wav in preset directory"));
+
 
     m_devCommandList.append(DeviceAnswer(new Parser("lcc\rEND\n", "11111111"), AnswerType::ackLcc, "cancel impulse"));
     m_devCommandList.append(DeviceAnswer(new Parser("esc\rEND\n", "11111111"), AnswerType::ackEsc, "return preset to saved state"));

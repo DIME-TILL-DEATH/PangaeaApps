@@ -72,7 +72,7 @@ void Core::parseInputData(const QByteArray& ba)
                     controlledDevice.setDeviceType(deviceType);
 
                     emit sgSetUIParameter("type_dev", deviceType);
-                    emit sgSetUIParameter("set_max_map", controlledDevice.maxBankPresetCount());
+                    emit sgSetUIParameter("set_max_map", controlledDevice.maxBankPresetCount()); //TODO for mobile?
                     qInfo() << recievedCommand.description();
                 }
                 break;
@@ -227,7 +227,7 @@ void Core::parseInputData(const QByteArray& ba)
 
                     QByteArray ba = *it;
                     if(ba=="*")
-                        ba="empty";
+                        ba="";
                     quint16 positionEndName = ba.lastIndexOf(".wav ");
                     currentPreset.setImpulseName(ba.left(positionEndName+4));
                     impulsNames.append(ba.left(positionEndName+4));
@@ -255,13 +255,13 @@ void Core::parseInputData(const QByteArray& ba)
                 if(parseResult.size()>0)
                     impulseName = recievedCommand.parseResult().at(0);
                 else
-                    impulseName = QObject::tr("empty");
+                    impulseName = "";
 
                 switch(presetManager.currentState())
                 {
                     case PresetState::Compare:
                     {
-                        // Необходимая заглушкаю Не удалять!
+                        // Необходимая заглушка. Не удалять!
                         break;
                     }
 
@@ -679,7 +679,8 @@ void Core::saveChanges()
     if(currentPreset.waveData() == IRWorker::flatIr())
     {
         if(controlledDevice.deviceType()==DeviceType::CP16 || controlledDevice.deviceType()==DeviceType::CP16PA)
-            pushCommandToQueue("preset_delete_wavs");
+            pushCommandToQueue("pwsd");
+//            pushCommandToQueue("preset_delete_wavs");
         else
             pushCommandToQueue("dcc");
 
@@ -734,10 +735,10 @@ void Core::importPreset(QString filePath, QString fileName)
 
     if(importedPreset.waveData().isEmpty())
     {
-        if(currentPreset.impulseName() != QObject::tr("empty"))
+        if(currentPreset.impulseName() != "")
         {
             importedPreset.setWaveData(IRWorker::flatIr());
-            importedPreset.setImpulseName(QObject::tr("empty"));
+            importedPreset.setImpulseName("");
         }
     }
     uploadImpulseData(importedPreset.waveData(), true, importedPreset.impulseName());
@@ -800,10 +801,10 @@ void Core::pastePreset()
 
     if(copiedPreset.waveData().isEmpty())
     {
-        if(currentPreset.impulseName() != QObject::tr("empty"))
+        if(currentPreset.impulseName() != "")
         {
             copiedPreset.setWaveData(IRWorker::flatIr());
-            copiedPreset.setImpulseName(QObject::tr("empty"));
+            copiedPreset.setImpulseName(QObject::tr(""));
         }
     }
     uploadImpulseData(copiedPreset.waveData(), true, copiedPreset.impulseName());
@@ -931,6 +932,7 @@ void Core::readAllParameters()
     pushCommandToQueue("amtdev");
     pushCommandToQueue("amtver");
 
+    //TODO
     //   pushCommandToQueue("sw4 disable"); //CP100 не знает такой команды
 
     pushCommandToQueue("rns");

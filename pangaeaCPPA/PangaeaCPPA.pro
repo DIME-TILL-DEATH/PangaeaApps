@@ -103,8 +103,8 @@ win32-msvc: libsPath = $${PWD}/../shared_libs/lib.msvc2019
 INCLUDEPATH += $${PWD}/../shared_libs/include
 LIBS += -L$${libsPath} -lWavConverterLib
 
-DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.00\\\"
-DEFINES += CP16PA_FIRMWARE_VERSION=\\\"1.04.00\\\"
+DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.01\\\"
+DEFINES += CP16PA_FIRMWARE_VERSION=\\\"1.04.01\\\"
 DEFINES += CP100_FIRMWARE_VERSION=\\\"2.08.02\\\"
 DEFINES += CP100PA_FIRMWARE_VERSION=\\\"6.08.04\\\"
 

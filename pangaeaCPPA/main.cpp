@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     // connections
     //-------------------------------------------------------------------------------
     QObject::connect(&uiSettings, &UiSettings::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
-    QObject::connect(&uiSettings, &UiSettings::sgTranslatorChanged, core, &Core::pushReadPresetCommands);
+    //QObject::connect(&uiSettings, &UiSettings::sgTranslatorChanged, core, &Core::pushReadPresetCommands);
     QObject::connect(&uiSettings, &UiSettings::sgApplicationStarted, netCore, &NetCore::requestAppUpdates);
 
     QObject::connect(&uiCore, &UiDesktopCore::sgReadAllParameters, core, &Core::readAllParameters);

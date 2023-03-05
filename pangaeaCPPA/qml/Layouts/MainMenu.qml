@@ -135,6 +135,8 @@ MenuBar{
 
         MenuItem{
             text: qsTr("Update firmware")
+
+            onTriggered: pickFimwareFileDialog.open();
         }
     }
 
@@ -207,6 +209,20 @@ MenuBar{
             var cleanPath = currentFile.toString();//fileUrl.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
             UiCore.exportPreset(cleanPath);
+        }
+    }
+
+    FileDialog{
+        id: pickFimwareFileDialog
+
+        title: qsTr("Pick firmware file")
+
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+
+        onAccepted: {
+            var cleanPath = currentFile.toString();//fileUrl.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+            UiCore.updateFirmware(cleanPath);
         }
     }
 

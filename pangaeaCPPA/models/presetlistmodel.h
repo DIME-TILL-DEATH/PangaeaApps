@@ -32,7 +32,8 @@ private:
         PresetDeviceIndexRole,
         PresetMapIndexRole,
         ImpulseEnabledRole,
-        ImpulseNameRole
+        ImpulseNameRole,
+        isImpulseEmptyRole
     };
 };
 
