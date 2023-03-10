@@ -586,26 +586,26 @@ void Core::setFirmware(QString fullFilePath)
 
     emit sgSetUIText("firmware_path", fullFilePath);
 
-    QFile *file = new QFile(fullFilePath.toUtf8());
-
-    if(file != nullptr)
+    if(!Firmware::isFirmwareFile(fullFilePath))
     {
-        if(file->open(QIODevice::ReadOnly))
-        {
-            QByteArray baFW = file->read(file->size());
-            uploadFirmware(baFW);
+        emit sgSetUIText("not_fw_file_error", fullFilePath);
+        qDebug() << __FUNCTION__ << "Not firmware file";
+        return;
+    }
 
-            file->close();
-        }
-        else
-        {
-            qDebug() << __FUNCTION__ << __LINE__ << "Can not open file " << fullFilePath;
-            emit sgSetUIText("open_fw_file_error", fullFilePath);
-        }
+    QFile file(fullFilePath.toUtf8());
+
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QByteArray baFW = file.read(file.size());
+        uploadFirmware(baFW);
+
+        file.close();
     }
     else
     {
         qDebug() << __FUNCTION__ << __LINE__ << "Can not open file " << fullFilePath;
+        emit sgSetUIText("open_fw_file_error", fullFilePath);
     }
 }
 

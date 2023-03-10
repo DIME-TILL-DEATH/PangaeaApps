@@ -217,13 +217,40 @@ MenuBar{
 
         title: qsTr("Pick firmware file")
 
+        property string cleanPath
+
         currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
 
         onAccepted: {
-            var cleanPath = currentFile.toString();//fileUrl.toString();
+            cleanPath = currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            UiCore.updateFirmware(cleanPath);
+//            UiCore.updateFirmware(cleanPath);
+            aproveFileDialog.open();
         }
+    }
+
+    MessageDialog{
+        id: aproveFileDialog
+
+        title: qsTr("Load firmware file")
+        text: qsTr("Are you sure want to upload firmware file\n") + pickFimwareFileDialog.cleanPath;
+
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes:
+                UiCore.updateFirmware(pickFimwareFileDialog.cleanPath);
+                break;
+            }
+        }
+    }
+
+    MessageDialog{
+        id: notFwFileDialog
+
+        title: qsTr("Error")
+        text: qsTr("Not a fiwmare file!")
     }
 
     MessageDialog{
@@ -269,6 +296,14 @@ MenuBar{
                     case 3: menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual"; break;
                     case 4: menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual"; break;
                 }
+            }
+        }
+
+        function onSgSetUIText(nameParam, auxText)
+        {
+            if(nameParam === "not_fw_file_error")
+            {
+                notFwFileDialog.open();
             }
         }
     }

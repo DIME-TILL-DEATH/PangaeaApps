@@ -48,6 +48,8 @@ public:
     const QByteArray &rawData() const;
     void setRawData(const QByteArray &newRawData);
 
+    static bool isFirmwareFile(QString filePath);
+
 private:
     QString m_firmwareVersionString{""};
     DeviceType m_deviceType;

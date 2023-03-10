@@ -1,3 +1,4 @@
+#include <QFile>
 #include "firmware.h"
 
 Firmware::Firmware(QString version, DeviceType deviceType, FirmwareType type, QString path)
@@ -83,6 +84,29 @@ const QByteArray &Firmware::rawData() const
 void Firmware::setRawData(const QByteArray &newRawData)
 {
     m_rawData = newRawData;
+}
+
+bool Firmware::isFirmwareFile(QString filePath)
+{
+    QFile file(filePath);
+
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QByteArray magicNumber = file.read(4);
+        file.close();
+
+        if(magicNumber.at(0) == 0x78 &&
+           magicNumber.at(1) == 0x56 &&
+           magicNumber.at(2) == 0x34 &&
+           magicNumber.at(3) == 0x12) return true;
+        else return false;
+
+    }
+    else
+    {
+        qDebug() << __FUNCTION__ << __LINE__ << "Can not open file " << filePath;
+        return false;
+    }
 }
 
 DeviceType Firmware::deviceType() const

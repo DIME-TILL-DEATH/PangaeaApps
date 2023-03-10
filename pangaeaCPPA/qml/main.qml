@@ -179,6 +179,19 @@ ApplicationWindow
         id: _msgVersionInform        
     }
 
+    MessageDialog
+    {
+        id: operationCompleteDialog
+
+        title: qsTr("Operation complete")
+
+        text: qsTr("Operation complete. Please, reconnect to device")
+
+        onButtonClicked: {
+            InterfaceManager.disconnectFromDevice();
+        }
+    }
+
     MBusy
     {
         id: mBusy
@@ -281,6 +294,11 @@ ApplicationWindow
                 case DeviceType.CP16PA: devName = "CP-16PA"; break;
                 case DeviceType.CP100PA: devName = "CP-100PA"; break;
                 }
+            }
+
+            if(nameParam === "fw_update_enabled")
+            {
+                if(!value) operationCompleteDialog.open();
             }
         }
     }
