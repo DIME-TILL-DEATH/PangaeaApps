@@ -33,6 +33,8 @@ public:
 
     Q_INVOKABLE void updateFirmware(QString filePath);
 
+    Q_INVOKABLE void sw4Enable();
+
 signals:
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);

@@ -11,6 +11,8 @@ import Qt.labs.settings 1.0
 import CppObjects 1.0
 
 MenuBar{
+    id: mainMenu
+
     Menu{
         title: qsTr("File")
         MenuItem{
@@ -134,7 +136,10 @@ MenuBar{
         }
 
         MenuItem{
+            id: menuUpdateFirmware
+
             text: qsTr("Update firmware")
+            visible: false
 
             onTriggered: pickFimwareFileDialog.open();
         }
@@ -290,11 +295,26 @@ MenuBar{
             {
                 switch (value)
                 {
-                    case 0: menuDeviceManual.strManualBaseName = "";  break;
-                    case 1: menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";  break;
-                    case 2: menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";  break;
-                    case 3: menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual"; break;
-                    case 4: menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual"; break;
+                    case 0:
+                        menuDeviceManual.strManualBaseName = "";
+                        menuUpdateFirmware.visible = false;
+                        break;
+                    case 1:
+                        menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
+                        menuUpdateFirmware.visible = false;
+                        break;
+                    case 2:
+                        menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                        menuUpdateFirmware.visible = true;
+                        break;
+                    case 3:
+                        menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                        menuUpdateFirmware.visible = true;
+                        break;
+                    case 4:
+                        menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
+                        menuUpdateFirmware.visible = false;
+                        break;
                 }
             }
         }

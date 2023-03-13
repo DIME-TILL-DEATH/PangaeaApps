@@ -387,6 +387,8 @@ ApplicationWindow
         UiSettings.saveSetting("window_width", main.width);
         UiSettings.saveSetting("window_height", main.height);
 
+        UiCore.sw4Enable();
+
         if(main.edit && main.connected)
         {
             msgPresetChangeSave.saveParam = (-2);

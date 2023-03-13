@@ -71,6 +71,11 @@ void Core::parseInputData(const QByteArray& ba)
                     DeviceType deviceType = static_cast<DeviceType>(parseResult.at(0).toUInt());
                     controlledDevice.setDeviceType(deviceType);
 
+                    if(controlledDevice.deviceType() == DeviceType::CP16 || controlledDevice.deviceType() == DeviceType::CP16PA)
+                    {
+                        pushCommandToQueue("sw4 disable");
+                    }
+
                     emit sgSetUIParameter("type_dev", deviceType);
                     emit sgSetUIParameter("set_max_map", controlledDevice.maxBankPresetCount()); //TODO for mobile?
                     qInfo() << recievedCommand.description();
@@ -931,9 +936,6 @@ void Core::readAllParameters()
 
     pushCommandToQueue("amtdev");
     pushCommandToQueue("amtver");
-
-    //TODO
-    //   pushCommandToQueue("sw4 disable"); //CP100 не знает такой команды
 
     pushCommandToQueue("rns");
 

@@ -112,6 +112,11 @@ void UiDesktopCore::updateFirmware(QString filePath)
     emit sgSetFirmware(filePath);
 }
 
+void UiDesktopCore::sw4Enable()
+{
+    emit sgSw4Enable();
+}
+
 void UiDesktopCore::slProposeNetFirmwareUpdate(Firmware *updateFirmware, Firmware *oldFirmware)
 {
     emit sgSetUIText("firmware_local_path", updateFirmware->path());
