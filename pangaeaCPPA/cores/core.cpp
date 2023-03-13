@@ -1076,8 +1076,11 @@ void Core::updateProgressBar()
 
 void Core::sw4Enable()
 {
-    //pushCommandToQueue("sw4 enable"); //CP100 не знает такой команды
-    //processCommands();
+    if(controlledDevice.deviceType() == DeviceType::CP16 || controlledDevice.deviceType() == DeviceType::CP16PA)
+    {
+        pushCommandToQueue("sw4 enable");
+        processCommands();
+    }
 }
 
 void Core::stopCore()

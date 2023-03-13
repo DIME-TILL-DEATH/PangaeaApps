@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs
 import Qt.labs.settings 1.0
 
+import Qt.labs.platform 1.1 as Labs
+
 import QtQuick.Window 2.15
 
 import StyleSettings 1.0
@@ -50,7 +52,7 @@ ApplicationWindow
 
     header: MainMenu{
         visible: main.connected
-        enabled: !wait
+        enabled: !mBusy.visible
     }
 
     StartLayout
@@ -168,7 +170,7 @@ ApplicationWindow
         title: qsTr("Error")
         text: qsTr("Device is disconnected")
 
-        modality: Qt.WindowModal
+        modality: Qt.ApplicationModal
         onButtonClicked: {
             mBusy.visible = false;
         }
@@ -179,7 +181,8 @@ ApplicationWindow
         id: _msgVersionInform        
     }
 
-    MessageDialog
+    // modality works only in Labs
+    Labs.MessageDialog
     {
         id: operationCompleteDialog
 
@@ -187,7 +190,9 @@ ApplicationWindow
 
         text: qsTr("Operation complete. Please, reconnect to device")
 
-        onButtonClicked: {
+        modality: Qt.ApplicationModal
+
+        onOkClicked: {
             InterfaceManager.disconnectFromDevice();
         }
     }
@@ -298,7 +303,10 @@ ApplicationWindow
 
             if(nameParam === "fw_update_enabled")
             {
-                if(!value) operationCompleteDialog.open();
+                if(!value)
+                {
+                    operationCompleteDialog.open();
+                }
             }
         }
     }
@@ -318,14 +326,15 @@ ApplicationWindow
         {
             msgError.text = qsTr("Device is unavaliable")
             msgError.open();
-            mBusy.visible = false;
+ //           mBusy.visible = true;
+//            mBusy.visible = false;
         }
 
         function onSgExchangeError()
         {
             msgError.text = qsTr("Command exchange error")
             msgError.open();
-            mBusy.visible = false;
+//            mBusy.visible = false;
         }
 
         function onSgInterfaceConnected(interfaceDescription)

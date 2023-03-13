@@ -7,6 +7,7 @@ QT += qml
 QT += svg
 QT += serialport
 QT += bluetooth
+QT += widgets
 
 DEFINES += PANGAEA_DESKTOP
 

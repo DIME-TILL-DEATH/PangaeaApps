@@ -7,6 +7,8 @@
 #include "firmware.h"
 
 //TODO: class enum UIValueItem, UITextItem, UIErrorItem
+//TODO: все uiItems без событий передавать через UiProperties(Q_PROPERTY) а не sgSetUiText и тп
+
 class UiDesktopCore : public QObject
 {
     Q_OBJECT

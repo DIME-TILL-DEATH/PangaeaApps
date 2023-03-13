@@ -1,4 +1,5 @@
 #include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 
 #include <QDebug>
@@ -26,7 +27,8 @@ Logger* appLogger_ptr;
 int main(int argc, char *argv[])
 {
     signal(SIGSEGV, manageSegFailure);
-    QGuiApplication app(argc, argv);
+//    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     app.setOrganizationName("AMT");
     app.setApplicationName("Pangaea");
 
