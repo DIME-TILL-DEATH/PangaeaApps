@@ -89,7 +89,21 @@ void UiDesktopCore::openManualExternally(QString fileName)
     QString fullFileName =  fileName + "_" + appLanguage + ".pdf";
 
     QString filePath =  QCoreApplication::applicationDirPath() + "/docs/" + fullFileName;
+
+#ifdef Q_OS_LINUX
+    filePath = QCoreApplication::applicationDirPath() + "/../docs/" + fullFileName;
+
+    QProcess proc;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.remove("LD_LIBRARY_PATH"); // force evince use system librarys
+
+    proc.setProcessEnvironment(env);
+    proc.setProgram("evince");
+    proc.setArguments(QStringList(filePath));
+    proc.startDetached();
+#else
     QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+#endif
 }
 
 void UiDesktopCore::runIrConvertor()
@@ -104,6 +118,11 @@ void UiDesktopCore::runIrConvertor()
 
 #ifdef Q_OS_MACOS
     qDebug() << "Run converter" << irConvertorProcess.startDetached(QCoreApplication::applicationDirPath() + "/IrConverter");
+#endif
+
+#ifdef Q_OS_LINUX
+    QString path = QCoreApplication::applicationDirPath() + "/IrConverter";
+    qDebug() << "Run converter, paht" << path << "result:" << irConvertorProcess.startDetached(path);
 #endif
 }
 

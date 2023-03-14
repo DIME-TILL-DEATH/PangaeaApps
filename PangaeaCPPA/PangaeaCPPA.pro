@@ -168,7 +168,11 @@ CONFIG(release, debug|release) {
         converterBinaryFile = $${PWD}/../WavConverterShell/output_bin/IrConverter
         dirDeploy = $${PWD}/../deploy_linux
 
+        QMAKE_POST_LINK += mkdir -p $${dirDeploy}/bin/ $$escape_expand(\n\t)
+        QMAKE_POST_LINK += cp -r $${converterBinaryFile} $${dirDeploy}/bin/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cp -r $${dirDocs} $${dirDeploy}/ $$escape_expand(\\n\\t)
+
         # using cqtdeployer, installed from snap
-        QMAKE_POST_LINK += cqtdeployer -bin PangaeaCPPA -targetDir $${dirDeploy} -libDir $${libsPath} -qmlDir $${PWD}/qml/ -qmake ~/Qt/6.4.2/gcc_64/bin/qmake qif $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cqtdeployer -bin PangaeaCPPA -targetDir $${dirDeploy} -libDir $${libsPath} -qmlDir $${PWD}/qml/ -qmake ~/Qt/6.4.2/gcc_64/bin/qmake $$escape_expand(\\n\\t)
     }
 }

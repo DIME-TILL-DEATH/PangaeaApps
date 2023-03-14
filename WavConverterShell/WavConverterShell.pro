@@ -58,6 +58,11 @@ linux{
     libsPath = $${PWD}/../shared_libs/lib.linux
     destDir = $${PWD}/output_bin/
     LIBS += -L$${libsPath} -lsox
+
+    destDir = $${PWD}/output_bin/
+
+    QMAKE_POST_LINK += mkdir -p $${destDir} $$escape_expand(\n\t)
+    QMAKE_POST_LINK += cp -pr $${OUT_PWD}/$${TARGET} $${destDir} $$escape_expand(\n\t)
 }
 LIBS += -L$${libsPath} -lWavConverterLib
 
