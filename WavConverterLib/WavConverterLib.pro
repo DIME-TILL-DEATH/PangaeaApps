@@ -66,7 +66,7 @@ linux{
     QMAKE_POST_LINK += mkdir -p $${destIncludeDir} $$escape_expand(\n\t)
     QMAKE_POST_LINK += cp $${includeFile} $${destIncludeDir} $$escape_expand(\n\t)
     QMAKE_POST_LINK += cp $${libsPath}libsox.so $${DESTDIR} $$escape_expand(\n\t)
-    QMAKE_POST_LINK += ln -s $${DESTDIR}/libsox.so $${DESTDIR}/libsox.so.3 $$escape_expand(\n\t)
+    QMAKE_POST_LINK += ln -sf $${DESTDIR}/libsox.so $${DESTDIR}/libsox.so.3 $$escape_expand(\n\t)
 }
 
 mac {

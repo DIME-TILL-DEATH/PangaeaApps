@@ -132,7 +132,7 @@ CONFIG(release, debug|release) {
     win32 {
         appBinaryFile = release/$${TARGET}.exe
         converterBinaryFile = $${PWD}/../WavConverterShell/output_bin/IrConverter.exe
-        dirDeploy = $${PWD}/../desktop_bundle_output
+        dirDeploy = $${PWD}/../deploy_windows
         dirDeployRelease = $${dirDeploy}/release
 
         # replace slashes in source path for Windows
@@ -161,5 +161,14 @@ CONFIG(release, debug|release) {
         QMAKE_POST_LINK += cp -r $${converterBinary} PangaeaCPPA.app/Contents/MacOS/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += cp -r $${dirDocs} PangaeaCPPA.app/Contents/MacOS/docs $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/qml/ -libpath=$${libsPath} -dmg $$escape_expand(\\n\\t)
+    }
+
+    linux{
+        appBinaryFile = $${TARGET}
+        converterBinaryFile = $${PWD}/../WavConverterShell/output_bin/IrConverter
+        dirDeploy = $${PWD}/../deploy_linux
+
+        # using cqtdeployer, installed from snap
+        QMAKE_POST_LINK += cqtdeployer -bin PangaeaCPPA -targetDir $${dirDeploy} -libDir $${libsPath} -qmlDir $${PWD}/qml/ -qmake ~/Qt/6.4.2/gcc_64/bin/qmake qif $$escape_expand(\\n\\t)
     }
 }

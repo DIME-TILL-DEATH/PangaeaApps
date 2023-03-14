@@ -1,5 +1,7 @@
-desktop_bundle_output/release/*
+#desktop_bundle_output/release/*
 shared_libs/*
+deploy_linux/*
+deploy_windows/release/*
 WavConverterShell/output_bin/*
 *.exe
 *.zip
