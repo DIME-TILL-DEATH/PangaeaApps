@@ -100,6 +100,13 @@ macx {
 win32-g++: libsPath = $${PWD}/../shared_libs/lib.mingw32
 win32-msvc: libsPath = $${PWD}/../shared_libs/lib.msvc2019
 
+linux {
+    QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
+    ICON = icons/pangaea.icns
+
+    libsPath = $${PWD}/../shared_libs/lib.linux
+    LIBS += -L$${libsPath} -lsox
+}
 
 INCLUDEPATH += $${PWD}/../shared_libs/include
 LIBS += -L$${libsPath} -lWavConverterLib

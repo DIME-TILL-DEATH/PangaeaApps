@@ -20,6 +20,7 @@ HEADERS += \
 
 RESOURCES += qml.qrc
 
+INCLUDEPATH += $${PWD}/../shared_libs/include
 
 win32{
     DESTDIR = $${PWD}\output_bin\
@@ -34,7 +35,7 @@ win32{
 win32-g++: libsPath = $${PWD}/../shared_libs/lib.mingw32
 win32-msvc: libsPath = $${PWD}/../shared_libs/lib.msvc2019
 
-mac:{
+mac{
 
     DISTFILES += \
         icons/spirit.icns \
@@ -53,8 +54,10 @@ mac:{
 
 }
 
-INCLUDEPATH += $${PWD}/../shared_libs/include
+linux{
+    libsPath = $${PWD}/../shared_libs/lib.linux
+    destDir = $${PWD}/output_bin/
+    LIBS += -L$${libsPath} -lsox
+}
 LIBS += -L$${libsPath} -lWavConverterLib
-
-
 

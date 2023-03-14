@@ -139,7 +139,7 @@ MenuBar{
             id: menuUpdateFirmware
 
             text: qsTr("Update firmware")
-            visible: false
+            enabled: false
 
             onTriggered: pickFimwareFileDialog.open();
         }
@@ -297,23 +297,23 @@ MenuBar{
                 {
                     case 0:
                         menuDeviceManual.strManualBaseName = "";
-                        menuUpdateFirmware.visible = false;
+                        menuUpdateFirmware.enabled = false;
                         break;
                     case 1:
                         menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
-                        menuUpdateFirmware.visible = false;
+                        menuUpdateFirmware.enabled = false;
                         break;
                     case 2:
                         menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
-                        menuUpdateFirmware.visible = true;
+                        menuUpdateFirmware.enabled = true;
                         break;
                     case 3:
                         menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
-                        menuUpdateFirmware.visible = true;
+                        menuUpdateFirmware.enabled = true;
                         break;
                     case 4:
                         menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
-                        menuUpdateFirmware.visible = false;
+                        menuUpdateFirmware.enabled = false;
                         break;
                 }
             }

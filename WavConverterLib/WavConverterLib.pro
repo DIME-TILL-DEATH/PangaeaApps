@@ -19,15 +19,11 @@ HEADERS += \
 
 INCLUDEPATH += sox_lib/include/
 
-
-linux-g++: LIBS += -lsox$${LIB_SUFFIX}
-
-
 destIncludeDir = $${PWD}/../shared_libs/include
 includeFile = $${PWD}/resampler.h
 
 win32-g++ {
-    message("MinGW 32 compile")
+    message("MinGW 32 build")
     libsPath = $${PWD}/sox_lib/lib.mingw32    
     LIBS += -L$${libsPath} -lsox-3
 
@@ -35,7 +31,7 @@ win32-g++ {
 }
 
 win32-msvc {
-   message("msvc2019 compile")
+   message("msvc2019 build")
 
     libsPath = $${PWD}/sox_lib/lib.msvc2019/
     LIBS += -L$${libsPath} -llibsox
@@ -59,7 +55,23 @@ win32 {
     win32-g++: QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${destLibDir}) $$escape_expand(\\n\\t)
 }
 
+linux{
+    message("linux build")
+
+    libsPath = $${PWD}/sox_lib/lib.linux/
+
+    DESTDIR = $$PWD/../shared_libs/lib.linux
+    LIBS += -L$$libsPath -lsox
+
+    QMAKE_POST_LINK += mkdir -p $${destIncludeDir} $$escape_expand(\n\t)
+    QMAKE_POST_LINK += cp $${includeFile} $${destIncludeDir} $$escape_expand(\n\t)
+    QMAKE_POST_LINK += cp $${libsPath}libsox.so $${DESTDIR} $$escape_expand(\n\t)
+    QMAKE_POST_LINK += ln -s $${DESTDIR}/libsox.so $${DESTDIR}/libsox.so.3 $$escape_expand(\n\t)
+}
+
 mac {
+    message("mac build")
+
     libsPath = $${PWD}/sox_lib/lib.mac
 
     DESTDIR = $$PWD/../shared_libs/lib.mac

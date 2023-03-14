@@ -110,6 +110,8 @@ bool UsbInterface::connect(DeviceDescription device)
     }
     else
     {
+        QMetaEnum errorDescriptionEnum = QMetaEnum::fromType<QSerialPort::SerialPortError>();
+        emit sgInterfaceError(errorDescriptionEnum.valueToKey(m_port->error()));
         prevState();
     }
     return isPortOpened;

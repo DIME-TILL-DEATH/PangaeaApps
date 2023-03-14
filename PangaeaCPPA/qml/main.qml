@@ -78,7 +78,9 @@ ApplicationWindow
             width:  parent.width
             height: parent.height/1000*150
 
-            onSetImpuls: irFileDialog.open();
+            onSetImpuls: {
+                irFileDialog.open();
+            }
             editable: main.editable & (!main.wait)
             edit:     main.edit
         }
@@ -351,7 +353,7 @@ ApplicationWindow
             connected = false;
             main.editable = false;
             mainUi.visible = false;
-            msgError.text = qsTr("Device disconnected")
+            msgError.text = qsTr("Device disconnected\n" + errorDescription)
             msgError.open();
 
             InterfaceManager.startScanning();
