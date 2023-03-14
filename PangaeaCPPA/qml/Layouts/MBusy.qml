@@ -39,6 +39,7 @@ Item
             id : bI
 
             visible: rWait.visible
+            running: rWait.visible // if always running, FilaDialog lags in Linux
 
             Layout.preferredWidth: parent.width/3
             Layout.preferredHeight: width
