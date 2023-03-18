@@ -161,11 +161,11 @@ void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
     address = device.address().toString();
 #endif
 
-    if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
-    {
-        qInfo() << "Discovered LE Device name: " << device.name() << " Address: "
-                   << address;
-    }
+//    if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
+//    {
+//        qInfo() << "Discovered LE Device name: " << device.name() << " Address: "
+//                   << address;
+//    }
 
 //    bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
 
@@ -173,6 +173,7 @@ void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
     {
         if(!m_avaliableDevices.contains(device))
         {
+            qInfo() << "Finded BLE Device name: " << device.name() << " Address: " << address;
             m_avaliableDevices.append(device);
 //            if(isAutoconnectEnabled & (state() == InterfaceState::Scanning))
 //            {
@@ -445,6 +446,13 @@ void BleInterface::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
     }
     setState(AcquireData);
     emit sgInterfaceConnected(m_connectedDevice);
+
+//    QLowEnergyConnectionParameters leParameters;
+//    leParameters.setIntervalRange(20, 1000);
+//    leParameters.setLatency(10);
+//    leParameters.setSupervisionTimeout(15000);
+
+//    m_control->requestConnectionUpdate(leParameters);
 }
 
 void BleInterface::write(QByteArray data)
@@ -455,6 +463,7 @@ void BleInterface::write(QByteArray data)
     Data.append(data);
 
     m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithoutResponse);
+   //m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithResponse);
 }
 
 void BleInterface::disconnectFromDevice()

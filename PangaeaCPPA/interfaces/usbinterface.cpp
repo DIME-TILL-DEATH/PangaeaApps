@@ -10,7 +10,7 @@ UsbInterface::UsbInterface(QObject *parent)
     loadSettings();
 
     m_timer = new QTimer(this);
-    m_timer->setInterval(1000);
+    m_timer->setInterval(2500);
 
 
     m_port = new QSerialPort(this);
@@ -45,6 +45,13 @@ void UsbInterface::slPortTimer()
     if(!m_port->isOpen())
     {
         discoverDevices();
+        if(!m_discoveredDevices.isEmpty())
+        {
+            foreach (auto device, m_discoveredDevices)
+            {
+                qInfo() << "Finded USB device name:" << device.name() << "Address:" << device.address();
+            }
+        }
         emit sgDeviceListUpdated(DeviceConnectionType::USBAuto, m_discoveredDevices);
     }
     else

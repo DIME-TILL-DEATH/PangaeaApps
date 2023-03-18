@@ -3,6 +3,7 @@
 #include <QQmlApplicationEngine>
 
 #include <QDebug>
+#include <QLoggingCategory>
 
 #include <signal.h>
 
@@ -67,6 +68,9 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
 
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
+
+//    QLoggingCategory logBleBlueZ("qt.bluetooth");
+//    QLoggingCategory::setFilterRules(QStringLiteral("qt.bluetooth* = true"));
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------
