@@ -44,8 +44,9 @@ int main(int argc, char *argv[])
     ThreadController threadController(QThread::currentThread());
     core->moveToThread(threadController.backendThread());
     netCore->moveToThread(threadController.backendThread());
-#ifndef Q_OS_MACOS
-    interfaceManager->moveToThread(threadController.backendThread()); // On MAC BLE can work only on the main thread
+#if defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
+   // interfaceManager->moveToThread(threadController.backendThread()); // On MAC BLE can work only on the main thread
+                                                                        // In Linux BLE needs to work in separate thread from core
 #endif
     QObject::connect(threadController.backendThread(), &QThread::finished, core, &QObject::deleteLater);
     QObject::connect(threadController.backendThread(), &QThread::finished, netCore, &QObject::deleteLater);

@@ -68,6 +68,8 @@ private slots:
     void slStartConnect(QString address);
     void checkDevicesAvaliabliy();
 
+    void connectionParametersUpdated(const QLowEnergyConnectionParameters &newParameters);
+
 private:
     bool isAvaliable;
 

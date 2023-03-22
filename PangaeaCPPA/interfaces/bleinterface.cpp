@@ -342,6 +342,12 @@ void BleInterface::slStartConnect(QString address)
     setState(Connecting);
 }
 
+void BleInterface::deviceConnected()
+{
+    setState(Connected);
+    m_control->discoverServices();
+}
+
 void BleInterface::serviceDiscovered(const QBluetoothUuid &gatt)
 {
     if(gatt==QBluetoothUuid(QUuid(UARTSERVICEUUID)))
@@ -379,11 +385,6 @@ void BleInterface::serviceScanDone()
     setState(ServiceFound);
 }
 
-void BleInterface::deviceConnected()
-{
-    setState(Connected);
-    m_control->discoverServices();
-}
 
 void BleInterface::deviceDisconnected()
 {
@@ -398,7 +399,6 @@ void BleInterface::controllerError(QLowEnergyController::Error error)
     qWarning() << "Controller Error:" << error;
     emit sgInterfaceError("Controller error");
 }
-
 
 void BleInterface::serviceStateChanged(QLowEnergyService::ServiceState s)
 {
@@ -445,14 +445,24 @@ void BleInterface::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
         }
     }
     setState(AcquireData);
+
+    QLowEnergyConnectionParameters leParameters;
+    leParameters.setIntervalRange(20, 75);
+    leParameters.setLatency(0);
+    leParameters.setSupervisionTimeout(4000);
+
+    m_control->requestConnectionUpdate(leParameters);
+    QBluetoothDeviceDiscoveryAgent::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
+
     emit sgInterfaceConnected(m_connectedDevice);
+}
 
-//    QLowEnergyConnectionParameters leParameters;
-//    leParameters.setIntervalRange(20, 1000);
-//    leParameters.setLatency(10);
-//    leParameters.setSupervisionTimeout(15000);
-
-//    m_control->requestConnectionUpdate(leParameters);
+void BleInterface::connectionParametersUpdated(const QLowEnergyConnectionParameters &newParameters)
+{
+    qInfo() << "Connection parameters updated, intervals:"
+            << newParameters.minimumInterval()
+            << newParameters.maximumInterval()
+            << " supervision timeout:" << newParameters.supervisionTimeout();
 }
 
 void BleInterface::write(QByteArray data)
@@ -463,7 +473,6 @@ void BleInterface::write(QByteArray data)
     Data.append(data);
 
     m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithoutResponse);
-   //m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithResponse);
 }
 
 void BleInterface::disconnectFromDevice()
