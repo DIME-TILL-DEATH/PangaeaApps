@@ -166,13 +166,21 @@ CONFIG(release, debug|release) {
     linux{
         appBinaryFile = $${TARGET}
         converterBinaryFile = $${PWD}/../WavConverterShell/output_bin/IrConverter
-        dirDeploy = $${PWD}/../deploy_linux
+        dirDeploy = $${PWD}/../deploy_linux/
+        dirApp = {dirDeploy}/app/
 
-        QMAKE_POST_LINK += mkdir -p $${dirDeploy}/bin/ $$escape_expand(\n\t)
-        QMAKE_POST_LINK += cp -r $${converterBinaryFile} $${dirDeploy}/bin/ $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += cp -r $${dirDocs} $${dirDeploy}/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += mkdir -p $${dirApp}/bin/ $$escape_expand(\n\t)
+        QMAKE_POST_LINK += cp -r $${converterBinaryFile} $${dirApp}bin/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cp -r $${dirDocs} $${dirApp} $$escape_expand(\\n\\t)
 
         # using cqtdeployer, installed from snap
-        QMAKE_POST_LINK += cqtdeployer -bin PangaeaCPPA -targetDir $${dirDeploy} -libDir $${libsPath} -qmlDir $${PWD}/qml/ -qmake ~/Qt/6.4.2/gcc_64/bin/qmake $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cqtdeployer -bin PangaeaCPPA -targetDir $${dirApp} -libDir $${libsPath} -qmlDir $${PWD}/qml/ -qmake ~/Qt/$${QT_VERSION}/gcc_64/bin/qmake $$escape_expand(\\n\\t)
+
+        # make .deb package
+        QMAKE_POST_LINK += mkdir -p $${dirDeploy}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cp -r $${dirApp}/. $${dirDeploy}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cp -r $${dirDeploy}/DEBIAN/ $${dirDeploy}/debian_deploy/PangaeaCPPA/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cp -r $${dirDeploy}/usr/ $${dirDeploy}/debian_deploy/PangaeaCPPA/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += dpkg-deb --build $${dirDeploy}/debian_deploy/PangaeaCPPA/ $$escape_expand(\\n\\t)
     }
 }

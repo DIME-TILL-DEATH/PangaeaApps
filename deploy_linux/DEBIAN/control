@@ -1,0 +1,5 @@
+Package: PangaeaCPPA
+Version: 1709.2
+Maintainer: AMT electronics
+Architecture: all
+Description: Control application for PANGAEA devices
