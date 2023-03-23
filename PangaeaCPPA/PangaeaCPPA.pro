@@ -169,7 +169,7 @@ CONFIG(release, debug|release) {
         appBinaryFile = $${TARGET}
         converterBinaryFile = $${PWD}/../WavConverterShell/output_bin/IrConverter
         dirDeploy = $${PWD}/../deploy_linux/
-        dirApp = {dirDeploy}/app/
+        dirApp = $${dirDeploy}/app/
 
         QMAKE_POST_LINK += mkdir -p $${dirApp}/bin/ $$escape_expand(\n\t)
         QMAKE_POST_LINK += cp -r $${converterBinaryFile} $${dirApp}bin/ $$escape_expand(\\n\\t)
@@ -177,6 +177,9 @@ CONFIG(release, debug|release) {
 
         # using cqtdeployer, installed from snap
         QMAKE_POST_LINK += cqtdeployer -bin PangaeaCPPA -targetDir $${dirApp} -libDir $${libsPath} -qmlDir $${PWD}/qml/ -qmake ~/Qt/$${QT_VERSION}/gcc_64/bin/qmake $$escape_expand(\\n\\t)
+
+        # make tarball archive
+        QMAKE_POST_LINK += tar -czvf $${dirDeploy}/PangaeaCPPA.tar.gz $${dirApp}/. $$escape_expand(\\n\\t)
 
         # make .deb package
         QMAKE_POST_LINK += mkdir -p $${dirDeploy}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/ $$escape_expand(\\n\\t)
