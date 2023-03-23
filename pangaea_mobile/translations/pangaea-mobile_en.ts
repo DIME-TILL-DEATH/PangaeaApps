@@ -62,36 +62,36 @@
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="43"/>
         <source>Documentation</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="56"/>
         <source>BACK</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="82"/>
         <source>Web site</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="96"/>
         <source>Media center</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Media center AMT</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="110"/>
         <source>Application manual</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Application&apos;s manual</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="124"/>
         <source>Device manual</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Device&apos;s manual</translation>
     </message>
 </context>
 <context>
@@ -142,27 +142,27 @@
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="20"/>
         <source>Updating firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>Updating the firmware</translation>
     </message>
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="21"/>
         <source>WARNING: Do not power off device or exit from application while updating firmware!</source>
-        <translation type="unfinished">WARNING! Do not power off your device or exit the application while updating firmware!</translation>
+        <translation>WARNING! Do not power off your device or exit the application while updating the firmware!</translation>
     </message>
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="68"/>
         <source>Firmware file: </source>
-        <translation type="unfinished"></translation>
+        <translation>The firmware file: </translation>
     </message>
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="133"/>
         <source>Updating to firmware version </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="141"/>
         <source>kB from </source>
-        <translation type="unfinished"></translation>
+        <translation>kB of </translation>
     </message>
 </context>
 <context>
@@ -194,12 +194,13 @@
         <location filename="../qml/Modules/Ir.qml" line="63"/>
         <source>Not supported IR Format!
 PANGAEA supports only 48kHz/24bits/1channel files</source>
-        <translation type="unfinished"></translation>
+        <translation>There is not supported IR format!
+The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
     </message>
     <message>
         <location filename="../qml/Modules/Ir.qml" line="65"/>
         <source>Not supported format</source>
-        <translation type="unfinished"></translation>
+        <translation>There is not supported format</translation>
     </message>
 </context>
 <context>
@@ -257,7 +258,7 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
         <location filename="../qml/ControlGroups/MasterControls.qml" line="132"/>
         <source>Export</source>
         <extracomment>Button text. Export preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/MasterControls.qml" line="156"/>
@@ -275,7 +276,7 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
         <location filename="../qml/ControlGroups/MasterControls.qml" line="191"/>
         <source>Import</source>
         <extracomment>Button text. Import preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/MasterControls.qml" line="207"/>
@@ -339,7 +340,7 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
     <message>
         <location filename="../qml/Elements/PresetBankSpin.qml" line="42"/>
         <source>MAP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -347,12 +348,12 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
     <message>
         <location filename="../qml/ControlGroups/PresetsWindow.qml" line="47"/>
         <source>Presets list</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/PresetsWindow.qml" line="60"/>
         <source>BACK</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -415,7 +416,8 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
         <location filename="../qml/Pages/ServicePage.qml" line="262"/>
         <source>The Firmware file has been transmitted
 Please, reconnect to device</source>
-        <translation type="unfinished"></translation>
+        <translation>The Firmware file has been transmitted.
+Please, reconnect to the device</translation>
     </message>
     <message>
         <location filename="../qml/Pages/ServicePage.qml" line="281"/>
@@ -432,7 +434,7 @@ Please, reconnect to device</source>
         <location filename="../qml/Pages/ServicePage.qml" line="94"/>
         <source>Documentation</source>
         <extracomment>Button text</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/Pages/ServicePage.qml" line="126"/>
@@ -545,12 +547,12 @@ Please reset the AMT PANGAEA device power and reconnect via this application</tr
     <message>
         <location filename="../qml/Pages/SettingsPage.qml" line="128"/>
         <source>Autoselect</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/Pages/SettingsPage.qml" line="171"/>
         <source>Auto check updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto check of updates</translation>
     </message>
     <message>
         <location filename="../qml/Pages/SettingsPage.qml" line="190"/>
@@ -592,12 +594,12 @@ Please reset the AMT PANGAEA device power and reconnect via this application</tr
     <message>
         <location filename="../qml/main.qml" line="132"/>
         <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="134"/>
         <source>Exchange error</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="147"/>
@@ -615,12 +617,12 @@ Please reset the AMT PANGAEA device power and reconnect via this application</tr
     <message>
         <location filename="../qml/main.qml" line="166"/>
         <source>Update firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>Update the firmware</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="167"/>
         <source>Newest firmware avaliable on the server.</source>
-        <translation type="unfinished"></translation>
+        <translation>The newest firmware is available on the server.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="186"/>
@@ -631,7 +633,7 @@ Please reset the AMT PANGAEA device power and reconnect via this application</tr
     <message>
         <location filename="../qml/main.qml" line="254"/>
         <source>Firmware version of your device is </source>
-        <translation></translation>
+        <translation>The firmware version of your device is </translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="255"/>
@@ -644,41 +646,47 @@ Minimum required version is </source>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Do you want to update the firmware now?
+WARNING!!! Updating firmware may take several minutes!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="265"/>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
-        <translation type="unfinished"></translation>
+        <translation>The new firmware is available on the server.
+The firmware version of your device is: </translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="266"/>
         <source>
 New firmware version is: </source>
-        <translation type="unfinished"></translation>
+        <translation>
+The new firmware version is: </translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="268"/>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Do you want to download and update the firmware now?
+WARNING!!! Updating the firmware may take several minutes!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="281"/>
         <source>You must save preset before export</source>
-        <translation type="unfinished"></translation>
+        <translation>You must save this preset before export</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="288"/>
         <source>Preset import error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset&apos;s import error!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="294"/>
         <source>Preset export finished</source>
-        <translation type="unfinished"></translation>
+        <translation>Preset&apos;s export is finished</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="308"/>
@@ -693,12 +701,12 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <location filename="../qml/main.qml" line="316"/>
         <source>Device is unavaliable</source>
-        <translation type="unfinished"></translation>
+        <translation>Device is unavailable</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="320"/>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unknown bluetooth error is occurred. Please check if bluetooth and geolocation modules are enabled and click ok.</translation>
     </message>
 </context>
 </TS>

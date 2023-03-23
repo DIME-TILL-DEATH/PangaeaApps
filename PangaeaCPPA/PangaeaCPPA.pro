@@ -21,6 +21,8 @@ win32: {
 }
 else: VERSION = 1.0.1714
 
+DEFINES += VERSION_STRING=\\\"$${VERSION}\\\"
+
 CONFIG += c++11
 
 SOURCES += main.cpp \

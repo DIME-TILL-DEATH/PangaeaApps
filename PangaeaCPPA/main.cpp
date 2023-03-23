@@ -2,6 +2,8 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 
+#include <QIcon>
+
 #include <QDebug>
 #include <QLoggingCategory>
 
@@ -33,6 +35,10 @@ int main(int argc, char *argv[])
     app.setOrganizationName("AMT");
     app.setApplicationName("Pangaea");
 
+#ifdef Q_OS_LINUX
+    //QApplication::setWindowIcon(QIcon(":/qml/Images/AMT.svg"));
+    app.setApplicationVersion(VERSION_STRING);
+#endif
 
     Logger log;
     log.setAsMessageHandlerForApp();

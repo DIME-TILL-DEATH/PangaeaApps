@@ -62,36 +62,36 @@
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="43"/>
         <source>Documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Документация</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="56"/>
         <source>BACK</source>
-        <translation type="unfinished">НАЗАД</translation>
+        <translation>НАЗАД</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="82"/>
         <source>Web site</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Веб-сайт</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="96"/>
         <source>Media center</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Медиацентр AMT</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="110"/>
         <source>Application manual</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Мануал к приложению</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="124"/>
         <source>Device manual</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Мануал к прибору</translation>
     </message>
 </context>
 <context>
@@ -150,27 +150,27 @@
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="20"/>
         <source>Updating firmware</source>
-        <translation type="unfinished">Обновление прошивки</translation>
+        <translation>Обновление прошивки</translation>
     </message>
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="21"/>
         <source>WARNING: Do not power off device or exit from application while updating firmware!</source>
-        <translation type="unfinished">ВНИМАНИЕ: Не выключайте питание устройства и не выходите из приложения во время процесса обновления прошивки!</translation>
+        <translation>ВНИМАНИЕ: Не выключайте питание устройства и не выходите из приложения во время процесса обновления прошивки!</translation>
     </message>
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="68"/>
         <source>Firmware file: </source>
-        <translation type="unfinished">Файл прошивки: </translation>
+        <translation>Файл прошивки: </translation>
     </message>
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="133"/>
         <source>Updating to firmware version </source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление до прошивки версии </translation>
     </message>
     <message>
         <location filename="../qml/Elements/FirmwareLoadingWindow.qml" line="141"/>
         <source>kB from </source>
-        <translation type="unfinished"></translation>
+        <translation>kB из </translation>
     </message>
 </context>
 <context>
@@ -196,18 +196,19 @@
     <message>
         <location filename="../qml/Modules/Ir.qml" line="23"/>
         <source>Impulse response</source>
-        <translation></translation>
+        <translation>Импульс</translation>
     </message>
     <message>
         <location filename="../qml/Modules/Ir.qml" line="63"/>
         <source>Not supported IR Format!
 PANGAEA supports only 48kHz/24bits/1channel files</source>
-        <translation type="unfinished"></translation>
+        <translation>Неподдерживаемый формат IR импульса!
+PANGAEA поддерживает только wav файлы 48kHz/24bits/моно</translation>
     </message>
     <message>
         <location filename="../qml/Modules/Ir.qml" line="65"/>
         <source>Not supported format</source>
-        <translation type="unfinished"></translation>
+        <translation>Неподдерживаемый формат</translation>
     </message>
 </context>
 <context>
@@ -284,7 +285,7 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
         <location filename="../qml/ControlGroups/MasterControls.qml" line="132"/>
         <source>Export</source>
         <extracomment>Button text. Export preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/MasterControls.qml" line="156"/>
@@ -302,7 +303,7 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
         <location filename="../qml/ControlGroups/MasterControls.qml" line="191"/>
         <source>Import</source>
         <extracomment>Button text. Import preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Импорт</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/MasterControls.qml" line="207"/>
@@ -366,7 +367,7 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
     <message>
         <location filename="../qml/Elements/PresetBankSpin.qml" line="42"/>
         <source>MAP</source>
-        <translation type="unfinished">СПИСОК</translation>
+        <translation>СПИСОК</translation>
     </message>
 </context>
 <context>
@@ -392,12 +393,12 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
     <message>
         <location filename="../qml/ControlGroups/PresetsWindow.qml" line="47"/>
         <source>Presets list</source>
-        <translation type="unfinished">Список пресетов</translation>
+        <translation>Список пресетов</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/PresetsWindow.qml" line="60"/>
         <source>BACK</source>
-        <translation type="unfinished">НАЗАД</translation>
+        <translation>НАЗАД</translation>
     </message>
 </context>
 <context>
@@ -460,7 +461,8 @@ PANGAEA supports only 48kHz/24bits/1channel files</source>
         <location filename="../qml/Pages/ServicePage.qml" line="262"/>
         <source>The Firmware file has been transmitted
 Please, reconnect to device</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл прошивки был передан
+Пожалуйста, переподключитесь к устройству заново</translation>
     </message>
     <message>
         <location filename="../qml/Pages/ServicePage.qml" line="281"/>
@@ -479,7 +481,7 @@ Please, reconnect to device</source>
         <location filename="../qml/Pages/ServicePage.qml" line="94"/>
         <source>Documentation</source>
         <extracomment>Button text</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Документация</translation>
     </message>
     <message>
         <location filename="../qml/Pages/ServicePage.qml" line="126"/>
@@ -524,8 +526,8 @@ Version: </source>
         <location filename="../qml/Pages/ServicePage.qml" line="183"/>
         <source>(c) 2022
 website: https://amtelectronics.com</source>
-        <translation>(c) 2022
-веб-сайт: https://amtelectronics.com</translation>
+        <translation>© 2023
+Веб-сайт: https://amt-sales.ru</translation>
     </message>
     <message>
         <location filename="../qml/Pages/ServicePage.qml" line="194"/>
@@ -596,12 +598,12 @@ Please reset the device power and reconnect</source>
     <message>
         <location filename="../qml/Pages/SettingsPage.qml" line="128"/>
         <source>Autoselect</source>
-        <translation type="unfinished"></translation>
+        <translation>Автовыбор</translation>
     </message>
     <message>
         <location filename="../qml/Pages/SettingsPage.qml" line="171"/>
         <source>Auto check updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Автопроверка обновлений</translation>
     </message>
     <message>
         <location filename="../qml/Pages/SettingsPage.qml" line="190"/>
@@ -643,12 +645,12 @@ Please reset the device power and reconnect</source>
     <message>
         <location filename="../qml/main.qml" line="132"/>
         <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла ошибка обмена между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="134"/>
         <source>Exchange error</source>
-        <translation type="unfinished">Ошибка связи</translation>
+        <translation>Ошибка связи</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="147"/>
@@ -666,12 +668,12 @@ Please reset the device power and reconnect</source>
     <message>
         <location filename="../qml/main.qml" line="166"/>
         <source>Update firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновить прошивку</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="167"/>
         <source>Newest firmware avaliable on the server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Более свежая версия прошивки доступна на сервере.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="186"/>
@@ -696,41 +698,47 @@ Minimum required version is </source>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Вы хотите обновить прошивку сейчас?
+ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="265"/>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
-        <translation type="unfinished"></translation>
+        <translation>Новая прошивка доступна на сервере.
+Текущая версия прошивки Вашего устройства: </translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="266"/>
         <source>
 New firmware version is: </source>
-        <translation type="unfinished"></translation>
+        <translation>
+Новая версия прошивки: </translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="268"/>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Вы хотите скачать и обновить прошивку сейчас?
+ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="281"/>
         <source>You must save preset before export</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы должны схранить пресет перед экспортом</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="288"/>
         <source>Preset import error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка импорта пресета!</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="294"/>
         <source>Preset export finished</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт пресета завершён</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="308"/>
@@ -750,7 +758,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <location filename="../qml/main.qml" line="320"/>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation type="unfinished"></translation>
+        <translation>Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
     </message>
 </context>
 </TS>
