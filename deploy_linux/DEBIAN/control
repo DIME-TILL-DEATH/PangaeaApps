@@ -1,5 +1,7 @@
 Package: PangaeaCPPA
-Version: 1709.2
+Version: APPVERSION
 Maintainer: AMT electronics
 Architecture: all
 Description: Control application for PANGAEA devices
+ After install, please, add yourself to dialout group
+Homepage: https://media.amt-sales.com/cat/cab-emulation/pangaea-series/

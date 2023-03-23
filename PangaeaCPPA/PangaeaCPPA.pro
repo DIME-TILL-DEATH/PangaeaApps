@@ -180,6 +180,7 @@ CONFIG(release, debug|release) {
         QMAKE_POST_LINK += mkdir -p $${dirDeploy}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += cp -r $${dirApp}/. $${dirDeploy}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += cp -r $${dirDeploy}/DEBIAN/ $${dirDeploy}/debian_deploy/PangaeaCPPA/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += sed -i $$shell_quote(s/APPVERSION/$${VERSION}/) $${dirDeploy}/debian_deploy/PangaeaCPPA/DEBIAN/control $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += cp -r $${dirDeploy}/usr/ $${dirDeploy}/debian_deploy/PangaeaCPPA/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += dpkg-deb --build $${dirDeploy}/debian_deploy/PangaeaCPPA/ $$escape_expand(\\n\\t)
     }
