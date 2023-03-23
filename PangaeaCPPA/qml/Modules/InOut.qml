@@ -37,7 +37,7 @@ Rectangle {
             horizontalAlignment: Text.AlignHCenter
 
             Layout.fillWidth: true
-            font.pixelSize: root.height/27
+            font.pixelSize: Math.min(root.height/27, root.width/2.75)
 
             text: root.text
         }
