@@ -77,11 +77,13 @@ endif()
 if(ANDROID_TARGET_ARCH STREQUAL "arm64-v8a")
         set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
             ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/arm64-v8a/libcrypto_1_1.so
-            ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/arm64-v8a/libssl_1_1.so)
+            ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/arm64-v8a/libssl_1_1.so
+            ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libWavConverterLib_arm64-v8a.so)
 elseif(ANDROID_TARGET_ARCH STREQUAL "armeabi-v7a")
     set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
         ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/armeabi-v7a/libcrypto_1_1.so
-        ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/armeabi-v7a/libssl_1_1.so)
+        ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/armeabi-v7a/libssl_1_1.so
+        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/armeabi-v7a/libWavConverterLib_armeabi-v7a.so)
 endif()
 
 qt6_add_translations(Pangaea-mobile TS_FILES
