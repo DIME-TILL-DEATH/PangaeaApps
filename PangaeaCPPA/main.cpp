@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("Pangaea");
 
 #ifdef Q_OS_LINUX
-    //QApplication::setWindowIcon(QIcon(":/qml/Images/AMT.svg"));
+    QApplication::setWindowIcon(QIcon(":/qml/Images/AMT.svg"));
     app.setApplicationVersion(VERSION_STRING);
 #endif
 
