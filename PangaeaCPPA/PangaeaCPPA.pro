@@ -113,6 +113,7 @@ linux {
 INCLUDEPATH += $${PWD}/../shared_libs/include
 LIBS += -L$${libsPath} -lWavConverterLib
 
+#to backend
 DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.01\\\"
 DEFINES += CP16PA_FIRMWARE_VERSION=\\\"1.04.01\\\"
 DEFINES += CP100_FIRMWARE_VERSION=\\\"2.08.02\\\"
