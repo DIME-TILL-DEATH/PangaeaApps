@@ -84,7 +84,6 @@ linux: !macx{
 
         LIBS += -L$${libsPath} -lsox
 
-
         destLibDir = $${DESTDIR}
 
         includeFile ~= s,/,\\,g
@@ -94,7 +93,7 @@ linux: !macx{
 
         !exists($${destIncludeDir}) {QMAKE_POST_LINK += $$QMAKE_MKDIR $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)}
         QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${includeFile}) $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)
-        win32-g++: QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${destLibDir}) $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${destLibDir}) $$escape_expand(\\n\\t)
     }
 }
 
@@ -109,3 +108,5 @@ macx {
     QMAKE_POST_LINK += mkdir -p $${destIncludeDir} $$escape_expand(\n\t)
     QMAKE_POST_LINK += cp $${includeFile} $${destIncludeDir} $$escape_expand(\n\t)
 }
+
+

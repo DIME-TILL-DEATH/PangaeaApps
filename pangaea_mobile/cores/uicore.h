@@ -39,6 +39,7 @@ public:
     Q_INVOKABLE void readAll(void);
 
     Q_INVOKABLE void setImpuls(QString fullFilePath);
+    Q_INVOKABLE void convertAndUploadImpulse(QString filePath);
     Q_INVOKABLE void escImpuls();
 
     Q_INVOKABLE void exportPreset(QString fileName);
@@ -76,6 +77,7 @@ private:
         {"de", ":/translations/pangaea-mobile_de.qm"}
     };
 
+    QString m_pickedImpulsePath;
 
     void loadTranslator(QString languageCode);
     void loadDefaultTranslator();
@@ -121,6 +123,9 @@ public slots:
     void slFirmwareFilePicked(QString filePath, QString fileName);
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
+
+private slots:
+    void slImpulseFilePicked(QString filePath, QString fileName);
 };
 
 #endif // UICORE_H

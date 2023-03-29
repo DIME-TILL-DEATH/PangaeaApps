@@ -32,7 +32,8 @@ Dialog
 
     property bool closeOnDisconnect: false
 
-    anchors.centerIn: parent
+    anchors.centerIn: Overlay.overlay
+//    anchors.centerIn: parent
 
     background: Rectangle {
        id: _backRect

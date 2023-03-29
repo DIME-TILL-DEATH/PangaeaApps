@@ -16,7 +16,9 @@ Logger::Logger(QObject* parent)
 {
     Q_UNUSED(parent)
 
-    QString folderPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/";
+
+#ifdef Q_OS_ANDROID
+    QString folderPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
 
     if(!QDir(folderPath).exists())
     {
@@ -25,7 +27,7 @@ Logger::Logger(QObject* parent)
 
     logFile.setFileName(folderPath+"log.txt");
 
-#ifdef Q_OS_ANDROID
+
     bool result = AndroidUtils::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
     if(!result)
     {
@@ -39,6 +41,15 @@ Logger::Logger(QObject* parent)
         qDebug() << "READ_EXTERNAL_STORAGE permission denied, trying to request";
          AndroidUtils::requestPermission("android.permission.READ_EXTERNAL_STORAGE");
     }
+#elif
+    QString folderPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0)+"/AMT/pangaeaCPPA/";
+
+    if(!QDir(folderPath).exists())
+    {
+        QDir().mkpath(folderPath);
+    }
+
+    logFile.setFileName(folderPath+"log.txt");
 #endif
 
     if(!logFile.open(QIODevice::WriteOnly | QIODevice::Text))
