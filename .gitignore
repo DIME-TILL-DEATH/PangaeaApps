@@ -1,5 +1,6 @@
 #desktop_bundle_output/release/*
 shared_libs/*
+deploy_android/*
 deploy_linux/debian_deploy/*
 deploy_linux/app/*
 deploy_linux/PangaeaCPPA.tar.gz

@@ -124,3 +124,8 @@ qt6_add_resources(Pangaea-mobile "AndroidResources"
         android/AndroidManifest.xml
         android/build.gradle
 )
+
+add_custom_command(TARGET Pangaea-mobile POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/android-build/build/outputs/apk/debug/android-build-debug.apk
+                                     ${CMAKE_CURRENT_SOURCE_DIR}/../deploy_android/Pangaea-mobile_v${CMAKE_PROJECT_VERSION}.apk
+)
