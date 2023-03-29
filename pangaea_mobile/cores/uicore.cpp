@@ -6,6 +6,7 @@
 #include <QCoreApplication>
 
 #include "uicore.h"
+#include "resampler.h"
 
 #ifdef __ANDROID__
 #include <jni.h>
@@ -23,10 +24,10 @@ UICore::UICore(BluetoothleUART* bleConnection, QQmlApplicationEngine *engine, QO
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
 
-    connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, &UICore::sgSetImpuls, Qt::QueuedConnection);
-    connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UICore::sgImportPreset, Qt::QueuedConnection);
-    connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UICore::slFirmwareFilePicked, Qt::QueuedConnection);
-    connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UICore::sgExportPreset, Qt::QueuedConnection);
+    connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, &UICore::slImpulseFilePicked);
+    connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UICore::sgImportPreset);
+    connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UICore::slFirmwareFilePicked);
+    connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UICore::sgExportPreset);
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
@@ -110,6 +111,32 @@ void UICore::setImpuls(QString fullFilePath)
 #endif
 }
 
+void UICore::convertAndUploadImpulse(QString filePath)
+{
+    Q_UNUSED(filePath);
+    QFileInfo irFileInfo(m_pickedImpulsePath);
+
+    QString irOutFileName = irFileInfo.fileName();
+    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/convertedIR/";
+    QString tmpFilePath = outFolder+"tmp.wav";
+
+    if(!QDir(outFolder).exists())
+    {
+        QDir().mkpath(outFolder);
+    }
+    QString outpuFilePath = outFolder + irOutFileName;
+
+    QFile tmpFile;
+    tmpFile.setFileName(m_pickedImpulsePath);
+    tmpFile.copy(tmpFilePath);
+
+    Resampler().convertFile(tmpFilePath, outpuFilePath);
+
+    tmpFile.remove(tmpFilePath);
+
+    emit sgSetImpuls(outpuFilePath, irOutFileName);
+}
+
 void UICore::pickFile(ActivityType fileType, QString filter)
 {
 #ifdef Q_OS_ANDROID
@@ -145,9 +172,15 @@ void UICore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware 
     emit sgSetUIText("firmware_local_path", minimalFirmware->path());
 }
 
+void UICore::slImpulseFilePicked(QString filePath, QString fileName)
+{
+    emit sgSetImpuls(filePath, fileName);
+    qDebug() << "Impulse picked";
+    m_pickedImpulsePath = filePath;
+}
+
 void UICore::pickFirmwareFile()
 {
-    // TODO не будет работать на чем-то кроме андроида. Либо разные UICore для desktop и mobile, либо внутри функций
     pickFile(ActivityType::PICK_FIRMWARE, "*/*");
 }
 

@@ -476,7 +476,7 @@ void Core::setImpulse(QString filePath, QString fileName)
 
     if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
     {
-        qDebug() << __FUNCTION__ << "Not supported wav format";
+        qDebug() << __FUNCTION__ << "Not supported wav format:" << wavHead.sampleRate << wavHead.bitsPerSample << wavHead.numChannels;
         emit sgSetUIText("not_supported_ir",
                          QString::number(wavHead.sampleRate)+","+
                          QString::number(wavHead.bitsPerSample)+","+

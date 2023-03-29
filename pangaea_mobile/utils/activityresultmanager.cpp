@@ -97,8 +97,8 @@ void ActivityResultManager::processUri(QJniObject uriObject)
 {
 
     m_filePath = uriObject.toString();
-    m_filePath.replace("%2F", "/");
-    m_filePath.replace("%3A", ":");
+//    m_filePath.replace("%2F", "/");
+//    m_filePath.replace("%3A", ":");
 
     m_fileName= QJniObject::callStaticObjectMethod(
             "com.amtelectronics.utils/JavaFile", "getFileName",

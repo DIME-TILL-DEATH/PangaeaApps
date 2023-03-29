@@ -53,16 +53,19 @@ Item
         }
     }
 
-    CustomMessageDialog
-    {
+    CustomMessageDialog{
         id: _msgNotSupportedIrFormat
 
-        buttons: Dialog.Ok
         closeOnDisconnect: true
 
-        text: qsTr("Not supported IR Format!\nPANGAEA supports only 48kHz/24bits/1channel files");
-
         headerText: qsTr("Not supported format")
+
+        buttons: Dialog.Yes | Dialog.No
+
+        onAccepted:
+        {
+            _uiCore.convertAndUploadImpulse("");
+        }
     }
 
     Connections
@@ -78,7 +81,12 @@ Item
 
             if(nameParam === "not_supported_ir")
             {
+                _msgNotSupportedIrFormat.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
+                                     nameValue + "\n" +
+                                     qsTr("Do you want to convert it before upload?")
                 _msgNotSupportedIrFormat.open();
+
+
             }
         }
 
