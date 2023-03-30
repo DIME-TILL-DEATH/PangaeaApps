@@ -3,8 +3,11 @@ QT += core
 QT += serialport
 QT += bluetooth
 
-TEMPLATE = lib
 CONFIG += c++17
+
+TEMPLATE = lib
+CONFIG += staticlib
+
 
 DEFINES += PANGAEA_LIBRARY
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0

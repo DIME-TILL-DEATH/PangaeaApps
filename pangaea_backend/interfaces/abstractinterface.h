@@ -5,7 +5,7 @@
 
 #include "devicedescription.h"
 
-class AbstractInterface : public QObject
+class  AbstractInterface : public QObject
 {
     Q_OBJECT
 public:

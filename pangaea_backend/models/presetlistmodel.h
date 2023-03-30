@@ -6,7 +6,13 @@
 
 #include "preset.h"
 
-class PresetListModel : public QAbstractListModel
+#if defined(PANGAEA_LIBRARY)
+#  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
+#else
+#  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
+#endif
+
+class PANGAEA_LIBRARY_EXPORT PresetListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:

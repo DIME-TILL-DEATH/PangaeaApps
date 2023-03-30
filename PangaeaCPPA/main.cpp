@@ -11,6 +11,8 @@
 
 #include "core.h"
 #include "netcore.h"
+#include "presetlistmodel.h"
+
 #include "uidesktopcore.h"
 #include "uisettings.h"
 #include "interfacecore.h"
@@ -47,10 +49,12 @@ int main(int argc, char *argv[])
     Core* core = new Core();
     NetCore* netCore = new NetCore();
     InterfaceCore* interfaceManager = new InterfaceCore();
+    PresetListModel presetListModel;
 
     ThreadController threadController(QThread::currentThread());
     core->moveToThread(threadController.backendThread());
     netCore->moveToThread(threadController.backendThread());
+
 #if !defined(Q_OS_MACOS) && !defined(Q_OS_LINUX)
     interfaceManager->moveToThread(threadController.backendThread()); // On MAC BLE can work only on the main thread
                                                                         // In Linux BLE needs to work in separate thread from core
@@ -71,19 +75,20 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);
 
     qRegisterMetaType<DeviceDescription>();
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
 
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
 
-//    QLoggingCategory logBleBlueZ("qt.bluetooth");
-//    QLoggingCategory::setFilterRules(QStringLiteral("qt.bluetooth* = true"));
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------
+    QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
+    QObject::connect(core, &Core::sgUpdatePreset, &presetListModel, &PresetListModel::updatePreset, Qt::QueuedConnection);
+
     QObject::connect(&uiSettings, &UiSettings::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
-    //QObject::connect(&uiSettings, &UiSettings::sgTranslatorChanged, core, &Core::pushReadPresetCommands);
     QObject::connect(&uiSettings, &UiSettings::sgApplicationStarted, netCore, &NetCore::requestAppUpdates);
 
     QObject::connect(&uiCore, &UiDesktopCore::sgReadAllParameters, core, &Core::readAllParameters);

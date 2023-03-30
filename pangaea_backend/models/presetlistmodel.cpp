@@ -5,7 +5,7 @@
 PresetListModel::PresetListModel(QObject *parent)
     : QAbstractListModel{parent}
 {
-
+    m_presetList = new QList<Preset>; // dummy
 }
 
 QHash<int, QByteArray> PresetListModel::roleNames() const

@@ -1,9 +1,6 @@
 #ifndef CORE_H
 #define CORE_H
 
-//#include <QQmlApplicationEngine>
-//#include <QQmlContext>
-
 #include <QTimer>
 #include <QFile>
 #include <QFileInfo>
@@ -15,12 +12,17 @@
 #include "answerworker.h"
 #include "devicecontrols.h"
 #include "preset.h"
-#include "presetlistmodel.h"
 #include "presetmanager.h"
 
 #include "irworker.h"
 
-class Core : public QObject
+#if defined(PANGAEA_LIBRARY)
+#  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
+#else
+#  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
+#endif
+
+class PANGAEA_LIBRARY_EXPORT Core : public QObject
 {
     Q_OBJECT
 public:
@@ -64,7 +66,6 @@ private:
     AnswerWorker commandWorker;
 
     QList<Preset> m_presetsList;
-    PresetListModel m_presetListModel;
 
     Device controlledDevice;
 
@@ -118,7 +119,7 @@ signals:
 //    void sgModuleNameUpdated(QString name);
 
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
-
+    void sgUpdatePreset(Preset newPreset);
 
 public slots:
     void slReadyToDisconnect();

@@ -8,7 +8,13 @@
 #include "bleinterface.h"
 #include "usbinterface.h"
 
-class InterfaceCore : public QObject
+#if defined(PANGAEA_LIBRARY)
+#  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
+#else
+#  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
+#endif
+
+class PANGAEA_LIBRARY_EXPORT InterfaceCore : public QObject
 {
     Q_OBJECT
 public:

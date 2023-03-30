@@ -4,6 +4,8 @@
 #include <QString>
 #include <QObject>
 
+#include <QtCore/QtGlobal>
+
 class DeviceDescription
 {
     Q_GADGET

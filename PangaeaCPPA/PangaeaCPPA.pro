@@ -12,78 +12,33 @@ QT += widgets
 DEFINES += PANGAEA_DESKTOP
 
 win32: {
-    VERSION = 1.0.1714.1
+    VERSION = 1.0.1720.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1714
+else: VERSION = 1.0.1720
 
 DEFINES += VERSION_STRING=\\\"$${VERSION}\\\"
 
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    cores/core.cpp \
-    cores/interfacecore.cpp \
-    cores/netcore.cpp \
-    device/answerworker.cpp \
-    device/device.cpp \
-    device/deviceanswer.cpp \
-    device/devicecontrols.cpp \
-    device/deviceparameter.cpp \
-    device/firmware.cpp \
-    device/preset.cpp \
-    models/interfacelistmodel.cpp \
-    models/presetlistmodel.cpp \
-    interfaces/abstractinterface.cpp \
-    interfaces/devicedescription.cpp \
-    interfaces/bleinterface.cpp \
-    interfaces/usbinterface.cpp \
     threadcontroller.cpp \
     ui/uidesktopcore.cpp \
     ui/uiinterfacemanager.cpp \
     ui/uisettings.cpp \
-    utils/irworker.cpp \
     utils/logger.cpp \
-    utils/parser.cpp \
-    utils/presetmanager.cpp
 
 HEADERS += \
-    cores/core.h \
-    cores/interfacecore.h \
-    cores/netcore.h \
-    device/answerworker.h \
-    device/defines.h \
-    device/device.h \
-    device/deviceanswer.h \
-    device/devicecontrols.h \
-    device/deviceparameter.h \
-    device/firmware.h \
-    device/preset.h \
-    models/interfacelistmodel.h \
-    models/presetlistmodel.h \
-    interfaces/abstractinterface.h \
-    interfaces/devicedescription.h \
-    interfaces/bleinterface.h \
-    interfaces/usbinterface.h \
-    qmlEnums/devicetypeenum.h \
     threadcontroller.h \
     ui/uidesktopcore.h \
     ui/uiinterfacemanager.h \
     ui/uisettings.h \
-    utils/irworker.h \
     utils/logger.h \
-    utils/parser.h \
-    utils/presetmanager.h
 
-INCLUDEPATH += cores
-INCLUDEPATH += device
-INCLUDEPATH += interfaces
-INCLUDEPATH += models
-INCLUDEPATH += qmlEnums
 INCLUDEPATH += ui
 INCLUDEPATH += utils
 
@@ -112,6 +67,7 @@ linux {
 
 INCLUDEPATH += $${PWD}/../shared_libs/include
 LIBS += -L$${libsPath} -lWavConverterLib
+LIBS += -L$${libsPath} -lpangaea_backend
 
 #to backend
 DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.01\\\"

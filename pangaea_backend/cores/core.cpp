@@ -2,8 +2,6 @@
 #include <QThread>
 #include <QSerialPortInfo>
 #include <QDir>
-//#include <QDesktopServices>
-//#include <QGuiApplication>
 #include <QStandardPaths>
 
 #include <QFile>
@@ -24,12 +22,6 @@ Core::Core(QObject *parent) : QObject(parent)
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
-
-    m_presetListModel.refreshModel(&m_presetsList);
-    connect(this, &Core::sgRefreshPresetList, &m_presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
-
-    // TODO presetListModel наружу и регистрировать синглтон там
-   // qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &m_presetListModel);
 }
 
 
@@ -156,7 +148,7 @@ void Core::parseInputData(const QByteArray& ba)
                             default:
                             {
                                 currentPreset.setRawData(baPresetData);
-                                m_presetListModel.updatePreset(currentPreset);
+                                emit sgUpdatePreset(currentPreset);
                                 break;
                             }
                         }
@@ -279,7 +271,7 @@ void Core::parseInputData(const QByteArray& ba)
 
                 emit sgSetUIText("impulse_name", impulseName);
                 qInfo() << recievedCommand.description() << "impulse name:" << impulseName;
-                m_presetListModel.updatePreset(currentPreset);
+                emit sgUpdatePreset(currentPreset);
                 break;
             }
 
@@ -555,7 +547,7 @@ void Core::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QStr
         irData = impulseData;
         bytesToUpload = impulseData.size();
         currentPreset.setImpulseName(impulseName);
-        m_presetListModel.updatePreset(currentPreset);
+        emit sgUpdatePreset(currentPreset);
     }
 
     for(quint16 i=0; i<bytesToUpload; i++)
@@ -699,7 +691,7 @@ void Core::saveChanges()
 
     qDebug() << "Current preset bp: " << currentPreset.bankNumber() << ":" << currentPreset.presetNumber() << "impulse name:" << currentPreset.impulseName();
 
-    m_presetListModel.updatePreset(currentPreset);
+    emit sgUpdatePreset(currentPreset);
     isPresetEdited = false;
     emit sgSetUIParameter ("preset_edited",  isPresetEdited);
     bEditable = true;
