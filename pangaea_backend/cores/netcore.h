@@ -14,13 +14,7 @@
 
 #include "firmware.h"
 
-#if defined(PANGAEA_LIBRARY)
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
-#else
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
-#endif
-
-class PANGAEA_LIBRARY_EXPORT NetCore : public QObject
+class NetCore : public QObject
 {
     Q_OBJECT
 public:

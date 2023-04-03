@@ -97,8 +97,7 @@ void InterfaceCore::slInterfaceError(QString errorDescription)
 
 void InterfaceCore::slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason)
 {
-#ifdef PANGAEA_DESKTOP
-
+#ifndef Q_OS_ANDROID
     AbstractInterface* interface_ptr = dynamic_cast<AbstractInterface*>(QObject::sender());
     if(!interface_ptr)
     {

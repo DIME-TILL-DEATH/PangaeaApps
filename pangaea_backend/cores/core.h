@@ -16,13 +16,7 @@
 
 #include "irworker.h"
 
-#if defined(PANGAEA_LIBRARY)
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
-#else
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
-#endif
-
-class PANGAEA_LIBRARY_EXPORT Core : public QObject
+class Core : public QObject
 {
     Q_OBJECT
 public:
@@ -57,8 +51,6 @@ public:
     void sw4Enable();
 
     void stopCore();
-
-    void setPresetData(const Preset& preset);
 
 private:
     IRWorker irWorker;
@@ -103,6 +95,7 @@ private:
 
     bool bEditable;
 
+    void setPresetData(const Preset& preset);
 signals:
     void sgWriteToInterface(QByteArray data);
     void sgExchangeError();

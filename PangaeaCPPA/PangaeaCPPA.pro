@@ -9,8 +9,6 @@ QT += serialport
 QT += bluetooth
 QT += widgets
 
-DEFINES += PANGAEA_DESKTOP
-
 win32: {
     VERSION = 1.0.1720.1
 
@@ -31,6 +29,8 @@ SOURCES += main.cpp \
     ui/uiinterfacemanager.cpp \
     ui/uisettings.cpp \
     utils/logger.cpp \
+#    models/interfacelistmodel.cpp \
+#    models/presetlistmodel.cpp \
 
 HEADERS += \
     threadcontroller.h \
@@ -38,9 +38,11 @@ HEADERS += \
     ui/uiinterfacemanager.h \
     ui/uisettings.h \
     utils/logger.h \
+#    models/interfacelistmodel.h \
 
 INCLUDEPATH += ui
 INCLUDEPATH += utils
+INCLUDEPATH += models
 
 TRANSLATIONS += translations/PangaeaCPPA_en.ts
 TRANSLATIONS += translations/PangaeaCPPA_ru.ts

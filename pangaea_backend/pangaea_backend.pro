@@ -8,7 +8,6 @@ CONFIG += c++17
 TEMPLATE = lib
 CONFIG += staticlib
 
-
 DEFINES += PANGAEA_LIBRARY
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
@@ -104,6 +103,7 @@ macx {
     DESTDIR = $$PWD/../shared_libs/lib.mac
 }
 
+# TODO спрятать внутреннюю структуру backend, уменьшить количество заголовочных наружу
 headersDataFiles.path = $${PWD}/../shared_libs/include
 headersDataFiles.files = $$files($${PWD}/*.h, true) #$$PWD/*/*.h
 win32: headersDataFiles.files ~= s,/,\\,g

@@ -6,18 +6,12 @@
 
 #include "devicedescription.h"
 
-#if defined(PANGAEA_LIBRARY)
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
-#else
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
-#endif
-
-class PANGAEA_LIBRARY_EXPORT InterfaceListModel : public QAbstractListModel
+class InterfaceListModel : public QAbstractListModel
 {
+    Q_OBJECT
 public:
     explicit InterfaceListModel(QObject *parent = nullptr);
 
-public:
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;

@@ -1,25 +1,17 @@
 #ifndef PRESETLISTMODEL_H
 #define PRESETLISTMODEL_H
 
-#include <QAbstractListModel>
 #include <QObject>
+#include <QAbstractListModel>
 
 #include "preset.h"
 
-#if defined(PANGAEA_LIBRARY)
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
-#else
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
-#endif
-
-class PANGAEA_LIBRARY_EXPORT PresetListModel : public QAbstractListModel
+class PresetListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
     explicit PresetListModel(QObject *parent = nullptr);
 
-
-public:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
