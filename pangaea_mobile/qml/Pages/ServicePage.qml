@@ -10,6 +10,8 @@ import ControlGroups 1.0
 import Elements 1.0
 import StyleSettings 1.0
 
+import CppObjects
+
 Item
 {
     id: _main
@@ -54,7 +56,7 @@ Item
             onMbPressed:
             {
                 //fileFirmWare.open();
-                _uiCore.pickFirmwareFile();
+                UiCore.pickFirmwareFile();
             }
         }
 
@@ -134,7 +136,7 @@ Item
         onAccepted:
         {
             messageAcceptFile.close()
-            _uiCore.setFirmware(cleanPath);
+            UiCore.setFirmware(cleanPath);
         }
         onRejected:
         {
@@ -161,8 +163,8 @@ Item
         onRejected:
         {
             _main.openConnectPage();
-            _uiCore.sgSetUIParameter("fw_update_complete", true);
-            _uiCore.sgSetUIParameter("ready_to_disconnect", true);
+            UiCore.sgSetUIParameter("fw_update_complete", true);
+            UiCore.sgSetUIParameter("ready_to_disconnect", true);
         }
     }
 
@@ -203,7 +205,7 @@ Item
 
         onAccepted:
         {
-            _uiCore.setParameter("format", 0);
+            UiCore.setParameter("format", 0);
         }
     }
 
@@ -211,24 +213,24 @@ Item
     {
         id: nameDialog
 
-        contentText: _uiCore.moduleName
+        contentText: UiCore.moduleName
 
         headerText: qsTr("Set module name")
         text: qsTr("Set unique name for current module:")
 
         onAccepted:
         {
-            _uiCore.moduleName = contentText;
+            UiCore.moduleName = contentText;
         }
         onRejected:
         {
-            contentText = _uiCore.moduleName;
+            contentText = UiCore.moduleName;
         }
     }
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, inValue)
         {

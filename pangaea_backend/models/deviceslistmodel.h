@@ -1,16 +1,16 @@
-#ifndef INTERFACELISTMODEL_H
-#define INTERFACELISTMODEL_H
+#ifndef DEVICESLISTMODEL_H
+#define DEVICESLISTMODEL_H
 
 #include <QAbstractListModel>
 #include <QObject>
 
 #include "devicedescription.h"
 
-class InterfaceListModel : public QAbstractListModel
+class DevicesListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit InterfaceListModel(QObject *parent = nullptr);
+    explicit DevicesListModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -32,4 +32,4 @@ private:
     };
 };
 
-#endif // INTERFACELISTMODEL_H
+#endif // DEVICESLISTMODEL_H

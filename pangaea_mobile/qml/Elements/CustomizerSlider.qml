@@ -1,9 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.0
-//import QtGraphicalEffects 1.0
 import Qt5Compat.GraphicalEffects
 
 import StyleSettings 1.0
+
+import CppObjects
 
 Slider
 {
@@ -141,7 +142,7 @@ Slider
     {
         if(!softUpdate)
         {
-            _uiCore.setParameter(nameParam, Math.round(kVal * root.value * 100 + bVal));
+            UiCore.setParameter(nameParam, Math.round(kVal * root.value * 100 + bVal));
             editabled = true;
         }
         else
@@ -152,7 +153,7 @@ Slider
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if((root.nameParam.length>0) && nameParam.localeCompare(root.nameParam) === 0)

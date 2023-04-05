@@ -3,6 +3,11 @@ QT += core
 QT += serialport
 QT += bluetooth
 
+android{
+    QT += positioning
+    QT += core-private
+}
+
 CONFIG += c++17
 
 TEMPLATE = lib
@@ -27,7 +32,7 @@ SOURCES += \
     device/deviceparameter.cpp \
     device/firmware.cpp \
     device/preset.cpp \
-    models/interfacelistmodel.cpp \
+    models/deviceslistmodel.cpp \
     models/presetlistmodel.cpp \
     interfaces/abstractinterface.cpp \
     interfaces/devicedescription.cpp \
@@ -49,7 +54,7 @@ HEADERS += \
     device/deviceparameter.h \
     device/firmware.h \
     device/preset.h \
-    models/interfacelistmodel.h \
+    models/deviceslistmodel.h \
     models/presetlistmodel.h \
     interfaces/abstractinterface.h \
     interfaces/devicedescription.h \

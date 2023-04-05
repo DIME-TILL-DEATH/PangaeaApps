@@ -4,7 +4,7 @@
 #ifdef Q_OS_ANDROID
 #include <QGeoPositionInfoSource>
 #include <QtCore/private/qandroidextras_p.h>
-#include "androidutils.h"
+//#include "androidutils.h"
 #endif
 
 #include "bleinterface.h"
@@ -95,28 +95,29 @@ void BleInterface::startDiscovering()
     }
 
 #ifdef Q_OS_ANDROID
-    bool result = AndroidUtils::checkPermission("android.permission.ACCESS_COARSE_LOCATION");
-    if(!result)
-    {
-        result = AndroidUtils::requestPermission("android.permission.ACCESS_COARSE_LOCATION");
-        if(!result)
-        {
-            qDebug() << "Geolocation permission denied";
-            isAvaliable = false;
-            emit sgLocalBluetoothNotReady("GeolocationPermissionDenied");
-            return;
-        }
-        else
-        {
-            if(QGeoPositionInfoSource::createDefaultSource(this)->supportedPositioningMethods() == QGeoPositionInfoSource::NoPositioningMethods)
-            {
-                qDebug() << "Geolocation is off";
-                isAvaliable = false;
-                emit sgLocalBluetoothNotReady("GeolocationIsOff");
-                return;
-            }
-        }
-    }
+    // Todo platform indepenent permissions
+//    bool result = AndroidUtils::checkPermission("android.permission.ACCESS_COARSE_LOCATION");
+//    if(!result)
+//    {
+//        result = AndroidUtils::requestPermission("android.permission.ACCESS_COARSE_LOCATION");
+//        if(!result)
+//        {
+//            qDebug() << "Geolocation permission denied";
+//            isAvaliable = false;
+//            emit sgLocalBluetoothNotReady("GeolocationPermissionDenied");
+//            return;
+//        }
+//        else
+//        {
+//            if(QGeoPositionInfoSource::createDefaultSource(this)->supportedPositioningMethods() == QGeoPositionInfoSource::NoPositioningMethods)
+//            {
+//                qDebug() << "Geolocation is off";
+//                isAvaliable = false;
+//                emit sgLocalBluetoothNotReady("GeolocationIsOff");
+//                return;
+//            }
+//        }
+//    }
 
 #endif
 
@@ -271,7 +272,6 @@ QList<DeviceDescription> BleInterface::discoveredDevicesList()
 
 bool BleInterface::connect(DeviceDescription device)
 {
-
         m_connectedDevice = device;
         setState(InterfaceState::Connecting);
 

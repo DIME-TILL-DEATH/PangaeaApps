@@ -8,6 +8,7 @@ import ControlGroups 1.0
 import Modules 1.0
 import Elements 1.0
 
+import CppObjects
 
 Rectangle{
     width: 100
@@ -107,13 +108,13 @@ Rectangle{
         enabled: !parent.ListView.isCurrentItem
 
         onClicked: {
-            _uiCore.setParameter("set_preset_change", parent.ListView.section*16 + (index % maxMap));
+            UiCore.setParameter("set_preset_change", parent.ListView.section*16 + (index % maxMap));
         }
     }
 
 
     Connections{
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, inValue)
         {

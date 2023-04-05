@@ -512,9 +512,8 @@ Please reset the device power and reconnect</source>
     <message>
         <source>(c) 2023
 website: https://amtelectronics.com</source>
-        <translation type="unfinished">© 2023
-Веб-сайт: https://amt-sales.ru {2023
-?}</translation>
+        <translation>© 2023
+Веб-сайт: https://amt-sales.ru</translation>
     </message>
 </context>
 <context>

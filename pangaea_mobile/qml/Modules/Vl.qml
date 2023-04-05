@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import Elements 1.0
 import StyleSettings 1.0
 
+import CppObjects
+
 Item
 {
     id: main
@@ -55,7 +57,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if( nameParam === "presetEdit" )

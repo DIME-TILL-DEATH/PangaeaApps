@@ -9,6 +9,8 @@ import ControlGroups 1.0
 import Modules 1.0
 import Elements 1.0
 
+import CppObjects
+
 Item
 {
     id: _main
@@ -162,26 +164,26 @@ Item
 
         onAccepted:
         {
-            _uiCore.setParameter("save_change", saveParam);
-            _uiCore.setParameter("do_preset_change", saveParam);
+            UiCore.setParameter("save_change", saveParam);
+            UiCore.setParameter("do_preset_change", saveParam);
         }
         onDiscarded:
         {
-            _uiCore.restoreParameter("impulse")
-            _uiCore.setParameter("do_preset_change", saveParam);
+            UiCore.restoreParameter("impulse")
+            UiCore.setParameter("do_preset_change", saveParam);
             visible = false;
         }
         onRejected:
         {
             saveParam = 0
-            _uiCore.restoreParameter("preset")
-            _uiCore.restoreParameter("bank")
+            UiCore.restoreParameter("preset")
+            UiCore.restoreParameter("bank")
         }
     }
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgPresetChangeStage(inChangePreset)
         {
@@ -221,12 +223,21 @@ Item
                 }
             }
 
+//            if(nameParam === "open_preset_list")
+//            {
+//                console.log("Open presets list");
+//                _presetsList.open();
+//            }
+
+        }
+
+        function onSgSetParameter(nameParam, inValue)
+        {
             if(nameParam === "open_preset_list")
             {
                 console.log("Open presets list");
                 _presetsList.open();
             }
-
         }
     }
 
@@ -234,11 +245,11 @@ Item
         target: _masterControls
 
         function onImportPreset(){
-            _uiCore.importPreset("");
+            UiCore.importPreset("");
         }
 
         function onExportPreset(){
-            _uiCore.exportPreset("");
+            UiCore.exportPreset("");
         }
     }
 }

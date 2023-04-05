@@ -4,6 +4,8 @@ import QtQuick.Controls 2.12
 import StyleSettings 1.0
 import Elements 1.0
 
+import CppObjects
+
 Item {
     signal closeSettingsWindow()
 
@@ -39,7 +41,7 @@ Item {
                     if(_darkBlue.checked) Style.currentTheme = Style.themeBlue
                     if(_darkOrange.checked) Style.currentTheme = Style.themeOrange
 
-                    _uiCore.saveSetting("color_theme" ,_btnGroupTheme.checkedButton.themeName);
+                    UiCore.saveSetting("color_theme" ,_btnGroupTheme.checkedButton.themeName);
                 }
             }
 
@@ -99,11 +101,11 @@ Item {
                 buttons: columnLanguages.children
                 exclusive: true
                 onCheckedButtonChanged: {
-                    if(_autoselect.checked) _uiCore.setLanguage("autoselect");
-                    if(_english.checked) _uiCore.setLanguage("en");
-                    if(_russian.checked) _uiCore.setLanguage("ru");
-                    if(_italian.checked) _uiCore.setLanguage("it");
-                    if(_deutch.checked)  _uiCore.setLanguage("de");
+                    if(_autoselect.checked) UiCore.setLanguage("autoselect");
+                    if(_english.checked) UiCore.setLanguage("en");
+                    if(_russian.checked) UiCore.setLanguage("ru");
+                    if(_italian.checked) UiCore.setLanguage("it");
+                    if(_deutch.checked)  UiCore.setLanguage("de");
                 }
             }
 
@@ -111,10 +113,10 @@ Item {
             Column {
                 id: columnLanguages
                 anchors.fill: parent
-                spacing: 4
+//                spacing: 4
                 Item{
                     width: parent.width
-                    height: parent.height*0.15
+                    height: parent.height/6
                     MText {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
@@ -126,22 +128,32 @@ Item {
                 MRadioButton {
                     id: _autoselect
                     text: qsTr("Autoselect")
+
+                    height: parent.height/6
                 }
                 MRadioButton {
                     id: _english
                     text: "English"
+
+                    height: parent.height/6
                }
                 MRadioButton {
                     id: _russian
                     text: "Русский"
+
+                    height: parent.height/6
                 }
                 MRadioButton {
                     id: _italian
                     text: "Italiano" //Italiana
+
+                    height: parent.height/6
                 }
                 MRadioButton {
                     id: _deutch
                     text: "Deutsch" //Deutsche
+
+                    height: parent.height/6
                }
 
             }
@@ -178,7 +190,7 @@ Item {
                     leftPadding: _checkBoxUpdates.indicator.width/5
                 }
                 onCheckStateChanged: {
-                    _uiCore.saveSetting("check_updates_enable", _checkBoxUpdates.checked);
+                    UiCore.saveSetting("check_updates_enable", _checkBoxUpdates.checked);
                 }
             }
         }
@@ -204,7 +216,7 @@ Item {
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, inValue)
         {

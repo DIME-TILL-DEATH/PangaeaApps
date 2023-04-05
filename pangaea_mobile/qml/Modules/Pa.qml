@@ -1,9 +1,10 @@
-import QtQuick 2.15 //2.7
-import QtQuick.Controls 2.15 //1.5
-//import QtQuick.Controls.Styles 1.4
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 import StyleSettings 1.0
 import Elements 1.0
+
+import CppObjects
 
 Item
 {
@@ -70,12 +71,12 @@ Item
 
                 onActivated:
                 {
-                    _uiCore.setParameter("amp_type", currentIndex);
+                    UiCore.setParameter("amp_type", currentIndex);
                 }
 
                 Connections
                 {
-                    target: _uiCore
+                    target: UiCore
                     function onSgSetUIParameter(nameParam, nameValue)
                     {
                         if(nameParam === "amp_type")
@@ -91,7 +92,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if((nameParam === main.nameValue))

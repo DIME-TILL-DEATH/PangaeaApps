@@ -9,6 +9,8 @@ import ControlGroups 1.0
 import Modules 1.0
 import Elements 1.0
 
+import CppObjects
+
 CustomMessageDialog {
     id: _root
 
@@ -81,7 +83,7 @@ CustomMessageDialog {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
-        model: _presetListModel
+        model: PresetListModel
 
         boundsBehavior: Flickable.StopAtBounds
         clip: true
@@ -130,7 +132,7 @@ CustomMessageDialog {
     }
 
     Connections{
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, inValue)
         {

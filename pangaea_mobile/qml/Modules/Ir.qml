@@ -6,6 +6,8 @@ import QtQuick.Window 2.0
 import StyleSettings 1.0
 import Elements 1.0
 
+import CppObjects
+
 Item
 {
     id: main
@@ -46,7 +48,7 @@ Item
                     anchors.fill: parent
                     onClicked:
                     {
-                        _uiCore.setImpuls("");
+                        UiCore.setImpuls("");
                     }
                 }
             }
@@ -64,25 +66,25 @@ Item
 
         onAccepted:
         {
-            _uiCore.convertAndUploadImpulse("");
+            UiCore.convertAndUploadImpulse("");
         }
     }
 
     Connections
     {
-        target: _uiCore
-        function onSgSetUIText(nameParam, nameValue)
+        target: UiCore
+        function onSgSetUIText(nameParam, value)
         {
             if( nameParam === "impulse_name" )
             {
-                _baseModule.impulseName = nameValue;
+                _baseModule.impulseName = (value==="") ? qsTr("empty") : value;
 
             }
 
             if(nameParam === "not_supported_ir")
             {
                 _msgNotSupportedIrFormat.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
-                                     nameValue + "\n" +
+                                     value + "\n" +
                                      qsTr("Do you want to convert it before upload?")
                 _msgNotSupportedIrFormat.open();
 
@@ -90,11 +92,11 @@ Item
             }
         }
 
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUIParameter(nameParam, value)
         {
-            if((nameParam === main.nameValue))
+            if((nameParam === main.value))
             {
-                main.on=nameValue
+                main.on=value
 
             }
         }

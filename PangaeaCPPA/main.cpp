@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     Core* core = new Core();
     NetCore* netCore = new NetCore();
     InterfaceCore* interfaceManager = new InterfaceCore();
+
     PresetListModel presetListModel;
 
     ThreadController threadController(QThread::currentThread());
@@ -71,6 +72,8 @@ int main(int argc, char *argv[])
     UiSettings uiSettings;
 
     QQmlApplicationEngine engine;
+    engine.addImportPath(":/qml");
+    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
@@ -79,15 +82,11 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<DeviceDescription>();
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
-
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
 
     //-------------------------------------------------------------------------------
     // connections
-    //-------------------------------------------------------------------------------
-    QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
-    QObject::connect(core, &Core::sgUpdatePreset, &presetListModel, &PresetListModel::updatePreset, Qt::QueuedConnection);
-
+    //-------------------------------------------------------------------------------   
     QObject::connect(&uiSettings, &UiSettings::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
     QObject::connect(&uiSettings, &UiSettings::sgApplicationStarted, netCore, &NetCore::requestAppUpdates);
 
@@ -107,12 +106,22 @@ int main(int argc, char *argv[])
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);
     QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiDesktopCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
 
+    QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
+    QObject::connect(core, &Core::sgUpdatePreset, &presetListModel, &PresetListModel::updatePreset, Qt::QueuedConnection);
+
     NetCore::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
+
     NetCore::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiDesktopCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
     NetCore::connect(netCore, &NetCore::sgNewAppVersionAvaliable, &uiCore, &UiDesktopCore::slNewAppVersionAvaliable);
 //    QObject::connect(&uiCore, &UICore::sgDoOnlineFirmwareUpdate, &netCore, &NetCore::requestFirmwareFile);
 //    QObject::connect(&netCore, &NetCore::sgFirmwareDownloaded, &core, &Core::uploadFirmware);
 //    QObject::connect(&netCore, &NetCore::sgDownloadProgress, &uiCore, &UICore::sgDownloadProgress, Qt::QueuedConnection);
+
+    Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData);
+    Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::readAllParameters);
+    Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
+    Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
+    Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);
 
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, interfaceManager, &InterfaceCore::startScanning, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceCore::connectToDevice, Qt::QueuedConnection);
@@ -125,16 +134,8 @@ int main(int argc, char *argv[])
     InterfaceCore::connect(interfaceManager, &InterfaceCore::sgInterfaceUnavaliable, &uiInterfaceManager, &UiInterfaceManager::slInterfaceUnavaliable, Qt::QueuedConnection);
     InterfaceCore::connect(interfaceManager, &InterfaceCore::sgDeviceUnavaliable, &uiInterfaceManager, &UiInterfaceManager::sgDeviceUnavaliable, Qt::QueuedConnection);
     InterfaceCore::connect(interfaceManager, &InterfaceCore::sgInterfaceDisconnected, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceDisconnected, Qt::QueuedConnection);
-
-    Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData);
-    Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::readAllParameters);
-    Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
-    Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
-    Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);
     //----------------------------------------------------------------
 
-    engine.addImportPath(":/qml");
-    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     engine.load(url);
 
     return app.exec();

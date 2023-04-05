@@ -1,18 +1,18 @@
-#include "interfacelistmodel.h"
+#include "deviceslistmodel.h"
 
-InterfaceListModel::InterfaceListModel(QObject *parent)
+DevicesListModel::DevicesListModel(QObject *parent)
     : QAbstractListModel{parent}
 {
 
 }
 
-int InterfaceListModel::rowCount(const QModelIndex &parent) const
+int DevicesListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return m_devicesList.size();
 }
 
-QHash<int, QByteArray> InterfaceListModel::roleNames() const
+QHash<int, QByteArray> DevicesListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[ListRoles::DeviceDescriptionRole] = "deviceDescription";
@@ -20,7 +20,7 @@ QHash<int, QByteArray> InterfaceListModel::roleNames() const
     return roles;
 }
 
-QVariant InterfaceListModel::data(const QModelIndex &index, int role) const
+QVariant DevicesListModel::data(const QModelIndex &index, int role) const
 {
     if(!index.isValid() || index.row() > rowCount(index))
     {
@@ -42,13 +42,13 @@ QVariant InterfaceListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void InterfaceListModel::updateInterfaceList(DeviceConnectionType connectionType, QList<DeviceDescription>& list)
+void DevicesListModel::updateInterfaceList(DeviceConnectionType connectionType, QList<DeviceDescription>& list)
 {
     appendNewDevices(list);
     removeMissingDevices(connectionType, list);
 }
 
-void InterfaceListModel::appendNewDevices(QList<DeviceDescription>& list)
+void DevicesListModel::appendNewDevices(QList<DeviceDescription>& list)
 {
     for(auto& newDevice : list)
     {
@@ -62,7 +62,7 @@ void InterfaceListModel::appendNewDevices(QList<DeviceDescription>& list)
     }
 }
 
-void InterfaceListModel::removeMissingDevices(DeviceConnectionType connectionType, QList<DeviceDescription>& list)
+void DevicesListModel::removeMissingDevices(DeviceConnectionType connectionType, QList<DeviceDescription>& list)
 {
     for(auto& checkingDevice : m_devicesList)
     {
@@ -83,14 +83,14 @@ void InterfaceListModel::removeMissingDevices(DeviceConnectionType connectionTyp
     }
 }
 
-void InterfaceListModel::appendDevice(DeviceDescription &device)
+void DevicesListModel::appendDevice(DeviceDescription &device)
 {
     beginInsertRows(QModelIndex(), m_devicesList.size(), m_devicesList.size());
     m_devicesList.append(device);
     endInsertRows();
 }
 
-void InterfaceListModel::removeDevice(DeviceDescription &device)
+void DevicesListModel::removeDevice(DeviceDescription &device)
 {
     qint16 index = m_devicesList.indexOf(device);
 

@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.11
 import Elements 1.0
 import StyleSettings 1.0
 
+import CppObjects
+
 Rectangle {
     id: _main
 
@@ -158,7 +160,7 @@ Rectangle {
                 z: 5
                 onClicked: {
                     sgModuleOnOf()
-                    _uiCore.setParameter(_main.parent.nameValue, _main.parent.on) // Или хранить переменную внутри? Для меньшей связанности
+                    UiCore.setParameter(_main.parent.nameValue, _main.parent.on) // Или хранить переменную внутри? Для меньшей связанности
                 }
             }
         }
@@ -198,7 +200,7 @@ Rectangle {
     }
 
     Connections{
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(parameterName, inValue)
         {

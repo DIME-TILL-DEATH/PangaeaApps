@@ -4,6 +4,8 @@ import QtQuick.Controls 2.12
 import StyleSettings 1.0
 import Elements 1.0
 
+import CppObjects
+
 Item
 {
     id: main
@@ -104,7 +106,7 @@ Item
 
                             onClicked: {
                                 isPreEQ = !isPreEQ
-                                 _uiCore.setParameter("eq_pre", isPreEQ)
+                                 UiCore.setParameter("eq_pre", isPreEQ)
                             }
                         }
 
@@ -153,7 +155,7 @@ Item
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if((nameParam === main.nameValue))

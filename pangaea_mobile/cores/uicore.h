@@ -10,10 +10,10 @@
 
 #include <QTranslator>
 
-
 #include "activityresultmanager.h"
+
 #include "firmware.h"
-#include "bluetoothleuart.h"
+#include "devicedescription.h"
 
 
 //TODO: class enum UIValueItem, UITextItem, UIErrorItem
@@ -21,17 +21,11 @@ class UICore : public QObject
 {
     Q_OBJECT
 public:
-    explicit UICore(BluetoothleUART *bleConnection, QQmlApplicationEngine* engine, QObject *parent = nullptr);
+    explicit UICore(QObject *parent = nullptr);
 
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
 
     Q_INVOKABLE void setupApplication();
-
-    Q_INVOKABLE void connectToDevice(quint8 devNum);
-    Q_INVOKABLE void disconnectFromDevice(void);
-
-    Q_INVOKABLE void doConnect(quint8 numDev, QString address);
-    Q_INVOKABLE void rescanDevices();
 
     Q_INVOKABLE void setParameter(QString name, quint8 val);
     Q_INVOKABLE void restoreParameter(QString name);
@@ -62,7 +56,6 @@ public:
 private:
     QQmlApplicationEngine* m_qmlEngine;
 
-    BluetoothleUART* m_bleConnection;
     QTranslator m_translator;
 
     QString m_moduleName;
@@ -85,13 +78,6 @@ private:
     void pickFile(ActivityType fileType, QString filter);
 
 signals:
-    void sgStartScan();
-    void sgUpdateBLEDevicesList(QStringList str);
-    void sgConnectReady(void);
-    void sgConnectToDevice(int numDevice);
-    void sgDoConnect(quint8 numDev, QString address);
-    void sgDoDisconnect();
-
     void sgTranslatorChanged(QString langauageCode);
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
@@ -104,7 +90,7 @@ signals:
     //-----------------------------------------
     void sgLocalBluetoothNotReady(QString reason);
     //-----------------------------------------------
-    void sgReadAll();
+    void sgReadAllParameters();
     void sgSetParameter(QString name, quint8 value);
     void sgRestoreValue(QString name);
     void sgSetImpuls (QString filePath, QString fileName);

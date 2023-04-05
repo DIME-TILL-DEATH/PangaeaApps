@@ -6,7 +6,7 @@
 #include <QCoreApplication>
 
 #include "uicore.h"
-#include "resampler.h"
+//#include "resampler.h"
 
 #ifdef __ANDROID__
 #include <jni.h>
@@ -15,10 +15,8 @@
 ActivityResultManager activityResultHandler;
 #endif
 
-UICore::UICore(BluetoothleUART* bleConnection, QQmlApplicationEngine *engine, QObject *parent)
-    : QObject{parent},
-      m_qmlEngine{engine},
-      m_bleConnection{bleConnection}
+UICore::UICore(QObject *parent)
+    : QObject{parent}
 {
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
@@ -33,13 +31,6 @@ UICore::UICore(BluetoothleUART* bleConnection, QQmlApplicationEngine *engine, QO
 #endif
 
     loadDefaultTranslator();
-
-    connect(m_bleConnection, &BluetoothleUART::sgLocalBluetoothNotReady, this, &UICore::sgLocalBluetoothNotReady);
-    connect(m_bleConnection, &BluetoothleUART::sgConnect, this, &UICore::connectToDevice);
-
-    connect(this, &UICore::sgStartScan, m_bleConnection, &BluetoothleUART::startScan, Qt::QueuedConnection);
-    connect(this, &UICore::sgDoConnect, m_bleConnection, &BluetoothleUART::doConnect, Qt::QueuedConnection);
-    connect(this, &UICore::sgDoDisconnect, m_bleConnection, &BluetoothleUART::doDisconnect, Qt::QueuedConnection);
 }
 
 void UICore::setupApplication()
@@ -62,27 +53,6 @@ void UICore::setupApplication()
     appSettings->setValue("first_run", false);
 }
 
-void UICore::connectToDevice(quint8 devNum)
-{
-    emit sgConnectToDevice(devNum);
-}
-
-void UICore::disconnectFromDevice()
-{
-    emit sgDoDisconnect();
-    emit sgSetUIText("devVersion" ,"");
-    emit sgSetUIParameter("wait", false);
-}
-
-void UICore::doConnect(quint8 numDev, QString address)
-{
-    emit sgDoConnect(numDev, address);
-}
-
-void UICore::rescanDevices()
-{
-    emit sgStartScan();
-}
 
 void UICore::setParameter(QString name, quint8 val)
 {
@@ -96,7 +66,7 @@ void UICore::restoreParameter(QString name)
 
 void UICore::readAll()
 {
-    emit sgReadAll();
+    emit sgReadAllParameters();
 }
 
 void UICore::setImpuls(QString fullFilePath)
@@ -130,7 +100,7 @@ void UICore::convertAndUploadImpulse(QString filePath)
     tmpFile.setFileName(m_pickedImpulsePath);
     tmpFile.copy(tmpFilePath);
 
-    Resampler().convertFile(tmpFilePath, outpuFilePath);
+//    Resampler().convertFile(tmpFilePath, outpuFilePath);
 
     tmpFile.remove(tmpFilePath);
 
@@ -191,13 +161,14 @@ void UICore::slFirmwareFilePicked(QString filePath, QString fileName)
 
 void UICore::setFirmware(QString fullFilePath)
 {
-    emit sgSetUIParameter("update_firmware_mode", FirmwareUpdateMode::Offline);
+    // TODO firmwareupdatemode
+//    emit sgSetUIParameter("update_firmware_mode", FirmwareUpdateMode::Offline);
     emit sgSetFirmware(fullFilePath);
 }
 
 void UICore::doOnlineFirmwareUpdate()
 {
-    emit sgSetUIParameter("update_firmware_mode", FirmwareUpdateMode::Online);
+//    emit sgSetUIParameter("update_firmware_mode", FirmwareUpdateMode::Online);
     emit sgDoOnlineFirmwareUpdate();
 }
 
@@ -275,11 +246,6 @@ void UICore::loadTranslator(QString languageCode)
         qDebug() << "Translator loaded. Language: " << m_translator.language();
         QCoreApplication::installTranslator(&m_translator);
 
-        // TODO qQmlEngine можно законнектить с сигналом sgTranslatorChanged снаржи. Там сделать retranslate.
-        // Проверить нужен ли languegeCode. Возможно в QML?
-
-        m_qmlEngine->retranslate();
-
         emit sgTranslatorChanged(languageCode);
     }
     else qDebug() << "Translator not found. Using english";
@@ -292,7 +258,8 @@ void UICore::loadDefaultTranslator()
     {
         qDebug() << "Default ranslator loaded. Locale: " << QLocale();
         QCoreApplication::installTranslator(&m_translator);
-        m_qmlEngine->retranslate();
+
+        emit sgTranslatorChanged(QLocale().nativeLanguageName());
     }
 }
 

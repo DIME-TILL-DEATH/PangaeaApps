@@ -4,12 +4,14 @@ import QtQuick.Window 2.0
 
 import StyleSettings 1.0
 
+import CppObjects
+
 ToolBar
 {
     id: _root
 
     property string devName: ""
-    property string version: Qt.application.version//_uiCore.appVersion()
+    property string version: Qt.application.version//UiCore.appVersion()
     property string firmwareVersion: ""
 
     property string devNameStr: devName==""?"":devName
@@ -56,7 +58,7 @@ ToolBar
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, inValue)
         {
             // TODO: свести все названия в одно место class Device/DeviceDescription

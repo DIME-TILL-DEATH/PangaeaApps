@@ -41,10 +41,10 @@ public:
 signals:
     void sgInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
     void sgDeviceUnavaliable(DeviceConnectionType senderType, QString reason);
-    void sgDeviceListUpdated(DeviceConnectionType senderType, QList<DeviceDescription>& list);
+    void sgDeviceListUpdated(DeviceConnectionType senderType, QList<DeviceDescription> list);
     void sgConnectionStarted();
-    void sgInterfaceConnected(DeviceDescription& device);
-    void sgInterfaceDisconnected(DeviceDescription& device);
+    void sgInterfaceConnected(DeviceDescription device);
+    void sgInterfaceDisconnected(DeviceDescription device);
     void sgInterfaceError(QString errorDescription);
     void sgNewData(QByteArray data);
 

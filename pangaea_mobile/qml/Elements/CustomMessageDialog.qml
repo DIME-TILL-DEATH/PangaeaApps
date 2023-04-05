@@ -1,5 +1,4 @@
 import QtQuick
-//import QtQuick.Controls 2.12
 import QtQuick.Controls.Material
 
 import QtQuick.Layouts
@@ -7,6 +6,8 @@ import QtQuick.Window
 
 import StyleSettings 1.0
 import Elements 1.0
+
+import CppObjects
 
 Dialog
 {
@@ -111,7 +112,7 @@ Dialog
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, inValue)
         {

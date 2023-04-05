@@ -9,6 +9,8 @@ import StyleSettings 1.0
 import Elements 1.0
 import Modules 1.0
 
+import CppObjects
+
 Item
 {
     id: _root
@@ -82,7 +84,7 @@ Item
                     onMbPressed:
                     {
                         mode = 0;
-                        _uiCore.setParameter("output_mode", mode);
+                        UiCore.setParameter("output_mode", mode);
                     }
                 }
 
@@ -97,7 +99,7 @@ Item
                     onMbPressed:
                     {
                         mode = 2;
-                        _uiCore.setParameter("output_mode", mode);
+                        UiCore.setParameter("output_mode", mode);
                     }
                 }
 
@@ -112,7 +114,7 @@ Item
                     onMbPressed:
                     {
                         mode = 1;
-                        _uiCore.setParameter("output_mode", mode);
+                        UiCore.setParameter("output_mode", mode);
                     }
                 }
             }
@@ -134,7 +136,7 @@ Item
 
                     onMbPressed: {
                         if(_root.presetEdited)
-                            _uiCore.sgSetUIText("preset_not_saved", "");
+                            UiCore.sgSetUIText("preset_not_saved", "");
                         else
                             exportPreset();
                             //exportPresetDialog.open();
@@ -157,7 +159,7 @@ Item
 
                     onMbPressed:
                     {
-                        _uiCore.setParameter("save_change", (-1));
+                        UiCore.setParameter("save_change", (-1));
                     }
                 }
                 MButton
@@ -172,7 +174,7 @@ Item
 
                     //: Button text. Compare preset
                     textButton: qsTr("Comp")
-                    onMbPressed: _uiCore.setParameter("compare", 0);
+                    onMbPressed: UiCore.setParameter("compare", 0);
                 }
             }
 
@@ -209,7 +211,7 @@ Item
 
                     onMbPressed:
                     {
-                        _uiCore.setParameter("copy", 0);
+                        UiCore.setParameter("copy", 0);
                         copyFirst=true;
                     }
                 }
@@ -224,7 +226,7 @@ Item
 
                     onMbPressed:
                     {
-                        _uiCore.setParameter("paste", 0)
+                        UiCore.setParameter("paste", 0)
                     }
                 }
             }
@@ -266,12 +268,12 @@ Item
 ////        nameFilters: ["Firmware files (*.pst)"]
 ////        onAccepted:
 ////        {
-////            _uiCore.exportPreset(exportPresetFileDialog.fileUrl);
+////            UiCore.exportPreset(exportPresetFileDialog.fileUrl);
 ////        }
 ////    }
 
     Connections{
-        target: _uiCore
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, inValue)
         {

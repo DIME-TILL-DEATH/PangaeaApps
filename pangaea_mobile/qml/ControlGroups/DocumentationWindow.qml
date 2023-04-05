@@ -9,6 +9,8 @@ import ControlGroups 1.0
 import Modules 1.0
 import Elements 1.0
 
+import CppObjects
+
 CustomMessageDialog {
     id: _root
 
@@ -110,7 +112,7 @@ CustomMessageDialog {
             textButton: qsTr("Application manual")
             onMbPressed:
             {
-               _uiCore.openManualExternally("pangaea-mobile-app_user-manual");
+               UiCore.openManualExternally("pangaea-mobile-app_user-manual");
             }
         }
 
@@ -124,7 +126,7 @@ CustomMessageDialog {
             textButton: qsTr("Device manual")
             onMbPressed:
             {
-                _uiCore.openManualExternally("pangaea-VC-16-user-manual");
+                UiCore.openManualExternally("pangaea-VC-16-user-manual");
             }
         }
     }

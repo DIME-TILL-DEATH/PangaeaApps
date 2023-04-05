@@ -9,6 +9,8 @@ import Pages 1.0
 
 import StyleSettings 1.0
 
+import CppObjects
+
 ApplicationWindow
 {
     id: _main
@@ -142,7 +144,7 @@ ApplicationWindow
         headerText: qsTr("Exchange error")
         onAccepted: {
             openConnectPage();
-            _uiCore.sgSetUIParameter("ready_to_disconnect", true);
+            UiCore.sgSetUIParameter("ready_to_disconnect", true);
         }
     }
 
@@ -158,7 +160,7 @@ ApplicationWindow
 
         onAccepted: {
             _swipeView.currentIndex=2;
-            _uiCore.setFirmware(firmwareLocalPath);
+            UiCore.setFirmware(firmwareLocalPath);
             _msgVersionError.close();
         }
 
@@ -177,7 +179,7 @@ ApplicationWindow
 
         onAccepted: {
             _swipeView.currentIndex=2;
-            _uiCore.doOnlineFirmwareUpdate();
+            UiCore.doOnlineFirmwareUpdate();
         }
 
         onRejected: {
@@ -196,14 +198,14 @@ ApplicationWindow
 
         onAccepted:
         {
-            _uiCore.rescanDevices()
+            InterfaceManager.startScanning()
         }
     }
 
     Component.onCompleted:
     {
-        _uiCore.setupApplication();
-        _uiCore.rescanDevices();
+        UiCore.setupApplication();
+        InterfaceManager.startScanning();
     }
 
     Connections{
@@ -231,13 +233,7 @@ ApplicationWindow
 
     Connections
     {
-        target: _uiCore
-
-        function onSgConnectReady()
-        {
-            _swipeView.setCurrentIndex(1);
-            _uiCore.readAll();
-        }
+        target: UiCore
 
         function onSgSetUIParameter(nameParam, inValue)
         {
@@ -333,9 +329,19 @@ ApplicationWindow
         }
     }
 
+    Connections{
+        target: InterfaceManager
+
+        function onSgInterfaceConnected(deviceDescription)
+        {
+            _swipeView.setCurrentIndex(1);
+            UiCore.readAll();
+        }
+    }
+
     onClosing:
     {
-        _uiCore.sw4Enable();
+        UiCore.sw4Enable();
         console.log("Close");
     }
 }

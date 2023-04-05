@@ -241,7 +241,7 @@ void Core::parseInputData(const QByteArray& ba)
                     m_presetsList.append(currentPreset);
                 }
                 emit sgRefreshPresetList(&m_presetsList);
-                emit sgSetUIParameter("open_preset_list", true);
+//                emit sgSetUIParameter("open_preset_list", true);
 
                 break;
             }

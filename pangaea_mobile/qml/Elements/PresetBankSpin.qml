@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 
 import StyleSettings 1.0
 
+import CppObjects
+
 Rectangle
 {
     id: main
@@ -54,7 +56,7 @@ Rectangle
 
                 anchors.fill: parent
                 onClicked: {
-                    _uiCore.setParameter("call_preset_list", 1);
+                    UiCore.setParameter("open_preset_list", 1);
                 }
             }
         }
@@ -118,7 +120,7 @@ Rectangle
         {
             if( !softUpdate )
             {
-                _uiCore.setParameter("set_preset_change", presetNom);
+                UiCore.setParameter("set_preset_change", presetNom);
             }
         }
     }
@@ -136,7 +138,7 @@ Rectangle
 
     Connections
     {
-        target: _uiCore
+        target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
             if((main.nameValue.length>0)&&(nameParam === main.nameValue))

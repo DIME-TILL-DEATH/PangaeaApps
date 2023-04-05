@@ -9,6 +9,8 @@ import Qt5Compat.GraphicalEffects
 import StyleSettings 1.0
 import Elements 1.0
 
+import CppObjects
+
 Item
 {
     id: _main
@@ -174,6 +176,7 @@ Item
 
                 focus: true
 
+                model: DevicesListModel
                 delegate: BleListDelegate{}
 
                 highlight: BleListHighlight{
@@ -182,25 +185,18 @@ Item
                     iconVisible: isConnected
                 }
 
-                //[transitions]
-                //        remove: Transition {
-                //                NumberAnimation { property: "opacity"; to: 0; duration: 400  }
+                // Transitions
+                add: Transition {
+                     NumberAnimation { properties: "y"; from: _list.height; duration: 250 }
+                }
 
-                //        }
-                //        removeDisplaced: Transition {
-                //                 NumberAnimation { properties: "y"; duration: 250 }
-                //        }
-                //        add: Transition {
-                //                 NumberAnimation { property: "opacity"; from: 0; to: 1; duration: 400}
-                //        }
-                //        addDisplaced: Transition {
-                //                 NumberAnimation { properties: "y"; duration: 100 }
-                //                 NumberAnimation { properties: "opacity"; to: 1; duration: 200}
-                //        }
+                displaced: Transition{
+                    NumberAnimation { properties: "y"; duration: 300 }
+                }
 
-                //        displaced: Transition {
-                //                 NumberAnimation { properties: "y"; duration: 150 }
-                //        }
+                remove: Transition {
+                     NumberAnimation { properties: "x"; to: _list.width; duration: 250 }
+                }
             }
         }
 
@@ -236,7 +232,7 @@ Item
                     leftPadding: _checkBox.indicator.width/5
                 }
                 onCheckStateChanged: {
-                    _uiCore.saveSetting("autoconnect_enable", _checkBox.checked);
+                    UiCore.saveSetting("autoconnect_enable", _checkBox.checked);
                 }
             }
 
@@ -245,7 +241,7 @@ Item
                 onClicked: {
                     _checkBox.checked = !_checkBox.checked
 
-                    _uiCore.setParameter("autoconnect_state", _checkBox.checked)
+                    UiCore.setParameter("autoconnect_state", _checkBox.checked)
                 }
             }
 
@@ -263,39 +259,33 @@ Item
         onAccepted:
         {
             // ....and disconnect
-            _uiCore.sw4Enable();
+            UiCore.sw4Enable();
+            isConnected = false;
         }
     }
 
     Connections
     {
-        target: _uiCore
-        function onSgUpdateBLEDevicesList(devicesList)
-        {
-            _list.model = devicesList
+        target: UiCore
 
-            _main.findBT = false;
-            //_list.currentIndex = _list.autoSelectedItem
-        }
+//        function onSgConnectReady()
+//        {
+//            isConnected = true;
+//        }
 
-        function onSgConnectReady()
-        {
-            isConnected = true;
-        }
+//        // TODO autoconnect правильный выбор устройства
+//        function onSgConnectToDevice(devNum)
+//        {
+//            _list.autoSelectedItem = devNum
 
-        function onSgConnectToDevice(devNum)
-        {
-            _list.autoSelectedItem = devNum
-
-
-        }
+//        }
 
         function onSgSetUIParameter(nameParam, inValue)
         {
             if(nameParam === "ready_to_disconnect")
             {
                 isConnected = false;
-                _uiCore.disconnectFromDevice();
+                UiCore.disconnectFromDevice();
                 openConnectPage();
             }
 
@@ -303,6 +293,16 @@ Item
             {
                 _checkBox.checked = inValue;
             }
+        }
+    }
+
+    Connections
+    {
+        target: InterfaceManager
+
+        function onSgInterfaceConnected(deviceDescription)
+        {
+            isConnected = true;
         }
     }
 }

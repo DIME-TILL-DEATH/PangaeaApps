@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21.1)
-project(Pangaea-mobile VERSION 0.9.2 LANGUAGES CXX)
+project(Pangaea-mobile VERSION 0.9.3 LANGUAGES CXX)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
 
@@ -23,29 +23,14 @@ qt6_add_resources(SOURCES
 )
 
 qt_add_executable(Pangaea-mobile WIN32 MACOSX_BUNDLE
-    bluetooth/bluetoothleuart.cpp bluetooth/bluetoothleuart.h
-    cores/core.cpp cores/core.h
-    cores/netcore.cpp cores/netcore.h
-    cores/uicore.cpp cores/uicore.h
-    device/answerworker.cpp device/answerworker.h
-    device/defines.h
-    device/device.cpp device/device.h
-    device/deviceanswer.cpp device/deviceanswer.h
-    device/devicecontrols.cpp device/devicecontrols.h
-    device/deviceparameter.cpp device/deviceparameter.h
-    device/firmware.cpp device/firmware.h
-    device/parser.cpp device/parser.h
-    device/preset.cpp device/preset.h
-    device/presetlistmodel.cpp device/presetlistmodel.h
     main.cpp
     threadcontroller.cpp threadcontroller.h
+    cores/uicore.cpp cores/uicore.h
+    cores/uiinterfacemanager.cpp cores/uiinterfacemanager.h
     utils/activityresultmanager.cpp utils/activityresultmanager.h
     utils/androidutils.cpp utils/androidutils.h
-    utils/irworker.cpp utils/irworker.h
     utils/logger.cpp utils/logger.h
     utils/presetmanager.cpp utils/presetmanager.h
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/include/resampler.h
 
     ${SOURCES}
 )
@@ -78,26 +63,29 @@ if(ANDROID)
         QT_ANDROID_VERSION_CODE 1
         QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
     )
+
 endif()
 
 if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "arm64-v8a")
 
     target_link_libraries(Pangaea-mobile PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libWavConverterLib_arm64-v8a.so
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libWavConverterLib_arm64-v8a.so
+        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libpangaea_backend_arm64-v8a.a
     )
 
     set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
         ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/arm64-v8a/libcrypto_1_1.so
         ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/arm64-v8a/libssl_1_1.so
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libWavConverterLib_arm64-v8a.so
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libsox.so
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libWavConverterLib_arm64-v8a.so
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libsox.so
    )
 elseif(ANDROID_TARGET_ARCH STREQUAL "armeabi-v7a")
 
     target_link_libraries(Pangaea-mobile PUBLIC
 
         ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/armeabi-v7a/libWavConverterLib_armeabi-v7a.so
+        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libpangaea_backend_armeabi-v7a.a
     )
 
     set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
@@ -125,7 +113,8 @@ qt6_add_resources(Pangaea-mobile "AndroidResources"
         android/build.gradle
 )
 
-add_custom_command(TARGET Pangaea-mobile POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/android-build/build/outputs/apk/debug/android-build-debug.apk
-                                     ${CMAKE_CURRENT_SOURCE_DIR}/../deploy_android/Pangaea-mobile_v${CMAKE_PROJECT_VERSION}.apk
-)
+# APK на этот момент ещё не создан
+#add_custom_command(TARGET Pangaea-mobile POST_BUILD
+#    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/android-build/build/outputs/apk/debug/android-build-debug.apk
+#                                     ${CMAKE_CURRENT_SOURCE_DIR}/../deploy_android/Pangaea-mobile_v${CMAKE_PROJECT_VERSION}.apk
+#)
