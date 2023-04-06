@@ -1,7 +1,7 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+import QtQuick
+import QtQuick.Controls
 
-import StyleSettings 1.0
+import StyleSettings
 
 import CppObjects
 
@@ -9,27 +9,20 @@ Item
 {
     id : rWait
 
-    property bool busy: false
-    property bool pbVisible: true
     property double  pbValue: 0
-    property bool  txtVisible: false
-    property bool  txtExtVisible: false
 
-    //TODO для firmware отдельный экран. Нужно?
-    property string firmwareFile: "*.ble"
-
-    width:  busy?(parent.width):0
-    height: busy?(parent.height):0
+    width:  parent.width
+    height: parent.height
     anchors.centerIn: parent
 
-    visible: busy
+    visible: false
 
 
     Rectangle{
         id: background
 
         anchors.fill: parent
-        opacity: 0.5
+        opacity: 0.6
     }
 
     Column
@@ -45,60 +38,15 @@ Item
             BusyIndicator
             {
                 id : bI
-                visible: busy
-                width:  busy?(parent.width/2):0
-                height: busy?(parent.width/2):0
+
+                width: parent.width/2
+                height:parent.width/2
 
                 anchors.centerIn: parent
-
-                onVisibleChanged:
-                {
-
-                }
-
-
             }
         }
 
-        Text
-        {
-            width: parent.width*0.75
-            height: parent.height*1/10
 
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignBottom
-
-            font.pixelSize: parent.width*0.05
-
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            visible: txtExtVisible
-
-            text: firmwareFile
-
-            wrapMode: Text.Text.Wrap
-
-            color: Style.colorFon
-        }
-
-        Text
-        {
-            width: parent.width
-            height: parent.height*1/10
-
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignBottom
-
-            font.pixelSize: parent.width*0.05
-
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            visible: txtVisible
-
-            text: (Math.round(pbValue*10000)/100)+"%"
-
-            color: Style.colorFon
-        }
 
         ProgressBar
         {
@@ -108,7 +56,7 @@ Item
             height: parent.height*0.5/10
             anchors.horizontalCenter: parent.horizontalCenter
 
-            visible: pbVisible
+            visible: true
             value: pbValue
 
             background: Rectangle {
@@ -134,18 +82,33 @@ Item
             }
         }
 
+        Text
+        {
+            id: txt
+
+            width: parent.width
+            height: parent.height*1/10
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignBottom
+
+            font.pixelSize: parent.width*0.05
+            font.bold: true
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            visible: true //txtVisible
+
+            text: ""
+
+            color: Style.colorFon
+        }
+
     }
 
-//TODO а он нужен?
     MouseArea{
         id: mWait
-
-        enabled: busy
         anchors.fill: parent
-
-        onEnabledChanged: {
-
-        }
     }
 
     Connections
@@ -157,13 +120,34 @@ Item
             rWait.pbValue = val;
         }
 
-
         function onSgSetUIParameter(nameParam, inValue)
         {
             if(nameParam === ("wait"))
             {
+                rWait.visible = inValue;
+                txt.text = qsTr("Sending commands to device");
+                progressBar.visible = true
+            }
 
-                rWait.busy = inValue;
+            if(nameParam === ("data_uploading"))
+            {
+                rWait.visible = inValue;
+                txt.text = qsTr("Uploading file data to device");
+                progressBar.visible = true
+            }
+
+            if(nameParam === ("ir_downloading"))
+            {
+                rWait.visible = inValue;
+                txt.text = qsTr("Downloading impulse data from device");
+                progressBar.visible = true
+            }
+
+            if(nameParam === ("ir_upload_finished"))
+            {
+                rWait.visible = true;
+                txt.text = qsTr("Applying impulse to device. Please wait...");
+                progressBar.visible = false
             }
         }
     }
