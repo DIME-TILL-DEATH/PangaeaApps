@@ -35,9 +35,7 @@ qt_add_executable(Pangaea-mobile WIN32 MACOSX_BUNDLE
 )
 
 target_include_directories(Pangaea-mobile PUBLIC
-    cores
-    utils
-#    ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/include/
+    ../WavConverterLib/
 
     ../pangaea-backend/cores
     ../pangaea-backend/device
@@ -45,6 +43,9 @@ target_include_directories(Pangaea-mobile PUBLIC
     ../pangaea-backend/utils
     ../pangaea-backend/qmlEnums
     ../pangaea-backend/models/
+
+    cores
+    utils
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Bluetooth Gui Network Positioning Quick QuickControls2 LinguistTools Svg SerialPort)
@@ -58,6 +59,7 @@ target_link_libraries(Pangaea-mobile PUBLIC
     Qt6::Svg
 
     pangaea-backend
+    converter-lib
 )
 
 if(ANDROID)
@@ -72,36 +74,13 @@ if(ANDROID)
 
 endif()
 
-if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "arm64-v8a")
+set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
+    ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/${CMAKE_ANDROID_ARCH_ABI}/libcrypto_1_1.so
+    ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/${CMAKE_ANDROID_ARCH_ABI}/libssl_1_1.so
+    ${CMAKE_CURRENT_SOURCE_DIR}/android_openmp_libs/${CMAKE_ANDROID_ARCH_ABI}/libomp.so #needed for android sox lib
 
-    target_link_libraries(Pangaea-mobile PUBLIC
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libWavConverterLib_arm64-v8a.so
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libpangaea_backend_arm64-v8a.a
-    )
-
-    set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
-        ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/arm64-v8a/libcrypto_1_1.so
-        ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/arm64-v8a/libssl_1_1.so
-
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libWavConverterLib_arm64-v8a.so
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libsox.so
-   )
-elseif(ANDROID_TARGET_ARCH STREQUAL "armeabi-v7a")
-
-    target_link_libraries(Pangaea-mobile PUBLIC
-
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/armeabi-v7a/libWavConverterLib_armeabi-v7a.so
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libpangaea_backend_armeabi-v7a.a
-    )
-
-    set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
-        ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/armeabi-v7a/libcrypto_1_1.so
-        ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/armeabi-v7a/libssl_1_1.so
-
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/armeabi-v7a/libWavConverterLib_arm64-v8a.so
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/armeabi-v7a/libsox.so
-    )
-endif()
+    ${CMAKE_CURRENT_SOURCE_DIR}/../WavConverterLib/sox_lib/lib.android/${CMAKE_ANDROID_ARCH_ABI}/libsox.so
+)
 
 qt6_add_translations(Pangaea-mobile TS_FILES
     translations/pangaea-mobile_de.ts

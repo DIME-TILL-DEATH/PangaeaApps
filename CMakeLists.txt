@@ -5,3 +5,4 @@ project(mobile-bundle)
 
 add_subdirectory (pangaea-backend)
 add_subdirectory (pangaea-mobile)
+add_subdirectory (WavConverterLib)

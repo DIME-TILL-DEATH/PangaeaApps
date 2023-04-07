@@ -6,7 +6,7 @@
 #include <QCoreApplication>
 
 #include "uicore.h"
-//#include "resampler.h"
+#include "resampler.h"
 
 #ifdef __ANDROID__
 #include <jni.h>
@@ -100,7 +100,7 @@ void UICore::convertAndUploadImpulse(QString filePath)
     tmpFile.setFileName(m_pickedImpulsePath);
     tmpFile.copy(tmpFilePath);
 
-//    Resampler().convertFile(tmpFilePath, outpuFilePath);
+    Resampler().convertFile(tmpFilePath, outpuFilePath);
 
     tmpFile.remove(tmpFilePath);
 
