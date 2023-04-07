@@ -50,6 +50,8 @@ signals:
 
     void sgChangedState(AbstractInterface::InterfaceState newState);
 
+    void sgModuleNameUpdated(QString name);
+
 protected:
     QString m_description{"abstract"};
     DeviceConnectionType m_connectionType{DeviceConnectionType::Unknown};

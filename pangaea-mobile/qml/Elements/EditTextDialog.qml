@@ -25,6 +25,8 @@ CustomMessageDialog
            Column{
                spacing: parent.height/10
                anchors.centerIn: parent
+
+               width: _root.width * 0.8
                MText{
                    id: _textLabel
 
@@ -36,6 +38,8 @@ CustomMessageDialog
                }
                TextField{
                    id: _textField
+
+                   width: parent.width
                }
            }
     }

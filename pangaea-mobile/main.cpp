@@ -123,10 +123,9 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UICore::sgSw4Enable, core, &Core::sw4Enable);
 
 
+
     // TODO
-    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, bleInterface, &BleInterface::setModuleName);
     QObject::connect(&uiCore, &UICore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
-//    QObject::connect(&core, &Core::sgModuleNameUpdated, &uiCore, &UICore::setModuleName);
     //
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UICore::sgSetUIParameter);
@@ -154,6 +153,9 @@ int main(int argc, char *argv[])
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, bleInterface, &BleInterface::startScan, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, bleInterface, &BleInterface::connect, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgDisconnectFromDevice, bleInterface, &BleInterface::disconnectFromDevice, Qt::QueuedConnection);
+
+    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, bleInterface, &BleInterface::setModuleName);
+    QObject::connect(bleInterface, &BleInterface::sgModuleNameUpdated, &uiCore, &UICore::setModuleName);
 
     QObject::connect(bleInterface, &BleInterface::sgDeviceListUpdated, &uiInterfaceManager, &UiInterfaceManager::updateDevicesList);
     QObject::connect(bleInterface, &BleInterface::sgConnectionStarted, &uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted);

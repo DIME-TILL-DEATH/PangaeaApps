@@ -2,7 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS += WavConverterLib
 SUBDIRS += WavConverterShell
-SUBDIRS += pangaea_backend
+SUBDIRS += pangaea-backend
 SUBDIRS += PangaeaCPPA
 
 CONFIG += ordered

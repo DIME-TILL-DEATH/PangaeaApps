@@ -3,8 +3,6 @@ import QtQuick 2.15
 import QtQuick.Controls.Material
 
 import QtQuick.Layouts 1.3
-//import QtQuick.Dialogs 1.3
-//import Qt.labs.platform 1.1 // не работающие uri
 
 import ControlGroups 1.0
 import Elements 1.0

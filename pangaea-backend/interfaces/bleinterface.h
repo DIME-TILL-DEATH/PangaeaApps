@@ -18,8 +18,6 @@
 #define RXUUID "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
 #define TXUUID "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 
-
-// TODO после переделки части под андроид подчистить комментарии и функции
 class  BleInterface : public AbstractInterface
 {
     Q_OBJECT

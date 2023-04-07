@@ -299,8 +299,19 @@ ApplicationWindow
                 _msgCommon.open();
             }
         }
+    }
 
-        function onSgLocalBluetoothNotReady(Msg)
+    Connections{
+        target: InterfaceManager
+
+        function onSgInterfaceConnected(deviceDescription)
+        {
+            _swipeView.setCurrentIndex(1);
+            UiCore.readAll();
+        }
+
+
+        function onSgInterfaceUnavaliable(interfaceType, Msg)
         {
             if(Msg === "HostPoweredOff")
             {
@@ -325,16 +336,6 @@ ApplicationWindow
 
             _msgBluetoothNotReady.open();
             console.log("Open _msgBluetoothNotReady dialog");
-        }
-    }
-
-    Connections{
-        target: InterfaceManager
-
-        function onSgInterfaceConnected(deviceDescription)
-        {
-            _swipeView.setCurrentIndex(1);
-            UiCore.readAll();
         }
     }
 

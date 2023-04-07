@@ -256,7 +256,7 @@ void UICore::loadDefaultTranslator()
     if (m_translator.load(QLocale(), QLatin1String("pangaea-mobile"),
                         QLatin1String("_"), ":/translations/"))
     {
-        qDebug() << "Default ranslator loaded. Locale: " << QLocale();
+        qDebug() << "Default translator loaded. Locale: " << QLocale();
         QCoreApplication::installTranslator(&m_translator);
 
         emit sgTranslatorChanged(QLocale().nativeLanguageName());

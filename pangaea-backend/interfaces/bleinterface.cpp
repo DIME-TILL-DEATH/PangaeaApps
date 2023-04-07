@@ -4,7 +4,7 @@
 #ifdef Q_OS_ANDROID
 #include <QGeoPositionInfoSource>
 #include <QtCore/private/qandroidextras_p.h>
-//#include "androidutils.h"
+#include "androidutils.h"
 #endif
 
 #include "bleinterface.h"
@@ -87,39 +87,35 @@ void BleInterface::startDiscovering()
 
         m_qlFoundDevices.clear();
         emit sgDeviceListUpdated(DeviceConnectionType::BLE, m_qlFoundDevices);
-
         emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
         device.powerOn();
         return;
     }
 
 #ifdef Q_OS_ANDROID
-    // Todo platform indepenent permissions
-//    bool result = AndroidUtils::checkPermission("android.permission.ACCESS_COARSE_LOCATION");
-//    if(!result)
-//    {
-//        result = AndroidUtils::requestPermission("android.permission.ACCESS_COARSE_LOCATION");
-//        if(!result)
-//        {
-//            qDebug() << "Geolocation permission denied";
-//            isAvaliable = false;
-//            emit sgLocalBluetoothNotReady("GeolocationPermissionDenied");
-//            return;
-//        }
-//        else
-//        {
-//            if(QGeoPositionInfoSource::createDefaultSource(this)->supportedPositioningMethods() == QGeoPositionInfoSource::NoPositioningMethods)
-//            {
-//                qDebug() << "Geolocation is off";
-//                isAvaliable = false;
-//                emit sgLocalBluetoothNotReady("GeolocationIsOff");
-//                return;
-//            }
-//        }
-//    }
+    bool result = AndroidUtils::checkPermission("android.permission.ACCESS_COARSE_LOCATION");
+    if(!result)
+    {
+        result = AndroidUtils::requestPermission("android.permission.ACCESS_COARSE_LOCATION");
+        if(!result)
+        {
+            qDebug() << "Geolocation permission denied";
+            isAvaliable = false;
 
+            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "GeolocationPermissionDenied");
+            return;
+        }
+    }
+
+    if(QGeoPositionInfoSource::createDefaultSource(this)->supportedPositioningMethods() == QGeoPositionInfoSource::NoPositioningMethods)
+    {
+        qDebug() << "Geolocation is off";
+        isAvaliable = false;
+
+        emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "GeolocationIsOff");
+        return;
+    }
 #endif
-
 
     m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
     m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
@@ -238,14 +234,12 @@ void BleInterface::deviceScanError(QBluetoothDeviceDiscoveryAgent::Error error)
         {
             qDebug() << __FUNCTION__ << "The Bluetooth adapter is powered off, power it on before doing discovery.";
             emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
-            //emit sgLocalBluetoothNotReady("HostPoweredOff");
             break;
         }
         case QBluetoothDeviceDiscoveryAgent::UnknownError:
         {
             qDebug() << __FUNCTION__ << "An unknown error has occurred.";
             emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "UnknownBleError");
-//            emit sgLocalBluetoothNotReady("UnknownBleError");
             break;
         }
         default:
@@ -309,6 +303,7 @@ void BleInterface::slStartConnect(QString address)
     m_moduleName = m_moduleUniqueNames.value(m_currentDeviceAddress, "");
 
     setState(InterfaceState::UpdateModuleName);
+    emit sgModuleNameUpdated(m_moduleName);
 
     if (m_control)
     {
@@ -488,6 +483,7 @@ void BleInterface::disconnectFromDevice()
         QBluetoothDeviceDiscoveryAgent::disconnect(m_service, nullptr, nullptr, nullptr);
     }
 
+    emit sgInterfaceDisconnected(m_connectedDevice);
     setState(InterfaceState::Idle);
     m_avaliableDevices.clear();
 }

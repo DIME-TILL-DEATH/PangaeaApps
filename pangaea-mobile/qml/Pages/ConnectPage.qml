@@ -285,7 +285,7 @@ Item
             if(nameParam === "ready_to_disconnect")
             {
                 isConnected = false;
-                UiCore.disconnectFromDevice();
+                InterfaceManager.disconnectFromDevice();
                 openConnectPage();
             }
 
@@ -303,6 +303,12 @@ Item
         function onSgInterfaceConnected(deviceDescription)
         {
             isConnected = true;
+        }
+
+        function onSgInterfaceDisconnected()
+        {
+            isConnected = false;
+            InterfaceManager.startScanning();
         }
     }
 }
