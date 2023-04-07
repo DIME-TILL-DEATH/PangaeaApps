@@ -53,3 +53,16 @@ bool UiInterfaceManager::isBleAvaliable()
 {
     return m_isBleAvaliable;
 }
+
+const QString &UiInterfaceManager::moduleName() const
+{
+    return m_moduleName;
+}
+
+void UiInterfaceManager::setModuleName(const QString &newModuleName)
+{
+    if (m_moduleName == newModuleName)
+        return;
+    m_moduleName = newModuleName;
+    emit sgModuleNameChanged(newModuleName);
+}

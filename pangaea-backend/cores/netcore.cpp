@@ -44,6 +44,7 @@ void NetCore::requestNewestFirmware(Firmware *actualFirmware)
 
     if(QSettings(QSettings::UserScope).value("check_updates_enable", false).toBool())
     {
+        qInfo() << "Checking updates...";
         jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_firmwares.json"));
         m_networkManager->get(jsonDataRequest);
         connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFirmwareVersionReqResult);

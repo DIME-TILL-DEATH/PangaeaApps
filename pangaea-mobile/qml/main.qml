@@ -116,7 +116,6 @@ ApplicationWindow
                  _swipeView.currentIndex=2
              }
          }
-
     }
 
     BusyScreen

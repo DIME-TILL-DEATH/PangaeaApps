@@ -2,8 +2,6 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
-#include <QBluetoothLocalDevice>
-
 #include <signal.h>
 
 #include <QDir>
@@ -125,8 +123,6 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UICore::sgSw4Enable, core, &Core::sw4Enable);
 
 
-//    QObject::connect(&uiCore, &UICore::sgTranslatorChanged, &core, &Core::readPresetState);
-
     // TODO
     QObject::connect(&uiCore, &UICore::sgModuleNameChanged, bleInterface, &BleInterface::setModuleName);
     QObject::connect(&uiCore, &UICore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
@@ -154,9 +150,7 @@ int main(int argc, char *argv[])
     Core::connect(core, &Core::sgExchangeError, bleInterface, &BleInterface::disconnectFromDevice);
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);
 
-//    UICore::connect(&uiCore, &UICore::sgStartScan, bleInterface, &BleInterface::startScan, Qt::QueuedConnection);
-//    UICore::connect(&uiCore, &UICore::sgDoConnect, bleInterface, &BleInterface::connect, Qt::QueuedConnection);
-//    UICore::connect(&uiCore, &UICore::sgDoDisconnect, bleInterface, &BleInterface::disconnectFromDevice, Qt::QueuedConnection);
+
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, bleInterface, &BleInterface::startScan, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, bleInterface, &BleInterface::connect, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgDisconnectFromDevice, bleInterface, &BleInterface::disconnectFromDevice, Qt::QueuedConnection);

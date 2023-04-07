@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru_RU">
+<TS version="2.1" language="de_DE">
+<context>
+    <name>BusyScreen</name>
+    <message>
+        <source>Sending commands to device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uploading file data to device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading impulse data from device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Applying impulse to device. Please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>Cm</name>
     <message>
@@ -16,66 +35,66 @@
     <name>ConnectPage</name>
     <message>
         <source>CONNECTED</source>
-        <translation>ПОДКЛЮЧЕНО</translation>
+        <translation>VERBUNDEN</translation>
     </message>
     <message>
         <source>SCANNING...</source>
-        <translation>ПОИСК...</translation>
+        <translation>Gerätesuche...</translation>
     </message>
     <message>
         <source>(TAP to disconnect)</source>
-        <translation>(КОСНИТЕСЬ для отключения)</translation>
+        <translation>(TIPPEN Verbindung trennen)</translation>
     </message>
     <message>
         <source>All avaliable AMT PANGAEA devices:</source>
-        <translation>Все доступные устройства AMT PANGAEA:</translation>
+        <translation>Alle verfügbaren AMT PANGAEA Geräte:</translation>
     </message>
     <message>
         <source>TAP TWICE to connect your AMT PANGAEA:</source>
-        <translation>ДВАЖДЫ КОСНИТЕСЬ для подключения:</translation>
+        <translation>TIPPEN Sie ZWEIMAL zum Verbinden:</translation>
     </message>
     <message>
         <source>Autoconnect</source>
-        <translation>Автоподключение</translation>
+        <translation>Automatische Verbindung</translation>
     </message>
     <message>
         <source>Continue?</source>
-        <translation>Продолжить?</translation>
+        <translation>Bitte bestätigen!</translation>
     </message>
     <message>
         <source>Do you want to disconnect from AMT PANGAEA?</source>
-        <translation>Вы хотите отключиться от этого устройства AMT PANGAEA?</translation>
+        <translation>Möchten Sie dieses AMT PANGAEA-Gerät trennen?</translation>
     </message>
 </context>
 <context>
     <name>DocumentationWindow</name>
     <message>
         <source>Documentation</source>
-        <translation>Документация</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BACK</source>
-        <translation>НАЗАД</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Web site</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation>Веб-сайт</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Media center</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation>Медиацентр AMT</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Application manual</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation>Мануал к приложению</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Device manual</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation>Мануал к прибору</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -134,38 +153,38 @@
     <name>FirmwareLoadingDialog</name>
     <message>
         <source>Updating firmware</source>
-        <translation type="vanished">Обновление прошивки</translation>
+        <translation type="vanished">Aktualiesierung der Firmware</translation>
     </message>
     <message>
         <source>WARNING: Do not power off device or exit from application while updating firmware!</source>
-        <translation type="vanished">ВНИМАНИЕ: Не выключайте питание устройства и не выходите из приложения во время процесса обновления прошивки!</translation>
+        <translation type="vanished">WARNUNG: Schalten Sie Ihr Gerät nicht aus und beenden Sie die Anwendung nicht, während Sie die Firmware aktualisieren!</translation>
     </message>
     <message>
         <source>Firmware file: </source>
-        <translation type="vanished">Файл прошивки: </translation>
+        <translation type="vanished">Firmware-Datei: </translation>
     </message>
 </context>
 <context>
     <name>FirmwareLoadingWindow</name>
     <message>
         <source>Updating firmware</source>
-        <translation>Обновление прошивки</translation>
+        <translation type="unfinished">Aktualiesierung der Firmware</translation>
     </message>
     <message>
         <source>WARNING: Do not power off device or exit from application while updating firmware!</source>
-        <translation>ВНИМАНИЕ: Не выключайте питание устройства и не выходите из приложения во время процесса обновления прошивки!</translation>
+        <translation type="unfinished">WARNUNG: Schalten Sie Ihr Gerät nicht aus und beenden Sie die Anwendung nicht, während Sie die Firmware aktualisieren!</translation>
     </message>
     <message>
         <source>Firmware file: </source>
-        <translation>Файл прошивки: </translation>
+        <translation type="unfinished">Firmware-Datei: </translation>
     </message>
     <message>
         <source>Updating to firmware version </source>
-        <translation>Обновление до прошивки версии </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>kB from </source>
-        <translation>kB из </translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -182,30 +201,28 @@
 <context>
     <name>Ir</name>
     <message>
-        <source>Impulse response</source>
-        <translation>Импульс</translation>
-    </message>
-    <message>
-        <source>Not supported IR Format!
-PANGAEA supports only 48kHz/24bits/1channel files</source>
-        <translation type="vanished">Неподдерживаемый формат IR импульса!
-PANGAEA поддерживает только wav файлы 48kHz/24bits/моно</translation>
-    </message>
-    <message>
-        <source>Not supported format</source>
-        <translation>Неподдерживаемый формат</translation>
-    </message>
-    <message>
         <source>IR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Impulse response</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not supported format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
-        <translation>Pangaea не поддерживает данный формат:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Do you want to convert it before upload?</source>
-        <translation>Конвертировать файл перед загрузкой?</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>empty</source>
+        <translation type="unfinished">leer</translation>
     </message>
 </context>
 <context>
@@ -223,86 +240,86 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>MFileOpen</name>
     <message>
         <source>Select IR</source>
-        <translation type="vanished">Выберите файл импульса гитарного кабинета</translation>
+        <translation type="vanished">IR auswählen</translation>
     </message>
 </context>
 <context>
     <name>MapPage</name>
     <message>
         <source> Version: </source>
-        <translation type="vanished"> Версия: </translation>
+        <translation type="vanished"> Version: </translation>
     </message>
     <message>
         <source> Firmware version: </source>
-        <translation type="vanished"> Версия прошивки: </translation>
+        <translation type="vanished"> Firmwareversion: </translation>
     </message>
     <message>
         <source>Save preset</source>
-        <translation>Сохранение пресета</translation>
+        <translation>Preset speichern</translation>
     </message>
     <message>
         <source>Do you want to save your changes?</source>
-        <translation>Вы хотите сохранить изменения?</translation>
+        <translation>Möchten Sie Ihre Änderungen speichern?</translation>
     </message>
     <message>
         <source>Exchange error</source>
-        <translation type="vanished">Ошибка связи</translation>
+        <translation type="vanished">Fehler beim Datenaustausch</translation>
     </message>
 </context>
 <context>
     <name>MasterControls</name>
     <message>
-        <source>BANK</source>
-        <translation>БАНК</translation>
-    </message>
-    <message>
         <source>Phones</source>
         <extracomment>Output mode. Phones.</extracomment>
-        <translation>Наушники</translation>
+        <translation>Kopfhörer</translation>
     </message>
     <message>
         <source>Balance</source>
         <extracomment>Output mode. Balanced out.</extracomment>
-        <translation>Балансный</translation>
+        <translation>Symmetr.</translation>
     </message>
     <message>
         <source>Line</source>
         <extracomment>Output mode. Line out.</extracomment>
-        <translation>Линейный</translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <extracomment>Button text. Export preset</extracomment>
-        <translation>Экспорт</translation>
+        <translation>Linear</translation>
     </message>
     <message>
         <source>Save</source>
         <extracomment>Button text. Save preset</extracomment>
-        <translation>Сохр.</translation>
+        <translation>Speich.</translation>
     </message>
     <message>
         <source>Comp</source>
         <extracomment>Button text. Compare preset</extracomment>
-        <translation>Сравн.</translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <extracomment>Button text. Import preset</extracomment>
-        <translation>Импорт</translation>
+        <translation>Vergl.</translation>
     </message>
     <message>
         <source>Copy</source>
         <extracomment>Button text. Copy preset.</extracomment>
-        <translation>Копир.</translation>
+        <translation>Kopier.</translation>
     </message>
     <message>
         <source>Paste</source>
         <extracomment>Button text. Paste preset</extracomment>
-        <translation>Вставка</translation>
+        <translation>Einfüg.</translation>
+    </message>
+    <message>
+        <source>BANK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <extracomment>Button text. Export preset</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <extracomment>Button text. Import preset</extracomment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PRESET</source>
-        <translation>ПРЕСЕТ</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -342,36 +359,18 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>PresetBankSpin</name>
     <message>
         <source>MAP</source>
-        <translation>СПИСОК</translation>
-    </message>
-</context>
-<context>
-    <name>Presets</name>
-    <message>
-        <source>MAP</source>
-        <translation type="vanished">СПИСОК</translation>
-    </message>
-</context>
-<context>
-    <name>PresetsPage</name>
-    <message>
-        <source>Presets list</source>
-        <translation type="vanished">Список пресетов</translation>
-    </message>
-    <message>
-        <source>BACK</source>
-        <translation type="vanished">НАЗАД</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PresetsWindow</name>
     <message>
         <source>Presets list</source>
-        <translation>Список пресетов</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>BACK</source>
-        <translation>НАЗАД</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -389,7 +388,7 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>QObject</name>
     <message>
         <source>empty</source>
-        <translation>пусто</translation>
+        <translation type="vanished">leer</translation>
     </message>
 </context>
 <context>
@@ -397,159 +396,149 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <message>
         <source>Format</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation>Форматирование</translation>
+        <translation>Formatierung</translation>
     </message>
     <message>
         <source>Update Firmware</source>
         <extracomment>Button text</extracomment>
-        <translation>Обновление прошивки</translation>
+        <translation>Aktualisierung der Firmware</translation>
     </message>
     <message>
         <source>Set unique name</source>
         <extracomment>Button text</extracomment>
-        <translation>Присвоить уникальное имя</translation>
+        <translation>Modulname ändern</translation>
     </message>
     <message>
         <source>Application settings</source>
         <extracomment>Button text</extracomment>
-        <translation>НАСТРОЙКИ</translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>About...</source>
         <extracomment>Button text</extracomment>
-        <translation>О ПРИЛОЖЕНИИ...</translation>
-    </message>
-    <message>
-        <source>The Firmware file has been transmitted
-Please, reconnect to device</source>
-        <translation>Файл прошивки был передан
-Пожалуйста, переподключитесь к устройству заново</translation>
+        <translation>ÜBER DIE APP...</translation>
     </message>
     <message>
         <source>Do you want to load firmware file:
 </source>
-        <translation>Вы хотите загрузить следующий 
-файл прошивки:
+        <translation>Möchten Sie die Firmware-Datei hochladen:
 </translation>
     </message>
     <message>
         <source>Continue?</source>
-        <translation>Продолжить?</translation>
-    </message>
-    <message>
-        <source>Documentation</source>
-        <extracomment>Button text</extracomment>
-        <translation>Документация</translation>
+        <translation>Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <source>Do you want to load firmware file:</source>
-        <translation>Вы хотите загрузить следующий 
-файл прошивки:</translation>
+        <translation>Möchten Sie die Firmware-Datei hochladen:</translation>
     </message>
     <message>
         <source>Operation complete</source>
         <extracomment>Complete formatting operation</extracomment>
-        <translation>Операция завершена</translation>
+        <translation>Der Vorgang ist abgeschlossen</translation>
     </message>
     <message>
         <source>Format complete</source>
-        <translation>Форматирование завершено</translation>
+        <translation>Die Formatierung ist abgeschlossen</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation>Fehlermeldung</translation>
     </message>
     <message>
         <source>This file is not a firmware file</source>
-        <translation>Этот файл не является файлом прошивки</translation>
+        <translation>Diese Datei ist keine Firmware-Datei</translation>
     </message>
     <message>
         <source>AMT Pangaea CP-16/CP-100
 Android application
 Version: </source>
         <translation>AMT Pangaea CP-16/CP-100
-Приложение для Android OS
-Версия: </translation>
-    </message>
-    <message>
-        <source>(c) 2022
-website: https://amtelectronics.com</source>
-        <translation type="vanished">© 2023
-Веб-сайт: https://amt-sales.ru</translation>
+Android-Anwendung
+Version: </translation>
     </message>
     <message>
         <source>Formatting</source>
-        <translation>Форматирование</translation>
+        <translation>Formatierung</translation>
     </message>
     <message>
         <source>Formatting! User data will be lost!</source>
-        <translation>Сейчас будет произведено форматирование! Все пользовательские данные будут утеряны!</translation>
+        <translation>Achtung! Alle Benutzerdaten gehen verloren! Sind Sie sicher, dass dieses Gerät AMT PANAGEA formatiert werden soll?</translation>
     </message>
     <message>
         <source>Set module name</source>
-        <translation>Назначить имя модуля BLE-1</translation>
+        <translation>Modulnamen BLE-1 vergeben</translation>
     </message>
     <message>
         <source>Set unique name for current module:</source>
-        <translation>Уникальное имя для данного модуля:</translation>
+        <translation>Einen eindeutigen Namen für aktuelles Modul vergeben:</translation>
     </message>
     <message>
         <source>Formatting is complete
 Please reset the device power and reconnect</source>
-        <translation>Форматирование завершено.
-Пожалуйста, перезапустите питание Вашего устройства AMT PANGAEA, а затем снова подключитесь к нему через данное приложение</translation>
+        <translation>Die Formatierung ist abgeschlossen.
+Bitte starten Sie das Gerät AMT PANGAEA neu und verbinden Sie es dann über diese App erneut</translation>
     </message>
     <message>
         <source>The Firmware file has been transmitted
 Please reset the device power and reconnect</source>
-        <translation type="vanished">Файл прошивки был успешно передан на устройство.
-Пожалуйста, перезагрузите питание Вашего девайса AMT PANGAEA, а затем снова подключитесь к нему через это приложение</translation>
+        <translation type="vanished">Firmware-Datei wurde übertragen.
+Bitte starten Sie das Gerät AMT PANAGEA neu und verbinden Sie es dann über diese App erneut</translation>
     </message>
     <message>
         <source>Format error</source>
-        <translation>Ошибка форматирования</translation>
+        <translation>Formatierungsfehler</translation>
+    </message>
+    <message>
+        <source>Documentation</source>
+        <extracomment>Button text</extracomment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>(c) 2023
 website: https://amtelectronics.com</source>
-        <translation>© 2023
-Веб-сайт: https://amt-sales.ru</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Firmware file has been transmitted
+Please, reconnect to device</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SettingsPage</name>
     <message>
         <source>Color theme</source>
-        <translation>Цветовая схема</translation>
+        <translation>Farbschema</translation>
     </message>
     <message>
         <source>Dark orange</source>
-        <translation>Тёмно-оранжевая</translation>
+        <translation>Dunkelorange</translation>
     </message>
     <message>
         <source>Dark green</source>
-        <translation>Тёмно-зелёная</translation>
+        <translation>Dunkelgrün</translation>
     </message>
     <message>
         <source>Dark blue</source>
-        <translation>Тёмно-синяя</translation>
+        <translation>Dunkelblau</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Язык</translation>
-    </message>
-    <message>
-        <source>Autoselect</source>
-        <translation>Автовыбор</translation>
-    </message>
-    <message>
-        <source>Auto check updates</source>
-        <translation>Автопроверка обновлений</translation>
+        <translation>Sprache</translation>
     </message>
     <message>
         <source>Back</source>
         <extracomment>Back to the previous page</extracomment>
-        <translation>Вернуться</translation>
+        <translation>Zurück</translation>
+    </message>
+    <message>
+        <source>Autoselect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto check updates</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -567,109 +556,103 @@ website: https://amtelectronics.com</source>
     <name>main</name>
     <message>
         <source>Connect</source>
-        <translation>Соединение</translation>
+        <translation>Verbinden</translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation>Управление</translation>
+        <translation>Steuerung</translation>
     </message>
     <message>
         <source>Service</source>
-        <translation>Сервис</translation>
-    </message>
-    <message>
-        <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation>Произошла ошибка обмена между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
+        <translation>Service</translation>
     </message>
     <message>
         <source>Exchange error</source>
-        <translation>Ошибка связи</translation>
+        <translation type="unfinished">Fehler beim Datenaustausch</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>ВНИМАНИЕ</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <source>Firmware version error!</source>
-        <translation>Ошибка версии прошивки!</translation>
-    </message>
-    <message>
-        <source>Update firmware</source>
-        <translation>Обновить прошивку</translation>
-    </message>
-    <message>
-        <source>Newest firmware avaliable on the server.</source>
-        <translation>Более свежая версия прошивки доступна на сервере.</translation>
+        <translation>Firmware-Versionsfehler!</translation>
     </message>
     <message>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
-        <translation>Модуль Bluetooth выключен! Пожалуйста, включите модуль Bluetooth на Вашем мобильном устройстве и нажмите ОК</translation>
+        <translation>Das Modul Bluetooth ist ausgeschaltet. Bitte schalten Sie das Modul Bluetooth auf Ihrem mobilen Gerät ein und drücken Sie OK</translation>
     </message>
     <message>
         <source>Firmware version of your device is </source>
-        <translation>Текущая версия прошивки Вашего устройства </translation>
+        <translation>Aktuelle Firmware-Version Ihres Geräts </translation>
     </message>
     <message>
         <source>
 Minimum required version is </source>
         <translation>
-Минимальная требуемая версия </translation>
+Die erforderliche Mindestversion </translation>
+    </message>
+    <message>
+        <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
+        <translation>Android erfordert eine Geolokalisierung, um Bluetooth LE-Geräte zu scannen. Bitte schalten Sie das Geolokalisierung-Modul ein und drücken Sie OK</translation>
+    </message>
+    <message>
+        <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
+        <translation>Diese App erfordert die Berechtigung zur Geolokalisierung auf Ihrem mobilen Gerät, um die Module BLE-1 zu scannen. Bitte erteilen Sie der Anwendung alle erforderlichen Genehmigungen und drücken Sie OK</translation>
+    </message>
+    <message>
+        <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Update firmware</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Newest firmware avaliable on the server.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation>
-Вы хотите обновить прошивку сейчас?
-ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
-        <translation>Новая прошивка доступна на сервере.
-Текущая версия прошивки Вашего устройства: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>
 New firmware version is: </source>
-        <translation>
-Новая версия прошивки: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation>
-Вы хотите скачать и обновить прошивку сейчас?
-ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>You must save preset before export</source>
-        <translation>Вы должны схранить пресет перед экспортом</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Preset import error!</source>
-        <translation>Ошибка импорта пресета!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Preset export finished</source>
-        <translation>Экспорт пресета завершён</translation>
-    </message>
-    <message>
-        <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
-        <translation>ОС Android требуется Геолокация для возможности поиска устройств Bluetooth LE. Пожалуйста, включите модуль Геолокации на Вашем мобильном устройстве и нажмите кнопку ОК</translation>
-    </message>
-    <message>
-        <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
-        <translation>Приложению требуется разрешение на использование геолокации для поиска устройств Bluetooth LE. Пожалуйста, предоставьте приложению требуемые разрешения и нажмите ОК</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Device is unavaliable</source>
-        <translation>Устройство недоступно</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation>Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

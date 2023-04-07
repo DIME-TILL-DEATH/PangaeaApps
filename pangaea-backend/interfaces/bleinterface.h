@@ -36,9 +36,6 @@ public:
 
     void write(QByteArray data);
 
-//    void setAutoconnectState(bool newAutoconnect);
-//    bool AutoconnectState() const;
-
     void setModuleName(QString name);
     const QString &moduleName() const;
 
@@ -87,7 +84,7 @@ private:
 
     QSettings* appSettings;
 
-    QString m_autoconnectDeviceAddress;
+    QString m_currentDeviceAddress;
     QString m_moduleName;
 
     QHash<QString, QString> m_moduleUniqueNames;

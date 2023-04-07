@@ -45,7 +45,7 @@ void UICore::setupApplication()
     bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
     emit sgSetUIParameter("autoconnect_enable", isAutoconnectEnabled);
 
-    bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable", true).toBool();
+    bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable", false).toBool();
     emit sgSetUIParameter("check_updates_enable", isCheckUpdatesEnabled);
 
     bool firstRun = !appSettings->value("first_run", true).toBool();

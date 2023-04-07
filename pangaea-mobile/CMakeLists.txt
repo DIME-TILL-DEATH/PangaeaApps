@@ -30,33 +30,39 @@ qt_add_executable(Pangaea-mobile WIN32 MACOSX_BUNDLE
     utils/activityresultmanager.cpp utils/activityresultmanager.h
     utils/androidutils.cpp utils/androidutils.h
     utils/logger.cpp utils/logger.h
-    utils/presetmanager.cpp utils/presetmanager.h
 
     ${SOURCES}
 )
 
 target_include_directories(Pangaea-mobile PUBLIC
-    bluetooth
     cores
-    device
     utils
-    ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/include/
+#    ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/include/
+
+    ../pangaea-backend/cores
+    ../pangaea-backend/device
+    ../pangaea-backend/interfaces/
+    ../pangaea-backend/utils
+    ../pangaea-backend/qmlEnums
+    ../pangaea-backend/models/
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Bluetooth Gui Network Positioning Quick QuickControls2 LinguistTools Svg)
+find_package(Qt6 REQUIRED COMPONENTS Bluetooth Gui Network Positioning Quick QuickControls2 LinguistTools Svg SerialPort)
 target_link_libraries(Pangaea-mobile PUBLIC
     Qt6::Core
     Qt6::Bluetooth
+    Qt6::SerialPort
     Qt6::Gui
-    Qt6::Network
-    Qt6::Positioning
     Qt6::Quick
     Qt6::QuickControls2
     Qt6::Svg
+
+    pangaea-backend
 )
 
 if(ANDROID)
-    target_link_libraries(Pangaea-mobile PUBLIC Qt::CorePrivate)
+    target_link_libraries(Pangaea-mobile PUBLIC
+        Qt::CorePrivate)
 
     set_target_properties(Pangaea-mobile PROPERTIES
         QT_ANDROID_VERSION_NAME ${PROJECT_VERSION}
@@ -70,7 +76,7 @@ if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "arm64-v8a")
 
     target_link_libraries(Pangaea-mobile PUBLIC
 #        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libWavConverterLib_arm64-v8a.so
-        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libpangaea_backend_arm64-v8a.a
+#        ${CMAKE_CURRENT_SOURCE_DIR}/../shared_libs/lib.android/arm64-v8a/libpangaea_backend_arm64-v8a.a
     )
 
     set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS

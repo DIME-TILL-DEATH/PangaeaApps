@@ -216,8 +216,7 @@ void Preset::setWaveData(const QByteArray &newWaveData)
 void Preset::clearWavData()
 {
     m_waveData.clear();
-//    m_impulseName.clear();
-    m_impulseName = QObject::tr("empty");
+    m_impulseName.clear();
 }
 
 quint32 Preset::wavSize() const

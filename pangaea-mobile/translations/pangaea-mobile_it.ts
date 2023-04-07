@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE">
+<TS version="2.1" language="it_IT">
+<context>
+    <name>BusyScreen</name>
+    <message>
+        <source>Sending commands to device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uploading file data to device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading impulse data from device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Applying impulse to device. Please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 <context>
     <name>Cm</name>
     <message>
@@ -16,35 +35,35 @@
     <name>ConnectPage</name>
     <message>
         <source>CONNECTED</source>
-        <translation>VERBUNDEN</translation>
+        <translation>CONNESSO</translation>
     </message>
     <message>
         <source>SCANNING...</source>
-        <translation>Gerätesuche...</translation>
+        <translation>SCANSIONE…</translation>
     </message>
     <message>
         <source>(TAP to disconnect)</source>
-        <translation>(TIPPEN Verbindung trennen)</translation>
+        <translation>(TOCCA per Disconnettere)</translation>
     </message>
     <message>
         <source>All avaliable AMT PANGAEA devices:</source>
-        <translation>Alle verfügbaren AMT PANGAEA Geräte:</translation>
+        <translation>Tutti i dispositivi AMT PANGAEA disponibili:</translation>
     </message>
     <message>
         <source>TAP TWICE to connect your AMT PANGAEA:</source>
-        <translation>TIPPEN Sie ZWEIMAL zum Verbinden:</translation>
+        <translation>TOCCA due volte per connetterti:</translation>
     </message>
     <message>
         <source>Autoconnect</source>
-        <translation>Automatische Verbindung</translation>
+        <translation>Auto Connessione</translation>
     </message>
     <message>
         <source>Continue?</source>
-        <translation>Bitte bestätigen!</translation>
+        <translation>Continua?</translation>
     </message>
     <message>
         <source>Do you want to disconnect from AMT PANGAEA?</source>
-        <translation>Möchten Sie dieses AMT PANGAEA-Gerät trennen?</translation>
+        <translation>Vuoi disconnetterti da AMT PANGAEA?</translation>
     </message>
 </context>
 <context>
@@ -134,30 +153,26 @@
     <name>FirmwareLoadingDialog</name>
     <message>
         <source>Updating firmware</source>
-        <translation type="vanished">Aktualiesierung der Firmware</translation>
+        <translation type="vanished">Aggiornamento Firmware</translation>
     </message>
     <message>
         <source>WARNING: Do not power off device or exit from application while updating firmware!</source>
-        <translation type="vanished">WARNUNG: Schalten Sie Ihr Gerät nicht aus und beenden Sie die Anwendung nicht, während Sie die Firmware aktualisieren!</translation>
-    </message>
-    <message>
-        <source>Firmware file: </source>
-        <translation type="vanished">Firmware-Datei: </translation>
+        <translation type="vanished">ATTENZIONE! Non spegnere il dispositivo e non uscire dall’applicazione durante l’aggiornamento del Firmware!</translation>
     </message>
 </context>
 <context>
     <name>FirmwareLoadingWindow</name>
     <message>
         <source>Updating firmware</source>
-        <translation type="unfinished">Aktualiesierung der Firmware</translation>
+        <translation type="unfinished">Aggiornamento Firmware</translation>
     </message>
     <message>
         <source>WARNING: Do not power off device or exit from application while updating firmware!</source>
-        <translation type="unfinished">WARNUNG: Schalten Sie Ihr Gerät nicht aus und beenden Sie die Anwendung nicht, während Sie die Firmware aktualisieren!</translation>
+        <translation type="unfinished">ATTENZIONE! Non spegnere il dispositivo e non uscire dall’applicazione durante l’aggiornamento del Firmware!</translation>
     </message>
     <message>
         <source>Firmware file: </source>
-        <translation type="unfinished">Firmware-Datei: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Updating to firmware version </source>
@@ -201,6 +216,10 @@
         <source>Do you want to convert it before upload?</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>empty</source>
+        <translation type="unfinished">vuoto</translation>
+    </message>
 </context>
 <context>
     <name>Lp</name>
@@ -217,30 +236,30 @@
     <name>MFileOpen</name>
     <message>
         <source>Select IR</source>
-        <translation type="vanished">IR auswählen</translation>
+        <translation type="vanished">Seleziona IR</translation>
     </message>
 </context>
 <context>
     <name>MapPage</name>
     <message>
         <source> Version: </source>
-        <translation type="vanished"> Version: </translation>
+        <translation type="vanished"> Versione: </translation>
     </message>
     <message>
         <source> Firmware version: </source>
-        <translation type="vanished"> Firmwareversion: </translation>
+        <translation type="vanished"> Versione del Firmware: </translation>
     </message>
     <message>
         <source>Save preset</source>
-        <translation>Preset speichern</translation>
+        <translation>Salva il Preset</translation>
     </message>
     <message>
         <source>Do you want to save your changes?</source>
-        <translation>Möchten Sie Ihre Änderungen speichern?</translation>
+        <translation>Vuoi salvare le tue modifiche?</translation>
     </message>
     <message>
         <source>Exchange error</source>
-        <translation type="vanished">Fehler beim Datenaustausch</translation>
+        <translation type="vanished">Errore di scambio dati</translation>
     </message>
 </context>
 <context>
@@ -248,45 +267,45 @@
     <message>
         <source>Phones</source>
         <extracomment>Output mode. Phones.</extracomment>
-        <translation>Kopfhörer</translation>
+        <translation>Cuffie</translation>
     </message>
     <message>
         <source>Balance</source>
         <extracomment>Output mode. Balanced out.</extracomment>
-        <translation>Symmetr.</translation>
-    </message>
-    <message>
-        <source>Line</source>
-        <extracomment>Output mode. Line out.</extracomment>
-        <translation>Linear</translation>
+        <translation>Balanced</translation>
     </message>
     <message>
         <source>Save</source>
         <extracomment>Button text. Save preset</extracomment>
-        <translation>Speich.</translation>
-    </message>
-    <message>
-        <source>Comp</source>
-        <extracomment>Button text. Compare preset</extracomment>
-        <translation>Vergl.</translation>
+        <translation>Salva</translation>
     </message>
     <message>
         <source>Copy</source>
         <extracomment>Button text. Copy preset.</extracomment>
-        <translation>Kopier.</translation>
+        <translation>Copia</translation>
     </message>
     <message>
         <source>Paste</source>
         <extracomment>Button text. Paste preset</extracomment>
-        <translation>Einfüg.</translation>
+        <translation>Incolla</translation>
     </message>
     <message>
         <source>BANK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Line</source>
+        <extracomment>Output mode. Line out.</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Export</source>
         <extracomment>Button text. Export preset</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comp</source>
+        <extracomment>Button text. Compare preset</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -365,7 +384,7 @@
     <name>QObject</name>
     <message>
         <source>empty</source>
-        <translation>leer</translation>
+        <translation type="vanished">vuoto</translation>
     </message>
 </context>
 <context>
@@ -373,98 +392,103 @@
     <message>
         <source>Format</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation>Formatierung</translation>
+        <translation>Formattazione</translation>
     </message>
     <message>
         <source>Update Firmware</source>
         <extracomment>Button text</extracomment>
-        <translation>Aktualisierung der Firmware</translation>
+        <translation>Aggiorna il Firmware</translation>
     </message>
     <message>
         <source>Set unique name</source>
         <extracomment>Button text</extracomment>
-        <translation>Modulname ändern</translation>
+        <translation>Imposta un nome</translation>
     </message>
     <message>
         <source>Application settings</source>
         <extracomment>Button text</extracomment>
-        <translation>Einstellungen</translation>
+        <translation>Settaggi dell’Applicazione</translation>
     </message>
     <message>
         <source>About...</source>
         <extracomment>Button text</extracomment>
-        <translation>ÜBER DIE APP...</translation>
+        <translation>Info sull’Applicazione…</translation>
     </message>
     <message>
         <source>Do you want to load firmware file:
 </source>
-        <translation>Möchten Sie die Firmware-Datei hochladen:
+        <translation>Vuoi caricare il File del Firmware:
 </translation>
     </message>
     <message>
         <source>Continue?</source>
-        <translation>Möchten Sie fortfahren?</translation>
+        <translation>Continua?</translation>
     </message>
     <message>
         <source>Do you want to load firmware file:</source>
-        <translation>Möchten Sie die Firmware-Datei hochladen:</translation>
+        <translation>Vuoi caricare il File del Firmware:</translation>
     </message>
     <message>
         <source>Operation complete</source>
         <extracomment>Complete formatting operation</extracomment>
-        <translation>Der Vorgang ist abgeschlossen</translation>
+        <translation>Operazione Completata</translation>
     </message>
     <message>
         <source>Format complete</source>
-        <translation>Die Formatierung ist abgeschlossen</translation>
+        <translation>La formattazione è completata</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Fehlermeldung</translation>
+        <translation>Errore</translation>
     </message>
     <message>
         <source>This file is not a firmware file</source>
-        <translation>Diese Datei ist keine Firmware-Datei</translation>
+        <translation>Questo file non è un file del Firmware</translation>
     </message>
     <message>
         <source>AMT Pangaea CP-16/CP-100
 Android application
 Version: </source>
         <translation>AMT Pangaea CP-16/CP-100
-Android-Anwendung
-Version: </translation>
+Applicazione per Android
+Versione: </translation>
+    </message>
+    <message>
+        <source>(c) 2022
+website: https://amtelectronics.com</source>
+        <translation type="vanished">(c) 2022
+Sito Ufficiale:
+https://amtelectronics.com</translation>
     </message>
     <message>
         <source>Formatting</source>
-        <translation>Formatierung</translation>
+        <translation>Formattazione</translation>
     </message>
     <message>
         <source>Formatting! User data will be lost!</source>
-        <translation>Achtung! Alle Benutzerdaten gehen verloren! Sind Sie sicher, dass dieses Gerät AMT PANAGEA formatiert werden soll?</translation>
+        <translation>Formattazione! Tutti i dati verranno Cancellati!!</translation>
     </message>
     <message>
         <source>Set module name</source>
-        <translation>Modulnamen BLE-1 vergeben</translation>
+        <translation>Imposta il nome del dispositivo</translation>
     </message>
     <message>
         <source>Set unique name for current module:</source>
-        <translation>Einen eindeutigen Namen für aktuelles Modul vergeben:</translation>
+        <translation>Imposta un nome per il modulo in uso:</translation>
     </message>
     <message>
         <source>Formatting is complete
 Please reset the device power and reconnect</source>
-        <translation>Die Formatierung ist abgeschlossen.
-Bitte starten Sie das Gerät AMT PANGAEA neu und verbinden Sie es dann über diese App erneut</translation>
+        <translation>La Formattazione è completata. Spegnere e riaccendere il dispositivo, poi riconnettere</translation>
     </message>
     <message>
         <source>The Firmware file has been transmitted
 Please reset the device power and reconnect</source>
-        <translation type="vanished">Firmware-Datei wurde übertragen.
-Bitte starten Sie das Gerät AMT PANAGEA neu und verbinden Sie es dann über diese App erneut</translation>
+        <translation type="vanished">I file del Firmware sono stati trasmessi. Spegnere e riaccendere il dispositivo</translation>
     </message>
     <message>
         <source>Format error</source>
-        <translation>Formatierungsfehler</translation>
+        <translation>Errore di formattazione</translation>
     </message>
     <message>
         <source>Documentation</source>
@@ -474,7 +498,10 @@ Bitte starten Sie das Gerät AMT PANAGEA neu und verbinden Sie es dann über die
     <message>
         <source>(c) 2023
 website: https://amtelectronics.com</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(c) 2022
+Sito Ufficiale:
+https://amtelectronics.com {2023
+?}</translation>
     </message>
     <message>
         <source>The Firmware file has been transmitted
@@ -486,28 +513,28 @@ Please, reconnect to device</source>
     <name>SettingsPage</name>
     <message>
         <source>Color theme</source>
-        <translation>Farbschema</translation>
+        <translation>Colori del tema</translation>
     </message>
     <message>
         <source>Dark orange</source>
-        <translation>Dunkelorange</translation>
+        <translation>Arancione scuro</translation>
     </message>
     <message>
         <source>Dark green</source>
-        <translation>Dunkelgrün</translation>
+        <translation>Verde scuro</translation>
     </message>
     <message>
         <source>Dark blue</source>
-        <translation>Dunkelblau</translation>
+        <translation>Blu scuro</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Sprache</translation>
+        <translation>Linguaggio</translation>
     </message>
     <message>
         <source>Back</source>
         <extracomment>Back to the previous page</extracomment>
-        <translation>Zurück</translation>
+        <translation>Indietro</translation>
     </message>
     <message>
         <source>Autoselect</source>
@@ -533,49 +560,49 @@ Please, reconnect to device</source>
     <name>main</name>
     <message>
         <source>Connect</source>
-        <translation>Verbinden</translation>
+        <translation>Connetti</translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation>Steuerung</translation>
+        <translation>Controllo</translation>
     </message>
     <message>
         <source>Service</source>
-        <translation>Service</translation>
+        <translation>Servizio</translation>
     </message>
     <message>
         <source>Exchange error</source>
-        <translation type="unfinished">Fehler beim Datenaustausch</translation>
+        <translation type="unfinished">Errore di scambio dati</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>Warnung</translation>
+        <translation>Attenzione</translation>
     </message>
     <message>
         <source>Firmware version error!</source>
-        <translation>Firmware-Versionsfehler!</translation>
+        <translation>Errore! Versione del Firmware non valida!</translation>
     </message>
     <message>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
-        <translation>Das Modul Bluetooth ist ausgeschaltet. Bitte schalten Sie das Modul Bluetooth auf Ihrem mobilen Gerät ein und drücken Sie OK</translation>
+        <translation>Il modulo Bluetooth non è attivo! Accendi il modulo Bluetooth sul tuo dispositivo cliccando OK</translation>
     </message>
     <message>
         <source>Firmware version of your device is </source>
-        <translation>Aktuelle Firmware-Version Ihres Geräts </translation>
+        <translation>Versione del Firmware sul tuo dispositivo </translation>
     </message>
     <message>
         <source>
 Minimum required version is </source>
         <translation>
-Die erforderliche Mindestversion </translation>
+Versione minima richiesta </translation>
     </message>
     <message>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
-        <translation>Android erfordert eine Geolokalisierung, um Bluetooth LE-Geräte zu scannen. Bitte schalten Sie das Geolokalisierung-Modul ein und drücken Sie OK</translation>
+        <translation>La Geolocalizzazione è richiesta da Android per scansionare tutti i dispositivi Bluetooth LE nei paraggi. Per procedere, accendi la Geolocalizzazione e clicca su OK</translation>
     </message>
     <message>
         <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
-        <translation>Diese App erfordert die Berechtigung zur Geolokalisierung auf Ihrem mobilen Gerät, um die Module BLE-1 zu scannen. Bitte erteilen Sie der Anwendung alle erforderlichen Genehmigungen und drücken Sie OK</translation>
+        <translation>L’ Applicazione necessita del permesso per la geolocalizzazione, questo servirà per scansionare i dispositivi Bluetooth LE nelle vicinanze. Per procedere, dai il tuo permesso all’ App. cliccando su OK</translation>
     </message>
     <message>
         <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>

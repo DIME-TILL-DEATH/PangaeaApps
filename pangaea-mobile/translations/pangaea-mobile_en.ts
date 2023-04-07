@@ -2,6 +2,25 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>BusyScreen</name>
+    <message>
+        <source>Sending commands to device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uploading file data to device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading impulse data from device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Applying impulse to device. Please wait...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Cm</name>
     <message>
         <source>CM</source>
@@ -199,6 +218,10 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
         <source>Do you want to convert it before upload?</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>empty</source>
+        <translation type="unfinished">empty</translation>
+    </message>
 </context>
 <context>
     <name>Lp</name>
@@ -344,7 +367,7 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
     <name>QObject</name>
     <message>
         <source>empty</source>
-        <translation>empty</translation>
+        <translation type="vanished">empty</translation>
     </message>
 </context>
 <context>
