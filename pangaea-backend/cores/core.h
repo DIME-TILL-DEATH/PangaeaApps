@@ -109,10 +109,10 @@ signals:
     void sgPresetChangeStage(quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);
 
-//    void sgModuleNameUpdated(QString name);
-
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
     void sgUpdatePreset(Preset newPreset);
+
+    void sgReadyTodisconnect();
 
 public slots:
     void slReadyToDisconnect();

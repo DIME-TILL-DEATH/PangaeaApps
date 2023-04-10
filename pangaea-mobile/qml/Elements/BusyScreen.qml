@@ -151,4 +151,25 @@ Item
             }
         }
     }
+
+    Connections{
+        target: InterfaceManager
+
+        function onSgConnectionStarted()
+        {
+            progressBar.visible = false;
+            txt.text = qsTr("Connecting to device...");
+            rWait.visible = true;
+        }
+
+        function onSgInterfaceError(errorDescription)
+        {
+            rWait.visible = false;
+        }
+
+        function onSgInterfaceDisconnected(deviceDescription)
+        {
+            rWait.visible = false;
+        }
+    }
 }

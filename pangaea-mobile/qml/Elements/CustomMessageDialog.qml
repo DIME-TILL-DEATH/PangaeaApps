@@ -112,15 +112,12 @@ Dialog
 
     Connections
     {
-        target: UiCore
+        target: InterfaceManager
 
-        function onSgSetUIParameter(nameParam, inValue)
+        function onSgInterfaceDisconnected(deviceDescription)
         {
-            if(nameParam === ("ready_to_disconnect"))
-            {
                 if(closeOnDisconnect)
                     _root.close();
-            }
         }
     }
 }

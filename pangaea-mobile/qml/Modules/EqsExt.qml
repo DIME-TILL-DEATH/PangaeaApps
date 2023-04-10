@@ -388,9 +388,9 @@ Item
                 id: btn
 
                 width: parent.width
-                height: parent.height*1/12
+                height: parent.height*1/6
 
-                text: "HIDE"
+                text: qsTr("HIDE")
 
                 onClicked:
                 {

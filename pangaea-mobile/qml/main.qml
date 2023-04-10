@@ -143,7 +143,7 @@ ApplicationWindow
         headerText: qsTr("Exchange error")
         onAccepted: {
             openConnectPage();
-            UiCore.sgSetUIParameter("ready_to_disconnect", true);
+            InterfaceManager.disconnectFromDevice();
         }
     }
 
@@ -273,11 +273,6 @@ ApplicationWindow
                 _msgNetUpdateFirmware.visible = true;
             }
 
-            if(nameParam === "exchange_error")
-            {
-                _msgExchangeError.open()
-            }
-
             if(nameParam === "preset_not_saved")
             {
                 _msgCommon.headerText = qsTr("Warning");
@@ -310,6 +305,10 @@ ApplicationWindow
             UiCore.readAll();
         }
 
+        function onSgExchangeError()
+        {
+            _msgExchangeError.open();
+        }
 
         function onSgInterfaceUnavaliable(interfaceType, Msg)
         {

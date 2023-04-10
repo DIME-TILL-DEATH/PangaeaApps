@@ -31,8 +31,7 @@ void Core::slReadyToDisconnect()
     commandsPending.clear();
     enableRecieve = true;
 
-//    isConnected = false;  //TODO interface status. Differs from mobile
-    emit sgSetUIParameter("ready_to_disconnect", true);
+    emit sgReadyTodisconnect();
 }
 
 void Core::parseInputData(const QByteArray& ba)
@@ -1041,7 +1040,6 @@ void Core::recieveTimeout()
                     emit sgSetUIParameter("slider_enabled", 1);
                 }
 
-//                emit sgSetUIText("exchange_error", commandWithoutAnswer);
                 emit sgExchangeError();
 
                 commandsPending.clear();

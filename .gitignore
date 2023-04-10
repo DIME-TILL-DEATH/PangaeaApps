@@ -16,7 +16,7 @@ WavConverterShell/output_bin/*
 *.a
 *.la
 *.lai
-#*.so
+*.so
 *.dll
 *.dylib
 

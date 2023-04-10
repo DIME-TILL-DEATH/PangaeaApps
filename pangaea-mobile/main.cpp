@@ -147,6 +147,7 @@ int main(int argc, char *argv[])
     Core::connect(bleInterface, &BleInterface::sgInterfaceConnected, core, &Core::readAllParameters);
     Core::connect(core, &Core::sgWriteToInterface, bleInterface, &BleInterface::write);
     Core::connect(core, &Core::sgExchangeError, bleInterface, &BleInterface::disconnectFromDevice);
+    Core::connect(core, &Core::sgReadyTodisconnect, bleInterface, &BleInterface::disconnectFromDevice);
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);
 
 
