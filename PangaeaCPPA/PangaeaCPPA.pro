@@ -70,6 +70,8 @@ linux {
 
     libsPath = $${PWD}/../shared_libs/lib.linux
     LIBS += -L$${libsPath} -lsox
+
+    DEPENDPATH += $${PWD}/../shared_libs/lib.linux
 }
 
 #LIBS += -L$${libsPath} -lWavConverterLib
@@ -160,7 +162,6 @@ INCLUDEPATH += $$PWD/../pangaea-backend
 INCLUDEPATH += $$PWD/../WavConverterLib
 
 DEPENDPATH += $$PWD/../pangaea-backend
-DEPENDPATH += $$PWD/../WavConverterLib
 DEPENDPATH += $$PWD/../WavConverterLib
 
 unix:!macx:

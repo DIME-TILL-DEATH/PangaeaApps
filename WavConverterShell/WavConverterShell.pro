@@ -57,12 +57,20 @@ mac{
 linux{
     libsPath = $${PWD}/../shared_libs/lib.linux
     destDir = $${PWD}/output_bin/
-    LIBS += -L$${libsPath} -lsox
+    LIBS += -L$${PWD}/../WavConverterLib/sox_lib/lib.linux -lsox #-L$${libsPath} -lsox
 
     destDir = $${PWD}/output_bin/
 
     QMAKE_POST_LINK += mkdir -p $${destDir} $$escape_expand(\n\t)
     QMAKE_POST_LINK += cp -pr $${OUT_PWD}/$${TARGET} $${destDir} $$escape_expand(\n\t)
+
+INCLUDEPATH += $$PWD/../WavConverterLib
+DEPENDPATH += $$PWD/../WavConverterLib
+
+unix:!macx:
+{
+
+    LIBS += -L$$OUT_PWD/../WavConverterLib/ -lWavConverterLib
 }
-LIBS += -L$${libsPath} -lWavConverterLib
+}
 

@@ -66,6 +66,7 @@ linux: !macx{
         LIBS += -L$$libsPath -lsox
 
         QMAKE_POST_LINK += mkdir -p $${destIncludeDir} $$escape_expand(\n\t)
+        QMAKE_POST_LINK += mkdir -p $${DESTPATH} $$escape_expand(\n\t)
         QMAKE_POST_LINK += cp $${includeFile} $${destIncludeDir} $$escape_expand(\n\t)
         QMAKE_POST_LINK += cp $${libsPath}libsox.so $${DESTPATH} $$escape_expand(\n\t)
         QMAKE_POST_LINK += ln -sf $${DESTPATH}/libsox.so $${DESTPATH}/libsox.so.3 $$escape_expand(\n\t)

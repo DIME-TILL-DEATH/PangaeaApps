@@ -1,5 +1,5 @@
 import QtQuick 2.15
-import QtQuick 2.15.Controls
+import QtQuick.Controls
 
 import QtQml.Models 2.2
 
