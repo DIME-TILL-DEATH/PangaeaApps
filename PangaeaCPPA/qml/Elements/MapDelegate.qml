@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick 2.15 2.15
+import QtQuick 2.15.Controls 2.15
 
 import CppObjects 1.0
 

@@ -51,7 +51,7 @@ win32 {
     destLibDir ~= s,/,\\,g
 
     !exists($${destIncludeDir}) {QMAKE_POST_LINK += $$QMAKE_MKDIR $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)}
-    QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${includeFile}) $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)
+#    QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${includeFile}) $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)
     win32-g++: QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${destLibDir}) $$escape_expand(\\n\\t)
 }
 
@@ -61,40 +61,41 @@ linux: !macx{
 
         libsPath = $${PWD}/sox_lib/lib.linux/
 
-        DESTDIR = $$PWD/../shared_libs/lib.linux
+#        DESTDIR = $$PWD/../shared_libs/lib.linux
+        DESTPATH = $$PWD/../shared_libs/lib.linux
         LIBS += -L$$libsPath -lsox
 
         QMAKE_POST_LINK += mkdir -p $${destIncludeDir} $$escape_expand(\n\t)
         QMAKE_POST_LINK += cp $${includeFile} $${destIncludeDir} $$escape_expand(\n\t)
-        QMAKE_POST_LINK += cp $${libsPath}libsox.so $${DESTDIR} $$escape_expand(\n\t)
-        QMAKE_POST_LINK += ln -sf $${DESTDIR}/libsox.so $${DESTDIR}/libsox.so.3 $$escape_expand(\n\t)
+        QMAKE_POST_LINK += cp $${libsPath}libsox.so $${DESTPATH} $$escape_expand(\n\t)
+        QMAKE_POST_LINK += ln -sf $${DESTPATH}/libsox.so $${DESTPATH}/libsox.so.3 $$escape_expand(\n\t)
     }
 
-    android {
-        message("android build")
+#    android {
+#        message("android build")
 
-        equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
-            libsPath = $${PWD}/sox_lib/lib.android/armeabi-v7a
-            DESTDIR = $$PWD/../shared_libs/lib.android/armeabi-v7a
-        }
-        equals(ANDROID_TARGET_ARCH, arm64-v8a) {
-            libsPath = $${PWD}/sox_lib/lib.android/arm64-v8a
-            DESTDIR = $$PWD/../shared_libs/lib.android/arm64-v8a
-        }
+#        equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
+#            libsPath = $${PWD}/sox_lib/lib.android/armeabi-v7a
+#            DESTDIR = $$PWD/../shared_libs/lib.android/armeabi-v7a
+#        }
+#        equals(ANDROID_TARGET_ARCH, arm64-v8a) {
+#            libsPath = $${PWD}/sox_lib/lib.android/arm64-v8a
+#            DESTDIR = $$PWD/../shared_libs/lib.android/arm64-v8a
+#        }
 
-        LIBS += -L$${libsPath} -lsox
+#        LIBS += -L$${libsPath} -lsox
 
-        destLibDir = $${DESTDIR}
+#        destLibDir = $${DESTDIR}
 
-        includeFile ~= s,/,\\,g
-        libsPath ~= s,/,\\,g
-        destIncludeDir ~= s,/,\\,g
-        destLibDir ~= s,/,\\,g
+#        includeFile ~= s,/,\\,g
+#        libsPath ~= s,/,\\,g
+#        destIncludeDir ~= s,/,\\,g
+#        destLibDir ~= s,/,\\,g
 
-        !exists($${destIncludeDir}) {QMAKE_POST_LINK += $$QMAKE_MKDIR $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)}
-        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${includeFile}) $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${destLibDir}) $$escape_expand(\\n\\t)
-    }
+#        !exists($${destIncludeDir}) {QMAKE_POST_LINK += $$QMAKE_MKDIR $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)}
+#        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${includeFile}) $$shell_quote($${destIncludeDir}) $$escape_expand(\\n\\t)
+#        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${destLibDir}) $$escape_expand(\\n\\t)
+#    }
 }
 
 macx {
@@ -105,8 +106,8 @@ macx {
     DESTDIR = $$PWD/../shared_libs/lib.mac
     LIBS += -L$$libsPath -lsox
 
-    QMAKE_POST_LINK += mkdir -p $${destIncludeDir} $$escape_expand(\n\t)
-    QMAKE_POST_LINK += cp $${includeFile} $${destIncludeDir} $$escape_expand(\n\t)
+#    QMAKE_POST_LINK += mkdir -p $${destIncludeDir} $$escape_expand(\n\t)
+#    QMAKE_POST_LINK += cp $${includeFile} $${destIncludeDir} $$escape_expand(\n\t)
 }
 
 

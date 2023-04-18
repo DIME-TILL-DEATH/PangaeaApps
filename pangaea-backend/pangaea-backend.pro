@@ -87,7 +87,7 @@ linux: !macx{
     !android{
         message("linux build")
 
-        DESTDIR = $$PWD/../shared_libs/lib.linux
+#        DESTDIR = $$PWD/../shared_libs/lib.linux
     }
 
     android {

@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Layouts
+import QtQuick 2.15
+import QtQuick 2.15.Layouts
 
 import Elements
 import StyleSettings

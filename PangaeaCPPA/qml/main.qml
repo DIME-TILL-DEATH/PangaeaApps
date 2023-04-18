@@ -10,8 +10,8 @@ import QtQuick.Window 2.15
 import StyleSettings 1.0
 import Layouts 1.0
 
-import CppObjects
-import CppEnums
+import CppObjects 1.0
+import CppEnums 1.0
 
 ApplicationWindow
 {
@@ -111,7 +111,7 @@ ApplicationWindow
         }
     }
 
-    MessageDialog
+    Labs.MessageDialog
     {
         id: msgPresetChangeSave
 
@@ -120,52 +120,79 @@ ApplicationWindow
         text: qsTr("Do you want to save changes?")
         title: qsTr("Save preset")
 
-        buttons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
-        onButtonClicked: function(button, role){
-            switch(button)
-            {
-                case MessageDialog.Save:
-                {
-                    UiCore.setParameter("save_change", saveParam);
-                    UiCore.setParameter("do_preset_change", saveParam);
-                    break;
-                }
-                case MessageDialog.No:
-                {
-                    UiCore.restoreParameter("impulse")
-                    UiCore.setParameter("do_preset_change", saveParam);
-                    break;
-                }
-                case MessageDialog.Cancel:
-                {
-                    saveParam = 0
-                    UiCore.restoreParameter("preset")
-                    UiCore.restoreParameter("bank")
-                    break;
-                }
-            }
+        buttons: Labs.MessageDialog.Save | Labs.MessageDialog.No | Labs.MessageDialog.Cancel
+
+        onSaveClicked:
+        {
+            UiCore.setParameter("save_change", saveParam);
+            UiCore.setParameter("do_preset_change", saveParam);
         }
+
+        onNoClicked:
+        {
+            UiCore.restoreParameter("impulse")
+            UiCore.setParameter("do_preset_change", saveParam);
+        }
+
+        onCancelClicked:
+        {
+            saveParam = 0
+            UiCore.restoreParameter("preset")
+            UiCore.restoreParameter("bank")
+        }
+
+//        onButtonClicked: function(button, role){
+//            switch(button)
+//            {
+//                case MessageDialog.Save:
+//                {
+//                    UiCore.setParameter("save_change", saveParam);
+//                    UiCore.setParameter("do_preset_change", saveParam);
+//                    break;
+//                }
+//                case MessageDialog.No:
+//                {
+//                    UiCore.restoreParameter("impulse")
+//                    UiCore.setParameter("do_preset_change", saveParam);
+//                    break;
+//                }
+//                case MessageDialog.Cancel:
+//                {
+//                    saveParam = 0
+//                    UiCore.restoreParameter("preset")
+//                    UiCore.restoreParameter("bank")
+//                    break;
+//                }
+//            }
+//        }
     }
 
-    MessageDialog{
+    Labs.MessageDialog{
         id: msgIncorretIR
 
         title: qsTr("Incorrect wav format")
 
-        buttons: MessageDialog.Yes | MessageDialog.No
+        buttons: Labs.MessageDialog.Yes | Labs.MessageDialog.No
 
-        onButtonClicked: function (button, role) {
-            switch(button){
-            case MessageDialog.Yes:
-                var cleanPath = irFileDialog.currentFile.toString();
-                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-                UiCore.convertAndUploadImpulse(cleanPath);
-                break;
-            }
+//        onButtonClicked: function (button, role) {
+//            switch(button){
+//            case MessageDialog.Yes:
+//                var cleanPath = irFileDialog.currentFile.toString();
+//                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+//                UiCore.convertAndUploadImpulse(cleanPath);
+//                break;
+//            }
+//        }
+
+        onYesClicked:
+        {
+            var cleanPath = irFileDialog.currentFile.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+            UiCore.convertAndUploadImpulse(cleanPath);
         }
     }
 
-    MessageDialog
+    Labs.MessageDialog
     {
         id: msgError
 
@@ -173,12 +200,17 @@ ApplicationWindow
         text: qsTr("Device is disconnected")
 
         modality: Qt.ApplicationModal
-        onButtonClicked: {
+//        onButtonClicked: {
+//            mBusy.visible = false;
+//        }
+
+        onOkClicked:
+        {
             mBusy.visible = false;
         }
     }
 
-    MessageDialog
+    Labs.MessageDialog
     {
         id: _msgVersionInform        
     }

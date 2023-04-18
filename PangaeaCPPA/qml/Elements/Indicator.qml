@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Layouts
+import QtQuick 2.15
+import QtQuick 2.15.Layouts
 import StyleSettings
 
 import Qt5Compat.GraphicalEffects

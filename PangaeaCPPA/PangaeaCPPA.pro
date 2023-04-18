@@ -29,8 +29,6 @@ SOURCES += main.cpp \
     ui/uiinterfacemanager.cpp \
     ui/uisettings.cpp \
     utils/logger.cpp \
-#    models/interfacelistmodel.cpp \
-#    models/presetlistmodel.cpp \
 
 HEADERS += \
     threadcontroller.h \
@@ -38,11 +36,18 @@ HEADERS += \
     ui/uiinterfacemanager.h \
     ui/uisettings.h \
     utils/logger.h \
-#    models/interfacelistmodel.h \
 
 INCLUDEPATH += ui
 INCLUDEPATH += utils
 INCLUDEPATH += models
+
+INCLUDEPATH +=../pangaea-backend/cores
+INCLUDEPATH +=../pangaea-backend/device
+INCLUDEPATH +=../pangaea-backend/interfaces/
+INCLUDEPATH +=../pangaea-backend/utils
+INCLUDEPATH +=../pangaea-backend/qmlEnums
+INCLUDEPATH +=../pangaea-backend/models/
+INCLUDEPATH +=../WavConverterLib/
 
 TRANSLATIONS += translations/PangaeaCPPA_en.ts
 TRANSLATIONS += translations/PangaeaCPPA_ru.ts
@@ -67,9 +72,9 @@ linux {
     LIBS += -L$${libsPath} -lsox
 }
 
-INCLUDEPATH += $${PWD}/../shared_libs/include
-LIBS += -L$${libsPath} -lWavConverterLib
-LIBS += -L$${libsPath} -lpangaea_backend
+#LIBS += -L$${libsPath} -lWavConverterLib
+#LIBS += -L$${libsPath} -lpangaea_backend
+
 
 #to backend
 DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.01\\\"
@@ -148,4 +153,19 @@ CONFIG(release, debug|release) {
         QMAKE_POST_LINK += cp -r $${dirDeploy}/usr/ $${dirDeploy}/debian_deploy/PangaeaCPPA/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += dpkg-deb --build $${dirDeploy}/debian_deploy/PangaeaCPPA/ $$escape_expand(\\n\\t)
     }
+}
+
+
+INCLUDEPATH += $$PWD/../pangaea-backend
+INCLUDEPATH += $$PWD/../WavConverterLib
+
+DEPENDPATH += $$PWD/../pangaea-backend
+DEPENDPATH += $$PWD/../WavConverterLib
+DEPENDPATH += $$PWD/../WavConverterLib
+
+unix:!macx:
+{
+    PRE_TARGETDEPS += $$OUT_PWD/../pangaea-backend/libpangaea-backend.a
+    LIBS += -L$$OUT_PWD/../pangaea-backend/ -lpangaea-backend
+    LIBS += -L$$OUT_PWD/../WavConverterLib/ -lWavConverterLib
 }

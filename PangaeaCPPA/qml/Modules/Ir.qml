@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 2.15
 
 import Elements 1.0
 

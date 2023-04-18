@@ -1,8 +1,8 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Dialogs //1.3
+import QtQuick 2.15 2.15
+import QtQuick 2.15.Controls 2.15
+import QtQuick 2.15.Dialogs //1.3
 
-import QtQuick.Window 2.15
+import QtQuick 2.15.Window 2.15
 
 import StyleSettings 1.0
 import Qt.labs.platform 1.1 as Labs
@@ -234,48 +234,56 @@ MenuBar{
         }
     }
 
-    MessageDialog{
+    Labs.MessageDialog{
         id: aproveFileDialog
 
         title: qsTr("Load firmware file")
         text: qsTr("Are you sure want to upload firmware file\n") + pickFimwareFileDialog.cleanPath;
 
-        buttons: MessageDialog.Yes | MessageDialog.No
+        buttons: Labs.MessageDialog.Yes | Labs.MessageDialog.No
 
-        onButtonClicked: function (button, role) {
-            switch(button){
-            case MessageDialog.Yes:
-                UiCore.updateFirmware(pickFimwareFileDialog.cleanPath);
-                break;
-            }
+//        onButtonClicked: function (button, role) {
+//            switch(button){
+//            case MessageDialog.Yes:
+//                UiCore.updateFirmware(pickFimwareFileDialog.cleanPath);
+//                break;
+//            }
+//        }
+        onYesClicked:
+        {
+            UiCore.updateFirmware(pickFimwareFileDialog.cleanPath);
         }
     }
 
-    MessageDialog{
+    Labs.MessageDialog{
         id: notFwFileDialog
 
         title: qsTr("Error")
         text: qsTr("Not a fiwmare file!")
     }
 
-    MessageDialog{
+    Labs.MessageDialog{
         id: disconnectDialog
 
         title: qsTr("Disconnect?")
         text: qsTr("Are you sure want to disconnect?")
 
-        buttons: MessageDialog.Yes | MessageDialog.No
+        buttons: Labs.MessageDialog.Yes | Labs.MessageDialog.No
 
-        onButtonClicked: function (button, role) {
-            switch(button){
-            case MessageDialog.Yes:
-                InterfaceManager.disconnectFromDevice();
-                break;
-            }
+//        onButtonClicked: function (button, role) {
+//            switch(button){
+//            case MessageDialog.Yes:
+//                InterfaceManager.disconnectFromDevice();
+//                break;
+//            }
+//        }
+        onYesClicked:
+        {
+            InterfaceManager.disconnectFromDevice();
         }
     }
 
-    MessageDialog{
+    Labs.MessageDialog{
         id: aboutDialog
 
         title: qsTr("About...")
