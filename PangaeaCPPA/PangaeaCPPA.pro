@@ -9,15 +9,57 @@ QT += serialport
 QT += bluetooth
 QT += widgets
 
-win32: {
-    VERSION = 1.0.1720.1
+win32 {
+    VERSION = 1.0.1721.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1720
+else: VERSION = 1.0.1721
+
+macx {
+    QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
+    ICON = icons/pangaea.icns
+}
+
+linux {
+    QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
+    ICON = icons/pangaea.icns
+
+    libsPath = $${PWD}/../sox-lib/lib.linux
+    LIBS += -L$${libsPath} -lsox
+
+    DEPENDPATH += $${libsPath}
+}
+
+INCLUDEPATH += $${PWD}/../WavConverterLib
+
+DEPENDPATH += $${PWD}/../WavConverterLib
+DEPENDPATH += $${PWD}/../pangaea-backend
+
+win32{
+    CONFIG(debug, debug|release){
+        wavConverterLibPath = $${OUT_PWD}/../WavConverterLib/debug/
+
+        LIBS += -L$${OUT_PWD}/../pangaea-backend/debug/ -lpangaea-backend
+        PRE_TARGETDEPS += $${OUT_PWD}/../pangaea-backend/debug/pangaea-backend.lib
+    }
+    CONFIG(release, debug|release){
+        wavConverterLibPath = $${OUT_PWD}/../WavConverterLib/release/
+
+        LIBS += -L$${OUT_PWD}/../pangaea-backend/release/ -lpangaea-backend
+        PRE_TARGETDEPS += $${OUT_PWD}/../pangaea-backend/release/pangaea-backend.lib
+    }
+    LIBS += -L$${wavConverterLibPath} -lWavConverterLib
+}
+
+unix{
+    LIBS += -L$$OUT_PWD/../WavConverterLib/ -lWavConverterLib
+    LIBS += -L$$$${OUT_PWD}/../pangaea-backend/ -lpangaea-backend
+    PRE_TARGETDEPS += $$$${OUT_PWD}/../pangaea-backend/libpangaea-backend.a
+}
 
 DEFINES += VERSION_STRING=\\\"$${VERSION}\\\"
 
@@ -29,8 +71,6 @@ SOURCES += main.cpp \
     ui/uiinterfacemanager.cpp \
     ui/uisettings.cpp \
     utils/logger.cpp \
-#    models/interfacelistmodel.cpp \
-#    models/presetlistmodel.cpp \
 
 HEADERS += \
     threadcontroller.h \
@@ -38,44 +78,24 @@ HEADERS += \
     ui/uiinterfacemanager.h \
     ui/uisettings.h \
     utils/logger.h \
-#    models/interfacelistmodel.h \
 
 INCLUDEPATH += ui
 INCLUDEPATH += utils
 INCLUDEPATH += models
+
+INCLUDEPATH += $${PWD}/../pangaea-backend/cores
+INCLUDEPATH += $${PWD}/../pangaea-backend/device
+INCLUDEPATH += $${PWD}/../pangaea-backend/interfaces
+INCLUDEPATH += $${PWD}/../pangaea-backend/cores
+INCLUDEPATH += $${PWD}/../pangaea-backend/models
+INCLUDEPATH += $${PWD}/../pangaea-backend/utils
+INCLUDEPATH += $${PWD}/../pangaea-backend/qmlEnums/
 
 TRANSLATIONS += translations/PangaeaCPPA_en.ts
 TRANSLATIONS += translations/PangaeaCPPA_ru.ts
 TRANSLATIONS += translations/PangaeaCPPA_de.ts
 TRANSLATIONS += translations/PangaeaCPPA_it.ts
 
-macx {
-    QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
-    ICON = icons/pangaea.icns
-
-    libsPath = $${PWD}/../shared_libs/lib.mac
-}
-
-win32-g++: libsPath = $${PWD}/../shared_libs/lib.mingw32
-win32-msvc: libsPath = $${PWD}/../shared_libs/lib.msvc2019
-
-linux {
-    QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
-    ICON = icons/pangaea.icns
-
-    libsPath = $${PWD}/../shared_libs/lib.linux
-    LIBS += -L$${libsPath} -lsox
-}
-
-INCLUDEPATH += $${PWD}/../shared_libs/include
-LIBS += -L$${libsPath} -lWavConverterLib
-LIBS += -L$${libsPath} -lpangaea_backend
-
-#to backend
-DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.01\\\"
-DEFINES += CP16PA_FIRMWARE_VERSION=\\\"1.04.01\\\"
-DEFINES += CP100_FIRMWARE_VERSION=\\\"2.08.02\\\"
-DEFINES += CP100PA_FIRMWARE_VERSION=\\\"6.08.04\\\"
 
 QML_IMPORT_PATH += $$PWD/qml/
 QML2_IMPORT_PATH += $$PWD/qml/
@@ -86,6 +106,8 @@ RESOURCES += qml.qrc \
 DISTFILES += \
     MacOS/Info.plist \
     icons/pangaea_amt.ico \
+
+###### Post-build ###############
 
 dirDocs = $${PWD}/docs/
 
@@ -99,7 +121,7 @@ CONFIG(release, debug|release) {
         # replace slashes in source path for Windows
         appBinaryFile ~= s,/,\\,g
         converterBinaryFile ~= s,/,\\,g
-        libsPath ~= s,/,\\,g
+        wavConverterLibPath ~= s,/,\\,g
         dirDocs ~= s,/,\\,g
         dirDeploy ~= s,/,\\,g
         dirDeployRelease ~= s,/,\\,g
@@ -107,8 +129,7 @@ CONFIG(release, debug|release) {
         QMAKE_POST_LINK += $$[QT_INSTALL_BINS]/windeployqt.exe --force release/$${TARGET}.exe --qmldir=$${PWD}/qml/ --dir $$shell_quote($$dirDeployRelease) $$escape_expand(\\n\\t)# $$RETURN
         QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${appBinaryFile}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${converterBinaryFile}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
-        win32-g++: QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
-        win32-msvc: QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${libsPath}\\WavConverterLib.dll) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${wavConverterLibPath}\\WavConverterLib.dll) $$shell_quote($${dirDeployRelease}) $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += $$QMAKE_COPY_DIR $$shell_quote($${dirDocs}) $$shell_quote($${dirDeployRelease}\\docs\\) $$escape_expand(\\n\\t)
 
         #place version in template file and create Inno setup installer

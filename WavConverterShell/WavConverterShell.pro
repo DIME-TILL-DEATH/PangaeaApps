@@ -20,7 +20,12 @@ HEADERS += \
 
 RESOURCES += qml.qrc
 
-INCLUDEPATH += $${PWD}/../shared_libs/include
+INCLUDEPATH += $${PWD}/../WavConverterLib
+DEPENDPATH += $${PWD}/../WavConverterLib
+
+win32:CONFIG(release, debug|release): LIBS += -L$${OUT_PWD}/../WavConverterLib/release/ -lWavConverterLib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$${OUT_PWD}/../WavConverterLib/debug/ -lWavConverterLib
+else:unix: LIBS += -L$${OUT_PWD}/../WavConverterLib/ -lWavConverterLib
 
 win32{
     DESTDIR = $${PWD}\output_bin\
@@ -31,9 +36,8 @@ win32{
         icons/spirit.ico \
         icons/suhr.ico
 
+    libsPath = $${PWD}/../shared_libs/lib.msvc2019
 }
-win32-g++: libsPath = $${PWD}/../shared_libs/lib.mingw32
-win32-msvc: libsPath = $${PWD}/../shared_libs/lib.msvc2019
 
 mac{
 
@@ -43,10 +47,8 @@ mac{
 
     ICON = icons/spirit.icns
 
-    libsPath = $${PWD}/../shared_libs/lib.mac
+    destDir = $${PWD}/output_bin/ # DESTDIR does not allow to run program without copying QT librarys
 
-    destDir = $${PWD}/output_bin/
-    # DESTDIR does not allow to run program without copying QT librarys
     QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/ -libpath=$${libsPath} $$escape_expand(\\n\\t)
 
     QMAKE_POST_LINK += mkdir -p $${destDir} $$escape_expand(\n\t)
@@ -56,7 +58,6 @@ mac{
 
 linux{
     libsPath = $${PWD}/../shared_libs/lib.linux
-    destDir = $${PWD}/output_bin/
     LIBS += -L$${libsPath} -lsox
 
     destDir = $${PWD}/output_bin/
@@ -64,5 +65,3 @@ linux{
     QMAKE_POST_LINK += mkdir -p $${destDir} $$escape_expand(\n\t)
     QMAKE_POST_LINK += cp -pr $${OUT_PWD}/$${TARGET} $${destDir} $$escape_expand(\n\t)
 }
-LIBS += -L$${libsPath} -lWavConverterLib
-

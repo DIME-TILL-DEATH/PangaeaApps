@@ -83,6 +83,7 @@ void BleInterface::startDiscovering()
     if(!device.isValid())
     {
         qInfo() << "Bluetooth is not valid";
+        emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "Device is unavaliable");
         prevState();
         return;
     }

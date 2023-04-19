@@ -73,43 +73,43 @@ INCLUDEPATH += qmlEnums
 INCLUDEPATH += ui
 INCLUDEPATH += utils
 
-win32-g++ {
-    message("MinGW 32 build")
-    DESTDIR = $$PWD/../shared_libs/lib.mingw32
-}
+#win32-g++ {
+#    message("MinGW 32 build")
+#    DESTDIR = $$PWD/../shared_libs/lib.mingw32
+#}
 
-win32-msvc {
-    message("msvc2019 build")
-    DESTDIR = $$PWD/../shared_libs/lib.msvc2019
-}
+#win32-msvc {
+#    message("msvc2019 build")
+#    DESTDIR = $$PWD/../shared_libs/lib.msvc2019
+#}
 
-linux: !macx{
-    !android{
-        message("linux build")
+#linux: !macx{
+#    !android{
+#        message("linux build")
 
-        DESTDIR = $$PWD/../shared_libs/lib.linux
-    }
+#        DESTDIR = $$PWD/../shared_libs/lib.linux
+#    }
 
-    android {
-        message("android build")
+#    android {
+#        message("android build")
 
-        equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
-            DESTDIR = $$PWD/../shared_libs/lib.android/armeabi-v7a
-        }
-        equals(ANDROID_TARGET_ARCH, arm64-v8a) {
-            DESTDIR = $$PWD/../shared_libs/lib.android/arm64-v8a
-        }
-    }
-}
+#        equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
+#            DESTDIR = $$PWD/../shared_libs/lib.android/armeabi-v7a
+#        }
+#        equals(ANDROID_TARGET_ARCH, arm64-v8a) {
+#            DESTDIR = $$PWD/../shared_libs/lib.android/arm64-v8a
+#        }
+#    }
+#}
 
-macx {
-    message("mac build")
+#macx {
+#    message("mac build")
 
-    DESTDIR = $$PWD/../shared_libs/lib.mac
-}
+#    DESTDIR = $$PWD/../shared_libs/lib.mac
+#}
 
-# TODO спрятать внутреннюю структуру backend, уменьшить количество заголовочных наружу
-headersDataFiles.path = $${PWD}/../shared_libs/include
-headersDataFiles.files = $$files($${PWD}/*.h, true) #$$PWD/*/*.h
-win32: headersDataFiles.files ~= s,/,\\,g
-INSTALLS += headersDataFiles # add make install step!!!!
+## TODO спрятать внутреннюю структуру backend, уменьшить количество заголовочных наружу
+#headersDataFiles.path = $${PWD}/../shared_libs/include
+#headersDataFiles.files = $$files($${PWD}/*.h, true) #$$PWD/*/*.h
+#win32: headersDataFiles.files ~= s,/,\\,g
+#INSTALLS += headersDataFiles # add make install step!!!!
