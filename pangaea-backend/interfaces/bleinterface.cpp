@@ -80,6 +80,13 @@ void BleInterface::startDiscovering()
 {
     QBluetoothLocalDevice device;
 
+    if(!device.isValid())
+    {
+        qInfo() << "Bluetooth is not valid";
+        prevState();
+        return;
+    }
+
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
     {
         prevState();
