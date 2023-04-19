@@ -1033,14 +1033,14 @@ void Core::recieveTimeout()
             {
                 sendCount = 0;
 
+                emit sgExchangeError();
+
                 if(fwUpdate)
                 {
                     fwUpdate = false;
                     //TODO что за slider_enabled в мобильном? wait заменяет?
                     emit sgSetUIParameter("slider_enabled", 1);
                 }
-
-                emit sgExchangeError();
 
                 commandsPending.clear();
                 commandsSended.clear();

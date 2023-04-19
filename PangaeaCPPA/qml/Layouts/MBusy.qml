@@ -149,5 +149,10 @@ Item
         {
             rWait.visible = false;
         }
+
+        function onSgInterfaceDisconnected(deviceDescription)
+        {
+            rWait.visible = false;
+        }
     }
 }

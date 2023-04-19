@@ -180,6 +180,19 @@ ApplicationWindow
 
     MessageDialog
     {
+        id: msgExchangeError
+
+        title: qsTr("Error")
+        text: qsTr("Device is disconnected")
+
+        modality: Qt.ApplicationModal
+        onButtonClicked: {
+            InterfaceManager.disconnectFromDevice();
+        }
+    }
+
+    MessageDialog
+    {
         id: _msgVersionInform        
     }
 
@@ -195,6 +208,7 @@ ApplicationWindow
         modality: Qt.ApplicationModal
 
         onOkClicked: {
+            mBusy.visible = false;
             InterfaceManager.disconnectFromDevice();
         }
     }
@@ -328,15 +342,12 @@ ApplicationWindow
         {
             msgError.text = qsTr("Device is unavaliable")
             msgError.open();
- //           mBusy.visible = true;
-//            mBusy.visible = false;
         }
 
         function onSgExchangeError()
         {
-            msgError.text = qsTr("Command exchange error")
-            msgError.open();
-//            mBusy.visible = false;
+            msgExchangeError.text = qsTr("Command exchange error")
+            msgExchangeError.open();
         }
 
         function onSgInterfaceConnected(interfaceDescription)
