@@ -64,13 +64,12 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
 
 void InterfaceCore::disconnectFromDevice()
 {
-    m_exchangeInterface->disconnectFromDevice();
-    // лишнее. Интерфейс тоже отправляет сам
-//    emit sgInterfaceDisconnected(m_connectedDeviceDescription);
-
-    QObject::disconnect(m_exchangeInterface, nullptr, this, nullptr);
-    m_exchangeInterface = nullptr;
-
+    if(m_exchangeInterface != nullptr)
+    {
+        m_exchangeInterface->disconnectFromDevice();
+        QObject::disconnect(m_exchangeInterface, nullptr, this, nullptr);
+        m_exchangeInterface = nullptr;
+    }
 }
 
 void InterfaceCore::writeToDevice(QByteArray data)
