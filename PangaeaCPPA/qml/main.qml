@@ -165,7 +165,7 @@ ApplicationWindow
         }
     }
 
-    MessageDialog
+    Labs.MessageDialog
     {
         id: msgError
 
@@ -173,12 +173,12 @@ ApplicationWindow
         text: qsTr("Device is disconnected")
 
         modality: Qt.ApplicationModal
-        onButtonClicked: {
+        onOkClicked: {
             mBusy.visible = false;
         }
     }
 
-    MessageDialog
+    Labs.MessageDialog
     {
         id: msgExchangeError
 
@@ -186,7 +186,7 @@ ApplicationWindow
         text: qsTr("Device is disconnected")
 
         modality: Qt.ApplicationModal
-        onButtonClicked: {
+        onOkClicked: {
             InterfaceManager.disconnectFromDevice();
         }
     }
