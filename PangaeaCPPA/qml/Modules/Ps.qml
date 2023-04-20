@@ -49,7 +49,9 @@ Item
                 name: "PRESENCE"
                 nameValue: "presence_volume"
                 checkable: false
-                onChValue: main.chPresence(value)
+                onChValue: function (value) {
+                    main.chPresence(value)
+                }
             }
 
             Item

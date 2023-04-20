@@ -69,7 +69,6 @@ Item
                 name: "PRESENCE"
                 nameValue: "presence_volume"
                 checkable: false
-                onChValue: main.chPresence(value)
             }
 
             Dial
