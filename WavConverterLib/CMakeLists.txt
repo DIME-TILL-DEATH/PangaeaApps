@@ -15,9 +15,9 @@ qt_add_library(converter-lib SHARED
 target_link_libraries(converter-lib PUBLIC
     Qt6::Core
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/sox_lib/lib.android/${CMAKE_ANDROID_ARCH_ABI}/libsox.so
+    ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.android/${CMAKE_ANDROID_ARCH_ABI}/libsox.so
 )
 
 target_include_directories(converter-lib PUBLIC
-    sox_lib/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/include/
 )
