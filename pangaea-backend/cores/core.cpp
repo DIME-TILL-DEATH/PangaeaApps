@@ -411,6 +411,7 @@ void Core::parseInputData(const QByteArray& ba)
                 }
                 qInfo() << recievedCommand.description();
                 emit sgSetUIParameter("slider_enabled", 1);
+                emit sgImmediatelyDisconnect();
                 break;
             }
 
@@ -814,12 +815,12 @@ void Core::pastePreset()
 
 void Core::setParameter(QString name, quint8 value)
 {
-    qDebug()<<"setValue"<<name<<value;
+    qDebug() << "setParameter" << name << value;
 
     if(name==("preset_change"))
     {
         setPresetChange(value);
-        qDebug()<<__FUNCTION__<<__LINE__;
+        return;
     }
 
     if(name=="fw_update_complete")
@@ -890,6 +891,12 @@ void Core::setParameter(QString name, quint8 value)
     if(name==("esc"))
         sendStr = QString("esc\r\n");
 
+    if(name=="pa-ps_linked_on")
+    {
+        sendStr = deviceControls.getParameterSendString("presence_on", value);
+        sendStr += deviceControls.getParameterSendString("amp_on", value);
+    }
+
     if(deviceControls.containsParameter(name))
     {
         sendStr = deviceControls.getParameterSendString(name, value);
@@ -907,6 +914,10 @@ void Core::setParameter(QString name, quint8 value)
     {
         enableRecieve = false;
         emit sgWriteToInterface(sendStr.toUtf8());
+    }
+    else
+    {
+        qWarning() << "Send string empty! Parameter doesn't exist";
     }
 }
 

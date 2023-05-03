@@ -22,6 +22,8 @@ public:
     void startScanning();
     void stopScanning();
 
+    void setModuleName(QString name);
+
 signals:
     void sgInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
     void sgDeviceUnavaliable(DeviceConnectionType senderType, QString reason);
@@ -31,6 +33,7 @@ signals:
     void sgInterfaceDisconnected(DeviceDescription device);
     void sgInterfaceError(QString errorDescription);
     void sgNewData(QByteArray data);
+    void sgModuleNameUpdated(QString name);
 
 private:
     AbstractInterface* m_exchangeInterface{nullptr};

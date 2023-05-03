@@ -113,6 +113,7 @@ signals:
     void sgUpdatePreset(Preset newPreset);
 
     void sgReadyTodisconnect();
+    void sgImmediatelyDisconnect(); // Принудительное после обновления по USB
 
 public slots:
     void slReadyToDisconnect();

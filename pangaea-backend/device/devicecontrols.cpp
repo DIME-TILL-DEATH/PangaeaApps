@@ -145,7 +145,7 @@ DeviceParameter* DeviceControls::findParameter(QString parameterName)
 
     if(it == m_parametersList.end())
     {
-        qWarning() << "Parameter with name " << parameterName << "not found!!!";
+        //qWarning() << "Parameter with name " << parameterName << "not found!!!";
         return nullptr;
     }
 

@@ -8,18 +8,11 @@ InterfaceCore::InterfaceCore(QObject *parent)
                 : QObject{parent}
 {
     m_usbInterface = new UsbInterface(this);
-    m_bleInterface = new BleInterface(this);
-
-    QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable);
-
-    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
-    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
+    m_bleInterface = new BleInterface(this);  
 }
 
 InterfaceCore::~InterfaceCore()
 {
-//    qDebug() << "Interface manager destructor" << this->thread();
-
     if(m_exchangeInterface)
         m_exchangeInterface->disconnectFromDevice();
 }
@@ -50,12 +43,13 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
             return false;
         }
     }
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::sgNewData);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceCore::sgConnectionStarted);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceCore::sgDeviceUnavaliable);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceCore::slInterfaceError);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceCore::sgInterfaceConnected);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceCore::sgInterfaceDisconnected);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::sgNewData, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceCore::sgConnectionStarted, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceCore::sgDeviceUnavaliable, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceCore::slInterfaceError, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceCore::sgInterfaceConnected, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceCore::sgInterfaceDisconnected, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgModuleNameUpdated, this, &InterfaceCore::sgModuleNameUpdated, Qt::UniqueConnection);
 
     m_connectedDeviceDescription = device;
 
@@ -69,16 +63,28 @@ void InterfaceCore::disconnectFromDevice()
         m_exchangeInterface->disconnectFromDevice();
         QObject::disconnect(m_exchangeInterface, nullptr, this, nullptr);
         m_exchangeInterface = nullptr;
+
+
+        // clear old devices
+        QList<DeviceDescription> emptyList;
+        emit sgDeviceListUpdated(DeviceConnectionType::BLE, emptyList);
+        emit sgDeviceListUpdated(DeviceConnectionType::USBAuto, emptyList);
     }
 }
 
 void InterfaceCore::writeToDevice(QByteArray data)
 {
-    m_exchangeInterface->write(data);
+    if(m_exchangeInterface)
+        m_exchangeInterface->write(data);
 }
 
 void InterfaceCore::startScanning()
 {
+    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
+    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
+
+    QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable, Qt::UniqueConnection);
+
     m_usbInterface->startScan();
     m_bleInterface->startScan();
 }
@@ -87,6 +93,12 @@ void InterfaceCore::stopScanning()
 {
     m_usbInterface->stopScan();
     m_bleInterface->stopScan();
+}
+
+void InterfaceCore::setModuleName(QString name)
+{
+    if(m_bleInterface)
+        m_bleInterface->setModuleName(name);
 }
 
 void InterfaceCore::slInterfaceError(QString errorDescription)

@@ -10,7 +10,7 @@ QT += bluetooth
 QT += widgets
 
 win32 {
-    VERSION = 1.0.1721.1
+    VERSION = 1.0.1722.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics

@@ -88,6 +88,7 @@ void DevicesListModel::appendDevice(DeviceDescription &device)
     beginInsertRows(QModelIndex(), m_devicesList.size(), m_devicesList.size());
     m_devicesList.append(device);
     endInsertRows();
+//    qDebug() << "Device successfully appended";
 }
 
 void DevicesListModel::removeDevice(DeviceDescription &device)
@@ -97,6 +98,6 @@ void DevicesListModel::removeDevice(DeviceDescription &device)
     if(index == -1) return;
 
     beginRemoveRows(QModelIndex(), index, index);
-    m_devicesList.removeAll(device);
+    m_devicesList.removeOne(device);
     endRemoveRows();
 }
