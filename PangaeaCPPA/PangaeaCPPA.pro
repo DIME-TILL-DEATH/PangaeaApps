@@ -28,10 +28,10 @@ linux {
     QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
     ICON = icons/pangaea.icns
 
-    libsPath = $${PWD}/../sox-lib/lib.linux
-    LIBS += -L$${libsPath} -lsox
+    soxLibsPath = $${PWD}/../sox_lib/lib.linux
+    LIBS += -L$${soxLibsPath} -lsox
 
-    DEPENDPATH += $${libsPath}
+    DEPENDPATH += $${soxLibsPath}
 }
 
 INCLUDEPATH += $${PWD}/../WavConverterLib
@@ -56,9 +56,11 @@ win32{
 }
 
 unix{
-    LIBS += -L$$OUT_PWD/../WavConverterLib/ -lWavConverterLib
+    LIBS += -L$${OUT_PWD}/../WavConverterLib/ -lWavConverterLib
     LIBS += -L$$$${OUT_PWD}/../pangaea-backend/ -lpangaea-backend
-    PRE_TARGETDEPS += $$$${OUT_PWD}/../pangaea-backend/libpangaea-backend.a
+
+    PRE_TARGETDEPS += $${OUT_PWD}/../pangaea-backend/libpangaea-backend.a
+    PRE_TARGETDEPS += $${soxLibsPath}/libsox.so.3
 }
 
 DEFINES += VERSION_STRING=\\\"$${VERSION}\\\"
@@ -142,24 +144,27 @@ CONFIG(release, debug|release) {
 
         QMAKE_POST_LINK += cp -r $${converterBinary} PangaeaCPPA.app/Contents/MacOS/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += cp -r $${dirDocs} PangaeaCPPA.app/Contents/MacOS/docs $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/qml/ -libpath=$${libsPath} -dmg $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/qml/ -libpath=$${soxLibsPath} -dmg $$escape_expand(\\n\\t)
     }
 
     linux{
         appBinaryFile = $${TARGET}
         converterBinaryFile = $${PWD}/../WavConverterShell/output_bin/IrConverter
-        dirDeploy = $${PWD}/../deploy_linux/
-        dirApp = $${dirDeploy}/app/
+        dirDeploy = $${PWD}/../deploy_linux
+        dirApp = $${dirDeploy}/app
 
         QMAKE_POST_LINK += mkdir -p $${dirApp}/bin/ $$escape_expand(\n\t)
-        QMAKE_POST_LINK += cp -r $${converterBinaryFile} $${dirApp}bin/ $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += cp -r $${dirDocs} $${dirApp} $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cp -r $${converterBinaryFile} $${dirApp}/bin/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cp -r $${dirDocs} $${dirApp}/docs $$escape_expand(\\n\\t)
 
         # using cqtdeployer, installed from snap
-        QMAKE_POST_LINK += cqtdeployer -bin PangaeaCPPA -targetDir $${dirApp} -libDir $${libsPath} -qmlDir $${PWD}/qml/ -qmake ~/Qt/$${QT_VERSION}/gcc_64/bin/qmake $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cqtdeployer -bin PangaeaCPPA -targetDir $${dirApp} -libDir $${soxLibsPath} -qmlDir $${PWD}/qml/ -qmake ~/Qt/$${QT_VERSION}/gcc_64/bin/qmake $$escape_expand(\\n\\t)
+
+        QMAKE_POST_LINK += cp -r $${OUT_PWD}/../WavConverterLib/libWavConverterLib.* $${dirApp}/lib/ $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += cp -r $${soxLibsPath}/libsox.* $${dirApp}/lib/ $$escape_expand(\\n\\t)
 
         # make tarball archive
-        QMAKE_POST_LINK += tar -czvf $${dirDeploy}/PangaeaCPPA.tar.gz $${dirApp}/. $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += tar -czvf $${dirDeploy}/PangaeaCPPA.tar.gz $${dirApp}/ $$escape_expand(\\n\\t)
 
         # make .deb package
         QMAKE_POST_LINK += mkdir -p $${dirDeploy}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/ $$escape_expand(\\n\\t)

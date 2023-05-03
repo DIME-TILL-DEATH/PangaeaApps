@@ -57,7 +57,7 @@ mac{
 }
 
 linux{
-    libsPath = $${PWD}/../shared_libs/lib.linux
+    libsPath = $${PWD}/../sox_lib/lib.linux/
     LIBS += -L$${libsPath} -lsox
 
     destDir = $${PWD}/output_bin/
