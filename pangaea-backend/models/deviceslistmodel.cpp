@@ -68,10 +68,10 @@ void DevicesListModel::removeMissingDevices(DeviceConnectionType connectionType,
     {
         if(checkingDevice.connectionType() != connectionType) continue;
 
-        if(list.isEmpty())
-        {
-            removeDevice(checkingDevice);
-        }
+//        if(list.isEmpty())
+//        {
+//            removeDevice(checkingDevice);
+//        }
 
         auto findResult = std::find(list.begin(), list.end(), checkingDevice);
 
