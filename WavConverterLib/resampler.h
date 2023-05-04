@@ -12,7 +12,13 @@ struct WavFormat
     quint32 maxFileSize;
 };
 
-class Q_DECL_EXPORT Resampler
+#if defined(WAVCONVERTERLIB_LIBRARY)
+#  define WAVCONVERTERLIB_LIBRARY_EXPORT Q_DECL_EXPORT
+#else
+#  define WAVCONVERTERLIB_LIBRARY_EXPORT Q_DECL_IMPORT
+#endif
+
+class WAVCONVERTERLIB_LIBRARY_EXPORT Resampler
 {
     Q_GADGET
 public:

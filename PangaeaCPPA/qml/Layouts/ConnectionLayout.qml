@@ -125,7 +125,7 @@ Column{
 
             enabled: !isConnected
 
-            model: InterfaceListModel
+            model: DevicesListModel
 
             focus: true
             clip: true

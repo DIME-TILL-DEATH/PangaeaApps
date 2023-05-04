@@ -10,7 +10,7 @@ Item
     property string name:     "PA"
     property string nameValue: "amp_on"
 
-    property bool on: true
+    property bool on: false
 
     BaseModule{
         id: _baseModule
@@ -69,7 +69,6 @@ Item
                 name: "PRESENCE"
                 nameValue: "presence_volume"
                 checkable: false
-                onChValue: main.chPresence(value)
             }
 
             Dial
@@ -93,6 +92,12 @@ Item
                 height: parent.height/1000*25
             }
         }
+
+        // когда включаем/выклаючаем PA, также включить/выключить presence
+        onOnChanged: {
+            if(main.visible) // только если модуль есть в устройстве
+                UiCore.setParameter("pa-ps_linked_on", main.on);
+        }
     }
 
     Connections
@@ -103,6 +108,9 @@ Item
             if((nameParam === main.nameValue))
             {
                 main.on=nameValue
+
+                if(main.visible) // только если модуль есть в устройстве
+                    UiCore.setParameter("pa-ps_linked_on", main.on);
             }
         }
     }

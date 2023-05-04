@@ -9,13 +9,20 @@ ThreadController::ThreadController(QThread *mainThread)
 
     m_backendThread->setObjectName("Backend thread");
     m_backendThread->start();
+
+    m_connectionsThread = new QThread();
+
+    m_connectionsThread->setObjectName("Connections thread");
+    m_connectionsThread->start();
 }
 
 ThreadController::~ThreadController()
 {
-//    qDebug() << "Thread controller destructor";
     m_backendThread->quit();
     m_backendThread->wait();
+
+    m_connectionsThread->quit();
+    m_connectionsThread->wait();
 }
 
 QThread *ThreadController::mainThread() const
@@ -26,5 +33,10 @@ QThread *ThreadController::mainThread() const
 QThread *ThreadController::backendThread() const
 {
     return m_backendThread;
+}
+
+QThread *ThreadController::connectionsThread() const
+{
+    return m_connectionsThread;
 }
 

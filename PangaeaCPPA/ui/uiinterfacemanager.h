@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "interfacelistmodel.h"
+#include "deviceslistmodel.h"
 #include "devicedescription.h"
 
 class UiInterfaceManager : public QObject
@@ -21,7 +21,7 @@ public:
 
     void updateDevicesList(DeviceConnectionType connectionType, QList<DeviceDescription> list);
 
-    InterfaceListModel interfaceListModel() const;
+    DevicesListModel devicesListModel() const;
 
     bool isBleAvaliable();
 
@@ -47,7 +47,7 @@ signals:
 private:
     bool m_isBleAvaliable{true};
 
-    InterfaceListModel m_interfaceListModel;
+    DevicesListModel m_devicesListModel;
 };
 
 #endif // UIINTERFACEMANAGER_H

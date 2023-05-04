@@ -5,7 +5,7 @@
 UiInterfaceManager::UiInterfaceManager(QObject *parent)
     : QObject{parent}
 {
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceListModel", &m_interfaceListModel);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "DevicesListModel", &m_devicesListModel);
 }
 
 UiInterfaceManager::~UiInterfaceManager()
@@ -35,7 +35,7 @@ void UiInterfaceManager::updateDevicesList(DeviceConnectionType connectionType, 
         emit isBleAvaliableChanged();
     }
 
-    m_interfaceListModel.updateInterfaceList(connectionType, list);
+    m_devicesListModel.updateInterfaceList(connectionType, list);
 }
 
 void UiInterfaceManager::slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason)
