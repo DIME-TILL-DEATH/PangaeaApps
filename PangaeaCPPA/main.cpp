@@ -32,6 +32,9 @@ Logger* appLogger_ptr;
 int main(int argc, char *argv[])
 {
     signal(SIGSEGV, manageSegFailure);
+//    signal(SIGFPE, manageSegFailure);
+//    signal(SIGILL, manageSegFailure);
+
 //    QGuiApplication app(argc, argv);
     QApplication app(argc, argv);
     app.setOrganizationName("AMT");
@@ -121,12 +124,16 @@ int main(int argc, char *argv[])
     Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::readAllParameters, Qt::QueuedConnection);
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice, Qt::QueuedConnection);
 //    Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
+//    Core::connect(core, &Core::sgReadyTodisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError, Qt::QueuedConnection);
 
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, interfaceManager, &InterfaceCore::startScanning, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceCore::connectToDevice, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgDisconnectFromDevice, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
     Core::connect(core, &Core::sgImmediatelyDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
+
+//    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, interfaceManager, &InterfaceCore::setModuleName);
+//    QObject::connect(interfaceManager, &InterfaceCore::sgModuleNameUpdated, &uiCore, &UICore::setModuleName);
 
     InterfaceCore::connect(interfaceManager, &InterfaceCore::sgDeviceListUpdated, &uiInterfaceManager, &UiInterfaceManager::updateDevicesList, Qt::BlockingQueuedConnection);
     InterfaceCore::connect(interfaceManager, &InterfaceCore::sgConnectionStarted, &uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted, Qt::QueuedConnection);

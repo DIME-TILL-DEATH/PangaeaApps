@@ -90,6 +90,12 @@ Item
         }
     }
 
+    // когда включаем/выклаючаем PA, также включить/выключить presence
+    onOnChanged: {
+        if(main.visible) // только если модуль есть в устройстве
+            UiCore.setParameter("pa-ps_linked_on", main.on);
+    }
+
     Connections
     {
         target: UiCore
@@ -98,6 +104,9 @@ Item
             if((nameParam === main.nameValue))
             {
                 main.on=nameValue
+
+                if(main.visible) // только если модуль есть в устройстве
+                    UiCore.setParameter("pa-ps_linked_on", main.on);
             }
         }
     }

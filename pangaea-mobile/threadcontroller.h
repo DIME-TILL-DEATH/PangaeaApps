@@ -12,10 +12,12 @@ public:
     ~ThreadController();
     QThread *mainThread() const;
     QThread *backendThread() const;
+    QThread *connectionsThread() const;
 
 private:
     QThread* m_mainThread;
     QThread* m_backendThread;
+    QThread* m_connectionsThread;
 };
 
 #endif // THREADCONTROLLER_H

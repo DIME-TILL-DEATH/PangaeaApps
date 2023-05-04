@@ -268,18 +268,6 @@ Item
     {
         target: UiCore
 
-//        function onSgConnectReady()
-//        {
-//            isConnected = true;
-//        }
-
-//        // TODO autoconnect правильный выбор устройства
-//        function onSgConnectToDevice(devNum)
-//        {
-//            _list.autoSelectedItem = devNum
-
-//        }
-
         function onSgSetUIParameter(nameParam, inValue)
         {
 //            if(nameParam === "ready_to_disconnect")
