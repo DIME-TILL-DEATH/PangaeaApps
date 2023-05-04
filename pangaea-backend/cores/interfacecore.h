@@ -2,6 +2,7 @@
 #define INTERFACECORE_H
 
 #include <QObject>
+#include <QSettings>
 
 #include "devicedescription.h"
 #include "abstractinterface.h"
@@ -39,6 +40,8 @@ private:
     AbstractInterface* m_exchangeInterface{nullptr};
     BleInterface* m_bleInterface{nullptr};
     UsbInterface* m_usbInterface{nullptr};
+
+    QSettings* appSettings;
 
     DeviceDescription m_connectedDeviceDescription;
 

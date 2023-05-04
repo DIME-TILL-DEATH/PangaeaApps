@@ -7,8 +7,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_definitions(-DCP16_FIRMWARE_VERSION="1.04.01")
-add_definitions(-DCP16PA_FIRMWARE_VERSION="1.04.01")
+add_definitions(-DCP16_FIRMWARE_VERSION="1.04.03")
+add_definitions(-DCP16PA_FIRMWARE_VERSION="1.04.03")
 add_definitions(-DCP100_FIRMWARE_VERSION="2.08.02")
 add_definitions(-DCP100PA_FIRMWARE_VERSION="6.08.04")
 
@@ -21,6 +21,7 @@ qt_add_library(pangaea-backend STATIC
     interfaces/devicedescription.cpp interfaces/devicedescription.h
     cores/core.cpp cores/core.h
     cores/netcore.cpp cores/netcore.h
+	cores/interfacecore.cpp cores/interfacecore.h
     device/answerworker.cpp device/answerworker.h
     device/defines.h
     device/device.cpp device/device.h

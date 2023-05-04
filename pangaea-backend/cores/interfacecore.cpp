@@ -1,6 +1,6 @@
 #include <QDebug>
 #include <QThread>
-#include <QSettings>
+#include <QStandardPaths>
 
 #include "interfacecore.h"
 
@@ -8,7 +8,14 @@ InterfaceCore::InterfaceCore(QObject *parent)
                 : QObject{parent}
 {
     m_usbInterface = new UsbInterface(this);
-    m_bleInterface = new BleInterface(this);  
+    m_bleInterface = new BleInterface(this);
+
+#ifdef Q_OS_ANDROID
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.conf", QSettings::NativeFormat);
+#else
+    appSettings = new QSettings(QSettings::UserScope);
+#endif
 }
 
 InterfaceCore::~InterfaceCore()
@@ -129,7 +136,7 @@ void InterfaceCore::slDeviceListUpdated(DeviceConnectionType connectionType, QLi
 {
     emit sgDeviceListUpdated(connectionType, list);
 
-    bool makeAutoconnect = QSettings(QSettings::UserScope).value("autoconnect_enable", false).toBool();
+    bool makeAutoconnect = appSettings->value("autoconnect_enable", false).toBool();
 
     if(m_exchangeInterface == nullptr && makeAutoconnect)
     {
