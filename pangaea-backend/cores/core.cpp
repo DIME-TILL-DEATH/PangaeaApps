@@ -36,8 +36,6 @@ void Core::slReadyToDisconnect()
 
 void Core::parseInputData(const QByteArray& ba)
 {
-    qDebug() << "->" << __FUNCTION__ << ":" << ba;
-
     if(bytesToRecieve > 0)
     {
         bytesRecieved += ba.size()/2; // 1 byte = 2 symbols, 0xFF
@@ -1062,9 +1060,7 @@ void Core::recieveTimeout()
 }
 
 void Core::sendCommand(QByteArray val)
-{
-    qDebug() << "<- writeData:" << val << "hex:" << val.toHex() << "lenght:" << val.length();
-
+{  
     symbolsSended += val.size();
     enableRecieve = false;
     emit sgWriteToInterface(val);

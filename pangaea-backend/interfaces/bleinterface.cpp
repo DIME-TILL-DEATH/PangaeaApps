@@ -48,6 +48,8 @@ BleInterface::BleInterface(QObject *parent)
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
             this, &BleInterface::scanTimeout, Qt::QueuedConnection);
 
+    QBluetoothDeviceDiscoveryAgent::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
+
     QObject::connect(this, &QObject::destroyed, m_deviceDiscoveryAgent, &QObject::deleteLater);
 
     m_description = "BLE";
@@ -338,6 +340,10 @@ void BleInterface::slStartConnect(QString address)
     QBluetoothDeviceDiscoveryAgent::connect(m_control, &QLowEnergyController::errorOccurred,
             this, &BleInterface::controllerError);
 
+
+    QLowEnergyConnectionParameters connectionParams;
+
+
     qDebug() << m_control->state();
     m_control->connectToDevice();
     setState(Connecting);
@@ -453,7 +459,6 @@ void BleInterface::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
     leParameters.setSupervisionTimeout(4000);
 
     m_control->requestConnectionUpdate(leParameters);
-    QBluetoothDeviceDiscoveryAgent::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
 
     emit sgInterfaceConnected(m_connectedDevice);
 }

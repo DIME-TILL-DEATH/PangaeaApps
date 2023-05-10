@@ -50,7 +50,7 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
             return false;
         }
     }
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::sgNewData, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::slNewData, Qt::UniqueConnection);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceCore::sgConnectionStarted, Qt::UniqueConnection);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceCore::sgDeviceUnavaliable, Qt::UniqueConnection);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceCore::slInterfaceError, Qt::UniqueConnection);
@@ -82,7 +82,11 @@ void InterfaceCore::disconnectFromDevice()
 void InterfaceCore::writeToDevice(QByteArray data)
 {
     if(m_exchangeInterface)
+    {
+        qDebug() << "<- writeData:" << data << "hex:" << data.toHex() << "lenght:" << data.length();
+
         m_exchangeInterface->write(data);
+    }
 }
 
 void InterfaceCore::startScanning()
@@ -106,6 +110,12 @@ void InterfaceCore::setModuleName(QString name)
 {
     if(m_bleInterface)
         m_bleInterface->setModuleName(name);
+}
+
+void InterfaceCore::slNewData(QByteArray data)
+{
+    qDebug() << "->" << __FUNCTION__ << ":" << data;
+    emit sgNewData(data);
 }
 
 void InterfaceCore::slInterfaceError(QString errorDescription)
