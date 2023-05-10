@@ -50,7 +50,7 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
             return false;
         }
     }
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::slNewData, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::sgNewData, Qt::UniqueConnection);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceCore::sgConnectionStarted, Qt::UniqueConnection);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceCore::sgDeviceUnavaliable, Qt::UniqueConnection);
     QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceCore::slInterfaceError, Qt::UniqueConnection);

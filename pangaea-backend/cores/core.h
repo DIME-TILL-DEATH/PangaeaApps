@@ -118,7 +118,7 @@ signals:
 public slots:
     void slReadyToDisconnect();
 
-    void parseInputData(const QByteArray &data);
+    void parseInputData(QByteArray data);
     void processCommands();
     void recieveTimeout();
 
