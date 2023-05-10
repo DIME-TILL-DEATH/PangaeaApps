@@ -260,7 +260,7 @@ ApplicationWindow
                 devVersion = inString;
             }
 
-            if(nameParam === "version_error")
+            if(nameParam === "firmware_version_error")
             {
                  var versionArray = inString.split(',');
 
@@ -306,10 +306,8 @@ ApplicationWindow
             if(nameParam === "wait")
             {
                 wait = value;
-//                if(msgPresetChangeSave.saveParam==(-2))
                 if(main.appClosing)
                 {
-//                    if(!value && (!msgPresetChangeSave.visible) && (msgPresetChangeSave.saveParam==(-2)))
                     if(!wait && !msgPresetChangeSave.visible)
                         Qt.quit();
                 }
@@ -416,7 +414,6 @@ ApplicationWindow
 
         if(main.edit && main.connected)
         {
-//            msgPresetChangeSave.saveParam = (-2);
             main.appClosing = true;
             msgPresetChangeSave.visible = true;
             close.accepted = false;
