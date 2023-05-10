@@ -112,7 +112,7 @@ Item
                         lastY = mouseY;
                         main.valueLast = main.value;
                     }
-                    onWheel:
+                    onWheel: function(wheel)
                     {
                         valueUpdate(main.value + wheel.angleDelta.y/120);
                     }

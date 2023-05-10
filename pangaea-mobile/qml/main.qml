@@ -336,6 +336,17 @@ ApplicationWindow
             _msgBluetoothNotReady.open();
             console.log("Open _msgBluetoothNotReady dialog");
         }
+
+        function onSgInterfaceError(errorDescription)
+        {
+            //mBusy.visible = false;
+
+            openConnectPage();
+            _msgBluetoothNotReady.text = qsTr("Device disconnected\n") + errorDescription
+            _msgBluetoothNotReady.open();
+
+            InterfaceManager.startScanning();
+        }
     }
 
     onClosing:

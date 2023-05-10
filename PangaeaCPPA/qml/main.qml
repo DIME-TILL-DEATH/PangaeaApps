@@ -39,6 +39,7 @@ ApplicationWindow
     property bool edit: false
     property bool connected: false
     property bool wait: true
+    property bool appClosing: false
 
     title: connected ? "AMT PangaeaCPPA " +  " v." + Qt.application.version + " "
                 + markConnect + devName + " (firmware v." + devVersion +") " + markEdit
@@ -127,18 +128,27 @@ ApplicationWindow
                 case MessageDialog.Save:
                 {
                     UiCore.setParameter("save_change", saveParam);
-                    UiCore.setParameter("do_preset_change", saveParam);
+                    if(!main.appClosing)
+                        UiCore.setParameter("do_preset_change", saveParam);
                     break;
                 }
                 case MessageDialog.No:
                 {
-                    UiCore.restoreParameter("impulse")
-                    UiCore.setParameter("do_preset_change", saveParam);
+                    if(!main.appClosing)
+                    {
+                        UiCore.setParameter("do_preset_change", saveParam);
+                        UiCore.restoreParameter("impulse");
+                    }
+                    else
+                    {
+                        UiCore.setParameter("compare", true); // restore preset
+                    }
                     break;
                 }
                 case MessageDialog.Cancel:
                 {
                     saveParam = 0
+                    appClosing = false;
                     UiCore.restoreParameter("preset")
                     UiCore.restoreParameter("bank")
                     break;
@@ -296,9 +306,11 @@ ApplicationWindow
             if(nameParam === "wait")
             {
                 wait = value;
-                if(msgPresetChangeSave.saveParam==(-2))
+//                if(msgPresetChangeSave.saveParam==(-2))
+                if(main.appClosing)
                 {
-                    if(!value && (!msgPresetChangeSave.visible) && (msgPresetChangeSave.saveParam==(-2)))
+//                    if(!value && (!msgPresetChangeSave.visible) && (msgPresetChangeSave.saveParam==(-2)))
+                    if(!wait && !msgPresetChangeSave.visible)
                         Qt.quit();
                 }
             }
@@ -404,7 +416,8 @@ ApplicationWindow
 
         if(main.edit && main.connected)
         {
-            msgPresetChangeSave.saveParam = (-2);
+//            msgPresetChangeSave.saveParam = (-2);
+            main.appClosing = true;
             msgPresetChangeSave.visible = true;
             close.accepted = false;
         }

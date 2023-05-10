@@ -45,7 +45,7 @@ Item
                 enabled: main.on
                 name: "SUSTAIN"
                 checkable: false
-                nameValue: "compressor_sustein"
+                nameValue: "compressor_sustain"
             }
 
             Dial
