@@ -41,6 +41,8 @@ private:
     QNetworkRequest jsonDataRequest;
     QNetworkRequest firmwareFileRequest;
 
+    QSettings* appSettings;
+
     QString m_deviceTypeString{"CP16"};
 
     Firmware* deviceFirmware{nullptr};

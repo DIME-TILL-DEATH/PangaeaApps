@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 
 #include <QVersionNumber>
+#include <QStandardPaths>
 
 #include "netcore.h"
 
@@ -11,11 +12,18 @@ NetCore::NetCore(QObject *parent)
     : QObject{parent}
 {
     m_networkManager = new QNetworkAccessManager(this);
+
+#ifdef Q_OS_ANDROID
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.conf", QSettings::NativeFormat);
+#else
+    appSettings = new QSettings();
+#endif
 }
 
 void NetCore::requestAppUpdates()
 {
-    if(QSettings(QSettings::UserScope).value("check_updates_enable", false).toBool())
+    if(appSettings->value("check_updates_enable", false).toBool())
     {
         jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_applications.json"));
         m_networkManager->get(jsonDataRequest);
@@ -42,7 +50,7 @@ void NetCore::requestNewestFirmware(Firmware *actualFirmware)
 
     deviceFirmware = actualFirmware;
 
-    if(QSettings(QSettings::UserScope).value("check_updates_enable", false).toBool())
+    if(appSettings->value("check_updates_enable", false).toBool())
     {
         qInfo() << "Checking updates...";
         jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_firmwares.json"));
