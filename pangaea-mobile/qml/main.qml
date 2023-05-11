@@ -302,7 +302,7 @@ ApplicationWindow
         function onSgInterfaceConnected(deviceDescription)
         {
             _swipeView.setCurrentIndex(1);
-            UiCore.readAll();
+//            UiCore.readAll();
         }
 
         function onSgExchangeError()
