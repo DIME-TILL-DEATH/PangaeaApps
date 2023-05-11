@@ -16,7 +16,7 @@ public:
         Idle,
         Preview, //нереализован(нужен ли?)
         Modified, //нереализован
-        Pasted,
+        Pasting,
         Imported,
         Compare, // вызван оригинальный пресет
         Copying,

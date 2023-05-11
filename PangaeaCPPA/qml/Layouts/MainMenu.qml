@@ -238,7 +238,7 @@ MenuBar{
         id: aproveFileDialog
 
         title: qsTr("Load firmware file")
-        text: qsTr("Are you sure want to upload firmware file\n") + pickFimwareFileDialog.cleanPath;
+        text: qsTr("Are you sure want to upload firmware file") + "\n" + pickFimwareFileDialog.cleanPath;
 
         buttons: MessageDialog.Yes | MessageDialog.No
 

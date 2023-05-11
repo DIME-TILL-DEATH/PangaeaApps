@@ -112,11 +112,12 @@ void InterfaceCore::setModuleName(QString name)
         m_bleInterface->setModuleName(name);
 }
 
-void InterfaceCore::slNewData(QByteArray data)
-{
-    qDebug() << "->" << __FUNCTION__ << ":" << data;
-    emit sgNewData(data);
-}
+// в таком варианте иногда вызывает crash на ошибки буффера
+//void InterfaceCore::slNewData(QByteArray data)
+//{
+//    qDebug() << "->" << __FUNCTION__ << ":" << data;
+//    emit sgNewData(data);
+//}
 
 void InterfaceCore::slInterfaceError(QString errorDescription)
 {

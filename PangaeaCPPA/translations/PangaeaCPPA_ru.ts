@@ -39,7 +39,7 @@
     <message>
         <location filename="../qml/Layouts/Head.qml" line="147"/>
         <source>empty</source>
-        <translation type="unfinished">пусто</translation>
+        <translation>пусто</translation>
     </message>
 </context>
 <context>
@@ -134,12 +134,12 @@
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="113"/>
         <source>Autoconnect</source>
-        <translation type="unfinished">Автоподсоединение</translation>
+        <translation>Автоподсоединение</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="122"/>
         <source>Check updates</source>
-        <translation type="unfinished">Проверка обновлений</translation>
+        <translation>Проверка обновлений</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="131"/>
@@ -154,7 +154,7 @@
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="141"/>
         <source>Update firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление прошивки</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="149"/>
@@ -195,28 +195,32 @@
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="223"/>
         <source>Pick firmware file</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите файл прошивки</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="240"/>
         <source>Load firmware file</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка файла прошивки</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="241"/>
+        <source>Are you sure want to upload firmware file</source>
+        <translation>Вы уверены что хотите загрузить следующую прошивку</translation>
+    </message>
+    <message>
         <source>Are you sure want to upload firmware file
 </source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Вы уверены что хотите загрузить следующую прошивку:</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="257"/>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="258"/>
         <source>Not a fiwmare file!</source>
-        <translation type="unfinished"></translation>
+        <translation>Не является файлом прошивки!</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="264"/>
@@ -293,10 +297,8 @@ Down - Click + cmd</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../device/preset.cpp" line="220"/>
-        <location filename="../models/presetlistmodel.cpp" line="70"/>
         <source>empty</source>
-        <translation>пусто</translation>
+        <translation type="vanished">пусто</translation>
     </message>
 </context>
 <context>
@@ -360,84 +362,86 @@ Down - Click + cmd</source>
         <translation>Отключено</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="103"/>
+        <location filename="../qml/main.qml" line="104"/>
         <source>Select IR</source>
         <translation>Выберите</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="120"/>
+        <location filename="../qml/main.qml" line="121"/>
         <source>Do you want to save changes?</source>
         <translation>Вы хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="121"/>
+        <location filename="../qml/main.qml" line="122"/>
         <source>Save preset</source>
         <translation>Сохранить пресет</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="153"/>
+        <location filename="../qml/main.qml" line="163"/>
         <source>Incorrect wav format</source>
         <translation>Некорректный формат файла</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="172"/>
+        <location filename="../qml/main.qml" line="182"/>
+        <location filename="../qml/main.qml" line="195"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="173"/>
+        <location filename="../qml/main.qml" line="183"/>
+        <location filename="../qml/main.qml" line="196"/>
         <source>Device is disconnected</source>
         <translation>Устройство отключено</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="191"/>
+        <location filename="../qml/main.qml" line="214"/>
         <source>Operation complete</source>
-        <translation type="unfinished"></translation>
+        <translation>Операция завершена</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="193"/>
+        <location filename="../qml/main.qml" line="216"/>
         <source>Operation complete. Please, reconnect to device</source>
-        <translation type="unfinished"></translation>
+        <translation>Операция завершена. Пожалуйста, переподключите устройство</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="243"/>
+        <location filename="../qml/main.qml" line="267"/>
         <source>Warning</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="244"/>
+        <location filename="../qml/main.qml" line="268"/>
         <source>Version error!</source>
         <translation>Ошибка версии!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="256"/>
-        <location filename="../qml/main.qml" line="266"/>
+        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="290"/>
         <source>Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="258"/>
+        <location filename="../qml/main.qml" line="282"/>
         <source>New firmware version(v.</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая версия прошивки(v.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
-        <location filename="../qml/main.qml" line="270"/>
+        <location filename="../qml/main.qml" line="284"/>
+        <location filename="../qml/main.qml" line="294"/>
         <source>) avaliable on the server</source>
-        <translation type="unfinished"></translation>
+        <translation>) доступна на сервере</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="268"/>
+        <location filename="../qml/main.qml" line="292"/>
         <source>New application version(v.</source>
-        <translation type="unfinished"></translation>
+        <translation>Новая версия приложения(v.</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="222"/>
+        <location filename="../qml/main.qml" line="246"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат файла:</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="248"/>
+        <location filename="../qml/main.qml" line="272"/>
         <source>Minimum requsted version is </source>
         <translation>Минимальная требуемая версия </translation>
     </message>
@@ -447,17 +451,17 @@ Down - Click + cmd</source>
         <translation type="vanished">Pangaea не поддерживает данный формат файла:&lt;br/&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="224"/>
+        <location filename="../qml/main.qml" line="248"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Желаете ли Вы сконвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="230"/>
+        <location filename="../qml/main.qml" line="254"/>
         <source>Not a Pangaea preset file!</source>
         <translation>Файл не явлется пресетом Pangaea!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="246"/>
+        <location filename="../qml/main.qml" line="270"/>
         <source>Firmware version of your device is </source>
         <translation>Версия прошивки Вашего устройства </translation>
     </message>
@@ -467,12 +471,12 @@ Minimum requsted version is </source>
         <translation type="vanished">Минимальная требуемая версия </translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="329"/>
+        <location filename="../qml/main.qml" line="353"/>
         <source>Device is unavaliable</source>
         <translation>Устройство недоступно</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="337"/>
+        <location filename="../qml/main.qml" line="359"/>
         <source>Command exchange error</source>
         <translation>Ошибка при обмене командами</translation>
     </message>

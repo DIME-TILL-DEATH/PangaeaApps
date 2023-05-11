@@ -180,8 +180,7 @@
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="241"/>
-        <source>Are you sure want to upload firmware file
-</source>
+        <source>Are you sure want to upload firmware file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -241,15 +240,6 @@
     <message>
         <location filename="../qml/Elements/Presets.qml" line="123"/>
         <source>Down - Click + cmd</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <location filename="../device/preset.cpp" line="220"/>
-        <location filename="../models/presetlistmodel.cpp" line="70"/>
-        <source>empty</source>
         <translation></translation>
     </message>
 </context>
@@ -314,109 +304,111 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="103"/>
+        <location filename="../qml/main.qml" line="104"/>
         <source>Select IR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="120"/>
+        <location filename="../qml/main.qml" line="121"/>
         <source>Do you want to save changes?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="121"/>
+        <location filename="../qml/main.qml" line="122"/>
         <source>Save preset</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="153"/>
+        <location filename="../qml/main.qml" line="163"/>
         <source>Incorrect wav format</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="172"/>
+        <location filename="../qml/main.qml" line="182"/>
+        <location filename="../qml/main.qml" line="195"/>
         <source>Error</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="173"/>
+        <location filename="../qml/main.qml" line="183"/>
+        <location filename="../qml/main.qml" line="196"/>
         <source>Device is disconnected</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="191"/>
+        <location filename="../qml/main.qml" line="214"/>
         <source>Operation complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="193"/>
+        <location filename="../qml/main.qml" line="216"/>
         <source>Operation complete. Please, reconnect to device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="243"/>
+        <location filename="../qml/main.qml" line="267"/>
         <source>Warning</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="244"/>
+        <location filename="../qml/main.qml" line="268"/>
         <source>Version error!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="222"/>
+        <location filename="../qml/main.qml" line="246"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="248"/>
+        <location filename="../qml/main.qml" line="272"/>
         <source>Minimum requsted version is </source>
         <translation>Minimum required version is </translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="224"/>
+        <location filename="../qml/main.qml" line="248"/>
         <source>Do you want to convert it before upload?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="230"/>
+        <location filename="../qml/main.qml" line="254"/>
         <source>Not a Pangaea preset file!</source>
         <translation>This is not the Pangaea preset&apos;s file!</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="246"/>
+        <location filename="../qml/main.qml" line="270"/>
         <source>Firmware version of your device is </source>
         <translation>The firmware version of your device is </translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="256"/>
-        <location filename="../qml/main.qml" line="266"/>
+        <location filename="../qml/main.qml" line="280"/>
+        <location filename="../qml/main.qml" line="290"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="258"/>
+        <location filename="../qml/main.qml" line="282"/>
         <source>New firmware version(v.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="260"/>
-        <location filename="../qml/main.qml" line="270"/>
+        <location filename="../qml/main.qml" line="284"/>
+        <location filename="../qml/main.qml" line="294"/>
         <source>) avaliable on the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="268"/>
+        <location filename="../qml/main.qml" line="292"/>
         <source>New application version(v.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="329"/>
+        <location filename="../qml/main.qml" line="353"/>
         <source>Device is unavaliable</source>
         <translation>The device is unavailable</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="337"/>
+        <location filename="../qml/main.qml" line="359"/>
         <source>Command exchange error</source>
         <translation></translation>
     </message>

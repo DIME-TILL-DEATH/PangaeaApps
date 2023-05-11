@@ -46,7 +46,7 @@ private:
     DeviceDescription m_connectedDeviceDescription;
 
 private slots:
-    void slNewData(QByteArray data);
+//    void slNewData(QByteArray data);
     void slInterfaceError(QString errorDescription);
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
     void slDeviceListUpdated(DeviceConnectionType connectionType, QList<DeviceDescription> list);

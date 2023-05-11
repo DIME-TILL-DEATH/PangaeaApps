@@ -208,9 +208,9 @@ void Core::parseInputData(QByteArray ba)
                 QList<QByteArray>::const_iterator it = parseResult.constBegin();
                 while (it != parseResult.constEnd())
                 {
-                    Preset currentPreset(&controlledDevice);
+                    Preset currentLitedPreset(&controlledDevice);
 
-                    currentPreset.setBankPreset(bankNumber, presetNumber);
+                    currentLitedPreset.setBankPreset(bankNumber, presetNumber);
 
                     if(presetNumber == controlledDevice.maxBankPresetCount()-1)
                     {
@@ -226,18 +226,18 @@ void Core::parseInputData(QByteArray ba)
                     if(ba=="*")
                         ba="";
                     quint16 positionEndName = ba.lastIndexOf(".wav ");
-                    currentPreset.setImpulseName(ba.left(positionEndName+4));
+                    currentLitedPreset.setImpulseName(ba.left(positionEndName+4));
                     impulsNames.append(ba.left(positionEndName+4));
                     impulsNames.append(",");
                     it++;
 
                     ba = *it;
-                    currentPreset.setIsIrEnabled(ba.toInt());
+                    currentLitedPreset.setIsIrEnabled(ba.toInt());
                     impulsEn.append(ba);
                     impulsEn.append(",");
                     it++;
 
-                    m_presetsList.append(currentPreset);
+                    m_presetsList.append(currentLitedPreset);
                 }
                 emit sgRefreshPresetList(&m_presetsList);
 
@@ -796,12 +796,16 @@ void Core::pastePreset()
     quint8 currentBankNumber = currentPreset.bankNumber();
     quint8 currentPresetNumber = currentPreset.presetNumber();
 
+    // TODO для исправления бага с обновлением пресета после вставки
+    // эта часть должна быть в getStatus по ключу PresetState::Pasting
+    // но это немного костыльно и MAP для актуального пресета должен обновляться
+    // и хранится как-то по-другому. При этом при переключении применятся старый
     if(copiedPreset.waveData().isEmpty())
     {
         if(currentPreset.impulseName() != "")
         {
             copiedPreset.setWaveData(IRWorker::flatIr());
-            copiedPreset.setImpulseName(QObject::tr(""));
+            copiedPreset.setImpulseName("");
         }
     }
     uploadImpulseData(copiedPreset.waveData(), true, copiedPreset.impulseName());
