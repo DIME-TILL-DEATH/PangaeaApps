@@ -69,26 +69,26 @@ MenuBar{
 
                 onTriggered: UiSettings.setLanguage("ru");
             }
-            Action{
-                id: menuIt
+//            Action{
+//                id: menuIt
 
-                text: "Italiano"
-                checkable: true
-                checked: UiSettings.appLanguageCode === "it"
-                ActionGroup.group: languageGroup
+//                text: "Italiano"
+//                checkable: true
+//                checked: UiSettings.appLanguageCode === "it"
+//                ActionGroup.group: languageGroup
 
-                onTriggered: UiSettings.setLanguage("it");
-            }
-            Action{
-                id: menuDe
+//                onTriggered: UiSettings.setLanguage("it");
+//            }
+//            Action{
+//                id: menuDe
 
-                text: "Deutsch"
-                checkable: true
-                checked: UiSettings.appLanguageCode === "de"
-                ActionGroup.group: languageGroup
+//                text: "Deutsch"
+//                checkable: true
+//                checked: UiSettings.appLanguageCode === "de"
+//                ActionGroup.group: languageGroup
 
-                onTriggered: UiSettings.setLanguage("de");
-            }
+//                onTriggered: UiSettings.setLanguage("de");
+//            }
         }
 
         Menu{

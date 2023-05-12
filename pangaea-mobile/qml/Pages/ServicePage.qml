@@ -235,8 +235,6 @@ Item
         {
             if( nameParam === "format_complete" )
             {
-                mLoadFirmwareScreen.close() // костыль
-                mBusy.busy = false;
                 message.headerText = qsTr("Operation complete");
                 message.text = qsTr("Formatting is complete\nPlease reset the device power and reconnect");
                 message.standardButtons = Dialog.Close;
@@ -245,8 +243,6 @@ Item
 
             if( nameParam === "format_error" )
             {
-                mBusy.busy = false;
-
                 message.headerText = qsTr("Error");
                 message.text = qsTr("Format error");
                 message.standardButtons = StandardButton.Ok;

@@ -174,7 +174,7 @@ RowLayout{
                     anchors.verticalCenter: parent.verticalCenter
 
                     property var codesMap: {"en": 0, "ru": 1, "it": 2, "de": 3}
-                    model: ["English", "Русский", "Italiano", "Deutsch"]
+                    model: ["English", "Русский"] //, "Italiano", "Deutsch"]
 
                     currentIndex: codesMap[UiSettings.appLanguageCode]
 
