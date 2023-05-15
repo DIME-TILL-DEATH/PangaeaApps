@@ -311,6 +311,7 @@ void Core::parseInputData(QByteArray ba)
                         case PresetState::Exporting:
                         {
                             bytesToRecieve = wavSize;
+                            currentPreset.setImpulseName(wavName);
                             emit sgSetUIParameter("ir_downloading", true);
                             break;
                         }
@@ -772,6 +773,8 @@ void Core::exportPreset(QString filePath, QString fileName)
         {
             QDir().mkpath(folderPath);
         }
+
+        pushCommandToQueue("gs");
         currentPreset.setPathToExport(filePath);
         pushCommandToQueue("cc");
         processCommands();

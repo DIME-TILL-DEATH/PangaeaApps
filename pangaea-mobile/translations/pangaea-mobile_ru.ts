@@ -5,30 +5,34 @@
     <name>BusyScreen</name>
     <message>
         <source>Sending commands to device</source>
-        <translation type="unfinished"></translation>
+        <translation>Отправка команд устройству</translation>
     </message>
     <message>
         <source>Uploading file data to device</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка файла импульса в устройство</translation>
     </message>
     <message>
         <source>Downloading impulse data from device</source>
-        <translation type="unfinished"></translation>
+        <translation>Выгрузка данных из устройства</translation>
     </message>
     <message>
         <source>Applying impulse to device. Please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Применение импульса. Пожалуйста подождите...</translation>
+    </message>
+    <message>
+        <source>Connecting to device...</source>
+        <translation>Подключение к устройству...</translation>
     </message>
 </context>
 <context>
     <name>Cm</name>
     <message>
         <source>CM</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Compressor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -101,52 +105,59 @@
     <name>Eqs</name>
     <message>
         <source>EQ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Equalizer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>PRE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>POST</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>EqsExt</name>
+    <message>
+        <source>HIDE</source>
+        <translation>ЗАКРЫТЬ</translation>
     </message>
 </context>
 <context>
     <name>Er</name>
     <message>
         <source>ER</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Early reflections</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>ExtSlider</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>SAVE</source>
-        <translation type="unfinished"></translation>
+        <translation>СОХРАНИТЬ</translation>
     </message>
 </context>
 <context>
     <name>ExtSliderUp</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>SAVE</source>
-        <translation type="unfinished"></translation>
+        <translation>СОХРАНИТЬ</translation>
     </message>
 </context>
 <context>
@@ -191,11 +202,11 @@
     <name>Hp</name>
     <message>
         <source>HP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>High-pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -216,7 +227,7 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     </message>
     <message>
         <source>IR</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
@@ -235,11 +246,11 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>Lp</name>
     <message>
         <source>LP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Low-pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -332,33 +343,33 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>Ng</name>
     <message>
         <source>NG</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Noise gate</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>Pa</name>
     <message>
         <source>PA</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Power amp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>Pr</name>
     <message>
         <source>PR</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Preamp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -401,11 +412,11 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>Ps</name>
     <message>
         <source>PS</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Presence</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -579,11 +590,11 @@ website: https://amtelectronics.com</source>
     <name>Vl</name>
     <message>
         <source>VL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Preset volume</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -693,6 +704,11 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
         <translation>Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
+    </message>
+    <message>
+        <source>Device disconnected
+</source>
+        <translation>Устройство отключено</translation>
     </message>
 </context>
 </TS>

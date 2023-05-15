@@ -19,6 +19,10 @@
         <source>Applying impulse to device. Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Connecting to device...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Cm</name>
@@ -113,6 +117,13 @@
     </message>
     <message>
         <source>POST</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EqsExt</name>
+    <message>
+        <source>HIDE</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -634,6 +645,11 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     <message>
         <source>
 Minimum required version is </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device disconnected
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
