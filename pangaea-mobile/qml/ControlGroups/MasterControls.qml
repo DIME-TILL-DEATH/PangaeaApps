@@ -211,8 +211,15 @@ Item
 
                     onMbPressed:
                     {
-                        UiCore.setParameter("copy", 0);
-                        copyFirst=true;
+                        if(_root.presetEdited)
+                        {
+                            UiCore.sgSetUIText("preset_not_saved", "");
+                        }
+                        else
+                        {
+                            UiCore.setParameter("copy", 0);
+                            copyFirst=true;
+                        }
                     }
                 }
                 MButton

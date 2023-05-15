@@ -568,6 +568,9 @@ void Core::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QStr
     }
     pushCommandToQueue(baSend);
 
+    // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
+    emit sgSetUIParameter("cabinet_enable", true);
+
     processCommands();
 }
 

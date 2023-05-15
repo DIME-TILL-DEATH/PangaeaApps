@@ -276,7 +276,7 @@ ApplicationWindow
             if(nameParam === "preset_not_saved")
             {
                 _msgCommon.headerText = qsTr("Warning");
-                _msgCommon.text = qsTr("You must save preset before export");
+                _msgCommon.text = qsTr("You must save preset before copy/export");
                 _msgCommon.open();
             }
 

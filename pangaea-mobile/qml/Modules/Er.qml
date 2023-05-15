@@ -75,7 +75,7 @@ Item
 
             if(nameParam === "early_type")
             {
-                main.currentType = nameValue
+                main.currentType = value
             }
         }
     }
