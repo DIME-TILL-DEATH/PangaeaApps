@@ -87,14 +87,12 @@ Item
                                      value + "\n" +
                                      qsTr("Do you want to convert it before upload?")
                 _msgNotSupportedIrFormat.open();
-
-
             }
         }
 
         function onSgSetUIParameter(nameParam, value)
         {
-            if((nameParam === main.value))
+            if(nameParam === main.nameValue)
             {
                 main.on=value
 

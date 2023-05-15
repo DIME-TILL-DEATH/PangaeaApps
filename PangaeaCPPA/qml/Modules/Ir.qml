@@ -68,11 +68,11 @@ Item
             }
         }
 
-        function onSgSetParameter(nameParam, nameValue)
+        function onSgSetParameter(nameParam, value)
         {
             if((nameParam === main.nameValue))
             {
-                main.on=nameValue
+                main.on=value
             }
         }
     }

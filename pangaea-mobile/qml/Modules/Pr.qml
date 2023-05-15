@@ -77,11 +77,11 @@ Item
     {
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUIParameter(nameParam, value)
         {
             if((nameParam === main.nameValue))
             {
-                main.on=nameValue
+                main.on=value
             }
         }
     }

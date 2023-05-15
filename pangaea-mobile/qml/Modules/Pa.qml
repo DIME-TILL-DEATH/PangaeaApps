@@ -99,11 +99,11 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUIParameter(nameParam, value)
         {
             if((nameParam === main.nameValue))
             {
-                main.on=nameValue
+                main.on=value
 
                 if(main.visible) // только если модуль есть в устройстве
                     UiCore.setParameter("pa-ps_linked_on", main.on);
