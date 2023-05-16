@@ -68,6 +68,7 @@ private:
 
     bool isPresetEdited{false};
     Preset currentPreset{&controlledDevice};
+    Preset currentSavedPreset{&controlledDevice};
     Preset copiedPreset{&controlledDevice};
     PresetManager presetManager;
 

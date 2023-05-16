@@ -13,6 +13,8 @@ import CppObjects 1.0
 MenuBar{
     id: mainMenu
 
+    property bool presetEdited: true
+
     Menu{
         title: qsTr("File")
         MenuItem{
@@ -23,7 +25,13 @@ MenuBar{
         MenuItem{
             text: qsTr("Export preset")
 
-            onTriggered: exportPresetDialog.open();
+            onTriggered:
+            {
+                if(mainMenu.presetEdited)
+                    UiCore.sgSetUIText("preset_not_saved", "");
+                else
+                    exportPresetDialog.open();
+            }
         }
         MenuSeparator{}
         MenuItem{
@@ -315,6 +323,11 @@ MenuBar{
                         menuUpdateFirmware.enabled = false;
                         break;
                 }
+            }
+
+            if(nameParam === "preset_edited")
+            {
+                mainMenu.presetEdited = value;
             }
         }
 

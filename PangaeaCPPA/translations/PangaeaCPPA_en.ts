@@ -154,7 +154,7 @@
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="177"/>
-        <location filename="../qml/Layouts/MainMenu.qml" line="281"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="280"/>
         <source>About...</source>
         <translation></translation>
     </message>
@@ -174,52 +174,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="240"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="239"/>
         <source>Load firmware file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="241"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="240"/>
         <source>Are you sure want to upload firmware file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="257"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="256"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="258"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="257"/>
         <source>Not a fiwmare file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="264"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="263"/>
         <source>Disconnect?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="265"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="264"/>
         <source>Are you sure want to disconnect?</source>
         <translation>Are you sure to disconnect?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="282"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="281"/>
         <source>AMT Pangaea CP-16/CP-100</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="283"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="282"/>
         <source>Desktop application</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="284"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="283"/>
         <source>Version: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="285"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="284"/>
         <source>(c) 2023</source>
         <translation>© 2023</translation>
     </message>

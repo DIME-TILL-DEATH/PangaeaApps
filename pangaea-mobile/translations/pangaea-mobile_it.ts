@@ -395,7 +395,7 @@
     <name>QObject</name>
     <message>
         <source>empty</source>
-        <translation type="vanished">vuoto</translation>
+        <translation>vuoto</translation>
     </message>
 </context>
 <context>

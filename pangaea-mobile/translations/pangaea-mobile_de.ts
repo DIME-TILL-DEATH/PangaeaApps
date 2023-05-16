@@ -399,7 +399,7 @@
     <name>QObject</name>
     <message>
         <source>empty</source>
-        <translation type="vanished">leer</translation>
+        <translation>leer</translation>
     </message>
 </context>
 <context>

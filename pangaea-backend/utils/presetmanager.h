@@ -22,7 +22,8 @@ public:
         Copying,
         Exporting,
         Saving,
-        UploadingIr
+        UploadingIr,
+        Changing
     };
     Q_ENUM(PresetState)
 

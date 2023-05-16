@@ -142,6 +142,15 @@ void Core::parseInputData(QByteArray ba)
                                 break;
                             }
 
+                            case PresetState::Changing:
+                            {
+                                currentPreset.setRawData(baPresetData);
+                                currentSavedPreset = currentPreset;
+                                emit sgUpdatePreset(currentSavedPreset);
+                                presetManager.returnToPreviousState();
+                                break;
+                            }
+
                             case PresetState::Compare:
                             {
                                 // Необходимая заглушка! не удалять
@@ -421,8 +430,9 @@ void Core::parseInputData(QByteArray ba)
 
             case AnswerType::ackPresetChange:
             {
-                qInfo() << "Preset change, updating state";
+                qInfo() << "Preset change, updating state";                
                 currentPreset.clearWavData();
+                presetManager.setCurrentState(PresetState::Changing);
                 pushReadPresetCommands();
                 break;
             }
@@ -551,8 +561,8 @@ void Core::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QStr
         irData = impulseData;
         bytesToUpload = impulseData.size();
         currentPreset.setImpulseName(impulseName);
-        emit sgUpdatePreset(currentPreset);
     }
+    emit sgUpdatePreset(currentPreset);
 
     for(quint16 i=0; i<bytesToUpload; i++)
     {
@@ -575,13 +585,6 @@ void Core::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QStr
     // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
     emit sgSetUIParameter("cabinet_enable", true);
 
-    processCommands();
-}
-
-void Core::slEscImpuls()
-{
-    pushCommandToQueue("lcc");
-    pushCommandToQueue("rn");
     processCommands();
 }
 
@@ -663,6 +666,7 @@ void Core::doPresetChange(quint8 val)
     isPresetEdited = false;
     emit sgSetUIParameter ("preset_edited", isPresetEdited);
     emit sgSetUIParameter ("compare_state", false);
+    emit sgUpdatePreset(currentSavedPreset); // Обновить актуальный пресет перед переключением
 
     pushCommandToQueue(QString("pc %2").arg(val, 2, 16, QChar('0')).toUtf8());
 
@@ -698,7 +702,8 @@ void Core::saveChanges()
 
     qDebug() << "Current preset bp: " << currentPreset.bankNumber() << ":" << currentPreset.presetNumber() << "impulse name:" << currentPreset.impulseName();
 
-    emit sgUpdatePreset(currentPreset);
+    currentSavedPreset = currentPreset;
+    emit sgUpdatePreset(currentSavedPreset);
     isPresetEdited = false;
     emit sgSetUIParameter ("preset_edited",  isPresetEdited);
     bEditable = true;

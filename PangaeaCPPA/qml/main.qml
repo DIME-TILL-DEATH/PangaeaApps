@@ -346,6 +346,19 @@ ApplicationWindow
     }
 
     Connections{
+        target: UiCore
+
+        function onSgSetUIText(nameParam, value)
+        {
+            if(nameParam === "preset_not_saved")
+            {
+                msgError.text = qsTr("You must save preset before export");
+                msgError.open();
+            }
+        }
+    }
+
+    Connections{
         target: InterfaceManager
 
         function onSgDeviceUnavaliable(senderType, reason)

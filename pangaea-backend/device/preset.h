@@ -54,7 +54,7 @@ private:
 
     // TODO: заменить DeviceControls? Все параемтры?
     bool m_isIrEnabled{false};
-    QString m_impulseName{"none"};
+    QString m_impulseName{""};
 
     QString m_pathToExport;
 

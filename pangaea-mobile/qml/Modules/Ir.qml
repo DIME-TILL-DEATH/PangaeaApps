@@ -78,7 +78,6 @@ Item
             if( nameParam === "impulse_name" )
             {
                 _baseModule.impulseName = (value==="") ? qsTr("empty") : value;
-
             }
 
             if(nameParam === "not_supported_ir")

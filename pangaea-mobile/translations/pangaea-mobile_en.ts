@@ -214,6 +214,10 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
         <translation>There is not supported format</translation>
     </message>
     <message>
+        <source>empty</source>
+        <translation type="unfinished">empty</translation>
+    </message>
+    <message>
         <source>IR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -228,10 +232,6 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
     <message>
         <source>Do you want to convert it before upload?</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>empty</source>
-        <translation type="unfinished">empty</translation>
     </message>
 </context>
 <context>
@@ -378,7 +378,7 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
     <name>QObject</name>
     <message>
         <source>empty</source>
-        <translation type="vanished">empty</translation>
+        <translation>empty</translation>
     </message>
 </context>
 <context>

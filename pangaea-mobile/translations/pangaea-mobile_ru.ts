@@ -226,10 +226,6 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
         <translation>Неподдерживаемый формат</translation>
     </message>
     <message>
-        <source>IR</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат:</translation>
     </message>
@@ -240,6 +236,10 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <message>
         <source>empty</source>
         <translation>пусто</translation>
+    </message>
+    <message>
+        <source>IR</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -423,7 +423,7 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>QObject</name>
     <message>
         <source>empty</source>
-        <translation type="vanished">пусто</translation>
+        <translation>пусто</translation>
     </message>
 </context>
 <context>
