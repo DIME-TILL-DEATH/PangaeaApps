@@ -78,27 +78,27 @@
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="17"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="19"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="19"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="21"/>
         <source>Import preset</source>
         <translation>Импортировать пресет</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="24"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="26"/>
         <source>Export preset</source>
         <translation>Экспорт пресета</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="30"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="38"/>
         <source>Disconnect from device</source>
         <translation>Отключить устройство</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="36"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="44"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
@@ -107,103 +107,103 @@
         <translation type="vanished">Вид</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="42"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="50"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="46"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="54"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="95"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="103"/>
         <source>Modules direction</source>
         <translation>Отображения модулей</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="97"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="105"/>
         <source>Left to right</source>
         <translation>Слева направо</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="103"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="111"/>
         <source>Right to left</source>
         <translation>Справа налево</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="113"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="121"/>
         <source>Autoconnect</source>
         <translation>Автоподсоединение</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="122"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="130"/>
         <source>Check updates</source>
         <translation>Проверка обновлений</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="131"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="139"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="133"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="141"/>
         <source>IR convertor</source>
         <translation>Конвертор импульсов</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="141"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="149"/>
         <source>Update firmware</source>
         <translation>Обновление прошивки</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="149"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="157"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="152"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="160"/>
         <source>AMT web site</source>
         <translation>Веб-сайт AMT</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="158"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="166"/>
         <source>Pangaea web page</source>
         <translation>Веб-страница устройств Pangaea</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="168"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="176"/>
         <source>Device manual</source>
         <translation>Руководство для Pangaea</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="177"/>
-        <location filename="../qml/Layouts/MainMenu.qml" line="280"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="185"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="288"/>
         <source>About...</source>
         <translation>О программе...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="192"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="200"/>
         <source>Import preset file</source>
         <translation>Импорт файла пресета</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="206"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="214"/>
         <source>Export preset file</source>
         <translation>Экспорт файла пресета</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="223"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="231"/>
         <source>Pick firmware file</source>
         <translation>Выберите файл прошивки</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="239"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="247"/>
         <source>Load firmware file</source>
         <translation>Загрузка файла прошивки</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="240"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="248"/>
         <source>Are you sure want to upload firmware file</source>
         <translation>Вы уверены что хотите загрузить следующую прошивку</translation>
     </message>
@@ -213,32 +213,32 @@
         <translation type="vanished">Вы уверены что хотите загрузить следующую прошивку:</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="256"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="264"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="257"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="265"/>
         <source>Not a fiwmare file!</source>
         <translation>Не является файлом прошивки!</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="263"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="271"/>
         <source>Disconnect?</source>
         <translation>Отключить?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="264"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="272"/>
         <source>Are you sure want to disconnect?</source>
         <translation>Вы уверены что хотите отключить устройство?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="281"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="289"/>
         <source>AMT Pangaea CP-16/CP-100</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="282"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="290"/>
         <source>Desktop application</source>
         <translation>Стационарное приложение</translation>
     </message>
@@ -248,12 +248,12 @@
         <translation type="vanished">Стационарное приложение&lt;br/&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="283"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="291"/>
         <source>Version: </source>
         <translation>Версия: </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="284"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="292"/>
         <source>(c) 2023</source>
         <translation>© 2023</translation>
     </message>
@@ -436,6 +436,11 @@ Down - Click + cmd</source>
         <translation>Новая версия приложения(v.</translation>
     </message>
     <message>
+        <location filename="../qml/main.qml" line="355"/>
+        <source>You must save preset before export</source>
+        <translation>Необходимо сохранить пресет перед экспортом</translation>
+    </message>
+    <message>
         <location filename="../qml/main.qml" line="246"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат файла:</translation>
@@ -471,12 +476,12 @@ Minimum requsted version is </source>
         <translation type="vanished">Минимальная требуемая версия </translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="353"/>
+        <location filename="../qml/main.qml" line="366"/>
         <source>Device is unavaliable</source>
         <translation>Устройство недоступно</translation>
     </message>
     <message>
-        <location filename="../qml/main.qml" line="359"/>
+        <location filename="../qml/main.qml" line="372"/>
         <source>Command exchange error</source>
         <translation>Ошибка при обмене командами</translation>
     </message>
