@@ -139,8 +139,6 @@ Item
                             UiCore.sgSetUIText("preset_not_saved", "");
                         else
                             exportPreset();
-                            //exportPresetDialog.open();
-                            //exportPresetFileDialog.open();
                     }
                 }
 
@@ -195,7 +193,6 @@ Item
 
                     onMbPressed:
                     {
-                        //importPresetFileDialog.open();
                         importPreset();
                     }
                 }
@@ -211,15 +208,8 @@ Item
 
                     onMbPressed:
                     {
-                        if(_root.presetEdited)
-                        {
-                            UiCore.sgSetUIText("preset_not_saved", "");
-                        }
-                        else
-                        {
-                            UiCore.setParameter("copy", 0);
-                            copyFirst=true;
-                        }
+                        UiCore.setParameter("copy", 0);
+                        copyFirst=true;
                     }
                 }
                 MButton

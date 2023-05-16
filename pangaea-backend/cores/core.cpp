@@ -133,6 +133,10 @@ void Core::parseInputData(QByteArray ba)
                         {
                             case PresetState::Copying:
                             {
+                               // copy preview wave data
+                               if(currentPreset.wavSize() != 0)
+                                   copiedPreset = currentPreset;
+
                                 copiedPreset.setRawData(baPresetData);
                                 presetManager.returnToPreviousState();
                                 break;
