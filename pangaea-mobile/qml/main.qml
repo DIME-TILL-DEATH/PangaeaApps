@@ -276,7 +276,7 @@ ApplicationWindow
             if(nameParam === "preset_not_saved")
             {
                 _msgCommon.headerText = qsTr("Warning");
-                _msgCommon.text = qsTr("You must save preset before copy/export");
+                _msgCommon.text = qsTr("You must save preset before export");
                 _msgCommon.open();
             }
 
@@ -323,6 +323,17 @@ ApplicationWindow
             {
                 _msgBluetoothNotReady.text = qsTr("Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok")
             }
+            if(Msg === "UnknownBleError")
+            {
+                _msgBluetoothNotReady.text = qsTr("Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.")
+            }
+
+            _msgBluetoothNotReady.open();
+            console.log("signal interface unavaliable");
+        }
+
+        function onSgDeviceUnavaliable(interfaceType, Msg)
+        {
             if(Msg === "DeviceUnavaliable")
             {
                 _msgBluetoothNotReady.text = qsTr("Device is unavaliable")
@@ -333,8 +344,10 @@ ApplicationWindow
             }
 
             _msgBluetoothNotReady.open();
-            console.log("Open _msgBluetoothNotReady dialog");
+            console.log("signal device unavaliable");
         }
+
+
 
         function onSgInterfaceError(errorDescription)
         {
