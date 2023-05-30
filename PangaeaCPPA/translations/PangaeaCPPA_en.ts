@@ -19,7 +19,7 @@
     <message>
         <location filename="../qml/Layouts/Head.qml" line="147"/>
         <source>empty</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -110,12 +110,12 @@
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="121"/>
         <source>Autoconnect</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="130"/>
         <source>Check updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Check for updates</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="139"/>
@@ -130,7 +130,7 @@
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="149"/>
         <source>Update firmware</source>
-        <translation type="unfinished"></translation>
+        <translation>Update the firmware</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="157"/>
@@ -171,27 +171,27 @@
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="231"/>
         <source>Pick firmware file</source>
-        <translation type="unfinished"></translation>
+        <translation>Select the firmware file</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="247"/>
         <source>Load firmware file</source>
-        <translation type="unfinished"></translation>
+        <translation>Load the firmware file</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="248"/>
         <source>Are you sure want to upload firmware file</source>
-        <translation type="unfinished"></translation>
+        <translation>Are you sure want to upload firmware file?</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="264"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="265"/>
         <source>Not a fiwmare file!</source>
-        <translation type="unfinished"></translation>
+        <translation>This is not a firmware file!</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="271"/>
@@ -338,12 +338,12 @@
     <message>
         <location filename="../qml/main.qml" line="214"/>
         <source>Operation complete</source>
-        <translation type="unfinished"></translation>
+        <translation>The operation is completed</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="216"/>
         <source>Operation complete. Please, reconnect to device</source>
-        <translation type="unfinished"></translation>
+        <translation>The operation is completed. Please, reconnect to the device</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="267"/>
@@ -384,28 +384,28 @@
         <location filename="../qml/main.qml" line="280"/>
         <location filename="../qml/main.qml" line="290"/>
         <source>Info</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="282"/>
         <source>New firmware version(v.</source>
-        <translation type="unfinished"></translation>
+        <translation>Newest firmware version (v.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="284"/>
         <location filename="../qml/main.qml" line="294"/>
         <source>) avaliable on the server</source>
-        <translation type="unfinished"></translation>
+        <translation>) is available on the server</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="292"/>
         <source>New application version(v.</source>
-        <translation type="unfinished"></translation>
+        <translation>New application version (v.</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="355"/>
         <source>You must save preset before export</source>
-        <translation type="unfinished"></translation>
+        <translation>You must save the preset before export</translation>
     </message>
     <message>
         <location filename="../qml/main.qml" line="366"/>

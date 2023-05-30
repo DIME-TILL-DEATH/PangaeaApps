@@ -613,7 +613,7 @@ website: https://amtelectronics.com</source>
     </message>
     <message>
         <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation>Произошла ошибка обмена между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
+        <translation>Произошла ошибка обмена данными между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
     </message>
     <message>
         <source>Exchange error</source>
