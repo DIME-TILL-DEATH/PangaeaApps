@@ -46,6 +46,8 @@ AnswerWorker::AnswerWorker()
    // m_devCommandList.append(DeviceAnswer(new Parser("cc s 1\r", "1111111"), AnswerType::ccAck, "IR upload acknowledge")); //upload runtime
     m_devCommandList.append(DeviceAnswer(new Parser("cc * *\r", "111X1X1"), AnswerType::ccAck, "IR upload acknowledge")); //upload save
     m_devCommandList.append(DeviceAnswer(new Parser("ccEND\n", "111111"), AnswerType::ccEND, "IR saving/appliyng finished"));
+    m_devCommandList.append(DeviceAnswer(new Parser("SYNC ERROR\n", "11111111111"), AnswerType::ccError, "IR saving/appliyng error"));
+
     m_devCommandList.append(DeviceAnswer(getIr, AnswerType::getIr, "get IR file"));
     m_devCommandList.append(DeviceAnswer(getIrNameSize, AnswerType::getIrNameSize, "get IR file"));
     m_devCommandList.append(DeviceAnswer(getIrEmpty, AnswerType::getIrEmpty, "IR file empty"));

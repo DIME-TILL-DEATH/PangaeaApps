@@ -392,6 +392,17 @@ void Core::parseInputData(QByteArray ba)
                 break;
             }
 
+            case AnswerType::ccError:
+            {
+                timer->start();
+
+                emit sgSetUIText("impulse_save_error", currentPreset.impulseName());
+
+                qInfo() << recievedCommand.description();
+                presetManager.returnToPreviousState();
+                break;
+            }
+
             case AnswerType::requestNextChunk:
             {
                 if(!fwUpdate)
@@ -989,12 +1000,12 @@ void Core::processCommands()
 
         if(controlledDevice.deviceType() == DeviceType::CP100 || controlledDevice.deviceType() == DeviceType::CP100PA)
         {
-            chunckSize=500;
-            sleepTime=75;
+            chunckSize=512;
+            sleepTime=100;
         }
         else
         {
-            chunckSize=100;
+            chunckSize=128;
             sleepTime=150;
         }
 

@@ -287,6 +287,13 @@ ApplicationWindow
                 _msgCommon.open();
             }
 
+            if(nameParam === "impulse_save_error")
+            {
+                _msgCommon.headerText = qsTr("Error");
+                _msgCommon.text = qsTr("Error while saving IR. Please, try to reload impulse.");
+                _msgCommon.open();
+            }
+
             if(nameParam === "preset_exported")
             {
                 _msgCommon.headerText = qsTr("Preset export finished");

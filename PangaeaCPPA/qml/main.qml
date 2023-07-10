@@ -355,6 +355,12 @@ ApplicationWindow
                 msgError.text = qsTr("You must save preset before export");
                 msgError.open();
             }
+
+            if(nameParam === "impulse_save_error")
+            {
+                msgError.text = qsTr("Error while saving IR. Please, try to reload impulse.");
+                msgError.open();
+            }
         }
     }
 

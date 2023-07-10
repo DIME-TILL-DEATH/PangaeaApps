@@ -12,6 +12,7 @@ enum AnswerType{
     unknown = 0,
     //gsEND,
     ccAck,
+    ccError,
     ccEND,
     getAMTDevType,
     getStatus,
