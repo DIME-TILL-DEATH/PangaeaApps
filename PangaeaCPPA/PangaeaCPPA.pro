@@ -22,6 +22,11 @@ else: VERSION = 1.0.1726
 macx {
     QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
     ICON = icons/pangaea.icns
+
+    soxLibsPath = $${PWD}/../sox_lib/lib.mac
+    LIBS += -L$${soxLibsPath} -lsox
+
+    DEPENDPATH += $${soxLibsPath}
 }
 
 linux {
@@ -55,12 +60,20 @@ win32{
     LIBS += -L$${wavConverterLibPath} -lWavConverterLib
 }
 
-unix{
+linux{
     LIBS += -L$${OUT_PWD}/../WavConverterLib/ -lWavConverterLib
     LIBS += -L$$$${OUT_PWD}/../pangaea-backend/ -lpangaea-backend
 
     PRE_TARGETDEPS += $${OUT_PWD}/../pangaea-backend/libpangaea-backend.a
     PRE_TARGETDEPS += $${soxLibsPath}/libsox.so.3
+}
+
+macx{
+    LIBS += -L$${OUT_PWD}/../WavConverterLib/ -lWavConverterLib
+    LIBS += -L$$$${OUT_PWD}/../pangaea-backend/ -lpangaea-backend
+
+    PRE_TARGETDEPS += $${OUT_PWD}/../pangaea-backend/libpangaea-backend.a
+    PRE_TARGETDEPS += $${soxLibsPath}/libsox.a
 }
 
 DEFINES += VERSION_STRING=\\\"$${VERSION}\\\"

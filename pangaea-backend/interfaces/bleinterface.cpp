@@ -299,7 +299,7 @@ void BleInterface::slStartConnect(QString address)
     }
 
 #ifdef Q_OS_MAC
-    m_autoconnectDeviceAddress = deviceToConnect->deviceUuid().toString();
+    m_currentDeviceAddress = deviceToConnect->deviceUuid().toString();
 #else
     m_currentDeviceAddress = deviceToConnect->address().toString();
 #endif
