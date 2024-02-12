@@ -9,6 +9,8 @@
 
 #include <signal.h>
 
+#include <QQuickStyle>
+
 #include "core.h"
 #include "netcore.h"
 #include "presetlistmodel.h"
@@ -75,6 +77,9 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     engine.addImportPath(":/qml");
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
+#ifdef Q_OS_MACOS
+    QQuickStyle::setStyle("Basic");
+#endif
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);

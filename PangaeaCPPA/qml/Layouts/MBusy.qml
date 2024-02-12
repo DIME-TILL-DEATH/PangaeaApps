@@ -68,7 +68,7 @@ Item
                      border.color: "grey"
                  }
 
-             contentItem:    Rectangle {
+             contentItem: Rectangle {
                      width: progressBar.visualPosition * parent.width
                      height: parent.height
                      radius: 3
