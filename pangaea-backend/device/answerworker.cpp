@@ -10,11 +10,29 @@ AnswerWorker::AnswerWorker()
     Parser* getIrEmpty  = new Parser("cc\r\n\n", "11111");
 
     QByteArray sample, mask;
+    sample = "rns\r";
+    mask   = "1111";
     for(quint8 i=0; i<100; i++)
     {
-        sample.append("_\n00\nEND\n");
+        sample.append("*\n00\nEND\n");
         mask.append("X10011111");
     }
+    Parser* getIrListCP100_legacy = new Parser(sample, mask);
+
+    sample.clear();
+    mask.clear();
+
+    sample = "rns\r";
+    mask   = "1111";
+    for(quint8 i=0; i<100; i++)
+    {
+        //        sample.append("00\n\t*\n\t00\n");
+        //        mask.append("0011X11001");
+        sample.append("*\n00\n");
+        mask.append("X1001");
+    }
+    sample.append("END\n"); // new
+    mask.append("1111"); //new
 
     Parser* getIrListCP100 = new Parser(sample, mask);
 
@@ -85,6 +103,7 @@ AnswerWorker::AnswerWorker()
 
     m_devCommandList.append(DeviceAnswer(getIrListCP16, AnswerType::getIrList, "get list of IR names for CP16"));
     m_devCommandList.append(DeviceAnswer(getIrListCP100, AnswerType::getIrList, "get list of IR names for CP100"));
+    m_devCommandList.append(DeviceAnswer(getIrListCP100_legacy, AnswerType::getIrList, "get list of IR names for CP100(legacy)"));
 
    // m_devCommandList.append(DeviceAnswer(new Parser("END\n", "1111"), AnswerType::endOperation, "operation complete"));
 }

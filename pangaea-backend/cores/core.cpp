@@ -1001,7 +1001,7 @@ void Core::processCommands()
         if(controlledDevice.deviceType() == DeviceType::CP100 || controlledDevice.deviceType() == DeviceType::CP100PA)
         {
             chunckSize=512;
-            sleepTime=100;
+            sleepTime=50;
         }
         else
         {

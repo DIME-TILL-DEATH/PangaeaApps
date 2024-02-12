@@ -28,6 +28,11 @@ ApplicationWindow
 
     color: Style.backgroundColor
 
+    property string nameCP100: "CP-100";
+    property string nameCP16: "CP-16M";
+    property string nameCP16PA: "CP-16PA";
+    property string nameCP100PA: "CP-100PA"
+
     property string markEdit: edit?" * ":" "
     property string devName: ""
     property string devVersion: ""
@@ -108,7 +113,29 @@ ApplicationWindow
         {
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            UiCore.setImpuls(cleanPath);
+            if((devName == nameCP16) || (devName == nameCP16PA))
+            {
+                UiCore.setImpuls(cleanPath);
+            }
+        }
+
+        onRejected:
+        {
+            if((devName == nameCP100) || (devName == nameCP100PA))
+            {
+                UiCore.escImpuls()
+            }
+        }
+
+        onSelectedFileChanged:
+        {
+            var cleanPath = irFileDialog.currentFile.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+
+            if((devName == nameCP100) || (devName == nameCP100PA))
+            {
+                UiCore.setImpuls(cleanPath);
+            }
         }
     }
 
