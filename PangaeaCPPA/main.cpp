@@ -59,9 +59,9 @@ int main(int argc, char *argv[])
     core->moveToThread(threadController.backendThread());
     netCore->moveToThread(threadController.backendThread());
 
-#if !defined(Q_OS_MACOS) //&& !defined(Q_OS_LINUX)
+//#if !defined(Q_OS_MACOS) //&& !defined(Q_OS_LINUX)
     interfaceManager->moveToThread(threadController.connectionsThread()); // On MAC BLE can work only on the main thread
-#endif
+//#endif
 
     QObject::connect(threadController.backendThread(), &QThread::finished, core, &QObject::deleteLater);
     QObject::connect(threadController.backendThread(), &QThread::finished, netCore, &QObject::deleteLater);
@@ -122,7 +122,11 @@ int main(int argc, char *argv[])
 
     Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData, Qt::QueuedConnection);
     Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::readAllParameters, Qt::QueuedConnection);
+//#if !defined(Q_OS_MACOS)
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice, Qt::BlockingQueuedConnection);
+//#else
+//    Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
+//#endif
 //    Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
 //    Core::connect(core, &Core::sgReadyTodisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError, Qt::QueuedConnection);
@@ -131,9 +135,6 @@ int main(int argc, char *argv[])
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceCore::connectToDevice, Qt::QueuedConnection);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgDisconnectFromDevice, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
     Core::connect(core, &Core::sgImmediatelyDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
-
-//    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, interfaceManager, &InterfaceCore::setModuleName);
-//    QObject::connect(interfaceManager, &InterfaceCore::sgModuleNameUpdated, &uiCore, &UICore::setModuleName);
 
     InterfaceCore::connect(interfaceManager, &InterfaceCore::sgDeviceListUpdated, &uiInterfaceManager, &UiInterfaceManager::updateDevicesList, Qt::BlockingQueuedConnection);
     InterfaceCore::connect(interfaceManager, &InterfaceCore::sgConnectionStarted, &uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted, Qt::QueuedConnection);

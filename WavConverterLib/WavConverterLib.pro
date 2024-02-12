@@ -44,6 +44,6 @@ linux: !macx{
 macx {
     message("mac build")
 
-    libsPath = $${PWD}/sox_lib/lib.mac
+    libsPath = $${PWD}/../sox_lib/lib.mac
     LIBS += -L$$libsPath -lsox
 }
