@@ -1006,7 +1006,7 @@ void Core::processCommands()
         else
         {
             chunckSize=128;
-            sleepTime=150;
+            sleepTime=200; // lower values tends to disconnect on MacOs
         }
 
         if(commandToSend.length() > chunckSize)

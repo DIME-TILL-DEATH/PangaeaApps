@@ -70,8 +70,9 @@ linux{
 
 macx{
     LIBS += -L$${OUT_PWD}/../WavConverterLib/ -lWavConverterLib
-    LIBS += -L$$$${OUT_PWD}/../pangaea-backend/ -lpangaea-backend
+    LIBS += -L$${OUT_PWD}/../pangaea-backend/ -lpangaea-backend
 
+    PRE_TARGETDEPS += $${OUT_PWD}/../WavConverterLib/libWavConverterLib.dylib
     PRE_TARGETDEPS += $${OUT_PWD}/../pangaea-backend/libpangaea-backend.a
     PRE_TARGETDEPS += $${soxLibsPath}/libsox.a
 }
