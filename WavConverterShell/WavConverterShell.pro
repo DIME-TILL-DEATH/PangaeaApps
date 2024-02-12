@@ -36,6 +36,7 @@ win32{
         icons/spirit.ico \
         icons/suhr.ico
 
+# нужен ли???
     libsPath = $${PWD}/../shared_libs/lib.msvc2019
 }
 
@@ -47,13 +48,10 @@ mac{
 
     ICON = icons/spirit.icns
 
-    destDir = $${PWD}/output_bin/ # DESTDIR does not allow to run program without copying QT librarys
+    libsPath = $${OUT_PWD}/../WavConverterLib/
+    LIBS += -L$${OUT_PWD}/../WavConverterLib/ -lWavConverterLib
 
     QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/ -libpath=$${libsPath} $$escape_expand(\\n\\t)
-
-    QMAKE_POST_LINK += mkdir -p $${destDir} $$escape_expand(\n\t)
-    QMAKE_POST_LINK += cp -pr $${OUT_PWD}/$${TARGET}.app $${destDir} $$escape_expand(\n\t)
-
 }
 
 linux{

@@ -154,11 +154,12 @@ CONFIG(release, debug|release) {
     }
 
     macx {
-        converterBinary = $${PWD}/../WavConverterShell/output_bin/IrConverter.app/Contents/MacOS/IrConverter
+        converterBinary = $${OUT_PWD}/../WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter
+        converterLibsPath = $${OUT_PWD}/../WavConverterLib/
 
         QMAKE_POST_LINK += cp -r $${converterBinary} PangaeaCPPA.app/Contents/MacOS/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += cp -r $${dirDocs} PangaeaCPPA.app/Contents/MacOS/docs $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/qml/ -libpath=$${soxLibsPath} -dmg $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/qml/ -libpath=$${converterLibsPath} -dmg $$escape_expand(\\n\\t)
     }
 
     linux{
