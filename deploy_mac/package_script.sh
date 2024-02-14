@@ -12,24 +12,13 @@ rm -f "${DMG_NAME_TMP}"
 hdiutil create -ov -srcfolder ${TMP_DIR} -format UDRW -volname "${VOL_NAME}" "${DMG_NAME_TMP}"
 device=$(hdiutil attach -readwrite -noverify -noautoopen ${DMG_NAME_TMP} | egrep '^/dev/' | sed 1q | awk '{print $1}')
 
-
-echo "    * Copying volume image... "
 BG_IMG_NAME="background.png"
 BG_FOLDER="/Volumes/${VOL_NAME}/.background"
 mkdir "${BG_FOLDER}"
 cp "${BG_IMG_NAME}" "${BG_FOLDER}/"
-echo "done!"
 
-echo "    * Copying volume icon... "
-VOL_ICON_NAME="pangaea.icns"
 ICON_FOLDER="/Volumes/${VOL_NAME}/"
-cp "${VOL_ICON_NAME}" "${ICON_FOLDER}/.VolumeIcon.icns"
-echo "done!"
-
-echo "    * Setting volume icon... "
-SetFile -c icnC "${ICON_FOLDER}/.VolumeIcon.icns"
-SetFile -a C "${ICON_FOLDER}"
-echo "done!"
+cp "VolumeIcon.icns" "${ICON_FOLDER}/.VolumeIcon.icns"
 
 ARG_ICON_SIZE=160
 
@@ -79,6 +68,14 @@ end tell
 
 echo "$APPLESCRIPT" | osascript
 echo "AppleScript done"
+
+echo "    * Setting volume icon... "
+SetFile -c icnC "${ICON_FOLDER}/.VolumeIcon.icns"
+SetFile -a C ${ICON_FOLDER}
+echo "done!"
+
+## on some step system remove icon. Copy again
+cp "VolumeIcon.icns" "${ICON_FOLDER}/.VolumeIcon.icns"
 
 # set rights and sync(2 times for reliable)
 chmod -Rf go-w /Volumes/"${VOL_NAME}"
