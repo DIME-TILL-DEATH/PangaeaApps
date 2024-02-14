@@ -1,10 +1,7 @@
 TMP_DIR="dmg_content"
 APP_BUNDLE_NAME="PangaeaCPPA.app"
-#APP_VERSION=`/usr/libexec/PlistBuddy -c "Print :BundleVersion" "${APP_BUNDLE_NAME}/Contents/Info.plist"`
 
-DMG_NAME_BASE=${APP_BUNDLE_NAME%.*}
-#DMG_NAME_SUFFIX=" ${APP_VERSION}"
-DMG_NAME="PangaeaCPPA.dmg" #${DMG_NAME_SUFFIX}.dmg"
+DMG_NAME="PangaeaCPPA.dmg"
 DMG_NAME_TMP="${APP_BUNDLE_NAME%.*}_tmp.dmg"
 VOL_NAME=${APP_BUNDLE_NAME%.*}
 
@@ -12,14 +9,12 @@ VOL_NAME=${APP_BUNDLE_NAME%.*}
 rm -f "${DMG_NAME}"
 rm -f "${DMG_NAME_TMP}"
 
-# create image
 hdiutil create -ov -srcfolder ${TMP_DIR} -format UDRW -volname "${VOL_NAME}" "${DMG_NAME_TMP}"
-# mount image
 device=$(hdiutil attach -readwrite -noverify -noautoopen ${DMG_NAME_TMP} | egrep '^/dev/' | sed 1q | awk '{print $1}')
-#hdiutil attach -readwrite -noverify -noautoopen ${DMG_NAME_TMP}
+
 
 echo "    * Copying volume image... "
-BG_IMG_NAME="amt.png"
+BG_IMG_NAME="background.png"
 BG_FOLDER="/Volumes/${VOL_NAME}/.background"
 mkdir "${BG_FOLDER}"
 cp "${BG_IMG_NAME}" "${BG_FOLDER}/"
@@ -38,11 +33,11 @@ echo "done!"
 
 ARG_ICON_SIZE=160
 
-APPS_X=500
-APPS_Y=200
+BUNDLE_X=150
+BUNDLE_Y=230
 
-BUNDLE_X=180
-BUNDLE_Y=200
+APPS_X=490
+APPS_Y=220
 
 WINDOW_LEFT=400
 WINDOW_TOP=100
