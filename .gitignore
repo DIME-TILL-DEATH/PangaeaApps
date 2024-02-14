@@ -5,6 +5,7 @@ deploy_linux/debian_deploy/*
 deploy_linux/app/*
 deploy_linux/PangaeaCPPA.tar.gz
 deploy_windows/release/*
+deploy_mac/dmg_content/*
 WavConverterShell/output_bin/*
 *.exe
 *.zip
