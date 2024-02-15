@@ -61,3 +61,5 @@ compile_commands.json
 *creator.user*
 
 .DS_Store
+
+*.dmg

@@ -159,7 +159,11 @@ CONFIG(release, debug|release) {
 
         QMAKE_POST_LINK += cp -r $${converterBinary} PangaeaCPPA.app/Contents/MacOS/ $$escape_expand(\\n\\t)
         QMAKE_POST_LINK += cp -r $${dirDocs} PangaeaCPPA.app/Contents/MacOS/docs $$escape_expand(\\n\\t)
-        QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/qml/ -libpath=$${converterLibsPath} -dmg $$escape_expand(\\n\\t)
+        QMAKE_POST_LINK += macdeployqt $${DESTDIR}$${TARGET}.app -qmldir=$${PWD}/qml/ -libpath=$${converterLibsPath} $$escape_expand(\\n\\t)
+
+        QMAKE_POST_LINK += cp -r $${OUT_PWD}/PangaeaCPPA.app $${PWD}/../deploy_mac/dmg_content/ $$escape_expand(\\n\\t)
+
+        QMAKE_POST_LINK += (cd $${PWD}/../deploy_mac/; sh package_script.sh )$$escape_expand(\\n\\t)
     }
 
     linux{
