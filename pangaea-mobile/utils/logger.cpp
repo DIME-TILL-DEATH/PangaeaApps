@@ -21,11 +21,11 @@ Logger::Logger(QObject* parent)
     QString folderPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
 
     if(!QDir(folderPath).exists())
+
+    logFile.setFileName(folderPath+"log.txt");
     {
         QDir().mkpath(folderPath);
     }
-
-    logFile.setFileName(folderPath+"log.txt");
 
 
     bool result = AndroidUtils::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
