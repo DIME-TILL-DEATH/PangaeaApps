@@ -15,6 +15,8 @@ Slider
     property string nameParam: "master_volume"
     property string units: " "
 
+    property var paramType
+
     property color colorHandle
     property color colorSlider
 
@@ -126,7 +128,7 @@ Slider
     {
         if(!softUpdate)
         {
-            UiCore.setParameter(nameParam, Math.round(kVal * root.value * 100 + bVal));
+            UiCore.setDeviceParameter(paramType, Math.round(kVal * root.value * 100 + bVal));
             editabled = true;
         }
         else
@@ -140,16 +142,28 @@ Slider
         target: UiCore
         function onSgSetUIParameter(nameParam, nameValue)
         {
-            if((root.nameParam.length>0) && nameParam.localeCompare(root.nameParam) === 0)
-            {
-                softUpdate = true;
-                root.value = nameValue/(root.valueMax-root.valueMin);
-                softUpdate = false;
-            }
+            // if((root.nameParam.length>0) && nameParam.localeCompare(root.nameParam) === 0)
+            // {
+            //     softUpdate = true;
+            //     root.value = nameValue/(root.valueMax-root.valueMin);
+            //     softUpdate = false;
+            // }
 
             if( nameParam === "presetEdit" )
             {
                 main.edit = nameValue;
+            }
+        }
+
+        function onSgSetUiDeviceParameter(paramType, value)
+        {
+            if(paramType === root.paramType)
+            {
+                softUpdate = true;
+                root.value = (value - bVal) / 100 / kVal ;
+                softUpdate = false;
+
+                console.log("Settling by sgSetDeviceParameter", paramType)
             }
         }
     }

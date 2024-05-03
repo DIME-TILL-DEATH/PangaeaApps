@@ -2,64 +2,64 @@
 
 DeviceControls::DeviceControls()
 {
-    m_parametersList.append({"eq_volume1",      "eqv 0", 0});
-    m_parametersList.append({"eq_volume2",      "eqv 1", 1});
-    m_parametersList.append({"eq_volume3",      "eqv 2", 2});
-    m_parametersList.append({"eq_volume4",      "eqv 3", 3});
-    m_parametersList.append({"eq_volume5",      "eqv 4", 4});
+    m_parametersList.append({DeviceParameter::Type::EQ_VOLUME1, "eq_volume1"});
+    m_parametersList.append({DeviceParameter::Type::EQ_VOLUME2, "eq_volume2"});
+    m_parametersList.append({DeviceParameter::Type::EQ_VOLUME3, "eq_volume3"});
+    m_parametersList.append({DeviceParameter::Type::EQ_VOLUME4, "eq_volume4"});
+    m_parametersList.append({DeviceParameter::Type::EQ_VOLUME5, "eq_volume5"});
 
-    m_parametersList.append({"early_volume",    "ev", 5});
-    m_parametersList.append({"early_type",      "et", 6});
+    m_parametersList.append({DeviceParameter::Type::EARLY_VOLUME, "early_volume"});
+    m_parametersList.append({DeviceParameter::Type::EARLY_TYPE, "early_type"});
 
-    m_parametersList.append({"master_volume",   "mv", 7});
+    m_parametersList.append({DeviceParameter::Type::MASTER_VOLUME, "master_volume"});
 
-    m_parametersList.append({"cabinet_enable",  "ce", 8});
+    m_parametersList.append({DeviceParameter::Type::CABINET_ENABLE, "cabinet_enable"});
 
-    m_parametersList.append({"eq_on",           "eqo", 9});
+    m_parametersList.append({DeviceParameter::Type::EQ_ON, "eq_on"});
 
-    m_parametersList.append({"early_on",        "eo", 10});
+    m_parametersList.append({DeviceParameter::Type::EARLY_ON, "early_on"});
 
-    m_parametersList.append({"amp_on",          "ao", 11});
-    m_parametersList.append({"amp_volume",      "av", 12});
-    m_parametersList.append({"amp_slave",       "as", 13});
-    m_parametersList.append({"amp_type",        "at", 14});
+    m_parametersList.append({DeviceParameter::Type::AMP_ON, "amp_on"});
+    m_parametersList.append({DeviceParameter::Type::AMP_VOLUME, "amp_volume"});
+    m_parametersList.append({DeviceParameter::Type::AMP_SLAVE, "amp_slave"});
+    m_parametersList.append({DeviceParameter::Type::AMP_TYPE, "amp_type"});
 
-    m_parametersList.append({"preamp_on",       "pro", 15});
-    m_parametersList.append({"preamp_volume",   "prv", 16});
-    m_parametersList.append({"preamp_low",      "prl", 17, true});
-    m_parametersList.append({"preamp_mid",      "prm", 18, true});
-    m_parametersList.append({"preamp_high",     "prh", 19, true});
+    m_parametersList.append({DeviceParameter::Type::PREAMP_ON, "preamp_on"});
+    m_parametersList.append({DeviceParameter::Type::PREAMP_VOLUME, "preamp_volume"});
+    m_parametersList.append({DeviceParameter::Type::PREAMP_LOW, "preamp_low"});
+    m_parametersList.append({DeviceParameter::Type::PREAMP_MID, "preamp_mid"});
+    m_parametersList.append({DeviceParameter::Type::PREAMP_HIGH, "preamp_high"});
 
-    m_parametersList.append({"gate_on",         "go", 20});
-    m_parametersList.append({"gate_threshold",  "gt", 21});
-    m_parametersList.append({"gate_decay",      "gd", 22});
+    m_parametersList.append({DeviceParameter::Type::GATE_ON, "gate_on"});
+    m_parametersList.append({DeviceParameter::Type::GATE_THRESHOLD, "gate_threshold"});
+    m_parametersList.append({DeviceParameter::Type::GATE_DECAY, "gate_decay"});
 
-    m_parametersList.append({"compressor_on",           "co", 23});
-    m_parametersList.append({"compressor_sustain",      "cs", 24});
-    m_parametersList.append({"compressor_volume",       "cv", 25});
+    m_parametersList.append({DeviceParameter::Type::COMPRESSOR_ON, "compressor_on"});
+    m_parametersList.append({DeviceParameter::Type::COMPRESSOR_SUSTAIN, "compressor_sustain"});
+    m_parametersList.append({DeviceParameter::Type::COMPRESSOR_VOLUME, "compressor_volume"});
 
-    m_parametersList.append({"eq_freq1",       "eqf 0", 26, true});
-    m_parametersList.append({"eq_freq2",       "eqf 1", 27, true});
-    m_parametersList.append({"eq_freq3",       "eqf 2", 28, true});
-    m_parametersList.append({"eq_freq4",       "eqf 3", 29, true});
-    m_parametersList.append({"eq_freq5",       "eqf 4", 30, true});
+    m_parametersList.append({DeviceParameter::Type::EQ_FREQ1, "eq_freq1"});
+    m_parametersList.append({DeviceParameter::Type::EQ_FREQ2, "eq_freq2"});
+    m_parametersList.append({DeviceParameter::Type::EQ_FREQ3, "eq_freq3"});
+    m_parametersList.append({DeviceParameter::Type::EQ_FREQ4, "eq_freq4"});
+    m_parametersList.append({DeviceParameter::Type::EQ_FREQ5, "eq_freq5"});
 
-    m_parametersList.append({"eq_q1",       "eqq 0", 31, true});
-    m_parametersList.append({"eq_q2",       "eqq 1", 32, true});
-    m_parametersList.append({"eq_q3",       "eqq 2", 33, true});
-    m_parametersList.append({"eq_q4",       "eqq 3", 34, true});
-    m_parametersList.append({"eq_q5",       "eqq 4", 35, true});
+    m_parametersList.append({DeviceParameter::Type::EQ_Q1, "eq_q1"});
+    m_parametersList.append({DeviceParameter::Type::EQ_Q2, "eq_q2"});
+    m_parametersList.append({DeviceParameter::Type::EQ_Q3, "eq_q3"});
+    m_parametersList.append({DeviceParameter::Type::EQ_Q4, "eq_q4"});
+    m_parametersList.append({DeviceParameter::Type::EQ_Q5, "eq_q5"});
 
-    m_parametersList.append({"lpf_volume",       "lv", 36});
-    m_parametersList.append({"hpf_volume",       "hv", 37});
+    m_parametersList.append({DeviceParameter::Type::LPF_VOLUME, "lpf_volume"});
+    m_parametersList.append({DeviceParameter::Type::HPF_VOLUME, "hpf_volume"});
 
-    m_parametersList.append({"hpf_on",       "ho", 38});
-    m_parametersList.append({"lpf_on",       "lo", 39});
+    m_parametersList.append({DeviceParameter::Type::HPF_ON, "hpf_on"});
+    m_parametersList.append({DeviceParameter::Type::LPF_ON, "lpf_on"});
 
-    m_parametersList.append({"presence_on",       "po", 40});
-    m_parametersList.append({"presence_volume",   "pv", 41});
+    m_parametersList.append({DeviceParameter::Type::PRESENCE_ON, "presence_on"});
+    m_parametersList.append({DeviceParameter::Type::PRESENCE_VOLUME, "presence_volume"});
 
-    m_parametersList.append({"eq_pre",       "eqp", 42});
+    m_parametersList.append({DeviceParameter::Type::EQ_PRE, "eq_pre"});
 }
 
 bool DeviceControls::containsParameter(QString paramName)
@@ -74,12 +74,22 @@ QString DeviceControls::getParameterSendString(QString parameterName, quint8 val
     return parameter->sendString(value);
 }
 
-quint8 DeviceControls::getParameterValue(QString parameterName)
+QString DeviceControls::getParameterSendString(DeviceParameter::Type parameterType, quint8 value)
 {
-    auto parameter = findParameter(parameterName);
+    auto parameter = std::find_if(m_parametersList.begin(),
+                           m_parametersList.end(),
+                           [parameterType](DeviceParameter parameter)
+                           {return parameter.parameterType() == parameterType;});
 
-    return parameter->value();
+    return parameter->sendString(value);
 }
+
+// quint8 DeviceControls::getParameterValue(QString parameterName)
+// {
+//     auto parameter = findParameter(parameterName);
+
+//     return parameter->value();
+// }
 
 
 void DeviceControls::setParametersFromRaw(QByteArray ba)
@@ -120,21 +130,28 @@ void DeviceControls::setAllUIValues()
 {
     for(auto it=m_parametersList.begin(); it!=m_parametersList.end(); ++it)
     {
-        if(it->isSigned()) emit sgSetInterfaceValue(it->paramName(), (qint8)it->value());
-        else emit sgSetInterfaceValue(it->paramName(), it->value());
-
+        if(it->isSigned())
+        {
+            //emit sgSetInterfaceValue(it->paramName(), (qint8)it->value());
+            emit sgSetUiDeviceParameter(it->parameterType(), (qint8)it->value());
+        }
+        else
+        {
+           // emit sgSetInterfaceValue(it->paramName(), it->value());
+            emit sgSetUiDeviceParameter(it->parameterType(), it->value());
+        }
     }
 }
 
-void DeviceControls::setParameterValue(QString parameterName, quint8 value)
-{
-    auto parameter = findParameter(parameterName);
+// void DeviceControls::setParameterValue(QString parameterName, quint8 value)
+// {
+//     auto parameter = findParameter(parameterName);
 
-    if(parameter != nullptr)
-        parameter->setValue(value);
-    else
-        qWarning() << "Error setting parameter " << parameterName << "with value " << value;
-}
+//     if(parameter != nullptr)
+//         parameter->setValue(value);
+//     else
+//         qWarning() << "Error setting parameter " << parameterName << "with value " << value;
+// }
 
 DeviceParameter* DeviceControls::findParameter(QString parameterName)
 {

@@ -11,7 +11,7 @@ Item
     id: main
 
     property bool on: true
-    property string nameValue: "amp_on"
+    property int paramType: DeviceParameter.AMP_ON
 
     property int ampType
 
@@ -34,8 +34,10 @@ Item
             {
                 height: parent.height/4
                 width: parent.width
+
                 nameValue: "Volume"
-                nameParam: "amp_volume"
+                paramType: DeviceParameter.AMP_VOLUME
+
                 moduleOn: on
             }
 
@@ -43,16 +45,20 @@ Item
             {
                 height: parent.height/4
                 width: parent.width
+
                 nameValue: "Presence"
-                nameParam: "presence_volume"
+                paramType: DeviceParameter.PRESENCE_VOLUME
+
                 moduleOn: on
             }
             CustomizerSlider
             {
                 height: parent.height/4
                 width: parent.width
+
                 nameValue: "Slave"
-                nameParam: "amp_slave"
+                paramType: DeviceParameter.AMP_SLAVE
+
                 moduleOn: on
             }
 
@@ -71,18 +77,20 @@ Item
 
                 onActivated:
                 {
-                    UiCore.setParameter("amp_type", currentIndex);
+                    //UiCore.setParameter("amp_type", currentIndex);
+                    UiCore.setDevicePatameter(DeviceParameter.AMP_TYPE, currentIndex);
                 }
 
                 Connections
                 {
                     target: UiCore
-                    function onSgSetUIParameter(nameParam, nameValue)
+                    function onSgSetUiDeviceParameter(nameParam, value)
                     {
-                        if(nameParam === "amp_type")
+                        if(paramType === DeviceParameter.AMP_TYPE)
                         {
-                            main.ampType = nameValue
-                            _comboBox.currentIndex = nameValue
+                            main.ampType = value
+                            _comboBox.currentIndex = value
+                            console.log("Settling by sgSetDeviceParameter", paramType);
                         }
                     }
                 }
@@ -99,11 +107,13 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
                 main.on=value
+                console.log("Settling by sgSetDeviceParameter", paramType);
 
                 if(main.visible) // только если модуль есть в устройстве
                     UiCore.setParameter("pa-ps_linked_on", main.on);
@@ -113,9 +123,11 @@ Item
 
     Connections{
         target: _baseModule
+
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }

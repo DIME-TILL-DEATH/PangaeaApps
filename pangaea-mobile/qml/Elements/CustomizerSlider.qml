@@ -10,10 +10,13 @@ Slider
 {
     id: root
 
-    property string nameValue: "DIAL"
+    //---Deprecated
     property string nameParam: "master_volume"
+    //-----------------
+    property string nameValue: "DIAL"
     property string units: " "
 
+    property var paramType
 
     property int valueMin:  0   //Y1
     property int valueMax:  31  //Y2
@@ -55,10 +58,9 @@ Slider
     {
         parent: root.handle
         visible: root.pressed
-        text: yDisp //Math.round(root.value*100) //textValue.text //root.value//root.valueAt(root.position).toFixed(1)
+        text: yDisp
         scale: 1.2
         y : -40
-
     }
 
     background: Rectangle
@@ -130,7 +132,7 @@ Slider
     {
         id: modulName
         anchors.fill: parent
-        text: editabled?("  "+nameValue+"*"):("  " + nameValue)
+        text: editabled ? ("  "+ nameValue +"*") : ("  " + nameValue)
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         leftPadding: 4
@@ -142,7 +144,7 @@ Slider
     {
         if(!softUpdate)
         {
-            UiCore.setParameter(nameParam, Math.round(kVal * root.value * 100 + bVal));
+            UiCore.setDeviceParameter(paramType, Math.round(kVal * root.value * 100 + bVal));
             editabled = true;
         }
         else
@@ -154,18 +156,23 @@ Slider
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUIParameter(nameParam, value)
         {
-            if((root.nameParam.length>0) && nameParam.localeCompare(root.nameParam) === 0)
-            {
-                softUpdate = true;
-                root.value = (nameValue - bVal) / 100 / kVal ;
-                softUpdate = false;
-            }
-
             if( nameParam === "presetEdit" )
             {
-                main.edit = nameValue;
+                main.edit = value;
+            }
+        }
+
+        function onSgSetUiDeviceParameter(paramType, value)
+        {
+            if(paramType === root.paramType)
+            {
+                softUpdate = true;
+                root.value = (value - bVal) / 100 / kVal ;
+                softUpdate = false;
+
+                console.log("Settling by sgSetDeviceParameter", paramType)
             }
         }
     }

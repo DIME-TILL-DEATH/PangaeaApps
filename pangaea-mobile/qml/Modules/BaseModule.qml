@@ -12,7 +12,7 @@ Rectangle {
 
     property string moduleName: "Module name"
     property string moduleDescription: "Description"
-    property string nameValue
+    //property string nameValue
 
     property bool showDescription : true
 
@@ -156,11 +156,9 @@ Rectangle {
             }
             MouseArea{
                 anchors.fill: parent
-
                 z: 5
                 onClicked: {
-                    sgModuleOnOf()
-                    UiCore.setParameter(_main.parent.nameValue, _main.parent.on) // Или хранить переменную внутри? Для меньшей связанности
+                    sgModuleOnOf();
                 }
             }
         }

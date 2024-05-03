@@ -12,6 +12,7 @@
 
 #include "activityresultmanager.h"
 
+#include "deviceparameter.h"
 #include "firmware.h"
 #include "devicedescription.h"
 
@@ -28,6 +29,11 @@ public:
     Q_INVOKABLE void setupApplication();
 
     Q_INVOKABLE void setParameter(QString name, quint8 val);
+    // TODO: а впрямую вызвать sgSetDeviceParameter из QML нельзя?
+    Q_INVOKABLE void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
+    {
+        emit sgSetDeviceParameter(deviceParameterType, value);
+    };
     Q_INVOKABLE void restoreParameter(QString name);
 
     Q_INVOKABLE void readAll(void);
@@ -80,6 +86,7 @@ private:
 signals:
     void sgTranslatorChanged(QString langauageCode);
 
+    void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);
     void sgUpdateAppSetting(QString settingName, QVariant settingValue);
@@ -92,6 +99,7 @@ signals:
     //-----------------------------------------------
     void sgReadAllParameters();
     void sgSetParameter(QString name, quint8 value);
+    void sgSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
     void sgRestoreValue(QString name);
     void sgSetImpuls (QString filePath, QString fileName);
     void sgSetFirmware (QString fullFilePath);

@@ -23,6 +23,7 @@ public:
     explicit Core(QObject *parent = nullptr);
 
     void setParameter(QString name, quint8 value);
+    void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
     // TODO: пока умеет только Preset и bank!!!! Дописать
     void restoreValue(QString name);
     void readAllParameters();
@@ -75,8 +76,8 @@ private:
     QSettings* appSettings;
 
     QTimer *timer;
-
-    bool enableRecieve{true};
+    
+    bool recieveEnabled{true};
     quint8 sendCount{0};
     QList<QByteArray> commandsPending;
     QList<QByteArray> commandsSended;
@@ -104,6 +105,7 @@ signals:
     void sgFirmwareVersionInsufficient(Firmware *minimalFirmware, Firmware *actualFirmware);
     void sgRequestNewestFirmware(Firmware* actualFirmware);
 
+    void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
     void sgSetUIParameter(QString nameParam, qint32 value);
     void sgSetUIText(QString nameParam, QString value);
 

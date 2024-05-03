@@ -14,7 +14,6 @@ Item
     property bool on: true
 
     property string nameValue: qsTr("Preset volume")
-    property string nameParam: "master_volume"
 
     property int valueMin:  0
     property int valueMax:  31
@@ -50,7 +49,7 @@ Item
                 bottomLineEnabled: false
 
                 nameValue: main.nameValue
-                nameParam: main.nameParam
+                paramType: DeviceParameter.MASTER_VOLUME
             }
         }
     }

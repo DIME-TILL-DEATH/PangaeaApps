@@ -15,6 +15,7 @@ CustomizerSliderV
     property int qControlActive
 
     nameParam: "eq_volume1"
+
     dispMin: -15
     dispMax: 15
 

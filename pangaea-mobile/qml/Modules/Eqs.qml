@@ -13,7 +13,7 @@ Item
     signal extVisible
 
     property string name: "EQ"
-    property string nameValue: "eq_on"
+    property int paramType: DeviceParameter.EQ_ON
 
     property bool on: true
     property bool isPrePostVisible: true
@@ -106,7 +106,7 @@ Item
 
                             onClicked: {
                                 isPreEQ = !isPreEQ
-                                 UiCore.setParameter("eq_pre", isPreEQ)
+                                UiCore.setDeviceParameter(DeviceParameter.EQ_PRE, isPreEQ);
                             }
                         }
 
@@ -170,11 +170,31 @@ Item
         }
     }
 
+    Connections
+    {
+        target: UiCore
+        function onSgSetUiDeviceParameter(paramType, value)
+        {
+            if(paramType === main.paramType)
+            {
+                main.on=value
+                console.log("Settling by sgSetDeviceParameter", paramType);
+            }
+
+            if(paramType === DeviceParameter.EQ_PRE)
+            {
+                isPreEQ=value
+                console.log("Settling by sgSetDeviceParameter", paramType);
+            }
+        }
+    }
+
     Connections{
         target: _baseModule
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }

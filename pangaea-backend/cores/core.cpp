@@ -18,7 +18,8 @@ Core::Core(QObject *parent) : QObject(parent)
     appSettings = new QSettings();
 #endif
 
-    QObject::connect(&deviceControls, &DeviceControls::sgSetInterfaceValue, this, &Core::sgSetUIParameter);
+   // QObject::connect(&deviceControls, &DeviceControls::sgSetInterfaceValue, this, &Core::sgSetUIParameter);
+    QObject::connect(&deviceControls, &DeviceControls::sgSetUiDeviceParameter, this, &Core::sgSetUiDeviceParameter);
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
@@ -29,7 +30,7 @@ void Core::slReadyToDisconnect()
 {
     timer->stop();
     commandsPending.clear();
-    enableRecieve = true;
+    recieveEnabled = true;
 
     emit sgReadyTodisconnect();
 }
@@ -52,7 +53,7 @@ void Core::parseInputData(QByteArray ba)
     {
         DeviceAnswer recievedCommand = commandWorker.popAnswer();
         QList<QByteArray> parseResult = recievedCommand.parseResult();
-        enableRecieve = recievedCommand.isEnableRecieve();
+        recieveEnabled = recievedCommand.isEnableRecieve();
 
         switch(recievedCommand.answerType())
         {
@@ -334,7 +335,7 @@ void Core::parseInputData(QByteArray ba)
                             currentPreset.setImpulseName(wavName);
                         }
                     }
-                    enableRecieve = false; // команда cc обрабатывается двумя парсерами. Этим и getIr при полном выполнении
+                        recieveEnabled = false; // команда cc обрабатывается двумя парсерами. Этим и getIr при полном выполнении
                 }
                 break;
             }
@@ -377,7 +378,7 @@ void Core::parseInputData(QByteArray ba)
             case AnswerType::ccAck:
             {
                 emit sgSetUIParameter("ir_upload_finished", true);
-                enableRecieve=false;
+                recieveEnabled=false;
                 timer->stop(); // wait for impulse apllying (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
                 qInfo() << recievedCommand.description();
                 break;
@@ -407,7 +408,7 @@ void Core::parseInputData(QByteArray ba)
             {
                 if(!fwUpdate)
                 {
-                    enableRecieve = false;
+                    recieveEnabled = false;
                 }
                 qInfo() << recievedCommand.description();
                 break;
@@ -468,7 +469,7 @@ void Core::parseInputData(QByteArray ba)
             }
         }
 
-        if(enableRecieve)
+            if(recieveEnabled)
         {
             if(commandsSended.length()>0)
                 commandsSended.removeFirst();
@@ -639,7 +640,7 @@ void Core::uploadFirmware(QByteArray firmware)
         timer->setInterval(1000);
 
         fwUpdate = true;
-        enableRecieve = false;
+        recieveEnabled = false;
 
         QByteArray baSend;
         baSend.append("fwu\r");
@@ -700,7 +701,6 @@ void Core::saveChanges()
     {
         if(controlledDevice.deviceType()==DeviceType::CP16 || controlledDevice.deviceType()==DeviceType::CP16PA)
             pushCommandToQueue("pwsd");
-//            pushCommandToQueue("preset_delete_wavs");
         else
             pushCommandToQueue("dcc");
 
@@ -926,13 +926,6 @@ void Core::setParameter(QString name, quint8 value)
         sendStr += deviceControls.getParameterSendString("amp_on", value);
     }
 
-    if(deviceControls.containsParameter(name))
-    {
-        sendStr = deviceControls.getParameterSendString(name, value);
-        isPresetEdited = true;
-        emit sgSetUIParameter ("preset_edited", isPresetEdited);
-    }
-
     if(name=="cabinet_enable")
     {
         //TODO в device controls обновлять все поля пресета, а не только это
@@ -941,13 +934,23 @@ void Core::setParameter(QString name, quint8 value)
 
     if(sendStr.length()>0)
     {
-        enableRecieve = false;
+        recieveEnabled = false;
         emit sgWriteToInterface(sendStr.toUtf8());
     }
     else
     {
         qWarning() << "Send string empty! Parameter doesn't exist";
     }
+}
+
+void Core::setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
+{
+    QString sendStr = deviceControls.getParameterSendString(deviceParameterType, value);
+    isPresetEdited = true;
+    emit sgSetUIParameter ("preset_edited", isPresetEdited);
+
+    recieveEnabled = false;
+    emit sgWriteToInterface(sendStr.toUtf8());
 }
 
 void Core::restoreValue(QString name)
@@ -1058,7 +1061,7 @@ void Core::recieveTimeout()
     {
         QByteArray commandWithoutAnswer = commandsSended.first();
 
-        if(enableRecieve)
+        if(recieveEnabled)
         {
             sendCount = 0;
         }
@@ -1093,7 +1096,7 @@ void Core::recieveTimeout()
 void Core::sendCommand(QByteArray val)
 {  
     symbolsSended += val.size();
-    enableRecieve = false;
+    recieveEnabled = false;
     emit sgWriteToInterface(val);
 
     updateProgressBar();

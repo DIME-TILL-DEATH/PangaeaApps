@@ -13,7 +13,7 @@ Item
     id: main
 
     property bool on: true
-    property string nameValue: "cabinet_enable"
+    property int paramType: DeviceParameter.CABINET_ENABLE
 
     BaseModule{
         id: _baseModule
@@ -89,12 +89,12 @@ Item
             }
         }
 
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === main.nameValue)
+            if(paramType === main.paramType)
             {
                 main.on=value
-
+                console.log("Settling by sgSetDeviceParameter", paramType);
             }
         }
     }
@@ -104,6 +104,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }

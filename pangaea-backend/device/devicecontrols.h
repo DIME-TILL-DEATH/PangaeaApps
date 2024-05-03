@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QMap>
 #include <QDebug>
-#include <memory>
 
 #include "deviceparameter.h"
 
@@ -17,10 +16,11 @@ public:
     bool containsParameter(QString paramName);
 
     QString getParameterSendString(QString parameterName, quint8 value);
+    QString getParameterSendString(DeviceParameter::Type parameterType, quint8 value);
 
     quint8 getParameterValue(QString parameterName);
 
-    void setParameterValue(QString parameterName, quint8 value);
+    // void setParameterValue(QString parameterName, quint8 value);
     void setParameterValue(quint8 numberInArray, quint8 value);
 
     void setParametersFromRaw(QByteArray ba);
@@ -28,10 +28,11 @@ public:
     void setAllUIValues();
 
 signals:
-    void sgSetInterfaceValue(QString nameParam, qint32 inValue);
+   // void sgSetInterfaceValue(QString nameParam, qint32 inValue);
+    void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, quint32 value);
 
 private:
-    QList<DeviceParameter> m_parametersList;
+    QList<DeviceParameter> m_parametersList; // TODO QMap удобнее
 
     DeviceParameter* findParameter(QString parameterName);
     DeviceParameter* findParameter(quint8 numberInArray);

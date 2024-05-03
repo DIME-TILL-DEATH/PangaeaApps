@@ -4,6 +4,8 @@ import QtQuick.Controls 2.12
 import StyleSettings 1.0
 import Elements 1.0
 
+import CppObjects
+
 Item
 {
     id: main
@@ -57,7 +59,8 @@ Item
 
                     valueMin: -100
                     valueMax: 100
-                    nameParam: "eq_q1"
+
+                    paramType: DeviceParameter.EQ_Q1
                     visible: (eqsArray.nomActiv==0)
                 }
                 CustomizerSlider
@@ -72,7 +75,9 @@ Item
 
                     valueMin: -100
                     valueMax: 100
-                    nameParam:"eq_q2"
+
+                    paramType: DeviceParameter.EQ_Q2
+
                     visible: (eqsArray.nomActiv==1)
                 }
                 CustomizerSlider
@@ -87,7 +92,9 @@ Item
 
                     valueMin: -100
                     valueMax: 100
-                    nameParam:"eq_q3"
+
+                    paramType: DeviceParameter.EQ_Q3
+
                     visible: (eqsArray.nomActiv==2)
                 }
                 CustomizerSlider
@@ -102,7 +109,9 @@ Item
 
                     valueMin: -100
                     valueMax: 100
-                    nameParam:"eq_q4"
+
+                    paramType: DeviceParameter.EQ_Q4
+
                     visible: (eqsArray.nomActiv==3)
                 }
                 CustomizerSlider
@@ -117,7 +126,9 @@ Item
 
                     valueMin: -100
                     valueMax: 100
-                    nameParam:"eq_q5"
+
+                    paramType: DeviceParameter.EQ_Q5
+
                     visible: (eqsArray.nomActiv==4)
                 }
             }
@@ -237,7 +248,7 @@ Item
                         height: parent.height
                         width: eqsArray.maxWidth * 0.9
 
-                        nameParam: "eq_volume1"
+                        paramType: DeviceParameter.EQ_VOLUME1
                         qSetting: main.q1
                         qControlActive: 0
                     }
@@ -251,7 +262,7 @@ Item
                         height: parent.height
                         width: eqsArray.maxWidth * 0.9
 
-                        nameParam: "eq_volume2"
+                        paramType: DeviceParameter.EQ_VOLUME2
                         qSetting: main.q2
                         qControlActive: 1
                     }
@@ -265,7 +276,7 @@ Item
                         height: parent.height
                         width: eqsArray.maxWidth * 0.9
 
-                        nameParam: "eq_volume3"
+                        paramType: DeviceParameter.EQ_VOLUME3
                         qSetting: main.q3
                         qControlActive: 2
                     }
@@ -279,7 +290,7 @@ Item
                         height: parent.height
                         width: eqsArray.maxWidth * 0.9
 
-                        nameParam: "eq_volume4"
+                        paramType: DeviceParameter.EQ_VOLUME4
                         qSetting: main.q4
                         qControlActive: 3
                     }
@@ -293,7 +304,7 @@ Item
                         height: parent.height
                         width: eqsArray.maxWidth * 0.95
 
-                        nameParam: "eq_volume5"
+                        paramType: DeviceParameter.EQ_VOLUME5
                         qSetting: main.q5
                         qControlActive: 4
                     }
@@ -314,7 +325,7 @@ Item
                 {
                     nameValue: "Central Frequency"
                     anchors.fill: parent
-                    nameParam: "eq_freq1"
+                    paramType: DeviceParameter.EQ_FREQ1
                     dispMin: 20
                     dispMax: 220
 
@@ -327,7 +338,7 @@ Item
                 {
                     nameValue: "Central Frequency"
                     anchors.fill: parent
-                    nameParam: "eq_freq2"
+                    paramType: DeviceParameter.EQ_FREQ2
                     dispMin: 260
                     dispMax: 460
 
@@ -340,7 +351,7 @@ Item
                 {
                     nameValue: "Central Frequency"
                     anchors.fill: parent
-                    nameParam: "eq_freq3"
+                    paramType: DeviceParameter.EQ_FREQ3
                     dispMin: 600
                     dispMax: 1000
 
@@ -353,7 +364,7 @@ Item
                 {
                     nameValue: "Central Frequency"
                     anchors.fill: parent
-                    nameParam: "eq_freq4"
+                    paramType: DeviceParameter.EQ_FREQ4
                     dispMin: 1000
                     dispMax: 3000
 
@@ -366,7 +377,7 @@ Item
                 {
                     nameValue: "Central Frequency"
                     anchors.fill: parent
-                    nameParam: "eq_freq5"
+                    paramType: DeviceParameter.EQ_FREQ5
                     dispMin: 1000
                     dispMax: 11000
 

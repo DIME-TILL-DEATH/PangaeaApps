@@ -97,6 +97,8 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/translations");
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
 
+    qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
+
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);  
@@ -111,6 +113,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&uiCore, &UICore::sgReadAllParameters, core, &Core::readAllParameters);
     QObject::connect(&uiCore, &UICore::sgSetParameter, core, &Core::setParameter);
+    QObject::connect(&uiCore, &UICore::sgSetDeviceParameter, core, &Core::setDeviceParameter);
     QObject::connect(&uiCore, &UICore::sgRestoreValue, core, &Core::restoreValue);
     QObject::connect(&uiCore, &UICore::sgSetImpuls, core, &Core::setImpulse);
     QObject::connect(&uiCore, &UICore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
@@ -120,6 +123,7 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UICore::sgSw4Enable, core, &Core::sw4Enable);
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UICore::sgSetUIParameter);
+    QObject::connect(core, &Core::sgSetUiDeviceParameter, &uiCore, &UICore::sgSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UICore::sgSetUIText);
     QObject::connect(core, &Core::sgPresetChangeStage, &uiCore, &UICore::sgPresetChangeStage);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UICore::sgSetProgress);

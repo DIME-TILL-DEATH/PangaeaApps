@@ -11,7 +11,7 @@ Item
     id: main
 
     property bool on: true
-    property string nameValue: "preamp_on"
+    property int paramType: DeviceParameter.PREAMP_ON
 
     BaseModule{
         id: _baseModule
@@ -25,48 +25,52 @@ Item
             width: parent.width
             CustomizerSlider
             {
-                nameParam: "preamp_high"
-                valueMin: (-64)
-                valueMax: (63)
-                dispMin:  (0)
-                dispMax:  (127)
-                height: parent.height/4
-                width: parent.width
+                paramType: DeviceParameter.PREAMP_HIGH
                 nameValue: "High"
-                moduleOn: on
-            }
 
-            CustomizerSlider
-            {
-                nameParam: "preamp_mid"
                 valueMin: (-64)
                 valueMax: (63)
                 dispMin:  (0)
                 dispMax:  (127)
                 height: parent.height/4
                 width: parent.width
+                moduleOn: on
+            }
+
+            CustomizerSlider
+            {
+                paramType: DeviceParameter.PREAMP_MID
                 nameValue: "Mid"
-                moduleOn: on
-            }
-            CustomizerSlider
-            {
-                nameParam: "preamp_low"
+
                 valueMin: (-64)
                 valueMax: (63)
                 dispMin:  (0)
                 dispMax:  (127)
                 height: parent.height/4
                 width: parent.width
+                moduleOn: on
+            }
+            CustomizerSlider
+            {
+                paramType: DeviceParameter.PREAMP_LOW
                 nameValue: "Low"
+
+                valueMin: (-64)
+                valueMax: (63)
+                dispMin:  (0)
+                dispMax:  (127)
+                height: parent.height/4
+                width: parent.width
                 moduleOn: on
             }
 
             CustomizerSlider
             {
-                nameParam: "preamp_volume"
+                paramType: DeviceParameter.PREAMP_VOLUME
+                nameValue: "Volume"
+
                 height: parent.height/4
                 width: parent.width
-                nameValue: "Volume"
                 bottomLineEnabled: false
                 moduleOn: on
             }
@@ -76,12 +80,12 @@ Item
     Connections
     {
         target: UiCore
-
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
                 main.on=value
+                console.log("Settling by sgSetDeviceParameter", paramType);
             }
         }
     }
@@ -91,6 +95,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }

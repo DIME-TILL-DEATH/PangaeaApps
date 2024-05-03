@@ -10,9 +10,9 @@ Item
 {
     id: main
 
-    property string name:     "PS"
+    property string name: "PS"
     property bool on: true
-    property string nameValue: "presence_on"
+    property int paramType: DeviceParameter.PRESENCE_ON
 
     BaseModule{
         id: _baseModule
@@ -22,7 +22,7 @@ Item
 
         showDescription: false
 
-        contentItem:     Row
+        contentItem: Row
         {
             anchors.fill: parent
             spacing: 0
@@ -35,8 +35,10 @@ Item
                 {
                     height: parent.height
                     width: parent.width
+
                     nameValue: "Presence"
-                    nameParam: "presence_volume"
+                    paramType: DeviceParameter.PRESENCE_VOLUME
+
                     bottomLineEnabled: false
                     moduleOn: on
                 }
@@ -47,21 +49,22 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
                 main.on=value
+                console.log("Settling by sgSetDeviceParameter", paramType);
             }
         }
     }
-
 
     Connections{
         target: _baseModule
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }
