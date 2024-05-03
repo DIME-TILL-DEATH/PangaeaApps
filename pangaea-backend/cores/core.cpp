@@ -427,7 +427,7 @@ void Core::parseInputData(QByteArray ba)
                 if(fwUpdate)
                 {
                     emit sgSetUIParameter("fw_update_enabled", false);
-                    emit sgSetUIParameter("slider_enabled", 1);
+                    // emit sgSetUIParameter("slider_enabled", 1);
                 }
                 else
                 {
@@ -435,7 +435,7 @@ void Core::parseInputData(QByteArray ba)
                     emit sgSetUIParameter("format_complete", true);
                 }
                 qInfo() << recievedCommand.description();
-                emit sgSetUIParameter("slider_enabled", 1);
+                // emit sgSetUIParameter("slider_enabled", 1);
                 emit sgImmediatelyDisconnect();
                 break;
             }
@@ -595,7 +595,7 @@ void Core::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QStr
     pushCommandToQueue(baSend);
 
     // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
-    emit sgSetUIParameter("cabinet_enable", true);
+    emit sgSetUiDeviceParameter(DeviceParameter::Type::CABINET_ENABLE, true);
 
     processCommands();
 }
@@ -636,7 +636,7 @@ void Core::uploadFirmware(QByteArray firmware)
         const uint32_t sizeBlock = 1024;
 
         emit sgSetUIParameter("fw_update_enabled", true);
-        emit sgSetUIParameter("slider_enabled", 0);
+        // emit sgSetUIParameter("slider_enabled", 0);
         timer->setInterval(1000);
 
         fwUpdate = true;
@@ -909,7 +909,7 @@ void Core::setParameter(QString name, quint8 value)
     if(name==("format"))
     {
         emit sgSetUIParameter("wait", true);
-        emit sgSetUIParameter("slider_enabled", 0);
+        // emit sgSetUIParameter("slider_enabled", 0);
 
         isFormatting = true;
         timer->setInterval(10000);
@@ -1053,7 +1053,7 @@ void Core::recieveTimeout()
     if(isFormatting) // Format timeout
     {
         emit sgSetUIParameter("format_error", 1);
-        emit sgSetUIParameter("slider_enabled", 1);
+        // emit sgSetUIParameter("slider_enabled", 1);
         isFormatting = false;
     }
 
@@ -1082,7 +1082,7 @@ void Core::recieveTimeout()
                 {
                     fwUpdate = false;
                     //TODO что за slider_enabled в мобильном? wait заменяет?
-                    emit sgSetUIParameter("slider_enabled", 1);
+                    // emit sgSetUIParameter("slider_enabled", 1);
                 }
 
                 commandsPending.clear();
