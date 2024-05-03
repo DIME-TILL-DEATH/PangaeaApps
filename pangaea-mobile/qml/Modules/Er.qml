@@ -51,13 +51,13 @@ Item
 
                 on: main.on
 
-                currentIndex: currentType
+                currentIndex: main.currentType
 
                 model: ["SHORT","MEDIUM","LONG"]
 
                 onActivated:
                 {
-                    UiCore.setDevicePatameter(DeviceParameter.EARLY_TYPE, currentIndex);
+                    UiCore.setDeviceParameter(DeviceParameter.EARLY_TYPE, currentIndex);
                 }
             }
         }
@@ -78,7 +78,7 @@ Item
             if(paramType === DeviceParameter.EARLY_TYPE)
             {
                 main.currentType = value
-                console.log("Settling by sgSetDeviceParameter", paramType);
+                console.log("Settling by sgSetDeviceParameter", paramType, "early type:", value);
             }
         }
     }

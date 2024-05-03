@@ -73,26 +73,11 @@ Item
 
                 model: ["01.PP 6L6","02.PP EL34","03.SE 6L6","04.SE EL34","05.AMT TC-3","06.CALIF","07.BRIT M","08.BRIT L","09.DEFAULT","10.CALIF MOD","11.CALIF VINT","12.PVH 01","13.PVH 02","14.PVH 03","15.PVH 04"]
 
-                currentIndex: ampType
+                currentIndex: main.ampType
 
                 onActivated:
                 {
-                    //UiCore.setParameter("amp_type", currentIndex);
-                    UiCore.setDevicePatameter(DeviceParameter.AMP_TYPE, currentIndex);
-                }
-
-                Connections
-                {
-                    target: UiCore
-                    function onSgSetUiDeviceParameter(nameParam, value)
-                    {
-                        if(paramType === DeviceParameter.AMP_TYPE)
-                        {
-                            main.ampType = value
-                            _comboBox.currentIndex = value
-                            console.log("Settling by sgSetDeviceParameter", paramType);
-                        }
-                    }
+                    UiCore.setDeviceParameter(DeviceParameter.AMP_TYPE, currentIndex);
                 }
             }
         }
@@ -117,6 +102,12 @@ Item
 
                 if(main.visible) // только если модуль есть в устройстве
                     UiCore.setParameter("pa-ps_linked_on", main.on);
+            }
+
+            if(paramType === DeviceParameter.AMP_TYPE)
+            {
+                main.ampType = value
+                console.log("Settling by sgSetDeviceParameter", paramType);
             }
         }
     }

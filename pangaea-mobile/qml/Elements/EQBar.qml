@@ -1,5 +1,4 @@
 import QtQuick 2.15
-//import QtGraphicalEffects 1.0
 import Qt5Compat.GraphicalEffects
 
 import StyleSettings 1.0
