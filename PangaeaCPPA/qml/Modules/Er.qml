@@ -1,5 +1,5 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
+//import QtQuick.Controls 2.15
 
 import Elements 1.0
 
@@ -9,7 +9,7 @@ Item {
     id: main
 
     property string name: "ER"
-    property string nameValue: "early_on"
+    property int paramType: DeviceParameter.EARLY_ON
 
     property bool on: true
 
@@ -17,7 +17,7 @@ Item {
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        paramType: main.paramType
 
         on: main.on
 
@@ -59,7 +59,7 @@ Item {
 
                 name: "VOLUME"
                 checkable: false
-                nameValue: "early_volume"
+                paramType: DeviceParameter.EARLY_VOLUME
             }
 
             Item
@@ -76,11 +76,11 @@ Item {
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=nameValue;
+                main.on = value;
             }
         }
     }
@@ -91,6 +91,7 @@ Item {
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

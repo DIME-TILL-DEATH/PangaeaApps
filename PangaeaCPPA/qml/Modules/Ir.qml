@@ -9,7 +9,7 @@ Item
     id: main
 
     property string name: "IR"
-    property string nameValue: "cabinet_enable"
+    property int paramType: DeviceParameter.CABINET_ENABLE
 
     property bool on: true
 
@@ -17,7 +17,7 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        paramType: main.paramType
 
         on: main.on
 
@@ -46,7 +46,7 @@ Item
                 enabled: main.on
 
                 onChValue: value => {
-                    UiCore.setParameter(nameValue, !value);
+                    UiCore.setDeviceParameter(main.paramType, !value);
                 }
             }
             Item
@@ -60,17 +60,17 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=nameValue
+                main.on = value;
             }
         }
 
-        function onSgSetParameter(nameParam, value)
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if((paramType === main.paramType))
             {
                 main.on=value
             }
@@ -82,6 +82,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

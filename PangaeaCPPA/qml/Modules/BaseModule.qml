@@ -11,7 +11,7 @@ Rectangle {
     anchors.fill: parent
 
     property string moduleName: "MN"
-    property string nameValue: ""
+    property int paramType
 
     property bool on: false
     property bool isHeaderVisible: true
@@ -86,7 +86,6 @@ Rectangle {
         {
             material.start(mouseX, mouseY)
             sgModuleOnOf()
-            UiCore.setParameter(root.parent.nameValue, root.parent.on) // Или хранить переменную внутри? Для меньшей связанности
         }
     }
 

@@ -47,7 +47,7 @@ Item
             width:  row.widthWithoutSpase/15*1
 
             text: "BANK"
-            nameValue: "bank"
+            paramType: DeviceParameter.BANK
             onChPreset: UiCore.setParameter("set_preset_change", presetNom)
             enabled: main.editable
         }
@@ -125,7 +125,8 @@ Item
             width:  row.widthWithoutSpase/15*1
 
             text: "PRESET"
-            nameValue: "preset"
+            paramType: DeviceParameter.PRESET
+
             onChPreset: UiCore.setParameter("set_preset_change", presetNom)
             enabled: main.editable
         }
@@ -150,8 +151,18 @@ Item
 
         function onSgSetUIParameter(nameParam, value)
         {
-            if(nameParam===("type_dev"))
-            {              
+            if(nameParam === "compare_state")
+            {
+                main.compareState = value;
+            }
+        }
+
+        function onSgSetUiDeviceParameter(paramType, value)
+        {
+            switch(paramType)
+            {
+            case DeviceParameter.DEVICE_TYPE:
+            {
                 switch (value)
                 {
                     case DeviceType.CP100:
@@ -181,22 +192,20 @@ Item
                         break;
                     }
                 }
+                break;
             }
 
-            if(nameParam==="cabinet_enable")
+            case DeviceParameter.CABINET_ENABLE:
             {
                 main.irOn = value;
+                break;
             }
-
-            if(nameParam === "compare_state")
-            {
-                main.compareState = value;
             }
         }
 
-        function onSgSetParameter(nameParam, value)
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if(nameParam==="cabinet_enable")
+            if(paramType === DeviceParameter.CABINET_ENABLE)
             {
                 main.irOn = value;
             }

@@ -81,6 +81,8 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Basic");
 #endif
 
+    qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
+
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
@@ -98,6 +100,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&uiCore, &UiDesktopCore::sgReadAllParameters, core, &Core::readAllParameters);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetParameter, core, &Core::setParameter);
+    QObject::connect(&uiCore, &UiDesktopCore::sgSetDeviceParameter, core, &Core::setDeviceParameter);
     QObject::connect(&uiCore, &UiDesktopCore::sgRestoreValue, core, &Core::restoreValue);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetImpuls, core, &Core::setImpulse);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
@@ -107,6 +110,7 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiDesktopCore::sgSw4Enable, core, &Core::sw4Enable);
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
+    QObject::connect(core, &Core::sgSetUiDeviceParameter, &uiCore, &UiDesktopCore::sgSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
     QObject::connect(core, &Core::sgPresetChangeStage, &uiCore, &UiDesktopCore::sgPresetChangeStage);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);

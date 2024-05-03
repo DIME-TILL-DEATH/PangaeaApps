@@ -8,7 +8,7 @@ Item
     id: main
 
     property string name
-    property string nameValue: "eq_on"
+    property int paramType: DeviceParameter.EQ_ON
 
     property bool on
 
@@ -16,7 +16,7 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        paramType: main.paramType
 
         isHeaderVisible: false
         on: true
@@ -61,17 +61,18 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=value
+                main.on = value;
             }
         }
 
-        function onSgSetParameter(nameParam, value)
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if((paramType === main.paramType))
             {
                 main.on=value
             }
@@ -83,6 +84,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

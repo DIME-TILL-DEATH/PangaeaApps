@@ -1,7 +1,7 @@
 import QtQuick 2.15
-//import QtQuick.Controls 1.5
 
 import Elements 1.0
+import CppObjects
 
 Item
 {
@@ -41,7 +41,7 @@ Item
 
                 enabled: main.on
                 name: "VOLUME"
-                nameValue: "master_volume"
+                paramType: DeviceParameter.MASTER_VOLUME
                 checkable: false
             }
 

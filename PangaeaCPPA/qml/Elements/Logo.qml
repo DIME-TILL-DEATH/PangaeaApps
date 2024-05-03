@@ -38,10 +38,13 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam===("type_dev"))
-                main.deviceType = value
+            if(paramType === DeviceParameter.DEVICE_TYPE)
+            {
+               main.deviceType = value
+            }
         }
     }
 }

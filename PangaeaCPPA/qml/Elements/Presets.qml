@@ -15,7 +15,7 @@ Item
     property int    value:     tumb.currentIndex
     property int maxMapRow: 10
     property string text:  "TEXT"
-    property string nameValue:  ""
+    property int paramType
     property bool editable: true
 
     signal chPreset()
@@ -154,20 +154,17 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if((main.nameValue.length>0)&&(nameParam===main.nameValue))
-                tumb.currentIndex=value;
 
-            if(nameParam===("type_dev"))
+        function onSgSetUiDeviceParameter(paramType, value)
+        {
+            if(paramType === main.paramType)
             {
-                switch (value)
-                {
-                case DeviceType.CP100: maxMapRow = 10;  break;
-                case DeviceType.CP100PA: maxMapRow = 10;  break;
-                case DeviceType.CP16: maxMapRow = 4; break;
-                case DeviceType.CP16PA: maxMapRow = 4; break;
-                }
+               tumb.currentIndex=value;
+            }
+
+            if(paramType === DeviceParameter.MAP_SIZE)
+            {
+                maxMapRow = value
             }
         }
     }

@@ -111,21 +111,12 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === "bank")
+            switch(paramType)
             {
-                currentBank = value;
-                mapHeadBank.curVal = value
-            }
-
-            if(nameParam === "preset")
-            {
-                currentPreset = value;
-                mapHeadPreset.curVal = value
-            }
-
-            if(nameParam===("type_dev"))
+            case DeviceParameter.MAP_SIZE:
             {
                 switch (value)
                 {
@@ -134,6 +125,23 @@ Item
                     case DeviceType.CP16: maxMapRow = 4; break;
                     case DeviceType.CP16PA: maxMapRow = 4; break;
                 }
+                console.log("maxMaprow, hard:", maxMapRow);
+                maxMapRow = value;
+                console.log("maxMaprow, soft:", maxMapRow);
+                break;
+            }
+            case DeviceParameter.BANK:
+            {
+                currentBank = value;
+                mapHeadBank.curVal = value
+                break;
+            }
+
+            case DeviceParameter.PRESET:
+            {
+                currentPreset = value;
+                mapHeadPreset.curVal = value
+            }
             }
         }
     }

@@ -342,7 +342,18 @@ ApplicationWindow
             if(nameParam === "editable")
                 main.editable=value
 
-            if(nameParam === "type_dev")
+            if(nameParam === "fw_update_enabled")
+            {
+                if(!value)
+                {
+                    operationCompleteDialog.open();
+                }
+            }
+        }
+
+        function onSgSetUiDeviceParameter(paramType, value)
+        {
+            if(paramType === DeviceParameter.DEVICE_TYPE)
             {
                 switch (value)
                 {
@@ -351,14 +362,6 @@ ApplicationWindow
                 case DeviceType.CP16: devName = "CP-16M";  break;
                 case DeviceType.CP16PA: devName = "CP-16PA"; break;
                 case DeviceType.CP100PA: devName = "CP-100PA"; break;
-                }
-            }
-
-            if(nameParam === "fw_update_enabled")
-            {
-                if(!value)
-                {
-                    operationCompleteDialog.open();
                 }
             }
         }

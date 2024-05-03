@@ -8,7 +8,7 @@ Item
     id: main
 
     property string name:     "PS"
-    property string nameValue: "presence_on"
+    property int paramType: DeviceParameter.PRESENCE_ON
 
     property bool on: true
 
@@ -18,7 +18,7 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        paramType: main.paramType
 
         on: main.on
 
@@ -47,7 +47,7 @@ Item
 
                 enabled: main.on
                 name: "PRESENCE"
-                nameValue: "presence_volume"
+                paramType: DeviceParameter.PRESENCE_VOLUME
                 checkable: false
                 onChValue: function (value) {
                     main.chPresence(value)
@@ -65,11 +65,11 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=nameValue
+                main.on = value;
             }
         }
     }
@@ -80,6 +80,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

@@ -28,7 +28,6 @@ SOURCES += \
     device/answerworker.cpp \
     device/device.cpp \
     device/deviceanswer.cpp \
-    device/devicecontrols.cpp \
     device/deviceparameter.cpp \
     device/firmware.cpp \
     device/preset.cpp \
@@ -50,7 +49,6 @@ HEADERS += \
     device/defines.h \
     device/device.h \
     device/deviceanswer.h \
-    device/devicecontrols.h \
     device/deviceparameter.h \
     device/firmware.h \
     device/preset.h \

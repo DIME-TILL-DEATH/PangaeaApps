@@ -8,7 +8,7 @@ Item
     id: main
 
     property string name:     "PA"
-    property string nameValue: "amp_on"
+    property int paramType: DeviceParameter.AMP_ON
 
     property bool on: false
 
@@ -16,7 +16,7 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        paramType: main.paramType
 
         on: main.on
 
@@ -56,7 +56,7 @@ Item
                 enabled: main.on
                 name: "VOLUME"
                 checkable: false
-                nameValue: "amp_volume"
+                paramType: DeviceParameter.AMP_VOLUME
             }
 
             Dial
@@ -67,7 +67,7 @@ Item
                 id: presence
                 enabled: main.on
                 name: "PRESENCE"
-                nameValue: "presence_volume"
+                paramType: DeviceParameter.PRESENCE_VOLUME
                 checkable: false
             }
 
@@ -81,7 +81,7 @@ Item
                 enabled: main.on
                 name: "SLAVE"
                 checkable: false
-                nameValue: "amp_slave"
+                paramType: DeviceParameter.AMP_SLAVE
                 valueMin:  1
                 dispMin:   1
             }
@@ -103,11 +103,12 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=nameValue
+                main.on = value;
 
                 if(main.visible) // только если модуль есть в устройстве
                     UiCore.setParameter("pa-ps_linked_on", main.on);
@@ -121,6 +122,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

@@ -1,14 +1,14 @@
 import QtQuick 2.15
-//import QtQuick.Controls 1.5
 
 import Elements 1.0
+import CppObjects
 
 Item
 {
     id: main
 
     property bool on: true
-    property string nameValue: "eq_on"
+    property int paramType: DeviceParameter.EQ_ON
     Row
     {
         anchors.fill: parent

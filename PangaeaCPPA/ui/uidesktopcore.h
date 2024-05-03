@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTimer>
 
+#include "deviceparameter.h"
 #include "firmware.h"
 
 //TODO: class enum UIValueItem, UITextItem, UIErrorItem
@@ -17,6 +18,11 @@ public:
     explicit UiDesktopCore(QObject *parent = nullptr);
 
     Q_INVOKABLE void setParameter(QString name, quint8 val);
+    Q_INVOKABLE void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
+    {
+        emit sgSetDeviceParameter(deviceParameterType, value);
+    };
+
     Q_INVOKABLE void restoreParameter(QString name);
 
     Q_INVOKABLE void setImpuls(QString fullFilePath);
@@ -36,6 +42,7 @@ public:
     Q_INVOKABLE void sw4Enable();
 
 signals:
+    void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);
 
@@ -45,7 +52,9 @@ signals:
 
     void sgReadAllParameters();
     void sgSetParameter(QString name, quint8 value);
+    void sgSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
     void sgRestoreValue(QString name);
+
     void sgSetImpuls (QString filePath, QString fileName);
     void sgSetFirmware (QString fullFilePath);
 

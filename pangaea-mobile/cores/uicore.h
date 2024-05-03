@@ -100,6 +100,7 @@ signals:
     void sgReadAllParameters();
     void sgSetParameter(QString name, quint8 value);
     void sgSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
+
     void sgRestoreValue(QString name);
     void sgSetImpuls (QString filePath, QString fileName);
     void sgSetFirmware (QString fullFilePath);

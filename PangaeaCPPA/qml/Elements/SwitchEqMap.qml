@@ -75,7 +75,7 @@ Item
                     main.map=false;
                 else
                 {
-                    UiCore.setParameter("eq_on", !eqOn);
+                    UiCore.setDeviceParameter(DeviceParameter.EQ_ON, !eqOn);
                 }
                 redraw();
             }
@@ -108,17 +108,18 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === "eq_on")
+            if(paramType === DeviceParameter.EQ_ON)
             {
                 main.eqOn = value;
                 redraw();
             }
         }
-        function onSgSetParameter(nameParam, value)
+
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if(nameParam === "eq_on")
+            if(paramType === DeviceParameter.EQ_ON)
             {
                 main.eqOn = value;
                 redraw();

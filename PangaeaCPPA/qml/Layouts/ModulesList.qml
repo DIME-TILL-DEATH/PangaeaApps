@@ -207,25 +207,30 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam===("type_dev"))
+            switch(paramType)
+            {
+            case DeviceParameter.DEVICE_TYPE:
             {
                 isPaFirmware = ((value===DeviceType.CP16PA)||(value===DeviceType.CP100PA));
-
                 if(value>0) placeAllModuls();
+                break;
             }
 
-            if(nameParam==="eq_pre")
+            case DeviceParameter.EQ_PRE:
             {
                 arrangePrePost(value);
+                break;
+            }
             }
         }
 
         // not set ui
-        function onSgSetParameter(nameParam, value)
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if(nameParam==="eq_pre")
+            if(paramType === DeviceParameter.EQ_PRE)
             {
                 arrangePrePost(value);
             }

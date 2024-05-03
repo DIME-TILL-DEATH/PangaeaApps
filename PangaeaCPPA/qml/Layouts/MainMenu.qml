@@ -296,9 +296,9 @@ MenuBar{
     Connections{
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === "type_dev")
+            if(paramType === DeviceParameter.DEVICE_TYPE)
             {
                 switch (value)
                 {
@@ -324,7 +324,10 @@ MenuBar{
                         break;
                 }
             }
+        }
 
+        function onSgSetUIParameter(nameParam, value)
+        {
             if(nameParam === "preset_edited")
             {
                 mainMenu.presetEdited = value;

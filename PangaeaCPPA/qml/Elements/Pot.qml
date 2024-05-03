@@ -16,7 +16,7 @@ Item
     property int dispMin:   -15
     property int dispMax:   15
 
-    property string nameValue: ""
+    property int paramType
 
     property double k2: (dispMin-dispMax)/(valueMin-valueMax)
     property double k1:  dispMin-(valueMin*k2)
@@ -92,7 +92,7 @@ Item
         value = value>=valueMax?valueMax:value;
         if(main.valueLastSend!=main.value)
         {
-            UiCore.setParameter(main.nameValue, main.value);
+            UiCore.setDeviceParameter(main.paramType, main.value);
             main.valueLastSend=main.value;
         }
     }
@@ -100,10 +100,13 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((main.nameValue.length>0)&&(nameParam===main.nameValue))
+            if(paramType === main.paramType)
+            {
                 main.value=value;
+            }
         }
     }
 }
