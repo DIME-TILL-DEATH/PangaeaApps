@@ -26,7 +26,7 @@ Item
             CustomizerSlider
             {
                 paramType: DeviceParameter.PREAMP_HIGH
-                nameValue: "High"
+                name: "High"
 
                 valueMin: (-64)
                 valueMax: (63)
@@ -40,7 +40,7 @@ Item
             CustomizerSlider
             {
                 paramType: DeviceParameter.PREAMP_MID
-                nameValue: "Mid"
+                name: "Mid"
 
                 valueMin: (-64)
                 valueMax: (63)
@@ -53,7 +53,7 @@ Item
             CustomizerSlider
             {
                 paramType: DeviceParameter.PREAMP_LOW
-                nameValue: "Low"
+                name: "Low"
 
                 valueMin: (-64)
                 valueMax: (63)
@@ -67,7 +67,7 @@ Item
             CustomizerSlider
             {
                 paramType: DeviceParameter.PREAMP_VOLUME
-                nameValue: "Volume"
+                name: "Volume"
 
                 height: parent.height/4
                 width: parent.width

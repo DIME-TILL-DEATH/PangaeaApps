@@ -31,7 +31,7 @@ Item
                  height: parent.height/2
                  width: parent.width
 
-                 nameValue: "Threshold"
+                 name: "Threshold"
                  paramType: DeviceParameter.GATE_THRESHOLD
 
                  moduleOn: on
@@ -43,7 +43,7 @@ Item
                  width: parent.width
                  bottomLineEnabled: false
 
-                 nameValue: "Decay"
+                 name: "Decay"
                  paramType: DeviceParameter.GATE_DECAY
 
                  moduleOn: on

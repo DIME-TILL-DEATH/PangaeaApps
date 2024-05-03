@@ -11,8 +11,7 @@ Slider
     id: root
     orientation: Qt.Vertical
 
-    property string nameValue: "DIAL"
-    property string nameParam: "master_volume"
+    property string name: "BAR"
     property string units: " "
 
     property var paramType
@@ -32,7 +31,7 @@ Slider
     property bool softUpdate: false
 
     //    property bool inverse: false
-    property bool editabled: false
+    property bool edited: false
 
     property bool botLineEn: true
 
@@ -129,31 +128,17 @@ Slider
         if(!softUpdate)
         {
             UiCore.setDeviceParameter(paramType, Math.round(kVal * root.value * 100 + bVal));
-            editabled = true;
+            edited = true;
         }
         else
         {
-            editabled = false;
+            edited = false;
         }
     }
 
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
-        {
-            // if((root.nameParam.length>0) && nameParam.localeCompare(root.nameParam) === 0)
-            // {
-            //     softUpdate = true;
-            //     root.value = nameValue/(root.valueMax-root.valueMin);
-            //     softUpdate = false;
-            // }
-
-            if( nameParam === "presetEdit" )
-            {
-                main.edit = nameValue;
-            }
-        }
 
         function onSgSetUiDeviceParameter(paramType, value)
         {

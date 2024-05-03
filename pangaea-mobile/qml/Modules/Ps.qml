@@ -36,7 +36,7 @@ Item
                     height: parent.height
                     width: parent.width
 
-                    nameValue: "Presence"
+                    name: "Presence"
                     paramType: DeviceParameter.PRESENCE_VOLUME
 
                     bottomLineEnabled: false

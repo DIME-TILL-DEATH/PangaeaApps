@@ -35,7 +35,7 @@ Item
                 height: parent.height/4
                 width: parent.width
 
-                nameValue: "Volume"
+                name: "Volume"
                 paramType: DeviceParameter.AMP_VOLUME
 
                 moduleOn: on
@@ -46,7 +46,7 @@ Item
                 height: parent.height/4
                 width: parent.width
 
-                nameValue: "Presence"
+                name: "Presence"
                 paramType: DeviceParameter.PRESENCE_VOLUME
 
                 moduleOn: on
@@ -56,7 +56,7 @@ Item
                 height: parent.height/4
                 width: parent.width
 
-                nameValue: "Slave"
+                name: "Slave"
                 paramType: DeviceParameter.AMP_SLAVE
 
                 moduleOn: on

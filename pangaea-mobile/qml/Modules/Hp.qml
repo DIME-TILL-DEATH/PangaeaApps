@@ -35,7 +35,7 @@ Item
                 height: parent.height
                 width: parent.width
 
-                nameValue: "High pass filter"
+                name: "High pass filter"
                 paramType: DeviceParameter.HPF_VOLUME
 
                 inverse: true

@@ -28,7 +28,7 @@ Item
                 height: parent.height/2
                 width: parent.width
 
-                nameValue: "Sustain"
+                name: "Sustain"
                 paramType: DeviceParameter.COMPRESSOR_SUSTAIN
 
                 moduleOn: on
@@ -39,7 +39,7 @@ Item
                 height: parent.height/2
                 width: parent.width
 
-                nameValue: "Volume"
+                name: "Volume"
                 paramType: DeviceParameter.COMPRESSOR_VOLUME
 
                 bottomLineEnabled: false

@@ -34,7 +34,7 @@ Item
 
                 height: parent.height/2
                 width: parent.width
-                nameValue: "Early reflection"
+                name: "Early reflection"
                 paramType: DeviceParameter.EARLY_VOLUME
 
                 bottomLineEnabled: false

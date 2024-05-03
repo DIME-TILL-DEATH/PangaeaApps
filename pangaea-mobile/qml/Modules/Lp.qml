@@ -41,7 +41,7 @@ Item
                     valueMin: 195
                     height: parent.height
                     width: parent.width
-                    nameValue: "Low-pass filter"
+                    name: "Low-pass filter"
                     paramType: DeviceParameter.LPF_VOLUME
 
                     bottomLineEnabled: false

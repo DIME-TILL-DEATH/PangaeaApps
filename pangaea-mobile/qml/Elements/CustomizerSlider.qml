@@ -10,10 +10,7 @@ Slider
 {
     id: root
 
-    //---Deprecated
-    property string nameParam: "master_volume"
-    //-----------------
-    property string nameValue: "DIAL"
+    property string name: "BAR"
     property string units: " "
 
     property var paramType
@@ -32,14 +29,14 @@ Slider
     property bool moduleOn: true
 
     property bool inverse: false
-    property bool editabled: false
+    property bool edited: false
 
     property bool bottomLineEnabled: true
 
-    property int     maximumValue: 1
-    property int     minimumValue: 2
+    property int maximumValue: 1
+    property int minimumValue: 2
 
-    property int     delitel: 1  //Делитель, если нужны десятичные занки
+    property int delitel: 1  //Делитель, если нужны десятичные занки
 
     property double kDisp: -((dispMax-dispMin)/(x1val-x2val))
     property double bDisp: -(((x2val*dispMin)-(x1val*dispMax))/(x1val-x2val))
@@ -102,7 +99,7 @@ Slider
     {
         x: root.leftPadding + root.visualPosition * (root.availableWidth - width)
 
-        color:  Style.currentTheme.colorSlider //editabled?"#00B0F3":"#00A0E3"
+        color:  Style.currentTheme.colorSlider
 
         width: 2
         height: root.height
@@ -113,7 +110,7 @@ Slider
         {
             transparentBorder: true
             color: "#00A0E3"
-            samples: 10 /*20*/
+            samples: 10
         }
     }
 
@@ -132,7 +129,7 @@ Slider
     {
         id: modulName
         anchors.fill: parent
-        text: editabled ? ("  "+ nameValue +"*") : ("  " + nameValue)
+        text: edited ? ("  "+ name +"*") : ("  " + name)
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         leftPadding: 4
@@ -145,24 +142,17 @@ Slider
         if(!softUpdate)
         {
             UiCore.setDeviceParameter(paramType, Math.round(kVal * root.value * 100 + bVal));
-            editabled = true;
+            edited = true;
         }
         else
         {
-            editabled = false;
+            edited = false;
         }
     }
 
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if( nameParam === "presetEdit" )
-            {
-                main.edit = value;
-            }
-        }
 
         function onSgSetUiDeviceParameter(paramType, value)
         {

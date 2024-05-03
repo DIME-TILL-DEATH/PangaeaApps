@@ -14,7 +14,7 @@ CustomizerSliderV
     property var qSetting
     property int qControlActive
 
-    nameParam: "eq_volume1"
+    name: "eq_volume1"
 
     dispMin: -15
     dispMax: 15

@@ -51,7 +51,7 @@ Item
                 {
                     id: _q1Control
 
-                    nameValue: "Q-Factor"
+                    name: "Q-Factor"
                     anchors.fill: parent
                     dispMin: 1
                     dispMax: 200
@@ -67,7 +67,7 @@ Item
                 {
                     id: _q2Control
 
-                    nameValue: "Q-Factor"
+                    name: "Q-Factor"
                     anchors.fill: parent
                     dispMin: 1
                     dispMax: 200
@@ -84,7 +84,7 @@ Item
                 {
                     id: _q3Control
 
-                    nameValue: "Q-Factor"
+                    name: "Q-Factor"
                     anchors.fill: parent
                     dispMin: 1
                     dispMax: 200
@@ -101,7 +101,7 @@ Item
                 {
                     id: _q4Control
 
-                    nameValue: "Q-Factor"
+                    name: "Q-Factor"
                     anchors.fill: parent
                     dispMin: 1
                     dispMax: 200
@@ -118,7 +118,7 @@ Item
                 {
                     id: _q5Control
 
-                    nameValue: "Q-Factor"
+                    name: "Q-Factor"
                     anchors.fill: parent
                     dispMin: 1
                     dispMax: 200
@@ -323,7 +323,7 @@ Item
                 height: parent.height*1/12
                 CustomizerSlider
                 {
-                    nameValue: "Central Frequency"
+                    name: "Central Frequency"
                     anchors.fill: parent
                     paramType: DeviceParameter.EQ_FREQ1
                     dispMin: 20
@@ -336,7 +336,7 @@ Item
                 }
                 CustomizerSlider
                 {
-                    nameValue: "Central Frequency"
+                    name: "Central Frequency"
                     anchors.fill: parent
                     paramType: DeviceParameter.EQ_FREQ2
                     dispMin: 260
@@ -349,7 +349,7 @@ Item
                 }
                 CustomizerSlider
                 {
-                    nameValue: "Central Frequency"
+                    name: "Central Frequency"
                     anchors.fill: parent
                     paramType: DeviceParameter.EQ_FREQ3
                     dispMin: 600
@@ -362,7 +362,7 @@ Item
                 }
                 CustomizerSlider
                 {
-                    nameValue: "Central Frequency"
+                    name: "Central Frequency"
                     anchors.fill: parent
                     paramType: DeviceParameter.EQ_FREQ4
                     dispMin: 1000
@@ -375,7 +375,7 @@ Item
                 }
                 CustomizerSlider
                 {
-                    nameValue: "Central Frequency"
+                    name: "Central Frequency"
                     anchors.fill: parent
                     paramType: DeviceParameter.EQ_FREQ5
                     dispMin: 1000

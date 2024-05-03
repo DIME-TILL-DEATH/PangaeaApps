@@ -48,7 +48,7 @@ Item
 
                 bottomLineEnabled: false
 
-                nameValue: main.nameValue
+                name: main.nameValue
                 paramType: DeviceParameter.MASTER_VOLUME
             }
         }
