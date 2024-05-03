@@ -54,15 +54,4 @@ Item
         }
     }
 
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
-        {
-            if( nameParam === "presetEdit" )
-            {
-                main.edit = nameValue;
-            }
-        }
-    }
 }

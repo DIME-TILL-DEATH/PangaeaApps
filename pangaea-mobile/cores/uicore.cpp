@@ -161,14 +161,11 @@ void UICore::slFirmwareFilePicked(QString filePath, QString fileName)
 
 void UICore::setFirmware(QString fullFilePath)
 {
-    // TODO firmwareupdatemode
-//    emit sgSetUIParameter("update_firmware_mode", FirmwareUpdateMode::Offline);
     emit sgSetFirmware(fullFilePath);
 }
 
 void UICore::doOnlineFirmwareUpdate()
 {
-//    emit sgSetUIParameter("update_firmware_mode", FirmwareUpdateMode::Online);
     emit sgDoOnlineFirmwareUpdate();
 }
 

@@ -15,7 +15,8 @@ Rectangle
     property int    value:     _tumbler.currentIndex
     property int maxMapRow: 4
     property string text:  "TEXT"
-    property string nameValue:  ""
+    // property string nameValue:  ""
+    property int paramType
     property bool editable: true
 
     property bool softUpdate: true
@@ -139,18 +140,19 @@ Rectangle
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((main.nameValue.length>0)&&(nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
                 softUpdate = true;
-                _tumbler.currentIndex=nameValue;
+                _tumbler.currentIndex = value;
                 softUpdate = false;
             }
 
-            if(nameParam === "set_max_map")
+            if(paramType === DeviceParameter.MAP_SIZE)
             {
-                maxMapRow = nameValue
+                maxMapRow = value
             }
         }
     }

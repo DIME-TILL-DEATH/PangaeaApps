@@ -59,12 +59,13 @@ ToolBar
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, inValue)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            // TODO: свести все названия в одно место class Device/DeviceDescription
-            if(nameParam === ("type_dev"))
+            if(paramType === DeviceParameter.DEVICE_TYPE)
             {
-                switch (inValue)
+                // TODO: свести все названия в одно место class Device/DeviceDescription
+                switch (value)
                 {
                 case 0: devName = "";  break;
                 case 1: devName = "CP-100";  break;

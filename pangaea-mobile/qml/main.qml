@@ -358,8 +358,6 @@ ApplicationWindow
 
         function onSgInterfaceError(errorDescription)
         {
-            //mBusy.visible = false;
-
             openConnectPage();
             _msgBluetoothNotReady.text = qsTr("Device disconnected\n") + errorDescription
             _msgBluetoothNotReady.open();

@@ -1,8 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.15
-//import Qt.labs.platform 1.1 as Labs
-//import QtQuick.Dialogs 1.3
 
 import StyleSettings 1.0
 
@@ -50,7 +48,7 @@ Item
             height: parent.height
 
             text: qsTr("BANK")
-            nameValue: "bank"
+            paramType: DeviceParameter.BANK
         }
 
         GridLayout
@@ -247,36 +245,15 @@ Item
             height: parent.height
 
             text: qsTr("PRESET")
-            nameValue: "preset"
+            paramType: DeviceParameter.PRESET
         }
     }
-
-////    FileDialog{
-////        id: exportPresetFileDialog
-
-////        modality: Qt.WindowModal
-
-////        selectExisting:  false
-////        selectMultiple: false
-
-////        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.GenericDataLocation)
-
-////        defaultSuffix: "pst"
-////        nameFilters: ["Firmware files (*.pst)"]
-////        onAccepted:
-////        {
-////            UiCore.exportPreset(exportPresetFileDialog.fileUrl);
-////        }
-////    }
 
     Connections{
         target: UiCore
 
         function onSgSetUIParameter(nameParam, inValue)
         {
-            if(nameParam === "output_mode")
-                mode = inValue;
-
             if(nameParam === "preset_edited")
             {
                 _root.presetEdited = inValue;
@@ -286,6 +263,12 @@ Item
             {
                 _root.compareState = inValue;
             }
+        }
+
+        function onSgSetUiDeviceParameter(paramType, value)
+        {
+            if(paramType === DeviceParameter.OUTPUT_MODE)
+                mode = value;
         }
     }
 

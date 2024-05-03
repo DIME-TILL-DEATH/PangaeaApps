@@ -191,11 +191,11 @@ Item
             msgPresetChangeSave.open();
         }
 
-        function onSgSetUIParameter(nameParam, inValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === ("type_dev"))
+            if(paramType === DeviceParameter.DEVICE_TYPE)
             {
-                switch (inValue)
+                switch (value)
                 {
                 case 0: devName = "";  break;
                 case 1:
@@ -222,13 +222,6 @@ Item
                     break;
                 }
             }
-
-//            if(nameParam === "open_preset_list")
-//            {
-//                console.log("Open presets list");
-//                _presetsList.open();
-//            }
-
         }
 
         function onSgSetParameter(nameParam, inValue)

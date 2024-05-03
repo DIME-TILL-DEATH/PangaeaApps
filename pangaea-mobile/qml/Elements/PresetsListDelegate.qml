@@ -116,11 +116,11 @@ Rectangle{
     Connections{
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, inValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === "set_max_map")
+            if(paramType === DeviceParameter.MAP_SIZE)
             {
-                maxMap = inValue
+                maxMap = value;
             }
         }
     }

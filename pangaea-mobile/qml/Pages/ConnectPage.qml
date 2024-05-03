@@ -270,13 +270,6 @@ Item
 
         function onSgSetUIParameter(nameParam, inValue)
         {
-//            if(nameParam === "ready_to_disconnect")
-//            {
-//                isConnected = false;
-//                InterfaceManager.disconnectFromDevice();
-//                openConnectPage();
-//            }
-
             if(nameParam === "autoconnect_enable")
             {
                 _checkBox.checked = inValue;

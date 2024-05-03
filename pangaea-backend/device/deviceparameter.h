@@ -67,7 +67,14 @@ public:
         PRESENCE_ON = 40,
         PRESENCE_VOLUME = 41,
 
-        EQ_PRE = 42
+        EQ_PRE = 42,
+
+        //=======Not in status command
+        DEVICE_TYPE = 64,
+        MAP_SIZE,
+        BANK,
+        PRESET,
+        OUTPUT_MODE
     };
     Q_ENUM(Type);
 

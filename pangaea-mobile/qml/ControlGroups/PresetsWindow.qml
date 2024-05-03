@@ -134,19 +134,13 @@ CustomMessageDialog {
     Connections{
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, inValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === "set_max_map")
+            switch(paramType)
             {
-                maxMapRow = inValue
-            }
-            if(nameParam === "bank")
-            {
-                currentBank = inValue
-            }
-            if(nameParam === "preset")
-            {
-                currentPreset = inValue
+            case DeviceParameter.MAP_SIZE: maxMapRow = value; break;
+            case DeviceParameter.BANK: currentBank = value; break;
+            case DeviceParameter.PRESET: currentPreset = value; break;
             }
         }
     }

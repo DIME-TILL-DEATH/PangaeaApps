@@ -18,7 +18,6 @@ Core::Core(QObject *parent) : QObject(parent)
     appSettings = new QSettings();
 #endif
 
-   // QObject::connect(&deviceControls, &DeviceControls::sgSetInterfaceValue, this, &Core::sgSetUIParameter);
     QObject::connect(&deviceControls, &DeviceControls::sgSetUiDeviceParameter, this, &Core::sgSetUiDeviceParameter);
 
     timer = new QTimer(this);
@@ -69,8 +68,12 @@ void Core::parseInputData(QByteArray ba)
                         pushCommandToQueue("sw4 disable");
                     }
 
-                    emit sgSetUIParameter("type_dev", deviceType);
-                    emit sgSetUIParameter("set_max_map", controlledDevice.maxBankPresetCount()); //TODO for mobile?
+                    // emit sgSetUIParameter("type_dev", deviceType);
+                    // emit sgSetUIParameter("set_max_map", controlledDevice.maxBankPresetCount()); //TODO for mobile?
+
+                    emit sgSetUiDeviceParameter(DeviceParameter::Type::DEVICE_TYPE, deviceType);
+                    emit sgSetUiDeviceParameter(DeviceParameter::Type::MAP_SIZE, controlledDevice.maxBankPresetCount());
+
                     qInfo() << recievedCommand.description();
                 }
                 break;
@@ -187,8 +190,11 @@ void Core::parseInputData(QByteArray ba)
 
                         currentPreset.setBankPreset(static_cast<quint8>(bank), static_cast<quint8>(preset));
 
-                        emit sgSetUIParameter("bank",  currentPreset.bankNumber());
-                        emit sgSetUIParameter("preset", currentPreset.presetNumber());
+                        // emit sgSetUIParameter("bank",  currentPreset.bankNumber());
+                        // emit sgSetUIParameter("preset", currentPreset.presetNumber());
+
+                        emit sgSetUiDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
+                        emit sgSetUiDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
 
                         qInfo() << recievedCommand.description() << "bank:" << bank << "preset:" << preset;
                     }
@@ -201,7 +207,8 @@ void Core::parseInputData(QByteArray ba)
                 if(parseResult.size()==1)
                 {
                     quint8 mode = parseResult.at(0).toUInt();
-                    emit sgSetUIParameter("output_mode",  mode);
+                    // emit sgSetUIParameter("output_mode",  mode);
+                    emit sgSetUiDeviceParameter(DeviceParameter::Type::OUTPUT_MODE, mode);
                     qInfo() << recievedCommand.description();
                 }
                 break;
@@ -427,7 +434,6 @@ void Core::parseInputData(QByteArray ba)
                 if(fwUpdate)
                 {
                     emit sgSetUIParameter("fw_update_enabled", false);
-                    // emit sgSetUIParameter("slider_enabled", 1);
                 }
                 else
                 {
@@ -435,7 +441,6 @@ void Core::parseInputData(QByteArray ba)
                     emit sgSetUIParameter("format_complete", true);
                 }
                 qInfo() << recievedCommand.description();
-                // emit sgSetUIParameter("slider_enabled", 1);
                 emit sgImmediatelyDisconnect();
                 break;
             }
@@ -636,7 +641,6 @@ void Core::uploadFirmware(QByteArray firmware)
         const uint32_t sizeBlock = 1024;
 
         emit sgSetUIParameter("fw_update_enabled", true);
-        // emit sgSetUIParameter("slider_enabled", 0);
         timer->setInterval(1000);
 
         fwUpdate = true;
@@ -909,7 +913,6 @@ void Core::setParameter(QString name, quint8 value)
     if(name==("format"))
     {
         emit sgSetUIParameter("wait", true);
-        // emit sgSetUIParameter("slider_enabled", 0);
 
         isFormatting = true;
         timer->setInterval(10000);
@@ -960,9 +963,10 @@ void Core::restoreValue(QString name)
     // и отдельно обрабатывать случай банка и пресета
     // пока костыль для отмены сохранения пресета!!!!!
 
-    if(name == "bank") emit sgSetUIParameter("bank", currentPreset.bankNumber());
 
-    if(name == "preset") emit sgSetUIParameter("preset", currentPreset.presetNumber());
+    if(name == "bank") emit sgSetUiDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
+
+    if(name == "preset") emit sgSetUiDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
 }
 
 void Core::readAllParameters()
@@ -1053,7 +1057,6 @@ void Core::recieveTimeout()
     if(isFormatting) // Format timeout
     {
         emit sgSetUIParameter("format_error", 1);
-        // emit sgSetUIParameter("slider_enabled", 1);
         isFormatting = false;
     }
 
@@ -1081,8 +1084,6 @@ void Core::recieveTimeout()
                 if(fwUpdate)
                 {
                     fwUpdate = false;
-                    //TODO что за slider_enabled в мобильном? wait заменяет?
-                    // emit sgSetUIParameter("slider_enabled", 1);
                 }
 
                 commandsPending.clear();

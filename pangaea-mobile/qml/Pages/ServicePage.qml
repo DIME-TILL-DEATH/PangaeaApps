@@ -162,7 +162,6 @@ Item
         {
             _main.openConnectPage();
             UiCore.sgSetUIParameter("fw_update_complete", true);
-//            UiCore.sgSetUIParameter("ready_to_disconnect", true);
             InterfaceManager.disconnectFromDevice();
         }
     }

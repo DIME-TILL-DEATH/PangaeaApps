@@ -156,23 +156,6 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
-        {
-            if((nameParam === main.nameValue))
-            {
-                main.on=nameValue
-            }
-
-            if(nameParam === "eq_pre")
-            {
-                isPreEQ=nameValue
-            }
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
         function onSgSetUiDeviceParameter(paramType, value)
         {
             if(paramType === main.paramType)
