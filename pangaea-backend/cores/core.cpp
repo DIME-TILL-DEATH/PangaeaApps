@@ -18,8 +18,6 @@ Core::Core(QObject *parent) : QObject(parent)
     appSettings = new QSettings();
 #endif
 
-    QObject::connect(&deviceControls, &DeviceControls::sgSetUiDeviceParameter, this, &Core::sgSetUiDeviceParameter);
-
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
 }
@@ -67,9 +65,6 @@ void Core::parseInputData(QByteArray ba)
                     {
                         pushCommandToQueue("sw4 disable");
                     }
-
-                    // emit sgSetUIParameter("type_dev", deviceType);
-                    // emit sgSetUIParameter("set_max_map", controlledDevice.maxBankPresetCount()); //TODO for mobile?
 
                     emit sgSetUiDeviceParameter(DeviceParameter::Type::DEVICE_TYPE, deviceType);
                     emit sgSetUiDeviceParameter(DeviceParameter::Type::MAP_SIZE, controlledDevice.maxBankPresetCount());
@@ -169,8 +164,36 @@ void Core::parseInputData(QByteArray ba)
                             }
                         }
 
-                        deviceControls.setParametersFromRaw(baPresetData);
-                        deviceControls.setAllUIValues();
+                        QString sss;
+                        quint8 count=0;
+                        quint8 nomByte=0;
+
+                        foreach (QChar val, baPresetData) //quint8
+                        {
+                            if((nomByte&1)==0)
+                            {
+                                sss.clear();
+                                sss.append(val);
+                            }
+                            else
+                            {
+                                sss.append(val);
+
+                                //setParameterValue(count, sss.toInt(nullptr, 16));
+
+                                DeviceParameter::Type paramType = static_cast<DeviceParameter::Type>(count);
+                                if(DeviceParameter::isSigned(paramType))
+                                {
+                                    emit sgSetUiDeviceParameter(paramType, (qint8)sss.toInt(nullptr, 16));
+                                }
+                                else
+                                {
+                                    emit sgSetUiDeviceParameter(paramType, sss.toInt(nullptr, 16));
+                                }
+                                count++;
+                            }
+                            nomByte++;
+                        }
 
                         emit sgSetUIParameter("preset_edited",   isPresetEdited);
                         emit sgSetUIParameter("editable",      bEditable); // TODO отличается от мобильного
@@ -190,9 +213,6 @@ void Core::parseInputData(QByteArray ba)
 
                         currentPreset.setBankPreset(static_cast<quint8>(bank), static_cast<quint8>(preset));
 
-                        // emit sgSetUIParameter("bank",  currentPreset.bankNumber());
-                        // emit sgSetUIParameter("preset", currentPreset.presetNumber());
-
                         emit sgSetUiDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
                         emit sgSetUiDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
 
@@ -207,7 +227,6 @@ void Core::parseInputData(QByteArray ba)
                 if(parseResult.size()==1)
                 {
                     quint8 mode = parseResult.at(0).toUInt();
-                    // emit sgSetUIParameter("output_mode",  mode);
                     emit sgSetUiDeviceParameter(DeviceParameter::Type::OUTPUT_MODE, mode);
                     qInfo() << recievedCommand.description();
                 }
@@ -925,14 +944,8 @@ void Core::setParameter(QString name, quint8 value)
 
     if(name=="pa-ps_linked_on")
     {
-        sendStr = deviceControls.getParameterSendString("presence_on", value);
-        sendStr += deviceControls.getParameterSendString("amp_on", value);
-    }
-
-    if(name=="cabinet_enable")
-    {
-        //TODO в device controls обновлять все поля пресета, а не только это
-        currentPreset.setIsIrEnabled(value);
+        sendStr = DeviceParameter::sendString(DeviceParameter::Type::PRESENCE_ON, value);
+        sendStr += DeviceParameter::sendString(DeviceParameter::Type::AMP_ON, value);
     }
 
     if(sendStr.length()>0)
@@ -948,12 +961,20 @@ void Core::setParameter(QString name, quint8 value)
 
 void Core::setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
 {
-    QString sendStr = deviceControls.getParameterSendString(deviceParameterType, value);
+    QString sendStr = DeviceParameter::sendString(deviceParameterType, value);
     isPresetEdited = true;
     emit sgSetUIParameter ("preset_edited", isPresetEdited);
 
     recieveEnabled = false;
-    emit sgWriteToInterface(sendStr.toUtf8());
+
+    if(sendStr.size() > 0)
+        emit sgWriteToInterface(sendStr.toUtf8());
+
+    if(deviceParameterType == DeviceParameter::Type::CABINET_ENABLE)
+    {
+        //TODO в device controls обновлять все поля пресета, а не только это
+        currentPreset.setIsIrEnabled(value);
+    }
 }
 
 void Core::restoreValue(QString name)

@@ -78,26 +78,19 @@ public:
     };
     Q_ENUM(Type);
 
-    DeviceParameter(Type parameterType, QString paramName);
+    DeviceParameter(Type parameterType);
 
-    QString sendString(quint8 value) const;
     static QString sendString(Type parameterType, quint8 value);
-
-    const QString &paramName() const;
 
     quint8 value() const;
     void setValue(quint8 newValue);
 
-    quint16 positionInArray() const;
-
-    bool isSigned() const;
+    static bool isSigned(Type parameterType);
 
     Type parameterType() const;
 
 private:
     Type m_parameterType;
-    QString m_paramName;
-
     quint8 m_value;
 };
 

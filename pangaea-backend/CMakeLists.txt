@@ -26,10 +26,11 @@ qt_add_library(pangaea-backend STATIC
     device/defines.h
     device/device.cpp device/device.h
     device/deviceanswer.cpp device/deviceanswer.h
-    device/devicecontrols.cpp device/devicecontrols.h
-    device/deviceparameter.cpp device/deviceparameter.h
+
+
     device/firmware.cpp device/firmware.h
     device/preset.cpp device/preset.h
+    device/deviceparameter.h device/deviceparameter.cpp
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
     utils/androidutils.cpp utils/androidutils.h

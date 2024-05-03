@@ -1,16 +1,11 @@
 #include "deviceparameter.h"
 
-DeviceParameter::DeviceParameter(Type parameterType, QString paramName)
-    : m_parameterType{parameterType},
-    m_paramName{paramName}
+DeviceParameter::DeviceParameter(Type parameterType)
+    : m_parameterType{parameterType}
 {
 
 }
 
-QString DeviceParameter::sendString(quint8 value) const
-{
-    return sendString(m_parameterType, value);
-}
 
 QString DeviceParameter::sendString(Type parameterType, quint8 value)
 {
@@ -76,16 +71,14 @@ QString DeviceParameter::sendString(Type parameterType, quint8 value)
     case Type::PRESENCE_VOLUME: fullString += "pv"; break;
 
     case Type::EQ_PRE: fullString += "eqp"; break;
+    default: return "";
     }
 
     fullString += QString(" %1\r\n").arg(value, 0, 16);
     return fullString;
 }
 
-const QString &DeviceParameter::paramName() const
-{
-    return m_paramName;
-}
+
 
 quint8 DeviceParameter::value() const
 {
@@ -97,14 +90,11 @@ void DeviceParameter::setValue(quint8 newValue)
     m_value = newValue;
 }
 
-quint16 DeviceParameter::positionInArray() const
-{
-    return (quint8)m_parameterType;
-}
 
-bool DeviceParameter::isSigned() const
+
+bool DeviceParameter::isSigned(Type parameterType)
 {
-    switch(m_parameterType)
+    switch(parameterType)
     {
     case Type::PREAMP_LOW: return true;
     case Type::PREAMP_MID: return true;

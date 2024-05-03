@@ -8,9 +8,8 @@
 #include <QSettings>
 
 #include "firmware.h"
-
+#include "deviceparameter.h"
 #include "answerworker.h"
-#include "devicecontrols.h"
 #include "preset.h"
 #include "presetmanager.h"
 
@@ -24,6 +23,7 @@ public:
 
     void setParameter(QString name, quint8 value);
     void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
+
     // TODO: пока умеет только Preset и bank!!!! Дописать
     void restoreValue(QString name);
     void readAllParameters();
@@ -55,7 +55,6 @@ public:
 
 private:
     IRWorker irWorker;
-    DeviceControls deviceControls;
     AnswerWorker commandWorker;
 
     QList<Preset> m_presetsList;
