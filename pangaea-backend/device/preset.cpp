@@ -179,7 +179,7 @@ quint8 Preset::getPresetFlatNumber() const
 
 bool Preset::isIrEnabled() const
 {
-    //TODO переделать на запрос и установку любого параметра из/в rawData, на основе статических функций в deviceControls
+    //TODO переделать на запрос и установку любого параметра из/в rawData
     int result = m_rawData.at(17)-'0';
     return result;
 }

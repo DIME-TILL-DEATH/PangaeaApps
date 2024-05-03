@@ -164,11 +164,11 @@ void Core::parseInputData(QByteArray ba)
                             }
                         }
 
-                        QString sss;
                         quint8 count=0;
                         quint8 nomByte=0;
+                        QString sss;
 
-                        foreach (QChar val, baPresetData) //quint8
+                        foreach(QChar val, baPresetData) //quint8
                         {
                             if((nomByte&1)==0)
                             {
@@ -179,8 +179,6 @@ void Core::parseInputData(QByteArray ba)
                             {
                                 sss.append(val);
 
-                                //setParameterValue(count, sss.toInt(nullptr, 16));
-
                                 DeviceParameter::Type paramType = static_cast<DeviceParameter::Type>(count);
                                 if(DeviceParameter::isSigned(paramType))
                                 {
@@ -188,7 +186,7 @@ void Core::parseInputData(QByteArray ba)
                                 }
                                 else
                                 {
-                                    emit sgSetUiDeviceParameter(paramType, sss.toInt(nullptr, 16));
+                                    emit sgSetUiDeviceParameter(paramType, (qint16)sss.toInt(nullptr, 16));
                                 }
                                 count++;
                             }
@@ -972,7 +970,7 @@ void Core::setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 
 
     if(deviceParameterType == DeviceParameter::Type::CABINET_ENABLE)
     {
-        //TODO в device controls обновлять все поля пресета, а не только это
+        //TODO в rawData обновлять все поля пресета, а не только это
         currentPreset.setIsIrEnabled(value);
     }
 }
@@ -980,7 +978,7 @@ void Core::setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 
 void Core::restoreValue(QString name)
 {
     Q_UNUSED(name)
-    // TODO: добавить в Preset  объект DeviceControls. По имени находить позицию параметра в rawData и возвращать, устанавливая этот параметр
+    // TODO: добавить в Preset  объект ?DeviceControls?. По имени находить позицию параметра в rawData и возвращать, устанавливая этот параметр
     // и отдельно обрабатывать случай банка и пресета
     // пока костыль для отмены сохранения пресета!!!!!
 

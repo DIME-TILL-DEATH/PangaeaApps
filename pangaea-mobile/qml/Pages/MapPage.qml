@@ -176,6 +176,7 @@ Item
         onRejected:
         {
             saveParam = 0
+            // TODO: change to DeviceParameter
             UiCore.restoreParameter("preset")
             UiCore.restoreParameter("bank")
         }

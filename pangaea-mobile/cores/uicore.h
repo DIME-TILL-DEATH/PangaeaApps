@@ -29,7 +29,7 @@ public:
     Q_INVOKABLE void setupApplication();
 
     Q_INVOKABLE void setParameter(QString name, quint8 val);
-    // TODO: а впрямую вызвать sgSetDeviceParameter из QML нельзя?
+
     Q_INVOKABLE void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
     {
         emit sgSetDeviceParameter(deviceParameterType, value);

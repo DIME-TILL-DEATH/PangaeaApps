@@ -52,7 +52,7 @@ private:
 
     quint8 presetVersion{1};
 
-    // TODO: заменить DeviceControls? Все параемтры?
+    // TODO: заменить на rawBA или соответствующую структуру
     bool m_isIrEnabled{false};
     QString m_impulseName{""};
 
