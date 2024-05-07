@@ -444,14 +444,14 @@ ApplicationWindow
         UiSettings.setupApplication();
         InterfaceManager.startScanning();
 
-        if(main.width!==0)
+        if(UiSettings.windowWidth!==0 && UiSettings.windowHeight!==0)
         {
-            main.width = UiSettings.windowWidth
-            main.height = UiSettings.windowHeight
+            main.width = UiSettings.windowWidth;
+            main.height = UiSettings.windowHeight;
         }
 
         main.x = Screen.width/2 - main.width/2;
-        main.y = Screen.height/2 - main.height/2
+        main.y = Screen.height/2 - main.height/2;
     }
 
     onClosing: function(close)
