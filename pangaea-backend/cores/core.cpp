@@ -429,7 +429,7 @@ void Core::parseInputData(QByteArray ba)
                 quint32 signalOutR = parseResult.at(4).toInt();
                 // quint32 max = 20 * log(0xffffffff);
 
-                qDebug() << signalIn << parseResult.at(1).toInt() << signalOutL << signalOutR << max;
+                // qDebug() << signalIn << parseResult.at(1).toInt() << signalOutL << signalOutR << max;
 
                 emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_IN, signalIn);
                 emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_OUT_L, signalOutL);
@@ -1118,7 +1118,7 @@ void Core::processCommands()
 
 void Core::indicationRequest()
 {
-    qDebug() << "Indication request";
+    // qDebug() << "Indication request";
 
     if(controlledDevice.isFirmwareCanIndicate())
     {

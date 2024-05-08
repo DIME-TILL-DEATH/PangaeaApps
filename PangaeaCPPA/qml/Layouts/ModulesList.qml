@@ -46,19 +46,19 @@ Item
          }
     }
 
-    InOut
+    In
     {
         id: inp
-        text: "IN"
+
         height: listViewModules.height
         width:  listViewModules.widthWithoutSpase/modulesCount/2
         visible: moduleVisible
     }
 
-    InOut
+    Out
     {
         id: outp
-        text: "OUT"
+
         height: listViewModules.height
         width:  listViewModules.widthWithoutSpase/modulesCount/2
         visible: moduleVisible

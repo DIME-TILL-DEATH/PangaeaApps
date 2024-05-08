@@ -116,6 +116,16 @@ MenuBar{
         }
 
         MenuItem{
+            id: menuEqClassicView
+
+            text: qsTr("Classic EQ view")
+            checkable: true
+            checked: UiSettings.eqClassicView
+
+            onTriggered: UiSettings.saveSetting("eq_classic_view", checked);
+        }
+
+        MenuItem{
             id: menuAutoconnect
 
             text: qsTr("Autoconnect")

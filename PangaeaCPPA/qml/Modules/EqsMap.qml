@@ -45,7 +45,14 @@ Item
                 Eqs
                 {
                     on: main.on
-                    visible: !switchEnMap.map
+                    visible: (!switchEnMap.map) & (UiSettings.eqClassicView)
+                    anchors.fill: parent
+                }
+
+                EqParametric
+                {
+                    on: main.on
+                    visible: (!switchEnMap.map) & (!UiSettings.eqClassicView)
                     anchors.fill: parent
                 }
 

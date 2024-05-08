@@ -98,6 +98,11 @@ bool UiSettings::isModulesRightAligned()
     return appSettings->value("modules_right_aligned", true).toBool();
 }
 
+bool UiSettings::eqClassicView()
+{
+    return appSettings->value("eq_classic_view", false).toBool();
+}
+
 int UiSettings::windowWidth()
 {
     return m_windowWidth;

@@ -37,6 +37,7 @@ SOURCES += \
     interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
     interfaces/usbinterface.cpp \
+    utils/eqband.cpp \
     utils/eqresponse.cpp \
     utils/irworker.cpp \
     utils/parser.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
     qmlEnums/devicetypeenum.h \
+    utils/eqband.h \
     utils/eqresponse.h \
     utils/irworker.h \
     utils/parser.h \

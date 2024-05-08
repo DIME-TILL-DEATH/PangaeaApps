@@ -12,6 +12,7 @@ class UiSettings : public QObject
     Q_PROPERTY(bool autoConnectEnabled READ autoConnectEnabled NOTIFY sgUiSettingsChanged)
     Q_PROPERTY(bool checkUpdatesEnabled READ checkUpdatesEnabled NOTIFY sgUiSettingsChanged)
     Q_PROPERTY(bool isModulesRightAligned READ isModulesRightAligned NOTIFY sgUiSettingsChanged)
+    Q_PROPERTY(bool eqClassicView READ eqClassicView NOTIFY sgUiSettingsChanged FINAL)
 
     Q_PROPERTY(int windowWidth READ windowWidth NOTIFY sgUiSettingsChanged)
     Q_PROPERTY(int windowHeight READ windowHeight NOTIFY sgUiSettingsChanged)
@@ -27,6 +28,7 @@ public:
     bool autoConnectEnabled();
     bool checkUpdatesEnabled();
     bool isModulesRightAligned();
+    bool eqClassicView();
 
     int windowWidth();
     int windowHeight();

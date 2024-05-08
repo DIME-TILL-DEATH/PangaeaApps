@@ -68,5 +68,7 @@
         <file>qml/Modules/In.qml</file>
         <file>qml/Modules/Out.qml</file>
         <file>qml/Modules/EqParametric.qml</file>
+        <file>qml/Elements/EqPoint.qml</file>
+        <file>qml/Elements/EqDial.qml</file>
     </qresource>
 </RCC>
