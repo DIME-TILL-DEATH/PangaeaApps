@@ -15,6 +15,7 @@ MButton         1.0 MButton.qml
 MText           1.0 MText.qml
 Pot             1.0 Pot.qml
 Presets         1.0 Presets.qml
+SignalBar       1.0 SignalBar.qml
 Switch2         1.0 Switch2.qml
 Switch3         1.0 Switch3.qml
 SwitchEqMap     1.0 SwitchEqMap.qml

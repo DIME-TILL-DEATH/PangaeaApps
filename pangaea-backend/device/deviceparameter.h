@@ -74,7 +74,12 @@ public:
         MAP_SIZE,
         BANK,
         PRESET,
-        OUTPUT_MODE
+        OUTPUT_MODE,
+
+        FIRMWARE_CAN_INDICATE,
+        SIGNAL_IN,
+        SIGNAL_OUT_L,
+        SIGNAL_OUT_R
     };
     Q_ENUM(Type);
 

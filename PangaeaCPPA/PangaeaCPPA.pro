@@ -121,7 +121,7 @@ RESOURCES += qml.qrc \
 
 DISTFILES += \
     MacOS/Info.plist \
-    icons/pangaea_amt.ico \
+    icons/pangaea_amt.ico
 
 ###### Post-build ###############
 

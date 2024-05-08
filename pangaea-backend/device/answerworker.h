@@ -15,6 +15,8 @@ public:
     void parseAnswers(const QByteArray& rawData);
     DeviceAnswer popAnswer();
     bool haveAnswer();
+
+    bool displayNextAnswer();
 private:
     QList<DeviceAnswer> m_devCommandList;
     QList<DeviceAnswer> m_recievedAnswers;

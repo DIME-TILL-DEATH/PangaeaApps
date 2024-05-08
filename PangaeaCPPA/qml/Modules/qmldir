@@ -2,12 +2,14 @@ module Modules
 
 BaseModule 1.0 BaseModule.qml
 Cm 1.0 Cm.qml
+EqParametric 1.0 EqParametric.qml
 Eqs 1.0 Eqs.qml
 EqsMap 1.0 EqsMap.qml
 Er 1.0 Er.qml
 Ng 1.0 Ng.qml
 Hp 1.0 Hp.qml
-InOut 1.0 InOut.qml
+In 1.0 In.qml
+Out 1.0 Out.qml
 Ir 1.0 Ir.qml
 Lp 1.0 Lp.qml
 Map 1.0 Map.qml

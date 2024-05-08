@@ -18,14 +18,20 @@ Core::Core(QObject *parent) : QObject(parent)
     appSettings = new QSettings();
 #endif
 
-    timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
+    timeoutTimer = new QTimer(this);
+    connect(timeoutTimer, &QTimer::timeout, this, &Core::recieveTimeout);
+
+    indicationTimer = new QTimer(this);
+    indicationTimer->setInterval(1000);
+    connect(indicationTimer, &QTimer::timeout, this, &Core::indicationRequest);
 }
 
 
 void Core::slReadyToDisconnect()
 {
-    timer->stop();
+    timeoutTimer->stop();
+    indicationTimer->stop();
+
     commandsPending.clear();
     recieveEnabled = true;
 
@@ -34,7 +40,6 @@ void Core::slReadyToDisconnect()
 
 void Core::parseInputData(QByteArray ba)
 {
-    qDebug() << "->" << __FUNCTION__ << ":" << ba;
 
     if(bytesToRecieve > 0)
     {
@@ -45,6 +50,11 @@ void Core::parseInputData(QByteArray ba)
     updateProgressBar();
 
     commandWorker.parseAnswers(ba);
+
+    if(commandWorker.displayNextAnswer())
+    {
+        if(ba.indexOf("iio") != 0) qDebug() << "->" << __FUNCTION__ << ":" << ba;
+    }
 
     while(commandWorker.haveAnswer())
     {
@@ -100,21 +110,24 @@ void Core::parseInputData(QByteArray ba)
                     qDebug() << "version control, minimal: " << controlledDevice.minimalFirmware()->firmwareVersion()
                                << " actual: " << controlledDevice.actualFirmware()->firmwareVersion();
 
-                    if(*controlledDevice.minimalFirmware() > *controlledDevice.actualFirmware())
-                    {
-                        qWarning() << "firmware insufficient!";
-                        emit sgFirmwareVersionInsufficient(controlledDevice.minimalFirmware(), controlledDevice.actualFirmware());
-                    }
-                    else
+                    if(controlledDevice.isFimwareSufficient())
                     {
                         bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
 
                         if(isCheckUpdatesEnabled)
                         {
-                           emit sgRequestNewestFirmware(deviceFirmware);
+                            emit sgRequestNewestFirmware(deviceFirmware);
                         }
                     }
+                    else
+                    {
+                        qWarning() << "firmware insufficient!";
+                        emit sgFirmwareVersionInsufficient(controlledDevice.minimalFirmware(), controlledDevice.actualFirmware());
+                    }
                     emit sgSetUIText("devVersion", deviceFirmware->firmwareVersion());
+
+                    qDebug() << "Firmware can indicate:" << controlledDevice.isFirmwareCanIndicate();
+                    emit sgSetUiDeviceParameter(DeviceParameter::Type::FIRMWARE_CAN_INDICATE, controlledDevice.isFirmwareCanIndicate());
                 }
                 break;
             }
@@ -394,8 +407,33 @@ void Core::parseInputData(QByteArray ba)
                     default:{}
                 }
                 bytesToRecieve=0;
-                timer->start();
+
+                timeoutTimer->start();
+                indicationTimer->start();
+
                 qInfo() << recievedCommand.description();
+                break;
+            }
+
+            case AnswerType::indicationRequest:
+            {
+                recieveEnabled = false; // TODO waitAnswer?
+
+                // quint32 signalIn = 20 * log10(parseResult.at(0).toInt());
+                // quint32 signalOutL = 20 * log10(parseResult.at(2).toInt());
+                // quint32 signalOutR = 20 * log10(parseResult.at(4).toInt());
+                quint32 max = 20 * log10(0xffffffff);
+
+                quint32 signalIn = parseResult.at(0).toInt();
+                quint32 signalOutL = parseResult.at(2).toInt();
+                quint32 signalOutR = parseResult.at(4).toInt();
+                // quint32 max = 20 * log(0xffffffff);
+
+                qDebug() << signalIn << parseResult.at(1).toInt() << signalOutL << signalOutR << max;
+
+                emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_IN, signalIn);
+                emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_OUT_L, signalOutL);
+                emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_OUT_R, signalOutR);
                 break;
             }
 
@@ -403,14 +441,18 @@ void Core::parseInputData(QByteArray ba)
             {
                 emit sgSetUIParameter("ir_upload_finished", true);
                 recieveEnabled=false;
-                timer->stop(); // wait for impulse apllying (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
+
+                timeoutTimer->stop(); // wait for impulse apllying (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
+                indicationTimer->stop();
+
                 qInfo() << recievedCommand.description();
                 break;
             }
 
             case AnswerType::ccEND:
             {
-                timer->start();
+                timeoutTimer->start();
+                indicationTimer->start();
 
                 qInfo() << recievedCommand.description();
                 presetManager.returnToPreviousState();
@@ -419,7 +461,8 @@ void Core::parseInputData(QByteArray ba)
 
             case AnswerType::ccError:
             {
-                timer->start();
+                timeoutTimer->start();
+                indicationTimer->start();
 
                 emit sgSetUIText("impulse_save_error", currentPreset.impulseName());
 
@@ -491,7 +534,7 @@ void Core::parseInputData(QByteArray ba)
             }
         }
 
-            if(recieveEnabled)
+        if(recieveEnabled)
         {
             if(commandsSended.length()>0)
                 commandsSended.removeFirst();
@@ -658,7 +701,7 @@ void Core::uploadFirmware(QByteArray firmware)
         const uint32_t sizeBlock = 1024;
 
         emit sgSetUIParameter("fw_update_enabled", true);
-        timer->setInterval(1000);
+        timeoutTimer->setInterval(1000);
 
         fwUpdate = true;
         recieveEnabled = false;
@@ -924,15 +967,13 @@ void Core::setParameter(QString name, quint8 value)
 
     QString sendStr;
 
-    if(name==("output_mode"))
-        sendStr = QString("gm %1\r\n").arg(value, 0, 16);
 
     if(name==("format"))
     {
         emit sgSetUIParameter("wait", true);
 
         isFormatting = true;
-        timer->setInterval(10000);
+        timeoutTimer->setInterval(10000);
 
         sendStr = QString("fsf\r\n");
     }
@@ -1003,6 +1044,8 @@ void Core::readAllParameters()
 
     processCommands();
 
+    indicationTimer->start();
+
     bEditable = true;
 }
 
@@ -1053,7 +1096,8 @@ void Core::processCommands()
 
         if(commandToSend.indexOf("cc\r\n")==0)
         {
-            timer->stop();
+            timeoutTimer->stop();
+            indicationTimer->stop();
         }
         else
         {
@@ -1062,12 +1106,27 @@ void Core::processCommands()
             {
                 timeoutInterval = 10000;
             }
-            timer->start(timeoutInterval);
+            timeoutTimer->start(timeoutInterval);
+            indicationTimer->start();
         }
     }
     else
     {
         emit sgSetUIParameter("wait", false);
+    }
+}
+
+void Core::indicationRequest()
+{
+    qDebug() << "Indication request";
+
+    if(controlledDevice.isFirmwareCanIndicate())
+    {
+        emit sgSilentWriteToInterface("iio\r\n");
+    }
+    else
+    {
+        indicationTimer->stop();
     }
 }
 
@@ -1092,7 +1151,7 @@ void Core::recieveTimeout()
             sendCount++;
             qDebug() << "!!!!!!!!!!!!!!!!! recieve timeout !!!!!!!!!!!!!!!!!" << sendCount;
             sendCommand(commandWithoutAnswer);
-            timer->setInterval(1000);
+            timeoutTimer->setInterval(1000);
 
             if(sendCount>3)
             {
@@ -1139,5 +1198,6 @@ void Core::sw4Enable()
 
 void Core::stopCore()
 {
-    timer->stop();
+    timeoutTimer->stop();
+    indicationTimer->stop();
 }

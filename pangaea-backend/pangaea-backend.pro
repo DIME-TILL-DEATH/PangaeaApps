@@ -16,10 +16,10 @@ CONFIG += staticlib
 DEFINES += PANGAEA_LIBRARY
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.03\\\"
-DEFINES += CP16PA_FIRMWARE_VERSION=\\\"1.04.03\\\"
-DEFINES += CP100_FIRMWARE_VERSION=\\\"2.08.06\\\"
-DEFINES += CP100PA_FIRMWARE_VERSION=\\\"6.08.04\\\"
+DEFINES += CP16_FIRMWARE_VERSION=\\\"RV.1.04.04\\\"
+DEFINES += CP16PA_FIRMWARE_VERSION=\\\"PA.1.04.04\\\"
+DEFINES += CP100_FIRMWARE_VERSION=\\\"RV.2.08.12\\\"
+DEFINES += CP100PA_FIRMWARE_VERSION=\\\"PA.6.09.06\\\"
 
 SOURCES += \
     cores/core.cpp \
@@ -37,6 +37,7 @@ SOURCES += \
     interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
     interfaces/usbinterface.cpp \
+    utils/eqresponse.cpp \
     utils/irworker.cpp \
     utils/parser.cpp \
     utils/presetmanager.cpp
@@ -59,6 +60,7 @@ HEADERS += \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
     qmlEnums/devicetypeenum.h \
+    utils/eqresponse.h \
     utils/irworker.h \
     utils/parser.h \
     utils/presetmanager.h

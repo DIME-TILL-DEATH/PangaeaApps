@@ -1,10 +1,11 @@
 #include "deviceanswer.h"
 
-DeviceAnswer::DeviceAnswer(Parser* parser, AnswerType type, QString description, quint32 timeout)
+DeviceAnswer::DeviceAnswer(Parser* parser, AnswerType type, QString description, quint32 timeout, bool displayble)
     : m_parser{parser},
       m_answerType{type},
       m_description{description},
-      m_timeout{timeout}
+      m_timeout{timeout},
+      m_displayble{displayble}
 {
 
 }
@@ -37,4 +38,9 @@ const QList<QByteArray> &DeviceAnswer::parseResult() const
 bool DeviceAnswer::isEnableRecieve() const
 {
     return m_isEnableRecieve;
+}
+
+bool DeviceAnswer::displayble() const
+{
+    return m_displayble;
 }

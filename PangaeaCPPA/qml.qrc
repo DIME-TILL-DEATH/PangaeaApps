@@ -27,7 +27,6 @@
         <file>qml/Modules/Er.qml</file>
         <file>qml/Modules/Ng.qml</file>
         <file>qml/Modules/Hp.qml</file>
-        <file>qml/Modules/InOut.qml</file>
         <file>qml/Modules/Ir.qml</file>
         <file>qml/Modules/Lp.qml</file>
         <file>qml/Modules/Map.qml</file>
@@ -65,5 +64,9 @@
         <file>qml/Images/bluetooth-icon.svg</file>
         <file>qml/Images/usb-icon.svg</file>
         <file>qml/Layouts/StartLayout.qml</file>
+        <file>qml/Elements/SignalBar.qml</file>
+        <file>qml/Modules/In.qml</file>
+        <file>qml/Modules/Out.qml</file>
+        <file>qml/Modules/EqParametric.qml</file>
     </qresource>
 </RCC>

@@ -22,6 +22,12 @@ strVersion Firmware::extractVerFromString(QString versionString)
         resultList.removeFirst();
     }
 
+    if(resultList.at(0) == "RV")
+    {
+        result.isPA = false;
+        resultList.removeFirst();
+    }
+
     if(resultList.count()==3)
     {
         result.global = resultList.at(0).toInt();
@@ -63,7 +69,13 @@ bool Firmware::compareVersion(strVersion requestedVesrion, strVersion devVersion
 
 QString Firmware::firmwareVersion() const
 {
-    return m_firmwareVersionString;
+    QString isPaStr;
+    if(m_firmwareVersion.isPA) isPaStr = "PA";
+    else isPaStr = "RV";
+    return isPaStr + "." +
+           QString().setNum(m_firmwareVersion.global) + "." +
+           QString().setNum(m_firmwareVersion.major) + "." +
+           QString().setNum(m_firmwareVersion.minor);
 }
 
 FirmwareType Firmware::firmwareType() const

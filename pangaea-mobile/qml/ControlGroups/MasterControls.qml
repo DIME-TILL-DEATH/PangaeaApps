@@ -82,7 +82,7 @@ Item
                     onMbPressed:
                     {
                         mode = 0;
-                        UiCore.setParameter("output_mode", mode);
+                        UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
                     }
                 }
 
@@ -97,7 +97,7 @@ Item
                     onMbPressed:
                     {
                         mode = 2;
-                        UiCore.setParameter("output_mode", mode);
+                        UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
                     }
                 }
 
@@ -112,7 +112,7 @@ Item
                     onMbPressed:
                     {
                         mode = 1;
-                        UiCore.setParameter("output_mode", mode);
+                        UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
                     }
                 }
             }

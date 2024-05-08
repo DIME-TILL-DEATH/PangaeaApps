@@ -17,7 +17,8 @@ public:
     DeviceType deviceType() const;
     void setDeviceType(DeviceType newDeviceType);
 
-    bool isFimwareSUfficient();
+    bool isFimwareSufficient();
+    bool isFirmwareCanIndicate();
 
     Firmware *actualFirmware() const;
 
@@ -30,6 +31,7 @@ private:
 
     Firmware* m_actualFirmware{nullptr};
     Firmware* m_minimalFirmware{nullptr};
+    Firmware* m_indicationFirmware{nullptr};
 
     quint8 m_maxBankPresetCount{0};
 };

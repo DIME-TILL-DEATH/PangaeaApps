@@ -41,6 +41,7 @@ enum AnswerType{
     ackPwl,
     ackSetParameter,
     requestNextChunk,
+    indicationRequest,
     endOperation
 };
 
@@ -48,7 +49,7 @@ class DeviceAnswer
 {
 public:
 
-    explicit DeviceAnswer(Parser* parser, AnswerType type = AnswerType::unknown, QString description="", quint32 timeout=1000);
+    explicit DeviceAnswer(Parser* parser, AnswerType type = AnswerType::unknown, QString description="", quint32 timeout=1000, bool displayble=true);
 
     bool processRawData(QByteArray rawData);
 
@@ -58,6 +59,8 @@ public:
 
     bool isEnableRecieve() const;
 
+    bool displayble() const;
+
 private:
     Parser* m_parser;
 
@@ -65,6 +68,7 @@ private:
     QString m_description;
 
     bool m_isEnableRecieve=false;
+    bool m_displayble{true};
 
     QList<QByteArray> m_parseResult;
 

@@ -73,8 +73,9 @@ private:
     PresetManager presetManager;
 
     QSettings* appSettings;
-
-    QTimer *timer;
+    
+    QTimer *timeoutTimer;
+    QTimer *indicationTimer;
     
     bool recieveEnabled{true};
     quint8 sendCount{0};
@@ -99,6 +100,7 @@ private:
     void setPresetData(const Preset& preset);
 signals:
     void sgWriteToInterface(QByteArray data);
+    void sgSilentWriteToInterface(QByteArray data);
     void sgExchangeError();
 
     void sgFirmwareVersionInsufficient(Firmware *minimalFirmware, Firmware *actualFirmware);
@@ -122,8 +124,11 @@ public slots:
 
     void parseInputData(QByteArray data);
     void processCommands();
-    void recieveTimeout();
 
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
+
+private slots:
+    void indicationRequest();
+    void recieveTimeout();
 };
 #endif // CORE_H

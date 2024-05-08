@@ -101,6 +101,8 @@ AnswerWorker::AnswerWorker()
     m_devCommandList.append(DeviceAnswer(new Parser("pws xx\rEND\n", "11110011111"), AnswerType::ackPws, "temporaly save IR acknowledgemnt"));
     m_devCommandList.append(DeviceAnswer(new Parser("pwl xx\rEND\n", "11110011111"), AnswerType::ackPwl, "load temporaly IR acknowledgemnt"));
 
+    m_devCommandList.append(DeviceAnswer(new Parser("iio\r*\n*\n*\n*\n*\n*\nEND\n", "1111X1X1X1X1X1X11111"), AnswerType::indicationRequest, "input and output signal values", 1000, false));
+
     m_devCommandList.append(DeviceAnswer(getIrListCP16, AnswerType::getIrList, "get list of IR names for CP16"));
     m_devCommandList.append(DeviceAnswer(getIrListCP100, AnswerType::getIrList, "get list of IR names for CP100"));
     m_devCommandList.append(DeviceAnswer(getIrListCP100_legacy, AnswerType::getIrList, "get list of IR names for CP100(legacy)"));
@@ -141,4 +143,10 @@ DeviceAnswer AnswerWorker::popAnswer()
 bool AnswerWorker::haveAnswer()
 {
     return !m_recievedAnswers.isEmpty();
+}
+
+bool AnswerWorker::displayNextAnswer()
+{
+    if(m_recievedAnswers.empty()) return true;
+    return m_recievedAnswers.first().displayble();
 }

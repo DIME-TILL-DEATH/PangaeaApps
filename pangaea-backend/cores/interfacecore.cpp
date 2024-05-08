@@ -89,6 +89,14 @@ void InterfaceCore::writeToDevice(QByteArray data)
     }
 }
 
+void InterfaceCore::silentWriteToDevice(QByteArray data)
+{
+    if(m_exchangeInterface)
+    {
+        m_exchangeInterface->write(data);
+    }
+}
+
 void InterfaceCore::startScanning()
 {
     QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);

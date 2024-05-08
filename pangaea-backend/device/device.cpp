@@ -12,7 +12,18 @@ void Device::setDeviceType(DeviceType newDeviceType)
 {
     m_deviceType = newDeviceType;
 
-    // TODO: не хардкодить пути и число банков
+    if(m_minimalFirmware != nullptr)
+    {
+        delete(m_minimalFirmware);
+        m_minimalFirmware = nullptr;
+    }
+
+    if(m_indicationFirmware != nullptr)
+    {
+        delete(m_indicationFirmware);
+        m_indicationFirmware = nullptr;
+    }
+
     switch(m_deviceType)
     {
         case DeviceType::CP16:
@@ -29,6 +40,7 @@ void Device::setDeviceType(DeviceType newDeviceType)
         break;
         case DeviceType::CP100PA:
             m_minimalFirmware = new Firmware(CP100PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
+            m_indicationFirmware = new Firmware("PA.06.09.06", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
             m_maxBankPresetCount = 10;
         break;
     default:
@@ -37,7 +49,7 @@ void Device::setDeviceType(DeviceType newDeviceType)
     }
 }
 
-bool Device::isFimwareSUfficient()
+bool Device::isFimwareSufficient()
 {
     if(m_actualFirmware==nullptr || m_minimalFirmware==nullptr)
     {
@@ -45,9 +57,23 @@ bool Device::isFimwareSUfficient()
         return false;
     }
 
-    if(m_actualFirmware >= m_minimalFirmware)
-        return true;
-    else return false;
+    if(*m_actualFirmware < *m_minimalFirmware) return false;
+
+    return true;
+}
+
+bool Device::isFirmwareCanIndicate()
+{
+    if(m_actualFirmware==nullptr)
+    {
+        qWarning() << __FUNCTION__ << "Firmwares does not set!";
+        return false;
+    }
+    if(m_indicationFirmware == nullptr) return false;
+
+    if(*m_actualFirmware < *m_indicationFirmware) return false;
+
+    return true;
 }
 
 Firmware *Device::actualFirmware() const
