@@ -52,10 +52,10 @@ Item{
                 height: width
                 radius: width / 2
 
-                color: "white"
+                color: (main.on) ? "white" : "darkgrey"
 
                 border.width: 1
-                border.color: "black"
+                border.color: "darkgrey"
             }
 
             handle: Rectangle {
@@ -68,7 +68,7 @@ Item{
                 height: width
                 radius: width/2
 
-                color: "black"
+                color: Style.mainDisabledColor
                 antialiasing: true
                 transform: [
                     Translate {
@@ -93,7 +93,7 @@ Item{
             MText
             {
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: Style.backgroundColor
+                color: (main.on) ? "white" : "darkgrey"
                 font.pixelSize: parent.width/10
                 text: annotation
             }

@@ -19,23 +19,60 @@ Rectangle{
 
     transformOrigin: Item.Center
 
-    width: Math.min(parent.width/25, parent.height/25)
+    width: Math.min(parent.width/15, parent.height/15)
     height: width
 
     radius: width/2
 
-    color: (selectedBandIndex === index) ? "red" : "transparent"
+    color: (selectedBandIndex === index) ?
+               (main.on ? "red" : "darkgrey") :
+               "transparent"
 
     border.width: Math.max(2, width/20)
-    border.color: (true) ? "Salmon" : "#EBECEC"
+    border.color: main.on ? "Salmon" : "darkgrey"
 
     signal pointSelected(var index);
 
-    MouseArea{
-        anchors.fill: parent
+    Drag.active: ma.drag.active
+    Drag.hotSpot.x: width/2
+    Drag.hotSpot.y: height/2
 
-        onClicked: {
+    MouseArea{
+        id: ma
+
+        anchors.fill: parent
+        cursorShape: Qt.SizeAllCursor
+
+        drag.target: root
+
+        property real xmin: EqResponse.points[0].x;
+        property real xmax: EqResponse.points[EqResponse.points.length-1].x
+
+        drag.minimumX: _canvas.width*((Math.log10(eqBand.fStart)-Math.log10(xmin))
+                                      /(Math.log10(xmax)-Math.log10(xmin))) - root.width/2;
+        drag.maximumX: _canvas.width*((Math.log10(eqBand.fStop)-Math.log10(xmin))
+                                      /(Math.log10(xmax)-Math.log10(xmin))) - root.width/2;
+
+        drag.minimumY: root.parent.height/2 - 15 * root.parent.height/gainRange - root.height/2
+        drag.maximumY: root.parent.height/2 + 15 * root.parent.height/gainRange - root.height/2
+
+        drag.smoothed: false
+        // drag.threshold: 3
+
+        onPressed: {
             pointSelected(index);
+        }
+
+        onWheel: function(wheel){
+            if(EqResponse.EqBands[currentBandIndex].Q>0.1 & wheel.angleDelta.y<0)
+            {
+                EqResponse.EqBands[currentBandIndex].Q -= 0.1
+            }
+
+            if(EqResponse.EqBands[currentBandIndex].Q<20 & wheel.angleDelta.y>0)
+            {
+                EqResponse.EqBands[currentBandIndex].Q += 0.1
+            }
         }
     }
 }

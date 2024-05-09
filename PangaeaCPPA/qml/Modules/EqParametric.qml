@@ -35,6 +35,12 @@ Rectangle
             width: parent.width
             height: parent.height*3/4
 
+            MouseArea{
+                id: mAsteaalModuleOnOf
+                anchors.fill: parent
+                z: parent.z-1
+            }
+
             Canvas{
                 id: _canvas
 
@@ -55,31 +61,45 @@ Rectangle
 
                     ctx.lineWidth = 1;
                     ctx.strokeStyle = "gray";
+                    ctx.font = "8px Arial";
+                    ctx.fillStyle = "gray";
 
                     // y-grid draw
-                    ctx.beginPath();
                     for(var i=0; i<gainRange/yGridSize; i++)
                     {
+                        if(i == gainRange/yGridSize/2)
+                        {
+                            ctx.strokeStyle =  (main.on)? "darkgrey" : "gray";
+                            ctx.lineWidth = 3
+                        }
+                        else
+                        {
+                            ctx.strokeStyle = "gray";
+                            ctx.lineWidth=1
+                        }
+                        ctx.beginPath();
                         var ypos = coefY*yGridSize*i;
                         ctx.moveTo(0, ypos);
                         ctx.lineTo(_canvas.width, ypos);
+                        ctx.stroke();
+                        ctx.fillText((gainRange/2 - yGridSize*i)+"dB", 2, ypos-4);
                     }
-                    ctx.stroke();
 
                     // x-grid draw
-                    ctx.beginPath();
                     for(i=1; i<5; i++)
                     {
+                        ctx.beginPath();
                         var xpos = _canvas.width*((Math.log10(Math.pow(10, i))-Math.log10(xmin))
                                                   /(Math.log10(xmax)-Math.log10(xmin)));
                         ctx.moveTo(xpos, 0);
                         ctx.lineTo(xpos, _canvas.height);
+                        ctx.stroke();
+                        ctx.fillText(Math.pow(10, i)+"Hz", xpos+2, _canvas.height-2);
                     }
-                    ctx.stroke();
 
                     // response draw
                     ctx.lineWidth = 3;
-                    ctx.strokeStyle = "white";
+                    ctx.strokeStyle = (main.on)? "white" : "darkgray";
 
                     ctx.translate(0, _canvas.height/2);
 
@@ -90,11 +110,7 @@ Rectangle
 
                     for(i=0; i<EqResponse.points.length; i++)
                     {
-                        // console.log(EqResponse.points[i], x, y);
-                        /*To create a logarithmic scale between two values, let V0 and V1, take to base-10 logarithms log(V1) and log(V2) and rescale to map to the desired coordinates on your plot, let X0 to X1.
-
-                        X = X0 + (X1 - X0)(log(V) - log(V0))/(log(V1) - log(V0))
-                        To draw ticks at simple values, first determine the full decades that are spanned,
+                        /*To draw ticks at simple values, first determine the full decades that are spanned,
                         from 10^floor(log(V0)) to 10^floor(log(V1)), then get the most significant digits by
 
                         ceil(10^(log(V0) - floor(log(V0)))
@@ -112,6 +128,8 @@ Rectangle
             }
 
             Repeater{
+               id: repeater
+
                anchors.fill: parent
                delegate: EqPoint{
                    eqBand: EqResponse.EqBands[index]
@@ -125,6 +143,26 @@ Rectangle
 
                model: EqResponse.EqBands
             }
+
+            DropArea{
+                id: dropArea
+
+                anchors.fill: parent
+
+
+                onPositionChanged: function(drag){
+                    var xmin = EqResponse.points[0].x;
+                    var xmax = EqResponse.points[EqResponse.points.length-1].x;
+                    var pointRadius = repeater.itemAt(currentBandIndex).height/2;
+
+                    var freq = Math.pow(10, (drag.source.x+pointRadius)/_canvas.width * (Math.log10(xmax)-Math.log10(xmin)) + Math.log10(xmin))
+                    var gain = (-drag.source.y + _canvas.height/2 - pointRadius) * main.gainRange/_canvas.height;
+
+                    EqResponse.EqBands[currentBandIndex].gain = Math.round(gain);
+                    EqResponse.EqBands[currentBandIndex].Fc = Math.round(freq);
+                    // console.log(Math.round(freq), Math.round(gain))
+                }
+            }
         }
 
         Rectangle{
@@ -133,10 +171,12 @@ Rectangle
             width: parent.width
             height: parent.height - _canvas.height - border.width*2
 
+            z:-1
+
             color: "transparent"
 
             border.width: 2
-            border.color: "white"
+            border.color: (main.on) ? "white" : "darkgrey"
 
             Row{
                 width: parent.width
@@ -149,7 +189,7 @@ Rectangle
 
                     MText{
                         anchors.horizontalCenter: parent.horizontalCenter
-                        color: Style.backgroundColor
+                        color: (main.on) ? "white" : "darkgrey"
                         font.pixelSize: parent.width/6
 
                         text: "BAND " + (currentBandIndex + 1) + "\n" +
@@ -211,6 +251,14 @@ Rectangle
         target: UiCore
 
         function onSgSetDeviceParameter(paramType, value)
+        {
+            if(paramType === DeviceParameter.EQ_ON)
+            {
+                main.update();
+            }
+        }
+
+        function onSetDeviceParameter(paramType, value)
         {
             if(paramType === DeviceParameter.EQ_ON)
             {
