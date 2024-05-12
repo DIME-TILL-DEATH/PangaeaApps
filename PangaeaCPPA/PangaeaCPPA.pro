@@ -10,14 +10,14 @@ QT += bluetooth
 QT += widgets
 
 win32 {
-    VERSION = 1.0.1731.1
+    VERSION = 1.0.1732.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1731
+else: VERSION = 1.0.1732
 
 macx {
     QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist

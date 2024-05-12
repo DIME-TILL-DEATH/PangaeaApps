@@ -74,8 +74,8 @@ int main(int argc, char *argv[])
 
     //-----------------------------------------------------------------
     // UI creation
-    //----------------------------------------------------------------   
-    UiInterfaceManager uiInterfaceManager;
+    //----------------------------------------------------------------
+    UiInterfaceManager uiInterfaceManager; // TODO: move to backend, либо common(Общий для всех)
     UiDesktopCore uiCore;
     UiSettings uiSettings;
 
@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
 
     qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
-    qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
 
     //-------------------------------------------------------------------------------
     // connections

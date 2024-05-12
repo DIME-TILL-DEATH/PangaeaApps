@@ -13,21 +13,17 @@ Item
     property string name:     "PA"
     property bool on: true
 
-    property int eq1: eq1.yDisp
-    property int eq2: eq2.yDisp
-    property int eq3: eq3.yDisp
-    property int eq4: eq4.yDisp
-    property int eq5: eq5.yDisp
+    property int currentBandIndex
 
-    property int q1: _q1Control.yDisp
-    property int q2: _q2Control.yDisp
-    property int q3: _q3Control.yDisp
-    property int q4: _q4Control.yDisp
-    property int q5: _q5Control.yDisp
+    property int gainRange: 40
 
     property bool extVisible: false
     signal hide
 
+    function update()
+    {
+        _canvas.requestPaint();
+    }
 
     Rectangle
     {
@@ -39,359 +35,232 @@ Item
 
         Column
         {
-            width: parent.width/10*8
+            width: parent.width/10*9
             height: parent.height/10*8
             anchors.centerIn: parent
 
-            Item
-            {
+            spacing: height/36
+
+            Item {
                 width: parent.width
-                height: parent.height*1/12
-                CustomizerSlider
-                {
-                    id: _q1Control
+                height: parent.height*18/36
+                Canvas{
+                    id: _canvas
 
-                    name: "Q-Factor"
                     anchors.fill: parent
-                    dispMin: 1
-                    dispMax: 200
-                    delitel: 10
 
-                    valueMin: -100
-                    valueMax: 100
+                    renderStrategy: Canvas.Threaded
 
-                    paramType: DeviceParameter.EQ_Q1
-                    visible: (eqsArray.nomActiv==0)
+                    property int yGridSize: 5
+                    property real coefY : height / gainRange
+
+                    onPaint: {
+                        var xmin = EqResponse.points[0].x;
+                        var xmax = EqResponse.points[EqResponse.points.length-1].x
+
+                        var ctx = getContext("2d");
+
+                        ctx.reset();
+
+                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = "gray";
+                        ctx.font = "6px sans-serif";
+                        ctx.fillStyle = "gray";
+
+                        // y-grid draw
+                        for(var i=0; i<gainRange/yGridSize; i++)
+                        {
+                            if(i == gainRange/yGridSize/2)
+                            {
+                                ctx.strokeStyle = "darkgrey"
+                                ctx.lineWidth = 3
+                            }
+                            else
+                            {
+                                ctx.strokeStyle = "gray";
+                                ctx.lineWidth=1
+                            }
+                            ctx.beginPath();
+                            var ypos = coefY*yGridSize*i;
+                            ctx.moveTo(0, ypos);
+                            ctx.lineTo(_canvas.width, ypos);
+                            ctx.stroke();
+                            ctx.fillText((gainRange/2 - yGridSize*i)+"dB", 2, ypos-4);
+                        }
+
+                        // x-grid draw
+                        for(i=1; i<5; i++)
+                        {
+                            ctx.beginPath();
+                            var xpos = _canvas.width*((Math.log10(Math.pow(10, i))-Math.log10(xmin))
+                                                      /(Math.log10(xmax)-Math.log10(xmin)));
+                            ctx.moveTo(xpos, 0);
+                            ctx.lineTo(xpos, _canvas.height);
+                            ctx.stroke();
+                            ctx.fillText(Math.pow(10, i)+"Hz", xpos+2, _canvas.height-2);
+                        }
+
+                        // response draw
+                        ctx.lineWidth = 3;
+                        ctx.strokeStyle = "white" ;
+
+                        ctx.translate(0, _canvas.height/2);
+
+                        ctx.beginPath();
+
+                        var x=0;
+                        var y=_canvas.height/2;
+
+                        for(i=0; i<EqResponse.points.length; i++)
+                        {
+                            x = _canvas.width*((Math.log10(EqResponse.points[i].x)-Math.log10(xmin))
+                                               /(Math.log10(xmax)-Math.log10(xmin)));
+                            y = EqResponse.points[i].y*coefY
+
+                            ctx.lineTo(x, -y);
+                        }
+                        ctx.stroke()
+                    }
                 }
-                CustomizerSlider
-                {
-                    id: _q2Control
 
-                    name: "Q-Factor"
+                Repeater{
+                   id: repeater
+
+                   anchors.fill: parent
+                   delegate: EqPoint{
+                       eqBand: EqResponse.EqBands[index]
+                       gainRange: main.gainRange
+                       selectedBandIndex: main.currentBandIndex
+
+                       Component.onCompleted: {
+                           pointSelected.connect(main.bandSelected)
+                       }
+                   }
+
+                   model: EqResponse.EqBands
+                }
+
+                DropArea{
+                    id: dropArea
+
                     anchors.fill: parent
-                    dispMin: 1
-                    dispMax: 200
-                    delitel: 10
 
-                    valueMin: -100
-                    valueMax: 100
 
-                    paramType: DeviceParameter.EQ_Q2
+                    onPositionChanged: function(drag){
+                        var xmin = EqResponse.points[0].x;
+                        var xmax = EqResponse.points[EqResponse.points.length-1].x;
+                        var pointRadius = repeater.itemAt(currentBandIndex).height/2;
 
-                    visible: (eqsArray.nomActiv==1)
+                        var freq = Math.pow(10, (drag.source.x+pointRadius)/_canvas.width * (Math.log10(xmax)-Math.log10(xmin)) + Math.log10(xmin))
+                        var gain = (-drag.source.y + _canvas.height/2 - pointRadius) * main.gainRange/_canvas.height;
+
+                        EqResponse.EqBands[currentBandIndex].gain = Math.round(gain);
+                        EqResponse.EqBands[currentBandIndex].Fc = Math.round(freq);
+                    }
                 }
-                CustomizerSlider
-                {
-                    id: _q3Control
 
-                    name: "Q-Factor"
+
+                PinchArea{
+                    id: pinchArea
+
                     anchors.fill: parent
-                    dispMin: 1
-                    dispMax: 200
-                    delitel: 10
+                    pinch.target: _canvas
+                    pinch.dragAxis: Pinch.XAxis
 
-                    valueMin: -100
-                    valueMax: 100
+                    z: repeater.z-1
 
-                    paramType: DeviceParameter.EQ_Q3
+                    property var startPinchQ
 
-                    visible: (eqsArray.nomActiv==2)
-                }
-                CustomizerSlider
-                {
-                    id: _q4Control
-
-                    name: "Q-Factor"
-                    anchors.fill: parent
-                    dispMin: 1
-                    dispMax: 200
-                    delitel: 10
-
-                    valueMin: -100
-                    valueMax: 100
-
-                    paramType: DeviceParameter.EQ_Q4
-
-                    visible: (eqsArray.nomActiv==3)
-                }
-                CustomizerSlider
-                {
-                    id: _q5Control
-
-                    name: "Q-Factor"
-                    anchors.fill: parent
-                    dispMin: 1
-                    dispMax: 200
-                    delitel: 10
-
-                    valueMin: -100
-                    valueMax: 100
-
-                    paramType: DeviceParameter.EQ_Q5
-
-                    visible: (eqsArray.nomActiv==4)
-                }
-            }
-            Item
-            {
-                width: parent.width
-                height: parent.height*1/12
-            }
-
-            Item
-            {
-                anchors.left: parent.left
-                anchors.leftMargin: parent.width/20
-                width: parent.width
-                height: parent.height/2
-                Rectangle{
-                    anchors.right: parent.right
-                    anchors.rightMargin: -parent.width*2/100
-                    width: parent.width*115/100
-                    height: parent.height
-                    radius: parent.height/20
-                    color: "#20201F"
-                }
-                Rectangle{
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: parent.height*8/100
-                    width: parent.width*90/100
-                    height: 1
-                    color: "grey"
-                    MText {
-                        text: "+15"
-                        color: "white"
-                        anchors.verticalCenter: parent.top
-                        anchors.right: parent.left
-                        anchors.rightMargin: parent.width*3/100
-                    }
-                }
-                Rectangle{
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: parent.height/100*34
-                    width: parent.width*90/100
-                    height: 1
-                    color: "grey"
-                    MText {
-                        text: "+6"
-                        color: "white"
-                        anchors.verticalCenter: parent.top
-                        anchors.right: parent.left
-                        anchors.rightMargin: parent.width*3/100
-                    }
-                }
-                Rectangle{
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: parent.height*50/100
-                    width: parent.width*90/100
-                    height: 1
-                    color: "grey"
-                    Text {
-                        text: "0dB"
-                        font.pixelSize: parent.height/100
-                        color: "white"
-                        anchors.verticalCenter: parent.top
-                        anchors.right: parent.left
-                        anchors.rightMargin: parent.width*3/100
-                    }
-                }
-                Rectangle{
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: parent.height*58/1000
-                    width: parent.width*90/100
-                    height: 1
-                    color: "grey"
-                    MText {
-                        text: "-15"
-                        color: "white"
-                        anchors.verticalCenter: parent.top
-                        anchors.right: parent.left
-                        anchors.rightMargin: parent.width*3/100
-                    }
-                }
-                Rectangle{
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: parent.height/100*68
-                    width: parent.width*90/100
-                    height: 1
-                    color: "grey"
-                    MText {
-                        text: "-6"
-                        color: "white"
-                        anchors.verticalCenter: parent.top
-                        anchors.right: parent.left
-                        anchors.rightMargin: parent.width*3/100
-                    }
-                }
-
-                Item
-                {
-                    id: eqsArray
-
-                    property int nomActiv: 0
-                    property int maxWidth: parent.width/6
-
-                    width: parent.width
-                    height: parent.height
-
-                    EQExtBar
-                    {
-                        id: eq1
-
-                        x: eqsArray.maxWidth/2
-
-                        height: parent.height
-                        width: eqsArray.maxWidth * 0.9
-
-                        paramType: DeviceParameter.EQ_VOLUME1
-                        qSetting: main.q1
-                        qControlActive: 0
+                    onPinchStarted: {
+                        startPinchQ = EqResponse.EqBands[currentBandIndex].Q;
                     }
 
-                    EQExtBar
-                    {
-                        id: eq2
+                    onPinchUpdated: function(pinch){
+                        var delta1 = pinch.point1.x - pinch.startPoint1.x
+                        var delta2 = pinch.point2.x - pinch.startPoint2.x
 
-                        x: eqsArray.maxWidth + eqsArray.maxWidth/2
+                        var resultQ = startPinchQ / pinch.scale;
+                        if(resultQ > 20) resultQ = 20;
+                        if(resultQ < 0.1) resultQ = 0.1;
 
-                        height: parent.height
-                        width: eqsArray.maxWidth * 0.9
-
-                        paramType: DeviceParameter.EQ_VOLUME2
-                        qSetting: main.q2
-                        qControlActive: 1
-                    }
-
-                    EQExtBar
-                    {
-                        id: eq3
-
-                        x: eqsArray.maxWidth*2 + eqsArray.maxWidth/2
-
-                        height: parent.height
-                        width: eqsArray.maxWidth * 0.9
-
-                        paramType: DeviceParameter.EQ_VOLUME3
-                        qSetting: main.q3
-                        qControlActive: 2
-                    }
-
-                    EQExtBar
-                    {
-                        id: eq4
-
-                        x: eqsArray.maxWidth*3 + eqsArray.maxWidth/2
-
-                        height: parent.height
-                        width: eqsArray.maxWidth * 0.9
-
-                        paramType: DeviceParameter.EQ_VOLUME4
-                        qSetting: main.q4
-                        qControlActive: 3
-                    }
-
-                    EQExtBar
-                    {
-                        id: eq5
-
-                        x: eqsArray.maxWidth*4 + eqsArray.maxWidth/2
-
-                        height: parent.height
-                        width: eqsArray.maxWidth * 0.95
-
-                        paramType: DeviceParameter.EQ_VOLUME5
-                        qSetting: main.q5
-                        qControlActive: 4
+                        EqResponse.EqBands[currentBandIndex].Q = resultQ
                     }
                 }
             }
 
-            Item
-            {
-                width: parent.width
-                height: parent.height*1/12
-            }
+            Item{
+                width: parent.width*0.9
+                height: parent.height*1/10
 
-            Item
-            {
-                width: parent.width
-                height: parent.height*1/12
-                CustomizerSlider
-                {
-                    name: "Central Frequency"
-                    anchors.fill: parent
-                    paramType: DeviceParameter.EQ_FREQ1
-                    dispMin: 20
-                    dispMax: 220
+                MText{
+                    anchors.verticalCenter: parent.verticalCenter
 
-                    valueMin: -100
-                    valueMax: 100
-                    units: "Hz"
-                    visible: (eqsArray.nomActiv==0)
-                }
-                CustomizerSlider
-                {
-                    name: "Central Frequency"
-                    anchors.fill: parent
-                    paramType: DeviceParameter.EQ_FREQ2
-                    dispMin: 260
-                    dispMax: 460
+                    color: Style.colorText
 
-                    valueMin: -100
-                    valueMax: 100
-                    units: "Hz"
-                    visible: (eqsArray.nomActiv==1)
-                }
-                CustomizerSlider
-                {
-                    name: "Central Frequency"
-                    anchors.fill: parent
-                    paramType: DeviceParameter.EQ_FREQ3
-                    dispMin: 600
-                    dispMax: 1000
-
-                    valueMin: -100
-                    valueMax: 100
-                    units: "Hz"
-                    visible: (eqsArray.nomActiv==2)
-                }
-                CustomizerSlider
-                {
-                    name: "Central Frequency"
-                    anchors.fill: parent
-                    paramType: DeviceParameter.EQ_FREQ4
-                    dispMin: 1000
-                    dispMax: 3000
-
-                    valueMin: -100
-                    valueMax: 100
-                    units: "Hz"
-                    visible: (eqsArray.nomActiv==3)
-                }
-                CustomizerSlider
-                {
-                    name: "Central Frequency"
-                    anchors.fill: parent
-                    paramType: DeviceParameter.EQ_FREQ5
-                    dispMin: 1000
-                    dispMax: 11000
-
-                    valueMin: -100
-                    valueMax: 100
-                    units: "Hz"
-                    visible: (eqsArray.nomActiv==4)
+                    text: "BAND " + (currentBandIndex+1)
+                          + ", frequency span: " + EqResponse.EqBands[currentBandIndex].fStart + "Hz-"
+                           + EqResponse.EqBands[currentBandIndex].fStop + "Hz"
                 }
             }
 
-            Item
+            CustomSlider
             {
+                id: fSlider
+                name: "Central Frequency"
+
                 width: parent.width
                 height: parent.height*1/12
+
+                from: EqResponse.EqBands[currentBandIndex].fStart
+                to: EqResponse.EqBands[currentBandIndex].fStop
+                value: EqResponse.EqBands[currentBandIndex].Fc
+                edited: EqResponse.EqBands[currentBandIndex].isFcModified
+                units: "Hz"
+
+                onMoved:
+                {
+                    EqResponse.EqBands[currentBandIndex].Fc = value
+                }
+            }
+
+            CustomSlider
+            {
+                name: "Gain"
+
+                width: parent.width
+                height: parent.height*1/12
+
+                from: -15
+                to: +15
+                value: EqResponse.EqBands[currentBandIndex].gain
+                edited: EqResponse.EqBands[currentBandIndex].isGainModified
+                units: "dB"
+
+                onMoved:
+                {
+                    EqResponse.EqBands[currentBandIndex].gain = value;
+                }
+            }
+
+            CustomSlider
+            {
+                id: _q1Control
+
+                name: "Q-Factor"
+                width: parent.width
+                height: parent.height*1/12
+
+                from: 0.1
+                to: 20
+                // TODO: попробовать QtObject DeviceParameter{value, modified, valueMin, valueMax, controlMin, controlMax}
+                value: EqResponse.EqBands[currentBandIndex].Q
+                edited: EqResponse.EqBands[currentBandIndex].isQModified
+                precision: 1
+
+                onMoved:
+                {
+                    EqResponse.EqBands[currentBandIndex].Q = value
+                }
             }
 
             Button
@@ -399,7 +268,7 @@ Item
                 id: btn
 
                 width: parent.width
-                height: parent.height*1/6
+                height: parent.height*2/15
 
                 text: qsTr("HIDE")
 
@@ -411,8 +280,36 @@ Item
         }
     }
 
-    MouseArea
-    {   z: -1
-        anchors.fill: parent
+    function bandSelected(index){
+        currentBandIndex = index
+    }
+
+    Connections{
+        target: UiCore
+
+        function onSgSetDeviceParameter(paramType, value)
+        {
+            if(paramType === DeviceParameter.EQ_ON)
+            {
+                main.update();
+            }
+        }
+
+        function onSetDeviceParameter(paramType, value)
+        {
+            if(paramType === DeviceParameter.EQ_ON)
+            {
+                main.update();
+            }
+        }
+    }
+
+    Connections{
+        target: EqResponse
+
+        function onPointsChanged()
+        {
+            main.update();
+        }
     }
 }

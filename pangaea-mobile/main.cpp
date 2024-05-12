@@ -19,6 +19,9 @@
 #include "interfacecore.h"
 #include "presetlistmodel.h"
 
+#include "eqband.h"
+#include "eqresponse.h"
+
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
 
@@ -72,6 +75,8 @@ int main(int argc, char *argv[])
     NetCore* netCore = new NetCore;
     InterfaceCore* interfaceManager = new InterfaceCore;
 
+    EqResponse eqResponse;
+
     PresetListModel presetListModel;
 
     ThreadController threadController(QThread::currentThread());
@@ -88,7 +93,7 @@ int main(int argc, char *argv[])
     //-----------------------------------------------------------------
     // UI creation
     //----------------------------------------------------------------
-    UICore uiCore;
+    UiCore uiCore;
     UiInterfaceManager uiInterfaceManager;
 
     QQmlApplicationEngine engine;
@@ -97,48 +102,56 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/translations");
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
 
-    qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);  
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);
 
-    qRegisterMetaType<DeviceDescription>();
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "EqResponse", &eqResponse);
+
+    // qRegisterMetaType<DeviceDescription>();
+    qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------
-    UICore::connect(&uiCore, &UICore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
+    UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    QObject::connect(&uiCore, &UICore::sgReadAllParameters, core, &Core::readAllParameters);
-    QObject::connect(&uiCore, &UICore::sgSetParameter, core, &Core::setParameter);
-    QObject::connect(&uiCore, &UICore::sgSetDeviceParameter, core, &Core::setDeviceParameter);
-    QObject::connect(&uiCore, &UICore::sgRestoreValue, core, &Core::restoreValue);
-    QObject::connect(&uiCore, &UICore::sgSetImpuls, core, &Core::setImpulse);
-    QObject::connect(&uiCore, &UICore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
-    QObject::connect(&uiCore, &UICore::sgEscImpuls, core, &Core::escImpulse);
-    QObject::connect(&uiCore, &UICore::sgExportPreset, core, &Core::exportPreset);
-    QObject::connect(&uiCore, &UICore::sgImportPreset, core, &Core::importPreset);
-    QObject::connect(&uiCore, &UICore::sgSw4Enable, core, &Core::sw4Enable);
+    QObject::connect(&uiCore, &UiCore::sgReadAllParameters, core, &Core::readAllParameters);
+    QObject::connect(&uiCore, &UiCore::sgSetParameter, core, &Core::setParameter);
+    QObject::connect(&uiCore, &UiCore::sgSetDeviceParameter, core, &Core::setDeviceParameter);
+    //QObject::connect(&uiCore, &UiCore::sgSetDeviceParameter, &eqResponse, &EqResponse::slFilterParamChanged);
+    QObject::connect(&uiCore, &UiCore::sgRestoreValue, core, &Core::restoreValue);
+    QObject::connect(&uiCore, &UiCore::sgSetImpuls, core, &Core::setImpulse);
+    QObject::connect(&uiCore, &UiCore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
+    QObject::connect(&uiCore, &UiCore::sgEscImpuls, core, &Core::escImpulse);
+    QObject::connect(&uiCore, &UiCore::sgExportPreset, core, &Core::exportPreset);
+    QObject::connect(&uiCore, &UiCore::sgImportPreset, core, &Core::importPreset);
+    QObject::connect(&uiCore, &UiCore::sgSw4Enable, core, &Core::sw4Enable);
 
-    QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UICore::sgSetUIParameter);
-    QObject::connect(core, &Core::sgSetUiDeviceParameter, &uiCore, &UICore::sgSetUiDeviceParameter);
-    QObject::connect(core, &Core::sgSetUIText, &uiCore, &UICore::sgSetUIText);
-    QObject::connect(core, &Core::sgPresetChangeStage, &uiCore, &UICore::sgPresetChangeStage);
-    QObject::connect(core, &Core::sgSetProgress, &uiCore, &UICore::sgSetProgress);
-    QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UICore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
+    QObject::connect(&eqResponse, &EqResponse::setDeviceParameter, core, &Core::setDeviceParameter);
+
+    QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
+    QObject::connect(core, &Core::sgSetUIParameter, &eqResponse, &EqResponse::sgSetUIParameter);
+    QObject::connect(core, &Core::sgSetUiDeviceParameter, &uiCore, &UiCore::sgSetUiDeviceParameter);
+    QObject::connect(core, &Core::sgSetUiDeviceParameter, &eqResponse, &EqResponse::slFilterParamChanged);
+    QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiCore::sgSetUIText);
+    QObject::connect(core, &Core::sgPresetChangeStage, &uiCore, &UiCore::sgPresetChangeStage);
+    QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiCore::sgSetProgress);
+    QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
 
     QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgUpdatePreset, &presetListModel, &PresetListModel::updatePreset, Qt::QueuedConnection);
 
     QObject::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
 
-    QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UICore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
+    QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
 //    NetCore::connect(netCore, &NetCore::sgNewAppVersionAvaliable, &uiCore, &UiDesktopCore::slNewAppVersionAvaliable);
-    QObject::connect(&uiCore, &UICore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
+    QObject::connect(&uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
     QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
-    QObject::connect(netCore, &NetCore::sgDownloadProgress, &uiCore, &UICore::sgDownloadProgress, Qt::QueuedConnection);
+    QObject::connect(netCore, &NetCore::sgDownloadProgress, &uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);
 
     Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData);
     Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::readAllParameters);
@@ -153,8 +166,8 @@ int main(int argc, char *argv[])
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgDisconnectFromDevice, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
 //    Core::connect(core, &Core::sgImmediatelyDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
 
-    QObject::connect(&uiCore, &UICore::sgModuleNameChanged, interfaceManager, &InterfaceCore::setModuleName);
-    QObject::connect(interfaceManager, &InterfaceCore::sgModuleNameUpdated, &uiCore, &UICore::setModuleName);
+    QObject::connect(&uiCore, &UiCore::sgModuleNameChanged, interfaceManager, &InterfaceCore::setModuleName);
+    QObject::connect(interfaceManager, &InterfaceCore::sgModuleNameUpdated, &uiCore, &UiCore::setModuleName);
 
     QObject::connect(interfaceManager, &InterfaceCore::sgDeviceListUpdated, &uiInterfaceManager, &UiInterfaceManager::updateDevicesList);
     QObject::connect(interfaceManager, &InterfaceCore::sgConnectionStarted, &uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted);

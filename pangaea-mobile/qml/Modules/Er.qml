@@ -72,13 +72,11 @@ Item
             if(paramType === main.paramType)
             {
                 main.on=value
-                console.log("Settling by sgSetDeviceParameter", paramType);
             }
 
             if(paramType === DeviceParameter.EARLY_TYPE)
             {
-                main.currentType = value
-                console.log("Settling by sgSetDeviceParameter", paramType, "early type:", value);
+                main.currentType = value               
             }
         }
     }

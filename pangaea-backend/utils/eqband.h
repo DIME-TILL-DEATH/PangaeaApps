@@ -14,6 +14,10 @@ class EqBand : public QObject
     Q_PROPERTY(double Q READ getQ WRITE setQ NOTIFY QChanged FINAL)
     Q_PROPERTY(double gain READ getGain WRITE setGain NOTIFY gainChanged FINAL)
 
+    Q_PROPERTY(bool isFcModified READ isFcModified NOTIFY isFcModifiedChanged FINAL)
+    Q_PROPERTY(bool isQModified READ isQModified NOTIFY isQModifiedChanged FINAL)
+    Q_PROPERTY(bool isGainModified READ isGainModified NOTIFY isGainModifiedChanged FINAL)
+
     Q_PROPERTY(double fStart READ fStart CONSTANT)
     Q_PROPERTY(double fStop READ fStop CONSTANT)
 public:    
@@ -48,6 +52,13 @@ public:
     double fStop() {return m_fStop;};
 
     double getFilterResponse(double f);
+
+    bool isFcModified() const;
+
+    bool isQModified() const;
+
+    bool isGainModified() const;
+
 signals:
     void typeChanged();
     void FcChanged();
@@ -55,6 +66,13 @@ signals:
     void gainChanged();
 
     void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
+
+    void isFcModifiedChanged();
+    void isQModifiedChanged();
+    void isGainModifiedChanged();
+
+public slots:
+    void slSetUIParameter(QString nameParam, qint32 value);
 
 private:
     FilterType m_type;
@@ -78,6 +96,9 @@ private:
     }m_coefs;
 
     void calcFilterCoefs();
+    bool m_isFcModified;
+    bool m_isQModified;
+    bool m_isGainModified;
 };
 
 #endif // EQBAND_H

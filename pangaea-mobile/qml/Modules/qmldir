@@ -2,8 +2,8 @@ module Modules
 
 BaseModule 1.0 BaseModule.qml
 Cm	1.0 Cm.qml
-Eqs     1.0 Eqs.qml
 EqsExt  1.0 EqsExt.qml
+EqPreview     1.0 EqPreview.qml
 Er      1.0 Er.qml
 Hp      1.0 Hp.qml
 Ir      1.0 Ir.qml

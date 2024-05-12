@@ -88,6 +88,22 @@ double EqBand::getFilterResponse(double f)
     return 20*log10(abs(h));
 }
 
+void EqBand::slSetUIParameter(QString nameParam, qint32 value)
+{
+    if(nameParam == "preset_edited")
+    {
+        if(value == false)
+        {
+            m_isFcModified = false;
+            m_isQModified = false;
+            m_isGainModified = false;
+            emit isFcModifiedChanged();
+            emit isQModifiedChanged();
+            emit isGainModifiedChanged();
+        }
+    }
+}
+
 EqBand::FilterType EqBand::type() const
 {
     return m_type;
@@ -109,6 +125,9 @@ void EqBand::setFcValue(qint8 value)
     double k1 = freqMin-(valueMin*k2);
     int freqVal = k1 + value*k2;
 
+    if (qFuzzyCompare(m_Fc, freqVal))
+        return;
+
     m_Fc = freqVal;
     calcFilterCoefs();
     emit FcChanged();
@@ -121,7 +140,9 @@ void EqBand::setFc(double newFc)
 
     m_Fc = newFc;
     calcFilterCoefs();
+    m_isFcModified = true;
     emit FcChanged();
+    emit isFcModifiedChanged();
 
     double valueMin = -100;
     double valueMax = 100;
@@ -131,8 +152,7 @@ void EqBand::setFc(double newFc)
     double k2 = (freqMin-freqMax)/(valueMin-valueMax);
     double k1 = freqMin-(valueMin*k2);
 
-    quint8 value = (m_Fc - k1)/k2;
-
+    qint8 value = (m_Fc - k1)/k2;
     emit setDeviceParameter((DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_FREQ1 + m_bandNum), value);
 }
 
@@ -152,6 +172,8 @@ void EqBand::setQValue(qint8 value)
     double k1 = qMin-(valueMin*k2);
     double qVal = k1 + value*k2;
 
+    if(m_Q == qVal) return;
+
     m_Q = qVal;
     calcFilterCoefs();
     emit QChanged();
@@ -164,7 +186,9 @@ void EqBand::setQ(double newQ)
 
     m_Q = newQ;
     calcFilterCoefs();
+    m_isQModified = true;
     emit QChanged();
+    emit isQModifiedChanged();
 
     double valueMin = -100;
     double valueMax = 99;
@@ -174,7 +198,8 @@ void EqBand::setQ(double newQ)
     double k2 = (qMin-qMax)/(valueMin-valueMax);
     double k1 = qMin-(valueMin*k2);
 
-    quint8 value = (m_Q - k1)/k2;
+
+    qint8 value = (m_Q - k1)/k2;
     emit setDeviceParameter((DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_Q1 + m_bandNum), value);
 }
 
@@ -194,6 +219,8 @@ void EqBand::setGainValue(quint8 value)
     double k1 = gainMin-(valueMin*k2);
     int gainVal = k1 + value*k2;
 
+    if(m_gain == gainVal) return;
+
     m_gain = gainVal;
     calcFilterCoefs();
     emit gainChanged();
@@ -206,7 +233,10 @@ void EqBand::setGain(double newGain)
 
     m_gain = newGain;
     calcFilterCoefs();
+    // TODO функция для установки double параметра и модицикации объекта
+    m_isGainModified=true;
     emit gainChanged();
+    emit isGainModifiedChanged();
 
     double valueMin = 0;
     double valueMax = 31;
@@ -216,7 +246,22 @@ void EqBand::setGain(double newGain)
     double k2 = (gainMin-gainMax)/(valueMin-valueMax);
     double k1 = gainMin-(valueMin*k2);
 
-    quint8 value = (m_gain - k1)/k2;
+    qint8 value = (m_gain - k1)/k2;
 
     emit setDeviceParameter((DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_VOLUME1 + m_bandNum), value);
+}
+
+bool EqBand::isFcModified() const
+{
+    return m_isFcModified;
+}
+
+bool EqBand::isQModified() const
+{
+    return m_isQModified;
+}
+
+bool EqBand::isGainModified() const
+{
+    return m_isGainModified;
 }

@@ -16,8 +16,6 @@ Rectangle
 
     property int currentBandIndex
 
-    property real lineWidth: 0.25
-
     property int gainRange: 40
 
     color: main.on ? Style.mainEnabledColor : Style.mainDisabledColor

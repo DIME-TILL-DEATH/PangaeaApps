@@ -12,19 +12,7 @@ Slider
 
     property string name: "BAR"
     property string units: " "
-
-    property var paramType
-
-    property int valueMin:  0   //Y1
-    property int valueMax:  31  //Y2
-
-    property int dispMin:   0  //Y1
-    property int dispMax:   31 //Y2
-
-    property int x1val: 0
-    property int x2val: 100
-
-    property bool softUpdate: false
+    property int precision: 0
 
     property bool moduleOn: true
 
@@ -33,22 +21,6 @@ Slider
 
     property bool bottomLineEnabled: true
 
-    property int maximumValue: 1
-    property int minimumValue: 2
-
-    property int delitel: 1  //Делитель, если нужны десятичные занки
-
-    property double kDisp: -((dispMax-dispMin)/(x1val-x2val))
-    property double bDisp: -(((x2val*dispMin)-(x1val*dispMax))/(x1val-x2val))
-    property double yDisp: Math.round((kDisp * root.value * 100 + bDisp))/delitel
-
-    property double kVal: -((valueMax-valueMin)/(x1val-x2val))
-    property double bVal: -(((x2val*valueMin)-(x1val*valueMax))/(x1val-x2val))
-    property double yVal: Math.round(kVal * root.value * 100 + bVal)
-
-    property int rawValue
-    value:  (rawValue - bVal) / 100 / kVal
-
     leftPadding: 0
     rightPadding: 0
 
@@ -56,8 +28,7 @@ Slider
     {
         parent: root.handle
         visible: root.pressed
-        text: yDisp
-        scale: 1.2
+        text: value.toFixed(precision)
         y : -40
     }
 
@@ -119,7 +90,7 @@ Slider
     {
         id: textValue
         anchors.fill: parent
-        text: yDisp + " " + units + " "
+        text: value.toFixed(precision) + " " + units + " "
         horizontalAlignment: Text.AlignRight
         verticalAlignment: Text.AlignVCenter
         color: moduleOn ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
@@ -136,41 +107,5 @@ Slider
         leftPadding: 4
         color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
         z:1
-    }
-
-    onValueChanged:
-    {
-        if(!softUpdate)
-        {
-            UiCore.setDeviceParameter(paramType, Math.round(kVal * root.value * 100 + bVal));
-            edited = true;
-        }
-        else
-        {
-            edited = false;
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === root.paramType)
-            {
-                softUpdate = true;
-                root.rawValue = value;
-                softUpdate = false;
-            }
-        }
-
-        function onSgSetParameter(paramName, value)
-        {
-            if(paramName === "save_change")
-            {
-                edited = false;
-            }
-        }
     }
 }

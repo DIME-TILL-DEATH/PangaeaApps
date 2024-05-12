@@ -15,17 +15,17 @@
 ActivityResultManager activityResultHandler;
 #endif
 
-UICore::UICore(QObject *parent)
+UiCore::UiCore(QObject *parent)
     : QObject{parent}
 {
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
-
-    connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, &UICore::slImpulseFilePicked);
-    connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UICore::sgImportPreset);
-    connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UICore::slFirmwareFilePicked);
-    connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UICore::sgExportPreset);
+    
+    connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, &UiCore::slImpulseFilePicked);
+    connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::sgImportPreset);
+    connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UiCore::slFirmwareFilePicked);
+    connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::sgExportPreset);
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
@@ -33,7 +33,7 @@ UICore::UICore(QObject *parent)
     loadDefaultTranslator();
 }
 
-void UICore::setupApplication()
+void UiCore::setupApplication()
 {
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();
 
@@ -54,22 +54,22 @@ void UICore::setupApplication()
 }
 
 
-void UICore::setParameter(QString name, quint8 val)
+void UiCore::setParameter(QString name, quint8 val)
 {
     emit sgSetParameter(name, val);
 }
 
-void UICore::restoreParameter(QString name)
+void UiCore::restoreParameter(QString name)
 {
     emit sgRestoreValue(name);
 }
 
-void UICore::readAll()
+void UiCore::readAll()
 {
     emit sgReadAllParameters();
 }
 
-void UICore::setImpuls(QString fullFilePath)
+void UiCore::setImpuls(QString fullFilePath)
 {
 #ifdef Q_OS_ANDROID
     Q_UNUSED(fullFilePath)  
@@ -81,7 +81,7 @@ void UICore::setImpuls(QString fullFilePath)
 #endif
 }
 
-void UICore::convertAndUploadImpulse(QString filePath)
+void UiCore::convertAndUploadImpulse(QString filePath)
 {
     Q_UNUSED(filePath);
     QFileInfo irFileInfo(m_pickedImpulsePath);
@@ -107,7 +107,7 @@ void UICore::convertAndUploadImpulse(QString filePath)
     emit sgSetImpuls(outpuFilePath, irOutFileName);
 }
 
-void UICore::pickFile(ActivityType fileType, QString filter)
+void UiCore::pickFile(ActivityType fileType, QString filter)
 {
 #ifdef Q_OS_ANDROID
     QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "ACTION_OPEN_DOCUMENT");
@@ -129,52 +129,52 @@ void UICore::pickFile(ActivityType fileType, QString filter)
 #endif
 }
 
-void UICore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
+void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
 {
     emit sgSetUIText("firmware_local_path", updateFirmware->path());
     emit sgSetUIText("new_firmware_avaliable", oldFirmware->firmwareVersion() + ',' + updateFirmware->firmwareVersion());
 }
 
-void UICore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware)
+void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware)
 {
     emit sgSetUIText("firmware_version_error",
                      actualFirmware->firmwareVersion()+","+minimalFirmware->firmwareVersion());
     emit sgSetUIText("firmware_local_path", minimalFirmware->path());
 }
 
-void UICore::slImpulseFilePicked(QString filePath, QString fileName)
+void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
 {
     emit sgSetImpuls(filePath, fileName);
     qDebug() << "Impulse picked";
     m_pickedImpulsePath = filePath;
 }
 
-void UICore::pickFirmwareFile()
+void UiCore::pickFirmwareFile()
 {
     pickFile(ActivityType::PICK_FIRMWARE, "*/*");
 }
 
-void UICore::slFirmwareFilePicked(QString filePath, QString fileName)
+void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
 {
     emit sgSetUIText("firmware_file_picked", filePath + ',' + fileName);
 }
 
-void UICore::setFirmware(QString fullFilePath)
+void UiCore::setFirmware(QString fullFilePath)
 {
     emit sgSetFirmware(fullFilePath);
 }
 
-void UICore::doOnlineFirmwareUpdate()
+void UiCore::doOnlineFirmwareUpdate()
 {
     emit sgDoOnlineFirmwareUpdate();
 }
 
-void UICore::escImpuls()
+void UiCore::escImpuls()
 {
     emit sgEscImpuls();
 }
 
-void UICore::exportPreset(QString fileName)
+void UiCore::exportPreset(QString fileName)
 {
 #ifdef Q_OS_ANDROID
     Q_UNUSED(fileName)
@@ -209,7 +209,7 @@ void UICore::exportPreset(QString fileName)
 #endif
 }
 
-void UICore::importPreset(QString filePath)
+void UiCore::importPreset(QString filePath)
 {
 #ifdef Q_OS_ANDROID
     Q_UNUSED(filePath)
@@ -220,7 +220,7 @@ void UICore::importPreset(QString filePath)
 #endif
 }
 
-void UICore::setLanguage(QString languageCode)
+void UiCore::setLanguage(QString languageCode)
 {
     appSettings->setValue("application_language", languageCode);
     appSettings->sync();
@@ -228,7 +228,7 @@ void UICore::setLanguage(QString languageCode)
     loadTranslator(languageCode);
 }
 
-void UICore::loadTranslator(QString languageCode)
+void UiCore::loadTranslator(QString languageCode)
 {
     if(QCoreApplication::removeTranslator(&m_translator)) qDebug() << "Old translator removed";
 
@@ -248,7 +248,7 @@ void UICore::loadTranslator(QString languageCode)
     else qDebug() << "Translator not found. Using english";
 }
 
-void UICore::loadDefaultTranslator()
+void UiCore::loadDefaultTranslator()
 {
     if (m_translator.load(QLocale(), QLatin1String("pangaea-mobile"),
                         QLatin1String("_"), ":/translations/"))
@@ -260,7 +260,7 @@ void UICore::loadDefaultTranslator()
     }
 }
 
-void UICore::saveSetting(QString settingName, QVariant settingValue)
+void UiCore::saveSetting(QString settingName, QVariant settingValue)
 {
     appSettings->setValue(settingName, settingValue);
     appSettings->sync();
@@ -268,7 +268,7 @@ void UICore::saveSetting(QString settingName, QVariant settingValue)
     qDebug() << __FUNCTION__ << "Setting name: " << settingName << "Setting value:" << settingValue;
 }
 
-void UICore::openManualExternally(QString fileName)
+void UiCore::openManualExternally(QString fileName)
 {
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();
 
@@ -304,12 +304,12 @@ void UICore::openManualExternally(QString fileName)
     #endif
 }
 
-const QString &UICore::moduleName() const
+const QString &UiCore::moduleName() const
 {
     return m_moduleName;
 }
 
-void UICore::setModuleName(const QString &newModuleName)
+void UiCore::setModuleName(const QString &newModuleName)
 {
     if (m_moduleName == newModuleName)
         return;
@@ -317,7 +317,7 @@ void UICore::setModuleName(const QString &newModuleName)
     emit sgModuleNameChanged(newModuleName);
 }
 
-void UICore::sw4Enable()
+void UiCore::sw4Enable()
 {
     emit sgSw4Enable();
 }

@@ -46,6 +46,8 @@ Item
 
         spacing: 2
 
+        enabled: !eqsExt.visible
+
         MasterControls{
             id: _masterControls
 
@@ -101,19 +103,9 @@ Item
             height: _main.height*1/countElements - _moduleColumn.spacing
         }
 
-        Eqs
+        EqPreview
         {
             id: _eqsModule
-            eq1: eqsExt.eq1
-            eq2: eqsExt.eq2
-            eq3: eqsExt.eq3
-            eq4: eqsExt.eq4
-            eq5: eqsExt.eq5
-            q1: eqsExt.q1
-            q2: eqsExt.q2
-            q3: eqsExt.q3
-            q4: eqsExt.q4
-            q5: eqsExt.q5
             name: "EQ"
             width:  parent.width
             height: _main.height*3/countElements - _moduleColumn.spacing
@@ -122,6 +114,7 @@ Item
                 eqsExt.visible = true;
             }
         }
+
         Lp
         {
             width:  parent.width
@@ -139,9 +132,11 @@ Item
     {
         id: eqsExt
         visible: false
+
         anchors.centerIn: parent
-        height: parent.height/2
-        width:  parent.width/5*4
+        height: parent.height/1.5
+        width:  parent.width*0.95
+        z: _main.z+1
         onHide:
         {
             visible = false;

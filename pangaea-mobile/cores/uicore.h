@@ -18,11 +18,11 @@
 
 
 //TODO: class enum UIValueItem, UITextItem, UIErrorItem
-class UICore : public QObject
+class UiCore : public QObject
 {
     Q_OBJECT
 public:
-    explicit UICore(QObject *parent = nullptr);
+    explicit UiCore(QObject *parent = nullptr);
 
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
 

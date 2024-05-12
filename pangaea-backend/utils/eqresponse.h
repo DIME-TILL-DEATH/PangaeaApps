@@ -25,11 +25,12 @@ signals:
 
     void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
 
+    void sgSetUIParameter(QString nameParam, qint32 value);
 public slots:
     void slFilterParamChanged(DeviceParameter::Type deviceParameterType, qint32 value);
 
 private:
-    static constexpr quint16 pointsNum = 100;
+    static constexpr quint16 pointsNum = 250;
 
     QList<QPointF> m_points;
     QObjectList m_EqBands;

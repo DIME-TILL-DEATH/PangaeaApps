@@ -419,17 +419,13 @@ void Core::parseInputData(QByteArray ba)
             {
                 recieveEnabled = false; // TODO waitAnswer?
 
-                // quint32 signalIn = 20 * log10(parseResult.at(0).toInt());
-                // quint32 signalOutL = 20 * log10(parseResult.at(2).toInt());
-                // quint32 signalOutR = 20 * log10(parseResult.at(4).toInt());
-                quint32 max = 20 * log10(0xffffffff);
+                //sqrt(ind_in_p[1])*(31.0/sqrt(8388607.0));
 
-                quint32 signalIn = parseResult.at(0).toInt();
-                quint32 signalOutL = parseResult.at(2).toInt();
-                quint32 signalOutR = parseResult.at(4).toInt();
-                // quint32 max = 20 * log(0xffffffff);
+                quint32 signalIn = sqrt(parseResult.at(0).toInt())*(31.0/sqrt(8388607.0));
+                quint32 signalOutL = parseResult.at(1).toInt();
+                quint32 signalOutR = parseResult.at(2).toInt();
 
-                // qDebug() << signalIn << parseResult.at(1).toInt() << signalOutL << signalOutR << max;
+                qDebug() << signalIn << signalOutL << signalOutR;
 
                 emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_IN, signalIn);
                 emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_OUT_L, signalOutL);
@@ -1044,7 +1040,7 @@ void Core::readAllParameters()
 
     processCommands();
 
-    indicationTimer->start();
+    // indicationTimer->start();
 
     bEditable = true;
 }
@@ -1118,11 +1114,12 @@ void Core::processCommands()
 
 void Core::indicationRequest()
 {
-    // qDebug() << "Indication request";
 
     if(controlledDevice.isFirmwareCanIndicate())
     {
+        // qDebug() << "Indication request";
         emit sgSilentWriteToInterface("iio\r\n");
+        // emit sgWriteToInterface("iio\r\n");
     }
     else
     {

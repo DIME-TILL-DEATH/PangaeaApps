@@ -57,7 +57,6 @@ Item
             if(paramType === main.paramType)
             {
                 main.on=value
-                console.log("Settling by sgSetDeviceParameter", paramType);
             }
         }
     }

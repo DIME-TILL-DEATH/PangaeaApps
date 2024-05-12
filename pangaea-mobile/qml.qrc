@@ -5,14 +5,12 @@
         <file>qml/StyleSettings/Style.qml</file>
         <file>qml/StyleSettings/qmldir</file>
         <file>qml/Elements/ApplicationHeader.qml</file>
-        <file>qml/Elements/CustomizerSliderV.qml</file>
         <file>qml/Elements/MButton.qml</file>
         <file>qml/Elements/MText.qml</file>
         <file>qml/Elements/PresetBankSpin.qml</file>
         <file>qml/Elements/qmldir</file>
         <file>qml/main.qml</file>
         <file>qml/Modules/Cm.qml</file>
-        <file>qml/Modules/Eqs.qml</file>
         <file>qml/Modules/EqsExt.qml</file>
         <file>qml/Modules/Er.qml</file>
         <file>qml/Modules/Hp.qml</file>
@@ -25,7 +23,6 @@
         <file>qml/Modules/Vl.qml</file>
         <file>qml/Modules/BaseModule.qml</file>
         <file>qml/Elements/CustomComboBox.qml</file>
-        <file>qml/Elements/EQBar.qml</file>
         <file>qml/Pages/ConnectPage.qml</file>
         <file>qml/Pages/MapPage.qml</file>
         <file>qml/Pages/qmldir</file>
@@ -36,7 +33,6 @@
         <file>images/AMT.svg</file>
         <file>images/AMT (Fixed by Ivan).svg</file>
         <file>qml/Elements/CustomMessageDialog.qml</file>
-        <file>qml/Elements/EQExtBar.qml</file>
         <file>qml/StyleSettings/Theme.qml</file>
         <file>qml/Pages/SettingsPage.qml</file>
         <file>qml/Elements/MRadioButton.qml</file>
@@ -53,5 +49,8 @@
         <file>qml/ControlGroups/DocumentationWindow.qml</file>
         <file>qml/Elements/EditTextDialog.qml</file>
         <file>qml/Elements/MComboBox.qml</file>
+        <file>qml/Modules/EqPreview.qml</file>
+        <file>qml/Elements/EqPoint.qml</file>
+        <file>qml/Elements/CustomSlider.qml</file>
     </qresource>
 </RCC>

@@ -14,7 +14,7 @@ Rectangle {
 
     property real value: 0
     property real from: 0
-    property real to: 270000//20 * log10(32bit)
+    property real to: 24//20 * log10(32bit)
 
     Rectangle{
         id: fill

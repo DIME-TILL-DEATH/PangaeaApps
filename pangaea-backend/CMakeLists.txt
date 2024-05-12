@@ -33,6 +33,8 @@ qt_add_library(pangaea-backend STATIC
     device/deviceparameter.h device/deviceparameter.cpp
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
+    utils/eqband.cpp utils/eqband.h
+    utils/eqresponse.cpp utils/eqresponse.h
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h
     utils/presetmanager.cpp utils/presetmanager.h
