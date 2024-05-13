@@ -196,12 +196,10 @@ void Core::parseInputData(QByteArray ba)
                                 if(DeviceParameter::isSigned(paramType))
                                 {
                                     emit sgSetUiDeviceParameter(paramType, (qint8)sss.toInt(nullptr, 16));
-                                    qDebug() << "emiting setDeviceParameter " << paramType << (qint8)sss.toInt(nullptr, 16);
                                 }
                                 else
                                 {
                                     emit sgSetUiDeviceParameter(paramType, (qint16)sss.toInt(nullptr, 16));
-                                    qDebug() << "emiting setDeviceParameter " << paramType << (qint16)sss.toInt(nullptr, 16);
                                 }
                                 count++;
                             }

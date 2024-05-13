@@ -108,13 +108,6 @@ Rectangle
 
                     for(i=0; i<EqResponse.points.length; i++)
                     {
-                        /*To draw ticks at simple values, first determine the full decades that are spanned,
-                        from 10^floor(log(V0)) to 10^floor(log(V1)), then get the most significant digits by
-
-                        ceil(10^(log(V0) - floor(log(V0)))
-                        floor(10^(log(V1) - floor(log(V1)))
-                        to get the starting/ending digit in these decades.*/
-
                         x = _canvas.width*((Math.log10(EqResponse.points[i].x)-Math.log10(xmin))
                                            /(Math.log10(xmax)-Math.log10(xmin)));
                         y = EqResponse.points[i].y*coefY
@@ -156,8 +149,8 @@ Rectangle
                     var freq = Math.pow(10, (drag.source.x+pointRadius)/_canvas.width * (Math.log10(xmax)-Math.log10(xmin)) + Math.log10(xmin))
                     var gain = (-drag.source.y + _canvas.height/2 - pointRadius) * main.gainRange/_canvas.height;
 
-                    EqResponse.EqBands[currentBandIndex].gain = Math.round(gain);
-                    EqResponse.EqBands[currentBandIndex].Fc = Math.round(freq);
+                    EqResponse.EqBands[currentBandIndex].gain.value = Math.round(gain);
+                    EqResponse.EqBands[currentBandIndex].Fc.value = Math.round(freq);
                     // console.log(Math.round(freq), Math.round(gain))
                 }
             }
@@ -191,8 +184,8 @@ Rectangle
                         font.pixelSize: parent.width/6
 
                         text: "BAND " + (currentBandIndex + 1) + "\n" +
-                              EqResponse.EqBands[currentBandIndex].fStart + "Hz\n" +
-                              EqResponse.EqBands[currentBandIndex].fStop + "Hz\n"
+                              EqResponse.EqBands[currentBandIndex].Fc.minValue + "Hz\n" +
+                              EqResponse.EqBands[currentBandIndex].Fc.maxValue + "Hz\n"
                     }
                 }
 
@@ -201,14 +194,14 @@ Rectangle
 
                     annotation: "Freq"
 
-                    from: EqResponse.EqBands[currentBandIndex].fStart
-                    to: EqResponse.EqBands[currentBandIndex].fStop
+                    from: EqResponse.EqBands[currentBandIndex].Fc.minValue
+                    to: EqResponse.EqBands[currentBandIndex].Fc.maxValue
 
                     step: 1
-                    value: EqResponse.EqBands[currentBandIndex].Fc
+                    value: EqResponse.EqBands[currentBandIndex].Fc.value
 
                     onMoved: {
-                        EqResponse.EqBands[currentBandIndex].Fc = value
+                        EqResponse.EqBands[currentBandIndex].Fc.value = value
                     }
                 }
                 EqDial{
@@ -218,10 +211,10 @@ Rectangle
                     to: 15
                     step: 1
 
-                    value: EqResponse.EqBands[currentBandIndex].gain
+                    value: EqResponse.EqBands[currentBandIndex].gain.value
 
                     onMoved: {
-                        EqResponse.EqBands[currentBandIndex].gain = value
+                        EqResponse.EqBands[currentBandIndex].gain.value = value
                     }
                 }
                 EqDial{
@@ -230,10 +223,10 @@ Rectangle
                     from: 0.1
                     to: 20
                     step: 0.1
-                    value: EqResponse.EqBands[currentBandIndex].Q
+                    value: EqResponse.EqBands[currentBandIndex].Q.value
 
                     onMoved: {
-                        EqResponse.EqBands[currentBandIndex].Q = value
+                        EqResponse.EqBands[currentBandIndex].Q.value = value
                     }
                 }
             }

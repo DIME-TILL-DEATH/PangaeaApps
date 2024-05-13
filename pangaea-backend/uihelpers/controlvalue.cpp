@@ -23,7 +23,6 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     if (qFuzzyCompare(m_displayValue, newDisplayValue))
         return;
 
-    qDebug() << "Settling display value: " << m_deviceParameterType << newDisplayValue;
     m_displayValue = newDisplayValue;
     emit displayValueChanged();
 
@@ -48,7 +47,6 @@ void ControlValue::slSetControlValue(DeviceParameter::Type deviceParameterType, 
     if(resultValue == m_displayValue) return;
 
     m_displayValue = resultValue;
-    qDebug() << "Settling control value: " << m_deviceParameterType << value << m_displayValue;
     emit displayValueChanged();
 }
 

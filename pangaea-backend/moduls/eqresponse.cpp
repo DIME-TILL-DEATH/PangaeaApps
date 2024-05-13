@@ -34,15 +34,8 @@ double EqResponse::getEqResponse(double f)
     return response;
 }
 
-// void EqResponse::slFilterParamChanged(DeviceParameter::Type deviceParameterType, qint32 value)
-// {
-//     //slSetDeviceParameter(deviceParameterType, value);
-//     calcEqResponse();
-// }
-
 void EqResponse::calcEqResponse()
 {
-    qDebug() << "Calcing response";
     m_points.clear();
 
     double currFreq = 10;

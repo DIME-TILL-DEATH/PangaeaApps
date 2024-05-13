@@ -91,7 +91,6 @@ void EqBand::calcFilterCoefs()
     }
     }
 
-    qDebug() << "calcing coefs, band:" << m_bandNum;
     emit filterChanged();
 }
 

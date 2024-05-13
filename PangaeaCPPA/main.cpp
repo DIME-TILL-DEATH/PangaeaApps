@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiDesktopCore::sgReadAllParameters, core, &Core::readAllParameters);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetParameter, core, &Core::setParameter);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetDeviceParameter, core, &Core::setDeviceParameter);
-    QObject::connect(&uiCore, &UiDesktopCore::sgSetDeviceParameter, &eqResponse, &EqResponse::slFilterParamChanged);
+    QObject::connect(&uiCore, &UiDesktopCore::sgSetDeviceParameter, &eqResponse, &EqResponse::slSetUiDeviceParameter);
     QObject::connect(&uiCore, &UiDesktopCore::sgRestoreValue, core, &Core::restoreValue);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetImpuls, core, &Core::setImpulse);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
@@ -118,12 +118,12 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiDesktopCore::sgImportPreset, core, &Core::importPreset);
     QObject::connect(&uiCore, &UiDesktopCore::sgSw4Enable, core, &Core::sw4Enable);
 
-    QObject::connect(&eqResponse, &EqResponse::setDeviceParameter, core, &Core::setDeviceParameter);
+    QObject::connect(&eqResponse, &EqResponse::sgSetDeviceParameter, core, &Core::setDeviceParameter);
 
     QObject::connect(core, &Core::sgSetAppParameter, &uiCore, &UiDesktopCore::slSetAppParameter);
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgSetUiDeviceParameter, &uiCore, &UiDesktopCore::sgSetUiDeviceParameter);
-    QObject::connect(core, &Core::sgSetUiDeviceParameter, &eqResponse, &EqResponse::slFilterParamChanged);
+    QObject::connect(core, &Core::sgSetUiDeviceParameter, &eqResponse, &EqResponse::slSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
     QObject::connect(core, &Core::sgPresetChangeStage, &uiCore, &UiDesktopCore::sgPresetChangeStage);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);

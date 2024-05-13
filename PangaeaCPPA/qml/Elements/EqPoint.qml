@@ -13,9 +13,9 @@ Rectangle{
     property int xmin: EqResponse.points[0].x
     property int xmax: EqResponse.points[EqResponse.points.length-1].x
 
-    x: parent.width*((Math.log10(eqBand.Fc)-Math.log10(xmin))
+    x: parent.width*((Math.log10(eqBand.Fc.value)-Math.log10(xmin))
                      /(Math.log10(xmax)-Math.log10(xmin))) - width/2;
-    y: parent.height/2 - eqBand.gain * parent.height/gainRange - height/2;
+    y: parent.height/2 - eqBand.gain.value * parent.height/gainRange - height/2;
 
     transformOrigin: Item.Center
 
@@ -48,9 +48,9 @@ Rectangle{
         property real xmin: EqResponse.points[0].x;
         property real xmax: EqResponse.points[EqResponse.points.length-1].x
 
-        drag.minimumX: _canvas.width*((Math.log10(eqBand.fStart)-Math.log10(xmin))
+        drag.minimumX: _canvas.width*((Math.log10(eqBand.Fc.minValue)-Math.log10(xmin))
                                       /(Math.log10(xmax)-Math.log10(xmin))) - root.width/2;
-        drag.maximumX: _canvas.width*((Math.log10(eqBand.fStop)-Math.log10(xmin))
+        drag.maximumX: _canvas.width*((Math.log10(eqBand.Fc.maxValue)-Math.log10(xmin))
                                       /(Math.log10(xmax)-Math.log10(xmin))) - root.width/2;
 
         drag.minimumY: root.parent.height/2 - 15 * root.parent.height/gainRange - root.height/2
@@ -64,14 +64,14 @@ Rectangle{
         }
 
         onWheel: function(wheel){
-            if(EqResponse.EqBands[currentBandIndex].Q>0.1 & wheel.angleDelta.y<0)
+            if(EqResponse.EqBands[currentBandIndex].Q.value>0.1 & wheel.angleDelta.y<0)
             {
-                EqResponse.EqBands[currentBandIndex].Q -= 0.1
+                EqResponse.EqBands[currentBandIndex].Q.value -= 0.1
             }
 
-            if(EqResponse.EqBands[currentBandIndex].Q<20 & wheel.angleDelta.y>0)
+            if(EqResponse.EqBands[currentBandIndex].Q.value<20 & wheel.angleDelta.y>0)
             {
-                EqResponse.EqBands[currentBandIndex].Q += 0.1
+                EqResponse.EqBands[currentBandIndex].Q.value += 0.1
             }
         }
     }
