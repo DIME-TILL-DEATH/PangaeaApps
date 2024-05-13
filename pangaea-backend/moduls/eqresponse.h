@@ -4,10 +4,10 @@
 #include <QObject>
 #include <QPointF>
 
-#include "core.h"
-#include "deviceparameter.h"
+#include "abstractmodule.h"
+// #include "deviceparameter.h"
 
-class EqResponse : public QObject
+class EqResponse : public AbstractModule
 {
     Q_OBJECT
     Q_PROPERTY(QList<QPointF> points READ points NOTIFY pointsChanged)
@@ -24,11 +24,9 @@ signals:
     void pointsChanged();
     void eqBandsChanged();
 
-    void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
 
-    void sgSetAppParameter(Core::AppParameter appParameterType, QVariant content);
 public slots:
-    void slFilterParamChanged(DeviceParameter::Type deviceParameterType, qint32 value);
+    // void slFilterParamChanged(DeviceParameter::Type deviceParameterType, qint32 value);
 
 private:
     static constexpr quint16 pointsNum = 250;

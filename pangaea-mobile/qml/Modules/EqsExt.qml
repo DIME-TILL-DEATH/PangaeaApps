@@ -154,8 +154,8 @@ Item
                         var freq = Math.pow(10, (drag.source.x+pointRadius)/_canvas.width * (Math.log10(xmax)-Math.log10(xmin)) + Math.log10(xmin))
                         var gain = (-drag.source.y + _canvas.height/2 - pointRadius) * main.gainRange/_canvas.height;
 
-                        EqResponse.EqBands[currentBandIndex].gain = Math.round(gain);
-                        EqResponse.EqBands[currentBandIndex].Fc = Math.round(freq);
+                        EqResponse.EqBands[currentBandIndex].gain.value = Math.round(gain);
+                        EqResponse.EqBands[currentBandIndex].Fc.value = Math.round(freq);
                     }
                 }
 
@@ -172,7 +172,7 @@ Item
                     property var startPinchQ
 
                     onPinchStarted: {
-                        startPinchQ = EqResponse.EqBands[currentBandIndex].Q;
+                        startPinchQ = EqResponse.EqBands[currentBandIndex].Q.value;
                     }
 
                     onPinchUpdated: function(pinch){
@@ -183,7 +183,7 @@ Item
                         if(resultQ > 20) resultQ = 20;
                         if(resultQ < 0.1) resultQ = 0.1;
 
-                        EqResponse.EqBands[currentBandIndex].Q = resultQ
+                        EqResponse.EqBands[currentBandIndex].Q.value = resultQ
                     }
                 }
             }
@@ -198,69 +198,43 @@ Item
                     color: Style.colorText
 
                     text: "BAND " + (currentBandIndex+1)
-                          + ", frequency span: " + EqResponse.EqBands[currentBandIndex].fStart + "Hz-"
-                           + EqResponse.EqBands[currentBandIndex].fStop + "Hz"
+                          + ", frequency span: " + EqResponse.EqBands[currentBandIndex].Fc.minValue + "Hz-"
+                           + EqResponse.EqBands[currentBandIndex].Fc.maxValue + "Hz"
                 }
             }
 
             CustomSlider
             {
-                id: fSlider
                 name: "Central Frequency"
+                units: "Hz"
 
                 width: parent.width
                 height: parent.height*1/12
 
-                from: EqResponse.EqBands[currentBandIndex].fStart
-                to: EqResponse.EqBands[currentBandIndex].fStop
-                value: EqResponse.EqBands[currentBandIndex].Fc
-                edited: EqResponse.EqBands[currentBandIndex].isFcModified
-                units: "Hz"
-
-                onMoved:
-                {
-                    EqResponse.EqBands[currentBandIndex].Fc = value
-                }
+                controlValue: EqResponse.EqBands[currentBandIndex].Fc
             }
 
             CustomSlider
             {
                 name: "Gain"
+                units: "dB"
 
                 width: parent.width
                 height: parent.height*1/12
 
-                from: -15
-                to: +15
-                value: EqResponse.EqBands[currentBandIndex].gain
-                edited: EqResponse.EqBands[currentBandIndex].isGainModified
-                units: "dB"
+                controlValue: EqResponse.EqBands[currentBandIndex].gain
 
-                onMoved:
-                {
-                    EqResponse.EqBands[currentBandIndex].gain = value;
-                }
             }
 
             CustomSlider
             {
-                id: _q1Control
-
                 name: "Q-Factor"
+
                 width: parent.width
                 height: parent.height*1/12
 
-                from: 0.1
-                to: 20
-                // TODO: попробовать QtObject DeviceParameter{value, modified, valueMin, valueMax, controlMin, controlMax}
-                value: EqResponse.EqBands[currentBandIndex].Q
-                edited: EqResponse.EqBands[currentBandIndex].isQModified
+                controlValue: EqResponse.EqBands[currentBandIndex].Q
                 precision: 1
-
-                onMoved:
-                {
-                    EqResponse.EqBands[currentBandIndex].Q = value
-                }
             }
 
             Button

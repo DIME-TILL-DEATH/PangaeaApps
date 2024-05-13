@@ -10,16 +10,28 @@ Slider
 {
     id: root
 
+    required property ControlValue controlValue
+
     property string name: "BAR"
     property string units: " "
     property int precision: 0
 
+
+    from: controlValue.minValue
+    to: controlValue.maxValue
+    value: controlValue.value
+
+    property bool edited: controlValue.isModified
+
     property bool moduleOn: true
 
     property bool inverse: false
-    property bool edited: false
-
     property bool bottomLineEnabled: true
+
+    onMoved:
+    {
+        controlValue.value = value;
+    }
 
     leftPadding: 0
     rightPadding: 0

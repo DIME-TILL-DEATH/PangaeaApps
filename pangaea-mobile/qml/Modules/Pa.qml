@@ -98,7 +98,6 @@ Item
             if(paramType === main.paramType)
             {
                 main.on=value
-                console.log("Settling by sgSetDeviceParameter", paramType);
 
                 if(main.visible) // только если модуль есть в устройстве
                     UiCore.setParameter("pa-ps_linked_on", main.on);
@@ -107,7 +106,6 @@ Item
             if(paramType === DeviceParameter.AMP_TYPE)
             {
                 main.ampType = value
-                console.log("Settling by sgSetDeviceParameter", paramType);
             }
         }
     }

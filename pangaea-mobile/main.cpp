@@ -113,7 +113,9 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
+
     qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
+    qmlRegisterUncreatableType<ControlValue>("CppObjects", 1, 0, "ControlValue", "Cannot create ControlValue in QML");
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------
@@ -131,13 +133,13 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiCore::sgImportPreset, core, &Core::importPreset);
     QObject::connect(&uiCore, &UiCore::sgSw4Enable, core, &Core::sw4Enable);
 
-    QObject::connect(&eqResponse, &EqResponse::setDeviceParameter, core, &Core::setDeviceParameter);
+    QObject::connect(&eqResponse, &EqResponse::sgSetDeviceParameter, core, &Core::setDeviceParameter);
 
     QObject::connect(core, &Core::sgSetAppParameter, &uiCore, &UiCore::slSetAppParameter);
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgSetAppParameter, &eqResponse, &EqResponse::sgSetAppParameter);
     QObject::connect(core, &Core::sgSetUiDeviceParameter, &uiCore, &UiCore::sgSetUiDeviceParameter);
-    QObject::connect(core, &Core::sgSetUiDeviceParameter, &eqResponse, &EqResponse::slFilterParamChanged);
+    QObject::connect(core, &Core::sgSetUiDeviceParameter, &eqResponse, &EqResponse::slSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiCore::sgSetUIText);
     QObject::connect(core, &Core::sgPresetChangeStage, &uiCore, &UiCore::sgPresetChangeStage);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiCore::sgSetProgress);

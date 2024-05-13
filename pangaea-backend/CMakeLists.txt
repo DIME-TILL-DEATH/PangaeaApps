@@ -35,6 +35,7 @@ qt_add_library(pangaea-backend STATIC
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
 
+    moduls/abstractmodule.cpp moduls/abstractmodule.h
     moduls/eqband.cpp moduls/eqband.h
     moduls/eqresponse.cpp moduls/eqresponse.h
 
@@ -43,6 +44,7 @@ qt_add_library(pangaea-backend STATIC
     utils/presetmanager.cpp utils/presetmanager.h
     utils/parser.cpp utils/parser.h
 
+    uihelpers/controlvalue.cpp uihelpers/controlvalue.h
     uihelpers/devicetypeenum.h
 )
 
