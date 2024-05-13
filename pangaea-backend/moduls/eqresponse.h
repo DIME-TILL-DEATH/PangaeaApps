@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QPointF>
 
+#include "core.h"
 #include "deviceparameter.h"
 
 class EqResponse : public QObject
@@ -25,7 +26,7 @@ signals:
 
     void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
 
-    void sgSetUIParameter(QString nameParam, qint32 value);
+    void sgSetAppParameter(Core::AppParameter appParameterType, QVariant content);
 public slots:
     void slFilterParamChanged(DeviceParameter::Type deviceParameterType, qint32 value);
 

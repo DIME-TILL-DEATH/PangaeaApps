@@ -39,6 +39,7 @@ SOURCES += \
     interfaces/usbinterface.cpp \
     moduls/eqband.cpp \
     moduls/eqresponse.cpp \
+    uihelpers/controlvalue.cpp \
     utils/irworker.cpp \
     utils/parser.cpp \
     utils/presetmanager.cpp
@@ -60,6 +61,7 @@ HEADERS += \
     interfaces/devicedescription.h \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
+    uihelpers/controlvalue.h \
     uihelpers/devicetypeenum.h \
     utils/eqband.h \
     utils/eqresponse.h \

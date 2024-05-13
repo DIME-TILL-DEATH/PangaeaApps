@@ -8,6 +8,7 @@
 #include "uicore.h"
 #include "resampler.h"
 
+
 #ifdef __ANDROID__
 #include <jni.h>
 #include "activityresultmanager.h"
@@ -140,6 +141,20 @@ void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware 
     emit sgSetUIText("firmware_version_error",
                      actualFirmware->firmwareVersion()+","+minimalFirmware->firmwareVersion());
     emit sgSetUIText("firmware_local_path", minimalFirmware->path());
+}
+
+void UiCore::slSetAppParameter(Core::AppParameter appParameterType, QVariant content)
+{
+    switch (appParameterType)
+    {
+    case Core::AppParameter::PRESET_MODIFIED:
+        m_presetModified = content.toBool();
+        emit presetModifiedChanged();
+        break;
+
+    default:
+        break;
+    }
 }
 
 void UiCore::slImpulseFilePicked(QString filePath, QString fileName)

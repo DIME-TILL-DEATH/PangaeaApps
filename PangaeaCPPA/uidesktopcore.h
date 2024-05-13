@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QTimer>
 
+#include "core.h"
+
 #include "deviceparameter.h"
 #include "firmware.h"
 
@@ -13,7 +15,7 @@
 class UiDesktopCore : public QObject
 {
     Q_OBJECT
-
+    Q_PROPERTY(bool presetModified READ presetModified NOTIFY presetModifiedChanged FINAL)
 public:
     explicit UiDesktopCore(QObject *parent = nullptr);
 
@@ -41,6 +43,8 @@ public:
 
     Q_INVOKABLE void sw4Enable();
 
+    bool presetModified() const {return m_presetModified;};
+
 signals:
     void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
     void sgSetUIParameter(QString nameParam, qint32 inValue);
@@ -66,10 +70,16 @@ signals:
 
     void sgDoOnlineFirmwareUpdate();
 
+    void presetModifiedChanged();
+
 public slots:
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
     void slNewAppVersionAvaliable(QString appVersion);
+
+    void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
+private:
+    bool m_presetModified;
 };
 
 #endif // UIDESKTOPCORE_H

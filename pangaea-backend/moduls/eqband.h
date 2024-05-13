@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "core.h"
 #include "deviceparameter.h"
 
 class EqBand : public QObject
@@ -72,7 +73,7 @@ signals:
     void isGainModifiedChanged();
 
 public slots:
-    void slSetUIParameter(QString nameParam, qint32 value);
+    void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
 
 private:
     FilterType m_type;

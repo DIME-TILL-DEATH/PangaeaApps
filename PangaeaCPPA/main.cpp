@@ -94,6 +94,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "EqResponse", &eqResponse);
 
+    qmlRegisterUncreatableType<Core>("CppObjects", 1, 0, "AppParameter", "Cannot create AppParameter in QML");
     qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
@@ -119,6 +120,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(&eqResponse, &EqResponse::setDeviceParameter, core, &Core::setDeviceParameter);
 
+    QObject::connect(core, &Core::sgSetAppParameter, &uiCore, &UiDesktopCore::slSetAppParameter);
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgSetUiDeviceParameter, &uiCore, &UiDesktopCore::sgSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetUiDeviceParameter, &eqResponse, &EqResponse::slFilterParamChanged);

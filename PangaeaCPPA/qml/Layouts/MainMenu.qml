@@ -13,7 +13,7 @@ import CppObjects 1.0
 MenuBar{
     id: mainMenu
 
-    property bool presetEdited: true
+    property bool presetEdited: UiCore.presetModified
 
     Menu{
         title: qsTr("File")
@@ -333,14 +333,6 @@ MenuBar{
                         menuUpdateFirmware.enabled = false;
                         break;
                 }
-            }
-        }
-
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if(nameParam === "preset_edited")
-            {
-                mainMenu.presetEdited = value;
             }
         }
 

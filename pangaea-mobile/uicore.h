@@ -14,17 +14,20 @@
 
 #include "deviceparameter.h"
 #include "firmware.h"
-#include "devicedescription.h"
+
+
+#include "core.h"
 
 
 //TODO: class enum UIValueItem, UITextItem, UIErrorItem
 class UiCore : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
+    Q_PROPERTY(bool presetModified READ presetModified NOTIFY presetModifiedChanged FINAL)
 public:
     explicit UiCore(QObject *parent = nullptr);
 
-    Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
 
     Q_INVOKABLE void setupApplication();
 
@@ -59,6 +62,8 @@ public:
     const QString &moduleName() const;
     void setModuleName(const QString &newModuleName);
 
+    bool presetModified() const {return m_presetModified;};
+
 private:
     QQmlApplicationEngine* m_qmlEngine;
 
@@ -82,6 +87,8 @@ private:
     void loadDefaultTranslator();
 
     void pickFile(ActivityType fileType, QString filter);
+
+    bool m_presetModified;
 
 signals:
     void sgTranslatorChanged(QString langauageCode);
@@ -114,10 +121,14 @@ signals:
 
     void sgDoOnlineFirmwareUpdate();
 
+    void presetModifiedChanged();
+
 public slots:
     void slFirmwareFilePicked(QString filePath, QString fileName);
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
+
+    void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
 
 private slots:
     void slImpulseFilePicked(QString filePath, QString fileName);

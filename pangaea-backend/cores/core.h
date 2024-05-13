@@ -21,6 +21,12 @@ class Core : public QObject
 public:
     explicit Core(QObject *parent = nullptr);
 
+    enum AppParameter
+    {
+        PRESET_MODIFIED
+    };
+    Q_ENUM(AppParameter)
+
     void setParameter(QString name, quint8 value);
     void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
 
@@ -107,6 +113,7 @@ signals:
     void sgRequestNewestFirmware(Firmware* actualFirmware);
 
     void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
+    void sgSetAppParameter(AppParameter appParameterType, QVariant content);
     void sgSetUIParameter(QString nameParam, qint32 value);
     void sgSetUIText(QString nameParam, QString value);
 

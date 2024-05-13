@@ -41,7 +41,7 @@ ApplicationWindow
     property string markConnect: connected ? qsTr("Connected to ") + interfaceDescription : qsTr("Disconnected")
 
     property bool editable: false
-    property bool edit: false
+    property bool edit: UiCore.presetModified
     property bool connected: false
     property bool wait: true
     property bool appClosing: false
@@ -325,11 +325,6 @@ ApplicationWindow
 
         function onSgSetUIParameter(nameParam, value)
         {
-            if(nameParam === "preset_edited")
-            {
-                edit = value;
-            }
-
             if(nameParam === "wait")
             {
                 wait = value;

@@ -153,3 +153,17 @@ void UiDesktopCore::slNewAppVersionAvaliable(QString appVersion)
 {
     emit sgSetUIText("new_app_version_avaliable", appVersion);
 }
+
+void UiDesktopCore::slSetAppParameter(Core::AppParameter appParameterType, QVariant content)
+{
+    switch (appParameterType)
+    {
+    case Core::AppParameter::PRESET_MODIFIED:
+        m_presetModified = content.toBool();
+        emit presetModifiedChanged();
+        break;
+
+    default:
+        break;
+    }
+}

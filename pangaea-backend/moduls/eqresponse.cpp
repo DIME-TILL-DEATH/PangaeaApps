@@ -22,7 +22,7 @@ EqResponse::EqResponse(QObject *parent)
         connect(eqBand, &EqBand::FcChanged, this, &EqResponse::calcEqResponse);
         connect(eqBand, &EqBand::gainChanged, this, &EqResponse::calcEqResponse);
         connect(eqBand, &EqBand::QChanged, this, &EqResponse::calcEqResponse);
-        connect(this, &EqResponse::sgSetUIParameter, eqBand, &EqBand::slSetUIParameter);
+        connect(this, &EqResponse::sgSetAppParameter, eqBand, &EqBand::slSetAppParameter);
     }
 
 }

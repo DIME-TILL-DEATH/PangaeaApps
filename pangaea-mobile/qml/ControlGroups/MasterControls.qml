@@ -19,7 +19,7 @@ Item
     property int mode: 0
 
     property bool copyFirst: false
-    property bool presetEdited: false
+    property bool presetEdited: UiCore.presetModified
 
     property bool compareState: false
 
@@ -254,11 +254,6 @@ Item
 
         function onSgSetUIParameter(nameParam, inValue)
         {
-            if(nameParam === "preset_edited")
-            {
-                _root.presetEdited = inValue;
-            }
-
             if(nameParam === "compare_state")
             {
                 _root.compareState = inValue;

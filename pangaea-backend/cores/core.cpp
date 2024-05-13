@@ -206,7 +206,7 @@ void Core::parseInputData(QByteArray ba)
                             nomByte++;
                         }
 
-                        emit sgSetUIParameter("preset_edited",   isPresetEdited);
+                        emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
                         emit sgSetUIParameter("editable",      bEditable); // TODO отличается от мобильного
                     }
                 }
@@ -586,7 +586,7 @@ void Core::setImpulse(QString filePath)
         qDebug("$$$$$ %s %d", __FUNCTION__, __LINE__);
 
         isPresetEdited = true;
-        emit sgSetUIParameter ("preset_edited", isPresetEdited);
+        emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
 
         irWorker.decodeWav(filePath);
 
@@ -736,7 +736,7 @@ void Core::setPresetChange(quint8 inChangePreset)
 void Core::doPresetChange(quint8 val)
 {
     isPresetEdited = false;
-    emit sgSetUIParameter ("preset_edited", isPresetEdited);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
     emit sgSetUIParameter ("compare_state", false);
     emit sgUpdatePreset(currentSavedPreset); // Обновить актуальный пресет перед переключением
 
@@ -776,7 +776,7 @@ void Core::saveChanges()
     currentSavedPreset = currentPreset;
     emit sgUpdatePreset(currentSavedPreset);
     isPresetEdited = false;
-    emit sgSetUIParameter ("preset_edited",  isPresetEdited);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
     bEditable = true;
     emit sgSetUIParameter ("editable",      bEditable);
 }
@@ -826,7 +826,7 @@ void Core::importPreset(QString filePath, QString fileName)
     currentPreset = importedPreset;
 
     isPresetEdited = true;
-    emit sgSetUIParameter ("preset_edited", isPresetEdited);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
 }
 
 void Core::setPresetData(const Preset &preset)
@@ -899,7 +899,7 @@ void Core::pastePreset()
     currentPreset.setBankPreset(currentBankNumber, currentPresetNumber);
 
     isPresetEdited = true;
-    emit sgSetUIParameter ("preset_edited", isPresetEdited);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
 }
 
 void Core::setParameter(QString name, quint8 value)
@@ -998,7 +998,7 @@ void Core::setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 
 {
     QString sendStr = DeviceParameter::sendString(deviceParameterType, value);
     isPresetEdited = true;
-    emit sgSetUIParameter ("preset_edited", isPresetEdited);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
 
     recieveEnabled = false;
 
