@@ -10,10 +10,15 @@ import Modules 1.0
 import Elements 1.0
 
 import CppObjects
+import CppEnums
 
 Item
 {
     id: _main
+
+    property bool isPaFirmware: true
+
+    property bool moduleVisible: false
 
     // Multiply 16 = shift left for 4 bits
     property int  presetNom: _masterControls.bank.value*16+_masterControls.preset.value
@@ -55,77 +60,158 @@ Item
             height: masterControlsHeight
         }
 
-        Ng
+        ListView
         {
-            width:  parent.width
-            height: _main.height*2/countElements - _moduleColumn.spacing
-        }
-        Cm
-        {
-            width:  parent.width
-            height: _main.height*2/countElements - _moduleColumn.spacing
-        }
-
-        Pr
-        {
-            width:  parent.width
-            height: _main.height*4/countElements - _moduleColumn.spacing
-        }
-
-        Pa
-        {
-            id: _paModule
-
+            id: listViewModules
             width: parent.width
-            height: _main.height*4/countElements - _moduleColumn.spacing
-            visible: true
-        }
+            height: parent.height - masterControlsHeight - _moduleColumn.spacing
+            spacing: 2
+            // property int widthWithoutSpase: width-spacing*10
 
-        //TODO presence в PA это одно и то же. Обрабатывать одним модулем
-        Ps
-        {
-            id: _psModule
+            interactive: false
+            orientation: ListView.Vertical
 
-            width:  parent.width
-            height: _main.height*1/countElements - _moduleColumn.spacing
+            // layoutDirection:  UiSettings.isModulesRightAligned ? Qt.RightToLeft : Qt.LeftToRight
 
-            visible: false
-        }
-        Ir
-        {
-            id: ir
-            width:  parent.width
-            height: _main.height*1/countElements - _moduleColumn.spacing
-        }
-        Hp
-        {
-            width:  parent.width
-            height: _main.height*1/countElements - _moduleColumn.spacing
-        }
+            model: modulesList
 
-        EqPreview
-        {
-            id: _eqsModule
-            name: "EQ"
-            width:  parent.width
-            height: _main.height*3/countElements - _moduleColumn.spacing
-            onExtVisible:
-            {
-                eqsExt.visible = true;
+            // add: Transition{
+            //     NumberAnimation { properties: "x"; duration: 500 }
+            // }
+
+            move: Transition {
+                 NumberAnimation { properties: "y"; duration: 250 }
             }
-        }
 
-        Lp
-        {
-            width:  parent.width
-            height: _main.height*1/countElements - _moduleColumn.spacing
+            displaced: Transition {
+                 NumberAnimation { properties: "y"; duration: 250 }
+             }
         }
+    }
 
-        Er
+    ObjectModel
+    {
+        id: modulesList
+    }
+
+    Ng
+    {
+        id: ng
+        width:  parent.width
+        height: _main.height*2/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+    Cm
+    {
+        id: cm
+        width:  parent.width
+        height: _main.height*2/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    Pr
+    {
+        id: pr
+        width:  parent.width
+        height: _main.height*4/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    Pa
+    {
+        id: pa
+
+        width: parent.width
+        height: _main.height*4/countElements - _moduleColumn.spacing
+        visible: moduleVisible & isPaFirmware
+    }
+
+    Ps
+    {
+        id: ps
+
+        width:  parent.width
+        height: _main.height*1/countElements - _moduleColumn.spacing
+
+        visible: moduleVisible & (!isPaFirmware)
+    }
+    Ir
+    {
+        id: ir
+        width:  parent.width
+        height: _main.height*1/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+    Hp
+    {
+        id: hp
+        width:  parent.width
+        height: _main.height*1/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    EqPreview
+    {
+        id: eq
+        name: "EQ"
+        width:  parent.width
+        height: _main.height*3/countElements - _moduleColumn.spacing
+        property int prePositionIndex: 3
+        property int postPositionIndex: 6
+        property bool isPrePosition: (ObjectModel.index === prePositionIndex)
+        isPrePostVisible: _main.isPaFirmware
+        onExtVisible:
         {
-            width:  parent.width
-            height: _main.height*2/countElements - _moduleColumn.spacing
+            eqsExt.visible = true;
         }
+        visible: moduleVisible
+    }
+
+    Lp
+    {
+        id: lp
+        width:  parent.width
+        height: _main.height*1/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    Er
+    {
+        id: er
+        width:  parent.width
+        height: _main.height*2/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    function arrangePrePost(isEqPre)
+    {
+        if(isEqPre)
+        {
+            if(!eq.isPrePosition) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
+        }
+        else
+        {
+            if(eq.isPrePosition) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
+        }
+    }
+
+    function placeAllModuls()
+    {
+        modulesList.clear();
+
+        modulesList.append(ng);
+        modulesList.append(cm);
+        modulesList.append(pr);
+        if(isPaFirmware) modulesList.append(pa);
+        modulesList.append(ir);
+        modulesList.append(hp);
+        modulesList.append(eq)
+        modulesList.append(lp);
+        if(!isPaFirmware) modulesList.append(ps);
+        modulesList.append(er);
+
+        moduleVisible = true
+        listViewModules.forceLayout();
     }
 
     EqsExt
@@ -189,34 +275,30 @@ Item
 
         function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(paramType === DeviceParameter.DEVICE_TYPE)
+            switch(paramType)
             {
-                switch (value)
-                {
-                case 0: devName = "";  break;
-                case 1:
-                    devName = "CP-100";
-                    _paModule.visible=false
-                    _psModule.visible=true
-                    _eqsModule.isPrePostVisible=false
-                    break;
-                case 2:
-                    devName = "CP-16M";
-                    _paModule.visible=false
-                    _psModule.visible=true
-                    _eqsModule.isPrePostVisible=false
-                    break;
-                case 3: devName = "CP-16PA";
-                    _paModule.visible=true
-                    _psModule.visible=false
-                    _eqsModule.isPrePostVisible=true
-                    break;
-                case 4: devName = "CP-100PA";
-                    _paModule.visible=true
-                    _psModule.visible=false
-                    _eqsModule.isPrePostVisible=true
-                    break;
-                }
+            case DeviceParameter.DEVICE_TYPE:
+            {
+                isPaFirmware = ((value===DeviceType.CP16PA)||(value===DeviceType.CP100PA));
+
+                placeAllModuls();
+                break;
+            }
+
+            case DeviceParameter.EQ_PRE:
+            {
+                arrangePrePost(value);
+                break;
+            }
+            }
+        }
+
+        // not set ui
+        function onSgSetDeviceParameter(paramType, value)
+        {
+            if(paramType === DeviceParameter.EQ_PRE)
+            {
+                arrangePrePost(value);
             }
         }
 
@@ -239,6 +321,22 @@ Item
 
         function onExportPreset(){
             UiCore.exportPreset("");
+        }
+    }
+
+    Connections{
+        target: InterfaceManager
+
+        function onSgInterfaceError(errorDescription)
+        {
+            modulesList.clear();
+            listViewModules.forceLayout();
+        }
+
+        function onSgInterfaceDisconnected()
+        {
+            modulesList.clear();
+            listViewModules.forceLayout();
         }
     }
 }
