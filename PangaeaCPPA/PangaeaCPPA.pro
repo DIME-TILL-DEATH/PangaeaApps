@@ -82,36 +82,38 @@ DEFINES += VERSION_STRING=\\\"$${VERSION}\\\"
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    threadcontroller.cpp \
-    ui/uidesktopcore.cpp \
-    ui/uiinterfacemanager.cpp \
-    ui/uisettings.cpp \
-    utils/logger.cpp \
+    uidesktopcore.cpp \
+    uisettings.cpp \
+    $${PWD}/../pangaea-backend/moduls/eqresponse.cpp\
+    $${PWD}/../pangaea-backend/moduls/eqband.cpp\
+    $${PWD}/../pangaea-backend/threadcontroller.cpp \
+    $${PWD}/../pangaea-backend/uihelpers/uiinterfacemanager.cpp \
+    $${PWD}/../pangaea-backend/utils/logger.cpp \
 
 HEADERS += \
-    threadcontroller.h \
-    ui/uidesktopcore.h \
-    ui/uiinterfacemanager.h \
-    ui/uisettings.h \
-    utils/logger.h \
+    uidesktopcore.h \
+    uisettings.h \
+    $${PWD}/../pangaea-backend/moduls/eqband.h\
+    $${PWD}/../pangaea-backend/moduls/eqresponse.h\
+    $${PWD}/../pangaea-backend/threadcontroller.h \
+    $${PWD}/../pangaea-backend/uihelpers/uiinterfacemanager.h \
+    $${PWD}/../pangaea-backend/utils/logger.h \
 
-INCLUDEPATH += ui
-INCLUDEPATH += utils
-INCLUDEPATH += models
 
+INCLUDEPATH += $${PWD}/../pangaea-backend/
 INCLUDEPATH += $${PWD}/../pangaea-backend/cores
 INCLUDEPATH += $${PWD}/../pangaea-backend/device
 INCLUDEPATH += $${PWD}/../pangaea-backend/interfaces
 INCLUDEPATH += $${PWD}/../pangaea-backend/cores
 INCLUDEPATH += $${PWD}/../pangaea-backend/models
+INCLUDEPATH += $${PWD}/../pangaea-backend/moduls
 INCLUDEPATH += $${PWD}/../pangaea-backend/utils
-INCLUDEPATH += $${PWD}/../pangaea-backend/qmlEnums/
+INCLUDEPATH += $${PWD}/../pangaea-backend/uihelpers
 
 TRANSLATIONS += translations/PangaeaCPPA_en.ts
 TRANSLATIONS += translations/PangaeaCPPA_ru.ts
 TRANSLATIONS += translations/PangaeaCPPA_de.ts
 TRANSLATIONS += translations/PangaeaCPPA_it.ts
-
 
 QML_IMPORT_PATH += $$PWD/qml/
 QML2_IMPORT_PATH += $$PWD/qml/

@@ -18,28 +18,31 @@ qt6_add_resources(SOURCES
 
 qt_add_executable(Pangaea-mobile WIN32 MACOSX_BUNDLE
     main.cpp
-    threadcontroller.cpp threadcontroller.h
-    cores/uicore.cpp cores/uicore.h
-    cores/uiinterfacemanager.cpp cores/uiinterfacemanager.h
-    utils/activityresultmanager.cpp utils/activityresultmanager.h
-    utils/androidutils.cpp utils/androidutils.h
-    utils/logger.cpp utils/logger.h
+    uicore.cpp uicore.h
+
+    android/src/activityresultmanager.cpp android/src/activityresultmanager.h
+    android/src/androidutils.cpp android/src/androidutils.h
+
+    ../pangaea-backend/threadcontroller.cpp ../pangaea-backend/threadcontroller.h
+    ../pangaea-backend/uihelpers/uiinterfacemanager.cpp ../pangaea-backend/uihelpers/uiinterfacemanager.h
+    ../pangaea-backend/utils/logger.cpp ../pangaea-backend/utils/logger.h
 
     ${SOURCES}
 )
 
 target_include_directories(Pangaea-mobile PUBLIC
-    ../WavConverterLib/
+    android/src/
 
+    ../pangaea-backend/
     ../pangaea-backend/cores
     ../pangaea-backend/device
     ../pangaea-backend/interfaces/
     ../pangaea-backend/utils
     ../pangaea-backend/qmlEnums
     ../pangaea-backend/models/
+    ../pangaea-backend/uihelpers/
 
-    cores
-    utils
+    ../WavConverterLib/
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Bluetooth Gui Network Positioning Quick QuickControls2 LinguistTools Svg SerialPort)

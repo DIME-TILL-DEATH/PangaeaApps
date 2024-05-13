@@ -15,40 +15,45 @@ add_definitions(-DCP100PA_FIRMWARE_VERSION="6.08.04")
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 qt_add_library(pangaea-backend STATIC
+    cores/core.cpp cores/core.h
+    cores/netcore.cpp cores/netcore.h
+    cores/interfacecore.cpp cores/interfacecore.h
+
     interfaces/abstractinterface.cpp interfaces/abstractinterface.h
     interfaces/bleinterface.cpp interfaces/bleinterface.h
     interfaces/usbinterface.cpp interfaces/usbinterface.h
     interfaces/devicedescription.cpp interfaces/devicedescription.h
-    cores/core.cpp cores/core.h
-    cores/netcore.cpp cores/netcore.h
-	cores/interfacecore.cpp cores/interfacecore.h
+
     device/answerworker.cpp device/answerworker.h
     device/defines.h
     device/device.cpp device/device.h
     device/deviceanswer.cpp device/deviceanswer.h
-
-
     device/firmware.cpp device/firmware.h
     device/preset.cpp device/preset.h
     device/deviceparameter.h device/deviceparameter.cpp
+
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
-    utils/eqband.cpp utils/eqband.h
-    utils/eqresponse.cpp utils/eqresponse.h
+
+    moduls/eqband.cpp moduls/eqband.h
+    moduls/eqresponse.cpp moduls/eqresponse.h
+
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h
     utils/presetmanager.cpp utils/presetmanager.h
     utils/parser.cpp utils/parser.h
-    qmlEnums/devicetypeenum.h
+
+    uihelpers/devicetypeenum.h
 )
 
 target_include_directories(pangaea-backend PUBLIC
     cores
     device
     interfaces
+    moduls
     models
+    uihelpers
     utils
-    qmlEnums
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning SerialPort)

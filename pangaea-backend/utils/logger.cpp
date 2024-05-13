@@ -2,6 +2,7 @@
 
 #include <QDebug>
 
+
 #ifdef Q_OS_ANDROID
 //#include <QtAndroidExtras>
 #include <QtCore/private/qandroidextras_p.h>
@@ -41,8 +42,10 @@ Logger::Logger(QObject* parent)
         qDebug() << "READ_EXTERNAL_STORAGE permission denied, trying to request";
          AndroidUtils::requestPermission("android.permission.READ_EXTERNAL_STORAGE");
     }
-#elif
-    QString folderPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0)+"/AMT/pangaeaCPPA/";
+
+#else
+
+    QString folderPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/AMT/pangaeaCPPA/";
 
     if(!QDir(folderPath).exists())
     {

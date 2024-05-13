@@ -37,8 +37,8 @@ SOURCES += \
     interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
     interfaces/usbinterface.cpp \
-    utils/eqband.cpp \
-    utils/eqresponse.cpp \
+    moduls/eqband.cpp \
+    moduls/eqresponse.cpp \
     utils/irworker.cpp \
     utils/parser.cpp \
     utils/presetmanager.cpp
@@ -60,7 +60,7 @@ HEADERS += \
     interfaces/devicedescription.h \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
-    qmlEnums/devicetypeenum.h \
+    uihelpers/devicetypeenum.h \
     utils/eqband.h \
     utils/eqresponse.h \
     utils/irworker.h \
@@ -71,8 +71,8 @@ INCLUDEPATH += cores
 INCLUDEPATH += device
 INCLUDEPATH += interfaces
 INCLUDEPATH += models
-INCLUDEPATH += qmlEnums
-INCLUDEPATH += ui
+INCLUDEPATH += moduls
+INCLUDEPATH += uihelpers
 INCLUDEPATH += utils
 
 #win32-g++ {
