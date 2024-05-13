@@ -28,13 +28,8 @@ ApplicationWindow
 
     color: Style.backgroundColor
 
-    property string nameCP100: "CP-100";
-    property string nameCP16: "CP-16M";
-    property string nameCP16PA: "CP-16PA";
-    property string nameCP100PA: "CP-100PA"
-
     property string markEdit: edit?" * ":" "
-    property string devName: ""
+    property string devName: UiCore.firmwareName
     property string devVersion: ""
 
     property string interfaceDescription: ""
@@ -121,7 +116,7 @@ ApplicationWindow
 
         onRejected:
         {
-            if((devName == nameCP100) || (devName == nameCP100PA))
+            if((UiCore === DeviceType.CP100) || (UiCore === DeviceType.CP100PA))
             {
                 UiCore.escImpuls()
             }
@@ -132,7 +127,7 @@ ApplicationWindow
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            if((devName == nameCP100) || (devName == nameCP100PA))
+            if((UiCore === DeviceType.CP100) || (UiCore === DeviceType.CP100PA))
             {
                 UiCore.setImpuls(cleanPath);
             }
@@ -342,21 +337,6 @@ ApplicationWindow
                 if(!value)
                 {
                     operationCompleteDialog.open();
-                }
-            }
-        }
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.DEVICE_TYPE)
-            {
-                switch (value)
-                {
-                default: devName = "";  break;
-                case DeviceType.CP100: devName = "CP-100";  break;
-                case DeviceType.CP16: devName = "CP-16M";  break;
-                case DeviceType.CP16PA: devName = "CP-16PA"; break;
-                case DeviceType.CP100PA: devName = "CP-100PA"; break;
                 }
             }
         }

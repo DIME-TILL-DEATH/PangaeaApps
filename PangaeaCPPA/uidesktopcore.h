@@ -16,6 +16,8 @@ class UiDesktopCore : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool presetModified READ presetModified NOTIFY presetModifiedChanged FINAL)
+    Q_PROPERTY(DeviceType deviceType READ deviceType NOTIFY deviceTypeChanged FINAL)
+    Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)
 public:
     explicit UiDesktopCore(QObject *parent = nullptr);
 
@@ -44,6 +46,8 @@ public:
     Q_INVOKABLE void sw4Enable();
 
     bool presetModified() const {return m_presetModified;};
+    DeviceType deviceType() const {return m_deviceType;};
+    QString firmwareName() const {return m_firmwareName;};
 
 signals:
     void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
@@ -71,15 +75,20 @@ signals:
     void sgDoOnlineFirmwareUpdate();
 
     void presetModifiedChanged();
+    void deviceTypeChanged();
+    void firmwareNameChanged();
 
 public slots:
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
     void slNewAppVersionAvaliable(QString appVersion);
 
+    void slSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
     void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
 private:
     bool m_presetModified;
+    DeviceType m_deviceType;
+    QString m_firmwareName;
 };
 
 #endif // UIDESKTOPCORE_H

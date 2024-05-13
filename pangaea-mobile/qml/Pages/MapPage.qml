@@ -263,6 +263,7 @@ Item
         }
     }
 
+
     Connections
     {
         target: UiCore
@@ -273,18 +274,17 @@ Item
             msgPresetChangeSave.open();
         }
 
+        function onDeviceTypeChanged()
+        {
+            isPaFirmware = ((UiCore.deviceType===DeviceType.CP16PA)||(UiCore.deviceType===DeviceType.CP100PA));
+
+            placeAllModuls();
+        }
+
         function onSgSetUiDeviceParameter(paramType, value)
         {
             switch(paramType)
             {
-            case DeviceParameter.DEVICE_TYPE:
-            {
-                isPaFirmware = ((value===DeviceType.CP16PA)||(value===DeviceType.CP100PA));
-
-                placeAllModuls();
-                break;
-            }
-
             case DeviceParameter.EQ_PRE:
             {
                 arrangePrePost(value);

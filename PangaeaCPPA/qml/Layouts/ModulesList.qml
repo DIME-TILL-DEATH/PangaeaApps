@@ -212,19 +212,18 @@ Item
         {
             switch(paramType)
             {
-            case DeviceParameter.DEVICE_TYPE:
-            {
-                isPaFirmware = ((value===DeviceType.CP16PA)||(value===DeviceType.CP100PA));
-                if(value>0) placeAllModuls();
-                break;
-            }
-
             case DeviceParameter.EQ_PRE:
             {
                 arrangePrePost(value);
                 break;
             }
             }
+        }
+
+        function onDeviceTypeChanged()
+        {
+            isPaFirmware = ((UiCore.deviceType===DeviceType.CP16PA)||(UiCore.deviceType===DeviceType.CP100PA));
+            placeAllModuls();
         }
 
         // not set ui

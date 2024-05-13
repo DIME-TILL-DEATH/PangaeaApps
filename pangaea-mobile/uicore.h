@@ -25,6 +25,8 @@ class UiCore : public QObject
     Q_OBJECT
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
     Q_PROPERTY(bool presetModified READ presetModified NOTIFY presetModifiedChanged FINAL)
+    Q_PROPERTY(DeviceType deviceType READ deviceType NOTIFY deviceTypeChanged FINAL)
+    Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)
 public:
     explicit UiCore(QObject *parent = nullptr);
 
@@ -59,10 +61,12 @@ public:
 
     Q_INVOKABLE void openManualExternally(QString fileName);
 
-    const QString &moduleName() const;
+    const QString &moduleName() const {return m_moduleName;};
     void setModuleName(const QString &newModuleName);
 
     bool presetModified() const {return m_presetModified;};
+    DeviceType deviceType() const {return m_deviceType;};
+    QString firmwareName() const {return m_firmwareName;};
 
 private:
     QQmlApplicationEngine* m_qmlEngine;
@@ -89,6 +93,8 @@ private:
     void pickFile(ActivityType fileType, QString filter);
 
     bool m_presetModified;
+    DeviceType m_deviceType;
+    QString m_firmwareName;
 
 signals:
     void sgTranslatorChanged(QString langauageCode);
@@ -122,6 +128,8 @@ signals:
     void sgDoOnlineFirmwareUpdate();
 
     void presetModifiedChanged();
+    void deviceTypeChanged();
+    void firmwareNameChanged();
 
 public slots:
     void slFirmwareFilePicked(QString filePath, QString fileName);
@@ -129,7 +137,7 @@ public slots:
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
 
     void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
-
+    void slSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
 private slots:
     void slImpulseFilePicked(QString filePath, QString fileName);
 };

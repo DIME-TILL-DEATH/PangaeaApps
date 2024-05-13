@@ -157,44 +157,43 @@ Item
             }
         }
 
+        function onDeviceTypeChanged()
+        {
+            switch (UiCore.deviceType)
+            {
+                case DeviceType.CP100:
+                {
+                    maxMapRow = 10;
+                    switchPostPre.isAvaliable = false;
+                    break;
+                }
+                case DeviceType.CP16:
+                {
+                    controlMultiplier = 16;
+                    maxMapRow = 4;
+                    switchPostPre.isAvaliable = false;
+                    break;
+                }
+                case DeviceType.CP16PA:
+                {
+                    controlMultiplier = 16;
+                    maxMapRow = 4;
+                    switchPostPre.isAvaliable = true;
+                    break;
+                }
+                case DeviceType.CP100PA:
+                {
+                    maxMapRow = 10;
+                    switchPostPre.isAvaliable = true;
+                    break;
+                }
+            }
+        }
+
         function onSgSetUiDeviceParameter(paramType, value)
         {
             switch(paramType)
             {
-            case DeviceParameter.DEVICE_TYPE:
-            {
-                switch (value)
-                {
-                    case DeviceType.CP100:
-                    {
-                        maxMapRow = 10;
-                        switchPostPre.isAvaliable = false;
-                        break;
-                    }
-                    case DeviceType.CP16:
-                    {
-                        controlMultiplier = 16;
-                        maxMapRow = 4;
-                        switchPostPre.isAvaliable = false;
-                        break;
-                    }
-                    case DeviceType.CP16PA:
-                    {
-                        controlMultiplier = 16;
-                        maxMapRow = 4;
-                        switchPostPre.isAvaliable = true;
-                        break;
-                    }
-                    case DeviceType.CP100PA:
-                    {
-                        maxMapRow = 10;
-                        switchPostPre.isAvaliable = true;
-                        break;
-                    }
-                }
-                break;
-            }
-
             case DeviceParameter.CABINET_ENABLE:
             {
                 main.irOn = value;

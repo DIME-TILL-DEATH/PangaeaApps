@@ -9,6 +9,7 @@ import Qt.labs.platform 1.1 as Labs
 import Qt.labs.settings 1.0
 
 import CppObjects 1.0
+import CppEnums
 
 MenuBar{
     id: mainMenu
@@ -306,33 +307,30 @@ MenuBar{
     Connections{
         target: UiCore
 
-        function onSgSetUiDeviceParameter(paramType, value)
+        function onDeviceTypeChanged()
         {
-            if(paramType === DeviceParameter.DEVICE_TYPE)
+            switch (UiCore.deviceType)
             {
-                switch (value)
-                {
-                    case 0:
-                        menuDeviceManual.strManualBaseName = "";
-                        menuUpdateFirmware.enabled = false;
-                        break;
-                    case 1:
-                        menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
-                        menuUpdateFirmware.enabled = false;
-                        break;
-                    case 2:
-                        menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
-                        menuUpdateFirmware.enabled = true;
-                        break;
-                    case 3:
-                        menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
-                        menuUpdateFirmware.enabled = true;
-                        break;
-                    case 4:
-                        menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
-                        menuUpdateFirmware.enabled = false;
-                        break;
-                }
+                case 0:
+                    menuDeviceManual.strManualBaseName = "";
+                    menuUpdateFirmware.enabled = false;
+                    break;
+                case 1:
+                    menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
+                    menuUpdateFirmware.enabled = false;
+                    break;
+                case 2:
+                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                    menuUpdateFirmware.enabled = true;
+                    break;
+                case 3:
+                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                    menuUpdateFirmware.enabled = true;
+                    break;
+                case 4:
+                    menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
+                    menuUpdateFirmware.enabled = false;
+                    break;
             }
         }
 
