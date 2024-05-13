@@ -66,18 +66,11 @@ Item
             width: parent.width
             height: parent.height - masterControlsHeight - _moduleColumn.spacing
             spacing: 2
-            // property int widthWithoutSpase: width-spacing*10
 
             interactive: false
             orientation: ListView.Vertical
 
-            // layoutDirection:  UiSettings.isModulesRightAligned ? Qt.RightToLeft : Qt.LeftToRight
-
             model: modulesList
-
-            // add: Transition{
-            //     NumberAnimation { properties: "x"; duration: 500 }
-            // }
 
             move: Transition {
                  NumberAnimation { properties: "y"; duration: 250 }
@@ -153,13 +146,15 @@ Item
     EqPreview
     {
         id: eq
-        name: "EQ"
+
         width:  parent.width
         height: _main.height*3/countElements - _moduleColumn.spacing
+
         property int prePositionIndex: 3
         property int postPositionIndex: 6
         property bool isPrePosition: (ObjectModel.index === prePositionIndex)
         isPrePostVisible: _main.isPaFirmware
+
         onExtVisible:
         {
             eqsExt.visible = true;

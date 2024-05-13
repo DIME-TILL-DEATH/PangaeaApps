@@ -5,24 +5,26 @@ AbstractModule::AbstractModule(DeviceParameter::Type parameterTypeModuleOn, QObj
     m_parameterTypeModuleOn{parameterTypeModuleOn}
 {}
 
-bool AbstractModule::enabled() const
+bool AbstractModule::moduleEnabled() const
 {
-    return m_enabled;
+    return m_moduleEnabled;
 }
 
-void AbstractModule::setEnabled(bool newEnabled)
+void AbstractModule::setModuleEnabled(bool newEnabled)
 {
-    if (m_enabled == newEnabled)
+    if (m_moduleEnabled == newEnabled)
         return;
-    m_enabled = newEnabled;
-    emit enabledChanged();
+    m_moduleEnabled = newEnabled;
+    emit moduleEnabledChanged();
+    emit sgSetDeviceParameter(m_parameterTypeModuleOn, newEnabled);
 }
 
 void AbstractModule::slSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value)
 {
     if(deviceParameterType == m_parameterTypeModuleOn)
     {
-        setEnabled(value);
+        m_moduleEnabled = value;
+        emit moduleEnabledChanged();
     }
     emit sgSetUiDeviceParameter(deviceParameterType, value);
 }

@@ -10,8 +10,7 @@ Item
 {
     id: main
 
-    property string name:     "PA"
-    property bool on: true
+    property bool on: EqResponse.moduleEnabled
 
     property int currentBandIndex
 
@@ -102,7 +101,7 @@ Item
 
                         // response draw
                         ctx.lineWidth = 3;
-                        ctx.strokeStyle = "white" ;
+                        ctx.strokeStyle = on ? "white" : "darkgray" ;
 
                         ctx.translate(0, _canvas.height/2);
 
@@ -205,34 +204,17 @@ Item
 
             CustomSlider
             {
-                name: "Central Frequency"
-                units: "Hz"
-
-                width: parent.width
-                height: parent.height*1/12
-
                 controlValue: EqResponse.EqBands[currentBandIndex].Fc
             }
 
             CustomSlider
             {
-                name: "Gain"
-                units: "dB"
-
-                width: parent.width
-                height: parent.height*1/12
-
                 controlValue: EqResponse.EqBands[currentBandIndex].gain
 
             }
 
             CustomSlider
             {
-                name: "Q-Factor"
-
-                width: parent.width
-                height: parent.height*1/12
-
                 controlValue: EqResponse.EqBands[currentBandIndex].Q
                 precision: 1
             }
@@ -259,29 +241,14 @@ Item
     }
 
     Connections{
-        target: UiCore
-
-        function onSgSetDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.EQ_ON)
-            {
-                main.update();
-            }
-        }
-
-        function onSetDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.EQ_ON)
-            {
-                main.update();
-            }
-        }
-    }
-
-    Connections{
         target: EqResponse
 
         function onPointsChanged()
+        {
+            main.update();
+        }
+
+        function onModuleEnabledChanged()
         {
             main.update();
         }

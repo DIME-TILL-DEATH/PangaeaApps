@@ -114,6 +114,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
 
+    qmlRegisterUncreatableType<AbstractModule>("CppObjects", 1, 0, "Module", "Cannot create Module in QML");
     qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
     qmlRegisterUncreatableType<ControlValue>("CppObjects", 1, 0, "ControlValue", "Cannot create ControlValue in QML");
     //-------------------------------------------------------------------------------

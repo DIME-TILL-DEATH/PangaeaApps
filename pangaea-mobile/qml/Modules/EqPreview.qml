@@ -12,20 +12,17 @@ Item
 
     signal extVisible()
 
-    property string name: "EQ"
     property int paramType: DeviceParameter.EQ_ON
 
-    property bool on: true
+    property bool on: EqResponse.moduleEnabled
     property bool isPrePostVisible: true
 
-    property int gainRange: 40
-
     property bool isPreEQ: true
-
 
     BaseModule{
         id: _baseModule
 
+        module: EqResponse
         moduleName: qsTr("EQ")
         moduleDescription: qsTr("Equalizer")
 
@@ -65,6 +62,8 @@ Item
 
                             anchors.fill: parent
                             renderStrategy: Canvas.Threaded
+
+                            property int gainRange: 40
 
                             property real coefY : height / gainRange
                             property int yGridSize: 5
@@ -124,7 +123,7 @@ Item
                                 var x=0;
                                 var y=_canvas.height/2;
 
-                                for(var i=0; i<EqResponse.points.length; i++)
+                                for(i=0; i<EqResponse.points.length; i++)
                                 {
                                     x = _canvas.width*((Math.log10(EqResponse.points[i].x)-Math.log10(xmin))
                                                        /(Math.log10(xmax)-Math.log10(xmin)));
@@ -143,25 +142,10 @@ Item
                             {
                                 _canvas.requestPaint();
                             }
-                        }
 
-                        Connections
-                        {
-                            target: UiCore
-                            function onSgSetUiDeviceParameter(paramType, value)
+                            function onModuleEnabledChanged()
                             {
-                                if(paramType === main.paramType)
-                                {
-                                    _canvas.requestPaint();
-                                }
-                            }
-
-                            function onSgSetDeviceParameter(paramType, value)
-                            {
-                                if(paramType === DeviceParameter.EQ_ON)
-                                {
-                                    _canvas.requestPaint();
-                                }
+                                _canvas.requestPaint();
                             }
                         }
                     }
@@ -226,24 +210,10 @@ Item
         target: UiCore
         function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(paramType === main.paramType)
-            {
-                main.on=value
-            }
-
             if(paramType === DeviceParameter.EQ_PRE)
             {
                 isPreEQ=value
             }
-        }
-    }
-
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
-        {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }

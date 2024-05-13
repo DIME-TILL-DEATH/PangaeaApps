@@ -2,13 +2,15 @@
 
 ControlValue::ControlValue(AbstractModule *parent, DeviceParameter::Type deviceParameterType,
                            qint16 minControlValue, qint16 maxControlValue,
-                           double minDisplayValue, double maxDisplayValue)
+                           double minDisplayValue, double maxDisplayValue, QString name, QString units)
     : QObject{parent},
     m_deviceParameterType{deviceParameterType},
     m_minControlValue{minControlValue},
     m_maxControlValue{maxControlValue},
     m_minDisplayValue{minDisplayValue},
-    m_maxDisplayValue{maxDisplayValue}
+    m_maxDisplayValue{maxDisplayValue},
+    m_name{name},
+    m_units{units}
 {
     if(parent != nullptr)
     {
@@ -65,4 +67,3 @@ void ControlValue::slSetAppParameter(Core::AppParameter appParameterType, QVaria
     default: {}
     }
 }
-

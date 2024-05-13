@@ -18,6 +18,8 @@ Rectangle {
 
     property Component contentItem
 
+    property Module module
+
     property bool disabled: false
 
     signal sgModuleOnOf()
@@ -159,6 +161,7 @@ Rectangle {
                 z: 5
                 onClicked: {
                     sgModuleOnOf();
+                    module.moduleEnabled = !module.moduleEnabled
                 }
             }
         }

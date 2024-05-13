@@ -12,12 +12,12 @@ EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, 
 {
 
     m_Fc = new ControlValue(ownerModule, (DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_FREQ1+m_bandNum),
-                            -100, 100, m_fStart, m_fStop);
+                            -100, 100, m_fStart, m_fStop, "Central Frequency", "Hz");
     m_gain = new ControlValue(ownerModule, (DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_VOLUME1+m_bandNum),
-                              0x0000, 0x001E, -15, 15);
+                              0x0000, 0x001E, -15, 15, "Gain", "dB");
 
     m_Q = new ControlValue(ownerModule, (DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_Q1+m_bandNum),
-                           -100, 99, 0.1, 20);
+                           -100, 99, 0.1, 20, "Q-Factor");
 
     connect(m_Fc, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);
     connect(m_gain, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);

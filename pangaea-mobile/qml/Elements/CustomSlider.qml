@@ -10,10 +10,13 @@ Slider
 {
     id: root
 
+    implicitWidth: parent.width
+    implicitHeight: parent.height/12
+
     required property ControlValue controlValue
 
-    property string name: "BAR"
-    property string units: " "
+    property string name: controlValue.name
+    property string units: controlValue.units
     property int precision: 0
 
 
