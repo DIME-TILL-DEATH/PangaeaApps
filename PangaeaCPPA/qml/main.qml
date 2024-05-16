@@ -336,14 +336,6 @@ ApplicationWindow
         }
     }
 
-    // TODO: сброс Q_PROPERTY при ошибке
-    // function clearHeader()
-    // {
-    //     main.devName = ""
-    //     main.devVersion = ""
-    //     main.interfaceDescription = ""
-    // }
-
     Connections{
         target: UiCore
 
@@ -399,7 +391,6 @@ ApplicationWindow
 
         function onSgInterfaceError(errorDescription)
         {
-            clearHeader();
             connected = false;
             main.editable = false;
             mainUi.visible = false;
@@ -411,7 +402,6 @@ ApplicationWindow
 
         function onSgInterfaceDisconnected()
         {
-            // clearHeader();
             connected = false;
             main.editable = false;
             mainUi.visible = false;

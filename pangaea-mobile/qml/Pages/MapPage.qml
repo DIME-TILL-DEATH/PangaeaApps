@@ -88,14 +88,14 @@ Item
     Ng
     {
         id: ng
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*2/countElements - _moduleColumn.spacing
         visible: moduleVisible
     }
     Cm
     {
         id: cm
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*2/countElements - _moduleColumn.spacing
         visible: moduleVisible
     }
@@ -103,7 +103,7 @@ Item
     Pr
     {
         id: pr
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*4/countElements - _moduleColumn.spacing
         visible: moduleVisible
     }
@@ -112,7 +112,7 @@ Item
     {
         id: pa
 
-        width: parent.width
+        width: listViewModules.width
         height: _main.height*4/countElements - _moduleColumn.spacing
         visible: moduleVisible & isPaFirmware
     }
@@ -121,7 +121,7 @@ Item
     {
         id: ps
 
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*1/countElements - _moduleColumn.spacing
 
         visible: moduleVisible & (!isPaFirmware)
@@ -129,14 +129,14 @@ Item
     Ir
     {
         id: ir
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*1/countElements - _moduleColumn.spacing
         visible: moduleVisible
     }
     Hp
     {
         id: hp
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*1/countElements - _moduleColumn.spacing
         visible: moduleVisible
     }
@@ -145,7 +145,7 @@ Item
     {
         id: eq
 
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*3/countElements - _moduleColumn.spacing
 
         property int prePositionIndex: 2
@@ -163,7 +163,7 @@ Item
     Lp
     {
         id: lp
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*1/countElements - _moduleColumn.spacing
         visible: moduleVisible
     }
@@ -171,7 +171,7 @@ Item
     Er
     {
         id: er
-        width:  parent.width
+        width:  listViewModules.width
         height: _main.height*2/countElements - _moduleColumn.spacing
         visible: moduleVisible
     }
