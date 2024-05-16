@@ -66,7 +66,8 @@ Rectangle
             height: parent.height*6/10
 
             model: DeviceProperties.presetsList
-            currentIndex: DeviceProperties.preset
+            currentIndex: DeviceProperties.isLa3Mode ? (DeviceProperties.bank*4 + DeviceProperties.preset)
+                                                     : DeviceProperties.preset
 
             visibleItemCount: 1
 
@@ -77,7 +78,7 @@ Rectangle
                 text: modelData
                 opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: Style.colorText
-                font.pixelSize: _tumbler.height*0.75
+                font.pixelSize: DeviceProperties.isLa3Mode ? _tumbler.height*0.6 : _tumbler.height*0.75
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 font.bold: true
@@ -110,11 +111,18 @@ Rectangle
     Timer
     {
         id: timer
-        interval: 250
+        interval: 500
         repeat: false
         onTriggered:
         {
-            DeviceProperties.preset = _tumbler.currentIndex;
+            if(DeviceProperties.isLa3Mode)
+            {
+                DeviceProperties.changePreset(_tumbler.currentIndex/4, _tumbler.currentIndex%4);
+            }
+            else
+            {
+                DeviceProperties.preset = _tumbler.currentIndex;
+            }
         }
     }
 }

@@ -17,11 +17,7 @@ Item
 
     property bool moduleVisible: false
 
-    property bool isLA3: false
-    property bool bankShift: isLA3 ? 32 : 16 // Multiply is lef shift: 16 = 4 bits, 32 = 5 bits
-    property int  presetNom: _masterControls.bank.value*bankShift + _masterControls.preset.value
-
-    property string devName: "CP-16"
+    // property string devName: "CP-16"
 
     property int countElements: 25
     property int masterControlsHeight: height*5/countElements

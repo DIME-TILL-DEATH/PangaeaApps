@@ -53,5 +53,6 @@
         <file>qml/Elements/EqPoint.qml</file>
         <file>qml/Elements/CustomSlider.qml</file>
         <file>qml/Elements/BankSpin.qml</file>
+        <file>qml/Elements/LA3ModeSpin.qml</file>
     </qresource>
 </RCC>

@@ -98,7 +98,7 @@ CustomMessageDialog {
         }
 
 
-        section.property: "bankNumber"
+        section.property: DeviceProperties.isLa3Mode? "" : "bankNumber"
         section.criteria: ViewSection.FullString
         section.delegate: Item{
             id: _sectionHeaderContent

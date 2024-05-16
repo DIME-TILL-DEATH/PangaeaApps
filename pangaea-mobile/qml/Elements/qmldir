@@ -13,6 +13,7 @@ CustomSlider    1.0 CustomSlider.qml
 EditTextDialog      1.0 EditTextDialog.qml
 EqPoint                 1.0 EqPoint.qml
 FirmwareLoadingWindow   1.0 FirmwareLoadingWindow.qml
+LA3ModeSpin             1.0 LA3ModeSpin.qml
 MButton         1.0 MButton.qml
 MComboBox         1.0 MComboBox.qml
 MRadioButton    1.0 MRadioButton.qml

@@ -95,11 +95,7 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
         {
             m_firmwareName = "LA3RV";
 
-            m_banksList.append("CL0");
-            m_banksList.append("CL1");
-            m_banksList.append("DS0");
-            m_banksList.append("DS1");
-            for(int i=0; i<4; i++)
+            for(int i=0; i<16; i++)
             {
                 m_presetsList.append(i);
             }
@@ -109,11 +105,7 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
         {
             m_firmwareName = "LA3PA";
 
-            m_banksList.append("CL0");
-            m_banksList.append("CL1");
-            m_banksList.append("DS0");
-            m_banksList.append("DS1");
-            for(int i=0; i<4; i++)
+            for(int i=0; i<16; i++)
             {
                 m_presetsList.append(i);
             }

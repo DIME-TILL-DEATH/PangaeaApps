@@ -23,9 +23,6 @@ Item
 
     property bool compareState: false
 
-    property alias bank : _bank
-    property alias preset : _preset
-
     property int borderSpacings : Style.mainSpacing
 
     signal exportPreset()
@@ -42,10 +39,10 @@ Item
 
         BankSpin
         {
-            id: _bank
-
             width:  parent.width*1/6 - _row.spacing
             height: parent.height
+
+            visible: DeviceProperties.isLa3Mode
         }
 
         GridLayout
@@ -234,10 +231,16 @@ Item
 
         }
 
+        LA3ModeSpin
+        {
+            width:  parent.width*1/6 - _row.spacing
+            height: parent.height
+
+            visible: DeviceProperties.isLa3Mode
+        }
+
         PresetSpin
         {
-            id: _preset
-
             width:  parent.width*1/6 -_row.spacing
             height: parent.height
         }

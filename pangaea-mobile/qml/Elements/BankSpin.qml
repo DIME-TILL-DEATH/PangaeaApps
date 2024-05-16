@@ -16,6 +16,8 @@ Rectangle
     property string text
 
     property bool editable: true
+    property bool isLA3: DeviceProperties.isLa3Mode
+
 
     color: "transparent"
     border.width: 1
