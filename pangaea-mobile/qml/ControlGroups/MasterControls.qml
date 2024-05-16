@@ -19,7 +19,7 @@ Item
     property int mode: 0
 
     property bool copyFirst: false
-    property bool presetEdited: UiCore.presetModified
+    property bool presetEdited: DeviceProperties.presetModified
 
     property bool compareState: false
 
@@ -40,15 +40,12 @@ Item
 
         spacing: borderSpacings
 
-        PresetBankSpin
+        BankSpin
         {
             id: _bank
 
             width:  parent.width*1/6 - _row.spacing
             height: parent.height
-
-            text: qsTr("BANK")
-            paramType: DeviceParameter.BANK
         }
 
         GridLayout
@@ -155,7 +152,7 @@ Item
 
                     onMbPressed:
                     {
-                        UiCore.setParameter("save_change", (-1));
+                        DeviceProperties.saveChanges();
                     }
                 }
                 MButton
@@ -237,15 +234,12 @@ Item
 
         }
 
-        PresetBankSpin
+        PresetSpin
         {
             id: _preset
 
             width:  parent.width*1/6 -_row.spacing
             height: parent.height
-
-            text: qsTr("PRESET")
-            paramType: DeviceParameter.PRESET
         }
     }
 

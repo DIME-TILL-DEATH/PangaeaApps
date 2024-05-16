@@ -14,19 +14,21 @@ Rectangle {
 
     property real value: 0
     property real from: 0
-    property real to: 24//20 * log10(32bit)
+    property real to: 32//20 * log10(32bit)
+
+    clip: true
 
     Rectangle{
         id: fill
 
         color: "green"
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
 
-        width: parent.width
+        width: parent.width - parent.border.width
         height: parent.height - (to - from - value)*parent.height/(to-from)
 
-        z: 1
-
-        anchors.bottom: parent.bottom
+        z: root.z-1
     }
 
     Connections

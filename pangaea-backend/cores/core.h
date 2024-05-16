@@ -12,6 +12,7 @@
 #include "answerworker.h"
 #include "preset.h"
 #include "presetmanager.h"
+#include "devicedescription.h"
 
 #include "irworker.h"
 
@@ -23,12 +24,19 @@ public:
 
     enum AppParameter
     {
-        PRESET_MODIFIED
+        PRESET_MODIFIED,
+        FW_UPDATE_COMPLITED
     };
     Q_ENUM(AppParameter)
 
-    void setParameter(QString name, quint8 value);
-    void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
+    enum AppAction
+    {
+        CHANGE_PRESET,
+        COPY_PRESET,
+        PASTE_PRESET,
+        SAVE_CHANGES
+    };
+    Q_ENUM(AppAction)
 
     // TODO: пока умеет только Preset и bank!!!! Дописать
     void restoreValue(QString name);
@@ -36,8 +44,6 @@ public:
 
     void setImpulse(QString fullFilePath);
     void escImpulse();
-
-    void setPresetChange(quint8);
 
     void saveChanges();
 
@@ -56,7 +62,6 @@ public:
     void uploadFirmware(QByteArray firmware);
 
     void sw4Enable();
-
     void stopCore();
 
 private:
@@ -71,6 +76,8 @@ private:
 
     bool fwUpdate{false};
     bool isFormatting{false};
+
+    bool m_blockConsoleLog{false};
 
     bool isPresetEdited{false};
     Preset currentPreset{&controlledDevice};
@@ -94,15 +101,14 @@ private:
     quint32 bytesToRecieve{0};
     quint32 bytesRecieved{0};
 
-    void pushCommandToQueue(QByteArray);
-    void calculateSendVolume();
-    void sendCommand(QByteArray);
-
-    void doPresetChange(quint8 val);
-    void updateProgressBar();
-
     bool bEditable;
 
+    void pushCommandToQueue(QByteArray);
+    void calculateSendVolume();
+    void updateProgressBar();
+    void sendCommand(QByteArray);
+
+    void changePreset(quint8 bank, quint8 preset);
     void setPresetData(const Preset& preset);
 signals:
     void sgWriteToInterface(QByteArray data);
@@ -112,12 +118,11 @@ signals:
     void sgFirmwareVersionInsufficient(Firmware *minimalFirmware, Firmware *actualFirmware);
     void sgRequestNewestFirmware(Firmware* actualFirmware);
 
-    void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
+    void sgRecieveDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
     void sgSetAppParameter(AppParameter appParameterType, QVariant content);
     void sgSetUIParameter(QString nameParam, qint32 value);
     void sgSetUIText(QString nameParam, QString value);
 
-    void sgPresetChangeStage(quint8 inChangePreset);
     void sgSetProgress(float val, QString extText);
 
     void sgRefreshPresetList(QList<Preset>* m_presetsList);
@@ -127,12 +132,18 @@ signals:
     void sgImmediatelyDisconnect(); // Принудительное после обновления по USB
 
 public slots:
+    void setParameter(QString name, quint8 value);
+    void slSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
+
     void slReadyToDisconnect();
+    void slInterfaceConnected(DeviceDescription interfaceDescription);
 
     void parseInputData(QByteArray data);
     void processCommands();
 
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
+
+    void slRecieveAppAction(AppAction appParameterType, QVariantList parameters);
 
 private slots:
     void indicationRequest();

@@ -14,7 +14,7 @@ import CppEnums
 MenuBar{
     id: mainMenu
 
-    property bool presetEdited: UiCore.presetModified
+    property bool presetEdited: DeviceProperties.presetModified
 
     Menu{
         title: qsTr("File")
@@ -305,34 +305,47 @@ MenuBar{
     }
 
     Connections{
-        target: UiCore
+        target: DeviceProperties
 
         function onDeviceTypeChanged()
         {
-            switch (UiCore.deviceType)
+            switch (DeviceProperties.deviceType)
             {
-                case 0:
+                case DeviceType.UnknownDev:
                     menuDeviceManual.strManualBaseName = "";
                     menuUpdateFirmware.enabled = false;
                     break;
-                case 1:
+                case DeviceType.CP100:
                     menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
                     menuUpdateFirmware.enabled = false;
                     break;
-                case 2:
+                case DeviceType.CP16:
                     menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
                     menuUpdateFirmware.enabled = true;
                     break;
-                case 3:
+                case DeviceType.CP16PA:
                     menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
                     menuUpdateFirmware.enabled = true;
                     break;
-                case 4:
+                case DeviceType.CP100PA:
                     menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
                     menuUpdateFirmware.enabled = false;
+                    break;
+                case DeviceType.LA3RV:
+                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                    menuUpdateFirmware.enabled = true;
+                    break;
+                case DeviceType.LA3PA:
+                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                    menuUpdateFirmware.enabled = true;
                     break;
             }
         }
+
+    }
+
+    Connections{
+        target: UiCore
 
         function onSgSetUIText(nameParam, auxText)
         {

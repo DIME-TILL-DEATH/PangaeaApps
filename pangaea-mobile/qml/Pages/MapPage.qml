@@ -1,8 +1,5 @@
-import QtQuick 2.15//2.12
-import QtQuick.Controls 2.15//2.5
-//import Qt.labs.platform 1.1 as Labs
-//import QtQuick.Dialogs 1.3
-
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import StyleSettings 1.0
 
 import ControlGroups 1.0
@@ -20,8 +17,9 @@ Item
 
     property bool moduleVisible: false
 
-    // Multiply 16 = shift left for 4 bits
-    property int  presetNom: _masterControls.bank.value*16+_masterControls.preset.value
+    property bool isLA3: false
+    property bool bankShift: isLA3 ? 32 : 16 // Multiply is lef shift: 16 = 4 bits, 32 = 5 bits
+    property int  presetNom: _masterControls.bank.value*bankShift + _masterControls.preset.value
 
     property string devName: "CP-16"
 
@@ -150,7 +148,7 @@ Item
         width:  parent.width
         height: _main.height*3/countElements - _moduleColumn.spacing
 
-        property int prePositionIndex: 3
+        property int prePositionIndex: 2
         property int postPositionIndex: 6
         property bool isPrePosition: (ObjectModel.index === prePositionIndex)
         isPrePostVisible: _main.isPaFirmware
@@ -180,13 +178,18 @@ Item
 
     function arrangePrePost(isEqPre)
     {
-        if(isEqPre)
         {
-            if(!eq.isPrePosition) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
-        }
-        else
-        {
-            if(eq.isPrePosition) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
+            if(isPaFirmware)
+            {
+                if(isEqPre)
+                {
+                    if(!eq.isPrePosition) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
+                }
+                else
+                {
+                    if(eq.isPrePosition) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
+                }
+            }
         }
     }
 
@@ -205,7 +208,7 @@ Item
         if(!isPaFirmware) modulesList.append(ps);
         modulesList.append(er);
 
-        moduleVisible = true
+        moduleVisible = true;
         listViewModules.forceLayout();
     }
 
@@ -214,7 +217,6 @@ Item
         id: eqsExt
         visible: false
 
-        anchors.centerIn: parent
         height: parent.height/1.5
         width:  parent.width*0.95
         z: _main.z+1
@@ -228,8 +230,8 @@ Item
     {
         id: msgPresetChangeSave
 
-        // TODO saveParam to enum
-        property int saveParam: 0
+        property int newBank
+        property int newPreset
 
         headerText: qsTr("Save preset")
         text: qsTr("Do you want to save your changes?")
@@ -240,41 +242,44 @@ Item
 
         onAccepted:
         {
-            UiCore.setParameter("save_change", saveParam);
-            UiCore.setParameter("do_preset_change", saveParam);
+            DeviceProperties.saveChanges();
+            DeviceProperties.changePreset(newBank, newPreset, true);
         }
         onDiscarded:
         {
             UiCore.restoreParameter("impulse")
-            UiCore.setParameter("do_preset_change", saveParam);
+            DeviceProperties.changePreset(newBank, newPreset, true);
             visible = false;
         }
         onRejected:
         {
-            saveParam = 0
             // TODO: change to DeviceParameter
             UiCore.restoreParameter("preset")
             UiCore.restoreParameter("bank")
         }
     }
 
+    Connections
+    {
+        target: DeviceProperties
+
+        function onDeviceTypeChanged()
+        {
+            isPaFirmware = ((DeviceProperties.deviceType===DeviceType.CP16PA)||(DeviceProperties.deviceType===DeviceType.CP100PA));
+            placeAllModuls();
+        }
+
+        function onPresetNotSaved(bank, preset)
+        {
+            msgPresetChangeSave.newBank = bank;
+            msgPresetChangeSave.newPreset = preset;
+            msgPresetChangeSave.visible = true;
+        }
+    }
 
     Connections
     {
         target: UiCore
-
-        function onSgPresetChangeStage(inChangePreset)
-        {
-            msgPresetChangeSave.saveParam = inChangePreset;
-            msgPresetChangeSave.open();
-        }
-
-        function onDeviceTypeChanged()
-        {
-            isPaFirmware = ((UiCore.deviceType===DeviceType.CP16PA)||(UiCore.deviceType===DeviceType.CP100PA));
-
-            placeAllModuls();
-        }
 
         function onSgSetUiDeviceParameter(paramType, value)
         {

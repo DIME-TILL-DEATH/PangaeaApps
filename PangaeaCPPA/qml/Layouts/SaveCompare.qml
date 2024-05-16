@@ -25,7 +25,7 @@ Item
                 height: parent.height/2
                 text: "SAVE"
                 enabled: main.editable & main.edit & !main.compareState
-                onClicked: UiCore.setParameter("save_change", (-1))
+                onClicked: DeviceProperties.saveChanges();
             }
 
             MButton

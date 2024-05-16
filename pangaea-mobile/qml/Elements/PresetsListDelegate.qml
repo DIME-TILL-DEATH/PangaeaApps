@@ -108,20 +108,7 @@ Rectangle{
         enabled: !parent.ListView.isCurrentItem
 
         onClicked: {
-            UiCore.setParameter("set_preset_change", parent.ListView.section*16 + (index % maxMap));
-        }
-    }
-
-
-    Connections{
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.MAP_SIZE)
-            {
-                maxMap = value;
-            }
+            DeviceProperties.changePreset(bankNumber, presetNumber)
         }
     }
 }

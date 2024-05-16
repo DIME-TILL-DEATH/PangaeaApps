@@ -25,6 +25,7 @@ public:
     const QString &impulseName() const;
     void setImpulseName(const QString &newImpulseName);
 
+    static quint8 calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, quint8 presetNumber);
     quint8 getPresetFlatIndex() const;
     quint8 getPresetFlatNumber() const;
 

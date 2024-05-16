@@ -107,7 +107,7 @@ Item
         width:  listViewModules.widthWithoutSpase/modulesCount*5
         visible: moduleVisible
 
-        property int prePositionIndex: 4
+        property int prePositionIndex: 3
         property int postPositionIndex: 7
 
         property bool isPrePosition: (ObjectModel.index === prePositionIndex)
@@ -172,13 +172,16 @@ Item
 
     function arrangePrePost(isEqPre)
     {
-        if(isEqPre)
+        if(isPaFirmware)
         {
-            if(!eqsMap.isPrePosition) modulesList.move(eqsMap.postPositionIndex, eqsMap.prePositionIndex, 1);
-        }
-        else
-        {
-            if(eqsMap.isPrePosition) modulesList.move(eqsMap.prePositionIndex, eqsMap.postPositionIndex, 1);
+            if(isEqPre)
+            {
+                if(!eqsMap.isPrePosition) modulesList.move(eqsMap.postPositionIndex, eqsMap.prePositionIndex, 1);
+            }
+            else
+            {
+                if(eqsMap.isPrePosition) modulesList.move(eqsMap.prePositionIndex, eqsMap.postPositionIndex, 1);
+            }
         }
     }
 
@@ -206,6 +209,17 @@ Item
 
     Connections
     {
+        target: DeviceProperties
+
+        function onDeviceTypeChanged()
+        {
+            isPaFirmware = ((DeviceProperties.deviceType===DeviceType.CP16PA)||(DeviceProperties.deviceType===DeviceType.CP100PA));
+            placeAllModuls();
+        }
+    }
+
+    Connections
+    {
         target: UiCore
 
         function onSgSetUiDeviceParameter(paramType, value)
@@ -218,12 +232,6 @@ Item
                 break;
             }
             }
-        }
-
-        function onDeviceTypeChanged()
-        {
-            isPaFirmware = ((UiCore.deviceType===DeviceType.CP16PA)||(UiCore.deviceType===DeviceType.CP100PA));
-            placeAllModuls();
         }
 
         // not set ui

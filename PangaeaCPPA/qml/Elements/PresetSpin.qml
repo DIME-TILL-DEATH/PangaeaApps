@@ -10,15 +10,22 @@ Item
 {
     id: main
 
-    property string fonColor: "#EBECEC"
-    property string devColor: "#5E5971"
-    property int    value:     tumb.currentIndex
-    property int maxMapRow: 10
-    property string text:  "TEXT"
-    property int paramType
     property bool editable: true
 
-    signal chPreset()
+    function up()
+    {
+        if(DeviceProperties.preset < (DeviceProperties.presetsList.length-1))
+        {
+            DeviceProperties.preset++;
+        }
+    }
+    function down()
+    {
+        if(DeviceProperties.preset > 0)
+        {
+            DeviceProperties.preset--;
+        }
+    }
 
     Column
     {
@@ -30,16 +37,19 @@ Item
             Tumbler
             {
                 id: tumb
-                model: 10
-                anchors.horizontalCenter: parent.horizontalCenter
-                visibleItemCount: 1
+
                 height: parent.height
                 width: parent.width
                 anchors.centerIn: parent.Center
+
+                model: DeviceProperties.presetsList
+                currentIndex: DeviceProperties.preset
+
+                visibleItemCount: 1
                 delegate: Text
                 {
                     text: modelData
-                    opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
+
                     color: "Red"
                     font.pixelSize: parent.height*0.9
                     horizontalAlignment: Text.AlignHCenter
@@ -76,44 +86,18 @@ Item
 
                 onClicked: (mouse)=>
                 {
-                    if( mouse.modifiers & Qt.ControlModifier )
-                    {
-                        if(value>0)
-                        {
-                            tumb.currentIndex--;
-                            timer.restart();
-                        }
-                    }
+                    if(mouse.modifiers & Qt.ControlModifier) main.down();
                     else
                     {
                         if(mouse.button & Qt.LeftButton)
-                        {
-                            if(value < (maxMapRow-1))
-                            {
-                                tumb.currentIndex++;
-                                timer.restart();
-                            }
-                        }
-                        else
-                        {
-                            if(value>0)
-                            {
-                                tumb.currentIndex--;
-                                timer.restart();
-                            }
-                        }
+                       {
+                           main.up();
+                       }
+                        else main.down();
                     }
                 }
                 onEntered: tp.visible = true
                 onExited:  tp.visible = false
-
-                Timer
-                {
-                    id: timer
-                    interval: 700
-                    repeat: false
-                    onTriggered: main.chPreset()
-                }
             }
 
             ToolTip
@@ -136,35 +120,7 @@ Item
                 color:  Style.mainEnabledColor
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: parent.height/1.1
-                text: main.text
-            }
-        }
-    }
-
-    function up()
-    {
-        tumb.currentIndex++;
-    }
-
-    function down()
-    {
-        tumb.currentIndex--;
-    }
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-               tumb.currentIndex=value;
-            }
-
-            if(paramType === DeviceParameter.MAP_SIZE)
-            {
-                maxMapRow = value
+                text: qsTr("PRESET")
             }
         }
     }

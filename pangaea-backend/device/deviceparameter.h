@@ -71,15 +71,13 @@ public:
 
         //=======Not in status command
         DEVICE_TYPE = 64,
-        MAP_SIZE,
         BANK,
         PRESET,
         OUTPUT_MODE,
 
         FIRMWARE_CAN_INDICATE,
         SIGNAL_IN,
-        SIGNAL_OUT_L,
-        SIGNAL_OUT_R
+        SIGNAL_OUT,
     };
     Q_ENUM(Type);
 

@@ -164,13 +164,15 @@ Slider
                 softUpdate = false;
             }
         }
+    }
 
-        function onSgSetParameter(paramName, value)
+    Connections
+    {
+        target: DeviceProperties
+
+        function onPresetModifiedChanged()
         {
-            if(paramName === "save_change")
-            {
-                edited = false;
-            }
+            if(!DeviceProperties.presetMofified) edited = false;
         }
     }
 }

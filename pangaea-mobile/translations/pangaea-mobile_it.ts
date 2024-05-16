@@ -2,6 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="it_IT">
 <context>
+    <name>BankSpin</name>
+    <message>
+        <source>MAP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BANK</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BusyScreen</name>
     <message>
         <source>Sending commands to device</source>
@@ -102,7 +113,7 @@
     </message>
 </context>
 <context>
-    <name>Eqs</name>
+    <name>EqPreview</name>
     <message>
         <source>EQ</source>
         <translation type="unfinished"></translation>
@@ -301,10 +312,6 @@
         <translation>Incolla</translation>
     </message>
     <message>
-        <source>BANK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Line</source>
         <extracomment>Output mode. Line out.</extracomment>
         <translation type="unfinished"></translation>
@@ -322,10 +329,6 @@
     <message>
         <source>Import</source>
         <extracomment>Button text. Import preset</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>PRESET</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -363,9 +366,13 @@
     </message>
 </context>
 <context>
-    <name>PresetBankSpin</name>
+    <name>PresetSpin</name>
     <message>
         <source>MAP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PRESET</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -672,6 +679,14 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <source>Device disconnected
 </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Errore</translation>
+    </message>
+    <message>
+        <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

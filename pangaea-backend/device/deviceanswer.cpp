@@ -4,8 +4,8 @@ DeviceAnswer::DeviceAnswer(Parser* parser, AnswerType type, QString description,
     : m_parser{parser},
       m_answerType{type},
       m_description{description},
-      m_timeout{timeout},
-      m_displayble{displayble}
+    m_displayble{displayble},
+    m_timeout{timeout}
 {
 
 }

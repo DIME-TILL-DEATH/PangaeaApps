@@ -143,46 +143,6 @@ void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware 
     emit sgSetUIText("firmware_local_path", minimalFirmware->path());
 }
 
-void UiCore::slSetAppParameter(Core::AppParameter appParameterType, QVariant content)
-{
-    switch (appParameterType)
-    {
-    case Core::AppParameter::PRESET_MODIFIED:
-        m_presetModified = content.toBool();
-        emit presetModifiedChanged();
-        break;
-
-    default:
-        break;
-    }
-}
-
-void UiCore::slSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value)
-{
-    switch(deviceParameterType)
-    {
-    case DeviceParameter::Type::DEVICE_TYPE:
-    {
-        m_deviceType = (DeviceType)value;
-        emit deviceTypeChanged();
-
-        switch(m_deviceType)
-        {
-            case DeviceType::CP100: m_firmwareName = "CP-100";  break;
-            case DeviceType::CP16: m_firmwareName = "CP-16M Blue";  break;
-            case DeviceType::CP16PA: m_firmwareName = "CP-16M-PA Green"; break;
-            case DeviceType::CP100PA: m_firmwareName = "CP-100PA"; break;
-            default: m_firmwareName = "";
-        }
-        emit firmwareNameChanged();
-        break;
-    }
-
-    default: emit sgSetUiDeviceParameter(deviceParameterType, value);
-    }
-
-}
-
 void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
 {
     emit sgSetImpuls(filePath, fileName);

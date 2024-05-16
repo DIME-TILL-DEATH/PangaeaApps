@@ -7,7 +7,7 @@ import CppEnums
 Item
 {
     id: main
-    property int deviceType: UiCore.deviceType
+    property int deviceType: DeviceProperties.deviceType
 
     Image
     {

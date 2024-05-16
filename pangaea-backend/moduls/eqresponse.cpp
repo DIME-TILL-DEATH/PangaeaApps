@@ -7,11 +7,11 @@
 EqResponse::EqResponse(QObject *parent)
     : AbstractModule(DeviceParameter::Type::EQ_ON, parent)
 {
-    m_EqBands.append(new EqBand(this, EqBand::FilterType::LOW_SHELF, 20, 220, 0));
+    m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 20, 220, 0));
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 260, 440, 1));
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 600, 1000, 2));
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 1000, 3000, 3));
-    m_EqBands.append(new EqBand(this, EqBand::FilterType::HIGH_SHELF, 1000, 11000, 4));
+    m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 1000, 11000, 4));
     calcEqResponse();
 
     for(int i=0; i<m_EqBands.count();i++)

@@ -12,14 +12,10 @@ Rectangle
     width:  parent.width*1/6
     height: parent.height
 
-    property int    value:     _tumbler.currentIndex
-    property int maxMapRow: 4
-    property string text:  "TEXT"
-    // property string nameValue:  ""
-    property int paramType
+    property string text
+
     property bool editable: true
 
-    property bool softUpdate: true
 
     color: "transparent"
     border.width: 1
@@ -69,7 +65,8 @@ Rectangle
             width:  parent.width
             height: parent.height*6/10
 
-            model: maxMapRow
+            model: DeviceProperties.presetsList
+            currentIndex: DeviceProperties.preset
 
             visibleItemCount: 1
 
@@ -80,7 +77,7 @@ Rectangle
                 text: modelData
                 opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: Style.colorText
-                font.pixelSize: _tumbler.height*0.75 // /(Math.abs(Tumbler.displacement*2)+1)
+                font.pixelSize: _tumbler.height*0.75
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 font.bold: true
@@ -89,10 +86,7 @@ Rectangle
 
             onCurrentIndexChanged:
             {
-                if(!softUpdate)
-                    timer.restart();
-
-                softUpdate = false;
+                timer.restart();
             }
         }
 
@@ -108,52 +102,19 @@ Rectangle
             font.bold: true
             font.pixelSize: main.width/5
 
-            text: main.text
+            text: qsTr("PRESET")
         }
     }
 
+    // set only last value
     Timer
     {
         id: timer
-        interval: 700
+        interval: 250
         repeat: false
         onTriggered:
         {
-            if( !softUpdate )
-            {
-                UiCore.setParameter("set_preset_change", presetNom);
-            }
-        }
-    }
-
-
-    function up()
-    {
-        _tumbler.currentIndex++;
-    }
-
-    function down()
-    {
-        _tumbler.currentIndex--;
-    }
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-                softUpdate = true;
-                _tumbler.currentIndex = value;
-                softUpdate = false;
-            }
-
-            if(paramType === DeviceParameter.MAP_SIZE)
-            {
-                maxMapRow = value
-            }
+            DeviceProperties.preset = _tumbler.currentIndex;
         }
     }
 }

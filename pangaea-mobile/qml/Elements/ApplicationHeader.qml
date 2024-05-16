@@ -16,7 +16,7 @@ ToolBar
     property string versionStr: Qt.application.version == "" ? "" : "/Application ver: " + Qt.application.version
     property string firmwareVersionStr: firmwareVersion == "" ? "":" Firmware ver." + firmwareVersion
 
-    property string  poVersion: "Pangaea " + UiCore.firmwareName + firmwareVersionStr + versionStr
+    property string  poVersion: "Pangaea " + DeviceProperties.firmwareName + firmwareVersionStr + versionStr
 
     height:  Screen.desktopAvailableHeight / 75
 

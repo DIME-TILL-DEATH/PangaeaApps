@@ -28,21 +28,41 @@ void Device::setDeviceType(DeviceType newDeviceType)
     {
         case DeviceType::CP16:
             m_minimalFirmware = new Firmware(CP16_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
-            m_maxBankPresetCount = 4;
+            m_indicationFirmware = new Firmware("PA.01.04.05", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
+            m_maxBankCount = 4;
+            m_maxPresetCount = 4;
         break;
         case DeviceType::CP16PA:
             m_minimalFirmware = new Firmware(CP16PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
-            m_maxBankPresetCount = 4;
+            m_indicationFirmware = new Firmware("PA.01.04.04", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
+            m_maxBankCount = 4;
+            m_maxPresetCount = 4;
         break;
         case DeviceType::CP100:
             m_minimalFirmware = new Firmware(CP100_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
-            m_maxBankPresetCount = 10;
+            m_indicationFirmware = new Firmware("PA.02.08.12", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
+            m_maxBankCount = 10;
+            m_maxPresetCount = 10;
         break;
         case DeviceType::CP100PA:
             m_minimalFirmware = new Firmware(CP100PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
-            m_indicationFirmware = new Firmware("PA.06.09.06", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
-            m_maxBankPresetCount = 10;
+            m_indicationFirmware = new Firmware("PA.06.09.08", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
+            m_maxBankCount = 10;
+            m_maxPresetCount = 10;
         break;
+
+        case DeviceType::LA3RV:
+            m_minimalFirmware = new Firmware(CP16PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
+            m_indicationFirmware = new Firmware("PA.01.04.05", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
+            m_maxBankCount = 4;
+            m_maxPresetCount = 4;
+        break;
+        case DeviceType::LA3PA:
+            m_minimalFirmware = new Firmware(CP16PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3PA.ble");
+            m_indicationFirmware = new Firmware("PA.01.04.05", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3PA.ble");
+            m_maxBankCount = 4;
+            m_maxPresetCount = 4;
+            break;
     default:
         qDebug() << __FUNCTION__ << "Unknown device type";
         break;
@@ -97,7 +117,3 @@ DeviceType Device::deviceType() const
     return m_deviceType;
 }
 
-quint8 Device::maxBankPresetCount() const
-{
-    return m_maxBankPresetCount;
-}

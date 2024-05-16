@@ -14,10 +14,6 @@ import CppObjects
 CustomMessageDialog {
     id: _root
 
-    property int currentBank: 0
-    property int currentPreset: 0
-    property int maxMapRow: 4
-
     property int topHeaderSize: 0
 
     closeOnDisconnect: true
@@ -72,13 +68,13 @@ CustomMessageDialog {
         }
     }
 
-    /*contentItem:*/ ListView{
+    ListView{
         id: _presetListView
 
         width: _root.width*0.95
         height: _root.height-headerHeight-footerHeight
 
-        currentIndex: currentBank * maxMapRow + currentPreset
+        currentIndex: DeviceProperties.bank * DeviceProperties.banksList.length + DeviceProperties.preset
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -117,7 +113,7 @@ CustomMessageDialog {
                 color: "lightsteelblue"
 
                 MText {
-                    text: "Bank " + _sectionHeaderContent.section
+                    text: "Bank " + DeviceProperties.banksList[_sectionHeaderContent.section]
                 }
             }
         }
@@ -129,19 +125,5 @@ CustomMessageDialog {
 
     onAccepted: {
         _root.close()
-    }
-
-    Connections{
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            switch(paramType)
-            {
-            case DeviceParameter.MAP_SIZE: maxMapRow = value; break;
-            case DeviceParameter.BANK: currentBank = value; break;
-            case DeviceParameter.PRESET: currentPreset = value; break;
-            }
-        }
     }
 }

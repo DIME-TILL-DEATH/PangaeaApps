@@ -28,15 +28,15 @@ ApplicationWindow
 
     color: Style.backgroundColor
 
-    property string markEdit: edit?" * ":" "
-    property string devName: UiCore.firmwareName
+    property string markEdit: DeviceProperties.presetModified ? " * ":" "
+    property string devName: DeviceProperties.firmwareName
     property string devVersion: ""
 
     property string interfaceDescription: ""
     property string markConnect: connected ? qsTr("Connected to ") + interfaceDescription : qsTr("Disconnected")
 
     property bool editable: false
-    property bool edit: UiCore.presetModified
+
     property bool connected: false
     property bool wait: true
     property bool appClosing: false
@@ -83,7 +83,6 @@ ApplicationWindow
                 irFileDialog.open();
             }
             editable: main.editable & (!main.wait)
-            edit:     main.edit
         }
 
         ModulesList
@@ -116,7 +115,7 @@ ApplicationWindow
 
         onRejected:
         {
-            if((UiCore === DeviceType.CP100) || (UiCore === DeviceType.CP100PA))
+            if((DeviceProperties.deviceType === DeviceType.CP100) || (DeviceProperties.deviceType === DeviceType.CP100PA))
             {
                 UiCore.escImpuls()
             }
@@ -127,7 +126,7 @@ ApplicationWindow
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            if((UiCore === DeviceType.CP100) || (UiCore === DeviceType.CP100PA))
+            if((DeviceProperties.deviceType === DeviceType.CP100) || (DeviceProperties.deviceType === DeviceType.CP100PA))
             {
                 UiCore.setImpuls(cleanPath);
             }
@@ -138,7 +137,8 @@ ApplicationWindow
     {
         id: msgPresetChangeSave
 
-        property int saveParam: 0
+        property int newBank
+        property int newPreset
 
         text: qsTr("Do you want to save changes?")
         title: qsTr("Save preset")
@@ -149,16 +149,16 @@ ApplicationWindow
             {
                 case MessageDialog.Save:
                 {
-                    UiCore.setParameter("save_change", saveParam);
-                    if(!main.appClosing)
-                        UiCore.setParameter("do_preset_change", saveParam);
+                    DeviceProperties.saveChanges();
+                    if(!main.appClosing) DeviceProperties.changePreset(newBank, newPreset, true);
                     break;
                 }
                 case MessageDialog.No:
                 {
                     if(!main.appClosing)
                     {
-                        UiCore.setParameter("do_preset_change", saveParam);
+                        DeviceProperties.changePreset(newBank, newPreset, true);
+
                         UiCore.restoreParameter("impulse");
                     }
                     else
@@ -169,7 +169,7 @@ ApplicationWindow
                 }
                 case MessageDialog.Cancel:
                 {
-                    saveParam = 0
+                    // saveParam = 0
                     appClosing = false;
                     UiCore.restoreParameter("preset")
                     UiCore.restoreParameter("bank")
@@ -255,12 +255,6 @@ ApplicationWindow
     {
         target: UiCore
 
-        function onSgPresetChangeStage(inChangePreset)
-        {
-            msgPresetChangeSave.saveParam = inChangePreset;
-            msgPresetChangeSave.visible = true;
-        }
-
         function onSgSetUIText(nameParam, inString)
         {
             if(nameParam === "not_supported_ir")
@@ -342,13 +336,13 @@ ApplicationWindow
         }
     }
 
-    function clearHeader()
-    {
-        main.edit = false;
-        main.devName = ""
-        main.devVersion = ""
-        main.interfaceDescription = ""
-    }
+    // TODO: сброс Q_PROPERTY при ошибке
+    // function clearHeader()
+    // {
+    //     main.devName = ""
+    //     main.devVersion = ""
+    //     main.interfaceDescription = ""
+    // }
 
     Connections{
         target: UiCore
@@ -366,6 +360,17 @@ ApplicationWindow
                 msgError.text = qsTr("Error while saving IR. Please, try to reload impulse.");
                 msgError.open();
             }
+        }
+    }
+
+    Connections{
+        target: DeviceProperties
+
+        function onPresetNotSaved(bank, preset)
+        {
+            msgPresetChangeSave.newBank = bank;
+            msgPresetChangeSave.newPreset = preset;
+            msgPresetChangeSave.visible = true;
         }
     }
 
@@ -406,7 +411,7 @@ ApplicationWindow
 
         function onSgInterfaceDisconnected()
         {
-            clearHeader();
+            // clearHeader();
             connected = false;
             main.editable = false;
             mainUi.visible = false;

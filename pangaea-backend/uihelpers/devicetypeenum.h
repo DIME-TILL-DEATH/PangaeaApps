@@ -14,7 +14,9 @@ public:
         CP100,
         CP16,
         CP16PA,
-        CP100PA
+        CP100PA,
+        LA3RV,
+        LA3PA
     };
     Q_ENUM(Value)
 };

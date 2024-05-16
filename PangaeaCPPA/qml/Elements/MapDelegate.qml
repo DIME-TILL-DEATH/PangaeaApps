@@ -31,7 +31,12 @@ Item{
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
 
-            onClicked: UiCore.setParameter("set_preset_change", presetDeviceIndex)
+            onClicked: {
+                // console.log("maxMapRow:", maxMapRow, presetDeviceIndex)
+                // UiCore.setParameter("set_preset_change", presetDeviceIndex)
+
+                DeviceProperties.changePreset(bankNumber, presetNumber);
+            }
             onEntered: tp.visible = (tp.text.length>0)
             onExited:  tp.visible = false
         }

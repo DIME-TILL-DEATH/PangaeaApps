@@ -3,16 +3,18 @@ import QtQuick.Controls 2.15
 
 import StyleSettings
 
+import CppObjects
+
 Item
 {
     id: main
 
-    property int curVal: -1
-    property int maxPresetBank: 10
+    property int curVal: DeviceProperties.preset
 
     Column
     {
         anchors.fill: parent
+        spacing: height/80
         Rectangle
         {
             width:  parent.width
@@ -39,10 +41,10 @@ Item
             Repeater
             {
                 anchors.fill: parent
-                model: maxPresetBank
+                model: DeviceProperties.presetsList
                 Item
                 {
-                    width:  parent.width/maxPresetBank
+                    width:  parent.width/DeviceProperties.presetsList.length
                     height: parent.height
                     Rectangle
                     {
@@ -54,7 +56,7 @@ Item
                         anchors.fill: parent
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment:   Qt.AlignVCenter
-                        text: index
+                        text: modelData
                         color: index === curVal ? Style.highlightColor : Style.backgroundColor
                         font.pixelSize: parent.height/1.5
                     }

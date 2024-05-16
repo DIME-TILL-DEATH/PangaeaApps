@@ -7,7 +7,7 @@
         <file>qml/Elements/ApplicationHeader.qml</file>
         <file>qml/Elements/MButton.qml</file>
         <file>qml/Elements/MText.qml</file>
-        <file>qml/Elements/PresetBankSpin.qml</file>
+        <file>qml/Elements/PresetSpin.qml</file>
         <file>qml/Elements/qmldir</file>
         <file>qml/main.qml</file>
         <file>qml/Modules/Cm.qml</file>
@@ -52,5 +52,6 @@
         <file>qml/Modules/EqPreview.qml</file>
         <file>qml/Elements/EqPoint.qml</file>
         <file>qml/Elements/CustomSlider.qml</file>
+        <file>qml/Elements/BankSpin.qml</file>
     </qresource>
 </RCC>

@@ -22,7 +22,6 @@ Core::Core(QObject *parent) : QObject(parent)
     connect(timeoutTimer, &QTimer::timeout, this, &Core::recieveTimeout);
 
     indicationTimer = new QTimer(this);
-    indicationTimer->setInterval(1000);
     connect(indicationTimer, &QTimer::timeout, this, &Core::indicationRequest);
 }
 
@@ -36,6 +35,20 @@ void Core::slReadyToDisconnect()
     recieveEnabled = true;
 
     emit sgReadyTodisconnect();
+}
+
+void Core::slInterfaceConnected(DeviceDescription interfaceDescription)
+{
+    switch (interfaceDescription.connectionType())
+    {
+    case DeviceConnectionType::BLE:
+        indicationTimer->setInterval(100);
+        break;
+    default:
+        indicationTimer->setInterval(20);
+        break;
+    }
+    readAllParameters();
 }
 
 void Core::parseInputData(QByteArray ba)
@@ -53,7 +66,12 @@ void Core::parseInputData(QByteArray ba)
 
     if(commandWorker.displayNextAnswer())
     {
-        if(ba.indexOf("iio") != 0) qDebug() << "->" << __FUNCTION__ << ":" << ba;
+        if(commandsSended.count() > 0) m_blockConsoleLog = false;
+
+        if(!m_blockConsoleLog)
+        {
+            qDebug() << "->" << __FUNCTION__ << ":" << ba;
+        }
     }
 
     while(commandWorker.haveAnswer())
@@ -76,8 +94,7 @@ void Core::parseInputData(QByteArray ba)
                         pushCommandToQueue("sw4 disable");
                     }
 
-                    emit sgSetUiDeviceParameter(DeviceParameter::Type::DEVICE_TYPE, deviceType);
-                    emit sgSetUiDeviceParameter(DeviceParameter::Type::MAP_SIZE, controlledDevice.maxBankPresetCount());
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::DEVICE_TYPE, deviceType);
 
                     qInfo() << recievedCommand.description();
                 }
@@ -127,7 +144,7 @@ void Core::parseInputData(QByteArray ba)
                     emit sgSetUIText("devVersion", deviceFirmware->firmwareVersion());
 
                     qDebug() << "Firmware can indicate:" << controlledDevice.isFirmwareCanIndicate();
-                    emit sgSetUiDeviceParameter(DeviceParameter::Type::FIRMWARE_CAN_INDICATE, controlledDevice.isFirmwareCanIndicate());
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::FIRMWARE_CAN_INDICATE, controlledDevice.isFirmwareCanIndicate());
                 }
                 break;
             }
@@ -195,11 +212,11 @@ void Core::parseInputData(QByteArray ba)
                                 DeviceParameter::Type paramType = static_cast<DeviceParameter::Type>(count);
                                 if(DeviceParameter::isSigned(paramType))
                                 {
-                                    emit sgSetUiDeviceParameter(paramType, (qint8)sss.toInt(nullptr, 16));
+                                    emit sgRecieveDeviceParameter(paramType, (qint8)sss.toInt(nullptr, 16));
                                 }
                                 else
                                 {
-                                    emit sgSetUiDeviceParameter(paramType, (qint16)sss.toInt(nullptr, 16));
+                                    emit sgRecieveDeviceParameter(paramType, (qint16)sss.toInt(nullptr, 16));
                                 }
                                 count++;
                             }
@@ -224,8 +241,8 @@ void Core::parseInputData(QByteArray ba)
 
                         currentPreset.setBankPreset(static_cast<quint8>(bank), static_cast<quint8>(preset));
 
-                        emit sgSetUiDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
-                        emit sgSetUiDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
+                        emit sgRecieveDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
+                        emit sgRecieveDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
 
                         qInfo() << recievedCommand.description() << "bank:" << bank << "preset:" << preset;
                     }
@@ -238,7 +255,7 @@ void Core::parseInputData(QByteArray ba)
                 if(parseResult.size()==1)
                 {
                     quint8 mode = parseResult.at(0).toUInt();
-                    emit sgSetUiDeviceParameter(DeviceParameter::Type::OUTPUT_MODE, mode);
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::OUTPUT_MODE, mode);
                     qInfo() << recievedCommand.description();
                 }
                 break;
@@ -263,7 +280,7 @@ void Core::parseInputData(QByteArray ba)
 
                     currentLitedPreset.setBankPreset(bankNumber, presetNumber);
 
-                    if(presetNumber == controlledDevice.maxBankPresetCount()-1)
+                    if(presetNumber == controlledDevice.maxBankCount()-1)
                     {
                         presetNumber = 0;
                         bankNumber++;
@@ -421,15 +438,15 @@ void Core::parseInputData(QByteArray ba)
 
                 //sqrt(ind_in_p[1])*(31.0/sqrt(8388607.0));
 
-                quint32 signalIn = sqrt(parseResult.at(0).toInt())*(31.0/sqrt(8388607.0));
-                quint32 signalOutL = parseResult.at(1).toInt();
-                quint32 signalOutR = parseResult.at(2).toInt();
+                quint32 signalIn = parseResult.at(0).toInt();
+                quint32 signalOut = parseResult.at(1).toInt();
+                // quint32 signalOutR = parseResult.at(2).toInt();
 
-                qDebug() << signalIn << signalOutL << signalOutR;
+                // qDebug() << signalIn << signalOutL << signalOutR;
 
-                emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_IN, signalIn);
-                emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_OUT_L, signalOutL);
-                emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_OUT_R, signalOutR);
+                emit sgRecieveDeviceParameter(DeviceParameter::Type::SIGNAL_IN, signalIn);
+                emit sgRecieveDeviceParameter(DeviceParameter::Type::SIGNAL_OUT, signalOut);
+                // emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_OUT_R, signalOutR);
                 break;
             }
 
@@ -656,7 +673,7 @@ void Core::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QStr
     pushCommandToQueue(baSend);
 
     // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
-    emit sgSetUiDeviceParameter(DeviceParameter::Type::CABINET_ENABLE, true);
+    emit sgRecieveDeviceParameter(DeviceParameter::Type::CABINET_ENABLE, true);
 
     processCommands();
 }
@@ -723,18 +740,10 @@ void Core::uploadFirmware(QByteArray firmware)
     }
 }
 
-void Core::setPresetChange(quint8 inChangePreset)
-{    
-    if(isPresetEdited)
-        emit sgPresetChangeStage(inChangePreset);
-    else
-    {
-        doPresetChange(inChangePreset);
-    }
-}
-
-void Core::doPresetChange(quint8 val)
+void Core::changePreset(quint8 bank, quint8 preset)
 {
+    quint8 val = Preset::calcPresetFlatIndex(controlledDevice.deviceType(), bank, preset);
+
     isPresetEdited = false;
     emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
     emit sgSetUIParameter ("compare_state", false);
@@ -906,12 +915,6 @@ void Core::setParameter(QString name, quint8 value)
 {
     qDebug() << "setParameter" << name << value;
 
-    if(name==("preset_change"))
-    {
-        setPresetChange(value);
-        return;
-    }
-
     if(name=="fw_update_complete")
     {
         fwUpdate = false;
@@ -930,27 +933,9 @@ void Core::setParameter(QString name, quint8 value)
         return;
     }
 
-    if(name==("save_change"))
-    {
-        saveChanges();
-        return;
-    }
-
     if(name==("compare"))
     {
         comparePreset();
-        return;
-    }
-
-    if(name==("set_preset_change"))
-    {
-        setPresetChange(value);
-        return;
-    }
-
-    if(name==("do_preset_change"))
-    {
-        doPresetChange(value);
         return;
     }
 
@@ -977,6 +962,7 @@ void Core::setParameter(QString name, quint8 value)
     if(name==("esc"))
         sendStr = QString("esc\r\n");
 
+    //TODO: по коду оно вроде само выключает/включает. проверить на слух
     if(name=="pa-ps_linked_on")
     {
         sendStr = DeviceParameter::sendString(DeviceParameter::Type::PRESENCE_ON, value);
@@ -985,8 +971,9 @@ void Core::setParameter(QString name, quint8 value)
 
     if(sendStr.length()>0)
     {
-        recieveEnabled = false;
         emit sgWriteToInterface(sendStr.toUtf8());
+        recieveEnabled = false;
+        m_blockConsoleLog = false;
     }
     else
     {
@@ -994,7 +981,23 @@ void Core::setParameter(QString name, quint8 value)
     }
 }
 
-void Core::setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
+void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameters)
+{
+    switch(appParameterType)
+    {
+    case AppAction::CHANGE_PRESET:
+    {
+        changePreset(parameters.at(0).toInt(),parameters.at(1).toInt());
+        break;
+    }
+    case SAVE_CHANGES: saveChanges(); break;
+    case COPY_PRESET:
+    case PASTE_PRESET:
+        break;
+    }
+}
+
+void Core::slSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
 {
     QString sendStr = DeviceParameter::sendString(deviceParameterType, value);
     isPresetEdited = true;
@@ -1010,6 +1013,8 @@ void Core::setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 
         //TODO в rawData обновлять все поля пресета, а не только это
         currentPreset.setIsIrEnabled(value);
     }
+
+    m_blockConsoleLog = false;
 }
 
 void Core::restoreValue(QString name)
@@ -1020,9 +1025,9 @@ void Core::restoreValue(QString name)
     // пока костыль для отмены сохранения пресета!!!!!
 
 
-    if(name == "bank") emit sgSetUiDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
+    if(name == "bank") emit sgRecieveDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
 
-    if(name == "preset") emit sgSetUiDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
+    if(name == "preset") emit sgRecieveDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
 }
 
 void Core::readAllParameters()
@@ -1039,8 +1044,6 @@ void Core::readAllParameters()
     pushCommandToQueue("gm");
 
     processCommands();
-
-    // indicationTimer->start();
 
     bEditable = true;
 }
@@ -1118,7 +1121,8 @@ void Core::indicationRequest()
     if(controlledDevice.isFirmwareCanIndicate())
     {
         // qDebug() << "Indication request";
-        emit sgSilentWriteToInterface("iio\r\n");
+        // emit sgSilentWriteToInterface("iio\r\n");
+        m_blockConsoleLog = true;
         // emit sgWriteToInterface("iio\r\n");
     }
     else
@@ -1176,6 +1180,8 @@ void Core::sendCommand(QByteArray val)
     emit sgWriteToInterface(val);
 
     updateProgressBar();
+
+    m_blockConsoleLog = false;
 }
 
 void Core::updateProgressBar()

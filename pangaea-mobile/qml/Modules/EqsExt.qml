@@ -10,6 +10,8 @@ Item
 {
     id: main
 
+    anchors.centerIn: parent
+
     property bool on: EqResponse.moduleEnabled
 
     property int currentBandIndex

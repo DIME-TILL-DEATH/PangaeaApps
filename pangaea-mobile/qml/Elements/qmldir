@@ -1,6 +1,7 @@
 module Elements
 
 ApplicationHeader   1.0 ApplicationHeader.qml
+BankSpin      1.0 BankSpin.qml
 BleListDelegate     1.0 BleListDelegate.qml
 BleListHighlight    1.0 BleListHighlight.qml
 BusyScreen      1.0 BusyScreen.qml
@@ -16,5 +17,5 @@ MButton         1.0 MButton.qml
 MComboBox         1.0 MComboBox.qml
 MRadioButton    1.0 MRadioButton.qml
 MText           1.0 MText.qml
-PresetBankSpin  1.0 PresetBankSpin.qml
+PresetSpin  1.0 PresetSpin.qml
 PresetsListDelegate 1.0 PresetsListDelegate.qml

@@ -51,10 +51,14 @@ Rectangle {
                 {
                     switch(paramType)
                     {
-                    case DeviceParameter.SIGNAL_OUT_L: _bar_left.value = value; break;
-                    case DeviceParameter.SIGNAL_OUT_R: _bar_right.value = value; break;
-                    }
+                    case DeviceParameter.SIGNAL_OUT:
+                    {
 
+                        _bar_left.value = value;
+                        _bar_right.value = value;
+                        break;
+                    }
+                    }
                 }
             }
         }

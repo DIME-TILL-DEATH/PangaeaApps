@@ -9,19 +9,8 @@ Item
 {
     id: main
 
-
-
-    property int  maxMapRow: 10
-    property int controlMultiplier: 10
-    property int  presetNom: bank.value*controlMultiplier+preset.value
-
-    property int  bank:   bank.value
-    property int  preset: preset.value
     property bool editable: true
-    property bool edit: true
-
     property bool compareState: false
-
     property bool irOn: true
 
     signal setImpuls()
@@ -39,16 +28,13 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Presets
+        BankSpin
         {
             id: bank
 
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            text: "BANK"
-            paramType: DeviceParameter.BANK
-            onChPreset: UiCore.setParameter("set_preset_change", presetNom)
             enabled: main.editable
         }
 
@@ -64,7 +50,7 @@ Item
             width:  row.widthWithoutSpase/15*1
 
             editable: main.editable
-            edit: main.edit
+            edit: DeviceProperties.presetModified
         }
 
         Rectangle
@@ -114,20 +100,20 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
+            isAvaliable: (DeviceProperties.deviceType === DeviceType.CP16PA) |
+                         (DeviceProperties.deviceType === DeviceType.CP100PA) |
+                         (DeviceProperties.deviceType === DeviceType.LA3PA)
+
             enabled: main.editable & !main.compareState
         }
 
-        Presets
+        PresetSpin
         {
             id: preset
 
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            text: "PRESET"
-            paramType: DeviceParameter.PRESET
-
-            onChPreset: UiCore.setParameter("set_preset_change", presetNom)
             enabled: main.editable
         }
 
@@ -154,39 +140,6 @@ Item
             if(nameParam === "compare_state")
             {
                 main.compareState = value;
-            }
-        }
-
-        function onDeviceTypeChanged()
-        {
-            switch (UiCore.deviceType)
-            {
-                case DeviceType.CP100:
-                {
-                    maxMapRow = 10;
-                    switchPostPre.isAvaliable = false;
-                    break;
-                }
-                case DeviceType.CP16:
-                {
-                    controlMultiplier = 16;
-                    maxMapRow = 4;
-                    switchPostPre.isAvaliable = false;
-                    break;
-                }
-                case DeviceType.CP16PA:
-                {
-                    controlMultiplier = 16;
-                    maxMapRow = 4;
-                    switchPostPre.isAvaliable = true;
-                    break;
-                }
-                case DeviceType.CP100PA:
-                {
-                    maxMapRow = 10;
-                    switchPostPre.isAvaliable = true;
-                    break;
-                }
             }
         }
 

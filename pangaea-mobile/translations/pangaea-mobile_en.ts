@@ -2,6 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>BankSpin</name>
+    <message>
+        <source>MAP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BANK</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BusyScreen</name>
     <message>
         <source>Sending commands to device</source>
@@ -102,22 +113,22 @@
     </message>
 </context>
 <context>
-    <name>Eqs</name>
+    <name>EqPreview</name>
     <message>
         <source>EQ</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Equalizer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PRE</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>POST</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -264,10 +275,6 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
         <translation>Balanced</translation>
     </message>
     <message>
-        <source>BANK</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Phones</source>
         <extracomment>Output mode. Phones.</extracomment>
         <translation></translation>
@@ -307,10 +314,6 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
         <extracomment>Button text. Paste preset</extracomment>
         <translation></translation>
     </message>
-    <message>
-        <source>PRESET</source>
-        <translation></translation>
-    </message>
 </context>
 <context>
     <name>Ng</name>
@@ -346,10 +349,14 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
     </message>
 </context>
 <context>
-    <name>PresetBankSpin</name>
+    <name>PresetSpin</name>
     <message>
         <source>MAP</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PRESET</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -653,6 +660,14 @@ Minimum required version is </source>
 </source>
         <translation>Device is disconnected
 </translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while saving IR. Please, try to reload impulse.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
