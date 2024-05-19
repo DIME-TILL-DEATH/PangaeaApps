@@ -9,6 +9,7 @@
 #include <QDebug>
 
 #include "core.h"
+#include "appproperties.h"
 #include "deviceproperties.h"
 #include "uicore.h"
 #include "uiinterfacemanager.h"
@@ -96,6 +97,8 @@ int main(int argc, char *argv[])
     //----------------------------------------------------------------
     UiCore uiCore;
     UiInterfaceManager uiInterfaceManager;
+
+    AppProperties appProperties;
     DeviceProperties deviceProperties;
 
     QQmlApplicationEngine engine;
@@ -104,8 +107,9 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/translations");
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
 
-
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
+
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "AppProperties", &appProperties);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "DeviceProperties", &deviceProperties);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);
@@ -139,7 +143,6 @@ int main(int argc, char *argv[])
 
     QObject::connect(&eqResponse, &EqResponse::sgSetDeviceParameter, core, &::Core::slSetDeviceParameter);
 
-    // QObject::connect(core, &Core::sgSetAppParameter, &uiCore, &UiCore::slSetAppParameter);
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgSetAppParameter, &eqResponse, &EqResponse::sgSetAppParameter);
     QObject::connect(core, &Core::sgRecieveDeviceParameter, &uiCore, &UiCore::sgSetUiDeviceParameter);
@@ -150,6 +153,7 @@ int main(int argc, char *argv[])
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiCore::sgSetProgress);
     QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
 
+    QObject::connect(&appProperties, &AppProperties::sendAppAction, core, &Core::slRecieveAppAction);
     QObject::connect(&deviceProperties, &DeviceProperties::sendAppAction, core, &Core::slRecieveAppAction);
 
     QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
@@ -158,7 +162,6 @@ int main(int argc, char *argv[])
     QObject::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
 
     QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
-//    NetCore::connect(netCore, &NetCore::sgNewAppVersionAvaliable, &uiCore, &UiDesktopCore::slNewAppVersionAvaliable);
     QObject::connect(&uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
     QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
     QObject::connect(netCore, &NetCore::sgDownloadProgress, &uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);

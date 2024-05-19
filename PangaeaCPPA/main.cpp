@@ -22,6 +22,8 @@
 #include "logger.h"
 
 #include "devicedescription.h"
+
+#include "appproperties.h"
 #include "deviceproperties.h"
 
 #include "threadcontroller.h"
@@ -78,6 +80,8 @@ int main(int argc, char *argv[])
     //----------------------------------------------------------------
     UiInterfaceManager uiInterfaceManager; // TODO: move to backend, либо common(Общий для всех)
     UiDesktopCore uiCore;
+
+    AppProperties appProperties;
     DeviceProperties deviceProperties;
     UiSettings uiSettings;
 
@@ -136,6 +140,7 @@ int main(int argc, char *argv[])
     QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgUpdatePreset, &presetListModel, &PresetListModel::updatePreset, Qt::QueuedConnection);
     
+    QObject::connect(&appProperties, &AppProperties::sendAppAction, core, &Core::slRecieveAppAction);
     QObject::connect(&deviceProperties, &DeviceProperties::sendAppAction, core, &Core::slRecieveAppAction);
 
     NetCore::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);

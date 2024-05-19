@@ -15,6 +15,7 @@ Rectangle
     property string text
 
     property bool editable: true
+    signal openPresetsList()
 
 
     color: "transparent"
@@ -52,9 +53,10 @@ Rectangle
                 id: _mapBtnMa
 
                 anchors.fill: parent
-                onClicked: {
-                    UiCore.setParameter("open_preset_list", 1);
-                }
+                onClicked: openPresetsList()
+                // {
+                //     UiCore.setParameter("open_preset_list", 1);
+                // }
             }
         }
 
@@ -117,7 +119,7 @@ Rectangle
         {
             if(DeviceProperties.isLa3Mode)
             {
-                DeviceProperties.changePreset(_tumbler.currentIndex/4, _tumbler.currentIndex%4);
+                DeviceProperties.changePreset(Math.floor(_tumbler.currentIndex/4), _tumbler.currentIndex%4);
             }
             else
             {

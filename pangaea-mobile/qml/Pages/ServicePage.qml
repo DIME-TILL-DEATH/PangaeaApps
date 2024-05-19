@@ -201,10 +201,10 @@ Item
 
         closeOnDisconnect: true
 
-        onAccepted:
-        {
-            UiCore.setParameter("format", 0);
-        }
+        onAccepted: AppProperties.formatFlash();
+        // {
+        //     UiCore.setParameter("format", 0);
+        // }
     }
 
     EditTextDialog

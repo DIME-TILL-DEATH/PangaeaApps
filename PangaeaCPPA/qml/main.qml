@@ -163,7 +163,8 @@ ApplicationWindow
                     }
                     else
                     {
-                        UiCore.setParameter("compare", true); // restore preset
+                        AppProperties.comparePreset(); // restore preset TODO: честный restore
+                        // UiCore.setParameter("compare", true); // restore preset
                     }
                     break;
                 }

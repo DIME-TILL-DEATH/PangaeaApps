@@ -921,46 +921,45 @@ void Core::setParameter(QString name, quint8 value)
         return;
     }
 
-    if(name==("copy"))
-    {
-        copyPreset();
-        return;
-    }
+    // if(name==("copy"))
+    // {
+    //     copyPreset();
+    //     return;
+    // }
 
-    if(name==("paste"))
-    {
-        pastePreset();
-        return;
-    }
+    // if(name==("paste"))
+    // {
+    //     pastePreset();
+    //     return;
+    // }
 
-    if(name==("compare"))
-    {
-        comparePreset();
-        return;
-    }
+    // if(name==("compare"))
+    // {
+    //     comparePreset();
+    //     return;
+    // }
 
-    if(name == "call_preset_list")
-    {
-        pushCommandToQueue("rns");
-        processCommands();
-        return;
-    }
+    // if(name == "call_preset_list")
+    // {
+    //     pushCommandToQueue("rns");
+    //     processCommands();
+    //     return;
+    // }
 
     QString sendStr;
 
 
-    if(name==("format"))
-    {
-        emit sgSetUIParameter("wait", true);
+    // if(name==("format"))
+    // {
+    //     emit sgSetUIParameter("wait", true);
 
-        isFormatting = true;
-        timeoutTimer->setInterval(10000);
+    //     isFormatting = true;
+    //     timeoutTimer->setInterval(10000);
 
-        sendStr = QString("fsf\r\n");
-    }
+    //     sendStr = QString("fsf\r\n");
+    // }
 
-    if(name==("esc"))
-        sendStr = QString("esc\r\n");
+    if(name==("esc")) sendStr = QString("esc\r\n");
 
     //TODO: по коду оно вроде само выключает/включает. проверить на слух
     if(name=="pa-ps_linked_on")
@@ -985,15 +984,30 @@ void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameter
 {
     switch(appParameterType)
     {
-    case AppAction::CHANGE_PRESET:
+    case SAVE_CHANGES: saveChanges(); break;
+    case CHANGE_PRESET: changePreset(parameters.at(0).toInt(),parameters.at(1).toInt()); break;
+    case COPY_PRESET: copyPreset(); break;
+    case PASTE_PRESET: pastePreset(); break;
+    case COMPARE_PRESET: comparePreset(); break;
+
+    case FORMAT_FLASH:
     {
-        changePreset(parameters.at(0).toInt(),parameters.at(1).toInt());
+        emit sgSetUIParameter("wait", true);
+
+        isFormatting = true;
+        timeoutTimer->setInterval(10000);
+
+        emit sgWriteToInterface(QString("fsf\r\n").toUtf8());
+        recieveEnabled = false;
+        m_blockConsoleLog = false;
         break;
     }
-    case SAVE_CHANGES: saveChanges(); break;
-    case COPY_PRESET:
-    case PASTE_PRESET:
-        break;
+    // case CALL_PRESET_LIST:
+    // {
+    //     pushCommandToQueue("rns");
+    //     processCommands();
+    //     break;
+    // }
     }
 }
 

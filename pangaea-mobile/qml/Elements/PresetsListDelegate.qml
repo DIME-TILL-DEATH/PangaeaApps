@@ -45,7 +45,9 @@ Rectangle{
 
                 leftPadding: (_impulseOnIndicatorContainer.width-_impulseOnIndicator.width)/2
 
-                text: presetName
+                property int la3Preset: (Number(bankNumber)*4 + Number(presetNumber));
+
+                text: "Preset " + (DeviceProperties.isLa3Mode ? la3Preset : presetNumber)
                 font.pixelSize: 8 * Style.dip
                 color: Style.colorText
 
@@ -108,7 +110,7 @@ Rectangle{
         enabled: !parent.ListView.isCurrentItem
 
         onClicked: {
-            DeviceProperties.changePreset(bankNumber, presetNumber)
+            DeviceProperties.changePreset(bankNumber, presetNumber);
         }
     }
 }

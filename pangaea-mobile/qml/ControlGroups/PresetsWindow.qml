@@ -74,7 +74,8 @@ CustomMessageDialog {
         width: _root.width*0.95
         height: _root.height-headerHeight-footerHeight
 
-        currentIndex: DeviceProperties.bank * DeviceProperties.banksList.length + DeviceProperties.preset
+        currentIndex: DeviceProperties.isLa3Mode? DeviceProperties.bank * 4 + DeviceProperties.preset
+                                                : DeviceProperties.bank * DeviceProperties.banksList.length + DeviceProperties.preset
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

@@ -47,6 +47,7 @@ qt_add_library(pangaea-backend STATIC
     uihelpers/controlvalue.cpp uihelpers/controlvalue.h
     uihelpers/devicetypeenum.h
     uihelpers/deviceproperties.cpp uihelpers/deviceproperties.h
+    uihelpers/appproperties.h uihelpers/appproperties.cpp
 )
 
 target_include_directories(pangaea-backend PUBLIC

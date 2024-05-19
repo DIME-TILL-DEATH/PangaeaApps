@@ -82,7 +82,7 @@ Rectangle
                 height: parent.height
 
                 model: DeviceProperties.presetsList
-                currentIndex: DeviceProperties.bank
+                // currentIndex: DeviceProperties.bank
 
                 visibleItemCount: 1
 
@@ -93,9 +93,7 @@ Rectangle
                     opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
 
                     color: "lightgreen"
-
-                    font.pixelSize:  _tumblerCln.height*0.75
-                    anchors.centerIn: parent
+                    font.pixelSize: _tumblerDst.height*0.7
 
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment:   Text.AlignVCenter
@@ -127,7 +125,7 @@ Rectangle
                 height: parent.height
 
                 model: DeviceProperties.presetsList
-                currentIndex: DeviceProperties.preset
+                // currentIndex: DeviceProperties.preset
 
                 visibleItemCount: 1
 
@@ -138,7 +136,7 @@ Rectangle
                     opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
 
                     color: "red"
-                    font.pixelSize: _tumblerDst.height*0.75
+                    font.pixelSize: _tumblerDst.height*0.7
 
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment:   Text.AlignVCenter

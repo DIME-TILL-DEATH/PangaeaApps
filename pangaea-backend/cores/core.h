@@ -34,7 +34,10 @@ public:
         CHANGE_PRESET,
         COPY_PRESET,
         PASTE_PRESET,
-        SAVE_CHANGES
+        COMPARE_PRESET,
+        SAVE_CHANGES,
+        FORMAT_FLASH
+        // CALL_PRESET_LIST
     };
     Q_ENUM(AppAction)
 

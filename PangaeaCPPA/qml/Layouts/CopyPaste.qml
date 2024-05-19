@@ -25,7 +25,7 @@ Item
                 height: parent.height/2
                 text: "COPY"
                 enabled: editable & !compareState
-                onClicked: {UiCore.setParameter("copy", 0); copyFirst=true;}
+                onClicked: AppProperties.copyPreset(); //{UiCore.setParameter("copy", 0); copyFirst=true;}
             }
 
             MButton
@@ -35,7 +35,7 @@ Item
                 text: "PASTE"
                 scaleText: 0.88
                 enabled: editable & copyFirst & !compareState
-                onClicked: UiCore.setParameter("paste", 0)
+                onClicked: AppProperties.pastePreset(); //UiCore.setParameter("paste", 0)
             }
         }
     }

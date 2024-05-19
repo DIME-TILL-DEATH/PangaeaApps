@@ -28,6 +28,8 @@ Item
     signal exportPreset()
     signal importPreset()
 
+    signal openPresetsList()
+
     Row
     {
         id: _row
@@ -42,7 +44,9 @@ Item
             width:  parent.width*1/6 - _row.spacing
             height: parent.height
 
-            visible: DeviceProperties.isLa3Mode
+            visible: !DeviceProperties.isLa3Mode
+
+            onOpenPresetsList: _root.openPresetsList();
         }
 
         GridLayout
@@ -164,7 +168,7 @@ Item
 
                     //: Button text. Compare preset
                     textButton: qsTr("Comp")
-                    onMbPressed: UiCore.setParameter("compare", 0);
+                    onMbPressed: AppProperties.comparePreset();/*UiCore.setParameter("compare", 0);*/
                 }
             }
 
@@ -200,7 +204,8 @@ Item
 
                     onMbPressed:
                     {
-                        UiCore.setParameter("copy", 0);
+                        //UiCore.setParameter("copy", 0);
+                        AppPropertis.copyPreset();
                         copyFirst=true;
                     }
                 }
@@ -215,7 +220,8 @@ Item
 
                     onMbPressed:
                     {
-                        UiCore.setParameter("paste", 0)
+                        // UiCore.setParameter("paste", 0)
+                        AppPropertis.pastePreset();
                     }
                 }
             }
@@ -243,6 +249,8 @@ Item
         {
             width:  parent.width*1/6 -_row.spacing
             height: parent.height
+
+            onOpenPresetsList: _root.openPresetsList();
         }
     }
 

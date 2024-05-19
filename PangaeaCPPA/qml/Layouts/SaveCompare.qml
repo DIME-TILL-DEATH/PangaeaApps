@@ -38,9 +38,9 @@ Item
                 enabled:  main.edit
                 highlighted: main.compareState
 
-                onClicked: {
-                    UiCore.setParameter("compare", 0);
-                }
+                onClicked: AppProperties.comparePreset(); //{
+                    // UiCore.setParameter("compare", 0);
+                // }
             }
         }
     }

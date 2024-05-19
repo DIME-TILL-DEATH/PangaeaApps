@@ -18,6 +18,8 @@ Rectangle
     property bool editable: true
     property bool isLA3: DeviceProperties.isLa3Mode
 
+    signal openPresetsList()
+
 
     color: "transparent"
     border.width: 1
@@ -54,9 +56,9 @@ Rectangle
                 id: _mapBtnMa
 
                 anchors.fill: parent
-                onClicked: {
-                    UiCore.setParameter("open_preset_list", 1);
-                }
+                onClicked: openPresetsList() //{
+                    // UiCore.setParameter("open_preset_list", 1);
+                // }
             }
         }
 

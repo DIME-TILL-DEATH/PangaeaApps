@@ -83,7 +83,6 @@ ApplicationWindow
         {
             id: _settingsPage
         }
-
     }
 
     footer: TabBar{

@@ -52,6 +52,11 @@ Item
 
             width:  parent.width
             height: masterControlsHeight
+
+            onOpenPresetsList: {
+                console.log("Open presets list");
+                _presetsList.open();
+            }
         }
 
         ListView
@@ -298,14 +303,14 @@ Item
             }
         }
 
-        function onSgSetParameter(nameParam, inValue)
-        {
-            if(nameParam === "open_preset_list")
-            {
-                console.log("Open presets list");
-                _presetsList.open();
-            }
-        }
+        // function onSgSetParameter(nameParam, inValue)
+        // {
+        //     if(nameParam === "open_preset_list")
+        //     {
+        //         console.log("Open presets list");
+        //         _presetsList.open();
+        //     }
+        // }
     }
 
     Connections{
