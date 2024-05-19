@@ -3,6 +3,8 @@ import QtQuick.Controls
 
 import StyleSettings
 
+import CppObjects
+
 Item{
     id: _root
 
@@ -10,12 +12,12 @@ Item{
     height: parent.height*0.9
     anchors.verticalCenter: parent.verticalCenter
 
-    property alias value: control.value
-    property alias step: control.stepSize
-    property alias from: control.from
-    property alias to: control.to
+    required property ControlValue controlValue
 
-    property string annotation
+    property alias step: control.stepSize
+
+    property string name: controlValue.name
+    property string units: controlValue.units
 
     signal moved()
 
@@ -25,9 +27,11 @@ Item{
         Dial {
             id: control
 
-            value: _root.value
-            from: _root.from
-            to: _root.to
+            from: controlValue.minValue
+            to: controlValue.maxValue
+            value: controlValue.value
+
+            stepSize: 1
 
             snapMode: Dial.SnapAlways
 
@@ -41,7 +45,7 @@ Item{
                 anchors.centerIn: parent
                 color: Style.mainEnabledColor
                 font.pixelSize: parent.width/5
-                text: value.toFixed(2)
+                text: control.value.toFixed(2)
             }
 
             background: Rectangle {
@@ -83,7 +87,7 @@ Item{
             }
 
             onMoved: {
-                _root.moved();
+                controlValue.value = control.value
             }
         }
 
@@ -95,7 +99,7 @@ Item{
                 anchors.horizontalCenter: parent.horizontalCenter
                 color: (main.on) ? "white" : "darkgrey"
                 font.pixelSize: parent.width/10
-                text: annotation
+                text: _root.name
             }
         }
     }

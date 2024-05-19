@@ -192,38 +192,38 @@ Rectangle
                 EqDial{
                     id: freqDial
 
-                    annotation: "Freq"
+                    // annotation: "Freq"
 
-                    from: EqResponse.EqBands[currentBandIndex].Fc.minValue
-                    to: EqResponse.EqBands[currentBandIndex].Fc.maxValue
+                    // from: EqResponse.EqBands[currentBandIndex].Fc.minValue
+                    // to: EqResponse.EqBands[currentBandIndex].Fc.maxValue
 
-                    step: 1
-                    value: EqResponse.EqBands[currentBandIndex].Fc.value
+                    // step: 1
+                    controlValue: EqResponse.EqBands[currentBandIndex].Fc
 
                     onMoved: {
                         EqResponse.EqBands[currentBandIndex].Fc.value = value
                     }
                 }
                 EqDial{
-                    annotation: "Gain"
+                    // annotation: "Gain"
 
-                    from: -15
-                    to: 15
-                    step: 1
+                    // from: -15
+                    // to: 15
+                    // step: 1
 
-                    value: EqResponse.EqBands[currentBandIndex].gain.value
+                    controlValue: EqResponse.EqBands[currentBandIndex].gain
 
                     onMoved: {
                         EqResponse.EqBands[currentBandIndex].gain.value = value
                     }
                 }
                 EqDial{
-                    annotation: "Q"
+                    // annotation: "Q"
 
-                    from: 0.1
-                    to: 20
+                    // from: 0.1
+                    // to: 20
                     step: 0.1
-                    value: EqResponse.EqBands[currentBandIndex].Q.value
+                    controlValue: EqResponse.EqBands[currentBandIndex].Q
 
                     onMoved: {
                         EqResponse.EqBands[currentBandIndex].Q.value = value

@@ -94,6 +94,8 @@ int main(int argc, char *argv[])
 
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
+
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "AppProperties", &appProperties);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "DeviceProperties", &deviceProperties);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
@@ -105,7 +107,10 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
+
+    qmlRegisterUncreatableType<AbstractModule>("CppObjects", 1, 0, "Module", "Cannot create Module in QML");
     qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
+    qmlRegisterUncreatableType<ControlValue>("CppObjects", 1, 0, "ControlValue", "Cannot create ControlValue in QML");
 
     //-------------------------------------------------------------------------------
     // connections

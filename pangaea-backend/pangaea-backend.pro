@@ -31,12 +31,12 @@ SOURCES += \
     device/deviceparameter.cpp \
     device/firmware.cpp \
     device/preset.cpp \
-    models/deviceslistmodel.cpp \
-    models/presetlistmodel.cpp \
     interfaces/abstractinterface.cpp \
     interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
     interfaces/usbinterface.cpp \
+    models/deviceslistmodel.cpp \
+    models/presetlistmodel.cpp \
     moduls/abstractmodule.cpp \
     moduls/eqband.cpp \
     moduls/eqresponse.cpp \
@@ -58,19 +58,19 @@ HEADERS += \
     device/deviceparameter.h \
     device/firmware.h \
     device/preset.h \
-    models/deviceslistmodel.h \
-    models/presetlistmodel.h \
     interfaces/abstractinterface.h \
     interfaces/devicedescription.h \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
+    models/deviceslistmodel.h \
+    models/presetlistmodel.h \
     moduls/abstractmodule.h \
-    uihalpers/appproperties.h \
+    moduls/eqband.h \
+    moduls/eqresponse.h \
+    uihelpers/appproperties.h \
     uihelpers/controlvalue.h \
     uihelpers/deviceproperties.h \
     uihelpers/devicetypeenum.h \
-    utils/eqband.h \
-    utils/eqresponse.h \
     utils/irworker.h \
     utils/parser.h \
     utils/presetmanager.h
