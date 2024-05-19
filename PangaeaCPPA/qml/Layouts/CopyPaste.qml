@@ -10,8 +10,6 @@ Item
 
     property bool copyFirst: false
 
-    property bool compareState: false
-
     Rectangle
     {
         anchors.fill: parent
@@ -24,8 +22,11 @@ Item
                 width:  parent.width
                 height: parent.height/2
                 text: "COPY"
-                enabled: editable & !compareState
-                onClicked: AppProperties.copyPreset(); //{UiCore.setParameter("copy", 0); copyFirst=true;}
+                enabled: !AppProperties.compareState
+                onClicked: {
+                    AppProperties.copyPreset(); //{UiCore.setParameter("copy", 0);
+                    copyFirst=true;
+                }
             }
 
             MButton
@@ -34,21 +35,8 @@ Item
                 height: parent.height/2
                 text: "PASTE"
                 scaleText: 0.88
-                enabled: editable & copyFirst & !compareState
+                enabled: copyFirst & !AppProperties.compareState
                 onClicked: AppProperties.pastePreset(); //UiCore.setParameter("paste", 0)
-            }
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if(nameParam === "compare_state")
-            {
-                main.compareState = value;
             }
         }
     }

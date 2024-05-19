@@ -15,8 +15,6 @@ Rectangle
 
     property string text
 
-    property bool editable: true
-
     color: "transparent"
     border.width: 1
     border.color: Style.currentTheme.colorBorderOn

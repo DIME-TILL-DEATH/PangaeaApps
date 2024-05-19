@@ -37,29 +37,28 @@ ComboBox
         implicitHeight: control.Material.buttonHeight
 
         radius: control.flat ? 0 : 2
-        color: Style.colorFon   //!control.editable ? control.Material.dialogColor : "transparent"
+        color: Style.colorFon
 
-        layer.enabled: control.enabled && !control.editable && control.Material.background.a > 0
+        layer.enabled: control.enabled && control.Material.background.a > 0
         layer.effect: ElevationEffect {
             elevation: control.Material.elevation
         }
 
         Rectangle {
-            visible: control.editable
             y: parent.y + control.baselineOffset
             width: parent.width
             height: control.activeFocus ? 2 : 1
-            color: control.editable && control.activeFocus ? control.Material.accentColor : control.Material.hintTextColor
+            color: control.activeFocus ? control.Material.accentColor : control.Material.hintTextColor
         }
 
         Ripple {
             clip: control.flat
             clipRadius: control.flat ? 0 : 2
-            x: control.editable && control.indicator ? control.indicator.x : 0
-            width: control.editable && control.indicator ? control.indicator.width : parent.width
+            x: control.indicator ? control.indicator.x : 0
+            width: control.indicator ? control.indicator.width : parent.width
             height: parent.height
             pressed: control.pressed
-            anchor: control.editable && control.indicator ? control.indicator : control
+            anchor: control.indicator ? control.indicator : control
             active: enabled && (control.pressed || control.visualFocus || control.hovered)
             color: control.Material.rippleColor
         }
@@ -78,7 +77,7 @@ ComboBox
     }
 
     popup: T.Popup {
-        y: control.editable ? control.height - 5 : 0
+        y: control.height - 5
         width: control.width
         height: Math.min(contentItem.implicitHeight, control.Window.height - topMargin - bottomMargin)
         transformOrigin: Item.Top

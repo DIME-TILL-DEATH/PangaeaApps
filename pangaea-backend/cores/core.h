@@ -25,6 +25,7 @@ public:
     enum AppParameter
     {
         PRESET_MODIFIED,
+        COMPARE_STATE,
         FW_UPDATE_COMPLITED
     };
     Q_ENUM(AppParameter)
@@ -103,8 +104,6 @@ private:
     quint32 symbolsSended{0};
     quint32 bytesToRecieve{0};
     quint32 bytesRecieved{0};
-
-    bool bEditable;
 
     void pushCommandToQueue(QByteArray);
     void calculateSendVolume();

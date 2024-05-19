@@ -137,6 +137,7 @@ int main(int argc, char *argv[])
     QObject::connect(core, &Core::sgRecieveDeviceParameter, &uiCore, &UiDesktopCore::sgSetUiDeviceParameter);
     QObject::connect(core, &Core::sgRecieveDeviceParameter, &eqResponse, &EqResponse::slSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetAppParameter, &deviceProperties, &DeviceProperties::slSetAppParameter);
+    QObject::connect(core, &Core::sgSetAppParameter, &appProperties, &AppProperties::slSetAppParameter);
     QObject::connect(core, &Core::sgRecieveDeviceParameter, &deviceProperties, &DeviceProperties::slSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);

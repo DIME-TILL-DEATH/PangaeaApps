@@ -10,8 +10,6 @@ Item
 {
     id: main
 
-    property bool editable: true
-
     function up()
     {
         if(DeviceProperties.preset < (DeviceProperties.presetsList.length-1))

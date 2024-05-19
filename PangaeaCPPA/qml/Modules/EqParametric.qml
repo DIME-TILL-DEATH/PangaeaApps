@@ -151,7 +151,6 @@ Rectangle
 
                     EqResponse.EqBands[currentBandIndex].gain.value = Math.round(gain);
                     EqResponse.EqBands[currentBandIndex].Fc.value = Math.round(freq);
-                    // console.log(Math.round(freq), Math.round(gain))
                 }
             }
         }
@@ -190,14 +189,7 @@ Rectangle
                 }
 
                 EqDial{
-                    id: freqDial
-
-                    // annotation: "Freq"
-
-                    // from: EqResponse.EqBands[currentBandIndex].Fc.minValue
-                    // to: EqResponse.EqBands[currentBandIndex].Fc.maxValue
-
-                    // step: 1
+                    id: dialFreq
                     controlValue: EqResponse.EqBands[currentBandIndex].Fc
 
                     onMoved: {
@@ -205,29 +197,15 @@ Rectangle
                     }
                 }
                 EqDial{
-                    // annotation: "Gain"
-
-                    // from: -15
-                    // to: 15
-                    // step: 1
+                    id: dialGain
 
                     controlValue: EqResponse.EqBands[currentBandIndex].gain
-
-                    onMoved: {
-                        EqResponse.EqBands[currentBandIndex].gain.value = value
-                    }
                 }
                 EqDial{
-                    // annotation: "Q"
+                    id: dialQ
 
-                    // from: 0.1
-                    // to: 20
                     step: 0.1
                     controlValue: EqResponse.EqBands[currentBandIndex].Q
-
-                    onMoved: {
-                        EqResponse.EqBands[currentBandIndex].Q.value = value
-                    }
                 }
             }
         }

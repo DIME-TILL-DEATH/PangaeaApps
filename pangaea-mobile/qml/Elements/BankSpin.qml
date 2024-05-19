@@ -15,7 +15,6 @@ Rectangle
 
     property string text
 
-    property bool editable: true
     property bool isLA3: DeviceProperties.isLa3Mode
 
     signal openPresetsList()

@@ -8,9 +8,7 @@ Item
 {
     id: main
 
-    property bool editable: true
     property bool edit: true
-    property bool compareState: false
 
     Rectangle
     {
@@ -24,7 +22,7 @@ Item
                 width:  parent.width
                 height: parent.height/2
                 text: "SAVE"
-                enabled: main.editable & main.edit & !main.compareState
+                enabled: main.edit & !AppProperties.compareState
                 onClicked: DeviceProperties.saveChanges();
             }
 
@@ -36,24 +34,11 @@ Item
                 text: "COMP"
 
                 enabled:  main.edit
-                highlighted: main.compareState
+                highlighted: AppProperties.compareState
 
                 onClicked: AppProperties.comparePreset(); //{
                     // UiCore.setParameter("compare", 0);
                 // }
-            }
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if(nameParam === "compare_state")
-            {
-                main.compareState = value;
             }
         }
     }

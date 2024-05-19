@@ -10,6 +10,8 @@ Rectangle {
     id: root
     anchors.fill: parent
 
+    enabled: !AppProperties.compareState
+
     property string moduleName: "MN"
     property int paramType
 
@@ -104,18 +106,6 @@ Rectangle {
             loops: Animation.Infinite
             ColorAnimation {from: "white"; to: "lightcoral"; duration: 1000}
             ColorAnimation {from: "lightcoral"; to: "white"; duration: 1000}
-        }
-    }
-
-    Connections{
-        target: UiCore
-
-        function onSgSetUIParameter(parameterName, inValue)
-        {
-            if(parameterName === "compare_state")
-            {
-                root.enabled = !inValue
-            }
         }
     }
 }

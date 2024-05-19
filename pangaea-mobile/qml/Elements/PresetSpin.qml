@@ -14,7 +14,6 @@ Rectangle
 
     property string text
 
-    property bool editable: true
     signal openPresetsList()
 
 

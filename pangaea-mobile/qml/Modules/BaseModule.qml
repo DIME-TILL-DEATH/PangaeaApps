@@ -20,7 +20,7 @@ Rectangle {
 
     property Module module
 
-    property bool disabled: false
+    property bool disabled: AppProperties.compareState
 
     signal sgModuleOnOf()
 
@@ -196,18 +196,6 @@ Rectangle {
 
                     sourceComponent: contentItem
                 }
-            }
-        }
-    }
-
-    Connections{
-        target: UiCore
-
-        function onSgSetUIParameter(parameterName, inValue)
-        {
-            if(parameterName === "compare_state")
-            {
-                _main.disabled = inValue
             }
         }
     }

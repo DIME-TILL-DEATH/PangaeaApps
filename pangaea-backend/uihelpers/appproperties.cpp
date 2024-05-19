@@ -26,10 +26,15 @@ void AppProperties::formatFlash()
 
 void AppProperties::slSetAppParameter(Core::AppParameter appParameterType, QVariant content)
 {
-
+    switch (appParameterType)
+    {
+    case Core::AppParameter::COMPARE_STATE:
+    {
+        m_compareState = content.toBool();
+        emit compareStateChanged();
+        break;
+    }
+    default:
+        break;
+    }
 }
-
-// void AppProperties::openPresetList()
-// {
-//     emit sendAppAction(Core::AppAction::CALL_PRESET_LIST, {});
-// }

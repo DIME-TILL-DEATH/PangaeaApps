@@ -20,7 +20,6 @@ Item
 
 
     property bool softUpdate: false
-    property bool editabled: false
 
     Rectangle {
         id: _contentRect

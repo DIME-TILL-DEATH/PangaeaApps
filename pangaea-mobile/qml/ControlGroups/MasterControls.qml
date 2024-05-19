@@ -21,7 +21,7 @@ Item
     property bool copyFirst: false
     property bool presetEdited: DeviceProperties.presetModified
 
-    property bool compareState: false
+    property bool compareState: AppProperties.compareState
 
     property int borderSpacings : Style.mainSpacing
 
@@ -128,7 +128,7 @@ Item
 
                     //: Button text. Export preset
                     textButton: qsTr("Export")
-                    enabled: !_root.compareState
+                    enabled: !AppProperties.compareState
 
                     onMbPressed: {
                         if(_root.presetEdited)
@@ -146,7 +146,7 @@ Item
                     // Почему-то именно кнопка save при смене своего состояния
                     // через свойство "enabled" отключала обновление SwipeView до любого следующего действия
                     // поэтому добавлено своё свойство "enabled" отключающее только нужные свойства
-                    enabledKostyl: _root.presetEdited & !_root.compareState
+                    enabledKostyl: _root.presetEdited & !AppProperties.compareState
 
                     //: Button text. Save preset
                     textButton: qsTr("Save")
@@ -164,7 +164,7 @@ Item
                     Layout.fillHeight: true
 
                     enabled: _root.presetEdited
-                    highlighted: _root.compareState
+                    highlighted: AppProperties.compareState
 
                     //: Button text. Compare preset
                     textButton: qsTr("Comp")
@@ -185,7 +185,7 @@ Item
 
                     //: Button text. Import preset
                     textButton: qsTr("Import")
-                    enabled: !_root.compareState
+                    enabled: !AppProperties.compareState
 
                     onMbPressed:
                     {
@@ -200,7 +200,7 @@ Item
 
                     //: Button text. Copy preset.
                     textButton: qsTr("Copy")
-                    enabled: !_root.compareState
+                    enabled: !AppProperties.compareState
 
                     onMbPressed:
                     {
@@ -216,7 +216,7 @@ Item
 
                     //: Button text. Paste preset
                     textButton: qsTr("Paste")
-                    enabled: copyFirst & !_root.compareState
+                    enabled: copyFirst & !AppProperties.compareState
 
                     onMbPressed:
                     {
@@ -256,14 +256,6 @@ Item
 
     Connections{
         target: UiCore
-
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam === "compare_state")
-            {
-                _root.compareState = inValue;
-            }
-        }
 
         function onSgSetUiDeviceParameter(paramType, value)
         {

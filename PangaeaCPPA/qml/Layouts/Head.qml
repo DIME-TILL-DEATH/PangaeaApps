@@ -9,11 +9,11 @@ Item
 {
     id: main
 
-    property bool editable: true
-    property bool compareState: false
     property bool irOn: true
 
     signal setImpuls()
+
+    //TODO: disable on wait
 
     Row
     {
@@ -34,8 +34,6 @@ Item
 
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-
-            enabled: main.editable
         }
 
         SwitchOutput
@@ -49,7 +47,6 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            editable: main.editable
             edit: DeviceProperties.presetModified
         }
 
@@ -104,7 +101,7 @@ Item
                          (DeviceProperties.deviceType === DeviceType.CP100PA) |
                          (DeviceProperties.deviceType === DeviceType.LA3PA)
 
-            enabled: main.editable & !main.compareState
+            enabled: !AppProperties.compareState
         }
 
         PresetSpin
@@ -113,8 +110,6 @@ Item
 
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-
-            enabled: main.editable
         }
 
         Item
@@ -132,14 +127,6 @@ Item
             if (nameParam==="impulse_name")
             {
                 impulsTxt.text = (value==="") ? qsTr("empty") : value;
-            }
-        }
-
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if(nameParam === "compare_state")
-            {
-                main.compareState = value;
             }
         }
 

@@ -35,8 +35,6 @@ ApplicationWindow
     property string interfaceDescription: ""
     property string markConnect: connected ? qsTr("Connected to ") + interfaceDescription : qsTr("Disconnected")
 
-    property bool editable: false
-
     property bool connected: false
     property bool wait: true
     property bool appClosing: false
@@ -82,7 +80,6 @@ ApplicationWindow
             onSetImpuls: {
                 irFileDialog.open();
             }
-            editable: main.editable & (!main.wait)
         }
 
         ModulesList
@@ -92,7 +89,7 @@ ApplicationWindow
             width:  parent.width
             height: parent.height/1000*850
 
-            enabled: editable & (!main.wait)
+            enabled: !main.wait
         }
     }
 
@@ -324,8 +321,6 @@ ApplicationWindow
                         Qt.quit();
                 }
             }
-            if(nameParam === "editable")
-                main.editable=value
 
             if(nameParam === "fw_update_enabled")
             {
@@ -393,7 +388,6 @@ ApplicationWindow
         function onSgInterfaceError(errorDescription)
         {
             connected = false;
-            main.editable = false;
             mainUi.visible = false;
             msgError.text = qsTr("Device disconnected\n" + errorDescription)
             msgError.open();
@@ -404,7 +398,6 @@ ApplicationWindow
         function onSgInterfaceDisconnected()
         {
             connected = false;
-            main.editable = false;
             mainUi.visible = false;
 
             InterfaceManager.startScanning();

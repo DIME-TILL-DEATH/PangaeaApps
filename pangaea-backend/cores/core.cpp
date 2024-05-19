@@ -224,7 +224,6 @@ void Core::parseInputData(QByteArray ba)
                         }
 
                         emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
-                        emit sgSetUIParameter("editable",      bEditable); // TODO отличается от мобильного
                     }
                 }
                 break;
@@ -746,7 +745,12 @@ void Core::changePreset(quint8 bank, quint8 preset)
 
     isPresetEdited = false;
     emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
-    emit sgSetUIParameter ("compare_state", false);
+
+    if(presetManager.currentState() == PresetState::Compare)
+    {
+        comparePreset();
+    }
+
     emit sgUpdatePreset(currentSavedPreset); // Обновить актуальный пресет перед переключением
 
     pushCommandToQueue(QString("pc %2").arg(val, 2, 16, QChar('0')).toUtf8());
@@ -786,15 +790,13 @@ void Core::saveChanges()
     emit sgUpdatePreset(currentSavedPreset);
     isPresetEdited = false;
     emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
-    bEditable = true;
-    emit sgSetUIParameter ("editable",      bEditable);
 }
 
 void Core::comparePreset()
 {
     if(presetManager.currentState() != PresetState::Compare)
     {
-        emit sgSetUIParameter("compare_state", true);
+        emit sgSetAppParameter(AppParameter::COMPARE_STATE, true);
         pushCommandToQueue("gs\r\n");
         pushCommandToQueue("esc\r\n");
     }
@@ -803,7 +805,7 @@ void Core::comparePreset()
         presetManager.returnToPreviousState();
         setPresetData(currentPreset);
         uploadImpulseData(currentPreset.waveData(), true, currentPreset.impulseName());
-        emit sgSetUIParameter("compare_state", false);
+        emit sgSetAppParameter(AppParameter::COMPARE_STATE, false);
     }
     processCommands();
 }
@@ -1058,8 +1060,6 @@ void Core::readAllParameters()
     pushCommandToQueue("gm");
 
     processCommands();
-
-    bEditable = true;
 }
 
 void Core::pushReadPresetCommands()
