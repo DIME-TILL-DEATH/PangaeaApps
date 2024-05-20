@@ -302,15 +302,6 @@ Item
                 arrangePrePost(value);
             }
         }
-
-        // function onSgSetParameter(nameParam, inValue)
-        // {
-        //     if(nameParam === "open_preset_list")
-        //     {
-        //         console.log("Open presets list");
-        //         _presetsList.open();
-        //     }
-        // }
     }
 
     Connections{

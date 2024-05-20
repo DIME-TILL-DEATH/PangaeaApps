@@ -55,9 +55,7 @@ Rectangle
                 id: _mapBtnMa
 
                 anchors.fill: parent
-                onClicked: openPresetsList() //{
-                    // UiCore.setParameter("open_preset_list", 1);
-                // }
+                onClicked: openPresetsList()
             }
         }
 

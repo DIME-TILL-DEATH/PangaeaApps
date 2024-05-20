@@ -1,8 +1,12 @@
 #include "deviceproperties.h"
 
-DeviceProperties::DeviceProperties(QObject *parent)
+DeviceProperties::DeviceProperties(Core *core, QObject *parent)
     : QObject{parent}
-{}
+{
+    connect(this, &DeviceProperties::sendAppAction, core, &Core::slRecieveAppAction);
+    connect(core, &Core::sgSetAppParameter, this, &DeviceProperties::slSetAppParameter);
+    connect(core, &Core::sgRecieveDeviceParameter, this, &DeviceProperties::slSetUiDeviceParameter);
+}
 
 void DeviceProperties::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges)
 {

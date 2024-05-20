@@ -11,7 +11,7 @@ class AppProperties : public QObject
 
     Q_PROPERTY(bool compareState READ compareState NOTIFY compareStateChanged FINAL)
 public:
-    explicit AppProperties(QObject *parent = nullptr);
+    explicit AppProperties(Core* core, QObject *parent = nullptr);
 
     Q_INVOKABLE void copyPreset();
     Q_INVOKABLE void pastePreset();

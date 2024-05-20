@@ -13,7 +13,7 @@ class EqResponse : public AbstractModule
     Q_PROPERTY(QList<QPointF> points READ points NOTIFY pointsChanged)
     Q_PROPERTY(QObjectList EqBands READ EqBands NOTIFY eqBandsChanged)
 public:
-    explicit EqResponse(QObject *parent = nullptr);
+    explicit EqResponse(Core *core, QObject *parent = nullptr);
 
     double getEqResponse(double f);
     QList<QPointF> points();

@@ -24,7 +24,7 @@ Item
                 text: "COPY"
                 enabled: !AppProperties.compareState
                 onClicked: {
-                    AppProperties.copyPreset(); //{UiCore.setParameter("copy", 0);
+                    AppProperties.copyPreset();
                     copyFirst=true;
                 }
             }
@@ -36,7 +36,7 @@ Item
                 text: "PASTE"
                 scaleText: 0.88
                 enabled: copyFirst & !AppProperties.compareState
-                onClicked: AppProperties.pastePreset(); //UiCore.setParameter("paste", 0)
+                onClicked: AppProperties.pastePreset();
             }
         }
     }

@@ -168,7 +168,7 @@ Item
 
                     //: Button text. Compare preset
                     textButton: qsTr("Comp")
-                    onMbPressed: AppProperties.comparePreset();/*UiCore.setParameter("compare", 0);*/
+                    onMbPressed: AppProperties.comparePreset();
                 }
             }
 
@@ -204,7 +204,6 @@ Item
 
                     onMbPressed:
                     {
-                        //UiCore.setParameter("copy", 0);
                         AppPropertis.copyPreset();
                         copyFirst=true;
                     }
@@ -220,7 +219,6 @@ Item
 
                     onMbPressed:
                     {
-                        // UiCore.setParameter("paste", 0)
                         AppPropertis.pastePreset();
                     }
                 }

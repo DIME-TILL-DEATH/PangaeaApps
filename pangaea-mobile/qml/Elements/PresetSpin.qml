@@ -53,9 +53,6 @@ Rectangle
 
                 anchors.fill: parent
                 onClicked: openPresetsList()
-                // {
-                //     UiCore.setParameter("open_preset_list", 1);
-                // }
             }
         }
 

@@ -4,8 +4,8 @@
 #include "eqresponse.h"
 
 
-EqResponse::EqResponse(QObject *parent)
-    : AbstractModule(DeviceParameter::Type::EQ_ON, parent)
+EqResponse::EqResponse(Core* core, QObject *parent)
+    : AbstractModule(core, DeviceParameter::Type::EQ_ON, parent)
 {
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 20, 220, 0));
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 260, 440, 1));

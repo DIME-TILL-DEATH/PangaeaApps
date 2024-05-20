@@ -240,8 +240,6 @@ Item
                 anchors.fill: parent
                 onClicked: {
                     _checkBox.checked = !_checkBox.checked
-
-                    UiCore.setParameter("autoconnect_state", _checkBox.checked)
                 }
             }
 

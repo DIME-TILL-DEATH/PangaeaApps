@@ -506,6 +506,7 @@ void Core::parseInputData(QByteArray ba)
                 if(fwUpdate)
                 {
                     emit sgSetUIParameter("fw_update_enabled", false);
+                    fwUpdate = false;
                 }
                 else
                 {
@@ -915,51 +916,7 @@ void Core::pastePreset()
 
 void Core::setParameter(QString name, quint8 value)
 {
-    qDebug() << "setParameter" << name << value;
-
-    if(name=="fw_update_complete")
-    {
-        fwUpdate = false;
-        return;
-    }
-
-    // if(name==("copy"))
-    // {
-    //     copyPreset();
-    //     return;
-    // }
-
-    // if(name==("paste"))
-    // {
-    //     pastePreset();
-    //     return;
-    // }
-
-    // if(name==("compare"))
-    // {
-    //     comparePreset();
-    //     return;
-    // }
-
-    // if(name == "call_preset_list")
-    // {
-    //     pushCommandToQueue("rns");
-    //     processCommands();
-    //     return;
-    // }
-
     QString sendStr;
-
-
-    // if(name==("format"))
-    // {
-    //     emit sgSetUIParameter("wait", true);
-
-    //     isFormatting = true;
-    //     timeoutTimer->setInterval(10000);
-
-    //     sendStr = QString("fsf\r\n");
-    // }
 
     if(name==("esc")) sendStr = QString("esc\r\n");
 

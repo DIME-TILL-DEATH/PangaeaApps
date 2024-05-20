@@ -13,8 +13,6 @@ Item
 
     signal setImpuls()
 
-    //TODO: disable on wait
-
     Row
     {
         id: row

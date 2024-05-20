@@ -161,7 +161,7 @@ Item
         onRejected:
         {
             _main.openConnectPage();
-            UiCore.sgSetUIParameter("fw_update_complete", true);
+            // UiCore.sgSetUIParameter("fw_update_complete", true);
             InterfaceManager.disconnectFromDevice();
         }
     }
@@ -202,9 +202,6 @@ Item
         closeOnDisconnect: true
 
         onAccepted: AppProperties.formatFlash();
-        // {
-        //     UiCore.setParameter("format", 0);
-        // }
     }
 
     EditTextDialog

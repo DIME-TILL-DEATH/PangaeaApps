@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     NetCore* netCore = new NetCore();
     InterfaceCore* interfaceManager = new InterfaceCore();
 
-    EqResponse eqResponse;
+    EqResponse eqResponse(core);
 
     PresetListModel presetListModel;
 
@@ -81,8 +81,8 @@ int main(int argc, char *argv[])
     UiInterfaceManager uiInterfaceManager; // TODO: move to backend, либо common(Общий для всех)
     UiDesktopCore uiCore;
 
-    AppProperties appProperties;
-    DeviceProperties deviceProperties;
+    AppProperties appProperties(core);
+    DeviceProperties deviceProperties(core);
     UiSettings uiSettings;
 
     QQmlApplicationEngine engine;
@@ -129,16 +129,9 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiDesktopCore::sgExportPreset, core, &Core::exportPreset);
     QObject::connect(&uiCore, &UiDesktopCore::sgImportPreset, core, &Core::importPreset);
     QObject::connect(&uiCore, &UiDesktopCore::sgSw4Enable, core, &Core::sw4Enable);
-    
-    QObject::connect(&eqResponse, &EqResponse::sgSetDeviceParameter, core, &Core::slSetDeviceParameter);
 
-    // QObject::connect(core, &Core::sgSetAppParameter, &uiCore, &UiDesktopCore::slSetAppParameter);
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgRecieveDeviceParameter, &uiCore, &UiDesktopCore::sgSetUiDeviceParameter);
-    QObject::connect(core, &Core::sgRecieveDeviceParameter, &eqResponse, &EqResponse::slSetUiDeviceParameter);
-    QObject::connect(core, &Core::sgSetAppParameter, &deviceProperties, &DeviceProperties::slSetAppParameter);
-    QObject::connect(core, &Core::sgSetAppParameter, &appProperties, &AppProperties::slSetAppParameter);
-    QObject::connect(core, &Core::sgRecieveDeviceParameter, &deviceProperties, &DeviceProperties::slSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);
     QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiDesktopCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);  
@@ -146,22 +139,16 @@ int main(int argc, char *argv[])
     QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgUpdatePreset, &presetListModel, &PresetListModel::updatePreset, Qt::QueuedConnection);
     
-    QObject::connect(&appProperties, &AppProperties::sendAppAction, core, &Core::slRecieveAppAction);
-    QObject::connect(&deviceProperties, &DeviceProperties::sendAppAction, core, &Core::slRecieveAppAction);
-
     NetCore::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
-
     NetCore::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiDesktopCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
     NetCore::connect(netCore, &NetCore::sgNewAppVersionAvaliable, &uiCore, &UiDesktopCore::slNewAppVersionAvaliable);
 
     Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData, Qt::QueuedConnection);
     Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::slInterfaceConnected, Qt::QueuedConnection);
-//#if !defined(Q_OS_MACOS)
+
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice, Qt::BlockingQueuedConnection);
     Core::connect(core, &Core::sgSilentWriteToInterface, interfaceManager, &InterfaceCore::silentWriteToDevice, Qt::BlockingQueuedConnection);
-//#else
-//    Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
-//#endif
+
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError, Qt::QueuedConnection);
 
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, interfaceManager, &InterfaceCore::startScanning, Qt::QueuedConnection);

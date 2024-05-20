@@ -10,7 +10,7 @@ class AbstractModule : public QObject
     Q_OBJECT
     Q_PROPERTY(bool moduleEnabled READ moduleEnabled WRITE setModuleEnabled NOTIFY moduleEnabledChanged FINAL)
 public:
-    explicit AbstractModule(DeviceParameter::Type parameterTypeModuleOn, QObject *parent = nullptr);
+    explicit AbstractModule(Core* core, DeviceParameter::Type parameterTypeModuleOn, QObject *parent = nullptr);
 
     bool moduleEnabled() const;
     void setModuleEnabled(bool newEnabled);

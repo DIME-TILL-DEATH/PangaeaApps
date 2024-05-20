@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     NetCore* netCore = new NetCore;
     InterfaceCore* interfaceManager = new InterfaceCore;
 
-    EqResponse eqResponse;
+    EqResponse eqResponse(core);
 
     PresetListModel presetListModel;
 
@@ -98,8 +98,8 @@ int main(int argc, char *argv[])
     UiCore uiCore;
     UiInterfaceManager uiInterfaceManager;
 
-    AppProperties appProperties;
-    DeviceProperties deviceProperties;
+    AppProperties appProperties(core);
+    DeviceProperties deviceProperties(core);
 
     QQmlApplicationEngine engine;
     engine.addImportPath(":/qml");
@@ -141,21 +141,12 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiCore::sgImportPreset, core, &Core::importPreset);
     QObject::connect(&uiCore, &UiCore::sgSw4Enable, core, &Core::sw4Enable);
 
-    QObject::connect(&eqResponse, &EqResponse::sgSetDeviceParameter, core, &::Core::slSetDeviceParameter);
-
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
-    QObject::connect(core, &Core::sgSetAppParameter, &eqResponse, &EqResponse::sgSetAppParameter);
     QObject::connect(core, &Core::sgRecieveDeviceParameter, &uiCore, &UiCore::sgSetUiDeviceParameter);
-    QObject::connect(core, &Core::sgSetAppParameter, &deviceProperties, &DeviceProperties::slSetAppParameter);
-    QObject::connect(core, &Core::sgSetAppParameter, &appProperties, &AppProperties::slSetAppParameter);
-    QObject::connect(core, &Core::sgRecieveDeviceParameter, &deviceProperties, &DeviceProperties::slSetUiDeviceParameter);
-    QObject::connect(core, &Core::sgRecieveDeviceParameter, &eqResponse, &EqResponse::slSetUiDeviceParameter);
+
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiCore::sgSetUIText);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiCore::sgSetProgress);
     QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
-
-    QObject::connect(&appProperties, &AppProperties::sendAppAction, core, &Core::slRecieveAppAction);
-    QObject::connect(&deviceProperties, &DeviceProperties::sendAppAction, core, &Core::slRecieveAppAction);
 
     QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgUpdatePreset, &presetListModel, &PresetListModel::updatePreset, Qt::QueuedConnection);

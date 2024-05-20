@@ -1,8 +1,11 @@
 #include "appproperties.h"
 
-AppProperties::AppProperties(QObject *parent)
+AppProperties::AppProperties(Core *core, QObject *parent)
     : QObject{parent}
-{}
+{
+    connect(core, &Core::sgSetAppParameter, this, &AppProperties::slSetAppParameter);
+    connect(this, &AppProperties::sendAppAction, core, &Core::slRecieveAppAction);
+}
 
 void AppProperties::copyPreset()
 {

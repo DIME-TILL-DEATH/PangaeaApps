@@ -23,7 +23,7 @@ class DeviceProperties : public QObject
     Q_PROPERTY(quint8 bank READ bank WRITE setBank NOTIFY bankChanged FINAL)
     Q_PROPERTY(quint8 preset READ preset WRITE setPreset NOTIFY presetChanged FINAL)
 public:
-    explicit DeviceProperties(QObject *parent = nullptr);
+    explicit DeviceProperties(Core* core, QObject *parent = nullptr);
 
     Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false);
     Q_INVOKABLE void saveChanges();

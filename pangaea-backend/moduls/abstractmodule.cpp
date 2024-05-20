@@ -1,9 +1,12 @@
 #include "abstractmodule.h"
 
-AbstractModule::AbstractModule(DeviceParameter::Type parameterTypeModuleOn, QObject *parent)
+AbstractModule::AbstractModule(Core *core, DeviceParameter::Type parameterTypeModuleOn, QObject *parent)
     : QObject{parent},
     m_parameterTypeModuleOn{parameterTypeModuleOn}
-{}
+{
+    connect(this, &AbstractModule::sgSetDeviceParameter, core, &Core::slSetDeviceParameter);
+    connect(core, &Core::sgRecieveDeviceParameter, this, &AbstractModule::slSetUiDeviceParameter);
+}
 
 bool AbstractModule::moduleEnabled() const
 {

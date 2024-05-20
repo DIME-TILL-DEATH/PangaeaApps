@@ -32,9 +32,6 @@ Item{
             cursorShape: Qt.PointingHandCursor
 
             onClicked: {
-                // console.log("maxMapRow:", maxMapRow, presetDeviceIndex)
-                // UiCore.setParameter("set_preset_change", presetDeviceIndex)
-
                 DeviceProperties.changePreset(bankNumber, presetNumber);
             }
             onEntered: tp.visible = (tp.text.length>0)
