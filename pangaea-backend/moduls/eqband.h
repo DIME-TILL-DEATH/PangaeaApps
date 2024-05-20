@@ -5,6 +5,7 @@
 
 #include "controlvalue.h"
 #include "deviceparameter.h"
+#include <QPointF>
 
 class EqBand : public QObject
 {
@@ -15,6 +16,7 @@ class EqBand : public QObject
     Q_PROPERTY(ControlValue* Q READ getQ CONSTANT)
     Q_PROPERTY(ControlValue* gain READ getGain CONSTANT)
 
+    Q_PROPERTY(QList<QPointF> bandPoints READ bandPoints NOTIFY bandPointsChanged)
 public:    
     enum FilterType
     {
@@ -39,13 +41,17 @@ public:
     double fStop() {return m_fStop;};
 
     double getFilterResponse(double f);
+    void calcBandResponse(quint16 pointsNum);
 
+    QList<QPointF> bandPoints();
 
 signals:
     void typeChanged();
     void filterChanged();
 
     void sgSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
+
+    void bandPointsChanged();
 
 private:
     FilterType m_type;
@@ -70,6 +76,7 @@ private:
     }m_coefs;
 
     void calcFilterCoefs();
+    QList<QPointF> m_bandPoints;
 };
 
 #endif // EQBAND_H

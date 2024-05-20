@@ -38,14 +38,31 @@ void EqResponse::calcEqResponse()
 {
     m_points.clear();
 
-    double currFreq = 10;
-    double power = log10(currFreq);
-    double powerStep = (log10(EqBand::Fs/2)-power)/pointsNum;
+    for(int i=0; i<m_EqBands.count(); i++)
+    {
+        EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
+        eqBand->calcBandResponse(pointsNum);
+    }
+
+    // TODO: recalc from calculated bands response
+    // double currFreq = 10;
+    // double power = log10(currFreq);
+    // double powerStep = (log10(EqBand::Fs/2)-power)/pointsNum;
     for(int i=0; i<pointsNum+1; i++)
     {
-        m_points.append(QPointF(currFreq, getEqResponse(currFreq)));
-        power += powerStep;
-        currFreq = pow(10, power);
+        double eqPointResponse = 0;
+        double currFreq = 0;
+        for(int j=0; j<m_EqBands.count(); j++)
+        {
+            EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(j));
+
+            currFreq = eqBand->bandPoints().at(i).x();
+            eqPointResponse += eqBand->bandPoints().at(i).y();
+        }
+        // m_points.append(QPointF(currFreq, getEqResponse(currFreq)));
+        m_points.append(QPointF(currFreq, eqPointResponse));
+        // power += powerStep;
+        // currFreq = pow(10, power);
     }
     emit pointsChanged();
 }

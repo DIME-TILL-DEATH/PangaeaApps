@@ -102,6 +102,22 @@ double EqBand::getFilterResponse(double f)
     return 20*log10(abs(h));
 }
 
+void EqBand::calcBandResponse(quint16 pointsNum)
+{
+    m_bandPoints.clear();
+
+    double currFreq = 10;
+    double power = log10(currFreq);
+    double powerStep = (log10(EqBand::Fs/2)-power)/pointsNum;
+    for(int i=0; i<pointsNum+1; i++)
+    {
+        m_bandPoints.append(QPointF(currFreq, getFilterResponse(currFreq)));
+        power += powerStep;
+        currFreq = pow(10, power);
+    }
+    emit bandPointsChanged();
+}
+
 EqBand::FilterType EqBand::type() const
 {
     return m_type;
@@ -120,4 +136,9 @@ ControlValue* EqBand::getQ() const
 ControlValue* EqBand::getGain() const
 {
     return m_gain;
+}
+
+QList<QPointF> EqBand::bandPoints()
+{
+    return m_bandPoints;
 }

@@ -114,6 +114,27 @@ Rectangle
                         ctx.lineTo(x, -y);
                     }
                     ctx.stroke()
+
+                    // band draw
+                    xmin = EqResponse.EqBands[currentBandIndex].bandPoints[0].x;
+                    xmax = EqResponse.EqBands[currentBandIndex].bandPoints[EqResponse.EqBands[currentBandIndex].bandPoints.length-1].x
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = "salmon"
+                    ctx.fillStyle = "salmon";
+                    ctx.globalAlpha = 0.4;
+
+                    ctx.beginPath();
+                    ctx.moveTo(xmax,0)
+                    ctx.lineTo(0,0)
+                    for(i=0; i<EqResponse.EqBands[currentBandIndex].bandPoints.length; i++)
+                    {
+                        x = _canvas.width*((Math.log10(EqResponse.EqBands[currentBandIndex].bandPoints[i].x)-Math.log10(xmin))
+                                           /(Math.log10(xmax)-Math.log10(xmin)));
+                        y = EqResponse.EqBands[currentBandIndex].bandPoints[i].y*coefY
+
+                        ctx.lineTo(x, -y);
+                    }
+                    ctx.fill()
                 }
             }
 
@@ -213,6 +234,7 @@ Rectangle
 
     function bandSelected(index){
         currentBandIndex = index
+        main.update();
     }
 
     Connections{
