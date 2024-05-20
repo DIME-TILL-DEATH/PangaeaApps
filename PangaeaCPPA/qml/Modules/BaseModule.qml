@@ -12,10 +12,11 @@ Rectangle {
 
     enabled: !AppProperties.compareState
 
-    property string moduleName: "MN"
-    property int paramType
+    property var module
 
-    property bool on: false
+    property string moduleName: module !== undefined ? module.moduleName : ""
+    property bool on: (module !== undefined) ? module.moduleEnabled : false
+
     property bool isHeaderVisible: true
 
     property Component contentItem
@@ -87,7 +88,15 @@ Rectangle {
         onClicked:
         {
             material.start(mouseX, mouseY)
-            sgModuleOnOf()
+
+            if(module !== undefined)
+            {
+                module.moduleEnabled = !module.moduleEnabled
+            }
+            else
+            {
+                sgModuleOnOf();
+            }
         }
     }
 

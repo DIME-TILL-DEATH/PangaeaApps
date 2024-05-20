@@ -11,8 +11,7 @@ Rectangle
 {
     id: main
 
-    property bool on: true
-    property int paramType: DeviceParameter.EQ_ON
+    property bool on: EqResponse.moduleEnabled
 
     property int currentBandIndex
 
@@ -188,7 +187,7 @@ Rectangle
                     }
                 }
 
-                EqDial{
+                ParameterDial{
                     id: dialFreq
                     controlValue: EqResponse.EqBands[currentBandIndex].Fc
 
@@ -196,12 +195,12 @@ Rectangle
                         EqResponse.EqBands[currentBandIndex].Fc.value = value
                     }
                 }
-                EqDial{
+                ParameterDial{
                     id: dialGain
 
                     controlValue: EqResponse.EqBands[currentBandIndex].gain
                 }
-                EqDial{
+                ParameterDial{
                     id: dialQ
 
                     step: 0.1
@@ -217,29 +216,14 @@ Rectangle
     }
 
     Connections{
-        target: UiCore
-
-        function onSgSetDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.EQ_ON)
-            {
-                main.update();
-            }
-        }
-
-        function onSetDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.EQ_ON)
-            {
-                main.update();
-            }
-        }
-    }
-
-    Connections{
         target: EqResponse
 
         function onPointsChanged()
+        {
+            main.update();
+        }
+
+        function onModuleEnabledChanged()
         {
             main.update();
         }

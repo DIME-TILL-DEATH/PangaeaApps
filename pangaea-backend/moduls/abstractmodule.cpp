@@ -1,17 +1,14 @@
 #include "abstractmodule.h"
 
-AbstractModule::AbstractModule(Core *core, DeviceParameter::Type parameterTypeModuleOn, QObject *parent)
+AbstractModule::AbstractModule(Core *core, QString name, DeviceParameter::Type parameterTypeModuleOn, QObject *parent)
     : QObject{parent},
+    m_moduleName{name},
     m_parameterTypeModuleOn{parameterTypeModuleOn}
 {
     connect(this, &AbstractModule::sgSetDeviceParameter, core, &Core::slSetDeviceParameter);
     connect(core, &Core::sgRecieveDeviceParameter, this, &AbstractModule::slSetUiDeviceParameter);
 }
 
-bool AbstractModule::moduleEnabled() const
-{
-    return m_moduleEnabled;
-}
 
 void AbstractModule::setModuleEnabled(bool newEnabled)
 {
@@ -30,4 +27,14 @@ void AbstractModule::slSetUiDeviceParameter(DeviceParameter::Type deviceParamete
         emit moduleEnabledChanged();
     }
     emit sgSetUiDeviceParameter(deviceParameterType, value);
+}
+
+bool AbstractModule::moduleEnabled() const
+{
+    return m_moduleEnabled;
+}
+
+QString AbstractModule::moduleName() const
+{
+    return m_moduleName;
 }

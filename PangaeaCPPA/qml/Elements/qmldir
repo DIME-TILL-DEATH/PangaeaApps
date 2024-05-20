@@ -4,7 +4,7 @@ BankSpin    1.0 BankSpin.qml
 CheckText   1.0 CheckText.qml
 Dial        1.0 Dial.qml
 Eq          1.0 Eq.qml
-EqDial      1.0 EqDial.qml
+ParameterDial      1.0 ParameterDial.qml
 EqPoint     1.0 EqPoint.qml
 ILDelegate  1.0 ILDelegate.qml
 ILHighlight 1.0 ILHighlight.qml

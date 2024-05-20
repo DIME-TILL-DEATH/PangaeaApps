@@ -9,11 +9,14 @@ class AbstractModule : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool moduleEnabled READ moduleEnabled WRITE setModuleEnabled NOTIFY moduleEnabledChanged FINAL)
+    Q_PROPERTY(QString moduleName READ moduleName CONSTANT)
 public:
-    explicit AbstractModule(Core* core, DeviceParameter::Type parameterTypeModuleOn, QObject *parent = nullptr);
+    explicit AbstractModule(Core* core, QString name, DeviceParameter::Type parameterTypeModuleOn, QObject *parent = nullptr);
 
     bool moduleEnabled() const;
     void setModuleEnabled(bool newEnabled);
+
+    QString moduleName() const;
 
 signals:
     void sgSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
@@ -27,6 +30,7 @@ public slots:
 
 private:
     bool m_moduleEnabled;
+    QString m_moduleName;
     DeviceParameter::Type m_parameterTypeModuleOn;
 };
 

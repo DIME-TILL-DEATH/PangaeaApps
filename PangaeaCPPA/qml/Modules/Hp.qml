@@ -15,7 +15,7 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        paramType: main.paramType
+        // paramType: main.paramType
 
         on: main.on
 
