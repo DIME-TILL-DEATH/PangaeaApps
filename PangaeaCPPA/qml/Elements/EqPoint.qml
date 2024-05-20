@@ -57,22 +57,26 @@ Rectangle{
         drag.maximumY: root.parent.height/2 + 15 * root.parent.height/gainRange - root.height/2
 
         drag.smoothed: false
-        // drag.threshold: 3
 
         onPressed: {
             pointSelected(index);
         }
 
         onWheel: function(wheel){
-            if(EqResponse.EqBands[currentBandIndex].Q.value>0.1 & wheel.angleDelta.y<0)
+            var resultQ = EqResponse.EqBands[currentBandIndex].Q.value;
+
+            if(wheel.angleDelta.y < 0)
             {
-                EqResponse.EqBands[currentBandIndex].Q.value -= 0.1
+                resultQ *= 0.9;
+                if(resultQ < EqResponse.EqBands[currentBandIndex].Q.minValue) resultQ = EqResponse.EqBands[currentBandIndex].Q.minValue;
             }
 
-            if(EqResponse.EqBands[currentBandIndex].Q.value<20 & wheel.angleDelta.y>0)
+            if(wheel.angleDelta.y > 0)
             {
-                EqResponse.EqBands[currentBandIndex].Q.value += 0.1
+                resultQ *= 1.1;
+                if(resultQ > EqResponse.EqBands[currentBandIndex].Q.maxValue) resultQ = EqResponse.EqBands[currentBandIndex].Q.maxValue;
             }
+            EqResponse.EqBands[currentBandIndex].Q.value = resultQ;
         }
     }
 }

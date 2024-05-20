@@ -181,8 +181,8 @@ Item
                         var delta2 = pinch.point2.x - pinch.startPoint2.x
 
                         var resultQ = startPinchQ / pinch.scale;
-                        if(resultQ > 20) resultQ = 20;
-                        if(resultQ < 0.1) resultQ = 0.1;
+                        if(resultQ > EqResponse.EqBands[currentBandIndex].Q.maxValue) resultQ = EqResponse.EqBands[currentBandIndex].Q.maxValue;
+                        if(resultQ < EqResponse.EqBands[currentBandIndex].Q.minValue) resultQ = EqResponse.EqBands[currentBandIndex].Q.minValue;
 
                         EqResponse.EqBands[currentBandIndex].Q.value = resultQ
                     }
