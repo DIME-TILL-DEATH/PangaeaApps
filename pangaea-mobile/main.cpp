@@ -63,7 +63,6 @@ int main(int argc, char *argv[])
     signal(SIGILL, manageSegFailure);
 
     QGuiApplication app(argc, argv);
-//    QApplication app(argc, argv);
 
     app.setOrganizationName("AMT");
     app.setOrganizationDomain("amtelectronics.com");
@@ -72,6 +71,8 @@ int main(int argc, char *argv[])
     Logger log;
     log.setAsMessageHandlerForApp();
     appLogger_ptr = &log;
+
+    qDebug() << "App version: " << app.applicationVersion();
 
     Core* core = new Core;
     NetCore* netCore = new NetCore;
