@@ -23,6 +23,8 @@ class DeviceProperties : public QObject
     Q_PROPERTY(quint8 bank READ bank WRITE setBank NOTIFY bankChanged FINAL)
     Q_PROPERTY(quint8 preset READ preset WRITE setPreset NOTIFY presetChanged FINAL)
 
+    Q_PROPERTY(quint8 outputMode READ outputMode NOTIFY outputModeChanged FINAL)
+
     Q_PROPERTY(quint8 la3CleanPreset READ la3CleanPreset NOTIFY la3CleanPresetChanged FINAL)
     Q_PROPERTY(quint8 la3DrivePreset READ la3DrivePreset NOTIFY la3DrivePresetChanged FINAL)
 public:
@@ -50,6 +52,8 @@ public:
     quint8 la3CleanPreset() const;
     quint8 la3DrivePreset() const;
 
+    quint8 outputMode() const {return m_outputMode;};
+
 signals:
 
     void presetNotSaved(quint8 newBank, quint8 newPreset);
@@ -68,6 +72,8 @@ signals:
     void la3CleanPresetChanged();
     void la3DrivePresetChanged();
 
+    void outputModeChanged();
+
 public slots:
     void slSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
     void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
@@ -83,6 +89,7 @@ private:
     quint8 m_preset;
     quint8 m_la3CleanPreset;
     quint8 m_la3DrivePreset;
+    quint8 m_outputMode;
 };
 
 #endif // DEVICEPROPERTIES_H

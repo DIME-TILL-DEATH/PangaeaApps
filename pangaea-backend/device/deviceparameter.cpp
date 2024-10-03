@@ -71,6 +71,8 @@ QString DeviceParameter::sendString(Type parameterType, quint8 value)
     case Type::PRESENCE_VOLUME: fullString += "pv"; break;
 
     case Type::EQ_PRE: fullString += "eqp"; break;
+
+    case Type::OUTPUT_MODE: fullString +="gm"; break;
     default: return "";
     }
 
