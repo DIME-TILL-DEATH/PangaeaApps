@@ -1,8 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.15
-//import Qt.labs.platform 1.1 as Labs
-//import QtQuick.Dialogs 1.3
 
 import StyleSettings 1.0
 
@@ -21,17 +19,16 @@ Item
     property int mode: 0
 
     property bool copyFirst: false
-    property bool presetEdited: false
+    property bool presetEdited: DeviceProperties.presetModified
 
-    property bool compareState: false
-
-    property alias bank : _bank
-    property alias preset : _preset
+    property bool compareState: AppProperties.compareState
 
     property int borderSpacings : Style.mainSpacing
 
     signal exportPreset()
     signal importPreset()
+
+    signal openPresetsList()
 
     Row
     {
@@ -42,15 +39,14 @@ Item
 
         spacing: borderSpacings
 
-        PresetBankSpin
+        BankSpin
         {
-            id: _bank
-
             width:  parent.width*1/6 - _row.spacing
             height: parent.height
 
-            text: qsTr("BANK")
-            nameValue: "bank"
+            visible: !DeviceProperties.isLa3Mode
+
+            onOpenPresetsList: _root.openPresetsList();
         }
 
         GridLayout
@@ -84,7 +80,7 @@ Item
                     onMbPressed:
                     {
                         mode = 0;
-                        UiCore.setParameter("output_mode", mode);
+                        UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
                     }
                 }
 
@@ -99,7 +95,7 @@ Item
                     onMbPressed:
                     {
                         mode = 2;
-                        UiCore.setParameter("output_mode", mode);
+                        UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
                     }
                 }
 
@@ -114,7 +110,7 @@ Item
                     onMbPressed:
                     {
                         mode = 1;
-                        UiCore.setParameter("output_mode", mode);
+                        UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
                     }
                 }
             }
@@ -132,7 +128,7 @@ Item
 
                     //: Button text. Export preset
                     textButton: qsTr("Export")
-                    enabled: !_root.compareState
+                    enabled: !AppProperties.compareState
 
                     onMbPressed: {
                         if(_root.presetEdited)
@@ -150,14 +146,14 @@ Item
                     // Почему-то именно кнопка save при смене своего состояния
                     // через свойство "enabled" отключала обновление SwipeView до любого следующего действия
                     // поэтому добавлено своё свойство "enabled" отключающее только нужные свойства
-                    enabledKostyl: _root.presetEdited & !_root.compareState
+                    enabledKostyl: _root.presetEdited & !AppProperties.compareState
 
                     //: Button text. Save preset
                     textButton: qsTr("Save")
 
                     onMbPressed:
                     {
-                        UiCore.setParameter("save_change", (-1));
+                        DeviceProperties.saveChanges();
                     }
                 }
                 MButton
@@ -168,11 +164,11 @@ Item
                     Layout.fillHeight: true
 
                     enabled: _root.presetEdited
-                    highlighted: _root.compareState
+                    highlighted: AppProperties.compareState
 
                     //: Button text. Compare preset
                     textButton: qsTr("Comp")
-                    onMbPressed: UiCore.setParameter("compare", 0);
+                    onMbPressed: AppProperties.comparePreset();
                 }
             }
 
@@ -189,7 +185,7 @@ Item
 
                     //: Button text. Import preset
                     textButton: qsTr("Import")
-                    enabled: !_root.compareState
+                    enabled: !AppProperties.compareState
 
                     onMbPressed:
                     {
@@ -204,11 +200,11 @@ Item
 
                     //: Button text. Copy preset.
                     textButton: qsTr("Copy")
-                    enabled: !_root.compareState
+                    enabled: !AppProperties.compareState
 
                     onMbPressed:
                     {
-                        UiCore.setParameter("copy", 0);
+                        AppPropertis.copyPreset();
                         copyFirst=true;
                     }
                 }
@@ -219,11 +215,11 @@ Item
 
                     //: Button text. Paste preset
                     textButton: qsTr("Paste")
-                    enabled: copyFirst & !_root.compareState
+                    enabled: copyFirst & !AppProperties.compareState
 
                     onMbPressed:
                     {
-                        UiCore.setParameter("paste", 0)
+                        AppPropertis.pastePreset();
                     }
                 }
             }
@@ -239,53 +235,30 @@ Item
 
         }
 
-        PresetBankSpin
+        LA3ModeSpin
         {
-            id: _preset
+            width:  parent.width*1/6 - _row.spacing
+            height: parent.height
 
+            visible: DeviceProperties.isLa3Mode
+        }
+
+        PresetSpin
+        {
             width:  parent.width*1/6 -_row.spacing
             height: parent.height
 
-            text: qsTr("PRESET")
-            nameValue: "preset"
+            onOpenPresetsList: _root.openPresetsList();
         }
     }
-
-////    FileDialog{
-////        id: exportPresetFileDialog
-
-////        modality: Qt.WindowModal
-
-////        selectExisting:  false
-////        selectMultiple: false
-
-////        folder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.GenericDataLocation)
-
-////        defaultSuffix: "pst"
-////        nameFilters: ["Firmware files (*.pst)"]
-////        onAccepted:
-////        {
-////            UiCore.exportPreset(exportPresetFileDialog.fileUrl);
-////        }
-////    }
 
     Connections{
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, inValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === "output_mode")
-                mode = inValue;
-
-            if(nameParam === "preset_edited")
-            {
-                _root.presetEdited = inValue;
-            }
-
-            if(nameParam === "compare_state")
-            {
-                _root.compareState = inValue;
-            }
+            if(paramType === DeviceParameter.OUTPUT_MODE)
+                mode = value;
         }
     }
 

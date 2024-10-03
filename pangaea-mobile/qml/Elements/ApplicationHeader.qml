@@ -5,25 +5,23 @@ import QtQuick.Window 2.0
 import StyleSettings 1.0
 
 import CppObjects
+import CppEnums
 
 ToolBar
 {
     id: _root
 
-    property string devName: ""
-    property string version: Qt.application.version//UiCore.appVersion()
     property string firmwareVersion: ""
 
-    property string devNameStr: devName==""?"":devName
-    property string versionStr: version==""?"":"/Application ver: " + version
-    property string firmwareVersionStr: firmwareVersion=="" ? "":" Firmware ver." + firmwareVersion
+    property string versionStr: Qt.application.version == "" ? "" : "Application ver: " + Qt.application.version
+    property string firmwareVersionStr: firmwareVersion == "" ? "":" Firmware ver." + firmwareVersion
 
-//    property string  poVersion: "Pangaea " + devNameStr + versionStr + firmwareVersionStr
-    property string  poVersion: "Pangaea " + devNameStr + firmwareVersionStr + versionStr
+    property string  poVersion: (connected ? "Pangaea " +  (DeviceProperties.firmwareName + firmwareVersionStr + "/") : "")
+                                + versionStr
 
     height:  Screen.desktopAvailableHeight / 75
 
-    signal menuClicked() // Сигнал, который сообщит о клике по кнопке меню
+    signal menuClicked()
 
     Rectangle
     {
@@ -56,24 +54,10 @@ ToolBar
         }
     }
 
+
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            // TODO: свести все названия в одно место class Device/DeviceDescription
-            if(nameParam === ("type_dev"))
-            {
-                switch (inValue)
-                {
-                case 0: devName = "";  break;
-                case 1: devName = "CP-100";  break;
-                case 2: devName = "CP-16M Blue";  break;
-                case 3: devName = "CP-16M-PA Green"; break;
-                case 4: devName = "CP-100PA"; break;
-                }
-            }
-        }
 
         function onSgSetUIText(nameParam, value)
         {

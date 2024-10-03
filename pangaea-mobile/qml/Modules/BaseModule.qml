@@ -10,15 +10,17 @@ import CppObjects
 Rectangle {
     id: _main
 
-    property string moduleName: "Module name"
+    property bool disabled: AppProperties.compareState
+
+    property string moduleName: module !== undefined ? module.moduleName : ""
     property string moduleDescription: "Description"
-    property string nameValue
+    //property string nameValue
 
     property bool showDescription : true
 
     property Component contentItem
 
-    property bool disabled: false
+    property Module module
 
     signal sgModuleOnOf()
 
@@ -156,11 +158,16 @@ Rectangle {
             }
             MouseArea{
                 anchors.fill: parent
-
                 z: 5
                 onClicked: {
-                    sgModuleOnOf()
-                    UiCore.setParameter(_main.parent.nameValue, _main.parent.on) // Или хранить переменную внутри? Для меньшей связанности
+                    if(module !== null)
+                    {
+                        module.moduleEnabled = !module.moduleEnabled
+                    }
+                    else
+                    {
+                        sgModuleOnOf();
+                    }
                 }
             }
         }
@@ -195,18 +202,6 @@ Rectangle {
 
                     sourceComponent: contentItem
                 }
-            }
-        }
-    }
-
-    Connections{
-        target: UiCore
-
-        function onSgSetUIParameter(parameterName, inValue)
-        {
-            if(parameterName === "compare_state")
-            {
-                _main.disabled = inValue
             }
         }
     }

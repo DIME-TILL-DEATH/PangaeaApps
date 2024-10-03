@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/languages"/>
+    <qresource prefix="/">
+        <file>translations/pangaea-mobile_de.qm</file>
+        <file>translations/pangaea-mobile_en.qm</file>
+        <file>translations/pangaea-mobile_it.qm</file>
+        <file>translations/pangaea-mobile_ru.qm</file>
+    </qresource>
+</RCC>

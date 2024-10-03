@@ -11,7 +11,7 @@
         <file>qml/Elements/MButton.qml</file>
         <file>qml/Elements/MText.qml</file>
         <file>qml/Elements/Pot.qml</file>
-        <file>qml/Elements/Presets.qml</file>
+        <file>qml/Elements/PresetSpin.qml</file>
         <file>qml/Elements/Switch2.qml</file>
         <file>qml/Elements/Switch3.qml</file>
         <file>qml/Elements/SwitchEqMap.qml</file>
@@ -27,7 +27,6 @@
         <file>qml/Modules/Er.qml</file>
         <file>qml/Modules/Ng.qml</file>
         <file>qml/Modules/Hp.qml</file>
-        <file>qml/Modules/InOut.qml</file>
         <file>qml/Modules/Ir.qml</file>
         <file>qml/Modules/Lp.qml</file>
         <file>qml/Modules/Map.qml</file>
@@ -65,5 +64,12 @@
         <file>qml/Images/bluetooth-icon.svg</file>
         <file>qml/Images/usb-icon.svg</file>
         <file>qml/Layouts/StartLayout.qml</file>
+        <file>qml/Elements/SignalBar.qml</file>
+        <file>qml/Modules/In.qml</file>
+        <file>qml/Modules/Out.qml</file>
+        <file>qml/Modules/EqParametric.qml</file>
+        <file>qml/Elements/EqPoint.qml</file>
+        <file>qml/Elements/ParameterDial.qml</file>
+        <file>qml/Elements/BankSpin.qml</file>
     </qresource>
 </RCC>

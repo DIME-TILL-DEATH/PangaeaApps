@@ -8,7 +8,7 @@ Item
     id: main
 
     property string name: "LP"
-    property string nameValue: "lpf_on"
+    property int paramType: DeviceParameter.LPF_ON
 
     property bool on
 
@@ -16,7 +16,7 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        // paramType: main.paramType
 
         on: main.on
 
@@ -45,7 +45,7 @@ Item
                 enabled: main.on
                 name: "1k Hz 20k"
                 checkable: false
-                nameValue: "lpf_volume"
+                paramType: DeviceParameter.LPF_VOLUME
 
                 angleMin: 140
                 angleMax: -140
@@ -67,11 +67,11 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=nameValue
+                main.on = value;
             }
         }
     }
@@ -81,6 +81,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

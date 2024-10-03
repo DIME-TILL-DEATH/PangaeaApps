@@ -18,25 +18,42 @@ Core::Core(QObject *parent) : QObject(parent)
     appSettings = new QSettings();
 #endif
 
-    QObject::connect(&deviceControls, &DeviceControls::sgSetInterfaceValue, this, &Core::sgSetUIParameter);
+    timeoutTimer = new QTimer(this);
+    connect(timeoutTimer, &QTimer::timeout, this, &Core::recieveTimeout);
 
-    timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &Core::recieveTimeout);
+    indicationTimer = new QTimer(this);
+    indicationTimer->setInterval(10000);
+    connect(indicationTimer, &QTimer::timeout, this, &Core::indicationRequest);
 }
 
 
 void Core::slReadyToDisconnect()
 {
-    timer->stop();
+    timeoutTimer->stop();
+    indicationTimer->stop();
+
     commandsPending.clear();
-    enableRecieve = true;
+    recieveEnabled = true;
 
     emit sgReadyTodisconnect();
 }
 
+void Core::slInterfaceConnected(DeviceDescription interfaceDescription)
+{
+    switch (interfaceDescription.connectionType())
+    {
+    case DeviceConnectionType::BLE:
+        indicationTimer->setInterval(1000);
+        break;
+    default:
+        indicationTimer->setInterval(20);
+        break;
+    }
+    readAllParameters();
+}
+
 void Core::parseInputData(QByteArray ba)
 {
-    qDebug() << "->" << __FUNCTION__ << ":" << ba;
 
     if(bytesToRecieve > 0)
     {
@@ -46,13 +63,19 @@ void Core::parseInputData(QByteArray ba)
 
     updateProgressBar();
 
+    lastRecievedData += ba;
     commandWorker.parseAnswers(ba);
 
     while(commandWorker.haveAnswer())
     {
+        lastRecievedData.clear();
+
+        if(commandWorker.displayNextAnswer())
+            qInfo() << "->" << __FUNCTION__ << ":" << ba;
+
         DeviceAnswer recievedCommand = commandWorker.popAnswer();
         QList<QByteArray> parseResult = recievedCommand.parseResult();
-        enableRecieve = recievedCommand.isEnableRecieve();
+        recieveEnabled = recievedCommand.isEnableRecieve();
 
         switch(recievedCommand.answerType())
         {
@@ -65,11 +88,18 @@ void Core::parseInputData(QByteArray ba)
 
                     if(controlledDevice.deviceType() == DeviceType::CP16 || controlledDevice.deviceType() == DeviceType::CP16PA)
                     {
-                        pushCommandToQueue("sw4 disable");
+                        pushCommandToQueue("sw4 disable"); // disable hardware switches
                     }
 
-                    emit sgSetUIParameter("type_dev", deviceType);
-                    emit sgSetUIParameter("set_max_map", controlledDevice.maxBankPresetCount()); //TODO for mobile?
+                    if(controlledDevice.deviceType() == DeviceType::LA3PA || controlledDevice.deviceType() == DeviceType::LA3RV)
+                    {
+                        // request LA3 maps
+                        pushCommandToQueue("sm0");
+                        pushCommandToQueue("sm1");
+                    }
+
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::DEVICE_TYPE, deviceType);
+
                     qInfo() << recievedCommand.description();
                 }
                 break;
@@ -101,21 +131,24 @@ void Core::parseInputData(QByteArray ba)
                     qDebug() << "version control, minimal: " << controlledDevice.minimalFirmware()->firmwareVersion()
                                << " actual: " << controlledDevice.actualFirmware()->firmwareVersion();
 
-                    if(*controlledDevice.minimalFirmware() > *controlledDevice.actualFirmware())
-                    {
-                        qWarning() << "firmware insufficient!";
-                        emit sgFirmwareVersionInsufficient(controlledDevice.minimalFirmware(), controlledDevice.actualFirmware());
-                    }
-                    else
+                    if(controlledDevice.isFimwareSufficient())
                     {
                         bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
 
                         if(isCheckUpdatesEnabled)
                         {
-                           emit sgRequestNewestFirmware(deviceFirmware);
+                            emit sgRequestNewestFirmware(deviceFirmware);
                         }
                     }
+                    else
+                    {
+                        qWarning() << "firmware insufficient!";
+                        emit sgFirmwareVersionInsufficient(controlledDevice.minimalFirmware(), controlledDevice.actualFirmware());
+                    }
                     emit sgSetUIText("devVersion", deviceFirmware->firmwareVersion());
+
+                    qDebug() << "Firmware can indicate:" << controlledDevice.isFirmwareCanIndicate();
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::FIRMWARE_CAN_INDICATE, controlledDevice.isFirmwareCanIndicate());
                 }
                 break;
             }
@@ -165,11 +198,36 @@ void Core::parseInputData(QByteArray ba)
                             }
                         }
 
-                        deviceControls.setParametersFromRaw(baPresetData);
-                        deviceControls.setAllUIValues();
+                        quint8 count=0;
+                        quint8 nomByte=0;
+                        QString sss;
 
-                        emit sgSetUIParameter("preset_edited",   isPresetEdited);
-                        emit sgSetUIParameter("editable",      bEditable); // TODO отличается от мобильного
+                        foreach(QChar val, baPresetData) //quint8
+                        {
+                            if((nomByte&1)==0)
+                            {
+                                sss.clear();
+                                sss.append(val);
+                            }
+                            else
+                            {
+                                sss.append(val);
+
+                                DeviceParameter::Type paramType = static_cast<DeviceParameter::Type>(count);
+                                if(DeviceParameter::isSigned(paramType))
+                                {
+                                    emit sgRecieveDeviceParameter(paramType, (qint8)sss.toInt(nullptr, 16));
+                                }
+                                else
+                                {
+                                    emit sgRecieveDeviceParameter(paramType, (qint16)sss.toInt(nullptr, 16));
+                                }
+                                count++;
+                            }
+                            nomByte++;
+                        }
+
+                        emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
                     }
                 }
                 break;
@@ -186,8 +244,8 @@ void Core::parseInputData(QByteArray ba)
 
                         currentPreset.setBankPreset(static_cast<quint8>(bank), static_cast<quint8>(preset));
 
-                        emit sgSetUIParameter("bank",  currentPreset.bankNumber());
-                        emit sgSetUIParameter("preset", currentPreset.presetNumber());
+                        emit sgRecieveDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
+                        emit sgRecieveDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
 
                         qInfo() << recievedCommand.description() << "bank:" << bank << "preset:" << preset;
                     }
@@ -195,12 +253,44 @@ void Core::parseInputData(QByteArray ba)
                 break;
             }
 
+            case AnswerType::la3CleanPreset:
+            {
+                if(parseResult.size()==1)
+                {
+                    quint8 bankPreset = parseResult.at(0).toUInt();
+
+                    qInfo() << "LA3 clean preset mapping: " << bankPreset;
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_CLEAN_PRESET, bankPreset);
+                }
+                break;
+            }
+
+            case AnswerType::la3DrivePreset:
+            {
+                if(parseResult.size()==1)
+                {
+                    quint8 bankPreset = parseResult.at(0).toUInt();
+                    qInfo() << "LA3 drive preset mapping: " << bankPreset;
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_DRIVE_PRESET, bankPreset);
+                }
+                break;
+            }
+
+            case AnswerType::la3ModeChange:
+            {
+                qInfo() << recievedCommand.description();
+
+                pushReadPresetCommands();
+                pushCommandToQueue("rns\n");
+                processCommands();
+            }
+
             case AnswerType::getOutputMode:
             {
                 if(parseResult.size()==1)
                 {
                     quint8 mode = parseResult.at(0).toUInt();
-                    emit sgSetUIParameter("output_mode",  mode);
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::OUTPUT_MODE, mode);
                     qInfo() << recievedCommand.description();
                 }
                 break;
@@ -225,7 +315,7 @@ void Core::parseInputData(QByteArray ba)
 
                     currentLitedPreset.setBankPreset(bankNumber, presetNumber);
 
-                    if(presetNumber == controlledDevice.maxBankPresetCount()-1)
+                    if(presetNumber == controlledDevice.maxBankCount()-1)
                     {
                         presetNumber = 0;
                         bankNumber++;
@@ -334,7 +424,7 @@ void Core::parseInputData(QByteArray ba)
                             currentPreset.setImpulseName(wavName);
                         }
                     }
-                    enableRecieve = false; // команда cc обрабатывается двумя парсерами. Этим и getIr при полном выполнении
+                        recieveEnabled = false; // команда cc обрабатывается двумя парсерами. Этим и getIr при полном выполнении
                 }
                 break;
             }
@@ -369,23 +459,48 @@ void Core::parseInputData(QByteArray ba)
                     default:{}
                 }
                 bytesToRecieve=0;
-                timer->start();
+
+                timeoutTimer->start();
+                indicationTimer->start();
+
                 qInfo() << recievedCommand.description();
+                break;
+            }
+
+            case AnswerType::indicationRequest:
+            {
+                recieveEnabled = false; // TODO waitAnswer?
+
+                //sqrt(ind_in_p[1])*(31.0/sqrt(8388607.0));
+
+                quint32 signalIn = parseResult.at(0).toInt();
+                quint32 signalOut = parseResult.at(1).toInt();
+                // quint32 signalOutR = parseResult.at(2).toInt();
+
+                // qDebug() << signalIn << signalOutL << signalOutR;
+
+                emit sgRecieveDeviceParameter(DeviceParameter::Type::SIGNAL_IN, signalIn);
+                emit sgRecieveDeviceParameter(DeviceParameter::Type::SIGNAL_OUT, signalOut);
+                // emit sgSetUiDeviceParameter(DeviceParameter::Type::SIGNAL_OUT_R, signalOutR);
                 break;
             }
 
             case AnswerType::ccAck:
             {
                 emit sgSetUIParameter("ir_upload_finished", true);
-                enableRecieve=false;
-                timer->stop(); // wait for impulse apllying (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
+                recieveEnabled=false;
+
+                timeoutTimer->stop(); // wait for impulse apllying (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
+                indicationTimer->stop();
+
                 qInfo() << recievedCommand.description();
                 break;
             }
 
             case AnswerType::ccEND:
             {
-                timer->start();
+                timeoutTimer->start();
+                indicationTimer->start();
 
                 qInfo() << recievedCommand.description();
                 presetManager.returnToPreviousState();
@@ -394,7 +509,8 @@ void Core::parseInputData(QByteArray ba)
 
             case AnswerType::ccError:
             {
-                timer->start();
+                timeoutTimer->start();
+                indicationTimer->start();
 
                 emit sgSetUIText("impulse_save_error", currentPreset.impulseName());
 
@@ -407,7 +523,7 @@ void Core::parseInputData(QByteArray ba)
             {
                 if(!fwUpdate)
                 {
-                    enableRecieve = false;
+                    recieveEnabled = false;
                 }
                 qInfo() << recievedCommand.description();
                 break;
@@ -426,7 +542,7 @@ void Core::parseInputData(QByteArray ba)
                 if(fwUpdate)
                 {
                     emit sgSetUIParameter("fw_update_enabled", false);
-                    emit sgSetUIParameter("slider_enabled", 1);
+                    fwUpdate = false;
                 }
                 else
                 {
@@ -434,7 +550,6 @@ void Core::parseInputData(QByteArray ba)
                     emit sgSetUIParameter("format_complete", true);
                 }
                 qInfo() << recievedCommand.description();
-                emit sgSetUIParameter("slider_enabled", 1);
                 emit sgImmediatelyDisconnect();
                 break;
             }
@@ -468,7 +583,7 @@ void Core::parseInputData(QByteArray ba)
             }
         }
 
-        if(enableRecieve)
+        if(recieveEnabled)
         {
             if(commandsSended.length()>0)
                 commandsSended.removeFirst();
@@ -524,7 +639,7 @@ void Core::setImpulse(QString filePath)
         qDebug("$$$$$ %s %d", __FUNCTION__, __LINE__);
 
         isPresetEdited = true;
-        emit sgSetUIParameter ("preset_edited", isPresetEdited);
+        emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
 
         irWorker.decodeWav(filePath);
 
@@ -594,7 +709,7 @@ void Core::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QStr
     pushCommandToQueue(baSend);
 
     // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
-    emit sgSetUIParameter("cabinet_enable", true);
+    emit sgRecieveDeviceParameter(DeviceParameter::Type::CABINET_ENABLE, true);
 
     processCommands();
 }
@@ -635,11 +750,10 @@ void Core::uploadFirmware(QByteArray firmware)
         const uint32_t sizeBlock = 1024;
 
         emit sgSetUIParameter("fw_update_enabled", true);
-        emit sgSetUIParameter("slider_enabled", 0);
-        timer->setInterval(1000);
+        timeoutTimer->setInterval(1000);
 
         fwUpdate = true;
-        enableRecieve = false;
+        recieveEnabled = false;
 
         QByteArray baSend;
         baSend.append("fwu\r");
@@ -662,21 +776,18 @@ void Core::uploadFirmware(QByteArray firmware)
     }
 }
 
-void Core::setPresetChange(quint8 inChangePreset)
-{    
-    if(isPresetEdited)
-        emit sgPresetChangeStage(inChangePreset);
-    else
-    {
-        doPresetChange(inChangePreset);
-    }
-}
-
-void Core::doPresetChange(quint8 val)
+void Core::changePreset(quint8 bank, quint8 preset)
 {
+    quint8 val = Preset::calcPresetFlatIndex(controlledDevice.deviceType(), bank, preset);
+
     isPresetEdited = false;
-    emit sgSetUIParameter ("preset_edited", isPresetEdited);
-    emit sgSetUIParameter ("compare_state", false);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
+
+    if(presetManager.currentState() == PresetState::Compare)
+    {
+        comparePreset();
+    }
+
     emit sgUpdatePreset(currentSavedPreset); // Обновить актуальный пресет перед переключением
 
     pushCommandToQueue(QString("pc %2").arg(val, 2, 16, QChar('0')).toUtf8());
@@ -700,7 +811,6 @@ void Core::saveChanges()
     {
         if(controlledDevice.deviceType()==DeviceType::CP16 || controlledDevice.deviceType()==DeviceType::CP16PA)
             pushCommandToQueue("pwsd");
-//            pushCommandToQueue("preset_delete_wavs");
         else
             pushCommandToQueue("dcc");
 
@@ -716,16 +826,14 @@ void Core::saveChanges()
     currentSavedPreset = currentPreset;
     emit sgUpdatePreset(currentSavedPreset);
     isPresetEdited = false;
-    emit sgSetUIParameter ("preset_edited",  isPresetEdited);
-    bEditable = true;
-    emit sgSetUIParameter ("editable",      bEditable);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
 }
 
 void Core::comparePreset()
 {
     if(presetManager.currentState() != PresetState::Compare)
     {
-        emit sgSetUIParameter("compare_state", true);
+        emit sgSetAppParameter(AppParameter::COMPARE_STATE, true);
         pushCommandToQueue("gs\r\n");
         pushCommandToQueue("esc\r\n");
     }
@@ -734,7 +842,7 @@ void Core::comparePreset()
         presetManager.returnToPreviousState();
         setPresetData(currentPreset);
         uploadImpulseData(currentPreset.waveData(), true, currentPreset.impulseName());
-        emit sgSetUIParameter("compare_state", false);
+        emit sgSetAppParameter(AppParameter::COMPARE_STATE, false);
     }
     processCommands();
 }
@@ -766,7 +874,7 @@ void Core::importPreset(QString filePath, QString fileName)
     currentPreset = importedPreset;
 
     isPresetEdited = true;
-    emit sgSetUIParameter ("preset_edited", isPresetEdited);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
 }
 
 void Core::setPresetData(const Preset &preset)
@@ -839,110 +947,26 @@ void Core::pastePreset()
     currentPreset.setBankPreset(currentBankNumber, currentPresetNumber);
 
     isPresetEdited = true;
-    emit sgSetUIParameter ("preset_edited", isPresetEdited);
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
 }
 
 void Core::setParameter(QString name, quint8 value)
 {
-    qDebug() << "setParameter" << name << value;
-
-    if(name==("preset_change"))
-    {
-        setPresetChange(value);
-        return;
-    }
-
-    if(name=="fw_update_complete")
-    {
-        fwUpdate = false;
-        return;
-    }
-
-    if(name==("copy"))
-    {
-        copyPreset();
-        return;
-    }
-
-    if(name==("paste"))
-    {
-        pastePreset();
-        return;
-    }
-
-    if(name==("save_change"))
-    {
-        saveChanges();
-        return;
-    }
-
-    if(name==("compare"))
-    {
-        comparePreset();
-        return;
-    }
-
-    if(name==("set_preset_change"))
-    {
-        setPresetChange(value);
-        return;
-    }
-
-    if(name==("do_preset_change"))
-    {
-        doPresetChange(value);
-        return;
-    }
-
-    if(name == "call_preset_list")
-    {
-        pushCommandToQueue("rns");
-        processCommands();
-        return;
-    }
-
     QString sendStr;
 
-    if(name==("output_mode"))
-        sendStr = QString("gm %1\r\n").arg(value, 0, 16);
+    if(name==("esc")) sendStr = QString("esc\r\n");
 
-    if(name==("format"))
-    {
-        emit sgSetUIParameter("wait", true);
-        emit sgSetUIParameter("slider_enabled", 0);
-
-        isFormatting = true;
-        timer->setInterval(10000);
-
-        sendStr = QString("fsf\r\n");
-    }
-
-    if(name==("esc"))
-        sendStr = QString("esc\r\n");
-
+    //TODO: по коду оно вроде само выключает/включает. проверить на слух
     if(name=="pa-ps_linked_on")
     {
-        sendStr = deviceControls.getParameterSendString("presence_on", value);
-        sendStr += deviceControls.getParameterSendString("amp_on", value);
-    }
-
-    if(deviceControls.containsParameter(name))
-    {
-        sendStr = deviceControls.getParameterSendString(name, value);
-        isPresetEdited = true;
-        emit sgSetUIParameter ("preset_edited", isPresetEdited);
-    }
-
-    if(name=="cabinet_enable")
-    {
-        //TODO в device controls обновлять все поля пресета, а не только это
-        currentPreset.setIsIrEnabled(value);
+        sendStr = DeviceParameter::sendString(DeviceParameter::Type::PRESENCE_ON, value);
+        sendStr += DeviceParameter::sendString(DeviceParameter::Type::AMP_ON, value);
     }
 
     if(sendStr.length()>0)
     {
-        enableRecieve = false;
         emit sgWriteToInterface(sendStr.toUtf8());
+        recieveEnabled = false;
     }
     else
     {
@@ -950,16 +974,75 @@ void Core::setParameter(QString name, quint8 value)
     }
 }
 
+void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameters)
+{
+    switch(appParameterType)
+    {
+    case SAVE_CHANGES: saveChanges(); break;
+    case CHANGE_PRESET: changePreset(parameters.at(0).toInt(),parameters.at(1).toInt()); break;
+    case COPY_PRESET: copyPreset(); break;
+    case PASTE_PRESET: pastePreset(); break;
+    case COMPARE_PRESET: comparePreset(); break;
+
+    case FORMAT_FLASH:
+    {
+        emit sgSetUIParameter("wait", true);
+
+        isFormatting = true;
+        timeoutTimer->setInterval(10000);
+
+        emit sgWriteToInterface(QString("fsf\r\n").toUtf8());
+        recieveEnabled = false;
+        break;
+    }
+
+    case SET_LA3_MAPPINGS:
+    {
+        quint8 cleanPreset = parameters.at(0).toInt();
+        quint8 drivePreset = parameters.at(1).toInt();
+        pushCommandToQueue(QString("sm0 %2").arg(cleanPreset).toUtf8());
+        pushCommandToQueue(QString("sm1 %2").arg(drivePreset).toUtf8());
+        processCommands();
+        break;
+    }
+    // case CALL_PRESET_LIST:
+    // {
+    //     pushCommandToQueue("rns");
+    //     processCommands();
+    //     break;
+    // }
+    }
+}
+
+void Core::slSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
+{
+    QString sendStr = DeviceParameter::sendString(deviceParameterType, value);
+    isPresetEdited = true;
+    emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
+
+    recieveEnabled = false;
+
+    if(sendStr.size() > 0)
+        emit sgWriteToInterface(sendStr.toUtf8(), false);
+
+    if(deviceParameterType == DeviceParameter::Type::CABINET_ENABLE)
+    {
+        //TODO в rawData обновлять все поля пресета, а не только это
+        currentPreset.setIsIrEnabled(value);
+    }
+}
+
 void Core::restoreValue(QString name)
 {
     Q_UNUSED(name)
-    // TODO: добавить в Preset  объект DeviceControls. По имени находить позицию параметра в rawData и возвращать, устанавливая этот параметр
+    // TODO: добавить в Preset  объект ?DeviceControls?. По имени находить позицию параметра в rawData и возвращать, устанавливая этот параметр
     // и отдельно обрабатывать случай банка и пресета
     // пока костыль для отмены сохранения пресета!!!!!
 
-    if(name == "bank") emit sgSetUIParameter("bank", currentPreset.bankNumber());
 
-    if(name == "preset") emit sgSetUIParameter("preset", currentPreset.presetNumber());
+    if(name == "bank") emit sgRecieveDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
+
+    if(name == "preset") emit sgRecieveDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
 }
 
 void Core::readAllParameters()
@@ -969,15 +1052,13 @@ void Core::readAllParameters()
     pushCommandToQueue("amtdev");
     pushCommandToQueue("amtver");
 
-    pushCommandToQueue("rns");
-
     pushReadPresetCommands();
+
+    pushCommandToQueue("rns");
 
     pushCommandToQueue("gm");
 
     processCommands();
-
-    bEditable = true;
 }
 
 void Core::pushReadPresetCommands()
@@ -1005,8 +1086,8 @@ void Core::processCommands()
         }
         else
         {
-            chunckSize=128;
-            sleepTime=200; // lower values tends to disconnect on MacOs
+            chunckSize=16;
+            sleepTime=40; // lower values tends to disconnect on MacOs
         }
 
         if(commandToSend.length() > chunckSize)
@@ -1027,7 +1108,8 @@ void Core::processCommands()
 
         if(commandToSend.indexOf("cc\r\n")==0)
         {
-            timer->stop();
+            timeoutTimer->stop();
+            indicationTimer->stop();
         }
         else
         {
@@ -1036,7 +1118,8 @@ void Core::processCommands()
             {
                 timeoutInterval = 10000;
             }
-            timer->start(timeoutInterval);
+            timeoutTimer->start(timeoutInterval);
+            indicationTimer->start();
         }
     }
     else
@@ -1045,12 +1128,25 @@ void Core::processCommands()
     }
 }
 
+void Core::indicationRequest()
+{
+
+    // if(controlledDevice.isFirmwareCanIndicate())
+    // {
+    //     qDebug() << "Indication request";
+    //     emit sgWriteToInterface("iio\r\n", false);
+    // }
+    // else
+    // {
+        indicationTimer->stop();
+    // }
+}
+
 void Core::recieveTimeout()
 {
     if(isFormatting) // Format timeout
     {
         emit sgSetUIParameter("format_error", 1);
-        emit sgSetUIParameter("slider_enabled", 1);
         isFormatting = false;
     }
 
@@ -1058,16 +1154,18 @@ void Core::recieveTimeout()
     {
         QByteArray commandWithoutAnswer = commandsSended.first();
 
-        if(enableRecieve)
+        if(recieveEnabled)
         {
             sendCount = 0;
         }
         else
         {
             sendCount++;
-            qDebug() << "!!!!!!!!!!!!!!!!! recieve timeout !!!!!!!!!!!!!!!!!" << sendCount;
+            qInfo() << "!!!!!!!!!!!!!!!!! recieve timeout !!!!!!!!!!!!!!!!!" << sendCount;
+            qInfo() << "Data recieved, but not parsed: " << lastRecievedData;
+
             sendCommand(commandWithoutAnswer);
-            timer->setInterval(1000);
+            timeoutTimer->setInterval(1000);
 
             if(sendCount>3)
             {
@@ -1078,8 +1176,6 @@ void Core::recieveTimeout()
                 if(fwUpdate)
                 {
                     fwUpdate = false;
-                    //TODO что за slider_enabled в мобильном? wait заменяет?
-                    emit sgSetUIParameter("slider_enabled", 1);
                 }
 
                 commandsPending.clear();
@@ -1093,7 +1189,7 @@ void Core::recieveTimeout()
 void Core::sendCommand(QByteArray val)
 {  
     symbolsSended += val.size();
-    enableRecieve = false;
+    recieveEnabled = false;
     emit sgWriteToInterface(val);
 
     updateProgressBar();
@@ -1116,5 +1212,6 @@ void Core::sw4Enable()
 
 void Core::stopCore()
 {
-    timer->stop();
+    timeoutTimer->stop();
+    indicationTimer->stop();
 }

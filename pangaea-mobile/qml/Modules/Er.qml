@@ -11,7 +11,7 @@ Item
     id: main
 
     property bool on: true
-    property string nameValue: "early_on"
+    property int paramType: DeviceParameter.EARLY_ON
 
     property int currentType
 
@@ -34,8 +34,9 @@ Item
 
                 height: parent.height/2
                 width: parent.width
-                nameValue: "Early reflection"
-                nameParam: "early_volume"
+                name: "Early reflection"
+                paramType: DeviceParameter.EARLY_VOLUME
+
                 bottomLineEnabled: false
                 moduleOn: on        
 
@@ -50,40 +51,42 @@ Item
 
                 on: main.on
 
-                currentIndex: currentType
+                currentIndex: main.currentType
 
                 model: ["SHORT","MEDIUM","LONG"]
 
                 onActivated:
                 {
-                    UiCore.setParameter("early_type", currentIndex);
+                    UiCore.setDeviceParameter(DeviceParameter.EARLY_TYPE, currentIndex);
                 }
             }
         }
     }
 
+
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
                 main.on=value
-
             }
 
-            if(nameParam === "early_type")
+            if(paramType === DeviceParameter.EARLY_TYPE)
             {
-                main.currentType = value
+                main.currentType = value               
             }
         }
     }
+
     Connections{
         target: _baseModule
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 

@@ -12,26 +12,30 @@ class Device
 public:
     Device();
 
-    quint8 maxBankPresetCount() const;
 
     DeviceType deviceType() const;
     void setDeviceType(DeviceType newDeviceType);
 
-    bool isFimwareSUfficient();
+    bool isFimwareSufficient();
+    bool isFirmwareCanIndicate();
 
-    Firmware *actualFirmware() const;
-
+    Firmware *actualFirmware() const;   
     void setActualFirmware(Firmware *newActualFirmware);
 
     Firmware *minimalFirmware() const;
+
+    quint8 maxBankCount() const {return m_maxBankCount;};
+    quint8 maxPresetCount() const {return m_maxPresetCount;};
 
 private:
     DeviceType m_deviceType{DeviceType::UnknownDev};
 
     Firmware* m_actualFirmware{nullptr};
     Firmware* m_minimalFirmware{nullptr};
+    Firmware* m_indicationFirmware{nullptr};
 
-    quint8 m_maxBankPresetCount{0};
+    quint8 m_maxBankCount{0};
+    quint8 m_maxPresetCount{0};
 };
 
 #endif // DEVICE_H

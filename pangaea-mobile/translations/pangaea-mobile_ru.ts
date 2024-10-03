@@ -2,6 +2,17 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>BankSpin</name>
+    <message>
+        <source>MAP</source>
+        <translation>СПИСОК</translation>
+    </message>
+    <message>
+        <source>BANK</source>
+        <translation>БАНК</translation>
+    </message>
+</context>
+<context>
     <name>BusyScreen</name>
     <message>
         <source>Sending commands to device</source>
@@ -102,22 +113,22 @@
     </message>
 </context>
 <context>
-    <name>Eqs</name>
+    <name>EqPreview</name>
     <message>
         <source>EQ</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Equalizer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>PRE</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>POST</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -287,7 +298,7 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>MasterControls</name>
     <message>
         <source>BANK</source>
-        <translation>БАНК</translation>
+        <translation type="vanished">БАНК</translation>
     </message>
     <message>
         <source>Phones</source>
@@ -336,7 +347,7 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     </message>
     <message>
         <source>PRESET</source>
-        <translation>ПРЕСЕТ</translation>
+        <translation type="vanished">ПРЕСЕТ</translation>
     </message>
 </context>
 <context>
@@ -376,7 +387,18 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>PresetBankSpin</name>
     <message>
         <source>MAP</source>
+        <translation type="vanished">СПИСОК</translation>
+    </message>
+</context>
+<context>
+    <name>PresetSpin</name>
+    <message>
+        <source>MAP</source>
         <translation>СПИСОК</translation>
+    </message>
+    <message>
+        <source>PRESET</source>
+        <translation>ПРЕСЕТ</translation>
     </message>
 </context>
 <context>
@@ -709,6 +731,14 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <source>Device disconnected
 </source>
         <translation>Устройство отключено</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <source>Error while saving IR. Please, try to reload impulse.</source>
+        <translation>Ошибка при сохранении импульса. Пожалуйста, попробуйте пересохранить импульс.</translation>
     </message>
 </context>
 </TS>

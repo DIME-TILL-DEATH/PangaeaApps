@@ -8,7 +8,7 @@ Item
     id: main
 
     property string name:     "NG"
-    property string nameValue: "gate_on"
+    property int paramType: DeviceParameter.GATE_ON
 
     property bool on: true
 
@@ -16,7 +16,7 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        // paramType: main.paramType
 
         on: main.on
 
@@ -44,7 +44,7 @@ Item
                 enabled: main.on
                 name: "THRESH"
                 checkable: false
-                nameValue: "gate_threshold"
+                paramType: DeviceParameter.GATE_THRESHOLD
             }
 
             Dial
@@ -54,7 +54,7 @@ Item
                 enabled: main.on
                 name: "DECAY"
                 checkable: false
-                nameValue: "gate_decay"
+                paramType: DeviceParameter.GATE_DECAY
             }
 
             Item
@@ -68,11 +68,11 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=nameValue
+                main.on = value;
             }
         }
     }
@@ -83,6 +83,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

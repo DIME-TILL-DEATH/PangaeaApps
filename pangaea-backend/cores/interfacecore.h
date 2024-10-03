@@ -18,7 +18,8 @@ public:
 
     bool connectToDevice(DeviceDescription device);
     void disconnectFromDevice();
-    void writeToDevice(QByteArray data);
+    void writeToDevice(QByteArray data, bool logCommand = true);
+    void silentWriteToDevice(QByteArray data);
 
     void startScanning();
     void stopScanning();

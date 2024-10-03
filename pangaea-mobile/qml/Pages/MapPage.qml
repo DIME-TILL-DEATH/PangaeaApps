@@ -1,8 +1,5 @@
-import QtQuick 2.15//2.12
-import QtQuick.Controls 2.15//2.5
-//import Qt.labs.platform 1.1 as Labs
-//import QtQuick.Dialogs 1.3
-
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import StyleSettings 1.0
 
 import ControlGroups 1.0
@@ -10,15 +7,17 @@ import Modules 1.0
 import Elements 1.0
 
 import CppObjects
+import CppEnums
 
 Item
 {
     id: _main
 
-    // Multiply 16 = shift left for 4 bits
-    property int  presetNom: _masterControls.bank.value*16+_masterControls.preset.value
+    property bool isPaFirmware: true
 
-    property string devName: "CP-16"
+    property bool moduleVisible: false
+
+    // property string devName: "CP-16"
 
     property int countElements: 25
     property int masterControlsHeight: height*5/countElements
@@ -46,102 +45,182 @@ Item
 
         spacing: 2
 
+        enabled: !eqsExt.visible
+
         MasterControls{
             id: _masterControls
 
             width:  parent.width
             height: masterControlsHeight
-        }
 
-        Ng
-        {
-            width:  parent.width
-            height: _main.height*2/countElements - _moduleColumn.spacing
-        }
-        Cm
-        {
-            width:  parent.width
-            height: _main.height*2/countElements - _moduleColumn.spacing
-        }
-
-        Pr
-        {
-            width:  parent.width
-            height: _main.height*4/countElements - _moduleColumn.spacing
-        }
-
-        Pa
-        {
-            id: _paModule
-
-            width: parent.width
-            height: _main.height*4/countElements - _moduleColumn.spacing
-            visible: true
-        }
-
-        //TODO presence в PA это одно и то же. Обрабатывать одним модулем
-        Ps
-        {
-            id: _psModule
-
-            width:  parent.width
-            height: _main.height*1/countElements - _moduleColumn.spacing
-
-            visible: false
-        }
-        Ir
-        {
-            id: ir
-            width:  parent.width
-            height: _main.height*1/countElements - _moduleColumn.spacing
-        }
-        Hp
-        {
-            width:  parent.width
-            height: _main.height*1/countElements - _moduleColumn.spacing
-        }
-
-        Eqs
-        {
-            id: _eqsModule
-            eq1: eqsExt.eq1
-            eq2: eqsExt.eq2
-            eq3: eqsExt.eq3
-            eq4: eqsExt.eq4
-            eq5: eqsExt.eq5
-            q1: eqsExt.q1
-            q2: eqsExt.q2
-            q3: eqsExt.q3
-            q4: eqsExt.q4
-            q5: eqsExt.q5
-            name: "EQ"
-            width:  parent.width
-            height: _main.height*3/countElements - _moduleColumn.spacing
-            onExtVisible:
-            {
-                eqsExt.visible = true;
+            onOpenPresetsList: {
+                console.log("Open presets list");
+                _presetsList.open();
             }
         }
-        Lp
-        {
-            width:  parent.width
-            height: _main.height*1/countElements - _moduleColumn.spacing
-        }
 
-        Er
+        ListView
         {
-            width:  parent.width
-            height: _main.height*2/countElements - _moduleColumn.spacing
+            id: listViewModules
+            width: parent.width
+            height: parent.height - masterControlsHeight - _moduleColumn.spacing
+            spacing: 2
+
+            interactive: false
+            orientation: ListView.Vertical
+
+            model: modulesList
+
+            move: Transition {
+                 NumberAnimation { properties: "y"; duration: 250 }
+            }
+
+            displaced: Transition {
+                 NumberAnimation { properties: "y"; duration: 250 }
+             }
         }
+    }
+
+    ObjectModel
+    {
+        id: modulesList
+    }
+
+    Ng
+    {
+        id: ng
+        width:  listViewModules.width
+        height: _main.height*2/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+    Cm
+    {
+        id: cm
+        width:  listViewModules.width
+        height: _main.height*2/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    Pr
+    {
+        id: pr
+        width:  listViewModules.width
+        height: _main.height*4/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    Pa
+    {
+        id: pa
+
+        width: listViewModules.width
+        height: _main.height*4/countElements - _moduleColumn.spacing
+        visible: moduleVisible & isPaFirmware
+    }
+
+    Ps
+    {
+        id: ps
+
+        width:  listViewModules.width
+        height: _main.height*1/countElements - _moduleColumn.spacing
+
+        visible: moduleVisible & (!isPaFirmware)
+    }
+    Ir
+    {
+        id: ir
+        width:  listViewModules.width
+        height: _main.height*1/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+    Hp
+    {
+        id: hp
+        width:  listViewModules.width
+        height: _main.height*1/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    EqPreview
+    {
+        id: eq
+
+        width:  listViewModules.width
+        height: _main.height*3/countElements - _moduleColumn.spacing
+
+        property int prePositionIndex: 2
+        property int postPositionIndex: 6
+        property bool isPrePosition: (ObjectModel.index === prePositionIndex)
+        isPrePostVisible: _main.isPaFirmware
+
+        onExtVisible:
+        {
+            eqsExt.visible = true;
+        }
+        visible: moduleVisible
+    }
+
+    Lp
+    {
+        id: lp
+        width:  listViewModules.width
+        height: _main.height*1/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    Er
+    {
+        id: er
+        width:  listViewModules.width
+        height: _main.height*2/countElements - _moduleColumn.spacing
+        visible: moduleVisible
+    }
+
+    function arrangePrePost(isEqPre)
+    {
+        {
+            if(isPaFirmware)
+            {
+                if(isEqPre)
+                {
+                    if(!eq.isPrePosition) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
+                }
+                else
+                {
+                    if(eq.isPrePosition) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
+                }
+            }
+        }
+    }
+
+    function placeAllModuls()
+    {
+        modulesList.clear();
+
+        modulesList.append(ng);
+        modulesList.append(cm);
+        modulesList.append(pr);
+        if(isPaFirmware) modulesList.append(pa);
+        modulesList.append(ir);
+        modulesList.append(hp);
+        modulesList.append(eq)
+        modulesList.append(lp);
+        if(!isPaFirmware) modulesList.append(ps);
+        modulesList.append(er);
+
+        moduleVisible = true;
+        listViewModules.forceLayout();
     }
 
     EqsExt
     {
         id: eqsExt
         visible: false
-        anchors.centerIn: parent
-        height: parent.height/2
-        width:  parent.width/5*4
+
+        height: parent.height/1.5
+        width:  parent.width*0.95
+        z: _main.z+1
         onHide:
         {
             visible = false;
@@ -152,8 +231,8 @@ Item
     {
         id: msgPresetChangeSave
 
-        // TODO saveParam to enum
-        property int saveParam: 0
+        property int newBank
+        property int newPreset
 
         headerText: qsTr("Save preset")
         text: qsTr("Do you want to save your changes?")
@@ -164,18 +243,18 @@ Item
 
         onAccepted:
         {
-            UiCore.setParameter("save_change", saveParam);
-            UiCore.setParameter("do_preset_change", saveParam);
+            DeviceProperties.saveChanges();
+            DeviceProperties.changePreset(newBank, newPreset, true);
         }
         onDiscarded:
         {
             UiCore.restoreParameter("impulse")
-            UiCore.setParameter("do_preset_change", saveParam);
+            DeviceProperties.changePreset(newBank, newPreset, true);
             visible = false;
         }
         onRejected:
         {
-            saveParam = 0
+            // TODO: change to DeviceParameter
             UiCore.restoreParameter("preset")
             UiCore.restoreParameter("bank")
         }
@@ -183,60 +262,44 @@ Item
 
     Connections
     {
+        target: DeviceProperties
+
+        function onDeviceTypeChanged()
+        {
+            isPaFirmware = ((DeviceProperties.deviceType===DeviceType.CP16PA)||(DeviceProperties.deviceType===DeviceType.CP100PA));
+            placeAllModuls();
+        }
+
+        function onPresetNotSaved(bank, preset)
+        {
+            msgPresetChangeSave.newBank = bank;
+            msgPresetChangeSave.newPreset = preset;
+            msgPresetChangeSave.visible = true;
+        }
+    }
+
+    Connections
+    {
         target: UiCore
 
-        function onSgPresetChangeStage(inChangePreset)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            msgPresetChangeSave.saveParam = inChangePreset;
-            msgPresetChangeSave.open();
-        }
-
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam === ("type_dev"))
+            switch(paramType)
             {
-                switch (inValue)
-                {
-                case 0: devName = "";  break;
-                case 1:
-                    devName = "CP-100";
-                    _paModule.visible=false
-                    _psModule.visible=true
-                    _eqsModule.isPrePostVisible=false
-                    break;
-                case 2:
-                    devName = "CP-16M";
-                    _paModule.visible=false
-                    _psModule.visible=true
-                    _eqsModule.isPrePostVisible=false
-                    break;
-                case 3: devName = "CP-16PA";
-                    _paModule.visible=true
-                    _psModule.visible=false
-                    _eqsModule.isPrePostVisible=true
-                    break;
-                case 4: devName = "CP-100PA";
-                    _paModule.visible=true
-                    _psModule.visible=false
-                    _eqsModule.isPrePostVisible=true
-                    break;
-                }
+            case DeviceParameter.EQ_PRE:
+            {
+                arrangePrePost(value);
+                break;
             }
-
-//            if(nameParam === "open_preset_list")
-//            {
-//                console.log("Open presets list");
-//                _presetsList.open();
-//            }
-
+            }
         }
 
-        function onSgSetParameter(nameParam, inValue)
+        // not set ui
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if(nameParam === "open_preset_list")
+            if(paramType === DeviceParameter.EQ_PRE)
             {
-                console.log("Open presets list");
-                _presetsList.open();
+                arrangePrePost(value);
             }
         }
     }
@@ -250,6 +313,22 @@ Item
 
         function onExportPreset(){
             UiCore.exportPreset("");
+        }
+    }
+
+    Connections{
+        target: InterfaceManager
+
+        function onSgInterfaceError(errorDescription)
+        {
+            modulesList.clear();
+            listViewModules.forceLayout();
+        }
+
+        function onSgInterfaceDisconnected()
+        {
+            modulesList.clear();
+            listViewModules.forceLayout();
         }
     }
 }

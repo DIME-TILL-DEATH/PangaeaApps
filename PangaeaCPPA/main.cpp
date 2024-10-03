@@ -23,9 +23,16 @@
 
 #include "devicedescription.h"
 
+#include "appproperties.h"
+#include "deviceproperties.h"
+
 #include "threadcontroller.h"
 
 #include "devicetypeenum.h"
+
+#include "eqband.h"
+#include "eqresponse.h"
+#include "poweramp.h"
 
 void manageSegFailure(int signalCode);
 Logger* Logger::currentHandler = nullptr;
@@ -55,6 +62,9 @@ int main(int argc, char *argv[])
     NetCore* netCore = new NetCore();
     InterfaceCore* interfaceManager = new InterfaceCore();
 
+    EqResponse eqResponse(core);
+    PowerAmp pa(core);
+
     PresetListModel presetListModel;
 
     ThreadController threadController(QThread::currentThread());
@@ -69,9 +79,12 @@ int main(int argc, char *argv[])
 
     //-----------------------------------------------------------------
     // UI creation
-    //----------------------------------------------------------------   
-    UiInterfaceManager uiInterfaceManager;
+    //----------------------------------------------------------------
+    UiInterfaceManager uiInterfaceManager; // TODO: move to backend, либо common(Общий для всех)
     UiDesktopCore uiCore;
+
+    AppProperties appProperties(core);
+    DeviceProperties deviceProperties(core);
     UiSettings uiSettings;
 
     QQmlApplicationEngine engine;
@@ -81,14 +94,26 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle("Basic");
 #endif
 
+
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
+
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "AppProperties", &appProperties);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "DeviceProperties", &deviceProperties);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);
 
-    qRegisterMetaType<DeviceDescription>();
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "EqResponse", &eqResponse);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "PowerAmp", &pa);
+
+    qmlRegisterUncreatableType<Core>("CppObjects", 1, 0, "AppParameter", "Cannot create AppParameter in QML");
+    qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
     qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
+
+    qmlRegisterUncreatableType<AbstractModule>("CppObjects", 1, 0, "Module", "Cannot create Module in QML");
+    qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
+    qmlRegisterUncreatableType<ControlValue>("CppObjects", 1, 0, "ControlValue", "Cannot create ControlValue in QML");
 
     //-------------------------------------------------------------------------------
     // connections
@@ -98,6 +123,8 @@ int main(int argc, char *argv[])
 
     QObject::connect(&uiCore, &UiDesktopCore::sgReadAllParameters, core, &Core::readAllParameters);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetParameter, core, &Core::setParameter);
+    QObject::connect(&uiCore, &UiDesktopCore::sgSetDeviceParameter, core, &Core::slSetDeviceParameter);
+    QObject::connect(&uiCore, &UiDesktopCore::sgSetDeviceParameter, &eqResponse, &EqResponse::slSetUiDeviceParameter);
     QObject::connect(&uiCore, &UiDesktopCore::sgRestoreValue, core, &Core::restoreValue);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetImpuls, core, &Core::setImpulse);
     QObject::connect(&uiCore, &UiDesktopCore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
@@ -107,31 +134,23 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiDesktopCore::sgSw4Enable, core, &Core::sw4Enable);
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiDesktopCore::sgSetUIParameter);
+    QObject::connect(core, &Core::sgRecieveDeviceParameter, &uiCore, &UiDesktopCore::sgSetUiDeviceParameter);
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiDesktopCore::sgSetUIText);
-    QObject::connect(core, &Core::sgPresetChangeStage, &uiCore, &UiDesktopCore::sgPresetChangeStage);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiDesktopCore::sgSetProgress);
-    QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiDesktopCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
+    QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiDesktopCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);  
 
     QObject::connect(core, &Core::sgRefreshPresetList, &presetListModel, &PresetListModel::refreshModel, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgUpdatePreset, &presetListModel, &PresetListModel::updatePreset, Qt::QueuedConnection);
-
+    
     NetCore::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
-
     NetCore::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiDesktopCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
     NetCore::connect(netCore, &NetCore::sgNewAppVersionAvaliable, &uiCore, &UiDesktopCore::slNewAppVersionAvaliable);
-//    QObject::connect(&uiCore, &UICore::sgDoOnlineFirmwareUpdate, &netCore, &NetCore::requestFirmwareFile);
-//    QObject::connect(&netCore, &NetCore::sgFirmwareDownloaded, &core, &Core::uploadFirmware);
-//    QObject::connect(&netCore, &NetCore::sgDownloadProgress, &uiCore, &UICore::sgDownloadProgress, Qt::QueuedConnection);
 
     Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData, Qt::QueuedConnection);
-    Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::readAllParameters, Qt::QueuedConnection);
-//#if !defined(Q_OS_MACOS)
+    Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::slInterfaceConnected, Qt::QueuedConnection);
+
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice, Qt::BlockingQueuedConnection);
-//#else
-//    Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
-//#endif
-//    Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
-//    Core::connect(core, &Core::sgReadyTodisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
+
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError, Qt::QueuedConnection);
 
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, interfaceManager, &InterfaceCore::startScanning, Qt::QueuedConnection);

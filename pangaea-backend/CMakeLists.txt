@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21.1)
+cmake_minimum_required(VERSION 3.16)
 project(pangaea-backend VERSION 1.0.0 LANGUAGES CXX)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
@@ -15,37 +15,50 @@ add_definitions(-DCP100PA_FIRMWARE_VERSION="6.08.04")
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 qt_add_library(pangaea-backend STATIC
+    cores/core.cpp cores/core.h
+    cores/netcore.cpp cores/netcore.h
+    cores/interfacecore.cpp cores/interfacecore.h
+
     interfaces/abstractinterface.cpp interfaces/abstractinterface.h
     interfaces/bleinterface.cpp interfaces/bleinterface.h
     interfaces/usbinterface.cpp interfaces/usbinterface.h
     interfaces/devicedescription.cpp interfaces/devicedescription.h
-    cores/core.cpp cores/core.h
-    cores/netcore.cpp cores/netcore.h
-	cores/interfacecore.cpp cores/interfacecore.h
+
     device/answerworker.cpp device/answerworker.h
     device/defines.h
     device/device.cpp device/device.h
     device/deviceanswer.cpp device/deviceanswer.h
-    device/devicecontrols.cpp device/devicecontrols.h
-    device/deviceparameter.cpp device/deviceparameter.h
     device/firmware.cpp device/firmware.h
     device/preset.cpp device/preset.h
+    device/deviceparameter.h device/deviceparameter.cpp
+
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
+
+    moduls/abstractmodule.cpp moduls/abstractmodule.h
+    moduls/eqband.cpp moduls/eqband.h
+    moduls/eqresponse.cpp moduls/eqresponse.h
+    moduls/poweramp.cpp moduls/poweramp.h
+
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h
     utils/presetmanager.cpp utils/presetmanager.h
     utils/parser.cpp utils/parser.h
-    qmlEnums/devicetypeenum.h
+
+    uihelpers/controlvalue.cpp uihelpers/controlvalue.h
+    uihelpers/devicetypeenum.h
+    uihelpers/deviceproperties.cpp uihelpers/deviceproperties.h
+    uihelpers/appproperties.h uihelpers/appproperties.cpp
 )
 
 target_include_directories(pangaea-backend PUBLIC
     cores
     device
     interfaces
+    moduls
     models
+    uihelpers
     utils
-    qmlEnums
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning SerialPort)

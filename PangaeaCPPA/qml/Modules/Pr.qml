@@ -9,7 +9,7 @@ Item
     id: main
 
     property string name:     "PR"
-    property string nameValue: "preamp_on"
+    property int paramType: DeviceParameter.PREAMP_ON
 
     property bool on: true
 
@@ -17,7 +17,6 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
 
         on: main.on
 
@@ -45,7 +44,7 @@ Item
                 enabled: main.on
                 name: "HIGH"
                 checkable: false
-                nameValue: "preamp_high"
+                paramType: DeviceParameter.PREAMP_HIGH
                 valueMin: (-64)
                 valueMax: (63)
                 dispMin:  (0)
@@ -60,7 +59,7 @@ Item
                 enabled: main.on
                 name: "MID"
                 checkable: false
-                nameValue: "preamp_mid"
+                paramType: DeviceParameter.PREAMP_MID
                 valueMin: (-64)
                 valueMax: (63)
                 dispMin:  (0)
@@ -75,7 +74,7 @@ Item
                 enabled: main.on
                 name: "LOW"
                 checkable: false
-                nameValue: "preamp_low"
+                paramType: DeviceParameter.PREAMP_LOW
                 valueMin: (-64)
                 valueMax: (63)
                 dispMin:  (0)
@@ -89,7 +88,7 @@ Item
                 enabled: main.on
                 name: "VOLUME"
                 checkable: false
-                nameValue: "preamp_volume"
+                paramType: DeviceParameter.PREAMP_VOLUME
             }
 
             Item
@@ -103,11 +102,11 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=nameValue
+                main.on = value;
             }
         }
     }
@@ -118,6 +117,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

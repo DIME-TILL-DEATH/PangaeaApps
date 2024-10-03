@@ -7,19 +7,12 @@ Item
 {
     id: main
 
-    property string name
-    property string nameValue: "eq_on"
-
-    property bool on
-
     BaseModule{
         id: _baseModule
 
-        moduleName: main.name
-        nameValue: main.nameValue
-
         isHeaderVisible: false
-        on: true
+
+        module: EqResponse
 
         contentItem: Column
         {
@@ -28,8 +21,6 @@ Item
             SwitchEqMap
             {
                 id: switchEnMap
-
-                eqOn: main.on
 
                 height: parent.height/1000*72
                 width:  parent.width
@@ -44,45 +35,30 @@ Item
 
                 Eqs
                 {
-                    on: main.on
-                    visible: !switchEnMap.map
+                    on: EqResponse.moduleEnabled
+                    visible: (!switchEnMap.map) & (UiSettings.eqClassicView)
                     anchors.fill: parent
+                }
+
+                EqParametric
+                {
+                    visible: (!switchEnMap.map) & (!UiSettings.eqClassicView)
+                    anchors.fill: parent
+                    z: _baseModule.z+5
                 }
 
                 Map
                 {
                     visible: switchEnMap.map
                     anchors.fill: parent
+
+                    MouseArea{
+                        id: mAsteaalModuleOnOf
+                        anchors.fill: parent
+                        z: parent.z-1
+                    }
                 }
             }
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if((nameParam === main.nameValue))
-            {
-                main.on=value
-            }
-        }
-
-        function onSgSetParameter(nameParam, value)
-        {
-            if((nameParam === main.nameValue))
-            {
-                main.on=value
-            }
-        }
-    }
-
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
-        {
-            main.on = (!main.on);
         }
     }
 }

@@ -28,6 +28,8 @@ ApplicationWindow
 
     Material.elevation: 4
 
+    property bool connected: false
+
     property string markEdit: edit?" * ":" "
     property bool edit: true
     property bool swipeEn: true
@@ -81,7 +83,6 @@ ApplicationWindow
         {
             id: _settingsPage
         }
-
     }
 
     footer: TabBar{
@@ -309,6 +310,7 @@ ApplicationWindow
         function onSgInterfaceConnected(deviceDescription)
         {
             _swipeView.setCurrentIndex(1);
+            _main.connected = true;
         }
 
         function onSgExchangeError()
@@ -358,13 +360,17 @@ ApplicationWindow
 
         function onSgInterfaceError(errorDescription)
         {
-            //mBusy.visible = false;
-
+            _main.connected = false;
             openConnectPage();
             _msgBluetoothNotReady.text = qsTr("Device disconnected\n") + errorDescription
             _msgBluetoothNotReady.open();
 
             InterfaceManager.startScanning();
+        }
+
+        function onSgInterfaceDisconnected()
+        {
+            _main.connected = false;
         }
     }
 

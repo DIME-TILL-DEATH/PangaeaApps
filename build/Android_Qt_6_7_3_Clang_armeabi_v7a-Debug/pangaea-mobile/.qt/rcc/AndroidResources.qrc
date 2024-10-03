@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="android/src/JavaFile.java">D:/AMT/Applications/PangaeaApps/pangaea-mobile/android/src/JavaFile.java</file>
+    <file alias="android/AndroidManifest.xml">D:/AMT/Applications/PangaeaApps/pangaea-mobile/android/AndroidManifest.xml</file>
+    <file alias="android/build.gradle">D:/AMT/Applications/PangaeaApps/pangaea-mobile/android/build.gradle</file>
+  </qresource>
+</RCC>
+

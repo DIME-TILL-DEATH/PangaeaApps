@@ -14,14 +14,12 @@ Item
     property bool on: true
 
     property string nameValue: qsTr("Preset volume")
-    property string nameParam: "master_volume"
 
     property int valueMin:  0
     property int valueMax:  31
 
 
     property bool softUpdate: false
-    property bool editabled: false
 
     Rectangle {
         id: _contentRect
@@ -49,21 +47,10 @@ Item
 
                 bottomLineEnabled: false
 
-                nameValue: main.nameValue
-                nameParam: main.nameParam
+                name: main.nameValue
+                paramType: DeviceParameter.MASTER_VOLUME
             }
         }
     }
 
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
-        {
-            if( nameParam === "presetEdit" )
-            {
-                main.edit = nameValue;
-            }
-        }
-    }
 }

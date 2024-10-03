@@ -11,7 +11,7 @@ Item
     id: main
 
     property bool on: true
-    property string nameValue: "compressor_on"
+    property int paramType: DeviceParameter.COMPRESSOR_ON
 
     BaseModule{
         id: _baseModule
@@ -27,8 +27,10 @@ Item
             {
                 height: parent.height/2
                 width: parent.width
-                nameValue: "Sustain"
-                nameParam: "compressor_sustain"
+
+                name: "Sustain"
+                paramType: DeviceParameter.COMPRESSOR_SUSTAIN
+
                 moduleOn: on
             }
 
@@ -36,8 +38,10 @@ Item
             {
                 height: parent.height/2
                 width: parent.width
-                nameValue: "Volume"
-                nameParam: "compressor_volume"
+
+                name: "Volume"
+                paramType: DeviceParameter.COMPRESSOR_VOLUME
+
                 bottomLineEnabled: false
                 moduleOn: on
             }
@@ -48,9 +52,9 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam===main.nameValue))
+            if(paramType === main.paramType)
             {
                 main.on=value
             }
@@ -62,6 +66,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }

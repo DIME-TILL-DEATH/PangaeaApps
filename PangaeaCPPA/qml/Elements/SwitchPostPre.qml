@@ -7,7 +7,7 @@ Item
 {
     id: main
 
-    property string nameValue: "eq_pre"
+    property int paramType: DeviceParameter.EQ_PRE
 
     property bool isAvaliable: true
     
@@ -34,7 +34,7 @@ Item
             width: parent.width
             height: parent.height/100*40
 
-            onChValue: UiCore.setParameter(main.nameValue, mSwitch.value)
+            onChValue: UiCore.setDeviceParameter(main.paramType, mSwitch.value)
 
             visible: isAvaliable
         }
@@ -54,7 +54,7 @@ Item
                 onClicked:
                 {
                     mSwitch.value = 0;
-                    UiCore.setParameter(main.nameValue, mSwitch.value)
+                    UiCore.setDeviceParameter(main.paramType, mSwitch.value)
                 }
             }
 
@@ -69,7 +69,7 @@ Item
                 onClicked:
                 {
                     mSwitch.value = 1;
-                    UiCore.setParameter(main.nameValue, mSwitch.value)
+                    UiCore.setDeviceParameter(main.paramType, mSwitch.value)
                 }
             }
         }
@@ -106,7 +106,7 @@ Item
         function onChValue(value)
         {
             mSwitch.value=value;
-            UiCore.setParameter(main.nameValue, mSwitch.value)
+            UiCore.setDeviceParameter(main.paramType, mSwitch.value)
 
         }
     }
@@ -114,19 +114,20 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === "eq_pre"))
+            if(paramType === main.paramType)
             {
-                mSwitch.value = value
+               mSwitch.value = value
             }
         }
 
-        function onSgSetParameter(nameParam, value)
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if((nameParam === "eq_pre"))
+            if(paramType === main.paramType)
             {
-                mSwitch.value = value
+               mSwitch.value = value
             }
         }
     }

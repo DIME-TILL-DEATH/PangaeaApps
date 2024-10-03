@@ -28,20 +28,13 @@ ApplicationWindow
 
     color: Style.backgroundColor
 
-    property string nameCP100: "CP-100";
-    property string nameCP16: "CP-16M";
-    property string nameCP16PA: "CP-16PA";
-    property string nameCP100PA: "CP-100PA"
-
-    property string markEdit: edit?" * ":" "
-    property string devName: ""
+    property string markEdit: DeviceProperties.presetModified ? " * ":" "
+    property string devName: DeviceProperties.firmwareName
     property string devVersion: ""
 
     property string interfaceDescription: ""
     property string markConnect: connected ? qsTr("Connected to ") + interfaceDescription : qsTr("Disconnected")
 
-    property bool editable: false
-    property bool edit: false
     property bool connected: false
     property bool wait: true
     property bool appClosing: false
@@ -87,8 +80,6 @@ ApplicationWindow
             onSetImpuls: {
                 irFileDialog.open();
             }
-            editable: main.editable & (!main.wait)
-            edit:     main.edit
         }
 
         ModulesList
@@ -98,7 +89,7 @@ ApplicationWindow
             width:  parent.width
             height: parent.height/1000*850
 
-            enabled: editable & (!main.wait)
+            enabled: !main.wait
         }
     }
 
@@ -121,7 +112,7 @@ ApplicationWindow
 
         onRejected:
         {
-            if((devName == nameCP100) || (devName == nameCP100PA))
+            if((DeviceProperties.deviceType === DeviceType.CP100) || (DeviceProperties.deviceType === DeviceType.CP100PA))
             {
                 UiCore.escImpuls()
             }
@@ -132,7 +123,7 @@ ApplicationWindow
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            if((devName == nameCP100) || (devName == nameCP100PA))
+            if((DeviceProperties.deviceType === DeviceType.CP100) || (DeviceProperties.deviceType === DeviceType.CP100PA))
             {
                 UiCore.setImpuls(cleanPath);
             }
@@ -143,7 +134,8 @@ ApplicationWindow
     {
         id: msgPresetChangeSave
 
-        property int saveParam: 0
+        property int newBank
+        property int newPreset
 
         text: qsTr("Do you want to save changes?")
         title: qsTr("Save preset")
@@ -154,27 +146,27 @@ ApplicationWindow
             {
                 case MessageDialog.Save:
                 {
-                    UiCore.setParameter("save_change", saveParam);
-                    if(!main.appClosing)
-                        UiCore.setParameter("do_preset_change", saveParam);
+                    DeviceProperties.saveChanges();
+                    if(!main.appClosing) DeviceProperties.changePreset(newBank, newPreset, true);
                     break;
                 }
                 case MessageDialog.No:
                 {
                     if(!main.appClosing)
                     {
-                        UiCore.setParameter("do_preset_change", saveParam);
+                        DeviceProperties.changePreset(newBank, newPreset, true);
+
                         UiCore.restoreParameter("impulse");
                     }
                     else
                     {
-                        UiCore.setParameter("compare", true); // restore preset
+                        AppProperties.comparePreset(); // restore preset TODO: честный restore
                     }
                     break;
                 }
                 case MessageDialog.Cancel:
                 {
-                    saveParam = 0
+                    // saveParam = 0
                     appClosing = false;
                     UiCore.restoreParameter("preset")
                     UiCore.restoreParameter("bank")
@@ -260,12 +252,6 @@ ApplicationWindow
     {
         target: UiCore
 
-        function onSgPresetChangeStage(inChangePreset)
-        {
-            msgPresetChangeSave.saveParam = inChangePreset;
-            msgPresetChangeSave.visible = true;
-        }
-
         function onSgSetUIText(nameParam, inString)
         {
             if(nameParam === "not_supported_ir")
@@ -325,11 +311,6 @@ ApplicationWindow
 
         function onSgSetUIParameter(nameParam, value)
         {
-            if(nameParam === "preset_edited")
-            {
-                edit = value;
-            }
-
             if(nameParam === "wait")
             {
                 wait = value;
@@ -337,20 +318,6 @@ ApplicationWindow
                 {
                     if(!wait && !msgPresetChangeSave.visible)
                         Qt.quit();
-                }
-            }
-            if(nameParam === "editable")
-                main.editable=value
-
-            if(nameParam === "type_dev")
-            {
-                switch (value)
-                {
-                default: devName = "";  break;
-                case DeviceType.CP100: devName = "CP-100";  break;
-                case DeviceType.CP16: devName = "CP-16M";  break;
-                case DeviceType.CP16PA: devName = "CP-16PA"; break;
-                case DeviceType.CP100PA: devName = "CP-100PA"; break;
                 }
             }
 
@@ -362,14 +329,6 @@ ApplicationWindow
                 }
             }
         }
-    }
-
-    function clearHeader()
-    {
-        main.edit = false;
-        main.devName = ""
-        main.devVersion = ""
-        main.interfaceDescription = ""
     }
 
     Connections{
@@ -388,6 +347,17 @@ ApplicationWindow
                 msgError.text = qsTr("Error while saving IR. Please, try to reload impulse.");
                 msgError.open();
             }
+        }
+    }
+
+    Connections{
+        target: DeviceProperties
+
+        function onPresetNotSaved(bank, preset)
+        {
+            msgPresetChangeSave.newBank = bank;
+            msgPresetChangeSave.newPreset = preset;
+            msgPresetChangeSave.visible = true;
         }
     }
 
@@ -416,9 +386,7 @@ ApplicationWindow
 
         function onSgInterfaceError(errorDescription)
         {
-            clearHeader();
             connected = false;
-            main.editable = false;
             mainUi.visible = false;
             msgError.text = qsTr("Device disconnected\n" + errorDescription)
             msgError.open();
@@ -428,9 +396,7 @@ ApplicationWindow
 
         function onSgInterfaceDisconnected()
         {
-            clearHeader();
             connected = false;
-            main.editable = false;
             mainUi.visible = false;
 
             InterfaceManager.startScanning();
@@ -441,14 +407,14 @@ ApplicationWindow
         UiSettings.setupApplication();
         InterfaceManager.startScanning();
 
-        if(main.width!==0)
+        if(UiSettings.windowWidth!==0 && UiSettings.windowHeight!==0)
         {
-            main.width = UiSettings.windowWidth
-            main.height = UiSettings.windowHeight
+            main.width = UiSettings.windowWidth;
+            main.height = UiSettings.windowHeight;
         }
 
         main.x = Screen.width/2 - main.width/2;
-        main.y = Screen.height/2 - main.height/2
+        main.y = Screen.height/2 - main.height/2;
     }
 
     onClosing: function(close)

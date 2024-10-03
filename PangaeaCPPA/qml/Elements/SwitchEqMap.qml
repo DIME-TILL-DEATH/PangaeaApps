@@ -10,7 +10,6 @@ Item
     id: main
 
     property bool   map: false
-    property bool   eqOn: false
 
     Canvas
     {
@@ -20,7 +19,7 @@ Item
         {
             var ctx = getContext("2d")
             var colorEqTab = main.map ? Style.backgroundColor
-                                      : (eqOn) ? Style.mainEnabledColor : Style.mainDisabledColor
+                                      : ((EqResponse.moduleEnabled) ? Style.mainEnabledColor : Style.mainDisabledColor)
             var colorMapTab = main.map ? Style.mainEnabledColor : Style.backgroundColor
 
             ctx.lineWidth = 4
@@ -54,6 +53,7 @@ Item
             ctx.stroke()
         }
     }
+
     MText
     {
         width:  parent.width/2
@@ -63,7 +63,8 @@ Item
         font.pixelSize: parent.height/1.8
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment:   Text.AlignVCenter
-        color: eqOn ? Style.highlightColor : (main.map ? Style.mainEnabledColor : Style.backgroundColor)
+        color: EqResponse.moduleEnabled ? Style.highlightColor
+                                        : (main.map ? Style.mainEnabledColor : Style.backgroundColor)
         MouseArea
         {
             anchors.fill: parent
@@ -71,11 +72,13 @@ Item
             cursorShape:  Qt.PointingHandCursor
             onClicked:
             {
-                if( main.map)
+                if(main.map)
+                {
                     main.map=false;
+                }
                 else
                 {
-                    UiCore.setParameter("eq_on", !eqOn);
+                    EqResponse.moduleEnabled = !EqResponse.moduleEnabled
                 }
                 redraw();
             }
@@ -105,24 +108,12 @@ Item
         }
     }
 
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+    Connections{
+        target: EqResponse
+
+        function onModuleEnabledChanged()
         {
-            if(nameParam === "eq_on")
-            {
-                main.eqOn = value;
-                redraw();
-            }
-        }
-        function onSgSetParameter(nameParam, value)
-        {
-            if(nameParam === "eq_on")
-            {
-                main.eqOn = value;
-                redraw();
-            }
+            main.redraw();
         }
     }
 

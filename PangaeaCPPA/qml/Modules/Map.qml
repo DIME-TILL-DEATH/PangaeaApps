@@ -13,9 +13,7 @@ Item
 
     anchors.fill: parent
 
-    property int maxMapRow: 10
-    property int currentBank: 0
-    property int currentPreset: 0
+    property int maxMapRow: Math.max(DeviceProperties.banksList.length, DeviceProperties.presetsList.length)
 
     Rectangle
     {
@@ -44,8 +42,6 @@ Item
 
                     height: parent.height/11*10
                     width:  parent.width
-
-                    maxPresetBank: main.maxMapRow
                 }
             }
 
@@ -60,8 +56,6 @@ Item
 
                     width:  parent.width
                     height: parent.height/11*1
-
-                    maxPresetBank: main.maxMapRow
                 }
 
                 GridView{
@@ -75,7 +69,7 @@ Item
 
                     interactive: false
 
-                    currentIndex: currentBank*maxMapRow + currentPreset
+                    currentIndex: DeviceProperties.bank*maxMapRow + DeviceProperties.preset
 
                     highlight: Rectangle{
                         color: "gray"
@@ -92,7 +86,7 @@ Item
 
                     }
 
-                    model: PresetListModel//_presetListModel
+                    model: PresetListModel
 
                     delegate: MapDelegate{
                         id: _root
@@ -102,37 +96,6 @@ Item
 
                         currentIndex: _mapGrid.currentIndex
                     }
-                }
-            }
-        }
-    }
-
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if(nameParam === "bank")
-            {
-                currentBank = value;
-                mapHeadBank.curVal = value
-            }
-
-            if(nameParam === "preset")
-            {
-                currentPreset = value;
-                mapHeadPreset.curVal = value
-            }
-
-            if(nameParam===("type_dev"))
-            {
-                switch (value)
-                {
-                    case DeviceType.CP100: maxMapRow = 10;  break;
-                    case DeviceType.CP100PA: maxMapRow = 10;  break;
-                    case DeviceType.CP16: maxMapRow = 4; break;
-                    case DeviceType.CP16PA: maxMapRow = 4; break;
                 }
             }
         }

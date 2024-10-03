@@ -9,7 +9,7 @@ Item
     id: main
 
     property string name:     "CM"
-    property string nameValue: "compressor_on"
+    property int paramType: DeviceParameter.COMPRESSOR_ON
 
     property bool on: true
 
@@ -17,7 +17,7 @@ Item
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        // paramType: main.paramType
 
         on: main.on
 
@@ -45,7 +45,7 @@ Item
                 enabled: main.on
                 name: "SUSTAIN"
                 checkable: false
-                nameValue: "compressor_sustain"
+                paramType: DeviceParameter.COMPRESSOR_SUSTAIN
             }
 
             Dial
@@ -56,7 +56,7 @@ Item
                 enabled: main.on
                 name: "VOLUME"
                 checkable: false
-                nameValue: "compressor_volume"
+                paramType: DeviceParameter.COMPRESSOR_VOLUME
             }
 
             Item
@@ -70,11 +70,12 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === main.nameValue))
+            if(paramType === main.paramType)
             {
-                main.on=nameValue
+                main.on = value;
             }
         }
     }
@@ -85,6 +86,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on);
         }
     }
 }

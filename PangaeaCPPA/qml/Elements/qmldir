@@ -1,8 +1,11 @@
 module Elements
 
+BankSpin    1.0 BankSpin.qml
 CheckText   1.0 CheckText.qml
 Dial        1.0 Dial.qml
 Eq          1.0 Eq.qml
+ParameterDial      1.0 ParameterDial.qml
+EqPoint     1.0 EqPoint.qml
 ILDelegate  1.0 ILDelegate.qml
 ILHighlight 1.0 ILHighlight.qml
 Indicator   1.0 Indicator.qml
@@ -14,7 +17,8 @@ Material        1.0 Material.qml
 MButton         1.0 MButton.qml
 MText           1.0 MText.qml
 Pot             1.0 Pot.qml
-Presets         1.0 Presets.qml
+PresetSpin         1.0 PresetSpin.qml
+SignalBar       1.0 SignalBar.qml
 Switch2         1.0 Switch2.qml
 Switch3         1.0 Switch3.qml
 SwitchEqMap     1.0 SwitchEqMap.qml

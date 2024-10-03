@@ -1,0 +1,27 @@
+{
+	"backtrace" : 0,
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : 
+		[
+			"pangaea-backend/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			}
+		]
+	},
+	"id" : "pangaea-backend_autogen_timestamp_deps::@1607732cfd55e531b444",
+	"isGeneratorProvided" : true,
+	"name" : "pangaea-backend_autogen_timestamp_deps",
+	"paths" : 
+	{
+		"build" : "pangaea-backend",
+		"source" : "pangaea-backend"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

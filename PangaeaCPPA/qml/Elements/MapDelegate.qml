@@ -31,7 +31,9 @@ Item{
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
 
-            onClicked: UiCore.setParameter("set_preset_change", presetDeviceIndex)
+            onClicked: {
+                DeviceProperties.changePreset(bankNumber, presetNumber);
+            }
             onEntered: tp.visible = (tp.text.length>0)
             onExited:  tp.visible = false
         }
@@ -54,15 +56,15 @@ Item{
                 _root.currentImpulseName=value;
         }
 
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam==="cabinet_enable")
+            if(paramType === DeviceParameter.CABINET_ENABLE)
                 _root.currentImpulseEnabled = value;
         }
 
-        function onSgSetParameter(nameParam, value)
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if(nameParam==="cabinet_enable")
+            if(paramType === DeviceParameter.CABINET_ENABLE)
                 _root.currentImpulseEnabled = value;
         }
     }

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>firmwares/firmwareCP16PA.ble</file>
+        <file>firmwares/firmwareCP16.ble</file>
+    </qresource>
+</RCC>

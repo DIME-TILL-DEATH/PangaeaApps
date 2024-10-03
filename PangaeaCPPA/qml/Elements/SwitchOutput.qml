@@ -7,8 +7,8 @@ Item
 {
     id: main
 
-    property int   value: mSwitch.value
-    property string nameValue: "output_mode"
+    property int value: mSwitch.value
+    property int paramType: DeviceParameter.OUTPUT_MODE
     
     Rectangle
     {
@@ -86,17 +86,20 @@ Item
 
     function send()
     {
-        UiCore.setParameter(main.nameValue, mSwitch.value)
+        UiCore.setDeviceParameter(main.paramType, mSwitch.value)
     }
 
 
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((main.nameValue.length>0)&&(nameParam===main.nameValue))
+            if(paramType === main.paramType)
+            {
                 mSwitch.value=value;
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ import CppEnums
 Item
 {
     id: main
-    property int deviceType: 0
+    property int deviceType: DeviceProperties.deviceType
 
     Image
     {
@@ -33,15 +33,5 @@ Item
 
         sourceSize.width:  width
         sourceSize.height: height
-    }
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if(nameParam===("type_dev"))
-                main.deviceType = value
-        }
     }
 }

@@ -9,11 +9,12 @@ import Qt.labs.platform 1.1 as Labs
 import Qt.labs.settings 1.0
 
 import CppObjects 1.0
+import CppEnums
 
 MenuBar{
     id: mainMenu
 
-    property bool presetEdited: true
+    property bool presetEdited: DeviceProperties.presetModified
 
     Menu{
         title: qsTr("File")
@@ -113,6 +114,16 @@ MenuBar{
                 checked: UiSettings.isModulesRightAligned
                 onTriggered: UiSettings.saveSetting("modules_right_aligned", true);
             }
+        }
+
+        MenuItem{
+            id: menuEqClassicView
+
+            text: qsTr("Classic EQ view")
+            checkable: true
+            checked: UiSettings.eqClassicView
+
+            onTriggered: UiSettings.saveSetting("eq_classic_view", checked);
         }
 
         MenuItem{
@@ -294,42 +305,47 @@ MenuBar{
     }
 
     Connections{
-        target: UiCore
+        target: DeviceProperties
 
-        function onSgSetUIParameter(nameParam, value)
+        function onDeviceTypeChanged()
         {
-            if(nameParam === "type_dev")
+            switch (DeviceProperties.deviceType)
             {
-                switch (value)
-                {
-                    case 0:
-                        menuDeviceManual.strManualBaseName = "";
-                        menuUpdateFirmware.enabled = false;
-                        break;
-                    case 1:
-                        menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
-                        menuUpdateFirmware.enabled = false;
-                        break;
-                    case 2:
-                        menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
-                        menuUpdateFirmware.enabled = true;
-                        break;
-                    case 3:
-                        menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
-                        menuUpdateFirmware.enabled = true;
-                        break;
-                    case 4:
-                        menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
-                        menuUpdateFirmware.enabled = false;
-                        break;
-                }
-            }
-
-            if(nameParam === "preset_edited")
-            {
-                mainMenu.presetEdited = value;
+                case DeviceType.UnknownDev:
+                    menuDeviceManual.strManualBaseName = "";
+                    menuUpdateFirmware.enabled = false;
+                    break;
+                case DeviceType.CP100:
+                    menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
+                    menuUpdateFirmware.enabled = false;
+                    break;
+                case DeviceType.CP16:
+                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                    menuUpdateFirmware.enabled = true;
+                    break;
+                case DeviceType.CP16PA:
+                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                    menuUpdateFirmware.enabled = true;
+                    break;
+                case DeviceType.CP100PA:
+                    menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
+                    menuUpdateFirmware.enabled = false;
+                    break;
+                case DeviceType.LA3RV:
+                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                    menuUpdateFirmware.enabled = true;
+                    break;
+                case DeviceType.LA3PA:
+                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
+                    menuUpdateFirmware.enabled = true;
+                    break;
             }
         }
+
+    }
+
+    Connections{
+        target: UiCore
 
         function onSgSetUIText(nameParam, auxText)
         {

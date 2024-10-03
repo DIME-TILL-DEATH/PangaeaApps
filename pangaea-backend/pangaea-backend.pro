@@ -16,10 +16,10 @@ CONFIG += staticlib
 DEFINES += PANGAEA_LIBRARY
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-DEFINES += CP16_FIRMWARE_VERSION=\\\"1.04.03\\\"
-DEFINES += CP16PA_FIRMWARE_VERSION=\\\"1.04.03\\\"
-DEFINES += CP100_FIRMWARE_VERSION=\\\"2.08.06\\\"
-DEFINES += CP100PA_FIRMWARE_VERSION=\\\"6.08.04\\\"
+DEFINES += CP16_FIRMWARE_VERSION=\\\"RV.1.04.03\\\"
+DEFINES += CP16PA_FIRMWARE_VERSION=\\\"PA.1.04.03\\\"
+DEFINES += CP100_FIRMWARE_VERSION=\\\"RV.2.08.02\\\"
+DEFINES += CP100PA_FIRMWARE_VERSION=\\\"PA.6.09.04\\\"
 
 SOURCES += \
     cores/core.cpp \
@@ -28,16 +28,22 @@ SOURCES += \
     device/answerworker.cpp \
     device/device.cpp \
     device/deviceanswer.cpp \
-    device/devicecontrols.cpp \
     device/deviceparameter.cpp \
     device/firmware.cpp \
     device/preset.cpp \
-    models/deviceslistmodel.cpp \
-    models/presetlistmodel.cpp \
     interfaces/abstractinterface.cpp \
     interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
     interfaces/usbinterface.cpp \
+    models/deviceslistmodel.cpp \
+    models/presetlistmodel.cpp \
+    moduls/abstractmodule.cpp \
+    moduls/eqband.cpp \
+    moduls/eqresponse.cpp \
+    moduls/poweramp.cpp \
+    uihelpers/controlvalue.cpp \
+    uihelpers/appproperties.cpp \
+    uihelpers/deviceproperties.cpp \
     utils/irworker.cpp \
     utils/parser.cpp \
     utils/presetmanager.cpp
@@ -50,17 +56,23 @@ HEADERS += \
     device/defines.h \
     device/device.h \
     device/deviceanswer.h \
-    device/devicecontrols.h \
     device/deviceparameter.h \
     device/firmware.h \
     device/preset.h \
-    models/deviceslistmodel.h \
-    models/presetlistmodel.h \
     interfaces/abstractinterface.h \
     interfaces/devicedescription.h \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
-    qmlEnums/devicetypeenum.h \
+    models/deviceslistmodel.h \
+    models/presetlistmodel.h \
+    moduls/abstractmodule.h \
+    moduls/eqband.h \
+    moduls/eqresponse.h \
+    moduls/poweramp.h \
+    uihelpers/appproperties.h \
+    uihelpers/controlvalue.h \
+    uihelpers/deviceproperties.h \
+    uihelpers/devicetypeenum.h \
     utils/irworker.h \
     utils/parser.h \
     utils/presetmanager.h
@@ -69,8 +81,8 @@ INCLUDEPATH += cores
 INCLUDEPATH += device
 INCLUDEPATH += interfaces
 INCLUDEPATH += models
-INCLUDEPATH += qmlEnums
-INCLUDEPATH += ui
+INCLUDEPATH += moduls
+INCLUDEPATH += uihelpers
 INCLUDEPATH += utils
 
 #win32-g++ {

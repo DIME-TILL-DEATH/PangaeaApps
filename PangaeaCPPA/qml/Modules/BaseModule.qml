@@ -10,10 +10,13 @@ Rectangle {
     id: root
     anchors.fill: parent
 
-    property string moduleName: "MN"
-    property string nameValue: ""
+    enabled: !AppProperties.compareState
 
-    property bool on: false
+    property var module
+
+    property string moduleName: module !== undefined ? module.moduleName : ""
+    property bool on: (module !== undefined) ? module.moduleEnabled : false
+
     property bool isHeaderVisible: true
 
     property Component contentItem
@@ -85,8 +88,15 @@ Rectangle {
         onClicked:
         {
             material.start(mouseX, mouseY)
-            sgModuleOnOf()
-            UiCore.setParameter(root.parent.nameValue, root.parent.on) // Или хранить переменную внутри? Для меньшей связанности
+
+            if(module !== undefined)
+            {
+                module.moduleEnabled = !module.moduleEnabled
+            }
+            else
+            {
+                sgModuleOnOf();
+            }
         }
     }
 
@@ -105,18 +115,6 @@ Rectangle {
             loops: Animation.Infinite
             ColorAnimation {from: "white"; to: "lightcoral"; duration: 1000}
             ColorAnimation {from: "lightcoral"; to: "white"; duration: 1000}
-        }
-    }
-
-    Connections{
-        target: UiCore
-
-        function onSgSetUIParameter(parameterName, inValue)
-        {
-            if(parameterName === "compare_state")
-            {
-                root.enabled = !inValue
-            }
         }
     }
 }

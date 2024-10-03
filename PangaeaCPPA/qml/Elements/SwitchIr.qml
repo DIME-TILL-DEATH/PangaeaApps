@@ -59,19 +59,20 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((nameParam === "cabinet_enable"))
+            if(paramType === DeviceParameter.CABINET_ENABLE)
             {
-                main.value = !nameValue
+                main.value = !value;
             }
         }
 
-        function onSgSetParameter(nameParam, nameValue)
+        function onSgSetDeviceParameter(paramType, nameValue)
         {
-            if((nameParam === "cabinet_enable"))
+            if(paramType === DeviceParameter.CABINET_ENABLE)
             {
-                main.value = !nameValue
+                main.value = !value;
             }
         }
     }

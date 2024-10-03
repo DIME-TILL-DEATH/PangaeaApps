@@ -14,10 +14,6 @@ import CppObjects
 CustomMessageDialog {
     id: _root
 
-    property int currentBank: 0
-    property int currentPreset: 0
-    property int maxMapRow: 4
-
     property int topHeaderSize: 0
 
     closeOnDisconnect: true
@@ -72,13 +68,14 @@ CustomMessageDialog {
         }
     }
 
-    /*contentItem:*/ ListView{
+    ListView{
         id: _presetListView
 
         width: _root.width*0.95
         height: _root.height-headerHeight-footerHeight
 
-        currentIndex: currentBank * maxMapRow + currentPreset
+        currentIndex: DeviceProperties.isLa3Mode? DeviceProperties.bank * 4 + DeviceProperties.preset
+                                                : DeviceProperties.bank * DeviceProperties.banksList.length + DeviceProperties.preset
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -102,7 +99,7 @@ CustomMessageDialog {
         }
 
 
-        section.property: "bankNumber"
+        section.property: DeviceProperties.isLa3Mode? "" : "bankNumber"
         section.criteria: ViewSection.FullString
         section.delegate: Item{
             id: _sectionHeaderContent
@@ -117,7 +114,7 @@ CustomMessageDialog {
                 color: "lightsteelblue"
 
                 MText {
-                    text: "Bank " + _sectionHeaderContent.section
+                    text: "Bank " + DeviceProperties.banksList[_sectionHeaderContent.section]
                 }
             }
         }
@@ -129,25 +126,5 @@ CustomMessageDialog {
 
     onAccepted: {
         _root.close()
-    }
-
-    Connections{
-        target: UiCore
-
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam === "set_max_map")
-            {
-                maxMapRow = inValue
-            }
-            if(nameParam === "bank")
-            {
-                currentBank = inValue
-            }
-            if(nameParam === "preset")
-            {
-                currentPreset = inValue
-            }
-        }
     }
 }

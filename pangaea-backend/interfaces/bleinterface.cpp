@@ -1,5 +1,8 @@
 #include <QMetaEnum>
 #include <QStandardPaths>
+#include <QPermission>
+
+#include <QCoreApplication>
 
 #ifdef Q_OS_ANDROID
 #include <QGeoPositionInfoSource>
@@ -14,6 +17,18 @@ BleInterface::BleInterface(QObject *parent)
     m_control{nullptr},
     m_service{nullptr}
 {
+    QCoreApplication *app = QCoreApplication::instance();
+    if(app)
+    {
+        app->requestPermission(QBluetoothPermission{}, [](const QPermission &permission)
+                               {
+                                   if (permission.status() == Qt::PermissionStatus::Granted)
+                                   {
+                                       qDebug() << "Bluetooth permission granted";
+                                   }
+                               });
+    }
+
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
@@ -48,7 +63,6 @@ BleInterface::BleInterface(QObject *parent)
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
             this, &BleInterface::scanTimeout, Qt::QueuedConnection);
 
-    QBluetoothDeviceDiscoveryAgent::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
 
     QObject::connect(this, &QObject::destroyed, m_deviceDiscoveryAgent, &QObject::deleteLater);
 
@@ -102,38 +116,13 @@ void BleInterface::startDiscovering()
         return;
     }
 
-#ifdef Q_OS_ANDROID
-    bool result = AndroidUtils::checkPermission("android.permission.ACCESS_COARSE_LOCATION");
-    if(!result)
-    {
-        result = AndroidUtils::requestPermission("android.permission.ACCESS_COARSE_LOCATION");
-        if(!result)
-        {
-            qDebug() << "Geolocation permission denied";
-            isAvaliable = false;
-
-            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "GeolocationPermissionDenied");
-            return;
-        }
-    }
-
-    if(QGeoPositionInfoSource::createDefaultSource(this)->supportedPositioningMethods() == QGeoPositionInfoSource::NoPositioningMethods)
-    {
-        qDebug() << "Geolocation is off";
-        isAvaliable = false;
-
-        emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "GeolocationIsOff");
-        return;
-    }
-#endif
-
     m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
     m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 
-    #ifdef Q_OS_MACOS
+#ifdef Q_OS_MACOS
         m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
         m_deviceDiscoveryAgent->start();
-    #endif
+#endif
 
     isAvaliable = true;
     setState(InterfaceState::Scanning);
@@ -318,6 +307,8 @@ void BleInterface::slStartConnect(QString address)
     if (m_control)
     {
         m_control->disconnectFromDevice();
+        disconnect(m_control, &QLowEnergyController::rssiRead, this, &BleInterface::rssiReaded);
+        disconnect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
         delete m_control;
         m_control = 0;
     }
@@ -341,9 +332,6 @@ void BleInterface::slStartConnect(QString address)
             this, &BleInterface::controllerError);
 
 
-    QLowEnergyConnectionParameters connectionParams;
-
-
     qDebug() << m_control->state();
     m_control->connectToDevice();
     setState(Connecting);
@@ -351,6 +339,17 @@ void BleInterface::slStartConnect(QString address)
 
 void BleInterface::deviceConnected()
 {
+    QLowEnergyConnectionParameters connectionParams;
+    qDebug() << "BLE params: latency" << connectionParams.latency() << " minimum interval:" << connectionParams.minimumInterval() << " maximum interval:" << connectionParams.maximumInterval();
+
+    connectionParams.setIntervalRange(20, 1000);
+    connectionParams.setLatency(50);
+    m_control->requestConnectionUpdate(connectionParams);
+    QObject::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
+
+    m_control->readRssi();
+    QObject::connect(m_control, &QLowEnergyController::rssiRead, this, &BleInterface::rssiReaded);
+
     setState(Connected);
     m_control->discoverServices();
 }
@@ -398,6 +397,11 @@ void BleInterface::deviceDisconnected()
     qWarning() << "Remote device disconnected(UART service disconnected)";
 
     emit sgInterfaceDisconnected(m_connectedDevice);
+}
+
+void BleInterface::rssiReaded(qint16 rssi)
+{
+    qDebug() << "BLE RSSI " << rssi;
 }
 
 void BleInterface::controllerError(QLowEnergyController::Error error)
@@ -453,12 +457,12 @@ void BleInterface::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
     }
     setState(AcquireData);
 
-    QLowEnergyConnectionParameters leParameters;
-    leParameters.setIntervalRange(20, 75);
-    leParameters.setLatency(0);
-    leParameters.setSupervisionTimeout(4000);
+    // QLowEnergyConnectionParameters leParameters;
+    // leParameters.setIntervalRange(20, 75);
+    // leParameters.setLatency(0);
+    // leParameters.setSupervisionTimeout(4000);
 
-    m_control->requestConnectionUpdate(leParameters);
+    // m_control->requestConnectionUpdate(leParameters);
 
     emit sgInterfaceConnected(m_connectedDevice);
 }
@@ -468,7 +472,8 @@ void BleInterface::connectionParametersUpdated(const QLowEnergyConnectionParamet
     qInfo() << "Connection parameters updated, intervals:"
             << newParameters.minimumInterval()
             << newParameters.maximumInterval()
-            << " supervision timeout:" << newParameters.supervisionTimeout();
+            << " supervision timeout:" << newParameters.supervisionTimeout()
+            << " latency" << newParameters.latency();
 }
 
 void BleInterface::write(QByteArray data)

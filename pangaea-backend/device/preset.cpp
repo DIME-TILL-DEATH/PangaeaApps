@@ -153,33 +153,38 @@ void Preset::setImpulseName(const QString &newImpulseName)
     m_impulseName = newImpulseName;
 }
 
+quint8 Preset::calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, quint8 presetNumber)
+{
+    if(deviceType==DeviceType::CP100 || (deviceType==DeviceType::CP100PA))
+        return bankNumber*10 + presetNumber;
+    else
+        return (bankNumber<<4) + presetNumber;
+}
+
 quint8 Preset::getPresetFlatIndex() const
 {
-    if(m_ownerDevice->deviceType()==DeviceType::CP16 || (m_ownerDevice->deviceType()==DeviceType::CP16PA))
-        return (m_bankNumber<<4) + m_presetNumber;
-    else
-        return m_bankNumber*10 + m_presetNumber;
+    return calcPresetFlatIndex(m_ownerDevice->deviceType(), m_bankNumber, m_presetNumber);
 }
 
 quint8 Preset::getPresetFlatNumber() const
 {
-    quint16 maxBankPreset;
+    quint16 maxBank;
 
     if(m_ownerDevice == nullptr)
     {
         qWarning() << __FUNCTION__ << "Owner device doesn't set. Using default maxBank=16";
-        maxBankPreset = 4;
+        maxBank = 4;
     }
     else
     {
-        maxBankPreset = m_ownerDevice->maxBankPresetCount();
+        maxBank = m_ownerDevice->maxBankCount();
     }
-    return m_bankNumber*maxBankPreset + m_presetNumber;
+    return m_bankNumber*maxBank + m_presetNumber;
 }
 
 bool Preset::isIrEnabled() const
 {
-    //TODO переделать на запрос и установку любого параметра из/в rawData, на основе статических функций в deviceControls
+    //TODO переделать на запрос и установку любого параметра из/в rawData
     int result = m_rawData.at(17)-'0';
     return result;
 }

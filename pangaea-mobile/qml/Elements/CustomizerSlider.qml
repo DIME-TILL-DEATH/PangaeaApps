@@ -10,10 +10,10 @@ Slider
 {
     id: root
 
-    property string nameValue: "DIAL"
-    property string nameParam: "master_volume"
+    property string name: "BAR"
     property string units: " "
 
+    property var paramType
 
     property int valueMin:  0   //Y1
     property int valueMax:  31  //Y2
@@ -29,14 +29,14 @@ Slider
     property bool moduleOn: true
 
     property bool inverse: false
-    property bool editabled: false
+    property bool edited: false
 
     property bool bottomLineEnabled: true
 
-    property int     maximumValue: 1
-    property int     minimumValue: 2
+    property int maximumValue: 1
+    property int minimumValue: 2
 
-    property int     delitel: 1  //Делитель, если нужны десятичные занки
+    property int delitel: 1  //Делитель, если нужны десятичные занки
 
     property double kDisp: -((dispMax-dispMin)/(x1val-x2val))
     property double bDisp: -(((x2val*dispMin)-(x1val*dispMax))/(x1val-x2val))
@@ -46,7 +46,8 @@ Slider
     property double bVal: -(((x2val*valueMin)-(x1val*valueMax))/(x1val-x2val))
     property double yVal: Math.round(kVal * root.value * 100 + bVal)
 
-    value: 0.5
+    property int rawValue
+    value:  (rawValue - bVal) / 100 / kVal
 
     leftPadding: 0
     rightPadding: 0
@@ -55,10 +56,9 @@ Slider
     {
         parent: root.handle
         visible: root.pressed
-        text: yDisp //Math.round(root.value*100) //textValue.text //root.value//root.valueAt(root.position).toFixed(1)
+        text: yDisp
         scale: 1.2
         y : -40
-
     }
 
     background: Rectangle
@@ -100,7 +100,7 @@ Slider
     {
         x: root.leftPadding + root.visualPosition * (root.availableWidth - width)
 
-        color:  Style.currentTheme.colorSlider //editabled?"#00B0F3":"#00A0E3"
+        color:  Style.currentTheme.colorSlider
 
         width: 2
         height: root.height
@@ -111,7 +111,7 @@ Slider
         {
             transparentBorder: true
             color: "#00A0E3"
-            samples: 10 /*20*/
+            samples: 10
         }
     }
 
@@ -130,7 +130,7 @@ Slider
     {
         id: modulName
         anchors.fill: parent
-        text: editabled?("  "+nameValue+"*"):("  " + nameValue)
+        text: edited ? ("  "+ name +"*") : ("  " + name)
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         leftPadding: 4
@@ -142,30 +142,39 @@ Slider
     {
         if(!softUpdate)
         {
-            UiCore.setParameter(nameParam, Math.round(kVal * root.value * 100 + bVal));
-            editabled = true;
+            UiCore.setDeviceParameter(paramType, Math.round(kVal * root.value * 100 + bVal));
+            edited = true;
         }
         else
         {
-            editabled = false;
+            edited = false;
         }
     }
 
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, nameValue)
+
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if((root.nameParam.length>0) && nameParam.localeCompare(root.nameParam) === 0)
+            if(paramType === root.paramType)
             {
                 softUpdate = true;
-                root.value = (nameValue - bVal) / 100 / kVal ;
+                root.rawValue = value;
                 softUpdate = false;
             }
+        }
+    }
 
-            if( nameParam === "presetEdit" )
+    Connections
+    {
+        target: DeviceProperties
+
+        function onPresetModifiedChanged()
+        {
+            if(!DeviceProperties.presetModified)
             {
-                main.edit = nameValue;
+                edited = false;
             }
         }
     }

@@ -11,7 +11,7 @@ Item
     id: main
 
     property bool on: true
-    property string nameValue: "hpf_on"
+    property int paramType: DeviceParameter.HPF_ON
 
 
     BaseModule{
@@ -34,8 +34,10 @@ Item
 
                 height: parent.height
                 width: parent.width
-                nameValue: "High pass filter"
-                nameParam: "hpf_volume"
+
+                name: "High pass filter"
+                paramType: DeviceParameter.HPF_VOLUME
+
                 inverse: true
                 bottomLineEnabled: false
 
@@ -47,9 +49,9 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam === main.nameValue)
+            if(paramType === main.paramType)
             {
                 main.on=value
             }
@@ -61,6 +63,7 @@ Item
         function onSgModuleOnOf()
         {
             main.on = (!main.on);
+            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }

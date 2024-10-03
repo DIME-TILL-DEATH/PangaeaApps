@@ -45,7 +45,9 @@ Rectangle{
 
                 leftPadding: (_impulseOnIndicatorContainer.width-_impulseOnIndicator.width)/2
 
-                text: presetName
+                property int la3Preset: (Number(bankNumber)*4 + Number(presetNumber));
+
+                text: "Preset " + (DeviceProperties.isLa3Mode ? la3Preset : presetNumber)
                 font.pixelSize: 8 * Style.dip
                 color: Style.colorText
 
@@ -108,20 +110,7 @@ Rectangle{
         enabled: !parent.ListView.isCurrentItem
 
         onClicked: {
-            UiCore.setParameter("set_preset_change", parent.ListView.section*16 + (index % maxMap));
-        }
-    }
-
-
-    Connections{
-        target: UiCore
-
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam === "set_max_map")
-            {
-                maxMap = inValue
-            }
+            DeviceProperties.changePreset(bankNumber, presetNumber);
         }
     }
 }

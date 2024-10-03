@@ -25,6 +25,7 @@ public:
     const QString &impulseName() const;
     void setImpulseName(const QString &newImpulseName);
 
+    static quint8 calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, quint8 presetNumber);
     quint8 getPresetFlatIndex() const;
     quint8 getPresetFlatNumber() const;
 
@@ -52,7 +53,7 @@ private:
 
     quint8 presetVersion{1};
 
-    // TODO: заменить DeviceControls? Все параемтры?
+    // TODO: заменить на rawBA или соответствующую структуру
     bool m_isIrEnabled{false};
     QString m_impulseName{""};
 

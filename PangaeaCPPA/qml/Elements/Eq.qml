@@ -3,6 +3,8 @@ import QtQuick 2.15
 import Modules
 import StyleSettings
 
+import CppObjects
+
 Item
 {
     id: main
@@ -41,7 +43,8 @@ Item
                 valueMax: 99
                 dispValue: Math.round(((value + 100) *0.1 + 0.11)*10)/10
                 enabled: main.on
-                nameValue: "eq_q"+main.nomBand
+                // nameValue: "eq_q"+main.nomBand
+                paramType: DeviceParameter.EQ_Q1+main.nomBand-1
             }
 
             Pot
@@ -51,7 +54,8 @@ Item
 
 
                 enabled: main.on
-                nameValue: "eq_volume"+main.nomBand
+                // nameValue: "eq_volume"+main.nomBand
+                paramType: DeviceParameter.EQ_VOLUME1+main.nomBand-1
             }
 
             Dial
@@ -67,7 +71,8 @@ Item
                 valueMax: 100
                 dispValue: toolAdd + toolMult*value
                 enabled: main.on
-                nameValue: "eq_freq"+main.nomBand
+                // nameValue: "eq_freq"+main.nomBand
+                paramType: DeviceParameter.EQ_FREQ1+main.nomBand-1
             }
 
             Item

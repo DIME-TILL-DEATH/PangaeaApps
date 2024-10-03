@@ -9,7 +9,7 @@ Item
     id: main
 
     property string name: "DIAL"
-    property string nameValue: ""
+    property int paramType
 
     property bool checkable: true
     property bool on: true
@@ -198,8 +198,8 @@ Item
         {
             main.valueLastSend=main.value;
             main.chValue(main.value);
-            if(main.nameValue.length>0)
-                UiCore.setParameter(main.nameValue, main.value)
+
+            UiCore.setDeviceParameter(main.paramType, main.value)
         }
     }
 
@@ -213,11 +213,13 @@ Item
     Connections
     {
         target: UiCore
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if((main.nameValue.length>0)&&(nameParam===main.nameValue))
-                valueUpdateSoft(value);
 
+        function onSgSetUiDeviceParameter(paramType, value)
+        {
+            if(paramType === main.paramType)
+            {
+                valueUpdateSoft(value);
+            }
         }
     }
 }

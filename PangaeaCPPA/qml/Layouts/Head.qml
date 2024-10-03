@@ -9,19 +9,6 @@ Item
 {
     id: main
 
-
-
-    property int  maxMapRow: 10
-    property int controlMultiplier: 10
-    property int  presetNom: bank.value*controlMultiplier+preset.value
-
-    property int  bank:   bank.value
-    property int  preset: preset.value
-    property bool editable: true
-    property bool edit: true
-
-    property bool compareState: false
-
     property bool irOn: true
 
     signal setImpuls()
@@ -39,17 +26,12 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Presets
+        BankSpin
         {
             id: bank
 
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-
-            text: "BANK"
-            nameValue: "bank"
-            onChPreset: UiCore.setParameter("set_preset_change", presetNom)
-            enabled: main.editable
         }
 
         SwitchOutput
@@ -63,8 +45,7 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            editable: main.editable
-            edit: main.edit
+            edit: DeviceProperties.presetModified
         }
 
         Rectangle
@@ -114,20 +95,19 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            enabled: main.editable & !main.compareState
+            isAvaliable: (DeviceProperties.deviceType === DeviceType.CP16PA) |
+                         (DeviceProperties.deviceType === DeviceType.CP100PA) |
+                         (DeviceProperties.deviceType === DeviceType.LA3PA)
+
+            enabled: !AppProperties.compareState
         }
 
-        Presets
+        PresetSpin
         {
             id: preset
 
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-
-            text: "PRESET"
-            nameValue: "preset"
-            onChPreset: UiCore.setParameter("set_preset_change", presetNom)
-            enabled: main.editable
         }
 
         Item
@@ -148,55 +128,21 @@ Item
             }
         }
 
-        function onSgSetUIParameter(nameParam, value)
+        function onSgSetUiDeviceParameter(paramType, value)
         {
-            if(nameParam===("type_dev"))
-            {              
-                switch (value)
-                {
-                    case DeviceType.CP100:
-                    {
-                        maxMapRow = 10;
-                        switchPostPre.isAvaliable = false;
-                        break;
-                    }
-                    case DeviceType.CP16:
-                    {
-                        controlMultiplier = 16;
-                        maxMapRow = 4;
-                        switchPostPre.isAvaliable = false;
-                        break;
-                    }
-                    case DeviceType.CP16PA:
-                    {
-                        controlMultiplier = 16;
-                        maxMapRow = 4;
-                        switchPostPre.isAvaliable = true;
-                        break;
-                    }
-                    case DeviceType.CP100PA:
-                    {
-                        maxMapRow = 10;
-                        switchPostPre.isAvaliable = true;
-                        break;
-                    }
-                }
-            }
-
-            if(nameParam==="cabinet_enable")
+            switch(paramType)
+            {
+            case DeviceParameter.CABINET_ENABLE:
             {
                 main.irOn = value;
+                break;
             }
-
-            if(nameParam === "compare_state")
-            {
-                main.compareState = value;
             }
         }
 
-        function onSgSetParameter(nameParam, value)
+        function onSgSetDeviceParameter(paramType, value)
         {
-            if(nameParam==="cabinet_enable")
+            if(paramType === DeviceParameter.CABINET_ENABLE)
             {
                 main.irOn = value;
             }

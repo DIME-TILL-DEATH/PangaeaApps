@@ -8,15 +8,14 @@ Item
     id: main
 
     property string name: "HP"
-    property string nameValue: "hpf_on"
-
+    property int paramType: DeviceParameter.HPF_ON
     property bool on: true
 
     BaseModule{
         id: _baseModule
 
         moduleName: main.name
-        nameValue: main.nameValue
+        // paramType: main.paramType
 
         on: main.on
 
@@ -43,7 +42,7 @@ Item
                 enabled: main.on
                 name: "20 Hz 1k"
                 checkable: false
-                nameValue: "hpf_volume"
+                paramType: DeviceParameter.HPF_VOLUME
                 valueMax: 255
                 dispMin:   20
                 dispMax:   1000
@@ -61,11 +60,11 @@ Item
         Connections
         {
             target: UiCore
-            function onSgSetUIParameter(nameParam, nameValue)
+            function onSgSetUiDeviceParameter(paramType, value)
             {
-                if((nameParam === main.nameValue))
+                if(paramType === main.paramType)
                 {
-                    main.on=nameValue
+                    main.on = value;
                 }
             }
         }
@@ -75,6 +74,7 @@ Item
             function onSgModuleOnOf()
             {
                 main.on = (!main.on);
+                UiCore.setDeviceParameter(main.paramType, main.on);
             }
         }
     }

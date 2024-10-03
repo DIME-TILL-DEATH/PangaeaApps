@@ -240,8 +240,6 @@ Item
                 anchors.fill: parent
                 onClicked: {
                     _checkBox.checked = !_checkBox.checked
-
-                    UiCore.setParameter("autoconnect_state", _checkBox.checked)
                 }
             }
 
@@ -270,13 +268,6 @@ Item
 
         function onSgSetUIParameter(nameParam, inValue)
         {
-//            if(nameParam === "ready_to_disconnect")
-//            {
-//                isConnected = false;
-//                InterfaceManager.disconnectFromDevice();
-//                openConnectPage();
-//            }
-
             if(nameParam === "autoconnect_enable")
             {
                 _checkBox.checked = inValue;
