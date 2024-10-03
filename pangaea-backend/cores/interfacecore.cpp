@@ -50,13 +50,13 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
             return false;
         }
     }
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::sgNewData, Qt::UniqueConnection);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceCore::sgConnectionStarted, Qt::UniqueConnection);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceCore::sgDeviceUnavaliable, Qt::UniqueConnection);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceCore::slInterfaceError, Qt::UniqueConnection);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceCore::sgInterfaceConnected, Qt::UniqueConnection);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceCore::sgInterfaceDisconnected, Qt::UniqueConnection);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgModuleNameUpdated, this, &InterfaceCore::sgModuleNameUpdated, Qt::UniqueConnection);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::sgNewData);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceCore::sgConnectionStarted);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceCore::sgDeviceUnavaliable);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceCore::slInterfaceError);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceCore::sgInterfaceConnected);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceCore::sgInterfaceDisconnected);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgModuleNameUpdated, this, &InterfaceCore::sgModuleNameUpdated);
 
     m_connectedDeviceDescription = device;
 
@@ -96,7 +96,9 @@ void InterfaceCore::startScanning()
 
     QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable, Qt::UniqueConnection);
 
+#ifndef Q_OS_ANDROID
     m_usbInterface->startScan();
+#endif
     m_bleInterface->startScan();
 }
 
