@@ -108,6 +108,12 @@ AnswerWorker::AnswerWorker()
     m_devCommandList.append(DeviceAnswer(getIrListCP100_legacy, AnswerType::getIrList, "get list of IR names for CP100(legacy)"));
 
    // m_devCommandList.append(DeviceAnswer(new Parser("END\n", "1111"), AnswerType::endOperation, "operation complete"));
+
+    // LA3 special
+    m_devCommandList.append(DeviceAnswer(new Parser("sm0*END\n", "111X1111"), AnswerType::la3CleanPreset, "la3 clean preset mappings"));
+    m_devCommandList.append(DeviceAnswer(new Parser("sm1*END\n", "111X1111"), AnswerType::la3DrivePreset, "la3 drive preset mappings"));
+    m_devCommandList.append(DeviceAnswer(new Parser("umx\rEND\n", "11011111"), AnswerType::la3ModeChange, "la3 hardware switch occured"));
+
 }
 
 DeviceAnswer AnswerWorker::parseRawData(const QByteArray &rawData)

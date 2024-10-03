@@ -42,6 +42,9 @@ enum AnswerType{
     ackSetParameter,
     requestNextChunk,
     indicationRequest,
+    la3CleanPreset,
+    la3DrivePreset,
+    la3ModeChange,
     endOperation
 };
 

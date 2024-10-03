@@ -32,6 +32,7 @@
 
 #include "eqband.h"
 #include "eqresponse.h"
+#include "poweramp.h"
 
 void manageSegFailure(int signalCode);
 Logger* Logger::currentHandler = nullptr;
@@ -62,6 +63,7 @@ int main(int argc, char *argv[])
     InterfaceCore* interfaceManager = new InterfaceCore();
 
     EqResponse eqResponse(core);
+    PowerAmp pa(core);
 
     PresetListModel presetListModel;
 
@@ -102,6 +104,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "EqResponse", &eqResponse);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "PowerAmp", &pa);
 
     qmlRegisterUncreatableType<Core>("CppObjects", 1, 0, "AppParameter", "Cannot create AppParameter in QML");
     qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
@@ -147,7 +150,6 @@ int main(int argc, char *argv[])
     Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::slInterfaceConnected, Qt::QueuedConnection);
 
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice, Qt::BlockingQueuedConnection);
-    Core::connect(core, &Core::sgSilentWriteToInterface, interfaceManager, &InterfaceCore::silentWriteToDevice, Qt::BlockingQueuedConnection);
 
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError, Qt::QueuedConnection);
 

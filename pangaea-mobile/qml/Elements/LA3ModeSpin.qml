@@ -15,6 +15,8 @@ Rectangle
 
     property string text
 
+    property bool isModified: false
+
     color: "transparent"
     border.width: 1
     border.color: Style.currentTheme.colorBorderOn
@@ -30,6 +32,8 @@ Rectangle
             width: parent.width
             height: parent.height*2.5/10
 
+            enabled: main.isModified
+
             color: _mapBtnMa.pressed ? Style.colorItemHighlight : Style.colorFon
 
             border.width: 1
@@ -39,7 +43,7 @@ Rectangle
             MText{
                 text: qsTr("SET")
 
-                color:  Style.colorText
+                color:  main.isModified ? Style.colorText : Style.colorBtnDisabled
 
                 anchors.centerIn: parent
 
@@ -50,9 +54,11 @@ Rectangle
             MouseArea{
                 id: _mapBtnMa
 
+
                 anchors.fill: parent
                 onClicked: {
-                    // set presets to CLN и DST
+                    main.isModified = false;
+                    DeviceProperties.setLa3Mappings(_tumblerCln.currentIndex, _tumblerDst.currentIndex);
                 }
             }
         }
@@ -80,7 +86,7 @@ Rectangle
                 height: parent.height
 
                 model: DeviceProperties.presetsList
-                // currentIndex: DeviceProperties.bank
+                //currentIndex: DeviceProperties.la3CleanPreset
 
                 visibleItemCount: 1
 
@@ -97,6 +103,10 @@ Rectangle
                     verticalAlignment:   Text.AlignVCenter
                     font.bold: true
                     font.family: "Arial Black"
+                }
+
+                onCurrentIndexChanged: {
+                    main.isModified = true;
                 }
             }
         }
@@ -123,7 +133,7 @@ Rectangle
                 height: parent.height
 
                 model: DeviceProperties.presetsList
-                // currentIndex: DeviceProperties.preset
+                //currentIndex: DeviceProperties.la3DrivePreset
 
                 visibleItemCount: 1
 
@@ -141,7 +151,27 @@ Rectangle
                     font.bold: true
                     font.family: "Arial Black"
                 }
+
+                onCurrentIndexChanged: {
+                    main.isModified = true;
+                }
             }
+        }
+    }
+
+    Connections{
+        target: DeviceProperties
+
+        function onLa3CleanPresetChanged()
+        {
+            _tumblerCln.currentIndex = DeviceProperties.la3CleanPreset
+            main.isModified = false;
+        }
+
+        function onLa3DrivePresetChanged()
+        {
+            _tumblerDst.currentIndex = DeviceProperties.la3DrivePreset
+            main.isModified = false;
         }
     }
 }

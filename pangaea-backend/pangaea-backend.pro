@@ -40,6 +40,7 @@ SOURCES += \
     moduls/abstractmodule.cpp \
     moduls/eqband.cpp \
     moduls/eqresponse.cpp \
+    moduls/poweramp.cpp \
     uihelpers/controlvalue.cpp \
     uihelpers/appproperties.cpp \
     uihelpers/deviceproperties.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     moduls/abstractmodule.h \
     moduls/eqband.h \
     moduls/eqresponse.h \
+    moduls/poweramp.h \
     uihelpers/appproperties.h \
     uihelpers/controlvalue.h \
     uihelpers/deviceproperties.h \

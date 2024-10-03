@@ -22,6 +22,7 @@ Core::Core(QObject *parent) : QObject(parent)
     connect(timeoutTimer, &QTimer::timeout, this, &Core::recieveTimeout);
 
     indicationTimer = new QTimer(this);
+    indicationTimer->setInterval(10000);
     connect(indicationTimer, &QTimer::timeout, this, &Core::indicationRequest);
 }
 
@@ -42,7 +43,7 @@ void Core::slInterfaceConnected(DeviceDescription interfaceDescription)
     switch (interfaceDescription.connectionType())
     {
     case DeviceConnectionType::BLE:
-        indicationTimer->setInterval(100);
+        indicationTimer->setInterval(1000);
         break;
     default:
         indicationTimer->setInterval(20);
@@ -62,20 +63,16 @@ void Core::parseInputData(QByteArray ba)
 
     updateProgressBar();
 
+    lastRecievedData += ba;
     commandWorker.parseAnswers(ba);
-
-    if(commandWorker.displayNextAnswer())
-    {
-        if(commandsSended.count() > 0) m_blockConsoleLog = false;
-
-        if(!m_blockConsoleLog)
-        {
-            qDebug() << "->" << __FUNCTION__ << ":" << ba;
-        }
-    }
 
     while(commandWorker.haveAnswer())
     {
+        lastRecievedData.clear();
+
+        if(commandWorker.displayNextAnswer())
+            qInfo() << "->" << __FUNCTION__ << ":" << ba;
+
         DeviceAnswer recievedCommand = commandWorker.popAnswer();
         QList<QByteArray> parseResult = recievedCommand.parseResult();
         recieveEnabled = recievedCommand.isEnableRecieve();
@@ -91,7 +88,14 @@ void Core::parseInputData(QByteArray ba)
 
                     if(controlledDevice.deviceType() == DeviceType::CP16 || controlledDevice.deviceType() == DeviceType::CP16PA)
                     {
-                        pushCommandToQueue("sw4 disable");
+                        pushCommandToQueue("sw4 disable"); // disable hardware switches
+                    }
+
+                    if(controlledDevice.deviceType() == DeviceType::LA3PA || controlledDevice.deviceType() == DeviceType::LA3RV)
+                    {
+                        // request LA3 maps
+                        pushCommandToQueue("sm0");
+                        pushCommandToQueue("sm1");
                     }
 
                     emit sgRecieveDeviceParameter(DeviceParameter::Type::DEVICE_TYPE, deviceType);
@@ -247,6 +251,38 @@ void Core::parseInputData(QByteArray ba)
                     }
                 }
                 break;
+            }
+
+            case AnswerType::la3CleanPreset:
+            {
+                if(parseResult.size()==1)
+                {
+                    quint8 bankPreset = parseResult.at(0).toUInt();
+
+                    qInfo() << "LA3 clean preset mapping: " << bankPreset;
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_CLEAN_PRESET, bankPreset);
+                }
+                break;
+            }
+
+            case AnswerType::la3DrivePreset:
+            {
+                if(parseResult.size()==1)
+                {
+                    quint8 bankPreset = parseResult.at(0).toUInt();
+                    qInfo() << "LA3 drive preset mapping: " << bankPreset;
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_DRIVE_PRESET, bankPreset);
+                }
+                break;
+            }
+
+            case AnswerType::la3ModeChange:
+            {
+                qInfo() << recievedCommand.description();
+
+                pushReadPresetCommands();
+                pushCommandToQueue("rns\n");
+                processCommands();
             }
 
             case AnswerType::getOutputMode:
@@ -931,7 +967,6 @@ void Core::setParameter(QString name, quint8 value)
     {
         emit sgWriteToInterface(sendStr.toUtf8());
         recieveEnabled = false;
-        m_blockConsoleLog = false;
     }
     else
     {
@@ -958,7 +993,16 @@ void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameter
 
         emit sgWriteToInterface(QString("fsf\r\n").toUtf8());
         recieveEnabled = false;
-        m_blockConsoleLog = false;
+        break;
+    }
+
+    case SET_LA3_MAPPINGS:
+    {
+        quint8 cleanPreset = parameters.at(0).toInt();
+        quint8 drivePreset = parameters.at(1).toInt();
+        pushCommandToQueue(QString("sm0 %2").arg(cleanPreset).toUtf8());
+        pushCommandToQueue(QString("sm1 %2").arg(drivePreset).toUtf8());
+        processCommands();
         break;
     }
     // case CALL_PRESET_LIST:
@@ -979,15 +1023,13 @@ void Core::slSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint
     recieveEnabled = false;
 
     if(sendStr.size() > 0)
-        emit sgWriteToInterface(sendStr.toUtf8());
+        emit sgWriteToInterface(sendStr.toUtf8(), false);
 
     if(deviceParameterType == DeviceParameter::Type::CABINET_ENABLE)
     {
         //TODO в rawData обновлять все поля пресета, а не только это
         currentPreset.setIsIrEnabled(value);
     }
-
-    m_blockConsoleLog = false;
 }
 
 void Core::restoreValue(QString name)
@@ -1010,9 +1052,9 @@ void Core::readAllParameters()
     pushCommandToQueue("amtdev");
     pushCommandToQueue("amtver");
 
-    pushCommandToQueue("rns");
-
     pushReadPresetCommands();
+
+    pushCommandToQueue("rns");
 
     pushCommandToQueue("gm");
 
@@ -1044,8 +1086,8 @@ void Core::processCommands()
         }
         else
         {
-            chunckSize=128;
-            sleepTime=200; // lower values tends to disconnect on MacOs
+            chunckSize=16;
+            sleepTime=40; // lower values tends to disconnect on MacOs
         }
 
         if(commandToSend.length() > chunckSize)
@@ -1089,17 +1131,15 @@ void Core::processCommands()
 void Core::indicationRequest()
 {
 
-    if(controlledDevice.isFirmwareCanIndicate())
-    {
-        // qDebug() << "Indication request";
-        // emit sgSilentWriteToInterface("iio\r\n");
-        m_blockConsoleLog = true;
-        // emit sgWriteToInterface("iio\r\n");
-    }
-    else
-    {
+    // if(controlledDevice.isFirmwareCanIndicate())
+    // {
+    //     qDebug() << "Indication request";
+    //     emit sgWriteToInterface("iio\r\n", false);
+    // }
+    // else
+    // {
         indicationTimer->stop();
-    }
+    // }
 }
 
 void Core::recieveTimeout()
@@ -1121,7 +1161,9 @@ void Core::recieveTimeout()
         else
         {
             sendCount++;
-            qDebug() << "!!!!!!!!!!!!!!!!! recieve timeout !!!!!!!!!!!!!!!!!" << sendCount;
+            qInfo() << "!!!!!!!!!!!!!!!!! recieve timeout !!!!!!!!!!!!!!!!!" << sendCount;
+            qInfo() << "Data recieved, but not parsed: " << lastRecievedData;
+
             sendCommand(commandWithoutAnswer);
             timeoutTimer->setInterval(1000);
 
@@ -1151,8 +1193,6 @@ void Core::sendCommand(QByteArray val)
     emit sgWriteToInterface(val);
 
     updateProgressBar();
-
-    m_blockConsoleLog = false;
 }
 
 void Core::updateProgressBar()

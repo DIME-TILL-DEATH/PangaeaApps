@@ -10,7 +10,9 @@ import CppObjects
 Rectangle {
     id: _main
 
-    property string moduleName: "Module name"
+    property bool disabled: AppProperties.compareState
+
+    property string moduleName: module !== undefined ? module.moduleName : ""
     property string moduleDescription: "Description"
     //property string nameValue
 
@@ -19,8 +21,6 @@ Rectangle {
     property Component contentItem
 
     property Module module
-
-    property bool disabled: AppProperties.compareState
 
     signal sgModuleOnOf()
 
@@ -160,8 +160,14 @@ Rectangle {
                 anchors.fill: parent
                 z: 5
                 onClicked: {
-                    sgModuleOnOf();
-                    module.moduleEnabled = !module.moduleEnabled
+                    if(module !== null)
+                    {
+                        module.moduleEnabled = !module.moduleEnabled
+                    }
+                    else
+                    {
+                        sgModuleOnOf();
+                    }
                 }
             }
         }

@@ -37,7 +37,8 @@ public:
         PASTE_PRESET,
         COMPARE_PRESET,
         SAVE_CHANGES,
-        FORMAT_FLASH
+        FORMAT_FLASH,
+        SET_LA3_MAPPINGS
         // CALL_PRESET_LIST
     };
     Q_ENUM(AppAction)
@@ -72,6 +73,8 @@ private:
     IRWorker irWorker;
     AnswerWorker commandWorker;
 
+    QByteArray lastRecievedData;
+
     QList<Preset> m_presetsList;
 
     Device controlledDevice;
@@ -80,8 +83,6 @@ private:
 
     bool fwUpdate{false};
     bool isFormatting{false};
-
-    bool m_blockConsoleLog{false};
 
     bool isPresetEdited{false};
     Preset currentPreset{&controlledDevice};
@@ -113,8 +114,7 @@ private:
     void changePreset(quint8 bank, quint8 preset);
     void setPresetData(const Preset& preset);
 signals:
-    void sgWriteToInterface(QByteArray data);
-    void sgSilentWriteToInterface(QByteArray data);
+    void sgWriteToInterface(QByteArray data, bool logCommand = true);
     void sgExchangeError();
 
     void sgFirmwareVersionInsufficient(Firmware *minimalFirmware, Firmware *actualFirmware);

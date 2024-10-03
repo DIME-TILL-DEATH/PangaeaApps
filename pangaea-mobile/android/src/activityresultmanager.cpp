@@ -100,11 +100,12 @@ void ActivityResultManager::processUri(QJniObject uriObject)
 //    m_filePath.replace("%2F", "/");
 //    m_filePath.replace("%3A", ":");
 
+    QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
     m_fileName= QJniObject::callStaticObjectMethod(
             "com.amtelectronics.utils/JavaFile", "getFileName",
             "(Landroid/net/Uri;Landroid/content/Context;)Ljava/lang/String;",
             uriObject.object(),
-            QNativeInterface::QAndroidApplication::context()).toString();
+            androidContext.object()).toString();
 }
 
 void ActivityResultManager::takeReadUriPermission(QJniObject uriObject)
@@ -162,10 +163,11 @@ QString ActivityResultManager::getFileNameFromUri(QString uri)
             "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
             QJniObject::fromString(uri).object<jstring>());
 
+        QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
         QString fileName = QJniObject::callStaticObjectMethod(
-                "com.amtelectronics.utils/JavaFile", "getFileName",
-                "(Landroid/net/Uri;Landroid/content/Context;)Ljava/lang/String;",
-                uriJni.object(), QNativeInterface::QAndroidApplication::context()).toString();
+                               "com.amtelectronics.utils/JavaFile", "getFileName",
+                               "(Landroid/net/Uri;Landroid/content/Context;)Ljava/lang/String;",
+                               uriJni.object(), androidContext.object()).toString();
         return fileName;
 }
 #endif

@@ -210,19 +210,25 @@ Rectangle
 
                 ParameterDial{
                     id: dialFreq
-                    controlValue: EqResponse.EqBands[currentBandIndex].Fc
+                    width: parent.width/3.5
+                    height: parent.height*0.9
+                    anchors.verticalCenter: parent.verticalCenter
 
-                    onMoved: {
-                        EqResponse.EqBands[currentBandIndex].Fc.value = value
-                    }
+                    controlValue: EqResponse.EqBands[currentBandIndex].Fc
                 }
                 ParameterDial{
                     id: dialGain
+                    width: parent.width/3.5
+                    height: parent.height*0.9
+                    anchors.verticalCenter: parent.verticalCenter
 
                     controlValue: EqResponse.EqBands[currentBandIndex].gain
                 }
                 ParameterDial{
                     id: dialQ
+                    width: parent.width/3.5
+                    height: parent.height*0.9
+                    anchors.verticalCenter: parent.verticalCenter
 
                     step: 0.1
                     controlValue: EqResponse.EqBands[currentBandIndex].Q

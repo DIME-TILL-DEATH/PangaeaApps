@@ -29,6 +29,12 @@ void AbstractModule::slSetUiDeviceParameter(DeviceParameter::Type deviceParamete
     emit sgSetUiDeviceParameter(deviceParameterType, value);
 }
 
+void AbstractModule::slSetAppParameter(Core::AppParameter appParameterType, QVariant content)
+{
+    if(appParameterType == Core::AppParameter::PRESET_MODIFIED && content.toBool() == false)
+        emit moduleEnabledChanged();
+}
+
 bool AbstractModule::moduleEnabled() const
 {
     return m_moduleEnabled;

@@ -79,20 +79,12 @@ void InterfaceCore::disconnectFromDevice()
     }
 }
 
-void InterfaceCore::writeToDevice(QByteArray data)
+void InterfaceCore::writeToDevice(QByteArray data, bool logCommand)
 {
     if(m_exchangeInterface)
     {
-        qDebug() << "<- writeData:" << data << "hex:" << data.toHex() << "lenght:" << data.length();
+        if(logCommand) qInfo() << "<- writeData:" << data << "hex:" << data.toHex() << "lenght:" << data.length();
 
-        m_exchangeInterface->write(data);
-    }
-}
-
-void InterfaceCore::silentWriteToDevice(QByteArray data)
-{
-    if(m_exchangeInterface)
-    {
         m_exchangeInterface->write(data);
     }
 }

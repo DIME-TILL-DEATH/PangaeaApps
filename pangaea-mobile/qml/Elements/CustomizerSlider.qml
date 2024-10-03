@@ -172,7 +172,10 @@ Slider
 
         function onPresetModifiedChanged()
         {
-            if(!DeviceProperties.presetMofified) edited = false;
+            if(!DeviceProperties.presetModified)
+            {
+                edited = false;
+            }
         }
     }
 }

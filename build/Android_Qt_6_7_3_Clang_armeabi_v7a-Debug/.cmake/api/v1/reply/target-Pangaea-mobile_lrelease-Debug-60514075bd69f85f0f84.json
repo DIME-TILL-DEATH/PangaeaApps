@@ -1,0 +1,115 @@
+{
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"qt6_add_lrelease",
+			"qt6_add_translations"
+		],
+		"files" : 
+		[
+			"D:/Qt/6.7.3/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsMacros.cmake",
+			"D:/Qt/6.7.3/mingw_64/lib/cmake/Qt6LinguistTools/Qt6LinguistToolsMacros.cmake:728:EVAL",
+			"pangaea-mobile/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 2
+			},
+			{
+				"file" : 2,
+				"line" : -1,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 1,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 748,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 542,
+				"parent" : 3
+			}
+		]
+	},
+	"id" : "Pangaea-mobile_lrelease::@6295e0ef9994fb9a6cc4",
+	"name" : "Pangaea-mobile_lrelease",
+	"paths" : 
+	{
+		"build" : "pangaea-mobile",
+		"source" : "pangaea-mobile"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 4,
+			"isGenerated" : true,
+			"path" : "build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/CMakeFiles/Pangaea-mobile_lrelease",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/CMakeFiles/Pangaea-mobile_lrelease.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/pangaea-mobile_de.qm.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/pangaea-mobile_en.qm.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/pangaea-mobile_it.qm.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/pangaea-mobile_ru.qm.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

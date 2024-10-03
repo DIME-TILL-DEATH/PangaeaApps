@@ -78,6 +78,9 @@ public:
         FIRMWARE_CAN_INDICATE,
         SIGNAL_IN,
         SIGNAL_OUT,
+
+        LA3_CLEAN_PRESET,
+        LA3_DRIVE_PRESET
     };
     Q_ENUM(Type);
 

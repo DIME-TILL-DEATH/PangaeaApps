@@ -1,8 +1,9 @@
 #include "controlvalue.h"
 
 ControlValue::ControlValue(AbstractModule *parent, DeviceParameter::Type deviceParameterType,
+                           QString name, QString units,
                            qint16 minControlValue, qint16 maxControlValue,
-                           double minDisplayValue, double maxDisplayValue, QString name, QString units)
+                           double minDisplayValue, double maxDisplayValue)
     : QObject{parent},
     m_deviceParameterType{deviceParameterType},
     m_minControlValue{minControlValue},
@@ -17,6 +18,7 @@ ControlValue::ControlValue(AbstractModule *parent, DeviceParameter::Type deviceP
         connect(this, &ControlValue::sgSetDeviceParameter, parent, &AbstractModule::sgSetDeviceParameter);
         connect(parent, &AbstractModule::sgSetUiDeviceParameter, this, &ControlValue::slSetControlValue);
         connect(parent, &AbstractModule::sgSetAppParameter, this, &ControlValue::slSetAppParameter);
+        connect(parent, &AbstractModule::moduleEnabledChanged, this, &ControlValue::enabledChanged);
     }
 }
 
@@ -36,6 +38,14 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     qint8 controlValue = (m_displayValue - k1)/k2;
     emit sgSetDeviceParameter(m_deviceParameterType, controlValue);
 
+}
+
+bool ControlValue::enabled() const
+{
+    if(this->parent() != nullptr)
+        return qobject_cast<AbstractModule*>(this->parent())->moduleEnabled();
+    else
+        return true;
 }
 
 void ControlValue::slSetControlValue(DeviceParameter::Type deviceParameterType, qint32 value)

@@ -27,8 +27,9 @@ signals:
 
 public slots:
     void slSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
+    void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
 
-private:
+protected:
     bool m_moduleEnabled;
     QString m_moduleName;
     DeviceParameter::Type m_parameterTypeModuleOn;

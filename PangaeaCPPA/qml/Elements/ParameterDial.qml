@@ -8,9 +8,8 @@ import CppObjects
 Item{
     id: _root
 
-    width: parent.width/3.5
-    height: parent.height*0.9
-    anchors.verticalCenter: parent.verticalCenter
+    width:  parent.width
+    height: parent.height/1000*165
 
     required property ControlValue controlValue
 
@@ -56,7 +55,7 @@ Item{
                 height: width
                 radius: width / 2
 
-                color: (main.on) ? "white" : "darkgrey"
+                color: (controlValue.enabled) ? "white" : "darkgrey"
 
                 border.width: 1
                 border.color: "darkgrey"
@@ -97,7 +96,7 @@ Item{
             MText
             {
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: (main.on) ? "white" : "darkgrey"
+                color: (controlValue.enabled) ? "white" : "darkgrey"
                 font.pixelSize: parent.width/10
                 text: _root.name
             }

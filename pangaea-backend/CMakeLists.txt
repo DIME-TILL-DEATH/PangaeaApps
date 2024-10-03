@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21.1)
+cmake_minimum_required(VERSION 3.16)
 project(pangaea-backend VERSION 1.0.0 LANGUAGES CXX)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
@@ -38,6 +38,7 @@ qt_add_library(pangaea-backend STATIC
     moduls/abstractmodule.cpp moduls/abstractmodule.h
     moduls/eqband.cpp moduls/eqband.h
     moduls/eqresponse.cpp moduls/eqresponse.h
+    moduls/poweramp.cpp moduls/poweramp.h
 
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h

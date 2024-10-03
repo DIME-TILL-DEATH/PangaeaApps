@@ -44,6 +44,18 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
         emit presetChanged();
         break;
     }
+    case DeviceParameter::Type::LA3_CLEAN_PRESET:
+    {
+        m_la3CleanPreset = value;
+        emit la3CleanPresetChanged();
+        break;
+    }
+    case DeviceParameter::Type::LA3_DRIVE_PRESET:
+    {
+        m_la3DrivePreset = value;
+        emit la3DrivePresetChanged();
+        break;
+    }
     case DeviceParameter::Type::DEVICE_TYPE:
     {
         m_deviceType = (DeviceType)value;
@@ -67,9 +79,9 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
         case DeviceType::CP16:
         {
             m_firmwareName = "CP-16M Blue";
-            for(int i=0; i<4; i++)
+
+            for(int i=0; i<16; i++)
             {
-                m_banksList.append(i);
                 m_presetsList.append(i);
             }
             break;
@@ -78,9 +90,8 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
         {
             m_firmwareName = "CP-16M-PA Green";
 
-            for(int i=0; i<4; i++)
+            for(int i=0; i<16; i++)
             {
-                m_banksList.append(i);
                 m_presetsList.append(i);
             }
             break;
@@ -149,6 +160,7 @@ void DeviceProperties::setBank(quint8 newBank)
 
     if(m_presetModified)
     {
+        qDebug() << "PresetNotSaved" << __FUNCTION__;
         emit presetNotSaved(newBank, m_preset);
         return;
     }
@@ -165,6 +177,7 @@ void DeviceProperties::setPreset(quint8 newPreset)
 
     if(m_presetModified)
     {
+        qDebug() << "PresetNotSaved" << __FUNCTION__;
         emit presetNotSaved(m_bank, newPreset);
         return;
     }
@@ -177,4 +190,24 @@ void DeviceProperties::setPreset(quint8 newPreset)
 bool DeviceProperties::isLa3Mode() const
 {
     return (m_deviceType == DeviceType::LA3PA) | (m_deviceType == DeviceType::LA3RV);
+}
+
+quint8 DeviceProperties::la3CleanPreset() const
+{
+    return (m_la3CleanPreset/10) * 4 + m_la3CleanPreset%10;
+}
+
+quint8 DeviceProperties::la3DrivePreset() const
+{
+    return (m_la3DrivePreset/10) * 4 + m_la3DrivePreset%10;
+}
+
+void DeviceProperties::setLa3Mappings(quint8 cleanPreset, quint8 drivePreset)
+{
+    m_la3CleanPreset = cleanPreset;
+    m_la3DrivePreset = drivePreset;
+
+    quint8 recalcedCleanPreset = 10 * quint8(m_la3CleanPreset/4) + m_la3CleanPreset%4;
+    quint8 recalcedDrivePreset = 10 * quint8(m_la3DrivePreset/4) + m_la3DrivePreset%4;
+    emit sendAppAction(Core::AppAction::SET_LA3_MAPPINGS, {recalcedCleanPreset, recalcedDrivePreset});
 }

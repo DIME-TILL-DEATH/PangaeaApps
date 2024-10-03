@@ -54,6 +54,8 @@ private slots:
     void controllerError(QLowEnergyController::Error);
     void deviceConnected();
     void deviceDisconnected();
+    void rssiReaded(qint16 rssi);
+    void connectionParametersUpdated(const QLowEnergyConnectionParameters &newParameters);
 
     /* Slotes for QLowEnergyService */
     void serviceStateChanged(QLowEnergyService::ServiceState s);
@@ -63,9 +65,6 @@ private slots:
     /* Slots for user */
     void slStartConnect(QString address);
     void checkDevicesAvaliabliy();
-
-    void connectionParametersUpdated(const QLowEnergyConnectionParameters &newParameters);
-
 private:
     bool isAvaliable;
 

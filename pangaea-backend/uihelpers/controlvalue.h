@@ -10,6 +10,8 @@ class ControlValue : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged FINAL)
+
     Q_PROPERTY(double value READ displayValue WRITE setDisplayValue NOTIFY displayValueChanged FINAL)
     Q_PROPERTY(double minValue READ minDisplayValue CONSTANT)
     Q_PROPERTY(double maxValue READ maxDisplayValue CONSTANT)
@@ -20,9 +22,9 @@ class ControlValue : public QObject
     Q_PROPERTY(QString units READ units CONSTANT)
 public:
     explicit ControlValue(AbstractModule *parent, DeviceParameter::Type deviceParameterType,
-                          qint16 minControlValue, qint16 maxControlValue,
-                          double minDisplayValue, double maxDisplayValue,
-                          QString name = "", QString units ="");
+                          QString name = "", QString units ="",
+                          qint16 minControlValue = 0, qint16 maxControlValue = 31,
+                          double minDisplayValue = 0, double maxDisplayValue = 31);
 
     void setDisplayValue(double newDisplayValue);
     double displayValue() const {return m_displayValue;};
@@ -36,11 +38,15 @@ public:
     QString name() const {return m_name;};
     QString units() const {return m_units;};
 
+    bool enabled() const;
+
 signals:
     void displayValueChanged();
     void isModifiedChanged();
 
     void sgSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
+
+    void enabledChanged();
 
 public slots:
     void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
