@@ -82,6 +82,54 @@
     </message>
 </context>
 <context>
+    <name>ControlButtonsGroup</name>
+    <message>
+        <source>Phones</source>
+        <extracomment>Output mode. Phones.</extracomment>
+        <translation type="unfinished">Cuffie</translation>
+    </message>
+    <message>
+        <source>Balance</source>
+        <extracomment>Output mode. Balanced out.</extracomment>
+        <translation type="unfinished">Balanced</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <extracomment>Output mode. Line out.</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <extracomment>Button text. Export preset</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <extracomment>Button text. Save preset</extracomment>
+        <translation type="unfinished">Salva</translation>
+    </message>
+    <message>
+        <source>Comp</source>
+        <extracomment>Button text. Compare preset</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <extracomment>Button text. Import preset</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <extracomment>Button text. Copy preset.</extracomment>
+        <translation type="unfinished">Copia</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <extracomment>Button text. Paste preset</extracomment>
+        <translation type="unfinished">Incolla</translation>
+    </message>
+</context>
+<context>
     <name>DocumentationWindow</name>
     <message>
         <source>Documentation</source>
@@ -114,10 +162,6 @@
 </context>
 <context>
     <name>EqPreview</name>
-    <message>
-        <source>EQ</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Equalizer</source>
         <translation type="unfinished"></translation>
@@ -289,46 +333,33 @@
     <message>
         <source>Phones</source>
         <extracomment>Output mode. Phones.</extracomment>
-        <translation>Cuffie</translation>
+        <translation type="vanished">Cuffie</translation>
     </message>
     <message>
         <source>Balance</source>
         <extracomment>Output mode. Balanced out.</extracomment>
-        <translation>Balanced</translation>
+        <translation type="vanished">Balanced</translation>
     </message>
     <message>
         <source>Save</source>
         <extracomment>Button text. Save preset</extracomment>
-        <translation>Salva</translation>
+        <translation type="vanished">Salva</translation>
     </message>
     <message>
         <source>Copy</source>
         <extracomment>Button text. Copy preset.</extracomment>
-        <translation>Copia</translation>
+        <translation type="vanished">Copia</translation>
     </message>
     <message>
         <source>Paste</source>
         <extracomment>Button text. Paste preset</extracomment>
-        <translation>Incolla</translation>
+        <translation type="vanished">Incolla</translation>
     </message>
+</context>
+<context>
+    <name>ModeSpin_LA</name>
     <message>
-        <source>Line</source>
-        <extracomment>Output mode. Line out.</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Export</source>
-        <extracomment>Button text. Export preset</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Comp</source>
-        <extracomment>Button text. Compare preset</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import</source>
-        <extracomment>Button text. Import preset</extracomment>
+        <source>SET</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -367,6 +398,17 @@
 </context>
 <context>
     <name>PresetSpin</name>
+    <message>
+        <source>MAP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PRESET</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PresetSpin_LA</name>
     <message>
         <source>MAP</source>
         <translation type="unfinished"></translation>
@@ -524,6 +566,16 @@ https://amtelectronics.com {2023
     <message>
         <source>The Firmware file has been transmitted
 Please, reconnect to device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attention!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -85. (RSSI -45...-85 dBm)
+
+Current RSSI: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

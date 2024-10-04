@@ -82,6 +82,54 @@
     </message>
 </context>
 <context>
+    <name>ControlButtonsGroup</name>
+    <message>
+        <source>Phones</source>
+        <extracomment>Output mode. Phones.</extracomment>
+        <translation>Наушники</translation>
+    </message>
+    <message>
+        <source>Balance</source>
+        <extracomment>Output mode. Balanced out.</extracomment>
+        <translation>Балансный</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <extracomment>Output mode. Line out.</extracomment>
+        <translation>Линейный</translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <extracomment>Button text. Export preset</extracomment>
+        <translation>Экспорт</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <extracomment>Button text. Save preset</extracomment>
+        <translation>Сохр.</translation>
+    </message>
+    <message>
+        <source>Comp</source>
+        <extracomment>Button text. Compare preset</extracomment>
+        <translation>Сравн.</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <extracomment>Button text. Import preset</extracomment>
+        <translation>Импорт</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <extracomment>Button text. Copy preset.</extracomment>
+        <translation>Копир.</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <extracomment>Button text. Paste preset</extracomment>
+        <translation>Вставка</translation>
+    </message>
+</context>
+<context>
     <name>DocumentationWindow</name>
     <message>
         <source>Documentation</source>
@@ -115,20 +163,16 @@
 <context>
     <name>EqPreview</name>
     <message>
-        <source>EQ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Equalizer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>PRE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>POST</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -303,51 +347,58 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <message>
         <source>Phones</source>
         <extracomment>Output mode. Phones.</extracomment>
-        <translation>Наушники</translation>
+        <translation type="vanished">Наушники</translation>
     </message>
     <message>
         <source>Balance</source>
         <extracomment>Output mode. Balanced out.</extracomment>
-        <translation>Балансный</translation>
+        <translation type="vanished">Балансный</translation>
     </message>
     <message>
         <source>Line</source>
         <extracomment>Output mode. Line out.</extracomment>
-        <translation>Линейный</translation>
+        <translation type="vanished">Линейный</translation>
     </message>
     <message>
         <source>Export</source>
         <extracomment>Button text. Export preset</extracomment>
-        <translation>Экспорт</translation>
+        <translation type="vanished">Экспорт</translation>
     </message>
     <message>
         <source>Save</source>
         <extracomment>Button text. Save preset</extracomment>
-        <translation>Сохр.</translation>
+        <translation type="vanished">Сохр.</translation>
     </message>
     <message>
         <source>Comp</source>
         <extracomment>Button text. Compare preset</extracomment>
-        <translation>Сравн.</translation>
+        <translation type="vanished">Сравн.</translation>
     </message>
     <message>
         <source>Import</source>
         <extracomment>Button text. Import preset</extracomment>
-        <translation>Импорт</translation>
+        <translation type="vanished">Импорт</translation>
     </message>
     <message>
         <source>Copy</source>
         <extracomment>Button text. Copy preset.</extracomment>
-        <translation>Копир.</translation>
+        <translation type="vanished">Копир.</translation>
     </message>
     <message>
         <source>Paste</source>
         <extracomment>Button text. Paste preset</extracomment>
-        <translation>Вставка</translation>
+        <translation type="vanished">Вставка</translation>
     </message>
     <message>
         <source>PRESET</source>
         <translation type="vanished">ПРЕСЕТ</translation>
+    </message>
+</context>
+<context>
+    <name>ModeSpin_LA</name>
+    <message>
+        <source>SET</source>
+        <translation>Сохр.</translation>
     </message>
 </context>
 <context>
@@ -392,6 +443,17 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
 </context>
 <context>
     <name>PresetSpin</name>
+    <message>
+        <source>MAP</source>
+        <translation>СПИСОК</translation>
+    </message>
+    <message>
+        <source>PRESET</source>
+        <translation>ПРЕСЕТ</translation>
+    </message>
+</context>
+<context>
+    <name>PresetSpin_LA</name>
     <message>
         <source>MAP</source>
         <translation>СПИСОК</translation>
@@ -570,6 +632,18 @@ Please reset the device power and reconnect</source>
 website: https://amtelectronics.com</source>
         <translation>© 2023
 Веб-сайт: https://amt-sales.ru</translation>
+    </message>
+    <message>
+        <source>Attention!</source>
+        <translation>Внимание!</translation>
+    </message>
+    <message>
+        <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -85. (RSSI -45...-85 dBm)
+
+Current RSSI: </source>
+        <translation>Загрузка прошивки требует устойчивого соединения. Пожалуйста, расположите телефон как можно ближе к устройству. Убедитесь что уровень сигнала больше -85. (RSSI -45...-85 dBm)
+
+Акутальный RSSI: </translation>
     </message>
 </context>
 <context>
