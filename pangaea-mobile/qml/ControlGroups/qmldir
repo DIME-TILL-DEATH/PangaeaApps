@@ -1,5 +1,7 @@
 module ControlGroups
 
 DocumentationWindow 1.0 DocumentationWindow.qml
-MasterControls 1.0 MasterControls.qml
+MasterControls_CP 1.0 MasterControls_CP.qml
+MasterControls_LA 1.0 MasterControls_LA.qml
+ControlButtonsGroup 1.0 ControlButtonsGroup.qml
 PresetsWindow 1.0 PresetsWindow.qml

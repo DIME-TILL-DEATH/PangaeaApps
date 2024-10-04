@@ -28,7 +28,6 @@
         <file>qml/Pages/qmldir</file>
         <file>qml/Pages/ServicePage.qml</file>
         <file>qml/Elements/BusyScreen.qml</file>
-        <file>qml/ControlGroups/MasterControls.qml</file>
         <file>qml/ControlGroups/qmldir</file>
         <file>images/AMT.svg</file>
         <file>images/AMT (Fixed by Ivan).svg</file>
@@ -53,6 +52,10 @@
         <file>qml/Elements/EqPoint.qml</file>
         <file>qml/Elements/CustomSlider.qml</file>
         <file>qml/Elements/BankSpin.qml</file>
-        <file>qml/Elements/LA3ModeSpin.qml</file>
+        <file>qml/Elements/ModeSpin_LA.qml</file>
+        <file>qml/ControlGroups/ControlButtonsGroup.qml</file>
+        <file>qml/ControlGroups/MasterControls_LA.qml</file>
+        <file>qml/ControlGroups/MasterControls_CP.qml</file>
+        <file>qml/Elements/PresetSpin_LA.qml</file>
     </qresource>
 </RCC>

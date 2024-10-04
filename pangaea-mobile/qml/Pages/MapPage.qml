@@ -47,11 +47,27 @@ Item
 
         enabled: !eqsExt.visible
 
-        MasterControls{
-            id: _masterControls
+        MasterControls_CP{
+            id: _masterControls_CP
 
             width:  parent.width
             height: masterControlsHeight
+
+            visible: !DeviceProperties.isLa3Mode
+
+            onOpenPresetsList: {
+                console.log("Open presets list");
+                _presetsList.open();
+            }
+        }
+
+        MasterControls_LA{
+            id: _masterControls_LA
+
+            width:  parent.width
+            height: masterControlsHeight
+
+            visible: DeviceProperties.isLa3Mode
 
             onOpenPresetsList: {
                 console.log("Open presets list");
@@ -304,17 +320,29 @@ Item
         }
     }
 
-    Connections{
-        target: _masterControls
+    // Connections{
+    //     target: _masterControls_CP
 
-        function onImportPreset(){
-            UiCore.importPreset("");
-        }
+    //     function onImportPreset(){
+    //         UiCore.importPreset("");
+    //     }
 
-        function onExportPreset(){
-            UiCore.exportPreset("");
-        }
-    }
+    //     function onExportPreset(){
+    //         UiCore.exportPreset("");
+    //     }
+    // }
+
+    // Connections{
+    //     target: _masterControls_LA
+
+    //     function onImportPreset(){
+    //         UiCore.importPreset("");
+    //     }
+
+    //     function onExportPreset(){
+    //         UiCore.exportPreset("");
+    //     }
+    // }
 
     Connections{
         target: InterfaceManager
