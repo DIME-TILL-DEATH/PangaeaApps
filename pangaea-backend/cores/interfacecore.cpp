@@ -10,6 +10,8 @@ InterfaceCore::InterfaceCore(QObject *parent)
     m_usbInterface = new UsbInterface(this);
     m_bleInterface = new BleInterface(this);
 
+    connect(m_bleInterface, &BleInterface::rssiReaded, this, &InterfaceCore::sgRssiReaded);
+
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                                     + "/settings.conf", QSettings::NativeFormat);
@@ -112,6 +114,12 @@ void InterfaceCore::setModuleName(QString name)
 {
     if(m_bleInterface)
         m_bleInterface->setModuleName(name);
+}
+
+void InterfaceCore::rssiMeasuring(bool isEnabled)
+{
+    if(m_bleInterface)
+        m_bleInterface->rssiMeasuring(isEnabled);
 }
 
 // в таком варианте иногда вызывает crash на ошибки буффера

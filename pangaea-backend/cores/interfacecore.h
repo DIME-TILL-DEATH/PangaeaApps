@@ -25,6 +25,7 @@ public:
     void stopScanning();
 
     void setModuleName(QString name);
+    void rssiMeasuring(bool isEnabled);
 
 signals:
     void sgInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
@@ -37,6 +38,8 @@ signals:
     void sgNewData(QByteArray data);
     void sgModuleNameUpdated(QString name);
 
+
+    void sgRssiReaded(qint16 rssi);
 private:
     AbstractInterface* m_exchangeInterface{nullptr};
     BleInterface* m_bleInterface{nullptr};

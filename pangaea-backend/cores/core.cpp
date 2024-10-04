@@ -96,6 +96,7 @@ void Core::parseInputData(QByteArray ba)
                         // request LA3 maps
                         pushCommandToQueue("sm0");
                         pushCommandToQueue("sm1");
+                        //TODO request current mode
                     }
 
                     emit sgRecieveDeviceParameter(DeviceParameter::Type::DEVICE_TYPE, deviceType);
@@ -283,6 +284,7 @@ void Core::parseInputData(QByteArray ba)
                 pushReadPresetCommands();
                 pushCommandToQueue("rns\n");
                 processCommands();
+                //TODO request current mode
             }
 
             case AnswerType::getOutputMode:

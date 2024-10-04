@@ -68,6 +68,10 @@ BleInterface::BleInterface(QObject *parent)
 
     m_description = "BLE";
     m_connectionType = DeviceConnectionType::BLE;
+
+    rssiUpdateTimer = new QTimer(this);
+    rssiUpdateTimer->setInterval(1000);
+    QObject::connect(rssiUpdateTimer, &QTimer::timeout, this, &BleInterface::requestRssi);
 }
 
 BleInterface::~BleInterface()
@@ -396,12 +400,8 @@ void BleInterface::deviceDisconnected()
 {
     qWarning() << "Remote device disconnected(UART service disconnected)";
 
+    rssiUpdateTimer->stop();
     emit sgInterfaceDisconnected(m_connectedDevice);
-}
-
-void BleInterface::rssiReaded(qint16 rssi)
-{
-    qDebug() << "BLE RSSI " << rssi;
 }
 
 void BleInterface::controllerError(QLowEnergyController::Error error)
@@ -556,4 +556,16 @@ void BleInterface::setModuleName(QString name)
 const QString &BleInterface::moduleName() const
 {
     return m_moduleName;
+}
+
+void BleInterface::rssiMeasuring(bool isEnabled)
+{
+    if(isEnabled) rssiUpdateTimer->start();
+    else rssiUpdateTimer->stop();
+}
+
+void BleInterface::requestRssi()
+{
+    if(m_control)
+        m_control->readRssi();
 }

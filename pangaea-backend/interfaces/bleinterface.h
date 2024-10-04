@@ -11,6 +11,8 @@
 #include <QSettings>
 #include <qregularexpression.h>
 
+#include <QTimer>
+
 #include "devicedescription.h"
 #include "abstractinterface.h"
 
@@ -37,6 +39,10 @@ public:
     void setModuleName(QString name);
     const QString &moduleName() const;
 
+    void rssiMeasuring(bool isEnabled);
+signals:
+    void rssiReaded(qint16 rssi);
+
 
 private slots:
     void startDiscovering();
@@ -54,7 +60,7 @@ private slots:
     void controllerError(QLowEnergyController::Error);
     void deviceConnected();
     void deviceDisconnected();
-    void rssiReaded(qint16 rssi);
+    void requestRssi();
     void connectionParametersUpdated(const QLowEnergyConnectionParameters &newParameters);
 
     /* Slotes for QLowEnergyService */
@@ -85,6 +91,8 @@ private:
     QString m_moduleName;
 
     QHash<QString, QString> m_moduleUniqueNames;
+
+    QTimer* rssiUpdateTimer;
 };
 
 #endif // BLEINTERFACE_H

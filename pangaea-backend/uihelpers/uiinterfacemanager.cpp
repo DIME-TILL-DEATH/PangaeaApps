@@ -66,3 +66,16 @@ void UiInterfaceManager::setModuleName(const QString &newModuleName)
     m_moduleName = newModuleName;
     emit sgModuleNameChanged(newModuleName);
 }
+
+qint16 UiInterfaceManager::bleRssi() const
+{
+    return m_bleRssi;
+}
+
+void UiInterfaceManager::setRssi(qint16 newBleRssi)
+{
+    if (m_bleRssi == newBleRssi)
+        return;
+    m_bleRssi = newBleRssi;
+    emit bleRssiChanged();
+}

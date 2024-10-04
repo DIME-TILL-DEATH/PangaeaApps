@@ -122,6 +122,23 @@ Item
 
     CustomMessageDialog
     {
+        id: rssiNotificationDialog
+
+        headerText: qsTr("Attention!")
+        text: qsTr("Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -85. (RSSI -45...-85 dBm)\n\nCurrent RSSI: ") + InterfaceManager.bleRssi + " dBm"
+        wrapMode: Text.WordWrap
+        standardButtons: Dialog.Ok
+
+        onAccepted:
+        {
+            InterfaceManager.rssiMeasuring(false);
+            rssiNotificationDialog.close()
+            messageAcceptFile.open()  
+        }
+    }
+
+    CustomMessageDialog
+    {
         id: messageAcceptFile
 
         headerText: qsTr("Continue?")
@@ -184,7 +201,7 @@ Item
         headerText: qsTr("About...")
         text: qsTr("AMT Pangaea CP-16/CP-100\nAndroid application\nVersion: ")
               + Qt.application.version + "\n"
-              + qsTr("(c) 2023\nwebsite: https://amtelectronics.com")
+              + qsTr("(c) 2024\nwebsite: https://amtelectronics.com")
 
         closeOnDisconnect: true
 
@@ -277,7 +294,9 @@ Item
 
                 messageAcceptFile.text = qsTr("Do you want to load firmware file:\n") + dataArray[1];
                 messageAcceptFile.cleanPath = dataArray[0];
-                messageAcceptFile.open()
+                // messageAcceptFile.open()
+                rssiNotificationDialog.open()
+                InterfaceManager.rssiMeasuring(true);
             }
         }
     }
