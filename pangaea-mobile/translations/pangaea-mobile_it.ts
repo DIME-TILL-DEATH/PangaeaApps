@@ -558,7 +558,7 @@ Please reset the device power and reconnect</source>
     <message>
         <source>(c) 2023
 website: https://amtelectronics.com</source>
-        <translation type="unfinished">(c) 2022
+        <translation type="obsolete">(c) 2022
 Sito Ufficiale:
 https://amtelectronics.com {2023
 ?}</translation>
@@ -573,10 +573,19 @@ Please, reconnect to device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -85. (RSSI -45...-85 dBm)
+        <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)
 
 Current RSSI: </source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(c) 2024
+website: https://amtelectronics.com</source>
+        <translation type="unfinished">(c) 2022
+Sito Ufficiale:
+https://amtelectronics.com {2023
+?} {2024
+?}</translation>
     </message>
 </context>
 <context>

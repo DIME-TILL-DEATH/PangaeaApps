@@ -125,7 +125,7 @@ Item
         id: rssiNotificationDialog
 
         headerText: qsTr("Attention!")
-        text: qsTr("Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -85. (RSSI -45...-85 dBm)\n\nCurrent RSSI: ") + InterfaceManager.bleRssi + " dBm"
+        text: qsTr("Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)\n\nCurrent RSSI: ") + InterfaceManager.bleRssi + " dBm"
         wrapMode: Text.WordWrap
         standardButtons: Dialog.Ok
 

@@ -11,12 +11,16 @@ import Elements 1.0
 import CppObjects
 
 Rectangle{
+    id: _root
+
     width: 100
     height: _grid.height*1.1
 
     property int maxMap: 4
 
-    color: ListView.isCurrentItem ? Style.colorItemHighlight  : Style.colorFon
+    property color fonColor: Style.colorFon
+
+    color: ListView.isCurrentItem ? Style.colorItemHighlight  : fonColor
 
     radius: Style.baseRadius
     border.width: 1
@@ -111,6 +115,27 @@ Rectangle{
 
         onClicked: {
             DeviceProperties.changePreset(bankNumber, presetNumber);
+        }
+    }
+
+    Connections{
+        target: DeviceProperties
+
+        function onLa3ChannelChanged(){
+            if(DeviceProperties.isLa3Mode){
+                if(index === DeviceProperties.la3CleanPreset)
+                {
+                    _root.fonColor = "lightgreen";
+                }
+                else if(index === DeviceProperties.la3DrivePreset)
+                {
+                    _root.fonColor = "red";
+                }
+                else
+                {
+                    _root.fonColor = Style.colorFon;
+                }
+            }
         }
     }
 }

@@ -45,6 +45,7 @@ enum AnswerType{
     la3CleanPreset,
     la3DrivePreset,
     la3ModeChange,
+    la3CurrentChannel,
     endOperation
 };
 

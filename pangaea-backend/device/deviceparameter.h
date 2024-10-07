@@ -80,7 +80,9 @@ public:
         SIGNAL_OUT,
 
         LA3_CLEAN_PRESET,
-        LA3_DRIVE_PRESET
+        LA3_DRIVE_PRESET,
+
+        LA3_CURRENT_CHANNEL
     };
     Q_ENUM(Type);
 

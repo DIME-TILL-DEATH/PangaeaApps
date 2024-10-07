@@ -22,7 +22,7 @@ Core::Core(QObject *parent) : QObject(parent)
     connect(timeoutTimer, &QTimer::timeout, this, &Core::recieveTimeout);
 
     indicationTimer = new QTimer(this);
-    indicationTimer->setInterval(10000);
+    indicationTimer->setInterval(1000);
     connect(indicationTimer, &QTimer::timeout, this, &Core::indicationRequest);
 }
 
@@ -43,7 +43,7 @@ void Core::slInterfaceConnected(DeviceDescription interfaceDescription)
     switch (interfaceDescription.connectionType())
     {
     case DeviceConnectionType::BLE:
-        indicationTimer->setInterval(1000);
+        indicationTimer->setInterval(500);
         break;
     default:
         indicationTimer->setInterval(20);
@@ -96,7 +96,7 @@ void Core::parseInputData(QByteArray ba)
                         // request LA3 maps
                         pushCommandToQueue("sm0");
                         pushCommandToQueue("sm1");
-                        //TODO request current mode
+                        pushCommandToQueue("sw1");
                     }
 
                     emit sgRecieveDeviceParameter(DeviceParameter::Type::DEVICE_TYPE, deviceType);
@@ -129,7 +129,7 @@ void Core::parseInputData(QByteArray ba)
 
                     controlledDevice.setActualFirmware(deviceFirmware);
 
-                    qDebug() << "version control, minimal: " << controlledDevice.minimalFirmware()->firmwareVersion()
+                    qInfo() << "version control, minimal: " << controlledDevice.minimalFirmware()->firmwareVersion()
                                << " actual: " << controlledDevice.actualFirmware()->firmwareVersion();
 
                     if(controlledDevice.isFimwareSufficient())
@@ -143,12 +143,12 @@ void Core::parseInputData(QByteArray ba)
                     }
                     else
                     {
-                        qWarning() << "firmware insufficient!";
+                        qInfo() << "firmware insufficient!";
                         emit sgFirmwareVersionInsufficient(controlledDevice.minimalFirmware(), controlledDevice.actualFirmware());
                     }
                     emit sgSetUIText("devVersion", deviceFirmware->firmwareVersion());
 
-                    qDebug() << "Firmware can indicate:" << controlledDevice.isFirmwareCanIndicate();
+                    qInfo() << "Firmware can indicate:" << controlledDevice.isFirmwareCanIndicate();
                     emit sgRecieveDeviceParameter(DeviceParameter::Type::FIRMWARE_CAN_INDICATE, controlledDevice.isFirmwareCanIndicate());
                 }
                 break;
@@ -283,8 +283,28 @@ void Core::parseInputData(QByteArray ba)
 
                 pushReadPresetCommands();
                 pushCommandToQueue("rns\n");
-                processCommands();
-                //TODO request current mode
+                pushCommandToQueue("sw1\n");
+                processCommands();            
+            }
+
+            case AnswerType::la3CurrentChannel:
+            {
+                if(parseResult.size()==1)
+                {
+                    QString strCurrentLa3Mode = QString::fromStdString(parseResult.at(0).toStdString());
+                    quint8 currentLa3Mode = 0;
+                    if(strCurrentLa3Mode == "high")
+                    {
+                        currentLa3Mode = 0;
+                        qInfo() << "LA3 current mode: " << "clean channel";
+                    }
+                    else
+                    {
+                        currentLa3Mode = 1;
+                        qInfo() << "LA3 current mode: " << "clean channel";
+                    }
+                    emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_CURRENT_CHANNEL, currentLa3Mode);
+                }
             }
 
             case AnswerType::getOutputMode:
@@ -1089,7 +1109,7 @@ void Core::processCommands()
         else
         {
             chunckSize=16;
-            sleepTime=40; // lower values tends to disconnect on MacOs
+            sleepTime=50; // lower values tends to disconnect on MacOs
         }
 
         if(commandToSend.length() > chunckSize)

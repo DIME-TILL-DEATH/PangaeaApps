@@ -28,13 +28,13 @@ void Device::setDeviceType(DeviceType newDeviceType)
     {
         case DeviceType::CP16:
             m_minimalFirmware = new Firmware(CP16_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
-            m_indicationFirmware = new Firmware("PA.01.04.05", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
+            m_indicationFirmware = new Firmware("PA.01.05.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
             m_maxBankCount = 4;
             m_maxPresetCount = 4;
         break;
         case DeviceType::CP16PA:
             m_minimalFirmware = new Firmware(CP16PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
-            m_indicationFirmware = new Firmware("PA.01.04.04", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
+            m_indicationFirmware = new Firmware("PA.01.05.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
             m_maxBankCount = 4;
             m_maxPresetCount = 4;
         break;
@@ -53,13 +53,13 @@ void Device::setDeviceType(DeviceType newDeviceType)
 
         case DeviceType::LA3RV:
             m_minimalFirmware = new Firmware(CP16PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
-            m_indicationFirmware = new Firmware("PA.01.04.05", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
+            m_indicationFirmware = new Firmware("PA.01.05.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
             m_maxBankCount = 4;
             m_maxPresetCount = 4;
         break;
         case DeviceType::LA3PA:
             m_minimalFirmware = new Firmware(CP16PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3PA.ble");
-            m_indicationFirmware = new Firmware("PA.01.04.05", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3PA.ble");
+            m_indicationFirmware = new Firmware("PA.01.05.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3PA.ble");
             m_maxBankCount = 4;
             m_maxPresetCount = 4;
             break;

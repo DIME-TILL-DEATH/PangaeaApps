@@ -630,7 +630,7 @@ Please reset the device power and reconnect</source>
     <message>
         <source>(c) 2023
 website: https://amtelectronics.com</source>
-        <translation>© 2023
+        <translation type="vanished">© 2023
 Веб-сайт: https://amt-sales.ru</translation>
     </message>
     <message>
@@ -641,9 +641,23 @@ website: https://amtelectronics.com</source>
         <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -85. (RSSI -45...-85 dBm)
 
 Current RSSI: </source>
-        <translation>Загрузка прошивки требует устойчивого соединения. Пожалуйста, расположите телефон как можно ближе к устройству. Убедитесь что уровень сигнала больше -85. (RSSI -45...-85 dBm)
+        <translation type="vanished">Загрузка прошивки требует устойчивого соединения. Пожалуйста, расположите телефон как можно ближе к устройству. Убедитесь что уровень сигнала больше -85. (RSSI -45...-85 dBm)
 
 Акутальный RSSI: </translation>
+    </message>
+    <message>
+        <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)
+
+Current RSSI: </source>
+        <translation>Загрузка прошивки требует устойчивого соединения. Пожалуйста, расположите телефон как можно ближе к устройству. Убедитесь что уровень сигнала больше -75 dBm. (RSSI -35...-75 dBm)
+
+Акутальный RSSI: </translation>
+    </message>
+    <message>
+        <source>(c) 2024
+website: https://amtelectronics.com</source>
+        <translation>© 2024
+Веб-сайт: https://amt-sales.ru </translation>
     </message>
 </context>
 <context>

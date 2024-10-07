@@ -113,7 +113,7 @@ AnswerWorker::AnswerWorker()
     m_devCommandList.append(DeviceAnswer(new Parser("sm0*END\n", "111X1111"), AnswerType::la3CleanPreset, "la3 clean preset mappings"));
     m_devCommandList.append(DeviceAnswer(new Parser("sm1*END\n", "111X1111"), AnswerType::la3DrivePreset, "la3 drive preset mappings"));
     m_devCommandList.append(DeviceAnswer(new Parser("umx\rEND\n", "11011111"), AnswerType::la3ModeChange, "la3 hardware switch occured"));
-
+    m_devCommandList.append(DeviceAnswer(new Parser("sw1\r*\nEND\n", "1111X11111"), AnswerType::la3CurrentChannel, "la3 current mode"));
 }
 
 DeviceAnswer AnswerWorker::parseRawData(const QByteArray &rawData)

@@ -105,7 +105,7 @@ void Logger::messageOutputHandlerImplementation(QtMsgType type, const QMessageLo
 
             case QtInfoMsg:
             #ifdef ANDROID
-                __android_log_print(ANDROID_LOG_DEBUG, "pangaea_mobile info", "%s", qPrintable(localMsg.constData()));
+                __android_log_print(ANDROID_LOG_INFO, "pangaea_mobile info", "%s", qPrintable(localMsg.constData()));
             #endif
                 std::cout << localMsg.constData() << std::flush;
 

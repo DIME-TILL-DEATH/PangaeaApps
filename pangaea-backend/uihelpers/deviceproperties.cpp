@@ -54,12 +54,20 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
     {
         m_la3CleanPreset = value;
         emit la3CleanPresetChanged();
+        emit la3ChannelChanged(); // this signal is update tumbler color too
         break;
     }
     case DeviceParameter::Type::LA3_DRIVE_PRESET:
     {
         m_la3DrivePreset = value;
         emit la3DrivePresetChanged();
+        emit la3ChannelChanged(); // this signal is update tumbler color too
+        break;
+    }
+    case DeviceParameter::Type::LA3_CURRENT_CHANNEL:
+    {
+        m_la3Channel = value;
+        emit la3ChannelChanged();
         break;
     }
     case DeviceParameter::Type::DEVICE_TYPE:
@@ -217,5 +225,6 @@ void DeviceProperties::setLa3Mappings(quint8 cleanPreset, quint8 drivePreset)
 
     quint8 recalcedCleanPreset = 10 * quint8(m_la3CleanPreset/4) + m_la3CleanPreset%4;
     quint8 recalcedDrivePreset = 10 * quint8(m_la3DrivePreset/4) + m_la3DrivePreset%4;
+    emit la3ChannelChanged();
     emit sendAppAction(Core::AppAction::SET_LA3_MAPPINGS, {recalcedCleanPreset, recalcedDrivePreset});
 }
