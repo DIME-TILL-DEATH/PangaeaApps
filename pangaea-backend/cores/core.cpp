@@ -112,7 +112,7 @@ void Core::parseInputData(QByteArray ba)
                 {
                     QString firmwareVersion = QString::fromStdString(parseResult.at(0).toStdString());
                     emit sgSetUIText ("devVersion", firmwareVersion);
-                    qInfo() << recievedCommand.description();
+                    qInfo() << recievedCommand.description() << firmwareVersion;
 
                     if(controlledDevice.deviceType() == DeviceType::UnknownDev)
                     {
@@ -146,7 +146,7 @@ void Core::parseInputData(QByteArray ba)
                         qInfo() << "firmware insufficient!";
                         emit sgFirmwareVersionInsufficient(controlledDevice.minimalFirmware(), controlledDevice.actualFirmware());
                     }
-                    emit sgSetUIText("devVersion", deviceFirmware->firmwareVersion());
+                    //emit sgSetUIText("devVersion", deviceFirmware->firmwareVersion());
 
                     qInfo() << "Firmware can indicate:" << controlledDevice.isFirmwareCanIndicate();
                     emit sgRecieveDeviceParameter(DeviceParameter::Type::FIRMWARE_CAN_INDICATE, controlledDevice.isFirmwareCanIndicate());

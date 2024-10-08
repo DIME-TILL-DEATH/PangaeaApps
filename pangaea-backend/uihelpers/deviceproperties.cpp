@@ -72,82 +72,89 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
     }
     case DeviceParameter::Type::DEVICE_TYPE:
     {
-        m_deviceType = (DeviceType)value;
-        emit deviceTypeChanged();
+        currentDevice.setDeviceType((DeviceType)value);
 
         m_presetsList.clear();
         m_banksList.clear();
 
-        switch(m_deviceType)
+        for(int i=0; i<currentDevice.maxBankCount(); i++)
         {
-            case DeviceType::CP100:
-            {
-                m_firmwareName = "CP-100";
-                for(int i=0; i<10; i++)
-                {
-                    m_banksList.append(i);
-                    m_presetsList.append(i);
-                }
-                break;
-            }
-            case DeviceType::CP16:
-            {
-                m_firmwareName = "CP-16M Blue";
-
-                for(int i=0; i<4; i++)
-                {
-                    m_banksList.append(i);
-                    m_presetsList.append(i);
-                }
-                break;
-            }
-            case DeviceType::CP16PA:
-            {
-                m_firmwareName = "CP-16M-PA Green";
-
-                for(int i=0; i<4; i++)
-                {
-                    m_banksList.append(i);
-                    m_presetsList.append(i);
-                }
-                break;
-            }
-            case DeviceType::CP100PA:
-            {
-                m_firmwareName = "CP-100PA";
-                for(int i=0; i<10; i++)
-                {
-                    m_banksList.append(i);
-                    m_presetsList.append(i);
-                }
-                break;
-            }
-            case DeviceType::LA3RV:
-            {
-                m_firmwareName = "LA3RV";
-
-                for(int i=0; i<16; i++)
-                {
-                    m_presetsList.append(i);
-                }
-                break;
-            }
-            case DeviceType::LA3PA:
-            {
-                m_firmwareName = "LA3PA";
-
-                for(int i=0; i<16; i++)
-                {
-                    m_presetsList.append(i);
-                }
-                break;
-            }
-            default: m_firmwareName = "";
+            m_banksList.append(i);
         }
 
-        emit isLa3ModeChanged();
-        emit firmwareNameChanged();
-        emit banksPresetsListChanged();
+        for(int i=0; i<currentDevice.maxPresetCount(); i++)
+        {
+            m_presetsList.append(i);
+        }
+
+        // switch(currentDevice.deviceType())
+        // {
+        //     case DeviceType::CP100:
+        //     {
+        //         m_firmwareName = "CP-100";
+        //         for(int i=0; i<10; i++)
+        //         {
+        //             m_banksList.append(i);
+        //             m_presetsList.append(i);
+        //         }
+        //         break;
+        //     }
+        //     case DeviceType::CP16:
+        //     {
+        //         m_firmwareName = "CP-16M Blue";
+
+        //         for(int i=0; i<4; i++)
+        //         {
+        //             m_banksList.append(i);
+        //             m_presetsList.append(i);
+        //         }
+        //         break;
+        //     }
+        //     case DeviceType::CP16PA:
+        //     {
+        //         m_firmwareName = "CP-16M-PA Green";
+
+        //         for(int i=0; i<4; i++)
+        //         {
+        //             m_banksList.append(i);
+        //             m_presetsList.append(i);
+        //         }
+        //         break;
+        //     }
+        //     case DeviceType::CP100PA:
+        //     {
+        //         m_firmwareName = "CP-100PA";
+        //         for(int i=0; i<10; i++)
+        //         {
+        //             m_banksList.append(i);
+        //             m_presetsList.append(i);
+        //         }
+        //         break;
+        //     }
+        //     case DeviceType::LA3RV:
+        //     {
+        //         m_firmwareName = "LA3RV";
+
+        //         for(int i=0; i<16; i++)
+        //         {
+        //             m_presetsList.append(i);
+        //         }
+        //         break;
+        //     }
+        //     case DeviceType::LA3PA:
+        //     {
+        //         m_firmwareName = "LA3PA";
+
+        //         for(int i=0; i<16; i++)
+        //         {
+        //             m_presetsList.append(i);
+        //         }
+        //         break;
+        //     }
+        //     default: m_firmwareName = "";
+        // }
+
+        emit deviceTypeChanged();
         break;
     }
 
@@ -205,7 +212,7 @@ void DeviceProperties::setPreset(quint8 newPreset)
 
 bool DeviceProperties::isLa3Mode() const
 {
-    return (m_deviceType == DeviceType::LA3PA) | (m_deviceType == DeviceType::LA3RV);
+    return (currentDevice.deviceType() == DeviceType::LA3PA) | (currentDevice.deviceType() == DeviceType::LA3RV);
 }
 
 quint8 DeviceProperties::la3CleanPreset() const

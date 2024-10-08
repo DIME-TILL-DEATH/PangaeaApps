@@ -13,8 +13,6 @@ Item
 {
     id: _main
 
-    property bool isPaFirmware: true
-
     property bool moduleVisible: false
 
     // property string devName: "CP-16"
@@ -131,7 +129,7 @@ Item
 
         width: listViewModules.width
         height: _main.height*4/countElements - _moduleColumn.spacing
-        visible: moduleVisible & isPaFirmware
+        visible: moduleVisible & DeviceProperties.isPaFirmware
     }
 
     Ps
@@ -141,7 +139,7 @@ Item
         width:  listViewModules.width
         height: _main.height*1/countElements - _moduleColumn.spacing
 
-        visible: moduleVisible & (!isPaFirmware)
+        visible: moduleVisible & (!DeviceProperties.isPaFirmware)
     }
     Ir
     {
@@ -168,7 +166,7 @@ Item
         property int prePositionIndex: 2
         property int postPositionIndex: 6
         property bool isPrePosition: (ObjectModel.index === prePositionIndex)
-        isPrePostVisible: _main.isPaFirmware
+        isPrePostVisible: DeviceProperties.isPaFirmware
 
         onExtVisible:
         {
@@ -196,7 +194,7 @@ Item
     function arrangePrePost(isEqPre)
     {
         {
-            if(isPaFirmware)
+            if(DeviceProperties.isPaFirmware)
             {
                 if(isEqPre)
                 {
@@ -217,12 +215,12 @@ Item
         modulesList.append(ng);
         modulesList.append(cm);
         modulesList.append(pr);
-        if(isPaFirmware) modulesList.append(pa);
+        if(DeviceProperties.isPaFirmware) modulesList.append(pa);
         modulesList.append(ir);
         modulesList.append(hp);
         modulesList.append(eq)
         modulesList.append(lp);
-        if(!isPaFirmware) modulesList.append(ps);
+        if(!DeviceProperties.isPaFirmware) modulesList.append(ps);
         modulesList.append(er);
 
         moduleVisible = true;
@@ -282,7 +280,6 @@ Item
 
         function onDeviceTypeChanged()
         {
-            isPaFirmware = ((DeviceProperties.deviceType===DeviceType.CP16PA)||(DeviceProperties.deviceType===DeviceType.CP100PA));
             placeAllModuls();
         }
 
