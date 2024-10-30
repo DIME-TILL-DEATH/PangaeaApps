@@ -161,6 +161,7 @@ Slider
             {
                 softUpdate = true;
                 root.rawValue = value;
+                root.value =  (root.rawValue - root.bVal) / 100 / root.kVal;
                 softUpdate = false;
             }
         }

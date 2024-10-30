@@ -1,3 +1,0 @@
-D:/AMT/Applications/PangaeaApps/build/Android_Qt_6_7_3_Clang_arm64_v8a-Debug/CMakeFiles/CMakeScratch/TryCompile-hxq8d7/CMakeFiles/cmTC_72817.dir
-D:/AMT/Applications/PangaeaApps/build/Android_Qt_6_7_3_Clang_arm64_v8a-Debug/CMakeFiles/CMakeScratch/TryCompile-hxq8d7/CMakeFiles/edit_cache.dir
-D:/AMT/Applications/PangaeaApps/build/Android_Qt_6_7_3_Clang_arm64_v8a-Debug/CMakeFiles/CMakeScratch/TryCompile-hxq8d7/CMakeFiles/rebuild_cache.dir

@@ -125,9 +125,45 @@ Item
         id: rssiNotificationDialog
 
         headerText: qsTr("Attention!")
-        text: qsTr("Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)\n\nCurrent RSSI: ") + InterfaceManager.bleRssi + " dBm"
-        wrapMode: Text.WordWrap
+        // text: qsTr("Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)\n\nCurrent RSSI: ") + InterfaceManager.bleRssi + " dBm"
+        // wrapMode: Text.WordWrap
         standardButtons: Dialog.Ok
+
+        height: (_text1.textHeight +3 )*_text1.font.pixelSize*0.6
+                + header.height + footer.height
+
+        contentItem:  Column {
+               id: _textLabel
+
+               width: rssiNotificationDialog.width
+               height: rssiNotificationDialog.height-rssiNotificationDialog.header.height-rssiNotificationDialog.footer.height
+
+               spacing: 10
+
+               MText{
+                   id: _text1
+
+                   wrapMode: Text.WordWrap
+                   width: parent.width
+
+                   text: qsTr("Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)\n")
+
+                   color: Style.colorText
+                   anchors.horizontalCenter: _textLabel.horizontalCenter
+               }
+
+               MText{
+                   id: _text2
+
+                   width: parent.width
+
+                   text: qsTr("Current RSSI: ") + InterfaceManager.bleRssi + " dBm"
+
+                   color: (InterfaceManager.bleRssi>-75) ? "lightgreen" : "red"
+                   // anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: Text.AlignHCenter
+               }
+        }
 
         onAccepted:
         {

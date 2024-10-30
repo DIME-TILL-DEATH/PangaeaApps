@@ -12,7 +12,6 @@ Item
 
     signal extVisible()
 
-    // property int paramType: DeviceParameter.EQ_ON
 
     property bool on: EqResponse.moduleEnabled
     property bool isPrePostVisible: true
@@ -161,8 +160,7 @@ Item
                            enabled: isPrePostVisible
 
                             onClicked: {
-                                isPreEQ = !isPreEQ
-                                UiCore.setDeviceParameter(DeviceParameter.EQ_PRE, isPreEQ);
+                                UiCore.setDeviceParameter(DeviceParameter.EQ_PRE, !isPreEQ);
                             }
                         }
 
@@ -204,16 +202,4 @@ Item
 
         }
     }
-
-    // Connections
-    // {
-    //     target: UiCore
-    //     function onSgSetUiDeviceParameter(paramType, value)
-    //     {
-    //         if(paramType === DeviceParameter.EQ_PRE)
-    //         {
-    //             isPreEQ=value
-    //         }
-    //     }
-    // }
 }

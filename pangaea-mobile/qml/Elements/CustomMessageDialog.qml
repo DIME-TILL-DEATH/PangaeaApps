@@ -91,7 +91,7 @@ Dialog
                anchors.verticalCenter: parent.verticalCenter
 
            }
-    }
+        }
 
     footer: DialogButtonBox
     {

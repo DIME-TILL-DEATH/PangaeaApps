@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 
     qInfo() << "App version: " << app.applicationVersion();
 
-    QLoggingCategory::setFilterRules("*.debug=false");
+   // QLoggingCategory::setFilterRules("*.debug=false");
 
     Core* core = new Core;
     NetCore* netCore = new NetCore;

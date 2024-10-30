@@ -12,6 +12,7 @@ class EqResponse : public AbstractModule
     Q_OBJECT
     Q_PROPERTY(QList<QPointF> points READ points NOTIFY pointsChanged)
     Q_PROPERTY(QObjectList EqBands READ EqBands NOTIFY eqBandsChanged)
+
 public:
     explicit EqResponse(Core *core, QObject *parent = nullptr);
 
@@ -19,6 +20,7 @@ public:
     QList<QPointF> points();
 
     QObjectList EqBands();
+
 
 signals:
     void pointsChanged();

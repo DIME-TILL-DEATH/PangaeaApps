@@ -1,9 +1,0 @@
-<RCC>
-  <qresource prefix="/i18n">
-    <file alias="pangaea-mobile_de.qm">D:/AMT/Applications/PangaeaApps/build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/pangaea-mobile_de.qm</file>
-    <file alias="pangaea-mobile_en.qm">D:/AMT/Applications/PangaeaApps/build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/pangaea-mobile_en.qm</file>
-    <file alias="pangaea-mobile_it.qm">D:/AMT/Applications/PangaeaApps/build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/pangaea-mobile_it.qm</file>
-    <file alias="pangaea-mobile_ru.qm">D:/AMT/Applications/PangaeaApps/build/Android_Qt_6_7_3_Clang_armeabi_v7a-Debug/pangaea-mobile/pangaea-mobile_ru.qm</file>
-  </qresource>
-</RCC>
-

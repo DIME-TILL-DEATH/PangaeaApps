@@ -66,12 +66,14 @@ void Core::parseInputData(QByteArray ba)
     lastRecievedData += ba;
     commandWorker.parseAnswers(ba);
 
+    qInfo() << "->" << __FUNCTION__ << ":" << ba;
+
     while(commandWorker.haveAnswer())
     {
         lastRecievedData.clear();
 
-        if(commandWorker.displayNextAnswer())
-            qInfo() << "->" << __FUNCTION__ << ":" << ba;
+        // if(commandWorker.displayNextAnswer())
+        //     qInfo() << "->" << __FUNCTION__ << ":" << ba;
 
         DeviceAnswer recievedCommand = commandWorker.popAnswer();
         QList<QByteArray> parseResult = recievedCommand.parseResult();
@@ -203,6 +205,10 @@ void Core::parseInputData(QByteArray ba)
                         quint8 nomByte=0;
                         QString sss;
 
+                        preset_data_legacy_t str;
+                        memcpy(&str, baPresetData.data(), sizeof(preset_data_legacy_t));
+
+
                         foreach(QChar val, baPresetData) //quint8
                         {
                             if((nomByte&1)==0)
@@ -223,6 +229,8 @@ void Core::parseInputData(QByteArray ba)
                                 {
                                     emit sgRecieveDeviceParameter(paramType, (qint16)sss.toInt(nullptr, 16));
                                 }
+                                qDebug() << "Param nom: " << paramType << " value:" << sss.toInt(nullptr, 16);
+
                                 count++;
                             }
                             nomByte++;
@@ -977,13 +985,6 @@ void Core::setParameter(QString name, quint8 value)
     QString sendStr;
 
     if(name==("esc")) sendStr = QString("esc\r\n");
-
-    //TODO: по коду оно вроде само выключает/включает. проверить на слух
-    if(name=="pa-ps_linked_on")
-    {
-        sendStr = DeviceParameter::sendString(DeviceParameter::Type::PRESENCE_ON, value);
-        sendStr += DeviceParameter::sendString(DeviceParameter::Type::AMP_ON, value);
-    }
 
     if(sendStr.length()>0)
     {

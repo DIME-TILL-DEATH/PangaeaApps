@@ -171,7 +171,7 @@ GridLayout
 
             onMbPressed:
             {
-                AppPropertis.copyPreset();
+                AppProperties.copyPreset();
                 copyFirst=true;
             }
         }
@@ -186,7 +186,7 @@ GridLayout
 
             onMbPressed:
             {
-                AppPropertis.pastePreset();
+                AppProperties.pastePreset();
             }
         }
     }

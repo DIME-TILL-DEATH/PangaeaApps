@@ -165,7 +165,7 @@ Item
 
         property int prePositionIndex: 2
         property int postPositionIndex: 6
-        property bool isPrePosition: (ObjectModel.index === prePositionIndex)
+        isPreEQ: (ObjectModel.index === prePositionIndex)
         isPrePostVisible: DeviceProperties.isPaFirmware
 
         onExtVisible:
@@ -191,21 +191,20 @@ Item
         visible: moduleVisible
     }
 
-    function arrangePrePost(isEqPre)
+    function arrangePrePost(value_isEqPre)
     {
+        if(DeviceProperties.isPaFirmware)
         {
-            if(DeviceProperties.isPaFirmware)
+            if(value_isEqPre)
             {
-                if(isEqPre)
-                {
-                    if(!eq.isPrePosition) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
-                }
-                else
-                {
-                    if(eq.isPrePosition) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
-                }
+                if(!eq.isPreEQ) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
+            }
+            else
+            {
+                if(eq.isPreEQ) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
             }
         }
+        listViewModules.forceLayout();
     }
 
     function placeAllModuls()

@@ -316,6 +316,8 @@ ApplicationWindow
         function onSgExchangeError()
         {
             _msgExchangeError.open();
+
+            mBusy.visible = false;
         }
 
         function onSgInterfaceUnavaliable(interfaceType, Msg)
@@ -338,6 +340,7 @@ ApplicationWindow
             }
 
             _msgBluetoothNotReady.open();
+            mBusy.visible = false;
             console.log("signal interface unavaliable");
         }
 
@@ -353,6 +356,7 @@ ApplicationWindow
             }
 
             _msgBluetoothNotReady.open();
+            mBusy.visible = false;
             console.log("signal device unavaliable");
         }
 
@@ -366,6 +370,7 @@ ApplicationWindow
             _msgBluetoothNotReady.open();
 
             InterfaceManager.startScanning();
+            mBusy.visible = false;
         }
 
         function onSgInterfaceDisconnected()

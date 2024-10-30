@@ -29,6 +29,8 @@ public:
 
     explicit EqBand(AbstractModule* ownerModule, FilterType bandType, double fStart, double fStop, int bandNum);
 
+    ~EqBand();
+
     static constexpr double Fs = 48000;
 
     FilterType type() const;

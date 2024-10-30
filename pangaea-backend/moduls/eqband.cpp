@@ -28,6 +28,13 @@ EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, 
     calcFilterCoefs();
 }
 
+EqBand::~EqBand()
+{
+    delete(m_Fc);
+    delete(m_gain);
+    delete(m_Q);
+}
+
 void EqBand::calcFilterCoefs()
 {
     double A = pow(10, m_gain->displayValue()/40);
