@@ -20,8 +20,8 @@ class DeviceProperties : public QObject
     Q_PROPERTY(bool presetModified READ presetModified NOTIFY presetModifiedChanged FINAL)
     Q_PROPERTY(DeviceType deviceType READ deviceType NOTIFY deviceTypeChanged FINAL)
 
-    Q_PROPERTY(quint8 bank READ bank WRITE setBank NOTIFY bankChanged FINAL)
-    Q_PROPERTY(quint8 preset READ preset WRITE setPreset NOTIFY presetChanged FINAL)
+    Q_PROPERTY(quint8 bank READ bank WRITE setBank NOTIFY bankPresetChanged FINAL)
+    Q_PROPERTY(quint8 preset READ preset WRITE setPreset NOTIFY bankPresetChanged FINAL)
 
     Q_PROPERTY(quint8 outputMode READ outputMode NOTIFY outputModeChanged FINAL)
 
@@ -69,8 +69,7 @@ signals:
     void presetModifiedChanged();
     void deviceTypeChanged();
 
-    void bankChanged();
-    void presetChanged();
+    void bankPresetChanged();
 
     void la3CleanPresetChanged();
     void la3DrivePresetChanged();

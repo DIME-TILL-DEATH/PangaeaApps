@@ -9,6 +9,7 @@
 
 #include <QHash>
 #include <QSettings>
+#include <qpermissions.h>
 #include <qregularexpression.h>
 
 #include <QTimer>
@@ -71,8 +72,13 @@ private slots:
     /* Slots for user */
     void slStartConnect(QString address);
     void checkDevicesAvaliabliy();
+
+    void serviceError(QLowEnergyService::ServiceError newError);
+
 private:
     bool isAvaliable;
+
+    int mtu;
 
     QBluetoothDeviceDiscoveryAgent *m_deviceDiscoveryAgent{nullptr};
 

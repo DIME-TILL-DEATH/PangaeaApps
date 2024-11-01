@@ -35,13 +35,13 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
     case DeviceParameter::Type::BANK:
     {
         m_bank = value;
-        emit bankChanged();
+        emit bankPresetChanged();
         break;
     }
     case DeviceParameter::Type::PRESET:
     {
         m_preset = value;
-        emit presetChanged();
+        emit bankPresetChanged();
         break;
     }
     case DeviceParameter::Type::OUTPUT_MODE:
@@ -122,7 +122,7 @@ void DeviceProperties::setBank(quint8 newBank)
     }
 
     m_bank = newBank;
-    emit bankChanged();
+    emit bankPresetChanged();
     emit sendAppAction(Core::AppAction::CHANGE_PRESET, {m_bank, m_preset});
 }
 
@@ -139,7 +139,7 @@ void DeviceProperties::setPreset(quint8 newPreset)
     }
 
     m_preset = newPreset;
-    emit presetChanged();
+    emit bankPresetChanged();
     emit sendAppAction(Core::AppAction::CHANGE_PRESET, {m_bank, m_preset});
 }
 

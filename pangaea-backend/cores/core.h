@@ -16,6 +16,8 @@
 
 #include "irworker.h"
 
+
+
 class Core : public QObject
 {
     Q_OBJECT
@@ -64,7 +66,7 @@ public:
     void exportPreset(QString filePath, QString fileName);
 
     void setFirmware (QString fullFilePath);
-    void uploadFirmware(QByteArray firmware);
+    void uploadFirmware(const QByteArray &firmware);
 
     void sw4Enable();
     void stopCore();
@@ -74,6 +76,9 @@ private:
     AnswerWorker commandWorker;
 
     QByteArray lastRecievedData;
+
+    const uint32_t fwUploadBlockSize = 100;
+    QByteArray m_rawFirmwareData;
 
     QList<Preset> m_presetsList;
 

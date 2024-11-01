@@ -85,6 +85,7 @@ Rectangle
 
             onCurrentIndexChanged:
             {
+                console.log("preset timer restart")
                 timer.restart();
             }
         }

@@ -8,6 +8,9 @@
 
 #include "core.h"
 
+// TODO change to MTU, or lower than size. Wait answer
+
+
 Core::Core(QObject *parent) : QObject(parent)
 {
 
@@ -229,8 +232,6 @@ void Core::parseInputData(QByteArray ba)
                                 {
                                     emit sgRecieveDeviceParameter(paramType, (qint16)sss.toInt(nullptr, 16));
                                 }
-                                qDebug() << "Param nom: " << paramType << " value:" << sss.toInt(nullptr, 16);
-
                                 count++;
                             }
                             nomByte++;
@@ -292,7 +293,8 @@ void Core::parseInputData(QByteArray ba)
                 pushReadPresetCommands();
                 pushCommandToQueue("rns\n");
                 pushCommandToQueue("sw1\n");
-                processCommands();            
+                processCommands();
+                break;
             }
 
             case AnswerType::la3CurrentChannel:
@@ -313,6 +315,7 @@ void Core::parseInputData(QByteArray ba)
                     }
                     emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_CURRENT_CHANNEL, currentLa3Mode);
                 }
+                break;
             }
 
             case AnswerType::getOutputMode:
@@ -551,11 +554,31 @@ void Core::parseInputData(QByteArray ba)
 
             case AnswerType::requestNextChunk:
             {
+                qInfo() << recievedCommand.description();
                 if(!fwUpdate)
                 {
-                    recieveEnabled = false;
+                   recieveEnabled = false;
+
                 }
-                qInfo() << recievedCommand.description();
+                else
+                {
+                    if(m_rawFirmwareData.length() > 0)
+                    {
+                        QByteArray baSend, baTmp;
+                        baTmp = m_rawFirmwareData.left(fwUploadBlockSize);
+                        m_rawFirmwareData.remove(0, baTmp.length());
+
+                        baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());
+                        baSend.append(baTmp);
+
+                        commandsPending.append(baSend);
+                    }
+                    else
+                    {
+                        commandsPending.append("0\n"); // нулевой блок это знак что файл загружен
+                    }
+                    processCommands();
+                }
                 break;
             }
 
@@ -773,35 +796,33 @@ void Core::setFirmware(QString fullFilePath)
     }
 }
 
-void Core::uploadFirmware(QByteArray firmware)
+void Core::uploadFirmware(const QByteArray& firmware)
 {
     if(firmware.length()>0)
     {
-        const uint32_t sizeBlock = 1024;
+        m_rawFirmwareData = firmware;
+
+        symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / fwUploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
+        bytesToRecieve = 0;// 18 * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
 
         emit sgSetUIParameter("fw_update_enabled", true);
-        timeoutTimer->setInterval(1000);
+        timeoutTimer->stop();
+        // timeoutTimer->setInterval(5000);
 
         fwUpdate = true;
         recieveEnabled = false;
 
-        QByteArray baSend;
+        QByteArray baTmp, baSend;
         baSend.append("fwu\r");
 
-        do
-        {
-            QByteArray baTmp;
-            baTmp = firmware.left(sizeBlock);
-            firmware.remove(0, baTmp.length()); // TODO: цикл for и передача firmware По константной ссылке
+        baTmp = m_rawFirmwareData.left(fwUploadBlockSize);
+        m_rawFirmwareData.remove(0, baTmp.length());
 
-            baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());
-            baSend.append(baTmp);
+        baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());
+        baSend.append(baTmp);
 
-            commandsPending.append(baSend);
-            baSend.clear();
 
-        } while (firmware.length()>0);
-        pushCommandToQueue("0\n"); // нахрена? но так было в изначальном коде
+        commandsPending.append(baSend);
         processCommands();
     }
 }
@@ -1028,12 +1049,6 @@ void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameter
         processCommands();
         break;
     }
-    // case CALL_PRESET_LIST:
-    // {
-    //     pushCommandToQueue("rns");
-    //     processCommands();
-    //     break;
-    // }
     }
 }
 
@@ -1109,11 +1124,11 @@ void Core::processCommands()
         }
         else
         {
-            chunckSize=16;
-            sleepTime=50; // lower values tends to disconnect on MacOs
+            chunckSize=120;
+            sleepTime=150;
         }
 
-        if(commandToSend.length() > chunckSize)
+        if((commandToSend.length() > chunckSize) && (!fwUpdate))
         {
             emit sgSetUIParameter("data_uploading", true);
             for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
@@ -1141,8 +1156,12 @@ void Core::processCommands()
             {
                 timeoutInterval = 10000;
             }
-            timeoutTimer->start(timeoutInterval);
-            indicationTimer->start();
+
+            if(!fwUpdate)
+            {
+                timeoutTimer->start(timeoutInterval);
+                indicationTimer->start();
+            }
         }
     }
     else

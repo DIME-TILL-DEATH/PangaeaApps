@@ -33,6 +33,7 @@ qt_add_library(pangaea-backend STATIC
     device/firmware.cpp device/firmware.h
     device/preset.cpp device/preset.h
     device/deviceparameter.h device/deviceparameter.cpp
+    device/abstractdevice.h device/abstractdevice.cpp
 
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h

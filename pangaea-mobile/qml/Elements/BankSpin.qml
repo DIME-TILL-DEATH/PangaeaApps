@@ -114,6 +114,7 @@ Rectangle
         repeat: false
         onTriggered:
         {
+            console.log("bank spin triggered")
             DeviceProperties.bank = _tumbler.currentIndex;
         }
     }

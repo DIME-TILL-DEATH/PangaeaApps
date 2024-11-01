@@ -35,7 +35,7 @@ Item
                 height: parent.height/4
                 width: parent.width
 
-                name: "Volume"
+                name: "Master" // Volume
                 paramType: DeviceParameter.AMP_VOLUME
 
                 moduleOn: on
@@ -56,7 +56,7 @@ Item
                 height: parent.height/4
                 width: parent.width
 
-                name: "Slave"
+                name: "Level" // Slave
                 paramType: DeviceParameter.AMP_SLAVE
 
                 moduleOn: on

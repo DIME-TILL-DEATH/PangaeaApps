@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21.1)
-project(Pangaea-mobile VERSION 0.10.8 LANGUAGES CXX)
+project(Pangaea-mobile VERSION 0.10.9 LANGUAGES CXX)
 set(VERSION_CODE 14)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
@@ -58,6 +58,7 @@ target_link_libraries(Pangaea-mobile PUBLIC
     Qt6::Quick
     Qt6::QuickControls2
     Qt6::Svg
+    Qt6::Positioning
 
     pangaea-backend
     converter-lib
@@ -86,11 +87,18 @@ set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
    ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.android/${CMAKE_ANDROID_ARCH_ABI}/libsox.so
 )
 
-qt6_add_translations(Pangaea-mobile TS_FILES
-   translations/pangaea-mobile_de.ts
-   translations/pangaea-mobile_en.ts
-   translations/pangaea-mobile_it.ts
-   translations/pangaea-mobile_ru.ts )
+# TODO automatic update translations
+# find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
+# qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES ru de it)
+# qt_add_lrelease(Pangaea-mobile
+# TS_FILES
+#    translations/pangaea-mobile_de.ts
+#    translations/pangaea-mobile_en.ts
+#    translations/pangaea-mobile_it.ts
+#    translations/pangaea-mobile_ru.ts
+# QM_FILES_OUTPUT_VARIABLE qm_files
+# )
+
 
 qt6_add_resources(Pangaea-mobile "AndroidResources"
     PREFIX

@@ -108,6 +108,25 @@ void BleInterface::startDiscovering()
         return;
     }
 
+    QGeoPositionInfoSource* geoSource =  QGeoPositionInfoSource::createDefaultSource(this);
+    if(geoSource == nullptr)
+    {
+        qWarning() << "Geo backend unavaliable!";
+        return;
+    }
+    else
+    {
+        geoSource->requestUpdate(0);
+
+        if(geoSource->error() == QGeoPositionInfoSource::ClosedError)
+        {
+            qWarning() << "Geolocation is off!";
+            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "GeolocationIsOff");
+            delete(geoSource);
+            return;
+        }
+    }
+
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
     {
         prevState();
@@ -344,16 +363,16 @@ void BleInterface::slStartConnect(QString address)
 void BleInterface::deviceConnected()
 {
     QLowEnergyConnectionParameters connectionParams;
-    qDebug() << "BLE params: latency" << connectionParams.latency() << " minimum interval:" << connectionParams.minimumInterval() << " maximum interval:" << connectionParams.maximumInterval();
-
-    connectionParams.setIntervalRange(20, 1000);
-    connectionParams.setLatency(50);
+    connectionParams.setIntervalRange(10, 25);
     m_control->requestConnectionUpdate(connectionParams);
     QObject::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
 
     m_control->readRssi();
     QObject::connect(m_control, &QLowEnergyController::rssiRead, this, &BleInterface::rssiReaded);
 
+
+    // mtu = m_control->mtu();
+    // qDebug() << "MTU: " << mtu;
     setState(Connected);
     m_control->discoverServices();
 }
@@ -390,6 +409,8 @@ void BleInterface::serviceScanDone()
             this, &BleInterface::updateData);
     QBluetoothDeviceDiscoveryAgent::connect(m_service, &QLowEnergyService::descriptorWritten,
             this, &BleInterface::confirmedDescriptorWrite);
+    QBluetoothDeviceDiscoveryAgent::connect(m_service, &QLowEnergyService::errorOccurred,
+                                            this, &BleInterface::serviceError);
 
     m_service->discoverDetails();
     setState(ServiceFound);
@@ -457,13 +478,6 @@ void BleInterface::confirmedDescriptorWrite(const QLowEnergyDescriptor &d,
     }
     setState(AcquireData);
 
-    // QLowEnergyConnectionParameters leParameters;
-    // leParameters.setIntervalRange(20, 75);
-    // leParameters.setLatency(0);
-    // leParameters.setSupervisionTimeout(4000);
-
-    // m_control->requestConnectionUpdate(leParameters);
-
     emit sgInterfaceConnected(m_connectedDevice);
 }
 
@@ -483,7 +497,19 @@ void BleInterface::write(QByteArray data)
     QByteArray Data;
     Data.append(data);
 
-    m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithoutResponse);
+    // if(data.size() > 48)
+    // {
+    //     QLowEnergyConnectionParameters connectionParams;
+    //     connectionParams.setIntervalRange(10, 25);
+    //     m_control->requestConnectionUpdate(connectionParams);
+    // }
+
+    m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithResponse);
+}
+
+void BleInterface::serviceError(QLowEnergyService::ServiceError newError)
+{
+    qWarning() << "UART BLE service error: " << newError;
 }
 
 void BleInterface::disconnectFromDevice()
