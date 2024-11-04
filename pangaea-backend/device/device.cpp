@@ -31,7 +31,7 @@ void Device::setDeviceType(DeviceType newDeviceType)
 
     switch(m_deviceType)
     {
-        case DeviceType::CP16:
+        case DeviceType::legacyCP16:
             m_minimalFirmware = new Firmware(CP16_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
             m_indicationFirmware = new Firmware("PA.01.05.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
             m_maxBankCount = 4;
@@ -39,7 +39,7 @@ void Device::setDeviceType(DeviceType newDeviceType)
             m_havePaSection = false;
             m_firmwareName = "CP-16M Blue";
         break;
-        case DeviceType::CP16PA:
+        case DeviceType::legacyCP16PA:
             m_minimalFirmware = new Firmware(CP16PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
             m_indicationFirmware = new Firmware("PA.01.05.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
             m_maxBankCount = 4;
@@ -47,7 +47,7 @@ void Device::setDeviceType(DeviceType newDeviceType)
             m_havePaSection = true;
             m_firmwareName = "CP-16M-PA Green";
         break;
-        case DeviceType::CP100:
+        case DeviceType::legacyCP100:
             m_minimalFirmware = new Firmware(CP100_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
             m_indicationFirmware = new Firmware("PA.02.08.12", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
             m_maxBankCount = 10;
@@ -55,7 +55,7 @@ void Device::setDeviceType(DeviceType newDeviceType)
             m_havePaSection = false;
             m_firmwareName = "CP-100";
         break;
-        case DeviceType::CP100PA:
+        case DeviceType::legacyCP100PA:
             m_minimalFirmware = new Firmware(CP100PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
             m_indicationFirmware = new Firmware("PA.06.09.08", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
             m_maxBankCount = 10;
@@ -64,7 +64,7 @@ void Device::setDeviceType(DeviceType newDeviceType)
             m_firmwareName = "CP-100PA";
         break;
 
-        case DeviceType::LA3RV:
+        case DeviceType::LA3:
             m_minimalFirmware = new Firmware(LA3RV_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
             m_indicationFirmware = new Firmware("PA.01.05.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
             m_maxBankCount = 0;
@@ -72,14 +72,6 @@ void Device::setDeviceType(DeviceType newDeviceType)
             m_havePaSection = false;
             m_firmwareName = "LA3RV";
         break;
-        case DeviceType::LA3PA:
-            m_minimalFirmware = new Firmware(LA3PA_FIRMWARE_VERSION, newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3PA.ble");
-            m_indicationFirmware = new Firmware("PA.01.05.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3PA.ble");
-            m_maxBankCount = 0;
-            m_maxPresetCount = 16;
-            m_havePaSection = true;
-            m_firmwareName = "LA3PA";
-            break;
     default:
         qDebug() << __FUNCTION__ << "Unknown device type";
         break;

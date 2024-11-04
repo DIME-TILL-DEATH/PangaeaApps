@@ -10,19 +10,16 @@ import CppObjects
 Rectangle {
     id: _main
 
+    property bool on: module.moduleEnabled
+
     property bool disabled: AppProperties.compareState
 
     property string moduleName: module !== undefined ? module.moduleName : ""
     property string moduleDescription: "Description"
-    //property string nameValue
 
     property bool showDescription : true
 
     property Component contentItem
-
-    property Module module
-
-    signal sgModuleOnOf()
 
     width: parent.width
     height: parent.height
@@ -65,7 +62,7 @@ Rectangle {
 
             gradient: Gradient{
                 GradientStop{
-                    position:_main.parent.on? 0.0 : 1.0
+                    position:_main.on ? 0.0 : 1.0
                     color: Style.colorModul
 
                     Behavior on position {NumberAnimation{duration: 100}}
@@ -76,7 +73,7 @@ Rectangle {
 
             radius: Style.baseRadius
             border.width: 1
-            border.color: _main.parent.on ? Style.currentTheme.colorBorderOn : Style.currentTheme.colorBorderOff
+            border.color: _main.on ? Style.currentTheme.colorBorderOn : Style.currentTheme.colorBorderOff
 
             Behavior on color {ColorAnimation{duration: 200}}
 
@@ -103,7 +100,7 @@ Rectangle {
                     font.pixelSize: _headerRect.width * 0.12
 
                     text: _main.moduleDescription
-                    color: _main.parent.on ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
+                    color: _main.on ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
 
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -132,7 +129,7 @@ Rectangle {
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
 
-                        color: (_main.parent.on) ? Style.currentTheme.colorLedOn : Style.currentTheme.colorLedOff
+                        color: (_main.on) ? Style.currentTheme.colorLedOn : Style.currentTheme.colorLedOff
 
                         Behavior on color{ColorAnimation{duration:200}}
                     }
@@ -152,7 +149,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
 
                         text: _main.moduleName
-                        color: _main.parent.on ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
+                        color: _main.on ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
                     }
                 }
             }
@@ -160,14 +157,8 @@ Rectangle {
                 anchors.fill: parent
                 z: 5
                 onClicked: {
-                    if(module !== null)
-                    {
                         module.moduleEnabled = !module.moduleEnabled
-                    }
-                    else
-                    {
-                        sgModuleOnOf();
-                    }
+                        main.on = module.moduleEnabled
                 }
             }
         }
@@ -184,7 +175,7 @@ Rectangle {
 
             radius: Style.baseRadius //width/40
             border.width: 1
-            border.color: _main.parent.on ? Style.currentTheme.colorBorderOn : Style.currentTheme.colorBorderOff
+            border.color: _main.on ? Style.currentTheme.colorBorderOn : Style.currentTheme.colorBorderOff
 
             Item {
                 id: _contentItem
@@ -203,6 +194,16 @@ Rectangle {
                     sourceComponent: contentItem
                 }
             }
+        }
+    }
+
+    Connections
+    {
+        target: CurrentDevice
+
+        function onDeviceUpdatingValues()
+        {
+            _main.on = module.moduleEnabled
         }
     }
 }

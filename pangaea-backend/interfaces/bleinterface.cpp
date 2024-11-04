@@ -490,7 +490,7 @@ void BleInterface::connectionParametersUpdated(const QLowEnergyConnectionParamet
             << " latency" << newParameters.latency();
 }
 
-void BleInterface::write(QByteArray data)
+void BleInterface::write(const QByteArray &data)
 {
     const QLowEnergyCharacteristic  RxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
 

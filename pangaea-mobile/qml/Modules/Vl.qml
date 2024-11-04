@@ -47,8 +47,9 @@ Item
 
                 bottomLineEnabled: false
 
-                name: main.nameValue
-                paramType: DeviceParameter.MASTER_VOLUME
+                moduleOn: true
+
+                ctrlValInstance: CurrentDevice.MV.presetVolume
             }
         }
     }

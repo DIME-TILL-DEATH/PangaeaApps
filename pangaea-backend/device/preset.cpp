@@ -3,9 +3,9 @@
 
 #include "preset.h"
 
-Preset::Preset(Device *owner)
+Preset::Preset()
 {
-    m_ownerDevice = owner;
+    // m_ownerDevice = owner;
     m_rawData.append(86, '0');
 }
 
@@ -155,7 +155,7 @@ void Preset::setImpulseName(const QString &newImpulseName)
 
 quint8 Preset::calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, quint8 presetNumber)
 {
-    if(deviceType==DeviceType::CP100 || (deviceType==DeviceType::CP100PA))
+    if(deviceType==DeviceType::legacyCP100 || (deviceType==DeviceType::legacyCP100PA))
         return bankNumber*10 + presetNumber;
     else
         return (bankNumber<<4) + presetNumber;
@@ -163,22 +163,23 @@ quint8 Preset::calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, qui
 
 quint8 Preset::getPresetFlatIndex() const
 {
-    return calcPresetFlatIndex(m_ownerDevice->deviceType(), m_bankNumber, m_presetNumber);
+    // return calcPresetFlatIndex(m_ownerDevice->deviceType(), m_bankNumber, m_presetNumber);
+    return 0;
 }
 
 quint8 Preset::getPresetFlatNumber() const
 {
     quint16 maxBank;
 
-    if(m_ownerDevice == nullptr)
-    {
-        qWarning() << __FUNCTION__ << "Owner device doesn't set. Using default maxBank=16";
-        maxBank = 4;
-    }
-    else
-    {
-        maxBank = m_ownerDevice->maxBankCount();
-    }
+    // if(m_ownerDevice == nullptr)
+    // {
+    //     qWarning() << __FUNCTION__ << "Owner device doesn't set. Using default maxBank=16";
+    //     maxBank = 4;
+    // }
+    // else
+    // {
+    //     maxBank = m_ownerDevice->maxBankCount();
+    // }
     return m_bankNumber*maxBank + m_presetNumber;
 }
 
@@ -229,13 +230,13 @@ quint32 Preset::wavSize() const
     return m_waveData.size();
 }
 
-Device *Preset::ownerDevice() const
-{
-    return m_ownerDevice;
-}
+// Device *Preset::ownerDevice() const
+// {
+//     return m_ownerDevice;
+// }
 
-void Preset::setOwnerDevice(Device *newOwnerDevice)
-{
-    m_ownerDevice = newOwnerDevice;
-}
+// void Preset::setOwnerDevice(Device *newOwnerDevice)
+// {
+//     m_ownerDevice = newOwnerDevice;
+// }
 

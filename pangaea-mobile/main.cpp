@@ -21,8 +21,10 @@
 #include "interfacecore.h"
 #include "presetlistmodel.h"
 
+#include "poweramp.h"
 #include "eqband.h"
 #include "eqresponse.h"
+#include "presetvolume.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
@@ -80,7 +82,7 @@ int main(int argc, char *argv[])
     NetCore* netCore = new NetCore;
     InterfaceCore* interfaceManager = new InterfaceCore;
 
-    EqResponse eqResponse(core);
+    // EqResponse eqResponse(core);
 
     PresetListModel presetListModel;
 
@@ -112,27 +114,36 @@ int main(int argc, char *argv[])
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
 
+
+    // AbstractDevice abstractDevice;
+    // qmlRegisterSingletonInstance("CppObjects", 1, 0, "CurrentDevice", &abstractDevice);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "AppProperties", &appProperties);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "DeviceProperties", &deviceProperties);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);
 
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "EqResponse", &eqResponse);
+    // qmlRegisterSingletonInstance("CppObjects", 1, 0, "EqResponse", &eqResponse);
 
     qmlRegisterUncreatableType<Core>("CppObjects", 1, 0, "AppParameter", "Cannot create AppParameter in QML");
     qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
-    qmlRegisterUncreatableType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription", "");
+    qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
+
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
 
+    qmlRegisterUncreatableType<ModuleTypeEnum>("CppEnums", 1, 0, "ModuleType", "Not creatable as it is an enum type");
+
+    qmlRegisterType<ControlValue>("CppObjects", 1, 0, "ControlValue");
     qmlRegisterUncreatableType<AbstractModule>("CppObjects", 1, 0, "Module", "Cannot create Module in QML");
+    qmlRegisterUncreatableType<PresetVolume>("CppObjects", 1, 0, "PresetVolume", "Cannot create MasterVolume in QML");
+    qmlRegisterUncreatableType<PowerAmp>("CppObjects", 1, 0, "PowerAmp", "Cannot create PowerAmp in QML");
     qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
-    qmlRegisterUncreatableType<ControlValue>("CppObjects", 1, 0, "ControlValue", "Cannot create ControlValue in QML");
+
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------
     UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    QObject::connect(&uiCore, &UiCore::sgReadAllParameters, core, &Core::readAllParameters);
+    // QObject::connect(&uiCore, &UiCore::sgReadAllParameters, core, &Core::readAllParameters);
     QObject::connect(&uiCore, &UiCore::sgSetParameter, core, &Core::setParameter);
     QObject::connect(&uiCore, &UiCore::sgSetDeviceParameter, core, &Core::slSetDeviceParameter);
 
@@ -142,7 +153,7 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiCore::sgEscImpuls, core, &Core::escImpulse);
     QObject::connect(&uiCore, &UiCore::sgExportPreset, core, &Core::exportPreset);
     QObject::connect(&uiCore, &UiCore::sgImportPreset, core, &Core::importPreset);
-    QObject::connect(&uiCore, &UiCore::sgSw4Enable, core, &Core::sw4Enable);
+    // QObject::connect(&uiCore, &UiCore::sgSw4Enable, core, &Core::sw4Enable);
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgRecieveDeviceParameter, &uiCore, &UiCore::sgSetUiDeviceParameter);
@@ -162,7 +173,8 @@ int main(int argc, char *argv[])
     QObject::connect(netCore, &NetCore::sgDownloadProgress, &uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);
 
     Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData);
-    Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::readAllParameters);
+    // Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::readAllParameters);
+    Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::slInterfaceConnected);
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
     Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
     Core::connect(core, &Core::sgReadyTodisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);

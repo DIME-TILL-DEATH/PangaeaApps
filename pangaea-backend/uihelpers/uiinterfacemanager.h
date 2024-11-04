@@ -19,6 +19,7 @@ public:
 
     Q_INVOKABLE void startScanning();
     Q_INVOKABLE void connectToDevice(DeviceDescription device);
+    Q_INVOKABLE void connectToVirtualDevice();
     Q_INVOKABLE void disconnectFromDevice();
     Q_INVOKABLE void rssiMeasuring(bool enabled) {emit sgRssiMeasuring(enabled);}
 

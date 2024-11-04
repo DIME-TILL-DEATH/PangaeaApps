@@ -30,7 +30,7 @@ public:
     bool connect(DeviceDescription device);
     void disconnectFromDevice();
 
-    void write(QByteArray data);
+    void write(const QByteArray &data);
 
 private slots:
     void slReadyRead();

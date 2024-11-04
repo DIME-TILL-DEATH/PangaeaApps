@@ -8,6 +8,7 @@
 #include "abstractinterface.h"
 #include "bleinterface.h"
 #include "usbinterface.h"
+#include "offlineinterface.h"
 
 class InterfaceCore : public QObject
 {
@@ -44,6 +45,7 @@ private:
     AbstractInterface* m_exchangeInterface{nullptr};
     BleInterface* m_bleInterface{nullptr};
     UsbInterface* m_usbInterface{nullptr};
+    OfflineInterface* m_offlineInterface{nullptr};
 
     QSettings* appSettings;
 

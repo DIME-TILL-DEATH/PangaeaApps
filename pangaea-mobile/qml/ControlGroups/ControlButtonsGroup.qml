@@ -14,20 +14,20 @@ GridLayout
 {
     id: _root
 
-    property int mode: DeviceProperties.outputMode
+    property int mode: CurrentDevice.outputMode
 
     rows: 2
     columns: 3
 
     property bool copyFirst: false
-    property bool presetEdited: DeviceProperties.presetModified
+    property bool presetEdited: CurrentDevice.deviceParamsModified
     property bool compareState: AppProperties.compareState
 
     signal openPresetsList()
 
     ColumnLayout
     {
-        Layout.preferredWidth: parent.width*2/5 - borderSpacings*2 //45*10*11/10
+        Layout.preferredWidth: parent.width*2/5 - borderSpacings*2
         Layout.preferredHeight: parent.height*11/15
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -41,11 +41,11 @@ GridLayout
 
             //: Output mode. Phones.
             textButton: qsTr("Phones")
-            active: (mode==0)
+            active: (mode == 0)
             onMbPressed:
             {
                 mode = 0;
-                UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
+                CurrentDevice.outputMode = 0;
             }
         }
 
@@ -55,12 +55,11 @@ GridLayout
             Layout.fillHeight: true
 
             //: Output mode. Balanced out.
-            textButton: qsTr("Balance")
-            active: (mode==2)
+            textButton: qsTr("Balanced")
+            active: (mode == 2)
             onMbPressed:
             {
-                mode = 2;
-                UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
+                CurrentDevice.outputMode = 2;
             }
         }
 
@@ -71,11 +70,10 @@ GridLayout
 
             //: Output mode. Line out.
             textButton: qsTr("Line")
-            active: (mode==1)
+            active: (mode == 1)
             onMbPressed:
             {
-                mode = 1;
-                UiCore.setDeviceParameter(DeviceParameter.OUTPUT_MODE, mode);
+                CurrentDevice.outputMode = 1;
             }
         }
     }
@@ -120,7 +118,8 @@ GridLayout
 
             onMbPressed:
             {
-                DeviceProperties.saveChanges();
+                CurrentDevice.saveChanges();
+                // DeviceProperties.saveChanges();
             }
         }
         MButton
@@ -199,15 +198,4 @@ GridLayout
         Layout.fillHeight: true
         Layout.columnSpan: 3
     }
-
-
-    // Connections{
-    //     target: UiCore
-
-    //     function onSgSetUiDeviceParameter(paramType, value)
-    //     {
-    //         if(paramType === DeviceParameter.OUTPUT_MODE)
-    //             mode = value;
-    //     }
-    // }
 }

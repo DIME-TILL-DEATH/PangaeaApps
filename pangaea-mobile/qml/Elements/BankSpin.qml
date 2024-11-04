@@ -63,13 +63,12 @@ Rectangle
             width:  parent.width
             height: parent.height*6/10
 
-            model: DeviceProperties.banksList
-            currentIndex: DeviceProperties.bank
+            model: 4//DeviceProperties.banksList
+            currentIndex: CurrentDevice.bank
 
             visibleItemCount: 1
 
             wrap: false
-
 
             delegate: MText{
                 text: modelData
@@ -110,12 +109,24 @@ Rectangle
     Timer
     {
         id: timer
-        interval: 250
+        interval: 2500
         repeat: false
         onTriggered:
         {
-            console.log("bank spin triggered")
-            DeviceProperties.bank = _tumbler.currentIndex;
+            if(!CurrentDevice.deviceUpdatingValues)
+            {
+                // change preset
+            }
+
+        }
+    }
+
+    Connections{
+        target: CurrentDevice
+
+        function onDeviceUpdatingValues()
+        {
+            _tumbler.currentIndex = CurrentDevice.bank
         }
     }
 }

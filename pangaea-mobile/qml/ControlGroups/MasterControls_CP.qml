@@ -13,8 +13,8 @@ Item
 {
     id: _root
 
-    width:  parent.width
-    height: parent.height
+    width:  100
+    height: 100
 
     property int borderSpacings : Style.mainSpacing
 

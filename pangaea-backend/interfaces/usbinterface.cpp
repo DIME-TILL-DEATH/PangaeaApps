@@ -124,7 +124,7 @@ bool UsbInterface::connect(DeviceDescription device)
     return isPortOpened;
 }
 
-void UsbInterface::write(QByteArray data)
+void UsbInterface::write(const QByteArray &data)
 {
     m_port->readAll();
     m_port->write(data);

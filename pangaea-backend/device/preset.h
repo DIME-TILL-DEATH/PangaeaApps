@@ -148,7 +148,7 @@ typedef struct
 class Preset
 {
 public:
-    Preset(Device* owner);
+    Preset();
 
     quint8 bankNumber() const;
     quint8 presetNumber() const;
@@ -180,11 +180,11 @@ public:
 
     quint32 wavSize() const;
 
-    Device *ownerDevice() const;
-    void setOwnerDevice(Device *newOwnerDevice);
+    // Device *ownerDevice() const;
+    // void setOwnerDevice(Device *newOwnerDevice);
 
 private:
-    Device* m_ownerDevice;
+   // Device* m_ownerDevice;
 
     quint8 m_presetNumber{0};
     quint8 m_bankNumber{0};

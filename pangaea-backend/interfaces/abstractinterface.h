@@ -30,7 +30,7 @@ public:
     virtual bool connect(DeviceDescription device) = 0;
     virtual void disconnectFromDevice() = 0;
 
-    virtual void write(QByteArray data) = 0;
+    virtual void write(const QByteArray &data) = 0;
 
     void setState(InterfaceState newState);
     void prevState();

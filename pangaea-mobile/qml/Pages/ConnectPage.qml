@@ -23,7 +23,7 @@ Item
         height: parent.height
         anchors.horizontalCenter: parent.horizontalCenter
 
-        spacing: height/50
+        spacing: height/65
 
         Rectangle{
             id: _scanContainerRect
@@ -144,7 +144,7 @@ Item
 
         Rectangle{
             width: parent.width
-            height: parent.height*7.6/10
+            height: parent.height*6.6/10
 
             gradient: Gradient{
                 GradientStop{
@@ -187,7 +187,7 @@ Item
 
                 // Transitions
                 add: Transition {
-                     NumberAnimation { properties: "y"; from: _list.height; duration: 250 }
+                    NumberAnimation { properties: "y"; from: _list.height; duration: 250 }
                 }
 
                 displaced: Transition{
@@ -195,7 +195,7 @@ Item
                 }
 
                 remove: Transition {
-                     NumberAnimation { properties: "x"; to: _list.width; duration: 250 }
+                    NumberAnimation { properties: "x"; to: _list.width; duration: 250 }
                 }
             }
         }
@@ -211,8 +211,8 @@ Item
             radius: Style.baseRadius
 
             gradient: Gradient{
-                GradientStop{ position: 0.0;color: Style.colorModul}
-                GradientStop{position: 1.0; color: "black"}
+                GradientStop{ position: 0.0; color: Style.colorModul}
+                GradientStop{ position: 1.0; color: "black"}
             }
 
             CheckBox{
@@ -242,9 +242,42 @@ Item
                     _checkBox.checked = !_checkBox.checked
                 }
             }
+        }
 
+        Rectangle{
+            id: _boxOffline
+
+            width: parent.width
+            height: parent.height*1/10
+
+            border.color: Style.currentTheme.colorBorderOn
+            border.width: 1
+            radius: Style.baseRadius
+
+            gradient: Gradient{
+                GradientStop{ position: 0.0;color: Style.colorModul}
+                GradientStop{position: 1.0; color: "black"}
+            }
+
+            MText{
+                anchors.centerIn: parent
+                color: Style.colorText
+                text: qsTr("Offline mode")
+            }
+
+            MouseArea{
+                anchors.fill: parent
+
+                onClicked: {
+                    console.log("Offline interface")
+
+                    InterfaceManager.connectToVirtualDevice()
+
+                }
+            }
         }
     }
+
 
     CustomMessageDialog
     {

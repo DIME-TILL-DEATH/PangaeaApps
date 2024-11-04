@@ -37,7 +37,10 @@ Rectangle
     MText
     {
         z: 2
-        anchors.fill: parent
+        // anchors.fill: parent
+        width: parent.width
+        height: parent.height
+
         text: qsTr(textButton)
 
         font.bold: true
@@ -62,7 +65,9 @@ Rectangle
     }
     MouseArea {
         id: myButtonMouse
-        anchors.fill: parent
+        // anchors.fill: parent
+        width: parent.width
+        height: parent.height
 
         enabled: main.enabledKostyl
 

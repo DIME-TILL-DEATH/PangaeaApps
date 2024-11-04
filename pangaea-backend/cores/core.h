@@ -8,15 +8,16 @@
 #include <QSettings>
 
 #include "firmware.h"
-#include "deviceparameter.h"
+
 #include "answerworker.h"
 #include "preset.h"
 #include "presetmanager.h"
 #include "devicedescription.h"
+#include "deviceparameter.h"
 
 #include "irworker.h"
 
-
+#include "abstractdevice.h"
 
 class Core : public QObject
 {
@@ -47,7 +48,7 @@ public:
 
     // TODO: пока умеет только Preset и bank!!!! Дописать
     void restoreValue(QString name);
-    void readAllParameters();
+    // void readAllParameters();
 
     void setImpulse(QString fullFilePath);
     void escImpulse();
@@ -68,7 +69,7 @@ public:
     void setFirmware (QString fullFilePath);
     void uploadFirmware(const QByteArray &firmware);
 
-    void sw4Enable();
+    // void sw4Enable();
     void stopCore();
 
 private:
@@ -83,6 +84,7 @@ private:
     QList<Preset> m_presetsList;
 
     Device controlledDevice;
+    AbstractDevice* currentDevice;
 
     Firmware* deviceFirmware{nullptr};
 
@@ -90,9 +92,9 @@ private:
     bool isFormatting{false};
 
     bool isPresetEdited{false};
-    Preset currentPreset{&controlledDevice};
-    Preset currentSavedPreset{&controlledDevice};
-    Preset copiedPreset{&controlledDevice};
+    Preset currentPreset;
+    Preset currentSavedPreset;
+    Preset copiedPreset;
     PresetManager presetManager;
 
     QSettings* appSettings;
@@ -111,7 +113,7 @@ private:
     quint32 bytesToRecieve{0};
     quint32 bytesRecieved{0};
 
-    void pushCommandToQueue(QByteArray);
+    void pushCommandToQueue(QByteArray command, bool finalize = true);
     void calculateSendVolume();
     void updateProgressBar();
     void sendCommand(QByteArray);
@@ -139,6 +141,8 @@ signals:
     void sgImmediatelyDisconnect(); // Принудительное после обновления по USB
 
 public slots:
+    void slDeviceInstanciated(DeviceType deviceType);
+
     void setParameter(QString name, quint8 value);
     void slSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
 
@@ -153,7 +157,7 @@ public slots:
     void slRecieveAppAction(AppAction appParameterType, QVariantList parameters);
 
 private slots:
-    void indicationRequest();
+    // void indicationRequest();
     void recieveTimeout();
 };
 #endif // CORE_H

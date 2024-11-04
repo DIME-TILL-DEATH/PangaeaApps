@@ -6,117 +6,108 @@ import Elements 1.0
 
 import CppObjects
 
-Item
+BaseModule
 {
     id: main
 
-    property bool on: true
-    property int paramType: DeviceParameter.AMP_ON
+    property PowerAmp module
 
     property int ampType
 
-    BaseModule{
-        id: _baseModule
+    moduleName: qsTr("PA")
+    moduleDescription: qsTr("Power amp")
 
-        width: parent.width
+    contentItem: Column{
+
+        property alias curInd: _comboBox.currentIndex
+
         height: parent.height
+        width: parent.width
 
-        moduleName: qsTr("PA")
-        moduleDescription: qsTr("Power amp")
-
-        contentItem: Column{
-
-            property alias curInd: _comboBox.currentIndex
-
-            height: parent.height
+        CustomizerSlider
+        {
+            height: parent.height/4
             width: parent.width
-            CustomizerSlider
+            ctrlValInstance: module.volume
+
+            moduleOn: main.on
+        }
+
+        CustomizerSlider
+        {
+            height: parent.height/4
+            width: parent.width
+
+            ctrlValInstance: module.presence
+
+            moduleOn: main.on
+        }
+
+        CustomizerSlider
+        {
+            height: parent.height/4
+            width: parent.width
+
+            ctrlValInstance: module.slave
+
+            moduleOn: main.on
+        }
+
+        MComboBox
+        {
+            id: _comboBox
+
+            property bool deviceUpdatingValues: false
+
+            on: main.on
+
+            height: parent.height/4
+            width: parent.width
+
+            model: ["01.PP 6L6","02.PP EL34","03.SE 6L6","04.SE EL34","05.AMT TC-3","06.CALIF","07.BRIT M","08.BRIT L","09.DEFAULT","10.CALIF MOD","11.CALIF VINT","12.PVH 01","13.PVH 02","14.PVH 03","15.PVH 04"]
+
+            currentIndex: module.ampType.value
+
+            onActivated:
             {
-                height: parent.height/4
-                width: parent.width
-
-                name: "Master" // Volume
-                paramType: DeviceParameter.AMP_VOLUME
-
-                moduleOn: on
+                if(!deviceUpdatingValues)
+                    module.ampType.value = currentIndex;
             }
 
-            CustomizerSlider
-            {
-                height: parent.height/4
-                width: parent.width
+            Connections{
+                target: CurrentDevice
 
-                name: "Presence"
-                paramType: DeviceParameter.PRESENCE_VOLUME
-
-                moduleOn: on
-            }
-            CustomizerSlider
-            {
-                height: parent.height/4
-                width: parent.width
-
-                name: "Level" // Slave
-                paramType: DeviceParameter.AMP_SLAVE
-
-                moduleOn: on
-            }
-
-            MComboBox
-            {
-                id: _comboBox
-
-                on: main.on
-
-                height: parent.height/4
-                width: parent.width
-
-                model: ["01.PP 6L6","02.PP EL34","03.SE 6L6","04.SE EL34","05.AMT TC-3","06.CALIF","07.BRIT M","08.BRIT L","09.DEFAULT","10.CALIF MOD","11.CALIF VINT","12.PVH 01","13.PVH 02","14.PVH 03","15.PVH 04"]
-
-                currentIndex: main.ampType
-
-                onActivated:
+                function onDeviceUpdatingValues()
                 {
-                    UiCore.setDeviceParameter(DeviceParameter.AMP_TYPE, currentIndex);
+                    _comboBox.deviceUpdatingValues = true;
+                    _comboBox.currentIndex = module.ampType.value;
+                    _comboBox.deviceUpdatingValues = false;
                 }
             }
         }
     }
+}
 
     // когда включаем/выклаючаем PA, также включить/выключить presence
-    onOnChanged: {
-        if(main.visible) // только если модуль есть в устройстве
-            UiCore.setParameter("pa-ps_linked_on", main.on);
-    }
+    // onOnChanged: {
+    //     if(main.visible) // только если модуль есть в устройстве
+    //         UiCore.setParameter("pa-ps_linked_on", main.on);
+    // }
 
-    Connections
-    {
-        target: UiCore
+    // Connections
+    // {
+    //     target: UiCore
 
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-                main.on=value
+    //     function onSgSetUiDeviceParameter(paramType, value)
+    //     {
+    //         if(paramType === main.paramType)
+    //         {
+    //             main.on=value
 
-                if(main.visible) // только если модуль есть в устройстве
-                    UiCore.setParameter("pa-ps_linked_on", main.on);
-            }
+    //             // if(main.visible) // только если модуль есть в устройстве
+    //             //     UiCore.setParameter("pa-ps_linked_on", main.on);
+    //         }
 
-            if(paramType === DeviceParameter.AMP_TYPE)
-            {
-                main.ampType = value
-            }
-        }
-    }
 
-    Connections{
-        target: _baseModule
-
-        function onSgModuleOnOf()
-        {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on)
-        }
-    }
-}
+    //     }
+    // }

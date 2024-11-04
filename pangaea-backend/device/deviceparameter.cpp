@@ -23,7 +23,7 @@ QString DeviceParameter::sendString(Type parameterType, quint8 value)
     case Type::EARLY_VOLUME: fullString += "ev"; break;
     case Type::EARLY_TYPE: fullString += "et"; break;
 
-    case Type::MASTER_VOLUME: fullString += "mv"; break;
+    case Type::MASTER_VOLUME: fullString += "mv"; break;    //+
 
     case Type::CABINET_ENABLE: fullString += "ce"; break;
 
@@ -31,10 +31,10 @@ QString DeviceParameter::sendString(Type parameterType, quint8 value)
 
     case Type::EARLY_ON: fullString += "eo"; break;
 
-    case Type::AMP_ON: fullString += "ao"; break;
-    case Type::AMP_VOLUME: fullString += "av"; break;
-    case Type::AMP_SLAVE: fullString += "as"; break;
-    case Type::AMP_TYPE: fullString += "at"; break;
+    case Type::AMP_ON: fullString += "ao"; break;       //+
+    case Type::AMP_VOLUME: fullString += "av"; break;   //+
+    case Type::AMP_SLAVE: fullString += "as"; break;    //+
+    case Type::AMP_TYPE: fullString += "at"; break;     //+
 
     case Type::PREAMP_ON: fullString += "pro"; break;
     case Type::PREAMP_VOLUME: fullString += "prv"; break;
@@ -72,7 +72,7 @@ QString DeviceParameter::sendString(Type parameterType, quint8 value)
 
     case Type::EQ_PRE: fullString += "eqp"; break;
 
-    case Type::OUTPUT_MODE: fullString +="gm"; break;
+    case Type::OUTPUT_MODE: fullString +="gm"; break;   //+
     default: return "";
     }
 

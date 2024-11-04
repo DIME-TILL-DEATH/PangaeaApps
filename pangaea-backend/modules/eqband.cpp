@@ -4,21 +4,20 @@
 #include "eqband.h"
 
 EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, double fStop, int bandNum)
-    : QObject{ownerModule},
-    m_type{bandType},
+    : m_type{bandType},
     m_fStart{fStart},
     m_fStop{fStop},
     m_bandNum{bandNum}
 {
 
-    m_Fc = new ControlValue(ownerModule, (DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_FREQ1+m_bandNum),
+    m_Fc = new ControlValue(ownerModule, "eqf " + QString().setNum(m_bandNum),
                             "Central Frequency", "Hz",
                             -100, 100, m_fStart, m_fStop);
-    m_gain = new ControlValue(ownerModule, (DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_VOLUME1+m_bandNum),
+    m_gain = new ControlValue(ownerModule, "eqg " + QString().setNum(m_bandNum),
                             "Gain", "dB",
                               0x0000, 0x001E, -15, 15);
 
-    m_Q = new ControlValue(ownerModule, (DeviceParameter::Type)((quint8)DeviceParameter::Type::EQ_Q1+m_bandNum),
+    m_Q = new ControlValue(ownerModule, "eqq " + QString().setNum(m_bandNum),
                             "Q-Factor", "",
                            -100, 0, 0.1, 10.1);
 

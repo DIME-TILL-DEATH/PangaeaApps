@@ -4,8 +4,8 @@
 #include "eqresponse.h"
 
 
-EqResponse::EqResponse(Core* core, QObject *parent)
-    : AbstractModule(core, "EQ", DeviceParameter::Type::EQ_ON, parent)
+EqResponse::EqResponse(AbstractDevice *owner)
+    : AbstractModule{owner, ModuleType::EQ, "EQ", "eqo"}
 {
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 20, 220, 0));
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 260, 440, 1));
@@ -17,7 +17,7 @@ EqResponse::EqResponse(Core* core, QObject *parent)
     for(int i=0; i<m_EqBands.count();i++)
     {
         EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
-        connect(eqBand, &EqBand::sgSetDeviceParameter, this, &EqResponse::sgSetDeviceParameter);
+        // connect(eqBand, &EqBand::sgSetDeviceParameter, this, &EqResponse::sgSetDeviceParameter);
 
         connect(eqBand, &EqBand::filterChanged, this, &EqResponse::calcEqResponse);
     }
@@ -64,7 +64,7 @@ void EqResponse::calcEqResponse()
         // power += powerStep;
         // currFreq = pow(10, power);
     }
-    emit pointsChanged();
+   emit pointsChanged();
 }
 
 QList<QPointF> EqResponse::points()

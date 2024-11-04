@@ -11,12 +11,15 @@ public:
     enum Value
     {
         UnknownDev=0,
-        CP100,
-        CP16,
-        CP16PA,
-        CP100PA,
-        LA3RV,
-        LA3PA
+        legacyCP100,
+        legacyCP16,
+        legacyCP16PA,
+        legacyCP100PA,
+
+        //-------------------------------
+        LEGACY_DEVICES,
+        CP,
+        LA3
     };
     Q_ENUM(Value)
 };

@@ -22,6 +22,12 @@ void UiInterfaceManager::connectToDevice(DeviceDescription device)
     emit sgConnectToDevice(device);
 }
 
+void UiInterfaceManager::connectToVirtualDevice()
+{
+    DeviceDescription virtualDevice("CP16/C100", "offline", DeviceConnectionType::Offline);
+    emit sgConnectToDevice(virtualDevice);
+}
+
 void UiInterfaceManager::disconnectFromDevice()
 {
     emit sgDisconnectFromDevice();

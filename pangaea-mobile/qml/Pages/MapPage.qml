@@ -33,6 +33,12 @@ Item
         topHeaderSize: masterControlsHeight
     }
 
+    function showFullEq(){
+        console.log("Request to show BIG eq")
+        eqsExt.visible = true;
+
+    }
+
     Column
     {
         id: _moduleColumn
@@ -45,33 +51,21 @@ Item
 
         enabled: !eqsExt.visible
 
-        MasterControls_CP{
-            id: _masterControls_CP
+        Loader{
+            id: _masterControlsLoader
 
             width:  parent.width
             height: masterControlsHeight
+        }
+        Connections{
+            target: _masterControlsLoader.item
 
-            visible: !DeviceProperties.isLa3Mode
-
-            onOpenPresetsList: {
+            function onOpenPresetsList() {
                 console.log("Open presets list");
                 _presetsList.open();
             }
         }
 
-        MasterControls_LA{
-            id: _masterControls_LA
-
-            width:  parent.width
-            height: masterControlsHeight
-
-            visible: DeviceProperties.isLa3Mode
-
-            onOpenPresetsList: {
-                console.log("Open presets list");
-                _presetsList.open();
-            }
-        }
 
         ListView
         {
@@ -83,8 +77,6 @@ Item
             interactive: false
             orientation: ListView.Vertical
 
-            model: modulesList
-
             move: Transition {
                  NumberAnimation { properties: "y"; duration: 250 }
             }
@@ -92,6 +84,38 @@ Item
             displaced: Transition {
                  NumberAnimation { properties: "y"; duration: 250 }
              }
+
+            delegate: Loader{
+                id: _delegateLoader
+
+                width: listViewModules.width
+
+                Component.onCompleted: function(){
+                    console.log("Module type:", moduleType)
+                    switch(moduleType)
+                    {
+                    case ModuleType.PA:
+                    {
+                        console.log(moduleInstance)
+                        _delegateLoader.source = "../Modules/Pa.qml";
+                        _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
+                        _delegateLoader.item.module = moduleInstance;
+
+
+                        break;
+                    }
+
+                    case ModuleType.EQ:
+                    {
+                        _delegateLoader.source = "../Modules/EqPreview.qml"
+                        _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing
+
+                        _delegateLoader.item.extVisible.connect(showFullEq)
+                        break;
+                    }
+                    }
+                }
+            }
         }
     }
 
@@ -100,145 +124,137 @@ Item
         id: modulesList
     }
 
-    Ng
-    {
-        id: ng
-        width:  listViewModules.width
-        height: _main.height*2/countElements - _moduleColumn.spacing
-        visible: moduleVisible
-    }
-    Cm
-    {
-        id: cm
-        width:  listViewModules.width
-        height: _main.height*2/countElements - _moduleColumn.spacing
-        visible: moduleVisible
-    }
+    // Ng
+    // {
+    //     id: ng
+    //     width:  listViewModules.width
+    //     height: _main.height*2/countElements - _moduleColumn.spacing
+    //     visible: moduleVisible
+    // }
+    // Cm
+    // {
+    //     id: cm
+    //     width:  listViewModules.width
+    //     height: _main.height*2/countElements - _moduleColumn.spacing
+    //     visible: moduleVisible
+    // }
 
-    Pr
-    {
-        id: pr
-        width:  listViewModules.width
-        height: _main.height*4/countElements - _moduleColumn.spacing
-        visible: moduleVisible
-    }
+    // Pr
+    // {
+    //     id: pr
+    //     width:  listViewModules.width
+    //     height: _main.height*4/countElements - _moduleColumn.spacing
+    //     visible: moduleVisible
+    // }
 
-    Pa
-    {
-        id: pa
 
-        width: listViewModules.width
-        height: _main.height*4/countElements - _moduleColumn.spacing
-        visible: moduleVisible & DeviceProperties.isPaFirmware
-    }
+    // Ps
+    // {
+    //     id: ps
 
-    Ps
-    {
-        id: ps
+    //     width:  listViewModules.width
+    //     height: _main.height*1/countElements - _moduleColumn.spacing
 
-        width:  listViewModules.width
-        height: _main.height*1/countElements - _moduleColumn.spacing
+    //     visible: moduleVisible & (!DeviceProperties.isPaFirmware)
+    // }
+    // Ir
+    // {
+    //     id: ir
+    //     width:  listViewModules.width
+    //     height: _main.height*1/countElements - _moduleColumn.spacing
+    //     visible: moduleVisible
+    // }
+    // Hp
+    // {
+    //     id: hp
+    //     width:  listViewModules.width
+    //     height: _main.height*1/countElements - _moduleColumn.spacing
+    //     visible: moduleVisible
+    // }
 
-        visible: moduleVisible & (!DeviceProperties.isPaFirmware)
-    }
-    Ir
-    {
-        id: ir
-        width:  listViewModules.width
-        height: _main.height*1/countElements - _moduleColumn.spacing
-        visible: moduleVisible
-    }
-    Hp
-    {
-        id: hp
-        width:  listViewModules.width
-        height: _main.height*1/countElements - _moduleColumn.spacing
-        visible: moduleVisible
-    }
+    // EqPreview
+    // {
+    //     id: eq
 
-    EqPreview
-    {
-        id: eq
+    //     width:  listViewModules.width
+    //     height: _main.height*3/countElements - _moduleColumn.spacing
 
-        width:  listViewModules.width
-        height: _main.height*3/countElements - _moduleColumn.spacing
+    //     property int prePositionIndex: 2
+    //     property int postPositionIndex: 6
+    //     isPreEQ: (ObjectModel.index === prePositionIndex)
+    //     isPrePostVisible: DeviceProperties.isPaFirmware
 
-        property int prePositionIndex: 2
-        property int postPositionIndex: 6
-        isPreEQ: (ObjectModel.index === prePositionIndex)
-        isPrePostVisible: DeviceProperties.isPaFirmware
+    //     onExtVisible:
+    //     {
+    //         eqsExt.visible = true;
+    //     }
+    //     visible: moduleVisible
+    // }
 
-        onExtVisible:
-        {
-            eqsExt.visible = true;
-        }
-        visible: moduleVisible
-    }
+    // Lp
+    // {
+    //     id: lp
+    //     width:  listViewModules.width
+    //     height: _main.height*1/countElements - _moduleColumn.spacing
+    //     visible: moduleVisible
+    // }
 
-    Lp
-    {
-        id: lp
-        width:  listViewModules.width
-        height: _main.height*1/countElements - _moduleColumn.spacing
-        visible: moduleVisible
-    }
-
-    Er
-    {
-        id: er
-        width:  listViewModules.width
-        height: _main.height*2/countElements - _moduleColumn.spacing
-        visible: moduleVisible
-    }
+    // Er
+    // {
+    //     id: er
+    //     width:  listViewModules.width
+    //     height: _main.height*2/countElements - _moduleColumn.spacing
+    //     visible: moduleVisible
+    // }
 
     function arrangePrePost(value_isEqPre)
     {
-        if(DeviceProperties.isPaFirmware)
-        {
-            if(value_isEqPre)
-            {
-                if(!eq.isPreEQ) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
-            }
-            else
-            {
-                if(eq.isPreEQ) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
-            }
-        }
-        listViewModules.forceLayout();
+        // if(DeviceProperties.isPaFirmware)
+        // {
+        //     if(value_isEqPre)
+        //     {
+        //         if(!eq.isPreEQ) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
+        //     }
+        //     else
+        //     {
+        //         if(eq.isPreEQ) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
+        //     }
+        // }
+        // listViewModules.forceLayout();
     }
 
     function placeAllModuls()
     {
-        modulesList.clear();
+        // modulesList.clear();
 
-        modulesList.append(ng);
-        modulesList.append(cm);
-        modulesList.append(pr);
-        if(DeviceProperties.isPaFirmware) modulesList.append(pa);
-        modulesList.append(ir);
-        modulesList.append(hp);
-        modulesList.append(eq)
-        modulesList.append(lp);
-        if(!DeviceProperties.isPaFirmware) modulesList.append(ps);
-        modulesList.append(er);
+        // modulesList.append(ng);
+        // modulesList.append(cm);
+        // modulesList.append(pr);
+        // if(DeviceProperties.isPaFirmware) modulesList.append(pa);
+        // modulesList.append(ir);
+        // modulesList.append(hp);
+        // modulesList.append(eq)
+        // modulesList.append(lp);
+        // if(!DeviceProperties.isPaFirmware) modulesList.append(ps);
+        // modulesList.append(er);
 
-        moduleVisible = true;
-        listViewModules.forceLayout();
+        // moduleVisible = true;
+        // listViewModules.forceLayout();
     }
 
-    EqsExt
-    {
-        id: eqsExt
-        visible: false
+    // EqsExt
+    // {
+    //     id: eqsExt
+    //     visible: false
 
-        height: parent.height/1.5
-        width:  parent.width*0.95
-        z: _main.z+1
-        onHide:
-        {
-            visible = false;
-        }
-    }
+    //     height: parent.height/1.5
+    //     width:  parent.width*0.95
+    //     z: _main.z+1
+    //     onHide:
+    //     {
+    //         visible = false;
+    //     }
+    // }
 
     CustomMessageDialog
     {
@@ -279,7 +295,8 @@ Item
 
         function onDeviceTypeChanged()
         {
-            placeAllModuls();
+            _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml"
+            listViewModules.model = ModulesListModel
         }
 
         function onPresetNotSaved(bank, preset)
@@ -315,30 +332,6 @@ Item
             }
         }
     }
-
-    // Connections{
-    //     target: _masterControls_CP
-
-    //     function onImportPreset(){
-    //         UiCore.importPreset("");
-    //     }
-
-    //     function onExportPreset(){
-    //         UiCore.exportPreset("");
-    //     }
-    // }
-
-    // Connections{
-    //     target: _masterControls_LA
-
-    //     function onImportPreset(){
-    //         UiCore.importPreset("");
-    //     }
-
-    //     function onExportPreset(){
-    //         UiCore.exportPreset("");
-    //     }
-    // }
 
     Connections{
         target: InterfaceManager

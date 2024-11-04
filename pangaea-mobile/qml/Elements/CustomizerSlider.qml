@@ -10,26 +10,24 @@ Slider
 {
     id: root
 
-    property string name: "BAR"
-    property string units: " "
+    property ControlValue ctrlValInstance
+    property bool deviceUpdatingValues
 
-    property var paramType
+    property string name: ctrlValInstance.name
+    property string units: " "
 
     property int valueMin:  0   //Y1
     property int valueMax:  31  //Y2
 
-    property int dispMin:   0  //Y1
-    property int dispMax:   31 //Y2
+    property int dispMin:  0  //Y1
+    property int dispMax:  31 //Y2
 
     property int x1val: 0
     property int x2val: 100
 
-    property bool softUpdate: false
-
-    property bool moduleOn: true
+    property bool moduleOn
 
     property bool inverse: false
-    property bool edited: false
 
     property bool bottomLineEnabled: true
 
@@ -46,7 +44,7 @@ Slider
     property double bVal: -(((x2val*valueMin)-(x1val*valueMax))/(x1val-x2val))
     property double yVal: Math.round(kVal * root.value * 100 + bVal)
 
-    property int rawValue
+    property int rawValue: ctrlValInstance.value;
     value:  (rawValue - bVal) / 100 / kVal
 
     leftPadding: 0
@@ -130,7 +128,7 @@ Slider
     {
         id: modulName
         anchors.fill: parent
-        text: edited ? ("  "+ name +"*") : ("  " + name)
+        text: ctrlValInstance.isModified ? ("  "+ name +"*") : ("  " + name)
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         leftPadding: 4
@@ -140,43 +138,55 @@ Slider
 
     onValueChanged:
     {
-        if(!softUpdate)
+        if(!deviceUpdatingValues)
         {
-            UiCore.setDeviceParameter(paramType, Math.round(kVal * root.value * 100 + bVal));
-            edited = true;
-        }
-        else
-        {
-            edited = false;
+            ctrlValInstance.value = Math.round(kVal * root.value * 100 + bVal);
+            ctrlValInstance.isModified = true;
         }
     }
 
     Connections
     {
-        target: UiCore
+        target: CurrentDevice
 
-        function onSgSetUiDeviceParameter(paramType, value)
+        function onDeviceUpdatingValues()
         {
-            if(paramType === root.paramType)
-            {
-                softUpdate = true;
-                root.rawValue = value;
-                root.value =  (root.rawValue - root.bVal) / 100 / root.kVal;
-                softUpdate = false;
-            }
+            root.deviceUpdatingValues = true;
+
+            root.rawValue = ctrlValInstance.value;
+            root.value =  (root.rawValue - root.bVal) / 100 / root.kVal; // ctrlValInstance.dispValue
+            ctrlValInstance.isModified = false;
+
+            root.deviceUpdatingValues = false;
         }
     }
 
-    Connections
-    {
-        target: DeviceProperties
+    // Connections
+    // {
+    //     target: UiCore
 
-        function onPresetModifiedChanged()
-        {
-            if(!DeviceProperties.presetModified)
-            {
-                edited = false;
-            }
-        }
-    }
+    //     function onSgSetUiDeviceParameter(paramType, value)
+    //     {
+    //         if(paramType === root.paramType)
+    //         {
+    //             softUpdate = true;
+    //             root.rawValue = value;
+    //             root.value =  (root.rawValue - root.bVal) / 100 / root.kVal;
+    //             softUpdate = false;
+    //         }
+    //     }
+    // }
+
+    // Connections
+    // {
+    //     target: DeviceProperties
+
+    //     function onPresetModifiedChanged()
+    //     {
+    //         if(!DeviceProperties.presetModified)
+    //         {
+    //             edited = false;
+    //         }
+    //     }
+    // }
 }

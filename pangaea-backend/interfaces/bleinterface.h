@@ -35,7 +35,7 @@ public:
     bool connect(DeviceDescription device);
     void disconnectFromDevice();
 
-    void write(QByteArray data);
+    void write(const QByteArray &data);
 
     void setModuleName(QString name);
     const QString &moduleName() const;

@@ -9,6 +9,7 @@ InterfaceCore::InterfaceCore(QObject *parent)
 {
     m_usbInterface = new UsbInterface(this);
     m_bleInterface = new BleInterface(this);
+    m_offlineInterface = new OfflineInterface(this);
 
     connect(m_bleInterface, &BleInterface::rssiReaded, this, &InterfaceCore::sgRssiReaded);
 
@@ -44,6 +45,12 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
         {
             qDebug() << "Settling USB interface";
             m_exchangeInterface = m_usbInterface;
+            break;
+        }
+        case DeviceConnectionType::Offline:
+        {
+            qDebug() << "Settling virtual interface";
+            m_exchangeInterface = m_offlineInterface;
             break;
         }
         default:

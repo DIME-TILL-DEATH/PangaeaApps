@@ -63,9 +63,9 @@ Rectangle
             width:  parent.width
             height: parent.height*6/10
 
-            model: DeviceProperties.presetsList
+            model: 4//DeviceProperties.presetsList
             currentIndex: DeviceProperties.isLa3Mode ? (DeviceProperties.bank*4 + DeviceProperties.preset)
-                                                     : DeviceProperties.preset
+                                                     : CurrentDevice.preset
 
             visibleItemCount: 1
 
@@ -85,7 +85,6 @@ Rectangle
 
             onCurrentIndexChanged:
             {
-                console.log("preset timer restart")
                 timer.restart();
             }
         }
@@ -114,14 +113,28 @@ Rectangle
         repeat: false
         onTriggered:
         {
-            if(DeviceProperties.isLa3Mode)
+            if(!CurrentDevice.deviceUpdatingValues)
             {
-                DeviceProperties.changePreset(Math.floor(_tumbler.currentIndex/4), _tumbler.currentIndex%4);
+                // change preset
+
+                if(DeviceProperties.isLa3Mode)
+                {
+                    // DeviceProperties.changePreset(Math.floor(_tumbler.currentIndex/4), _tumbler.currentIndex%4);
+                }
+                else
+                {
+                    // DeviceProperties.preset = _tumbler.currentIndex;
+                }
             }
-            else
-            {
-                DeviceProperties.preset = _tumbler.currentIndex;
-            }
+        }
+    }
+
+    Connections{
+        target: CurrentDevice
+
+        function onDeviceUpdatingValues()
+        {
+            _tumbler.currentIndex = CurrentDevice.preset
         }
     }
 }

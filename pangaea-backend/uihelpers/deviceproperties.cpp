@@ -32,18 +32,18 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
 {
     switch(deviceParameterType)
     {
-    case DeviceParameter::Type::BANK:
-    {
-        m_bank = value;
-        emit bankPresetChanged();
-        break;
-    }
-    case DeviceParameter::Type::PRESET:
-    {
-        m_preset = value;
-        emit bankPresetChanged();
-        break;
-    }
+    // case DeviceParameter::Type::BANK:
+    // {
+    //     m_bank = value;
+    //     emit bankPresetChanged();
+    //     break;
+    // }
+    // case DeviceParameter::Type::PRESET:
+    // {
+    //     m_preset = value;
+    //     emit bankPresetChanged();
+    //     break;
+    // }
     case DeviceParameter::Type::OUTPUT_MODE:
     {
         m_outputMode = value;
@@ -72,6 +72,7 @@ void DeviceProperties::slSetUiDeviceParameter(DeviceParameter::Type deviceParame
     }
     case DeviceParameter::Type::DEVICE_TYPE:
     {
+        qDebug() << __FUNCTION__ << "Device type";
         currentDevice.setDeviceType((DeviceType)value);
 
         m_presetsList.clear();
@@ -111,41 +112,41 @@ void DeviceProperties::slSetAppParameter(Core::AppParameter appParameterType, QV
 
 void DeviceProperties::setBank(quint8 newBank)
 {
-    if (m_bank == newBank)
-        return;
+    // if (m_bank == newBank)
+    //     return;
 
-    if(m_presetModified)
-    {
-        qDebug() << "PresetNotSaved" << __FUNCTION__;
-        emit presetNotSaved(newBank, m_preset);
-        return;
-    }
+    // if(m_presetModified)
+    // {
+    //     qDebug() << "PresetNotSaved" << __FUNCTION__;
+    //     emit presetNotSaved(newBank, m_preset);
+    //     return;
+    // }
 
-    m_bank = newBank;
-    emit bankPresetChanged();
-    emit sendAppAction(Core::AppAction::CHANGE_PRESET, {m_bank, m_preset});
+    // m_bank = newBank;
+    // emit bankPresetChanged();
+    // emit sendAppAction(Core::AppAction::CHANGE_PRESET, {m_bank, m_preset});
 }
 
 void DeviceProperties::setPreset(quint8 newPreset)
 {
-    if (m_preset == newPreset)
-        return;
+    // if (m_preset == newPreset)
+    //     return;
 
-    if(m_presetModified)
-    {
-        qDebug() << "PresetNotSaved" << __FUNCTION__;
-        emit presetNotSaved(m_bank, newPreset);
-        return;
-    }
+    // if(m_presetModified)
+    // {
+    //     qDebug() << "PresetNotSaved" << __FUNCTION__;
+    //     emit presetNotSaved(m_bank, newPreset);
+    //     return;
+    // }
 
-    m_preset = newPreset;
-    emit bankPresetChanged();
-    emit sendAppAction(Core::AppAction::CHANGE_PRESET, {m_bank, m_preset});
+    // m_preset = newPreset;
+    // emit bankPresetChanged();
+    // emit sendAppAction(Core::AppAction::CHANGE_PRESET, {m_bank, m_preset});
 }
 
 bool DeviceProperties::isLa3Mode() const
 {
-    return (currentDevice.deviceType() == DeviceType::LA3PA) | (currentDevice.deviceType() == DeviceType::LA3RV);
+    return (currentDevice.deviceType() == DeviceType::LA3);
 }
 
 quint8 DeviceProperties::la3CleanPreset() const

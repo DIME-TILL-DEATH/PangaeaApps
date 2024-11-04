@@ -18,7 +18,8 @@ public:
         Unknown = 0,
         USBAuto,
         USBManual,
-        BLE
+        BLE,
+        Offline
     };
     Q_ENUM(DeviceConnectionType)
 

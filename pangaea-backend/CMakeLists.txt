@@ -25,6 +25,7 @@ qt_add_library(pangaea-backend STATIC
     interfaces/bleinterface.cpp interfaces/bleinterface.h
     interfaces/usbinterface.cpp interfaces/usbinterface.h
     interfaces/devicedescription.cpp interfaces/devicedescription.h
+    interfaces/offlineinterface.h interfaces/offlineinterface.cpp
 
     device/answerworker.cpp device/answerworker.h
     device/defines.h
@@ -34,31 +35,41 @@ qt_add_library(pangaea-backend STATIC
     device/preset.cpp device/preset.h
     device/deviceparameter.h device/deviceparameter.cpp
     device/abstractdevice.h device/abstractdevice.cpp
+    device/cplegacy.h device/cplegacy.cpp
 
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
+    models/moduleslistmodel.h models/moduleslistmodel.cpp
 
-    moduls/abstractmodule.cpp moduls/abstractmodule.h
-    moduls/eqband.cpp moduls/eqband.h
-    moduls/eqresponse.cpp moduls/eqresponse.h
-    moduls/poweramp.cpp moduls/poweramp.h
+    modules/controlvalue.cpp modules/controlvalue.h
+    modules/abstractmodule.cpp modules/abstractmodule.h
+    modules/presetvolume.h modules/presetvolume.cpp
+    modules/poweramp.cpp modules/poweramp.h
+    modules/eqband.cpp modules/eqband.h
+    modules/eqresponse.cpp modules/eqresponse.h
 
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h
     utils/presetmanager.cpp utils/presetmanager.h
-    utils/parser.cpp utils/parser.h
+    utils/legacyparser.cpp utils/legacyparser.h
+    utils/parser.h utils/parser.cpp
 
-    uihelpers/controlvalue.cpp uihelpers/controlvalue.h
     uihelpers/devicetypeenum.h
     uihelpers/deviceproperties.cpp uihelpers/deviceproperties.h
     uihelpers/appproperties.h uihelpers/appproperties.cpp
+    uihelpers/moduletypeenum.h
+
+    mock/abstractmockdevice.h mock/abstractmockdevice.cpp
+    mock/mockcp16legacy.h mock/mockcp16legacy.cpp
+
 )
 
 target_include_directories(pangaea-backend PUBLIC
     cores
     device
     interfaces
-    moduls
+    mock
+    modules
     models
     uihelpers
     utils

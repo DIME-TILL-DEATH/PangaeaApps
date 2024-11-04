@@ -9,12 +9,12 @@
 
 class EqResponse : public AbstractModule
 {
-    Q_OBJECT
+    Q_GADGET
     Q_PROPERTY(QList<QPointF> points READ points NOTIFY pointsChanged)
     Q_PROPERTY(QObjectList EqBands READ EqBands NOTIFY eqBandsChanged)
 
 public:
-    explicit EqResponse(Core *core, QObject *parent = nullptr);
+    explicit EqResponse(AbstractDevice *owner);
 
     double getEqResponse(double f);
     QList<QPointF> points();
@@ -22,12 +22,12 @@ public:
     QObjectList EqBands();
 
 
-signals:
+// signals:
     void pointsChanged();
     void eqBandsChanged();
 
 
-public slots:
+// public slots:
     // void slFilterParamChanged(DeviceParameter::Type deviceParameterType, qint32 value);
 
 private:

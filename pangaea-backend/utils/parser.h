@@ -1,31 +1,24 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <QObject>
-//#include <QRegExp>
 #include <QString>
+#include <QByteArray>
+#include <QMap>
 
-class Parser : public QObject
+#include <functional>
+
+class Parser
 {
-    Q_OBJECT
 public:
-    explicit Parser(QByteArray val, QByteArray mask);
-    QList<QByteArray> ret;
-    bool getParse(QByteArray, QList<QByteArray>*);
-    void clearAll();
+    Parser();
 
+    void parseNewData(const QByteArray& newData);
+
+    void addCommandHandler(const QString& command, std::function<void(const QByteArray&)> callback);
 private:
-    QByteArray val, mask;
-//    QByteArray baBuffer;
-    quint16 curPos;
-    quint16 maskPos;
-    quint16 curParam;
-    quint8 prevMask; //предидущий символ маски
+    QByteArray m_buffer;
 
-
-signals:
-
-public slots:
+    QMap<QString, std::function<void(const QByteArray&)> > m_callbacks;
 };
 
 #endif // PARSER_H

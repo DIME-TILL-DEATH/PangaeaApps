@@ -6,7 +6,7 @@
 #include <QByteArray>
 #include <QDebug>
 
-#include "parser.h"
+#include "legacyparser.h"
 
 enum AnswerType{
     unknown = 0,
@@ -53,7 +53,7 @@ class DeviceAnswer
 {
 public:
 
-    explicit DeviceAnswer(Parser* parser, AnswerType type = AnswerType::unknown, QString description="", quint32 timeout=1000, bool displayble=true);
+    explicit DeviceAnswer(LegacyParser* parser, AnswerType type = AnswerType::unknown, QString description="", quint32 timeout=1000, bool displayble=true);
 
     bool processRawData(QByteArray rawData);
 
@@ -66,7 +66,7 @@ public:
     bool displayble() const;
 
 private:
-    Parser* m_parser;
+    LegacyParser* m_parser;
 
     AnswerType m_answerType;
     QString m_description;
