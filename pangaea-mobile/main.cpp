@@ -23,7 +23,7 @@
 
 #include "poweramp.h"
 #include "eqband.h"
-#include "eqresponse.h"
+#include "eqparametric.h"
 #include "presetvolume.h"
 
 #ifdef Q_OS_ANDROID
@@ -136,6 +136,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<AbstractModule>("CppObjects", 1, 0, "Module", "Cannot create Module in QML");
     qmlRegisterUncreatableType<PresetVolume>("CppObjects", 1, 0, "PresetVolume", "Cannot create MasterVolume in QML");
     qmlRegisterUncreatableType<PowerAmp>("CppObjects", 1, 0, "PowerAmp", "Cannot create PowerAmp in QML");
+    qmlRegisterUncreatableType<EqParametric>("CppObjects", 1, 0, "EqParametric", "Cannot create EQ in QML");
     qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
 
     //-------------------------------------------------------------------------------

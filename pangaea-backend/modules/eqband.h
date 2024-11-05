@@ -2,10 +2,11 @@
 #define EQBAND_H
 
 #include <QObject>
+#include <QPointF>
+
+#include "deviceparameter.h"
 
 #include "controlvalue.h"
-#include "deviceparameter.h"
-#include <QPointF>
 
 class EqBand : public QObject
 {
@@ -38,6 +39,8 @@ public:
     ControlValue* getFc() const;
     ControlValue* getQ() const;
     ControlValue* getGain() const;
+
+    void setRawBandParams(FilterType bandType, quint16 gain, qint16 Fc, qint16 Q);
 
     double fStart() {return m_fStart;};
     double fStop() {return m_fStop;};

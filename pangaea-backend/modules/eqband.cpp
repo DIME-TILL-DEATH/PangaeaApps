@@ -24,6 +24,10 @@ EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, 
     connect(m_Fc, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);
     connect(m_gain, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);
     connect(m_Q, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);
+
+    connect(m_Fc, &ControlValue::userModifiedValue, this, &EqBand::calcFilterCoefs);
+    connect(m_gain, &ControlValue::userModifiedValue, this, &EqBand::calcFilterCoefs);
+    connect(m_Q, &ControlValue::userModifiedValue, this, &EqBand::calcFilterCoefs);
     calcFilterCoefs();
 }
 
@@ -145,6 +149,13 @@ ControlValue* EqBand::getQ() const
 ControlValue* EqBand::getGain() const
 {
     return m_gain;
+}
+
+void EqBand::setRawBandParams(FilterType bandType, quint16 gain, qint16 Fc, qint16 Q)
+{
+    m_gain->setControlValue(gain);
+    m_Fc->setControlValue(Fc);
+    m_Q->setControlValue(Q);
 }
 
 QList<QPointF> EqBand::bandPoints()

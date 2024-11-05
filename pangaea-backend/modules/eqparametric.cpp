@@ -1,10 +1,10 @@
 #include <cmath>
 
 #include "eqband.h"
-#include "eqresponse.h"
+#include "eqparametric.h"
 
 
-EqResponse::EqResponse(AbstractDevice *owner)
+EqParametric::EqParametric(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::EQ, "EQ", "eqo"}
 {
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 20, 220, 0));
@@ -19,11 +19,11 @@ EqResponse::EqResponse(AbstractDevice *owner)
         EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
         // connect(eqBand, &EqBand::sgSetDeviceParameter, this, &EqResponse::sgSetDeviceParameter);
 
-        connect(eqBand, &EqBand::filterChanged, this, &EqResponse::calcEqResponse);
+        connect(eqBand, &EqBand::filterChanged, this, &EqParametric::calcEqResponse);
     }
 }
 
-double EqResponse::getEqResponse(double f)
+double EqParametric::getEqResponse(double f)
 {
     double response=0;
     for(int i=0; i<m_EqBands.count(); i++)
@@ -34,7 +34,7 @@ double EqResponse::getEqResponse(double f)
     return response;
 }
 
-void EqResponse::calcEqResponse()
+void EqParametric::calcEqResponse()
 {
     m_points.clear();
 
@@ -67,12 +67,27 @@ void EqResponse::calcEqResponse()
    emit pointsChanged();
 }
 
-QList<QPointF> EqResponse::points()
+QList<QPointF> EqParametric::points()
 {
     return m_points;
 }
 
-QObjectList EqResponse::EqBands()
+QObjectList EqParametric::EqBands()
 {
     return m_EqBands;
+}
+
+void EqParametric::setBandsData(eq_t eqData)
+{
+    for(int i=0; i<m_EqBands.count(); i++)
+    {
+        EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
+
+        eqBand->setRawBandParams(static_cast<EqBand::FilterType>(eqData.band_type[i]),
+                                 eqData.band_vol[i],
+                                 eqData.freq[i],
+                                 eqData.Q[i]);
+    }
+
+    emit dataChanged();
 }

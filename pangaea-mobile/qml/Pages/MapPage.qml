@@ -91,16 +91,14 @@ Item
                 width: listViewModules.width
 
                 Component.onCompleted: function(){
-                    console.log("Module type:", moduleType)
                     switch(moduleType)
                     {
                     case ModuleType.PA:
                     {
-                        console.log(moduleInstance)
                         _delegateLoader.source = "../Modules/Pa.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
-                        _delegateLoader.item.module = moduleInstance;
-
+                        // _delegateLoader.item.module = moduleInstance;
+                        console.log(_delegateLoader.item.module)
 
                         break;
                     }
@@ -111,9 +109,12 @@ Item
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing
 
                         _delegateLoader.item.extVisible.connect(showFullEq)
+                        console.log(_delegateLoader.item.module)
                         break;
                     }
                     }
+
+                    _delegateLoader.item.module = moduleInstance;
                 }
             }
         }

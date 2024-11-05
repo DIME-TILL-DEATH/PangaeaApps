@@ -14,7 +14,7 @@ Rectangle {
 
     property bool disabled: AppProperties.compareState
 
-    property string moduleName: module !== undefined ? module.moduleName : ""
+    property string moduleName: module.moduleName
     property string moduleDescription: "Description"
 
     property bool showDescription : true

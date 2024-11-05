@@ -1,6 +1,7 @@
 #include "moduleslistmodel.h"
 
 #include "poweramp.h"
+#include "eqparametric.h"
 
 #include <QtQuick/QQuickView>
 
@@ -58,7 +59,7 @@ QVariant ModulesListModel::data(const QModelIndex &index, int role) const
 
         switch(module->moduleType())
         {
-        case ModuleTypeEnum::BYPASS:
+        case ModuleTypeEnum::BYPASS: break;
         case ModuleTypeEnum::CM:
         case ModuleTypeEnum::PR:
         case ModuleTypeEnum::IR:
@@ -68,10 +69,16 @@ QVariant ModulesListModel::data(const QModelIndex &index, int role) const
             PowerAmp* paModule = dynamic_cast<PowerAmp*>(module);
             if(paModule)return QVariant::fromValue(paModule);
         }
-        case ModuleTypeEnum::EQ: break;
+        case ModuleTypeEnum::EQ:
+        {
+            EqParametric* eqModule = dynamic_cast<EqParametric*>(module);
+            if(eqModule)return QVariant::fromValue(eqModule);
+            break;
+        }
         case ModuleTypeEnum::LP:
         case ModuleTypeEnum::NG:
             break;
+        case ModuleTypeEnum::MASTER: break;
         }
     }
 

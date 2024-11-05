@@ -1,5 +1,5 @@
-#ifndef EQRESPONSE_H
-#define EQRESPONSE_H
+#ifndef EQPARAMETRIC_H
+#define EQPARAMETRIC_H
 
 #include <QObject>
 #include <QPointF>
@@ -7,22 +7,25 @@
 #include "abstractmodule.h"
 // #include "deviceparameter.h"
 
-class EqResponse : public AbstractModule
+#include "preset.h"
+
+class EqParametric : public AbstractModule
 {
-    Q_GADGET
+    Q_OBJECT
     Q_PROPERTY(QList<QPointF> points READ points NOTIFY pointsChanged)
     Q_PROPERTY(QObjectList EqBands READ EqBands NOTIFY eqBandsChanged)
 
 public:
-    explicit EqResponse(AbstractDevice *owner);
+    explicit EqParametric(AbstractDevice *owner);
 
     double getEqResponse(double f);
     QList<QPointF> points();
 
     QObjectList EqBands();
 
+    void setBandsData(eq_t eqData);
 
-// signals:
+signals:
     void pointsChanged();
     void eqBandsChanged();
 
@@ -38,4 +41,4 @@ private:
 
     void calcEqResponse();
 };
-#endif // EQRESPONSE_H
+#endif // EQPARAMETRIC_H

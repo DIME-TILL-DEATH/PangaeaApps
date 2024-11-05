@@ -14,7 +14,6 @@ BaseModule
 
     property int ampType
 
-    moduleName: qsTr("PA")
     moduleDescription: qsTr("Power amp")
 
     contentItem: Column{
