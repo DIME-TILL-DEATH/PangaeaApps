@@ -14,7 +14,7 @@ Rectangle
     height: parent.height
 
     property string text
-    property bool deviceUpdatingValues: false
+    property bool deviceUpdatingValues: true //disable timer on startup
 
     signal openPresetsList()
 
@@ -64,8 +64,7 @@ Rectangle
             width:  parent.width
             height: parent.height*6/10
 
-            model: 4//DeviceProperties.banksList
-            // currentIndex: CurrentDevice.bank
+            model: UiCore.currentDevice.maxBankCount
 
             visibleItemCount: 1
 
@@ -86,6 +85,7 @@ Rectangle
 
             onCurrentIndexChanged:
             {
+                console.log("bank upd3", main.deviceUpdatingValues)
                 if(!main.deviceUpdatingValues)
                 {
                     timer.restart();
@@ -124,7 +124,7 @@ Rectangle
     Connections{
         target: UiCore.currentDevice
 
-        function onDeviceUpdatingValues()
+        function onBankPresetChanged()
         {
             main.deviceUpdatingValues = true;
             _tumbler.currentIndex = UiCore.currentDevice.bank;

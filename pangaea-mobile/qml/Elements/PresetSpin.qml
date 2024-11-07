@@ -13,7 +13,7 @@ Rectangle
     height: parent.height
 
     property string text
-    property bool deviceUpdatingValues: false
+    property bool deviceUpdatingValues: true //disable timer on startup
 
     signal openPresetsList()
 
@@ -64,7 +64,7 @@ Rectangle
             width:  parent.width
             height: parent.height*6/10
 
-            model: 4//DeviceProperties.presetsList
+            model: UiCore.currentDevice.maxPresetCount
             // currentIndex: DeviceProperties.isLa3Mode ? (DeviceProperties.bank*4 + DeviceProperties.preset)
             //                                          : CurrentDevice.preset
 
@@ -86,6 +86,7 @@ Rectangle
 
             onCurrentIndexChanged:
             {
+                console.log("preset upd3", main.deviceUpdatingValues)
                 if(!main.deviceUpdatingValues)
                 {
                     timer.restart();
@@ -128,7 +129,6 @@ Rectangle
                 {
                     // DeviceProperties.preset = _tumbler.currentIndex;
                 }
-
                 UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, _tumbler.currentIndex);
         }
     }
@@ -136,7 +136,7 @@ Rectangle
     Connections{
         target: UiCore.currentDevice
 
-        function onDeviceUpdatingValues()
+        function onBankPresetChanged()
         {
             main.deviceUpdatingValues = true;
             _tumbler.currentIndex = UiCore.currentDevice.preset

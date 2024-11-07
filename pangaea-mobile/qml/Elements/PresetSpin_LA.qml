@@ -161,7 +161,7 @@ Rectangle
     Connections{
         target: CurrentDevice
 
-        function onDeviceUpdatingValues()
+        function onBankPresetChanged()
         {
             // _tumbler.currentIndex = CurrentDevice.preset
             // DeviceProperties.bank*4 + DeviceProperties.preset
