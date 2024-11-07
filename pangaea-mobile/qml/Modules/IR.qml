@@ -7,6 +7,7 @@ import StyleSettings 1.0
 import Elements 1.0
 
 import CppObjects
+import CppEnums
 
 BaseModule
 {
@@ -63,13 +64,14 @@ BaseModule
 
     Connections
     {
-        target: UiCore
-        function onSgSetUIText(nameParam, value)
+        target: UiCore.currentDevice
+
+        function onSgDeviceError(type, description, params)
         {
-            if(nameParam === "not_supported_ir")
+            if(type === DeviceError.IrFormatNotSupported)
             {
                 _msgNotSupportedIrFormat.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
-                                     value + "\n" +
+                                     description + "\n" +
                                      qsTr("Do you want to convert it before upload?")
                 _msgNotSupportedIrFormat.open();
             }

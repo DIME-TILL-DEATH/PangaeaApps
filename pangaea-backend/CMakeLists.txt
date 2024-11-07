@@ -52,14 +52,15 @@ qt_add_library(pangaea-backend STATIC
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h
     utils/presetmanager.cpp utils/presetmanager.h
-    utils/legacyparser.cpp utils/legacyparser.h
+    utils/maskedparser.cpp utils/maskedparser.h
     utils/parser.h utils/parser.cpp
 
+    uihelpers/appproperties.h uihelpers/appproperties.cpp
+    uihelpers/deviceproperties.cpp uihelpers/deviceproperties.h
     uihelpers/devicetypeenum.h
     uihelpers/deviceerrorenum.h
-    uihelpers/deviceproperties.cpp uihelpers/deviceproperties.h
-    uihelpers/appproperties.h uihelpers/appproperties.cpp
     uihelpers/moduletypeenum.h
+    uihelpers/presetstateenum.h
 
     mock/abstractmockdevice.h mock/abstractmockdevice.cpp
     mock/mockcp16legacy.h mock/mockcp16legacy.cpp

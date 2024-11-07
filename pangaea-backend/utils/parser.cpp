@@ -12,6 +12,9 @@ QList<QByteArray> Parser::parseNewData(const QByteArray &newData)
 
     QList<QByteArray> recievedCommands;
 
+    // partial analize(for legacy cc command)
+
+
     int lineSepPos;
     do
     {

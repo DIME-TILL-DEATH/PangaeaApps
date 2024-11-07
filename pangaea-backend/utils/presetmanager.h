@@ -3,29 +3,15 @@
 
 #include <QObject>
 
+#include "presetstateenum.h"
 
 class PresetManager : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(PresetState currentState READ currentState NOTIFY currentStateChanged FINAL)
 public:
     explicit PresetManager(QObject *parent = nullptr);
-
-    enum PresetState
-    {
-        Unknown=0,
-        Idle,
-        Preview, //нереализован(нужен ли?)
-        Modified, //нереализован
-        Pasting,
-        Imported,
-        Compare, // вызван оригинальный пресет
-        Copying,
-        Exporting,
-        Saving,
-        UploadingIr,
-        Changing
-    };
-    Q_ENUM(PresetState)
 
     PresetState currentState() const;
     void setCurrentState(PresetState newCurrentState);
@@ -33,12 +19,11 @@ public:
     void returnToPreviousState();
 signals:
 
+    void currentStateChanged();
 private:
     PresetState m_currentState{PresetState::Idle};
     PresetState m_previousState{PresetState::Idle};
 
 };
-
-typedef PresetManager::PresetState PresetState;
 
 #endif // PRESETMANAGER_H

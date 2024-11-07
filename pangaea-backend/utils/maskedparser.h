@@ -1,15 +1,15 @@
-#ifndef LEGACYPARSER_H
-#define LEGACYPARSER_H
+#ifndef MASKEDPARSER_H
+#define MASKEDPARSER_H
 
 #include <QObject>
 //#include <QRegExp>
 #include <QString>
 
-class LegacyParser : public QObject
+class MaksedParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit LegacyParser(QByteArray val, QByteArray mask);
+    explicit MaksedParser(QByteArray val, QByteArray mask);
     QList<QByteArray> ret;
     bool getParse(QByteArray, QList<QByteArray>*);
     void clearAll();
@@ -28,4 +28,4 @@ signals:
 public slots:
 };
 
-#endif // LEGACYPARSER_H
+#endif // MASKEDPARSER_H

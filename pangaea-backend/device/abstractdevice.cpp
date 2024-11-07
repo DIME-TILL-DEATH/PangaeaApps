@@ -5,7 +5,13 @@
 AbstractDevice::AbstractDevice(Core *owner)
    : m_deviceClass{DeviceClass::ABSTRACT}
 {
-    connect(this, &AbstractDevice::sgWriteToInterface, owner, &Core::sgWriteToInterface);
+    if(owner)
+    {
+        connect(this, &AbstractDevice::sgWriteToInterface, owner, &Core::sgWriteToInterface);
+
+        connect(this, &AbstractDevice::sgEnableTimeoutTimer, owner->timeoutTimer, qOverload<>(&QTimer::start));
+        connect(this, &AbstractDevice::sgDisableTimeoutTimer, owner->timeoutTimer, &QTimer::stop);
+    }
 
     using namespace std::placeholders;
     // undefined идёт после неверное команды, за табуляцией

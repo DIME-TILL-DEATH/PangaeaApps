@@ -208,20 +208,20 @@ Item
 
         onAccepted:
         {
-            // DeviceProperties.saveChanges();
-            // DeviceProperties.changePreset(newBank, newPreset, true);
+            UiCore.currentDevice.saveChanges();
+            UiCore.currentDevice.changePreset(newBank, newPreset, true);
         }
         onDiscarded:
         {
-            // UiCore.restoreParameter("impulse")
-            // DeviceProperties.changePreset(newBank, newPreset, true);
+            // UiCore.currentDevice.restoreParameter("impulse")
+            // UiCore.currentDevice.changePreset(newBank, newPreset, true);
             // visible = false;
         }
         onRejected:
         {
             // // TODO: change to DeviceParameter
-            // UiCore.restoreParameter("preset")
-            // UiCore.restoreParameter("bank")
+            // UiCore.currentDevice.restoreParameter("preset")
+            // UiCore.currentDevice.restoreParameter("bank")
         }
     }
 

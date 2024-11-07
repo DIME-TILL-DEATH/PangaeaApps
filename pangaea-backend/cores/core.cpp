@@ -301,33 +301,6 @@ void Core::parseInputData(QByteArray ba)
                 break;
             }
 
-            case AnswerType::ccAck:
-            {
-                emit sgSetUIParameter("ir_upload_finished", true);
-                recieveEnabled=false;
-
-                timeoutTimer->stop(); // wait for impulse apllying (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
-                break;
-            }
-
-            case AnswerType::ccEND:
-            {
-                timeoutTimer->start();
-                presetManager.returnToPreviousState();
-                break;
-            }
-
-            case AnswerType::ccError:
-            {
-                timeoutTimer->start();
-
-                // emit sgSetUIText("impulse_save_error", currentPreset.impulseName());
-
-                qInfo() << recievedCommand.description();
-                presetManager.returnToPreviousState();
-                break;
-            }
-
             case AnswerType::requestNextChunk:
             {
                 qInfo() << recievedCommand.description();
@@ -375,16 +348,8 @@ void Core::parseInputData(QByteArray ba)
                 break;
             }
 
-            // case AnswerType::ackEnableSW4:
-            // {
-            //     qInfo() << "Enabling buttons";
-            //     disconnectFromDevice();
-            //     break;
-            // }
-
             default:
             {
-                // qDebug() << recievedCommand.description();
             }
         }
     }
@@ -428,97 +393,6 @@ void Core::calculateSendVolume()
         symbolsToSend += baTmp.length();
     }
 }
-
-void Core::setImpulse(QString filePath)
-{
-    QString fileName;
-    QFileInfo fileInfo(filePath);
-
-    if(fileInfo.isFile())
-    {
-        fileInfo.absoluteDir();
-        fileName = fileInfo.fileName();
-    }
-    else return;
-
-    stWavHeader wavHead = IRWorker::getFormatWav(filePath);
-
-    if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
-    {
-        qDebug() << __FUNCTION__ << "Not supported wav format";
-        emit sgSetUIText("not_supported_ir",
-                         QString().setNum(wavHead.sampleRate)+" Hz/"+
-                         QString().setNum(wavHead.bitsPerSample)+" bits/"+
-                         QString().setNum(wavHead.numChannels)+" channel");
-    }
-    else
-    {
-        qDebug("$$$$$ %s %d", __FUNCTION__, __LINE__);
-
-        irWorker.decodeWav(filePath);
-
-        // QByteArray fileData = irWorker.formFileData();
-        // currentPreset.setWaveData(fileData);
-        // uploadImpulseData(fileData, true, fileName);
-    }
-}
-
-// void Core::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QString impulseName)
-// {
-//     if(impulseData.isEmpty())
-//     {
-//         qDebug() << __FUNCTION__ << "no wave data";
-//         return;
-//     }
-
-//     presetManager.setCurrentState(PresetState::UploadingIr);
-
-//     impulseName.replace(QString(" "), QString("_"), Qt::CaseInsensitive);
-
-//     emit sgSetUIText("impulse_name", impulseName);
-//     currentPreset.setImpulseName(impulseName);
-
-//     QByteArray baSend, irData;
-//     quint16 bytesToUpload;
-
-//     if(isPreview)
-//     {
-//         baSend.append(QString("cc s 1\r").toUtf8());
-//         bytesToUpload = 984*3;
-//         irData = impulseData.mid(44); //cut wav header
-//     }
-//     else
-//     {
-//         baSend.append(QString("cc %1 0\r").arg(impulseName).toUtf8());
-//         irData = impulseData;
-//         bytesToUpload = impulseData.size();
-//         currentPreset.setImpulseName(impulseName);
-//     }
-//     // emit sgUpdatePreset(currentPreset);
-
-//     for(quint16 i=0; i<bytesToUpload; i++)
-//     {
-//         QString sTmp;
-//         quint8  chr;
-//         if(i>=irData.length())
-//             sTmp = QString("00");
-//         else
-//         {
-//             chr = irData.at(i);
-//             if(chr<=15)
-//                 sTmp = QString("0%1").arg(chr, 1, 16);
-//             else
-//                 sTmp = QString("%1").arg (chr, 2, 16);
-//         }
-//         baSend.append(sTmp.toUtf8());
-//     }
-//     pushCommandToQueue(baSend);
-
-//     // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
-//     emit sgRecieveDeviceParameter(DeviceParameter::Type::CABINET_ENABLE, true);
-
-//     processCommands();
-// }
 
 void Core::setFirmware(QString fullFilePath)
 {
@@ -741,7 +615,7 @@ void Core::processCommands()
 
         if((commandToSend.length() > chunckSize) && (!fwUpdate))
         {
-            emit sgSetUIParameter("data_uploading", true);
+            // emit sgSetUIParameter("data_uploading", true);
             for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
             {
                 sendCommand(commandToSend.mid(sendPosition, chunckSize));
@@ -777,6 +651,21 @@ void Core::processCommands()
     {
         emit sgSetUIParameter("wait", false);
     }
+}
+
+void Core::sendCommand(QByteArray val)
+{
+    symbolsSended += val.size();
+    recieveEnabled = false;
+    emit sgWriteToInterface(val);
+
+    updateProgressBar();
+}
+
+void Core::updateProgressBar()
+{
+    float fVal = (double)(symbolsSended+bytesRecieved) / (double)(symbolsToSend+bytesToRecieve);
+    emit sgSetProgress(fVal, "");
 }
 
 void Core::recieveTimeout()
@@ -821,19 +710,4 @@ void Core::recieveTimeout()
             }
         }
     }
-}
-
-void Core::sendCommand(QByteArray val)
-{  
-    symbolsSended += val.size();
-    recieveEnabled = false;
-    emit sgWriteToInterface(val);
-
-    updateProgressBar();
-}
-
-void Core::updateProgressBar()
-{
-    float fVal = (double)(symbolsSended+bytesRecieved) / (double)(symbolsToSend+bytesToRecieve);
-    emit sgSetProgress(fVal, "");
 }

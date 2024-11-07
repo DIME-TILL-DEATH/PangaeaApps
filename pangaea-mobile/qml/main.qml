@@ -10,6 +10,7 @@ import Pages 1.0
 import StyleSettings 1.0
 
 import CppObjects
+import CppEnums
 
 ApplicationWindow
 {
@@ -30,8 +31,6 @@ ApplicationWindow
 
     property bool connected: false
 
-    property string markEdit: edit?" * ":" "
-    property bool edit: true
     property bool swipeEn: true
 
     property int curView: 0
@@ -235,14 +234,6 @@ ApplicationWindow
     {
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if( nameParam === "presetEdit" )
-            {
-                _main.edit = inValue;
-            }
-        }
-
         function onSgSetUIText(nameParam, value)
         {
             var versionArray;
@@ -288,13 +279,6 @@ ApplicationWindow
                 _msgCommon.open();
             }
 
-            if(nameParam === "impulse_save_error")
-            {
-                _msgCommon.headerText = qsTr("Error");
-                _msgCommon.text = qsTr("Error while saving IR. Please, try to reload impulse.");
-                _msgCommon.open();
-            }
-
             if(nameParam === "preset_exported")
             {
                 _msgCommon.headerText = qsTr("Preset export finished");
@@ -309,11 +293,22 @@ ApplicationWindow
 
         function onSgDeviceError(type, description, params)
         {
-            if(type === DeviceError.UndefinedCommand)
+            switch(type)
             {
-                _msgCommon.headerText = qsTr("Device parse error");
-                _msgCommon.text = qsTr("Device can't recognize command: \n" + params + "\nTry to update firmware");
-                _msgCommon.open();
+                case DeviceError.UndefinedCommand:
+                {
+                    _msgCommon.headerText = qsTr("Device parse error");
+                    _msgCommon.text = qsTr("Device can't recognize command: \n" + params + "\nTry to update firmware");
+                    _msgCommon.open();
+                    break;
+                }
+
+                case DeviceError.IrSaveError:
+                {
+                    _msgCommon.headerText = qsTr("Error");
+                    _msgCommon.text = qsTr("Error while saving IR. Please, try to reload impulse.");
+                    _msgCommon.open();
+                }
             }
         }
     }

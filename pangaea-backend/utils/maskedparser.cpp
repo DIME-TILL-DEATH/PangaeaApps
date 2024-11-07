@@ -1,4 +1,4 @@
-#include "legacyparser.h"
+#include "maskedparser.h"
 #include <QDebug>
 
 //sample
@@ -7,14 +7,14 @@
 // 1 - должно совпадать
 // 0 - может не совпадать, помещается в возвращаемые параметры
 
-LegacyParser::LegacyParser(QByteArray inVal, QByteArray inMask) : QObject()
+MaksedParser::MaksedParser(QByteArray inVal, QByteArray inMask) : QObject()
 {
     val  = inVal;
     mask = inMask;
     clearAll();
 }
 
-bool LegacyParser::getParse(QByteArray inBa, QList<QByteArray> *inRet)
+bool MaksedParser::getParse(QByteArray inBa, QList<QByteArray> *inRet)
 {
     quint8 afterX;
     bool kostyl;
@@ -89,7 +89,7 @@ bool LegacyParser::getParse(QByteArray inBa, QList<QByteArray> *inRet)
     return false;
 }
 
-void LegacyParser::clearAll()
+void MaksedParser::clearAll()
 {
     curParam = curPos = maskPos = 0;
     prevMask = '1';

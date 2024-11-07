@@ -15,8 +15,6 @@
 #include "devicedescription.h"
 #include "deviceparameter.h"
 
-#include "irworker.h"
-
 #include "abstractdevice.h"
 
 class Core : public QObject
@@ -46,65 +44,10 @@ public:
     };
     Q_ENUM(AppAction)
 
-    // TODO: пока умеет только Preset и bank!!!! Дописать
-    // void restoreValue(QString name);
-
-    void setImpulse(QString fullFilePath);
-    // void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
-    // void escImpulse();
-
-    // void copyPreset();
-    // void pastePreset();
-
-    // void importPreset(QString filePath, QString fileName);
-    // void exportPreset(QString filePath, QString fileName);
-
     void setFirmware (QString fullFilePath);
     void uploadFirmware(const QByteArray &firmware);
 
-private:
-    IRWorker irWorker;
-    AnswerWorker commandWorker;
-
-    QByteArray lastRecievedData;
-
-    const uint32_t fwUploadBlockSize = 100;
-    QByteArray m_rawFirmwareData;
-
-
-    Device controlledDevice;
-    AbstractDevice* currentDevice;
-
-    Firmware* deviceFirmware{nullptr};
-
-    bool fwUpdate{false};
-    bool isFormatting{false};
-
-    // bool isPresetEdited{false};
-    // Preset currentPreset;
-    // Preset currentSavedPreset;
-    // Preset copiedPreset;
-    PresetManager presetManager;
-
-    QSettings* appSettings;
-    
     QTimer *timeoutTimer;
-    
-    bool recieveEnabled{true};
-    quint8 sendCount{0};
-    QList<QByteArray> commandsPending;
-    QList<QByteArray> commandsSended;
-    quint16 commandCount;
-
-    quint32 symbolsToSend{0};
-    quint32 symbolsSended{0};
-    quint32 bytesToRecieve{0};
-    quint32 bytesRecieved{0};
-
-    void pushCommandToQueue(QByteArray command, bool finalize = true);
-    void calculateSendVolume();
-    void updateProgressBar();
-    void sendCommand(QByteArray);
 
 signals:
     void sgWriteToInterface(QByteArray data, bool logCommand = true);
@@ -134,11 +77,47 @@ public slots:
     void parseInputData(QByteArray data);
     void processCommands();
 
-
     void slRecieveAppAction(AppAction appParameterType, QVariantList parameters);
 
 private slots:
-    // void indicationRequest();
     void recieveTimeout();
+
+private:
+    // IRWorker irWorker;
+    AnswerWorker commandWorker;
+
+    QByteArray lastRecievedData;
+
+    const uint32_t fwUploadBlockSize = 100;
+    QByteArray m_rawFirmwareData;
+
+
+    Device controlledDevice;
+    AbstractDevice* currentDevice{nullptr};
+
+    Firmware* deviceFirmware{nullptr};
+
+    bool fwUpdate{false};
+    bool isFormatting{false};
+
+    PresetManager presetManager;
+
+    QSettings* appSettings;
+    
+    bool recieveEnabled{true};
+    quint8 sendCount{0};
+    QList<QByteArray> commandsPending;
+    QList<QByteArray> commandsSended;
+    quint16 commandCount;
+
+    quint32 symbolsToSend{0};
+    quint32 symbolsSended{0};
+    quint32 bytesToRecieve{0};
+    quint32 bytesRecieved{0};
+
+    void pushCommandToQueue(QByteArray command, bool finalize = true);
+    void calculateSendVolume();
+    void updateProgressBar();
+    void sendCommand(QByteArray);
 };
 #endif // CORE_H

@@ -15,8 +15,6 @@ public:
         UndefinedCommand,
         IrFormatNotSupported,
         IrSaveError,
-
-
     };
     Q_ENUM(Value)
 };

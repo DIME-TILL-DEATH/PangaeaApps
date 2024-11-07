@@ -1,6 +1,6 @@
 #include "deviceanswer.h"
 
-DeviceAnswer::DeviceAnswer(LegacyParser* parser, AnswerType type, QString description, quint32 timeout, bool displayble)
+DeviceAnswer::DeviceAnswer(MaksedParser* parser, AnswerType type, QString description, quint32 timeout, bool displayble)
     : m_parser{parser},
       m_answerType{type},
       m_description{description},

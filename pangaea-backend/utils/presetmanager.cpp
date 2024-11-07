@@ -23,6 +23,7 @@ void PresetManager::setCurrentState(PresetState newCurrentState)
 
         QMetaEnum enumDescription = QMetaEnum::fromType<PresetState>();
         qDebug() << "Set new preset manager state:" << enumDescription.valueToKey(m_currentState);
+        emit currentStateChanged();
     }
 }
 
@@ -32,4 +33,5 @@ void PresetManager::returnToPreviousState()
 
     QMetaEnum enumDescription = QMetaEnum::fromType<PresetState>();
     qDebug() << "Return to previous preset manager state:" << enumDescription.valueToKey(m_currentState);
+    emit currentStateChanged();
 }

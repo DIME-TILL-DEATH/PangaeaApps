@@ -97,7 +97,7 @@ Rectangle{
 
                 width: parent.width
 
-                text: (impulseName === "") ? qsTr(empty) : impulseName
+                text: (impulseName === "") ? qsTr("empty") : impulseName
 
                 elide: Text.ElideMiddle
                 anchors.verticalCenter: parent.verticalCenter

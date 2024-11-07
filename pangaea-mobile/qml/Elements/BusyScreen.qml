@@ -4,6 +4,7 @@ import QtQuick.Controls
 import StyleSettings
 
 import CppObjects
+import CppEnums
 
 Item
 {
@@ -129,25 +130,50 @@ Item
                 progressBar.visible = true
             }
 
-            if(nameParam === ("data_uploading"))
-            {
-                rWait.visible = inValue;
-                txt.text = qsTr("Uploading file data to device");
-                progressBar.visible = true
-            }
-
             if(nameParam === ("ir_downloading"))
             {
                 rWait.visible = inValue;
                 txt.text = qsTr("Downloading impulse data from device");
                 progressBar.visible = true
             }
+        }
+    }
 
-            if(nameParam === ("ir_upload_finished"))
+    Connections{
+        target: UiCore.currentDevice.presetManager
+
+        function onCurrentStateChanged()
+        {
+            switch(UiCore.currentDevice.presetManager.currentState)
             {
-                rWait.visible = true;
-                txt.text = qsTr("Applying impulse to device. Please wait...");
-                progressBar.visible = false
+                case PresetState.Changing:
+                {
+                    rWait.visible = inValue;
+                    txt.text = qsTr("Sending commands to device");
+                    progressBar.visible = true
+                    break;
+                }
+                case PresetState.UploadingIr:
+                {
+                    rWait.visible = true;
+                    txt.text = qsTr("Uploading file data to device");
+                    progressBar.visible = true
+                    break;
+                }
+
+                case PresetState.SavingIr:
+                {
+                    rWait.visible = true;
+                    txt.text = qsTr("Applying impulse to device. Please wait...");
+                    progressBar.visible = false
+                    break;
+                }
+
+                case PresetState.Idle:
+                {
+                    rWait.visible = false;
+                    break;
+                }
             }
         }
     }

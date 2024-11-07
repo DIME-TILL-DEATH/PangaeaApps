@@ -29,8 +29,6 @@ public:
 
     Q_INVOKABLE void setupApplication();
 
-    Q_INVOKABLE void restoreParameter(QString name);
-
     Q_INVOKABLE void setImpuls(QString fullFilePath);
     Q_INVOKABLE void convertAndUploadImpulse(QString filePath);
 
@@ -51,32 +49,6 @@ public:
 
     AbstractDevice *currentDevice() const;
 
-private:
-    QQmlApplicationEngine* m_qmlEngine;
-
-    QTranslator m_translator;
-
-    QString m_moduleName;
-
-    QSettings* appSettings;
-
-    QMap<QString, QString> pathFromCode
-    {
-        {"en", ":/translations/pangaea-mobile_en.qm"},
-        {"ru", ":/translations/pangaea-mobile_ru.qm"},
-        {"it", ":/translations/pangaea-mobile_it.qm"},
-        {"de", ":/translations/pangaea-mobile_de.qm"}
-    };
-
-    QString m_pickedImpulsePath;
-
-    void loadTranslator(QString languageCode);
-    void loadDefaultTranslator();
-
-    void pickFile(ActivityType fileType, QString filter);
-
-    AbstractDevice *m_currentDevice = nullptr;
-
 signals:
 
     void sgQmlRequestChangePreset(quint8 bank, quint8 preset);
@@ -92,8 +64,6 @@ signals:
     //-----------------------------------------------
     void sgReadAllParameters();
 
-    void sgRestoreValue(QString name);
-    void sgSetImpuls (QString filePath, QString fileName);
     void sgSetFirmware (QString fullFilePath);
 
     void sgExportPreset(QString filePath, QString fileName);
@@ -115,8 +85,39 @@ public slots:
 
     void slCurrentDeviceChanged(AbstractDevice* newDevice);
 
+    void slExportPreset(QString fullFilePath, QString fileName);
+    void slImportPreset(QString fullFilePath, QString fileName);
+
 private slots:
     void slImpulseFilePicked(QString filePath, QString fileName);
+
+private:
+    QQmlApplicationEngine* m_qmlEngine;
+
+    QTranslator m_translator;
+
+    QString m_moduleName;
+
+    QSettings* appSettings;
+
+    QMap<QString, QString> pathFromCode
+        {
+            {"en", ":/translations/pangaea-mobile_en.qm"},
+            {"ru", ":/translations/pangaea-mobile_ru.qm"},
+            {"it", ":/translations/pangaea-mobile_it.qm"},
+            {"de", ":/translations/pangaea-mobile_de.qm"}
+        };
+
+    QString m_pickedImpulsePath;
+
+    AbstractDevice dummyDevice{nullptr};
+
+    void loadTranslator(QString languageCode);
+    void loadDefaultTranslator();
+
+    void pickFile(ActivityType fileType, QString filter);
+
+    AbstractDevice *m_currentDevice = nullptr;
 };
 
 #endif // UICORE_H

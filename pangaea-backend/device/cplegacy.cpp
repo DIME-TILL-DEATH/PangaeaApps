@@ -1,5 +1,8 @@
 #include "cplegacy.h"
 
+#include <QDir>
+
+
 #include "core.h"
 
 #include "eqband.h"
@@ -9,18 +12,19 @@ CPLegacy::CPLegacy(Core *parent)
 {
     m_deviceClass = DeviceClass::CP_LEGACY;
 
-
     using namespace std::placeholders;
     m_parser.addCommandHandler("rn", std::bind(&CPLegacy::getIrNameCommHandler, this, _1, _2));
     m_parser.addCommandHandler("rns", std::bind(&CPLegacy::getIrListCommHandler, this, _1, _2));
 
-    m_parser.addCommandHandler("gb", std::bind(&CPLegacy::bankPresetCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("gm", std::bind(&CPLegacy::outputModeCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("gb", std::bind(&CPLegacy::getBankPresetCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("gm", std::bind(&CPLegacy::getOutputModeCommHandler, this, _1, _2));
     m_parser.addCommandHandler("gs", std::bind(&CPLegacy::getStateCommHandler, this, _1, _2));
 
     m_parser.addCommandHandler("sp", std::bind(&CPLegacy::ackSaveChanges, this, _1, _2));
     m_parser.addCommandHandler("pc", std::bind(&CPLegacy::ackPresetChangeCommHandler, this, _1, _2));
     m_parser.addCommandHandler("esc", std::bind(&CPLegacy::ackEscCommHandler, this, _1, _2));
+
+    m_parser.addCommandHandler("SYNC ERROR", std::bind(&CPLegacy::errorCCCommHandler, this, _1, _2));
 }
 
 void CPLegacy::initDevice(DeviceType deviceType)
@@ -55,6 +59,34 @@ void CPLegacy::initDevice(DeviceType deviceType)
     emit sgProcessCommands();
 }
 
+QList<QByteArray> CPLegacy::parseAnswers(QByteArray &baAnswer)
+{
+    QList<QByteArray> parseResults, recievedCommAnswers;
+
+    if(getIrNameSize.getParse(baAnswer, &parseResults))
+    {
+        getIrNameSizeCommHandler(parseResults); // это лишь начало команды. Не считаем что она выполнена
+    }
+    if(getIr.getParse(baAnswer, &parseResults))
+    {
+        getIrCommHandler(parseResults);
+        recievedCommAnswers.append("cc");
+    }
+    if(ackCC.getParse(baAnswer, &parseResults))
+    {
+        ackCCCommHandler(parseResults);
+        recievedCommAnswers.append("cc");
+    }
+    if(endCC.getParse(baAnswer, &parseResults))
+    {
+        endCCCommHandler(parseResults);
+        recievedCommAnswers.append("cc");
+    }
+
+    recievedCommAnswers += m_parser.parseNewData(baAnswer);
+    return recievedCommAnswers;
+}
+
 void CPLegacy::pushReadPresetCommands()
 {
     emit sgPushCommandToQueue("gb");
@@ -85,7 +117,7 @@ void CPLegacy::saveChanges()
 {
     qDebug()<<__FUNCTION__;
 
-    if(presetManager.currentState() == PresetState::Compare)
+    if(m_presetManager.currentState() == PresetState::Compare)
     {
         comparePreset();
     }
@@ -105,7 +137,7 @@ void CPLegacy::saveChanges()
     }
     else
     {
-        // uploadImpulseData(currentPreset.waveData(), false, currentPreset.impulseName());
+        uploadImpulseData(currentPreset.waveData(), false, currentPreset.impulseName());
     }
 
     qDebug() << "Current preset bp: " << currentPreset.bankNumber() << ":" << currentPreset.presetNumber() << "impulse name:" << currentPreset.impulseName();
@@ -124,7 +156,7 @@ void CPLegacy::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges
     quint8 val = Preset::calcPresetFlatIndex(m_deviceType, newBank, newPreset);
 
 
-    if(presetManager.currentState() == PresetState::Compare)
+    if(m_presetManager.currentState() == PresetState::Compare)
     {
         comparePreset();
     }
@@ -137,7 +169,7 @@ void CPLegacy::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges
 
 void CPLegacy::comparePreset()
 {
-    if(presetManager.currentState() != PresetState::Compare)
+    if(m_presetManager.currentState() != PresetState::Compare)
     {
         // emit sgSetAppParameter(AppParameter::COMPARE_STATE, true);
         emit sgPushCommandToQueue("gs");
@@ -145,12 +177,121 @@ void CPLegacy::comparePreset()
     }
     else
     {
-        presetManager.returnToPreviousState();
+        m_presetManager.returnToPreviousState();
         setPresetData(currentPreset);
-        // uploadImpulseData(currentPreset.waveData(), true, currentPreset.impulseName());
+        uploadImpulseData(currentPreset.waveData(), true, currentPreset.impulseName());
         // emit sgSetAppParameter(AppParameter::COMPARE_STATE, false);
     }
     emit sgProcessCommands();
+}
+
+void CPLegacy::copyPreset()
+{
+
+}
+
+void CPLegacy::pastePreset()
+{
+
+}
+
+void CPLegacy::importPreset(QString filePath, QString fileName)
+{
+
+}
+
+void CPLegacy::exportPreset(QString filePath, QString fileName)
+{
+
+}
+
+void CPLegacy::setImpulse(QString filePath)
+{
+    QString fileName;
+    QFileInfo fileInfo(filePath);
+
+    if(fileInfo.isFile())
+    {
+        fileInfo.absoluteDir();
+        fileName = fileInfo.fileName();
+    }
+    else return;
+
+    stWavHeader wavHead = IRWorker::getFormatWav(filePath);
+
+    if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
+    {
+        qWarning() << __FUNCTION__ << "Not supported wav format";
+        emit sgDeviceError(DeviceError::IrFormatNotSupported, QString().setNum(wavHead.sampleRate)+" Hz/"+
+                                                            QString().setNum(wavHead.bitsPerSample)+" bits/"+
+                                                            QString().setNum(wavHead.numChannels)+" channel");
+    }
+    else
+    {
+        irWorker.decodeWav(filePath);
+
+        QByteArray fileData = irWorker.formFileData();
+        currentPreset.setWaveData(fileData);
+        uploadImpulseData(fileData, true, fileName);
+    }
+}
+
+void CPLegacy::uploadImpulseData(const QByteArray &impulseData, bool isPreview, QString impulseName)
+{
+    if(impulseData.isEmpty())
+    {
+        qWarning() << __FUNCTION__ << "no wave data";
+        return;
+    }
+
+    m_presetManager.setCurrentState(PresetState::UploadingIr);
+
+    impulseName.replace(QString(" "), QString("_"), Qt::CaseInsensitive);
+
+    currentPreset.setImpulseName(impulseName);
+
+    QByteArray baSend, irData;
+    quint16 bytesToUpload;
+
+    if(isPreview)
+    {
+        baSend.append(QString("cc s 1\r").toUtf8());
+        bytesToUpload = 984*3;
+        irData = impulseData.mid(44); //cut wav header
+    }
+    else
+    {
+        baSend.append(QString("cc %1 0\r").arg(impulseName).toUtf8());
+        irData = impulseData;
+        bytesToUpload = impulseData.size();
+        currentPreset.setImpulseName(impulseName);
+    }
+    m_presetListModel.updatePreset(currentPreset);
+
+    for(quint16 i=0; i<bytesToUpload; i++)
+    {
+        QString sTmp;
+        quint8  chr;
+        if(i>=irData.length())
+            sTmp = QString("00");
+        else
+        {
+            chr = irData.at(i);
+            if(chr<=15)
+                sTmp = QString("0%1").arg(chr, 1, 16);
+            else
+                sTmp = QString("%1").arg (chr, 2, 16);
+        }
+        baSend.append(sTmp.toUtf8());
+    }
+    emit sgPushCommandToQueue(baSend);
+    emit sgProcessCommands();
+
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
+    IR->setImpulseName(impulseName);
+    IR->setEnabled(true); // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
 }
 
 void CPLegacy::escImpulse()
@@ -171,20 +312,10 @@ void CPLegacy::setOutputMode(quint8 newOutputMode)
     sendCommandToCP(QString("gm %1").arg(m_outputMode, 0, 16).toUtf8());
 }
 
-PresetVolume *CPLegacy::getMV()
-{
-    if(MV) return MV;
-    else
-    {
-        qWarning() << "Master volume not instanciated, but qml request it";
-        return nullptr;
-    }
-}
-
 //=======================================================================================
 //                  ***************Comm handlers************
 //=======================================================================================
-void CPLegacy::bankPresetCommHandler(const QString &command, const QByteArray &arguments)
+void CPLegacy::getBankPresetCommHandler(const QString &command, const QByteArray &arguments)
 {
     m_bank = arguments.left(2).toUInt();
     m_preset  = arguments.right(2).toUInt();
@@ -195,7 +326,7 @@ void CPLegacy::bankPresetCommHandler(const QString &command, const QByteArray &a
     qInfo() << "bank:" << m_bank << "preset:" << m_preset;
 }
 
-void CPLegacy::outputModeCommHandler(const QString &command, const QByteArray &arguments)
+void CPLegacy::getOutputModeCommHandler(const QString &command, const QByteArray &arguments)
 {
     quint8 mode = arguments.toUInt();
     m_outputMode = mode;
@@ -206,7 +337,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
 {
     QByteArray baPresetData = arguments;
 
-    switch(presetManager.currentState())
+    switch(m_presetManager.currentState())
     {
     case PresetState::Copying:
     {
@@ -215,7 +346,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
             copiedPreset = currentPreset;
 
         copiedPreset.setRawData(baPresetData);
-        presetManager.returnToPreviousState();
+        m_presetManager.returnToPreviousState();
         break;
     }
 
@@ -224,7 +355,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         currentPreset.setRawData(baPresetData);
         currentSavedPreset = currentPreset;
         m_presetListModel.updatePreset(currentSavedPreset);
-        presetManager.returnToPreviousState();
+        m_presetManager.returnToPreviousState();
         break;
     }
 
@@ -347,9 +478,9 @@ void CPLegacy::getIrNameCommHandler(const QString &command, const QByteArray &ar
     if(arguments.size()>0)
         impulseName = arguments;
     else
-        impulseName = "empty";
+        impulseName = "";
 
-    switch(presetManager.currentState())
+    switch(m_presetManager.currentState())
     {
     case PresetState::Compare:
     {
@@ -371,7 +502,7 @@ void CPLegacy::getIrNameCommHandler(const QString &command, const QByteArray &ar
 //-------------------------------------acknowledegs------------------------------------------
 void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &arguments)
 {
-    presetManager.setCurrentState(PresetState::Compare);
+    m_presetManager.setCurrentState(PresetState::Compare);
     emit sgPushCommandToQueue("gs");
     emit sgPushCommandToQueue("rn");
 }
@@ -386,6 +517,36 @@ void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArr
 {
     qInfo() << __FUNCTION__ << "Preset change, updating state";
     currentPreset.clearWavData();
-    presetManager.setCurrentState(PresetState::Changing);
+    m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
+}
+
+void CPLegacy::getIrCommHandler(const QList<QByteArray> &arguments)
+{
+
+}
+
+void CPLegacy::getIrNameSizeCommHandler(const QList<QByteArray> &arguments)
+{
+
+}
+
+void CPLegacy::ackCCCommHandler(const QList<QByteArray> &arguments)
+{
+    m_presetManager.returnToPreviousState();
+    m_presetManager.setCurrentState(PresetState::SavingIr);
+    emit sgDisableTimeoutTimer(); // wait for impulse saving (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
+}
+
+void CPLegacy::endCCCommHandler(const QList<QByteArray> &arguments)
+{
+    emit sgEnableTimeoutTimer();
+    m_presetManager.returnToPreviousState();
+}
+
+void CPLegacy::errorCCCommHandler(const QString &command, const QByteArray &arguments)
+{
+    emit sgEnableTimeoutTimer();
+    m_presetManager.returnToPreviousState();
+    emit sgDeviceError(DeviceError::IrSaveError, currentPreset.impulseName());
 }

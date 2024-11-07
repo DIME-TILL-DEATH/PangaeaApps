@@ -19,14 +19,16 @@ ActivityResultManager activityResultHandler;
 UiCore::UiCore(QObject *parent)
     : QObject{parent}
 {
+    m_currentDevice = &dummyDevice;
+
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
     
     connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, &UiCore::slImpulseFilePicked);
-    connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::sgImportPreset);
+    connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::slImportPreset);
     connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UiCore::slFirmwareFilePicked);
-    connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::sgExportPreset);
+    connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::slExportPreset);
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
@@ -52,11 +54,6 @@ void UiCore::setupApplication()
     bool firstRun = !appSettings->value("first_run", true).toBool();
     emit sgSetUIParameter("first_run", firstRun);
     appSettings->setValue("first_run", false);
-}
-
-void UiCore::restoreParameter(QString name)
-{
-    emit sgRestoreValue(name);
 }
 
 void UiCore::setImpuls(QString fullFilePath)
@@ -94,7 +91,7 @@ void UiCore::convertAndUploadImpulse(QString filePath)
 
     tmpFile.remove(tmpFilePath);
 
-    emit sgSetImpuls(outpuFilePath, irOutFileName);
+    m_currentDevice->setImpulse(outpuFilePath);
 }
 
 void UiCore::pickFile(ActivityType fileType, QString filter)
@@ -132,17 +129,11 @@ void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware 
     emit sgSetUIText("firmware_local_path", minimalFirmware->path());
 }
 
-void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
-{
-    m_currentDevice = newDevice;
-    emit currentDeviceChanged();
-}
-
 void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
 {
-    emit sgSetImpuls(filePath, fileName);
     qDebug() << "Impulse picked";
     m_pickedImpulsePath = filePath;
+    m_currentDevice->setImpulse(filePath);
 }
 
 void UiCore::pickFirmwareFile()
@@ -158,6 +149,7 @@ void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
 void UiCore::setFirmware(QString fullFilePath)
 {
     emit sgSetFirmware(fullFilePath);
+    //m_currentDevice->setFirmware(fullFilePath);
 }
 
 void UiCore::doOnlineFirmwareUpdate()
@@ -207,8 +199,18 @@ void UiCore::importPreset(QString filePath)
 
     pickFile(ActivityType::PICK_PRESET, "*/*");
 #else
-    emit sgImportPreset(filePath, "");
+    slImportPreset(filePath, "");
 #endif
+}
+
+void UiCore::slExportPreset(QString fullFilePath, QString fileName)
+{
+    m_currentDevice->exportPreset(fullFilePath, fileName);
+}
+
+void UiCore::slImportPreset(QString fullFilePath, QString fileName)
+{
+    m_currentDevice->importPreset(fullFilePath, fileName);
 }
 
 void UiCore::setLanguage(QString languageCode)
@@ -301,6 +303,12 @@ void UiCore::setModuleName(const QString &newModuleName)
         return;
     m_moduleName = newModuleName;
     emit sgModuleNameChanged(newModuleName);
+}
+
+void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
+{
+    m_currentDevice = newDevice;
+    emit currentDeviceChanged();
 }
 
 AbstractDevice *UiCore::currentDevice() const

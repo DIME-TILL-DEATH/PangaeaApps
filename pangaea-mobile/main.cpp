@@ -116,6 +116,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
 
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<PresetStateEnum>("CppEnums", 1, 0, "PresetState", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceErrorEnum>("CppEnums", 1, 0, "DeviceError", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<ModuleTypeEnum>("CppEnums", 1, 0, "ModuleType", "Not creatable as it is an enum type");
 
@@ -126,11 +127,7 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    // QObject::connect(&uiCore, &UiCore::sgRestoreValue, core, &Core::restoreValue);
-    QObject::connect(&uiCore, &UiCore::sgSetImpuls, core, &Core::setImpulse);
     QObject::connect(&uiCore, &UiCore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
-    // QObject::connect(&uiCore, &UiCore::sgExportPreset, core, &Core::exportPreset);
-    // QObject::connect(&uiCore, &UiCore::sgImportPreset, core, &Core::importPreset);
     // QObject::connect(&uiCore, &UiCore::sgSw4Enable, core, &Core::sw4Enable);
     QObject::connect(&uiCore, &UiCore::sgDisconnesctFromDevice, core, &Core::disconnectFromDevice);
 
@@ -154,6 +151,8 @@ int main(int argc, char *argv[])
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
     Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
     Core::connect(core, &Core::sgReadyTodisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
+
+
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);
 
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgStartScanning, interfaceManager, &InterfaceCore::startScanning, Qt::QueuedConnection);

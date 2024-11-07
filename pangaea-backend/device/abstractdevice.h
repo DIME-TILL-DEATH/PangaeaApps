@@ -27,6 +27,8 @@ class AbstractDevice : public QObject
     Q_PROPERTY(quint8 maxBankCount READ maxBankCount CONSTANT)
     Q_PROPERTY(quint8 maxPresetCount READ maxPresetCount CONSTANT)
 
+    Q_PROPERTY(PresetManager* presetManager READ presetManager CONSTANT)
+
     Q_PROPERTY(bool deviceParamsModified READ deviceParamsModified NOTIFY deviceParamsModifiedChanged FINAL)
     Q_PROPERTY(ModulesListModel* modulesListModel READ modulesListModel NOTIFY modulesListModelChanged FINAL)
     Q_PROPERTY(PresetListModel* presetListModel READ presetListModel NOTIFY presetListModelChanged FINAL)
@@ -34,7 +36,8 @@ public:
     enum DeviceClass
     {
         ABSTRACT = 0,
-        CP_LEGACY
+        CP_LEGACY,
+        CP_MODERN
     };
     Q_ENUM(DeviceClass)
 
@@ -45,8 +48,20 @@ public:
 
     virtual void initDevice(DeviceType deviceType);
 
-    Q_INVOKABLE virtual void saveChanges() = 0;
-    Q_INVOKABLE virtual void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) = 0;
+    // TODO: пока умеет только Preset и bank!!!! Дописать
+    Q_INVOKABLE virtual void restoreValue(QString name) {};  // restore parameter
+
+    Q_INVOKABLE virtual void saveChanges() {};
+    Q_INVOKABLE virtual void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) {};
+
+    Q_INVOKABLE virtual void comparePreset() {};
+    Q_INVOKABLE virtual void copyPreset() {};
+    Q_INVOKABLE virtual void pastePreset() {};
+
+    Q_INVOKABLE virtual void importPreset(QString filePath, QString fileName) {};
+    Q_INVOKABLE virtual void exportPreset(QString filePath, QString fileName) {};
+
+    virtual void setImpulse(QString filePath) {};
 
     quint8 bank() const {return m_bank;};
     quint8 preset() const {return m_preset;};
@@ -57,6 +72,8 @@ public:
 
     ModulesListModel* modulesListModel() {return &m_modulesListModel;};
     PresetListModel* presetListModel() {return &m_presetListModel;};
+    PresetManager* presetManager() {return &m_presetManager;};
+
 public slots:
     virtual QList<QByteArray> parseAnswers(QByteArray& baAnswer);
 
@@ -76,10 +93,14 @@ signals:
     void sgModuleListUpdated(QList<AbstractModule*> modulesList);
     void sgModuleParametersUpdated(AbstractModule* module, quint16 moduleUid);
 
+    void sgEnableTimeoutTimer();
+    void sgDisableTimeoutTimer();
+
     void deviceUpdatingValues();
     void deviceParamsModifiedChanged();
 
     void bankPresetChanged();
+
 
 protected:
     Parser m_parser;
@@ -99,11 +120,12 @@ protected:
     Preset currentPreset{this};
     Preset currentSavedPreset{this}; // TODO живёт в модели
     Preset copiedPreset{this};
-    PresetManager presetManager;
+    PresetManager m_presetManager{this};
 
     ModulesListModel m_modulesListModel;
     PresetListModel m_presetListModel;
-    // TODO: m_presetsList живёт внутри модели
+
+    // TODO: m_presetsList живёт внутри модели или modulesList тут
     QList<Preset> m_presetsList;
 
     bool m_deviceParamsModified;
