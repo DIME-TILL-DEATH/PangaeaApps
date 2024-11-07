@@ -23,7 +23,7 @@ BaseModule
         height: parent.height
         width: parent.width
 
-        CustomizerSlider
+        CustomSlider
         {
             height: parent.height/4
             width: parent.width
@@ -32,7 +32,7 @@ BaseModule
             moduleOn: main.on
         }
 
-        CustomizerSlider
+        CustomSlider
         {
             height: parent.height/4
             width: parent.width
@@ -42,7 +42,7 @@ BaseModule
             moduleOn: main.on
         }
 
-        CustomizerSlider
+        CustomSlider
         {
             height: parent.height/4
             width: parent.width
@@ -65,48 +65,24 @@ BaseModule
 
             model: ["01.PP 6L6","02.PP EL34","03.SE 6L6","04.SE EL34","05.AMT TC-3","06.CALIF","07.BRIT M","08.BRIT L","09.DEFAULT","10.CALIF MOD","11.CALIF VINT","12.PVH 01","13.PVH 02","14.PVH 03","15.PVH 04"]
 
-            currentIndex: module.ampType.value
+            currentIndex: module.ampType.displayValue
 
             onActivated:
             {
                 if(!deviceUpdatingValues)
-                    module.ampType.value = currentIndex;
+                    module.ampType.displayValue = currentIndex;
             }
 
             Connections{
-                target: CurrentDevice
+                target: UiCore.currentDevice
 
                 function onDeviceUpdatingValues()
                 {
                     _comboBox.deviceUpdatingValues = true;
-                    _comboBox.currentIndex = module.ampType.value;
+                    _comboBox.currentIndex = module.ampType.displayValue;
                     _comboBox.deviceUpdatingValues = false;
                 }
             }
         }
     }
 }
-
-    // когда включаем/выклаючаем PA, также включить/выключить presence
-    // onOnChanged: {
-    //     if(main.visible) // только если модуль есть в устройстве
-    //         UiCore.setParameter("pa-ps_linked_on", main.on);
-    // }
-
-    // Connections
-    // {
-    //     target: UiCore
-
-    //     function onSgSetUiDeviceParameter(paramType, value)
-    //     {
-    //         if(paramType === main.paramType)
-    //         {
-    //             main.on=value
-
-    //             // if(main.visible) // только если модуль есть в устройстве
-    //             //     UiCore.setParameter("pa-ps_linked_on", main.on);
-    //         }
-
-
-    //     }
-    // }

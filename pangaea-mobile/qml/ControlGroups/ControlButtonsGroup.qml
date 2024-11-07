@@ -14,13 +14,13 @@ GridLayout
 {
     id: _root
 
-    property int mode: CurrentDevice.outputMode
+    property int mode: UiCore.currentDevice.outputMode
 
     rows: 2
     columns: 3
 
     property bool copyFirst: false
-    property bool presetEdited: CurrentDevice.deviceParamsModified
+    property bool presetEdited: UiCore.currentDevice.deviceParamsModified
     property bool compareState: AppProperties.compareState
 
     signal openPresetsList()
@@ -45,7 +45,7 @@ GridLayout
             onMbPressed:
             {
                 mode = 0;
-                CurrentDevice.outputMode = 0;
+                UiCore.currentDevice.outputMode = 0;
             }
         }
 
@@ -59,7 +59,7 @@ GridLayout
             active: (mode == 2)
             onMbPressed:
             {
-                CurrentDevice.outputMode = 2;
+                UiCore.currentDevice.outputMode = 2;
             }
         }
 
@@ -73,7 +73,7 @@ GridLayout
             active: (mode == 1)
             onMbPressed:
             {
-                CurrentDevice.outputMode = 1;
+                UiCore.currentDevice.outputMode = 1;
             }
         }
     }
@@ -118,8 +118,7 @@ GridLayout
 
             onMbPressed:
             {
-                CurrentDevice.saveChanges();
-                // DeviceProperties.saveChanges();
+                UiCore.currentDevice.saveChanges();
             }
         }
         MButton
@@ -190,7 +189,7 @@ GridLayout
         }
     }
 
-    Vl
+    VL
     {
         Layout.preferredWidth: parent.width
         Layout.preferredHeight:  parent.height*3/15

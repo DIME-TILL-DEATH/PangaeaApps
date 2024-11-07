@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>images/cp_16m.svg</file>
-        <file>qml/Elements/CustomizerSlider.qml</file>
         <file>qml/StyleSettings/Style.qml</file>
         <file>qml/StyleSettings/qmldir</file>
         <file>qml/Elements/ApplicationHeader.qml</file>
@@ -10,17 +9,17 @@
         <file>qml/Elements/PresetSpin.qml</file>
         <file>qml/Elements/qmldir</file>
         <file>qml/main.qml</file>
-        <file>qml/Modules/Cm.qml</file>
-        <file>qml/Modules/EqsExt.qml</file>
-        <file>qml/Modules/Er.qml</file>
-        <file>qml/Modules/Hp.qml</file>
-        <file>qml/Modules/Ir.qml</file>
-        <file>qml/Modules/Lp.qml</file>
-        <file>qml/Modules/Ng.qml</file>
-        <file>qml/Modules/Pa.qml</file>
-        <file>qml/Modules/Pr.qml</file>
+        <file>qml/Modules/CM.qml</file>
+        <file>qml/Modules/EQExt.qml</file>
+        <file>qml/Modules/ER.qml</file>
+        <file>qml/Modules/HP.qml</file>
+        <file>qml/Modules/IR.qml</file>
+        <file>qml/Modules/LP.qml</file>
+        <file>qml/Modules/NG.qml</file>
+        <file>qml/Modules/PA.qml</file>
+        <file>qml/Modules/PR.qml</file>
         <file>qml/Modules/qmldir</file>
-        <file>qml/Modules/Vl.qml</file>
+        <file>qml/Modules/VL.qml</file>
         <file>qml/Modules/BaseModule.qml</file>
         <file>qml/Elements/CustomComboBox.qml</file>
         <file>qml/Pages/ConnectPage.qml</file>
@@ -36,7 +35,7 @@
         <file>qml/Pages/SettingsPage.qml</file>
         <file>qml/Elements/MRadioButton.qml</file>
         <file>qml/Elements/FirmwareLoadingWindow.qml</file>
-        <file>qml/Modules/Ps.qml</file>
+        <file>qml/Modules/PS.qml</file>
         <file>images/Arrow Gear new.svg</file>
         <file>images/(V).svg</file>
         <file>images/Connected.svg</file>
@@ -48,7 +47,7 @@
         <file>qml/ControlGroups/DocumentationWindow.qml</file>
         <file>qml/Elements/EditTextDialog.qml</file>
         <file>qml/Elements/MComboBox.qml</file>
-        <file>qml/Modules/EqPreview.qml</file>
+        <file>qml/Modules/EQPreview.qml</file>
         <file>qml/Elements/EqPoint.qml</file>
         <file>qml/Elements/CustomSlider.qml</file>
         <file>qml/Elements/BankSpin.qml</file>

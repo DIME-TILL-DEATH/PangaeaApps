@@ -13,6 +13,7 @@ Rectangle
     height: parent.height
 
     property string text
+    property bool deviceUpdatingValues: false
 
     signal openPresetsList()
 
@@ -64,8 +65,8 @@ Rectangle
             height: parent.height*6/10
 
             model: 4//DeviceProperties.presetsList
-            currentIndex: DeviceProperties.isLa3Mode ? (DeviceProperties.bank*4 + DeviceProperties.preset)
-                                                     : CurrentDevice.preset
+            // currentIndex: DeviceProperties.isLa3Mode ? (DeviceProperties.bank*4 + DeviceProperties.preset)
+            //                                          : CurrentDevice.preset
 
             visibleItemCount: 1
 
@@ -85,7 +86,10 @@ Rectangle
 
             onCurrentIndexChanged:
             {
-                timer.restart();
+                if(!main.deviceUpdatingValues)
+                {
+                    timer.restart();
+                }
             }
         }
 
@@ -113,8 +117,7 @@ Rectangle
         repeat: false
         onTriggered:
         {
-            if(!CurrentDevice.deviceUpdatingValues)
-            {
+
                 // change preset
 
                 if(DeviceProperties.isLa3Mode)
@@ -125,16 +128,19 @@ Rectangle
                 {
                     // DeviceProperties.preset = _tumbler.currentIndex;
                 }
-            }
+
+                UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, _tumbler.currentIndex);
         }
     }
 
     Connections{
-        target: CurrentDevice
+        target: UiCore.currentDevice
 
         function onDeviceUpdatingValues()
         {
-            _tumbler.currentIndex = CurrentDevice.preset
+            main.deviceUpdatingValues = true;
+            _tumbler.currentIndex = UiCore.currentDevice.preset
+            main.deviceUpdatingValues = false;
         }
     }
 }

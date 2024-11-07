@@ -10,9 +10,11 @@ Item
 {
     id: main
 
-    anchors.centerIn: parent
+    // anchors.centerIn: parent
 
-    property bool on: EqResponse.moduleEnabled
+    property EqParametric eqModule
+
+    property bool on: eqModule.moduleEnabled
 
     property int currentBandIndex
 
@@ -56,8 +58,8 @@ Item
                     property real coefY : height / gainRange
 
                     onPaint: {
-                        var xmin = EqResponse.points[0].x;
-                        var xmax = EqResponse.points[EqResponse.points.length-1].x
+                        var xmin = eqModule.points[0].x;
+                        var xmax = eqModule.points[eqModule.points.length-1].x
 
                         var ctx = getContext("2d");
 
@@ -109,22 +111,22 @@ Item
 
                         ctx.beginPath();
 
-                        var x=0;
-                        var y=_canvas.height/2;
+                        var x = 0;
+                        var y = _canvas.height/2;
 
-                        for(i=0; i<EqResponse.points.length; i++)
+                        for(i=0; i<eqModule.points.length; i++)
                         {
-                            x = _canvas.width*((Math.log10(EqResponse.points[i].x)-Math.log10(xmin))
+                            x = _canvas.width*((Math.log10(eqModule.points[i].x)-Math.log10(xmin))
                                                /(Math.log10(xmax)-Math.log10(xmin)));
-                            y = EqResponse.points[i].y*coefY
+                            y = eqModule.points[i].y*coefY
 
                             ctx.lineTo(x, -y);
                         }
                         ctx.stroke()
 
                         // band draw
-                        xmin = EqResponse.EqBands[currentBandIndex].bandPoints[0].x;
-                        xmax = EqResponse.EqBands[currentBandIndex].bandPoints[EqResponse.EqBands[currentBandIndex].bandPoints.length-1].x
+                        xmin = eqModule.EqBands[currentBandIndex].bandPoints[0].x;
+                        xmax = eqModule.EqBands[currentBandIndex].bandPoints[eqModule.EqBands[currentBandIndex].bandPoints.length-1].x
                         ctx.lineWidth = 1;
                         ctx.strokeStyle = "salmon"
                         ctx.fillStyle = "salmon";
@@ -133,11 +135,11 @@ Item
                         ctx.beginPath();
                         ctx.moveTo(xmax,0)
                         ctx.lineTo(0,0)
-                        for(i=0; i<EqResponse.EqBands[currentBandIndex].bandPoints.length; i++)
+                        for(i=0; i<eqModule.EqBands[currentBandIndex].bandPoints.length; i++)
                         {
-                            x = _canvas.width*((Math.log10(EqResponse.EqBands[currentBandIndex].bandPoints[i].x)-Math.log10(xmin))
+                            x = _canvas.width*((Math.log10(eqModule.EqBands[currentBandIndex].bandPoints[i].x)-Math.log10(xmin))
                                                /(Math.log10(xmax)-Math.log10(xmin)));
-                            y = EqResponse.EqBands[currentBandIndex].bandPoints[i].y*coefY
+                            y = eqModule.EqBands[currentBandIndex].bandPoints[i].y*coefY
 
                             ctx.lineTo(x, -y);
                         }
@@ -150,7 +152,7 @@ Item
 
                    anchors.fill: parent
                    delegate: EqPoint{
-                       eqBand: EqResponse.EqBands[index]
+                       eqBand: eqModule.EqBands[index]
                        gainRange: main.gainRange
                        selectedBandIndex: main.currentBandIndex
 
@@ -159,7 +161,7 @@ Item
                        }
                    }
 
-                   model: EqResponse.EqBands
+                   model: eqModule.EqBands
                 }
 
                 DropArea{
@@ -169,15 +171,18 @@ Item
 
 
                     onPositionChanged: function(drag){
-                        var xmin = EqResponse.points[0].x;
-                        var xmax = EqResponse.points[EqResponse.points.length-1].x;
+                        var xmin = eqModule.points[0].x;
+                        var xmax = eqModule.points[eqModule.points.length-1].x;
                         var pointRadius = repeater.itemAt(currentBandIndex).height/2;
 
                         var freq = Math.pow(10, (drag.source.x+pointRadius)/_canvas.width * (Math.log10(xmax)-Math.log10(xmin)) + Math.log10(xmin))
                         var gain = (-drag.source.y + _canvas.height/2 - pointRadius) * main.gainRange/_canvas.height;
 
-                        EqResponse.EqBands[currentBandIndex].gain.value = Math.round(gain);
-                        EqResponse.EqBands[currentBandIndex].Fc.value = Math.round(freq);
+                        if(gain > 15) gain = 15;
+                        if(gain < -15) gain = -15;
+
+                        eqModule.EqBands[currentBandIndex].gain.displayValue = Math.round(gain);
+                        eqModule.EqBands[currentBandIndex].Fc.displayValue = Math.round(freq);
                     }
                 }
 
@@ -194,7 +199,7 @@ Item
                     property var startPinchQ
 
                     onPinchStarted: {
-                        startPinchQ = EqResponse.EqBands[currentBandIndex].Q.value;
+                        startPinchQ = eqModule.EqBands[currentBandIndex].Q.displayValue;
                     }
 
                     onPinchUpdated: function(pinch){
@@ -202,10 +207,10 @@ Item
                         var delta2 = pinch.point2.x - pinch.startPoint2.x
 
                         var resultQ = startPinchQ / pinch.scale;
-                        if(resultQ > EqResponse.EqBands[currentBandIndex].Q.maxValue) resultQ = EqResponse.EqBands[currentBandIndex].Q.maxValue;
-                        if(resultQ < EqResponse.EqBands[currentBandIndex].Q.minValue) resultQ = EqResponse.EqBands[currentBandIndex].Q.minValue;
+                        if(resultQ > eqModule.EqBands[currentBandIndex].Q.maxDisplayValue) resultQ = eqModule.EqBands[currentBandIndex].Q.maxDisplayValue;
+                        if(resultQ < eqModule.EqBands[currentBandIndex].Q.minDisplayValue) resultQ = eqModule.EqBands[currentBandIndex].Q.minDisplayValue;
 
-                        EqResponse.EqBands[currentBandIndex].Q.value = resultQ
+                        eqModule.EqBands[currentBandIndex].Q.displayValue = resultQ
                     }
                 }
             }
@@ -220,25 +225,25 @@ Item
                     color: Style.colorText
 
                     text: "BAND " + (currentBandIndex+1)
-                          + ", frequency span: " + EqResponse.EqBands[currentBandIndex].Fc.minValue + "Hz-"
-                           + EqResponse.EqBands[currentBandIndex].Fc.maxValue + "Hz"
+                          + ", frequency span: " + eqModule.EqBands[currentBandIndex].Fc.minDisplayValue + "Hz-"
+                           + eqModule.EqBands[currentBandIndex].Fc.maxDisplayValue + "Hz"
                 }
             }
 
             CustomSlider
             {
-                controlValue: EqResponse.EqBands[currentBandIndex].Fc
+                ctrlValInstance: eqModule.EqBands[currentBandIndex].Fc
             }
 
             CustomSlider
             {
-                controlValue: EqResponse.EqBands[currentBandIndex].gain
+                ctrlValInstance: eqModule.EqBands[currentBandIndex].gain
 
             }
 
             CustomSlider
             {
-                controlValue: EqResponse.EqBands[currentBandIndex].Q
+                ctrlValInstance: eqModule.EqBands[currentBandIndex].Q
                 precision: 1
             }
 
@@ -266,7 +271,7 @@ Item
     }
 
     Connections{
-        target: EqResponse
+        target: eqModule
 
         function onPointsChanged()
         {

@@ -1,15 +1,15 @@
 module Modules
 
 BaseModule 1.0 BaseModule.qml
-Cm	1.0 Cm.qml
-EqsExt  1.0 EqsExt.qml
-EqPreview     1.0 EqPreview.qml
-Er      1.0 Er.qml
-Hp      1.0 Hp.qml
-Ir      1.0 Ir.qml
-Lp      1.0 Lp.qml
-Ng      1.0 Ng.qml
-Ps      1.0 Ps.qml
-Pa      1.0 Pa.qml
-Pr      1.0 Pr.qml
-Vl      1.0 Vl.qml
+CM	1.0 CM.qml
+EQExt  1.0 EQExt.qml
+EQPreview     1.0 EQPreview.qml
+ER      1.0 ER.qml
+HP      1.0 HP.qml
+IR      1.0 IR.qml
+LP      1.0 LP.qml
+NG      1.0 NG.qml
+PS      1.0 PS.qml
+PA      1.0 PA.qml
+PR      1.0 PR.qml
+VL      1.0 VL.qml

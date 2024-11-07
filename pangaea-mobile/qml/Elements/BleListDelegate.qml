@@ -31,7 +31,6 @@ Item
         onClicked:
         {
             _list.autoSelectedItem = index
-            console.log("click, choosen device:", modelData.name, modelData.address)
         }
         onDoubleClicked:
         {

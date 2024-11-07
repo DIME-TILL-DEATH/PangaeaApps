@@ -290,7 +290,8 @@ Item
         onAccepted:
         {
             // ....and disconnect
-            UiCore.sw4Enable();
+            // UiCore.sgSw4Enable();
+            UiCore.sgDisconnesctFromDevice();
             isConnected = false;
         }
     }

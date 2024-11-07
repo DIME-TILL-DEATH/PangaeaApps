@@ -26,10 +26,11 @@ void ControlValue::setDisplayValue(double newDisplayValue)
 
     m_isModified = true;
     emit isModifiedChanged();
+    emit displayValueChanged();
 
     double k2 = (m_minDisplayValue-m_maxDisplayValue)/(m_minControlValue-m_maxControlValue);
     double k1 = m_minDisplayValue-(m_minControlValue*k2);
-    qint8 controlValue = (m_displayValue - k1)/k2;
+    quint8 controlValue = (m_displayValue - k1)/k2;
 
     QString fullCommand = m_commandName + QString(" %1\r\n").arg(controlValue, 0, 16);
     if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
@@ -55,25 +56,7 @@ void ControlValue::setControlValue(qint32 value)
 
     m_displayValue = resultValue;
     emit displayValueChanged();
-
-    qDebug() << "settling control value" << value << m_displayValue;
 }
-
-// void ControlValue::slSetAppParameter(Core::AppParameter appParameterType, QVariant content)
-// {
-//     switch(appParameterType)
-//     {
-//     case Core::AppParameter::PRESET_MODIFIED:
-//         if(content.toBool() == false)
-//         {
-//             m_isModified = false;
-//             emit isModifiedChanged();
-//         }
-//         break;
-
-//     default: {}
-//     }
-// }
 
 void ControlValue::setIsModified(bool newIsModified)
 {

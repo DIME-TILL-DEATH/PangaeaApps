@@ -4,8 +4,6 @@
 #include <QObject>
 
 #include "abstractmodule.h"
-#include "deviceparameter.h"
-// #include "core.h"
 
 class ControlValue : public QObject
 {
@@ -13,7 +11,7 @@ class ControlValue : public QObject
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged FINAL)
 
-    Q_PROPERTY(double value READ displayValue WRITE setDisplayValue NOTIFY displayValueChanged FINAL)
+    Q_PROPERTY(double displayValue READ displayValue WRITE setDisplayValue NOTIFY displayValueChanged FINAL)
     Q_PROPERTY(double minDisplayValue READ minDisplayValue CONSTANT)
     Q_PROPERTY(double maxDisplayValue READ maxDisplayValue CONSTANT)
 

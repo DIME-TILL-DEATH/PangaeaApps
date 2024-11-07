@@ -74,13 +74,14 @@ CustomMessageDialog {
         width: _root.width*0.95
         height: _root.height-headerHeight-footerHeight
 
-        currentIndex: DeviceProperties.isLa3Mode? DeviceProperties.bank * 4 + DeviceProperties.preset
-                                                : DeviceProperties.bank * DeviceProperties.banksList.length + DeviceProperties.preset
+        currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxPresetCount + UiCore.currentDevice.preset
+            /*DeviceProperties.isLa3Mode? DeviceProperties.bank * 4 + DeviceProperties.preset
+                                                : DeviceProperties.bank * DeviceProperties.banksList.length + DeviceProperties.preset*/
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
-        model: PresetListModel
+        model: UiCore.currentDevice.presetListModel
 
         boundsBehavior: Flickable.StopAtBounds
         clip: true
@@ -99,7 +100,7 @@ CustomMessageDialog {
         }
 
 
-        section.property: DeviceProperties.isLa3Mode? "" : "bankNumber"
+        section.property: "bankNumber"//DeviceProperties.isLa3Mode? "" : "bankNumber"
         section.criteria: ViewSection.FullString
         section.delegate: Item{
             id: _sectionHeaderContent
@@ -114,7 +115,7 @@ CustomMessageDialog {
                 color: "lightsteelblue"
 
                 MText {
-                    text: "Bank " + DeviceProperties.banksList[_sectionHeaderContent.section]
+                    text: "Bank " + _sectionHeaderContent.section//DeviceProperties.banksList[_sectionHeaderContent.section]
                 }
             }
         }

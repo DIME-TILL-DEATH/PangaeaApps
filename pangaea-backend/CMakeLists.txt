@@ -9,8 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_definitions(-DCP16_FIRMWARE_VERSION="1.04.03")
 add_definitions(-DCP16PA_FIRMWARE_VERSION="1.04.03")
-add_definitions(-DLA3PA_FIRMWARE_VERSION="1.04.07")
-add_definitions(-DLA3RV_FIRMWARE_VERSION="1.05.03")
+add_definitions(-DLA3_FIRMWARE_VERSION="1.05.03")
 add_definitions(-DCP100_FIRMWARE_VERSION="2.08.02")
 add_definitions(-DCP100PA_FIRMWARE_VERSION="6.08.04")
 
@@ -44,9 +43,11 @@ qt_add_library(pangaea-backend STATIC
     modules/controlvalue.cpp modules/controlvalue.h
     modules/abstractmodule.cpp modules/abstractmodule.h
     modules/presetvolume.h modules/presetvolume.cpp
+    modules/noisegate.h modules/noisegate.cpp
     modules/poweramp.cpp modules/poweramp.h
+    modules/cabsim.h modules/cabsim.cpp
     modules/eqband.cpp modules/eqband.h
-    modules/eqresponse.cpp modules/eqresponse.h
+    modules/eqparametric.cpp modules/eqparametric.h
 
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h
@@ -55,6 +56,7 @@ qt_add_library(pangaea-backend STATIC
     utils/parser.h utils/parser.cpp
 
     uihelpers/devicetypeenum.h
+    uihelpers/deviceerrorenum.h
     uihelpers/deviceproperties.cpp uihelpers/deviceproperties.h
     uihelpers/appproperties.h uihelpers/appproperties.cpp
     uihelpers/moduletypeenum.h

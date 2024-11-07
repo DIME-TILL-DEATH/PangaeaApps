@@ -33,12 +33,6 @@ Item
         topHeaderSize: masterControlsHeight
     }
 
-    function showFullEq(){
-        console.log("Request to show BIG eq")
-        eqsExt.visible = true;
-
-    }
-
     Column
     {
         id: _moduleColumn
@@ -49,7 +43,7 @@ Item
 
         spacing: 2
 
-        enabled: !eqsExt.visible
+        enabled: !_eqExtLoader.visible
 
         Loader{
             id: _masterControlsLoader
@@ -93,23 +87,36 @@ Item
                 Component.onCompleted: function(){
                     switch(moduleType)
                     {
+                    case ModuleType.NG:
+                    {
+                        _delegateLoader.source = "../Modules/NG.qml";
+                        _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
+                        break;
+                    }
+
                     case ModuleType.PA:
                     {
-                        _delegateLoader.source = "../Modules/Pa.qml";
+                        _delegateLoader.source = "../Modules/PA.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
-                        // _delegateLoader.item.module = moduleInstance;
-                        console.log(_delegateLoader.item.module)
+                        break;
+                    }
 
+                    case ModuleType.IR:
+                    {
+                        _delegateLoader.source = "../Modules/IR.qml";
+                        _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.EQ:
                     {
-                        _delegateLoader.source = "../Modules/EqPreview.qml"
-                        _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing
+                        _delegateLoader.source = "../Modules/EQPreview.qml";
+                        _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
 
-                        _delegateLoader.item.extVisible.connect(showFullEq)
-                        console.log(_delegateLoader.item.module)
+                        _eqExtLoader.source = "../Modules/EQExt.qml";
+                        _delegateLoader.item.extVisible.connect(showFullEq);
+                        _eqExtLoader.item.hide.connect(hideFullEq);
+                        _eqExtLoader.item.eqModule = moduleInstance;
                         break;
                     }
                     }
@@ -120,18 +127,27 @@ Item
         }
     }
 
-    ObjectModel
-    {
-        id: modulesList
+    function showFullEq(){
+        _eqExtLoader.visible = true;
     }
 
-    // Ng
-    // {
-    //     id: ng
-    //     width:  listViewModules.width
-    //     height: _main.height*2/countElements - _moduleColumn.spacing
-    //     visible: moduleVisible
-    // }
+    function hideFullEq(){
+        _eqExtLoader.visible = false;
+    }
+
+    Loader{
+        id: _eqExtLoader
+
+        anchors.centerIn: parent
+
+        visible: false
+
+        height: parent.height/1.5
+        width:  parent.width*0.95
+        z: _main.z+1
+
+    }
+
     // Cm
     // {
     //     id: cm
@@ -148,23 +164,6 @@ Item
     //     visible: moduleVisible
     // }
 
-
-    // Ps
-    // {
-    //     id: ps
-
-    //     width:  listViewModules.width
-    //     height: _main.height*1/countElements - _moduleColumn.spacing
-
-    //     visible: moduleVisible & (!DeviceProperties.isPaFirmware)
-    // }
-    // Ir
-    // {
-    //     id: ir
-    //     width:  listViewModules.width
-    //     height: _main.height*1/countElements - _moduleColumn.spacing
-    //     visible: moduleVisible
-    // }
     // Hp
     // {
     //     id: hp
@@ -173,24 +172,6 @@ Item
     //     visible: moduleVisible
     // }
 
-    // EqPreview
-    // {
-    //     id: eq
-
-    //     width:  listViewModules.width
-    //     height: _main.height*3/countElements - _moduleColumn.spacing
-
-    //     property int prePositionIndex: 2
-    //     property int postPositionIndex: 6
-    //     isPreEQ: (ObjectModel.index === prePositionIndex)
-    //     isPrePostVisible: DeviceProperties.isPaFirmware
-
-    //     onExtVisible:
-    //     {
-    //         eqsExt.visible = true;
-    //     }
-    //     visible: moduleVisible
-    // }
 
     // Lp
     // {
@@ -208,54 +189,8 @@ Item
     //     visible: moduleVisible
     // }
 
-    function arrangePrePost(value_isEqPre)
-    {
-        // if(DeviceProperties.isPaFirmware)
-        // {
-        //     if(value_isEqPre)
-        //     {
-        //         if(!eq.isPreEQ) modulesList.move(eq.postPositionIndex, eq.prePositionIndex, 1);
-        //     }
-        //     else
-        //     {
-        //         if(eq.isPreEQ) modulesList.move(eq.prePositionIndex, eq.postPositionIndex, 1);
-        //     }
-        // }
-        // listViewModules.forceLayout();
-    }
 
-    function placeAllModuls()
-    {
-        // modulesList.clear();
 
-        // modulesList.append(ng);
-        // modulesList.append(cm);
-        // modulesList.append(pr);
-        // if(DeviceProperties.isPaFirmware) modulesList.append(pa);
-        // modulesList.append(ir);
-        // modulesList.append(hp);
-        // modulesList.append(eq)
-        // modulesList.append(lp);
-        // if(!DeviceProperties.isPaFirmware) modulesList.append(ps);
-        // modulesList.append(er);
-
-        // moduleVisible = true;
-        // listViewModules.forceLayout();
-    }
-
-    // EqsExt
-    // {
-    //     id: eqsExt
-    //     visible: false
-
-    //     height: parent.height/1.5
-    //     width:  parent.width*0.95
-    //     z: _main.z+1
-    //     onHide:
-    //     {
-    //         visible = false;
-    //     }
-    // }
 
     CustomMessageDialog
     {
@@ -273,38 +208,20 @@ Item
 
         onAccepted:
         {
-            DeviceProperties.saveChanges();
-            DeviceProperties.changePreset(newBank, newPreset, true);
+            // DeviceProperties.saveChanges();
+            // DeviceProperties.changePreset(newBank, newPreset, true);
         }
         onDiscarded:
         {
-            UiCore.restoreParameter("impulse")
-            DeviceProperties.changePreset(newBank, newPreset, true);
-            visible = false;
+            // UiCore.restoreParameter("impulse")
+            // DeviceProperties.changePreset(newBank, newPreset, true);
+            // visible = false;
         }
         onRejected:
         {
-            // TODO: change to DeviceParameter
-            UiCore.restoreParameter("preset")
-            UiCore.restoreParameter("bank")
-        }
-    }
-
-    Connections
-    {
-        target: DeviceProperties
-
-        function onDeviceTypeChanged()
-        {
-            _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml"
-            listViewModules.model = ModulesListModel
-        }
-
-        function onPresetNotSaved(bank, preset)
-        {
-            msgPresetChangeSave.newBank = bank;
-            msgPresetChangeSave.newPreset = preset;
-            msgPresetChangeSave.visible = true;
+            // // TODO: change to DeviceParameter
+            // UiCore.restoreParameter("preset")
+            // UiCore.restoreParameter("bank")
         }
     }
 
@@ -312,41 +229,25 @@ Item
     {
         target: UiCore
 
-        function onSgSetUiDeviceParameter(paramType, value)
+        function onCurrentDeviceChanged()
         {
-            switch(paramType)
-            {
-            case DeviceParameter.EQ_PRE:
-            {
-                arrangePrePost(value);
-                break;
-            }
-            }
+                _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
+                listViewModules.model = UiCore.currentDevice.modulesListModel;
         }
 
-        // not set ui
-        function onSgSetDeviceParameter(paramType, value)
+        function onSgQmlRequestChangePreset(bank, preset)
         {
-            if(paramType === DeviceParameter.EQ_PRE)
+            if(UiCore.currentDevice.bank !== bank || UiCore.currentDevice.preset !== preset)
             {
-                arrangePrePost(value);
+                if(UiCore.currentDevice.deviceParamsModified)
+                {
+                    msgPresetChangeSave.open();
+                }
+                else
+                {
+                    UiCore.currentDevice.changePreset(bank, preset);
+                }
             }
-        }
-    }
-
-    Connections{
-        target: InterfaceManager
-
-        function onSgInterfaceError(errorDescription)
-        {
-            modulesList.clear();
-            listViewModules.forceLayout();
-        }
-
-        function onSgInterfaceDisconnected()
-        {
-            modulesList.clear();
-            listViewModules.forceLayout();
         }
     }
 }

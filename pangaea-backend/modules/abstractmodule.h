@@ -16,6 +16,8 @@ public:
 
     explicit AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff);
 
+    static void registerTypestoQml();
+
     bool moduleEnabled() const {return m_moduleEnabled;};
     virtual void setModuleEnabled(bool newEnabled);
 

@@ -3,7 +3,7 @@
 
 AnswerWorker::AnswerWorker()
 {
-    LegacyParser* getStatus  = new LegacyParser("gs\r00000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n","111000000000000000000000000000000000000000000000000000000000000000000000000000000000000001");
+    // LegacyParser* getStatus  = new LegacyParser("gs\r00000000000000000000000000000000000000000000000000000000000000000000000000000000000000\n","111000000000000000000000000000000000000000000000000000000000000000000000000000000000000001");
 
     LegacyParser* getIr  = new LegacyParser("cc\r0\n0\n", "111X1X1");
     LegacyParser* getIrNameSize  = new LegacyParser("cc\r0\n", "111X1");
@@ -56,9 +56,9 @@ AnswerWorker::AnswerWorker()
     m_devCommandList.append(DeviceAnswer(new LegacyParser("amtdev\rX\n", "1111111X1"), AnswerType::getAMTDevType, "get device type"));
     m_devCommandList.append(DeviceAnswer(new LegacyParser("amtver\r0\n","1111111X1"), AnswerType::getFWVersion, "get firmware version"));
 
-    m_devCommandList.append(DeviceAnswer(getStatus, AnswerType::getStatus, "get parameter values from preset"));
-//    m_devCommandList.append(DeviceAnswer(new Parser("gsEND\n", "111111"), AnswerType::gsEND, "writing data to preset complete"));
-//    m_devCommandList.append(DeviceAnswer(new Parser("gs 1\r", "11111"), AnswerType::ackStatusSettling, "preset parameters settled"));
+    // m_devCommandList.append(DeviceAnswer(getStatus, AnswerType::getStatus, "get parameter values from preset"));
+   // m_devCommandList.append(DeviceAnswer(new Parser("gsEND\n", "111111"), AnswerType::gsEND, "writing data to preset complete"));
+   // m_devCommandList.append(DeviceAnswer(new Parser("gs 1\r", "11111"), AnswerType::ackStatusSettling, "preset parameters settled"));
     m_devCommandList.append(DeviceAnswer(new LegacyParser("gs 1\rgsEND\n", "11111111111"), AnswerType::ackStatusSettling, "preset parameters settled"));
 
    // m_devCommandList.append(DeviceAnswer(new Parser("cc s 1\r", "1111111"), AnswerType::ccAck, "IR upload acknowledge")); //upload runtime
@@ -75,33 +75,33 @@ AnswerWorker::AnswerWorker()
     m_devCommandList.append(DeviceAnswer(new LegacyParser("pwsd\rEND\n", "111111111"), AnswerType::ackDcc, "delete wav in preset directory"));
 
 
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("lcc\rEND\n", "11111111"), AnswerType::ackLcc, "cancel impulse"));
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("esc\rEND\n", "11111111"), AnswerType::ackEsc, "return preset to saved state"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("lcc\rEND\n", "11111111"), AnswerType::ackLcc, "cancel impulse"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("esc\rEND\n", "11111111"), AnswerType::ackEsc, "return preset to saved state"));
 
 
 //    m_devCommandList.append(DeviceAnswer(new Parser("sp\r", "111"), AnswerType::ackSavePreset, "save preset acknowledgement"));
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("sp\rEND\n", "1111111"), AnswerType::ackSavePreset, "save preset acknowledgement"));
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("gb\r0000\n", "11100001"), AnswerType::getBankPreset, "get current bank and preset number"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("sp\rEND\n", "1111111"), AnswerType::ackSavePreset, "save preset acknowledgement"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("gb\r0000\n", "11100001"), AnswerType::getBankPreset, "get current bank and preset number"));
 
 
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("gm\r00\n", "111001"), AnswerType::getOutputMode, "get output mode(phones, line, balance)"));
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("gm 0\r", "11101"), AnswerType::ackOutputMode, "set output mode acknowledgement"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("gm\r00\n", "111001"), AnswerType::getOutputMode, "get output mode(phones, line, balance)"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("gm 0\r", "11101"), AnswerType::ackOutputMode, "set output mode acknowledgement"));
 
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("rn\r \n", "111X1"), AnswerType::getIrName, "get IR name"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("rn\r \n", "111X1"), AnswerType::getIrName, "get IR name"));
 //    m_devCommandList.append(DeviceAnswer(new Parser("pc xx\r", "111001"), AnswerType::ackPresetChange, "preset change acknowledgement"));
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("pc xx\rEND\n", "1110011111"), AnswerType::ackPresetChange, "preset change acknowledgement"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("pc xx\rEND\n", "1110011111"), AnswerType::ackPresetChange, "preset change acknowledgement"));
 
     m_devCommandList.append(DeviceAnswer(new LegacyParser("REQUEST_CHUNK_SIZE","111111111111111111"), AnswerType::requestNextChunk, "request next chunk"));
     m_devCommandList.append(DeviceAnswer(new LegacyParser("FR_O","1111"), AnswerType::ackFWUFinished, "firmware update/formatting finished"));
 
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("sw4 disable\rEND\n", "11111111111X"), AnswerType::ackDisableSW4, "hardware buttons off acknowledgment"));
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("sw4 enable\rEND\n", "11111111111X"), AnswerType::ackEnableSW4, "hardware buttons on acknowledgment"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("sw4 disable\rEND\n", "11111111111X"), AnswerType::ackDisableSW4, "hardware buttons off acknowledgment"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("sw4 enable\rEND\n", "11111111111X"), AnswerType::ackEnableSW4, "hardware buttons on acknowledgment"));
 
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("pwc 00 00\rEND\n", "11110010011111"), AnswerType::ackPwc, "copying IR acknowledgment"));
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("pws xx\rEND\n", "11110011111"), AnswerType::ackPws, "temporaly save IR acknowledgemnt"));
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("pwl xx\rEND\n", "11110011111"), AnswerType::ackPwl, "load temporaly IR acknowledgemnt"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("pwc 00 00\rEND\n", "11110010011111"), AnswerType::ackPwc, "copying IR acknowledgment"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("pws xx\rEND\n", "11110011111"), AnswerType::ackPws, "temporaly save IR acknowledgemnt"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("pwl xx\rEND\n", "11110011111"), AnswerType::ackPwl, "load temporaly IR acknowledgemnt"));
 
-    m_devCommandList.append(DeviceAnswer(new LegacyParser("iio\r*\n*\nEND\n", "1111X1X11111"), AnswerType::indicationRequest, "input and output signal values"));
+    // m_devCommandList.append(DeviceAnswer(new LegacyParser("iio\r*\n*\nEND\n", "1111X1X11111"), AnswerType::indicationRequest, "input and output signal values"));
 
     m_devCommandList.append(DeviceAnswer(getIrListCP16, AnswerType::getIrList, "get list of IR names for CP16"));
     m_devCommandList.append(DeviceAnswer(getIrListCP100, AnswerType::getIrList, "get list of IR names for CP100"));

@@ -13,18 +13,18 @@ Slider
     implicitWidth: parent.width
     implicitHeight: parent.height/12
 
-    required property ControlValue controlValue
+    required property ControlValue ctrlValInstance
 
-    property string name: controlValue.name
-    property string units: controlValue.units
+    property string name: ctrlValInstance.name
+    property string units: ctrlValInstance.units
     property int precision: 0
 
 
-    from: controlValue.minValue
-    to: controlValue.maxValue
-    value: controlValue.value
+    from: ctrlValInstance.minDisplayValue
+    to: ctrlValInstance.maxDisplayValue
+    value: ctrlValInstance.displayValue
 
-    property bool edited: controlValue.isModified
+    property bool isModified: false
 
     property bool moduleOn: true
 
@@ -33,7 +33,8 @@ Slider
 
     onMoved:
     {
-        controlValue.value = value;
+            ctrlValInstance.displayValue = root.value;
+            ctrlValInstance.isModified = true;
     }
 
     leftPadding: 0
@@ -116,11 +117,21 @@ Slider
     {
         id: modulName
         anchors.fill: parent
-        text: edited ? ("  "+ name +"*") : ("  " + name)
+        text: isModified ? ("  "+ name +"*") : ("  " + name)
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         leftPadding: 4
         color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
         z:1
+    }
+
+    Connections
+    {
+        target: UiCore.currentDevice
+
+        function onDeviceUpdatingValues()
+        {
+            ctrlValInstance.isModified = false;
+        }
     }
 }

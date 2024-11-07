@@ -305,6 +305,20 @@ ApplicationWindow
     }
 
     Connections{
+        target: UiCore.currentDevice
+
+        function onSgDeviceError(type, description, params)
+        {
+            if(type === DeviceError.UndefinedCommand)
+            {
+                _msgCommon.headerText = qsTr("Device parse error");
+                _msgCommon.text = qsTr("Device can't recognize command: \n" + params + "\nTry to update firmware");
+                _msgCommon.open();
+            }
+        }
+    }
+
+    Connections{
         target: InterfaceManager
 
         function onSgInterfaceConnected(deviceDescription)
@@ -379,9 +393,9 @@ ApplicationWindow
         }
     }
 
-    onClosing:
-    {
-        UiCore.sw4Enable();
-        console.log("Close");
-    }
+    // onClosing:
+    // {
+    //     UiCore.sgSw4Enable();
+    //     console.log("Close");
+    // }
 }

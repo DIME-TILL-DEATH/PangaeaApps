@@ -15,30 +15,24 @@
 #include "deviceparameter.h"
 #include "firmware.h"
 
+#include "abstractdevice.h"
+
 
 class UiCore : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged FINAL)
+
+    Q_PROPERTY(AbstractDevice* currentDevice READ currentDevice NOTIFY currentDeviceChanged FINAL)
 public:
     explicit UiCore(QObject *parent = nullptr);
 
-
     Q_INVOKABLE void setupApplication();
 
-    Q_INVOKABLE void setParameter(QString name, quint8 val);
-
-    Q_INVOKABLE void setDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value)
-    {
-        emit sgSetDeviceParameter(deviceParameterType, value);
-    };
     Q_INVOKABLE void restoreParameter(QString name);
-
-    Q_INVOKABLE void readAll(void);
 
     Q_INVOKABLE void setImpuls(QString fullFilePath);
     Q_INVOKABLE void convertAndUploadImpulse(QString filePath);
-    Q_INVOKABLE void escImpuls();
 
     Q_INVOKABLE void exportPreset(QString fileName);
     Q_INVOKABLE void importPreset(QString filePath);
@@ -50,12 +44,12 @@ public:
     Q_INVOKABLE void setLanguage(QString languageCode);
     Q_INVOKABLE void saveSetting(QString settingName, QVariant settingValue);
 
-    Q_INVOKABLE void sw4Enable();
-
     Q_INVOKABLE void openManualExternally(QString fileName);
 
     const QString &moduleName() const {return m_moduleName;};
     void setModuleName(const QString &newModuleName);
+
+    AbstractDevice *currentDevice() const;
 
 private:
     QQmlApplicationEngine* m_qmlEngine;
@@ -81,10 +75,12 @@ private:
 
     void pickFile(ActivityType fileType, QString filter);
 
-signals:
-    void sgTranslatorChanged(QString langauageCode);
+    AbstractDevice *m_currentDevice = nullptr;
 
-    void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
+signals:
+
+    void sgQmlRequestChangePreset(quint8 bank, quint8 preset);
+
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);
     void sgUpdateAppSetting(QString settingName, QVariant settingValue);
@@ -95,8 +91,6 @@ signals:
     void sgLocalBluetoothNotReady(QString reason);
     //-----------------------------------------------
     void sgReadAllParameters();
-    void sgSetParameter(QString name, quint8 value);
-    void sgSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
 
     void sgRestoreValue(QString name);
     void sgSetImpuls (QString filePath, QString fileName);
@@ -105,17 +99,21 @@ signals:
     void sgExportPreset(QString filePath, QString fileName);
     void sgImportPreset(QString filePath, QString fileName);
 
-    void sgEscImpuls();
-    void sgSw4Enable();
+    void sgDisconnesctFromDevice();
     void sgModuleNameChanged(QString name);
 
     void sgDoOnlineFirmwareUpdate();
 
 
+    void sgTranslatorChanged(QString langauageCode);
+    void currentDeviceChanged();
+
 public slots:
     void slFirmwareFilePicked(QString filePath, QString fileName);
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
+
+    void slCurrentDeviceChanged(AbstractDevice* newDevice);
 
 private slots:
     void slImpulseFilePicked(QString filePath, QString fileName);

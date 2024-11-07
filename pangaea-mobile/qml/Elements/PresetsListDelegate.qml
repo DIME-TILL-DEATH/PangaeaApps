@@ -51,7 +51,7 @@ Rectangle{
 
                 property int la3Preset: (Number(bankNumber)*4 + Number(presetNumber));
 
-                text: "Preset " + (DeviceProperties.isLa3Mode ? la3Preset : presetNumber)
+                text: "Preset " + presetNumber //(DeviceProperties.isLa3Mode ? la3Preset : presetNumber)
                 font.pixelSize: 8 * Style.dip
                 color: Style.colorText
 
@@ -97,7 +97,7 @@ Rectangle{
 
                 width: parent.width
 
-                text: impulseName
+                text: (impulseName === "") ? qsTr(empty) : impulseName
 
                 elide: Text.ElideMiddle
                 anchors.verticalCenter: parent.verticalCenter
@@ -114,7 +114,7 @@ Rectangle{
         enabled: !parent.ListView.isCurrentItem
 
         onClicked: {
-            DeviceProperties.changePreset(bankNumber, presetNumber);
+            UiCore.sgQmlRequestChangePreset(bankNumber, presetNumber);
         }
     }
 

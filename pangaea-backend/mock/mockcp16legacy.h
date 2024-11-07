@@ -9,12 +9,17 @@ public:
     explicit MockCP16Legacy(QObject *parent = nullptr);
 
 private:
-    void amtDevCommHandler(const QByteArray& arguments);
-    void amtVerCommHandler(const QByteArray& arguments);
-    void bankPresetCommHandler(const QByteArray& arguments);
-    void outputModeCommHandler(const QByteArray& arguments);
-    void getStateCommHandler(const QByteArray& arguments);
-    void reqImpulseName(const QByteArray& arguments);
+    QString basePath;
+
+    void initFolders();
+
+
+    void amtDevCommHandler(const QString &command, const QByteArray& arguments);
+    void amtVerCommHandler(const QString &command, const QByteArray& arguments);
+    void bankPresetCommHandler(const QString &command, const QByteArray& arguments);
+    void outputModeCommHandler(const QString &command, const QByteArray& arguments);
+    void getStateCommHandler(const QString &command, const QByteArray& arguments);
+    void reqImpulseName(const QString &command, const QByteArray& arguments);
 };
 
 #endif // MOCKCP16LEGACY_H

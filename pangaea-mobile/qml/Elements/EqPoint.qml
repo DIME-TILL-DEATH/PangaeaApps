@@ -10,12 +10,12 @@ Rectangle{
     property EqBand eqBand
     property int gainRange: 40
 
-    property int xmin: EqResponse.points[0].x
-    property int xmax: EqResponse.points[EqResponse.points.length-1].x
+    property int xmin: eqModule.points[0].x
+    property int xmax: eqModule.points[eqModule.points.length-1].x
 
-    x: parent.width*((Math.log10(eqBand.Fc.value)-Math.log10(xmin))
+    x: parent.width*((Math.log10(eqBand.Fc.displayValue)-Math.log10(xmin))
                      /(Math.log10(xmax)-Math.log10(xmin))) - width/2;
-    y: parent.height/2 - eqBand.gain.value * parent.height/gainRange - height/2;
+    y: parent.height/2 - eqBand.gain.displayValue * parent.height/gainRange - height/2;
 
     transformOrigin: Item.Center
 
@@ -45,12 +45,12 @@ Rectangle{
 
         drag.target: root
 
-        property real xmin: EqResponse.points[0].x;
-        property real xmax: EqResponse.points[EqResponse.points.length-1].x
+        property real xmin: eqModule.points[0].x;
+        property real xmax: eqModule.points[eqModule.points.length-1].x
 
-        drag.minimumX: _canvas.width*((Math.log10(eqBand.Fc.minValue)-Math.log10(xmin))
+        drag.minimumX: _canvas.width*((Math.log10(eqBand.Fc.minDisplayValue)-Math.log10(xmin))
                                       /(Math.log10(xmax)-Math.log10(xmin))) - root.width/2;
-        drag.maximumX: _canvas.width*((Math.log10(eqBand.Fc.maxValue)-Math.log10(xmin))
+        drag.maximumX: _canvas.width*((Math.log10(eqBand.Fc.maxDisplayValue)-Math.log10(xmin))
                                       /(Math.log10(xmax)-Math.log10(xmin))) - root.width/2;
 
         drag.minimumY: root.parent.height/2 - 15 * root.parent.height/gainRange - root.height/2

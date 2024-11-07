@@ -2,35 +2,53 @@
 
 #include <QDebug>
 
-Parser::Parser() {}
+Parser::Parser(QString parserName)
+    :m_parserName{parserName}
+{}
 
-void Parser::parseNewData(const QByteArray &newData)
+QList<QByteArray> Parser::parseNewData(const QByteArray &newData)
 {
     m_buffer.append(newData);
+
+    QList<QByteArray> recievedCommands;
 
     int lineSepPos;
     do
     {
-        lineSepPos = m_buffer.indexOf("\n");
+        QString commSeparator;
+        if(fullEndModeEnabled) commSeparator = "\nEND\n";
+        else commSeparator = "\n";
 
+        lineSepPos = QString(m_buffer).indexOf(commSeparator);
+        if(lineSepPos == -1) break;
 
         QByteArray readedLine = m_buffer.left(lineSepPos);
-        m_buffer.remove(0, lineSepPos+1);
+        m_buffer.remove(0, lineSepPos + commSeparator.size());
 
-        int commSepPos = readedLine.indexOf("\r");
-        if(commSepPos == -1) continue;
+        int commTabSepPos = readedLine.indexOf("\r");
+        int commSpaceSepPos = readedLine.indexOf(" ");
+        int sepPosition;
 
-        QString command = readedLine.left(commSepPos);
-        QByteArray arguments = readedLine.right(readedLine.size() - commSepPos - 1);
+        if(commSpaceSepPos>0 && commTabSepPos > commSpaceSepPos) sepPosition = commSpaceSepPos;
+        else sepPosition = commTabSepPos;
 
-        qDebug() << "command: " << command << "arguments: " << arguments;
-        std::function<void (const QByteArray &)> callback = m_callbacks.value(command);
+        if(sepPosition == -1) continue;
 
-        if(callback) callback(arguments);
+        QString command = readedLine.left(sepPosition);
+        QByteArray arguments = readedLine.right(readedLine.size() - sepPosition - 1);
+
+
+        qDebug() << m_parserName << " --> command: " << command << "arguments: " << arguments;
+        recievedCommands.append(command.toUtf8());
+        std::function<void (const QString& command, const QByteArray &)> callback = m_callbacks.value(command);
+
+        if(callback) callback(command, arguments);
     }while(lineSepPos != -1);
+
+    return recievedCommands;
 }
 
-void Parser::addCommandHandler(const QString &command,  std::function<void (const QByteArray &)> callback)
+void Parser::addCommandHandler(const QString &command,  std::function<void (const QString& command, const QByteArray &)> callback)
 {
 
     m_callbacks.insert(command, callback);

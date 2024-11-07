@@ -40,7 +40,7 @@ Item
             anchors.leftMargin: parent.width/50
             anchors.bottomMargin: 3
             anchors.topMargin: 3
-            CustomizerSlider
+            CustomSlider
             {
                 width: _contentItem.width
                 height: _contentItem.height
@@ -49,7 +49,7 @@ Item
 
                 moduleOn: true
 
-                ctrlValInstance: CurrentDevice.MV.presetVolume
+                ctrlValInstance: UiCore.currentDevice.MV.presetVolume
             }
         }
     }

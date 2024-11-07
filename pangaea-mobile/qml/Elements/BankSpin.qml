@@ -14,6 +14,7 @@ Rectangle
     height: parent.height
 
     property string text
+    property bool deviceUpdatingValues: false
 
     signal openPresetsList()
 
@@ -64,7 +65,7 @@ Rectangle
             height: parent.height*6/10
 
             model: 4//DeviceProperties.banksList
-            currentIndex: CurrentDevice.bank
+            // currentIndex: CurrentDevice.bank
 
             visibleItemCount: 1
 
@@ -85,7 +86,10 @@ Rectangle
 
             onCurrentIndexChanged:
             {
-                timer.restart();
+                if(!main.deviceUpdatingValues)
+                {
+                    timer.restart();
+                }
             }
         }
 
@@ -109,24 +113,22 @@ Rectangle
     Timer
     {
         id: timer
-        interval: 2500
+        interval: 500
         repeat: false
         onTriggered:
         {
-            if(!CurrentDevice.deviceUpdatingValues)
-            {
-                // change preset
-            }
-
+            UiCore.sgQmlRequestChangePreset(_tumbler.currentIndex, UiCore.currentDevice.preset);
         }
     }
 
     Connections{
-        target: CurrentDevice
+        target: UiCore.currentDevice
 
         function onDeviceUpdatingValues()
         {
-            _tumbler.currentIndex = CurrentDevice.bank
+            main.deviceUpdatingValues = true;
+            _tumbler.currentIndex = UiCore.currentDevice.bank;
+            main.deviceUpdatingValues = false;
         }
     }
 }

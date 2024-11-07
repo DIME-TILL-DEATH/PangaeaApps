@@ -54,20 +54,9 @@ void UiCore::setupApplication()
     appSettings->setValue("first_run", false);
 }
 
-
-void UiCore::setParameter(QString name, quint8 val)
-{
-    emit sgSetParameter(name, val);
-}
-
 void UiCore::restoreParameter(QString name)
 {
     emit sgRestoreValue(name);
-}
-
-void UiCore::readAll()
-{
-    emit sgReadAllParameters();
 }
 
 void UiCore::setImpuls(QString fullFilePath)
@@ -143,6 +132,12 @@ void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware 
     emit sgSetUIText("firmware_local_path", minimalFirmware->path());
 }
 
+void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
+{
+    m_currentDevice = newDevice;
+    emit currentDeviceChanged();
+}
+
 void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
 {
     emit sgSetImpuls(filePath, fileName);
@@ -168,11 +163,6 @@ void UiCore::setFirmware(QString fullFilePath)
 void UiCore::doOnlineFirmwareUpdate()
 {
     emit sgDoOnlineFirmwareUpdate();
-}
-
-void UiCore::escImpuls()
-{
-    emit sgEscImpuls();
 }
 
 void UiCore::exportPreset(QString fileName)
@@ -313,7 +303,7 @@ void UiCore::setModuleName(const QString &newModuleName)
     emit sgModuleNameChanged(newModuleName);
 }
 
-void UiCore::sw4Enable()
+AbstractDevice *UiCore::currentDevice() const
 {
-    emit sgSw4Enable();
+    return m_currentDevice;
 }

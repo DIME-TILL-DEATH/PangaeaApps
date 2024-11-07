@@ -1,6 +1,8 @@
 #include "moduleslistmodel.h"
 
+#include "noisegate.h"
 #include "poweramp.h"
+#include "cabsim.h"
 #include "eqparametric.h"
 
 #include <QtQuick/QQuickView>
@@ -63,6 +65,11 @@ QVariant ModulesListModel::data(const QModelIndex &index, int role) const
         case ModuleTypeEnum::CM:
         case ModuleTypeEnum::PR:
         case ModuleTypeEnum::IR:
+        {
+            CabSim* irModule = dynamic_cast<CabSim*>(module);
+            if(irModule)return QVariant::fromValue(irModule);
+            break;
+        }
         case ModuleTypeEnum::HP:
         case ModuleType::PA:
         {
@@ -77,7 +84,11 @@ QVariant ModulesListModel::data(const QModelIndex &index, int role) const
         }
         case ModuleTypeEnum::LP:
         case ModuleTypeEnum::NG:
+        {
+            NoiseGate* ngModule = dynamic_cast<NoiseGate*>(module);
+            if(ngModule)return QVariant::fromValue(ngModule);
             break;
+        }
         case ModuleTypeEnum::MASTER: break;
         }
     }

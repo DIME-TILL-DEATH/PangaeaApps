@@ -10,15 +10,23 @@
 class Parser
 {
 public:
-    Parser();
+    Parser(QString parserName = "");
 
-    void parseNewData(const QByteArray& newData);
+    QList<QByteArray> parseNewData(const QByteArray& newData);
 
-    void addCommandHandler(const QString& command, std::function<void(const QByteArray&)> callback);
+    void addCommandHandler(const QString& command, std::function<void (const QString &, const QByteArray &)> callback);
+
+    // Костыль для старого формата rns
+    void enableFullEndMode() {fullEndModeEnabled=true;};
+    void disableFullEndMode() {fullEndModeEnabled=false;};
 private:
     QByteArray m_buffer;
 
-    QMap<QString, std::function<void(const QByteArray&)> > m_callbacks;
+    QString m_parserName;
+
+    bool fullEndModeEnabled{true};
+
+    QMap<QString, std::function<void(const QString& command, const QByteArray&)> > m_callbacks;
 };
 
 #endif // PARSER_H

@@ -5,7 +5,9 @@
 #include <QString>
 #include <QByteArray>
 
-#include "device.h"
+#include "devicetypeenum.h"
+
+class AbstractDevice;
 
 #define EQ_BANDS_COUNT 5
 
@@ -148,7 +150,7 @@ typedef struct
 class Preset
 {
 public:
-    Preset();
+    Preset(AbstractDevice* owner);
 
     quint8 bankNumber() const;
     quint8 presetNumber() const;
@@ -184,7 +186,7 @@ public:
     // void setOwnerDevice(Device *newOwnerDevice);
 
 private:
-   // Device* m_ownerDevice;
+    AbstractDevice* m_ownerDevice;
 
     quint8 m_presetNumber{0};
     quint8 m_bankNumber{0};

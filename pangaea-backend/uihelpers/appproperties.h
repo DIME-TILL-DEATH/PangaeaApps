@@ -22,13 +22,11 @@ public:
     bool compareState() const {return m_compareState;};
 
 signals:
-    // void sgSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
     void sendAppAction(Core::AppAction appParameterType, QVariantList parameters);
 
     void compareStateChanged();
 
 public slots:
-    // void slSetUiDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
     void slSetAppParameter(Core::AppParameter appParameterType, QVariant content);
 
 private:

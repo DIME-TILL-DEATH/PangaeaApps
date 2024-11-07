@@ -60,14 +60,13 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
 
         case ListRoles::PresetMapIndexRole:
         {
-//            return QVariant::fromValue(QString().setNum(m_presetList->at(index.row()).getPresetFlatNumber()));
-        return QVariant::fromValue(m_presetList->at(index.row()).getPresetFlatNumber());
+            return QVariant::fromValue(m_presetList->at(index.row()).getPresetFlatNumber());
         }
 
         case ListRoles::ImpulseNameRole:
         {
             QString impulseName = m_presetList->at(index.row()).impulseName();
-            if(impulseName == "") impulseName = QObject::tr("empty");
+            // if(impulseName == "") impulseName = QObject::tr("empty");
 
             return QVariant::fromValue(impulseName);
         }

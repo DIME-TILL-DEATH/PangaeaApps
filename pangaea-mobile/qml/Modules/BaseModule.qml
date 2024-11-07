@@ -199,7 +199,7 @@ Rectangle {
 
     Connections
     {
-        target: CurrentDevice
+        target: UiCore.currentDevice
 
         function onDeviceUpdatingValues()
         {

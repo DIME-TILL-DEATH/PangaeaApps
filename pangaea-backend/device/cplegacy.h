@@ -6,15 +6,15 @@
 #include "preset.h"
 #include "presetmanager.h"
 
-#include "poweramp.h"
 #include "presetvolume.h"
+#include "noisegate.h"
+#include "poweramp.h"
+#include "cabsim.h"
+#include "eqparametric.h"
 
 class CPLegacy : public AbstractDevice
 {
     Q_OBJECT
-
-    Q_PROPERTY(quint8 bank READ bank NOTIFY bankPresetChanged FINAL)
-    Q_PROPERTY(quint8 preset READ preset NOTIFY bankPresetChanged FINAL)
 
     Q_PROPERTY(quint8 outputMode READ outputMode WRITE setOutputMode NOTIFY outputModeChanged FINAL)
 
@@ -23,48 +23,47 @@ public:
     explicit CPLegacy(Core *parent);
 
 public:
-    void initDevice() override;
+    void initDevice(DeviceType deviceType) override;
 
-    Q_INVOKABLE void saveChanges();
-    Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false);
-
-    quint8 bank() const {return m_bank;};
-    quint8 preset() const {return m_preset;};
+    Q_INVOKABLE void saveChanges() override;
+    Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) override;
+    Q_INVOKABLE void comparePreset();
+    Q_INVOKABLE void escImpulse(); // TODO где используется?
 
     quint8 outputMode() const {return m_outputMode;};
     void setOutputMode(quint8 newOutputMode);
 
     PresetVolume* getMV();
-public slots:
-    void parseAnswers(QByteArray &baAnswer) override;
 
 signals:
-    void bankPresetChanged();
     void outputModeChanged();
 
     void MVChanged();
-
 private:
-    quint8 m_bank;
-    quint8 m_preset;
     quint8 m_outputMode;
 
-    bool isPresetEdited{false};
-    Preset currentPreset;
-    Preset currentSavedPreset;
-    Preset copiedPreset;
-    PresetManager presetManager;
-
-    // avaliable moduls
-    PowerAmp* PA;
+    // avaliable modules
     PresetVolume* MV;
+    NoiseGate* NG;
+    PowerAmp* PA;
+    CabSim* IR;
+    EqParametric* EQ;
 
-    void pushReadPresetCommands();
     void sendCommandToCP(const QByteArray &command);
 
-    void bankPresetCommHandler(const QByteArray& arguments);
-    void outputModeCommHandler(const QByteArray& arguments);
-    void getStateCommHandler(const QByteArray& arguments);
+    void pushReadPresetCommands();
+    void setPresetData(const Preset &preset);
+
+    void getIrNameCommHandler(const QString &command, const QByteArray &arguments);
+    void getIrListCommHandler(const QString &command, const QByteArray &arguments);
+
+    void bankPresetCommHandler(const QString &command, const QByteArray &arguments);
+    void outputModeCommHandler(const QString &command, const QByteArray &arguments);
+    void getStateCommHandler(const QString &command, const QByteArray &arguments);
+
+    void ackEscCommHandler(const QString &command, const QByteArray &arguments);
+    void ackSaveChanges(const QString &command, const QByteArray &arguments);
+    void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments);
 };
 
 #endif // CPLEGACY_H

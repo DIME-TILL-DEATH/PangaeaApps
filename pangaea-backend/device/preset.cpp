@@ -3,10 +3,12 @@
 
 #include "preset.h"
 
-Preset::Preset()
+#include "abstractdevice.h"
+
+Preset::Preset(AbstractDevice *owner)
 {
-    // m_ownerDevice = owner;
-    m_rawData.append(86, '0');
+    m_ownerDevice = owner;
+    m_rawData.append(sizeof(preset_data_legacy_t) * 2, '0');
 }
 
 quint8 Preset::presetNumber() const
@@ -171,15 +173,15 @@ quint8 Preset::getPresetFlatNumber() const
 {
     quint16 maxBank;
 
-    // if(m_ownerDevice == nullptr)
-    // {
-    //     qWarning() << __FUNCTION__ << "Owner device doesn't set. Using default maxBank=16";
-    //     maxBank = 4;
-    // }
-    // else
-    // {
-    //     maxBank = m_ownerDevice->maxBankCount();
-    // }
+    if(m_ownerDevice == nullptr)
+    {
+        qWarning() << __FUNCTION__ << "Owner device doesn't set. Using default maxBank=16";
+        maxBank = 4;
+    }
+    else
+    {
+        maxBank = m_ownerDevice->maxBankCount();
+    }
     return m_bankNumber*maxBank + m_presetNumber;
 }
 

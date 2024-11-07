@@ -18,7 +18,7 @@ public slots:
     void writeToDevice(const QByteArray& data);
 
 protected:
-    Parser m_parser;
+    Parser m_parser{"Mock device recieve"};
 };
 
 #endif // ABSTRACTMOCKDEVICE_H
