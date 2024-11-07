@@ -20,6 +20,7 @@ public:
         Exporting,
         SavingIr,
         UploadingIr,
+        DownloadingIr,
         Changing
     };
     Q_ENUM(Value)

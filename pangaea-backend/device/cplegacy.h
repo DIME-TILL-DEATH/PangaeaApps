@@ -38,6 +38,8 @@ public:
     Q_INVOKABLE void importPreset(QString filePath, QString fileName) override;
     Q_INVOKABLE void exportPreset(QString filePath, QString fileName) override;
 
+    Q_INVOKABLE void restoreValue(QString name) override;
+
     void setImpulse(QString filePath) override;
     Q_INVOKABLE void escImpulse(); // TODO где используется? В мобильном не нашёл вызовов из QML
 

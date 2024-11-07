@@ -24,8 +24,6 @@ Slider
     to: ctrlValInstance.maxDisplayValue
     value: ctrlValInstance.displayValue
 
-    property bool isModified: false
-
     property bool moduleOn: true
 
     property bool inverse: false
@@ -117,7 +115,7 @@ Slider
     {
         id: modulName
         anchors.fill: parent
-        text: isModified ? ("  "+ name +"*") : ("  " + name)
+        text: ctrlValInstance.isModified ? ("  "+ name +"*") : ("  " + name)
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         leftPadding: 4

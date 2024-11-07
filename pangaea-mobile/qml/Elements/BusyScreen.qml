@@ -126,16 +126,26 @@ Item
             if(nameParam === ("wait"))
             {
                 rWait.visible = inValue;
-                txt.text = qsTr("Sending commands to device");
+
+                switch(UiCore.currentDevice.presetManager.currentState)
+                {
+                    case PresetState.UploadingIr:
+                    {
+                        txt.text = qsTr("Uploading file data to device");
+                        break;
+                    }
+
+                    default: txt.text = qsTr("Sending commands to device");
+                }
                 progressBar.visible = true
             }
 
-            if(nameParam === ("ir_downloading"))
-            {
-                rWait.visible = inValue;
-                txt.text = qsTr("Downloading impulse data from device");
-                progressBar.visible = true
-            }
+            // if(nameParam === ("ir_downloading"))
+            // {
+            //     rWait.visible = inValue;
+            //     txt.text = qsTr("Downloading impulse data from device");
+            //     progressBar.visible = true
+            // }
         }
     }
 
@@ -146,17 +156,25 @@ Item
         {
             switch(UiCore.currentDevice.presetManager.currentState)
             {
-                case PresetState.Changing:
-                {
-                    rWait.visible = inValue;
-                    txt.text = qsTr("Sending commands to device");
-                    progressBar.visible = true
-                    break;
-                }
+                // case PresetState.Changing:
+                // {
+                //     rWait.visible = inValue;
+                //     txt.text = qsTr("Sending commands to device");
+                //     progressBar.visible = true
+                //     break;
+                // }
                 case PresetState.UploadingIr:
                 {
                     rWait.visible = true;
                     txt.text = qsTr("Uploading file data to device");
+                    progressBar.visible = true
+                    break;
+                }
+
+                case PresetState.DownloadingIr:
+                {
+                    rWait.visible = inValue;
+                    txt.text = qsTr("Downloading impulse data from device");
                     progressBar.visible = true
                     break;
                 }
@@ -169,11 +187,11 @@ Item
                     break;
                 }
 
-                case PresetState.Idle:
-                {
-                    rWait.visible = false;
-                    break;
-                }
+                // case PresetState.Idle:
+                // {
+                //     rWait.visible = false;
+                //     break;
+                // }
             }
         }
     }

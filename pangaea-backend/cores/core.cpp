@@ -548,11 +548,6 @@ void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameter
 {
     switch(appParameterType)
     {
-    // case SAVE_CHANGES: saveChanges(); break;
-    // case CHANGE_PRESET: changePreset(parameters.at(0).toInt(),parameters.at(1).toInt()); break;
-    // case COPY_PRESET: copyPreset(); break;
-    // case PASTE_PRESET: pastePreset(); break;
-    // case COMPARE_PRESET: comparePreset(); break;
 
     case FORMAT_FLASH:
     {
@@ -578,19 +573,6 @@ void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameter
     }
 }
 
-// void Core::restoreValue(QString name)
-// {
-//     Q_UNUSED(name)
-//     // TODO: добавить в Preset  объект ?DeviceControls?. По имени находить позицию параметра в rawData и возвращать, устанавливая этот параметр
-//     // и отдельно обрабатывать случай банка и пресета
-//     // пока костыль для отмены сохранения пресета!!!!!
-
-
-//     if(name == "bank") emit sgRecieveDeviceParameter(DeviceParameter::Type::BANK,  currentPreset.bankNumber());
-
-//     if(name == "preset") emit sgRecieveDeviceParameter(DeviceParameter::Type::PRESET, currentPreset.presetNumber());
-// }
-
 void Core::processCommands()
 {
     if(commandsSended.count()>0) return;
@@ -615,7 +597,6 @@ void Core::processCommands()
 
         if((commandToSend.length() > chunckSize) && (!fwUpdate))
         {
-            // emit sgSetUIParameter("data_uploading", true);
             for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
             {
                 sendCommand(commandToSend.mid(sendPosition, chunckSize));

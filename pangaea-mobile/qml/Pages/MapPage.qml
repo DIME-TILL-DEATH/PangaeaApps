@@ -213,15 +213,13 @@ Item
         }
         onDiscarded:
         {
-            // UiCore.currentDevice.restoreParameter("impulse")
-            // UiCore.currentDevice.changePreset(newBank, newPreset, true);
-            // visible = false;
+            UiCore.currentDevice.changePreset(newBank, newPreset, true);
+            visible = false;
         }
         onRejected:
         {
-            // // TODO: change to DeviceParameter
-            // UiCore.currentDevice.restoreParameter("preset")
-            // UiCore.currentDevice.restoreParameter("bank")
+            // // TODO: more accurate way
+            UiCore.currentDevice.restoreValue("bank-preset")
         }
     }
 
@@ -241,6 +239,8 @@ Item
             {
                 if(UiCore.currentDevice.deviceParamsModified)
                 {
+                    msgPresetChangeSave.newBank = bank;
+                    msgPresetChangeSave.newPreset = preset;
                     msgPresetChangeSave.open();
                 }
                 else

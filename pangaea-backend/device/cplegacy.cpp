@@ -205,6 +205,18 @@ void CPLegacy::exportPreset(QString filePath, QString fileName)
 
 }
 
+void CPLegacy::restoreValue(QString name)
+{
+    //  TODO пока костыль для отмены сохранения пресета!!!!!
+    if(name == "bank-preset")
+    {
+        m_bank = currentPreset.bankNumber();
+        m_preset = currentPreset.presetNumber();
+        emit bankPresetChanged();
+        //emit deviceUpdatingValues(); // так стираются марки модификации
+    }
+}
+
 void CPLegacy::setImpulse(QString filePath)
 {
     QString fileName;
@@ -277,7 +289,7 @@ void CPLegacy::uploadImpulseData(const QByteArray &impulseData, bool isPreview, 
         else
         {
             chr = irData.at(i);
-            if(chr<=15)
+            if(chr <= 0xF) //15
                 sTmp = QString("0%1").arg(chr, 1, 16);
             else
                 sTmp = QString("%1").arg (chr, 2, 16);
