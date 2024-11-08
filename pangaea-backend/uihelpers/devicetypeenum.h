@@ -25,5 +25,6 @@ public:
 };
 
 typedef DeviceTypeEnum::Value DeviceType;
+Q_DECLARE_METATYPE(DeviceType)
 
 #endif // DEVICETYPEENUM_H

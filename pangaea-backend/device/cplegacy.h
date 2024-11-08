@@ -3,10 +3,11 @@
 
 #include "abstractdevice.h"
 
+#include <QSettings>
+
 #include "irworker.h"
 
 #include "preset.h"
-#include "presetmanager.h"
 
 #include "presetvolume.h"
 #include "noisegate.h"
@@ -69,6 +70,8 @@ private:
     CabSim* IR;
     EqParametric* EQ;
 
+    void setDeviceType(DeviceType newDeviceType);
+
     void sendCommandToCP(const QByteArray &command);
 
     void pushReadPresetCommands();
@@ -76,9 +79,9 @@ private:
     void setPresetData(const Preset &preset);
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
 
+    void amtVerCommHandler(const QString &command, const QByteArray &arguments);
     void getIrNameCommHandler(const QString &command, const QByteArray &arguments);
     void getIrListCommHandler(const QString &command, const QByteArray &arguments);
-
 
     void getBankPresetCommHandler(const QString &command, const QByteArray &arguments);
     void getOutputModeCommHandler(const QString &command, const QByteArray &arguments);
@@ -99,6 +102,8 @@ private:
     void endCCCommHandler(const QList<QByteArray> &arguments);
 
     void errorCCCommHandler(const QString &command, const QByteArray &arguments);
+
+    QSettings* appSettings;
 };
 
 #endif // CPLEGACY_H

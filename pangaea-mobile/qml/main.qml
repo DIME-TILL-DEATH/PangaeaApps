@@ -304,6 +304,17 @@ ApplicationWindow
                     _msgCommon.open();
                     break;
                 }
+
+                case DeviceErrorType.FimrmwareVersionInsufficient:
+                {
+                    _msgVersionError.text = qsTr("Firmware version of your device is ") + params[0]
+                            + qsTr("\nMinimum required version is ")
+                            + params[1]
+                            + qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
+
+                    _msgVersionError.visible = true;
+                    break;
+                }
             }
         }
 

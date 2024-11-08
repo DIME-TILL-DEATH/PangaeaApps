@@ -13,6 +13,8 @@ CPLegacy::CPLegacy(Core *parent)
     m_deviceClass = DeviceClass::CP_LEGACY;
 
     using namespace std::placeholders;
+    m_parser.addCommandHandler("amtver", std::bind(&CPLegacy::amtVerCommHandler, this, _1, _2));
+
     m_parser.addCommandHandler("rn", std::bind(&CPLegacy::getIrNameCommHandler, this, _1, _2));
     m_parser.addCommandHandler("rns", std::bind(&CPLegacy::getIrListCommHandler, this, _1, _2));
 
@@ -25,11 +27,20 @@ CPLegacy::CPLegacy(Core *parent)
     m_parser.addCommandHandler("esc", std::bind(&CPLegacy::ackEscCommHandler, this, _1, _2));
 
     m_parser.addCommandHandler("SYNC ERROR", std::bind(&CPLegacy::errorCCCommHandler, this, _1, _2));
+
+#ifdef Q_OS_ANDROID
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.conf", QSettings::NativeFormat);
+#else
+    appSettings = new QSettings();
+#endif
 }
 
 void CPLegacy::initDevice(DeviceType deviceType)
 {
     m_deviceType = deviceType;
+
+    setDeviceType(m_deviceType);
 
     MV = new PresetVolume(this);
 
@@ -46,7 +57,56 @@ void CPLegacy::initDevice(DeviceType deviceType)
     emit modulesListModelChanged();
     emit presetListModelChanged();
 
-    emit sgDeviceInstanciated(DeviceType::LEGACY_DEVICES);  
+    emit sgDeviceInstanciated();
+}
+
+void CPLegacy::setDeviceType(DeviceType newDeviceType)
+{
+    m_deviceType = newDeviceType;
+
+    if(m_minimalFirmware != nullptr)
+    {
+        delete(m_minimalFirmware);
+        m_minimalFirmware = nullptr;
+    }
+
+    switch(m_deviceType)
+    {
+    case DeviceType::legacyCP16:
+        m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
+        m_maxBankCount = 4;
+        m_maxPresetCount = 4;
+        m_firmwareName = "CP-16M Blue";
+        break;
+    case DeviceType::legacyCP16PA:
+        m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
+        m_maxBankCount = 4;
+        m_maxPresetCount = 4;
+        m_firmwareName = "CP-16M-PA Green";
+        break;
+    case DeviceType::legacyCP100:
+        m_minimalFirmware = new Firmware("2.08.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
+        m_maxBankCount = 10;
+        m_maxPresetCount = 10;
+        m_firmwareName = "CP-100";
+        break;
+    case DeviceType::legacyCP100PA:
+        m_minimalFirmware = new Firmware("6.08.04", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
+        m_maxBankCount = 10;
+        m_maxPresetCount = 10;
+        m_firmwareName = "CP-100PA";
+        break;
+
+    // case DeviceType::LA3:
+    //     m_minimalFirmware = new Firmware("1.05.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
+    //     m_maxBankCount = 0;
+    //     m_maxPresetCount = 16;
+    //     m_firmwareName = "LA3";
+    //     break;
+    default:
+        qDebug() << __FUNCTION__ << "Unknown device type";
+        break;
+    }
 }
 
 void CPLegacy::readFullState()
@@ -377,6 +437,8 @@ void CPLegacy::uploadImpulseData(const QByteArray &impulseData, bool isPreview, 
     IR->setEnabled(true); // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
 }
 
+
+
 void CPLegacy::escImpulse()
 {
     emit sgPushCommandToQueue("lcc");
@@ -398,6 +460,37 @@ void CPLegacy::setOutputMode(quint8 newOutputMode)
 //=======================================================================================
 //                  ***************Comm handlers************
 //=======================================================================================
+void CPLegacy::amtVerCommHandler(const QString &command, const QByteArray &arguments)
+{
+    QString firmwareVersion = arguments;
+
+    m_firmwareName += " v." + firmwareVersion;
+    emit firmwareNameChanged();
+
+    qInfo() << __FUNCTION__ << firmwareVersion;
+
+    m_actualFirmware = new Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
+
+    qInfo() << "Firmware name: " << m_firmwareName
+            << ", version control, minimal: " << m_minimalFirmware->firmwareVersion()
+            << " actual: " << m_actualFirmware->firmwareVersion();
+
+    if(*m_actualFirmware > *m_minimalFirmware)
+    {
+        bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
+
+        if(isCheckUpdatesEnabled)
+        {
+            // emit sgRequestNewestFirmware(deviceFirmware);
+        }
+    }
+    else
+    {
+        qWarning() << "firmware insufficient!";
+        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware->firmwareVersion(), m_minimalFirmware->firmwareVersion()});
+    }
+}
+
 void CPLegacy::getBankPresetCommHandler(const QString &command, const QByteArray &arguments)
 {
     m_bank = arguments.left(2).toUInt();

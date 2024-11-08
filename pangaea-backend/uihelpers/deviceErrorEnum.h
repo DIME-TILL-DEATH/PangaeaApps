@@ -15,11 +15,13 @@ public:
         UndefinedCommand,
         IrFormatNotSupported,
         IrSaveError,
-        PresetImportUnsuccesfull
+        PresetImportUnsuccesfull,
+        FimrmwareVersionInsufficient
     };
     Q_ENUM(Value)
 };
 
 typedef DeviceErrorEnum::Value DeviceErrorType;
+Q_DECLARE_METATYPE(DeviceErrorType)
 
 #endif // DEVICEERRORENUM_H

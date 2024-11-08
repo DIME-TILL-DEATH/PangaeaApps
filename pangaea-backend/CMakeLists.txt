@@ -7,12 +7,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_definitions(-DCP16_FIRMWARE_VERSION="1.04.03")
-add_definitions(-DCP16PA_FIRMWARE_VERSION="1.04.03")
-add_definitions(-DLA3_FIRMWARE_VERSION="1.05.03")
-add_definitions(-DCP100_FIRMWARE_VERSION="2.08.02")
-add_definitions(-DCP100PA_FIRMWARE_VERSION="6.08.04")
-
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 qt_add_library(pangaea-backend STATIC
@@ -28,7 +22,7 @@ qt_add_library(pangaea-backend STATIC
 
     device/answerworker.cpp device/answerworker.h
     device/defines.h
-    device/device.cpp device/device.h
+
     device/deviceanswer.cpp device/deviceanswer.h
     device/firmware.cpp device/firmware.h
     device/preset.cpp device/preset.h

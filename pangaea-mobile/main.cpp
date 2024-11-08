@@ -75,8 +75,6 @@ int main(int argc, char *argv[])
     NetCore* netCore = new NetCore;
     InterfaceCore* interfaceManager = new InterfaceCore;
 
-    // PresetListModel presetListModel;
-
     ThreadController threadController(QThread::currentThread());
     core->moveToThread(threadController.backendThread());
     netCore->moveToThread(threadController.backendThread());
@@ -93,8 +91,6 @@ int main(int argc, char *argv[])
     //----------------------------------------------------------------
     UiCore uiCore;
     UiInterfaceManager uiInterfaceManager;
-
-
 
     QQmlApplicationEngine engine;
     engine.addImportPath(":/qml");
@@ -124,15 +120,13 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiCore::sgDisconnesctFromDevice, core, &Core::disconnectFromDevice);
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
-
     QObject::connect(core, &Core::sgCurrentDeviceChanged, &uiCore, &UiCore::slCurrentDeviceChanged);
 
     QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiCore::sgSetUIText);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiCore::sgSetProgress);
+
     QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
-
     QObject::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
-
     QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
     QObject::connect(&uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
     QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);

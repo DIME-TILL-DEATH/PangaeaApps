@@ -27,5 +27,6 @@ public:
 };
 
 typedef ModuleTypeEnum::Value ModuleType;
+Q_DECLARE_METATYPE(ModuleType)
 
 #endif // MODULETYPEENUM_H

@@ -11,9 +11,7 @@
 
 #include "answerworker.h"
 #include "preset.h"
-#include "presetmanager.h"
 #include "devicedescription.h"
-#include "deviceparameter.h"
 
 #include "abstractdevice.h"
 
@@ -23,26 +21,6 @@ class Core : public QObject
 public:
     explicit Core(QObject *parent = nullptr);
 
-    enum AppParameter
-    {
-        PRESET_MODIFIED,
-        COMPARE_STATE,
-        FW_UPDATE_COMPLITED
-    };
-    Q_ENUM(AppParameter)
-
-    enum AppAction
-    {
-        CHANGE_PRESET,
-        COPY_PRESET,
-        PASTE_PRESET,
-        COMPARE_PRESET,
-        SAVE_CHANGES,
-        FORMAT_FLASH,
-        SET_LA3_MAPPINGS
-        // CALL_PRESET_LIST
-    };
-    Q_ENUM(AppAction)
 
     void setFirmware (QString fullFilePath);
     void uploadFirmware(const QByteArray &firmware);
@@ -64,10 +42,10 @@ signals:
     void sgSetProgress(float val, QString extText);
 
     void sgReadyTodisconnect();
-    void sgImmediatelyDisconnect(); // Принудительное после обновления по USB
+    void sgImmediatelyDisconnect(); // Принудительное после обновления
 
 public slots:
-    void slDeviceInstanciated(DeviceType deviceType);
+    void slDeviceInstanciated();
 
     void disconnectFromDevice();
     void slInterfaceConnected(DeviceDescription interfaceDescription);
@@ -75,27 +53,19 @@ public slots:
     void parseInputData(QByteArray data);
     void processCommands();
 
-    void slRecieveAppAction(AppAction appParameterType, QVariantList parameters);
-
 private slots:
     void recieveTimeout();
 
 private:
     AnswerWorker commandWorker;
 
-
     const uint32_t fwUploadBlockSize = 100;
     QByteArray m_rawFirmwareData;
 
-
-    Device controlledDevice;
     AbstractDevice* currentDevice{nullptr};
-
-    Firmware* deviceFirmware{nullptr};
 
     bool fwUpdate{false};
     bool isFormatting{false};
-
 
     QSettings* appSettings;
     

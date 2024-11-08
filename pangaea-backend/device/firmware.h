@@ -5,7 +5,7 @@
 #include <qstring.h>
 #include <qbytearray.h>
 
-#include "device.h"
+#include "devicetypeenum.h"
 
 struct strVersion{
     quint8 global;

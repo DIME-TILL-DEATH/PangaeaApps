@@ -1,4 +1,3 @@
-#include <QSettings>
 #include <QThread>
 #include <QSerialPortInfo>
 #include <QDir>
@@ -12,21 +11,11 @@
 
 #include "cplegacy.h"
 
-
 Core::Core(QObject *parent) : QObject(parent)
 {
-
-#ifdef Q_OS_ANDROID
-    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                       + "/settings.conf", QSettings::NativeFormat);
-#else
-    appSettings = new QSettings();
-#endif
-
     timeoutTimer = new QTimer(this);
     connect(timeoutTimer, &QTimer::timeout, this, &Core::recieveTimeout);
 }
-
 
 void Core::disconnectFromDevice()
 {
@@ -86,9 +75,7 @@ void Core::parseInputData(QByteArray ba)
                 if(parseResult.size()==1)
                 {
                     DeviceType deviceType = static_cast<DeviceType>(parseResult.at(0).toUInt());
-                    controlledDevice.setDeviceType(deviceType);
-
-                    if(controlledDevice.deviceType() < DeviceType::LEGACY_DEVICES)
+                    if(deviceType < DeviceType::LEGACY_DEVICES)
                     {
                         currentDevice = new CPLegacy(this);
 
@@ -103,42 +90,6 @@ void Core::parseInputData(QByteArray ba)
                 break;
             }
 
-            case AnswerType::getFWVersion:
-            {
-                if(parseResult.size()==1)
-                {
-                    QString firmwareVersion = QString::fromStdString(parseResult.at(0).toStdString());
-                    emit sgSetUIText ("devVersion", firmwareVersion);
-                    qInfo() << recievedCommand.description() << firmwareVersion;
-
-                    if(deviceFirmware != nullptr)
-                        delete deviceFirmware;
-
-                    Firmware *deviceFirmware = new Firmware(firmwareVersion, controlledDevice.deviceType(),
-                                                            FirmwareType::DeviceInternal, "device:/internal");
-
-                    controlledDevice.setActualFirmware(deviceFirmware);
-
-                    qInfo() << "version control, minimal: " << controlledDevice.minimalFirmware()->firmwareVersion()
-                               << " actual: " << controlledDevice.actualFirmware()->firmwareVersion();
-
-                    if(controlledDevice.isFimwareSufficient())
-                    {
-                        bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
-
-                        if(isCheckUpdatesEnabled)
-                        {
-                            emit sgRequestNewestFirmware(deviceFirmware);
-                        }
-                    }
-                    else
-                    {
-                        qInfo() << "firmware insufficient!";
-                        emit sgFirmwareVersionInsufficient(controlledDevice.minimalFirmware(), controlledDevice.actualFirmware());
-                    }
-                }
-                break;
-            }
 
             case AnswerType::la3CleanPreset:
             {
@@ -263,7 +214,7 @@ void Core::parseInputData(QByteArray ba)
     processCommands();
 }
 
-void Core::slDeviceInstanciated(DeviceType deviceType)
+void Core::slDeviceInstanciated()
 {
     emit sgCurrentDeviceChanged(currentDevice);
     currentDevice->moveToThread(QGuiApplication::instance()->thread());
@@ -273,13 +224,14 @@ void Core::slDeviceInstanciated(DeviceType deviceType)
 
     currentDevice->readFullState();
 
-    if(controlledDevice.deviceType() == DeviceType::LA3)
-    {
-        // request LA3 maps
-        pushCommandToQueue("sm0");
-        pushCommandToQueue("sm1");
-        pushCommandToQueue("sw1");
-    }
+    qDebug() << "Device thread: " << currentDevice->thread();
+    // if(controlledDevice.deviceType() == DeviceType::LA3)
+    // {
+    //     // request LA3 maps
+    //     pushCommandToQueue("sm0");
+    //     pushCommandToQueue("sm1");
+    //     pushCommandToQueue("sw1");
+    // }
 }
 
 void Core::pushCommandToQueue(QByteArray command, bool finalize)
@@ -359,33 +311,33 @@ void Core::uploadFirmware(const QByteArray& firmware)
 }
 
 
-void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameters)
-{
-    switch(appParameterType)
-    {
+// void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameters)
+// {
+//     switch(appParameterType)
+//     {
 
-    case FORMAT_FLASH:
-    {
-        emit sgSetUIParameter("wait", true);
+//     case FORMAT_FLASH:
+//     {
+//         emit sgSetUIParameter("wait", true);
 
-        isFormatting = true;
-        timeoutTimer->setInterval(10000);
+//         isFormatting = true;
+//         timeoutTimer->setInterval(10000);
 
-        emit sgWriteToInterface(QString("fsf\r\n").toUtf8());
-        break;
-    }
+//         emit sgWriteToInterface(QString("fsf\r\n").toUtf8());
+//         break;
+//     }
 
-    case SET_LA3_MAPPINGS:
-    {
-        quint8 cleanPreset = parameters.at(0).toInt();
-        quint8 drivePreset = parameters.at(1).toInt();
-        pushCommandToQueue(QString("sm0 %2").arg(cleanPreset).toUtf8());
-        pushCommandToQueue(QString("sm1 %2").arg(drivePreset).toUtf8());
-        processCommands();
-        break;
-    }
-    }
-}
+//     case SET_LA3_MAPPINGS:
+//     {
+//         quint8 cleanPreset = parameters.at(0).toInt();
+//         quint8 drivePreset = parameters.at(1).toInt();
+//         pushCommandToQueue(QString("sm0 %2").arg(cleanPreset).toUtf8());
+//         pushCommandToQueue(QString("sm1 %2").arg(drivePreset).toUtf8());
+//         processCommands();
+//         break;
+//     }
+//     }
+// }
 
 void Core::processCommands()
 {
@@ -398,16 +350,16 @@ void Core::processCommands()
         int chunckSize;
         int sleepTime;
 
-        if(controlledDevice.deviceType() == DeviceType::legacyCP100 || controlledDevice.deviceType() == DeviceType::legacyCP100PA) // TODO chunkSize зависит от интерфейса
-        {
-            chunckSize=512;
-            sleepTime=50;
-        }
-        else
-        {
+        // if(controlledDevice.deviceType() == DeviceType::legacyCP100 || controlledDevice.deviceType() == DeviceType::legacyCP100PA) // TODO chunkSize зависит от интерфейса
+        // {
+        //     chunckSize=512;
+        //     sleepTime=50;
+        // }
+        // else
+        // {
             chunckSize=120;
             sleepTime=150;
-        }
+        // }
 
         if((commandToSend.length() > chunckSize) && (!fwUpdate))
         {
@@ -464,7 +416,6 @@ void Core::recieveTimeout()
         qInfo("!!!!!!!!!!!!!!!!! recieve timeout, attempt=%d !!!!!!!!!!!!!!!!!", sendCount);
 
         sendCommand(commandWithoutAnswer);
-        // timeoutTimer->setInterval(1000);
 
         if(sendCount>3)
         {

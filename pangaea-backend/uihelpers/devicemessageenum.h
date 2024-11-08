@@ -15,7 +15,7 @@ public:
         PresetExportFinished,
         PresetNotSaved,
         NewFirmwareAvaliable,
-        FimrmwareVersionError,
+        FimrmwareVersionInnsufficient
     };
     Q_ENUM(Value)
 };

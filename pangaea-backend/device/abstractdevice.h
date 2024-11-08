@@ -23,6 +23,8 @@ class AbstractDevice : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)
+
     Q_PROPERTY(quint8 bank READ bank NOTIFY bankPresetChanged FINAL)
     Q_PROPERTY(quint8 preset READ preset NOTIFY bankPresetChanged FINAL)
     Q_PROPERTY(quint8 maxBankCount READ maxBankCount CONSTANT)
@@ -46,6 +48,7 @@ public:
     ~AbstractDevice();
 
     DeviceClass deviceClass() {return m_deviceClass;}
+    QString firmwareName() {return m_firmwareName;};
 
     virtual void initDevice(DeviceType deviceType);
     virtual void readFullState() {};
@@ -84,7 +87,8 @@ public slots:
     void userModifiedModules();
 
 signals:
-    void sgDeviceInstanciated(DeviceType);
+    void sgDeviceInstanciated();
+
     void modulesListModelChanged();
     void presetListModelChanged();
 
@@ -102,10 +106,9 @@ signals:
     void sgDisableTimeoutTimer();
 
     void deviceUpdatingValues();
-    void deviceParamsModifiedChanged();
-
+    void firmwareNameChanged();
     void bankPresetChanged();
-
+    void deviceParamsModifiedChanged();
 
 protected:
     Parser m_parser;

@@ -22,6 +22,7 @@ public:
     };
     Q_ENUM(Value)
 };
-
 typedef PresetStateEnum::Value PresetState;
+Q_DECLARE_METATYPE(PresetState)
+
 #endif // PRESETSTATEENUM_H

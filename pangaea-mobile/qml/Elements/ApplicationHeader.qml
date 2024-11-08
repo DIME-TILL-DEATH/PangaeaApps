@@ -11,13 +11,8 @@ ToolBar
 {
     id: _root
 
-    property string firmwareVersion: ""
-
-    property string versionStr: Qt.application.version == "" ? "" : "Application ver: " + Qt.application.version
-    property string firmwareVersionStr: firmwareVersion == "" ? "":" Firmware ver." + firmwareVersion
-
-    property string  poVersion: (connected ? "Pangaea " +  (DeviceProperties.firmwareName + firmwareVersionStr + "/") : "")
-                                + versionStr
+    property string appVersionStr: Qt.application.version == "" ? "" : "Application ver: " + Qt.application.version
+    property string  poVersion: (connected ? UiCore.currentDevice.firmwareName : "") + "/" + appVersionStr
 
     height:  Screen.desktopAvailableHeight / 75
 
@@ -50,20 +45,6 @@ ToolBar
                     font.pixelSize: _root.height *0.7
                     color: Style.colorText
                 }
-            }
-        }
-    }
-
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUIText(nameParam, value)
-        {
-            if(nameParam === ("devVersion"))
-            {
-                firmwareVersion = value;
             }
         }
     }

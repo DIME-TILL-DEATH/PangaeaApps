@@ -30,6 +30,9 @@ AbstractDevice::AbstractDevice(Core *owner)
 AbstractDevice::~AbstractDevice()
 {
     disconnect(this);
+
+    if(m_actualFirmware) delete(m_actualFirmware);
+    if(m_minimalFirmware) delete(m_minimalFirmware);
 }
 
 void AbstractDevice::initDevice(DeviceType deviceType)
