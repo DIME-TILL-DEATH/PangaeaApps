@@ -7,6 +7,7 @@
 #include "abstractmodule.h"
 #include "devicetypeenum.h"
 #include "deviceerrorenum.h"
+#include "devicemessageenum.h"
 #include "parser.h"
 
 #include "firmware.h"
@@ -87,7 +88,8 @@ signals:
     void modulesListModelChanged();
     void presetListModelChanged();
 
-    void sgDeviceError(DeviceError errorType, QString description = "", QVariantList params = {});
+    void sgDeviceError(DeviceErrorType errorType, QString description = "", QVariantList params = {});
+    void sgDeviceMessage(DeviceMessageType msgType, QString description = "", QVariantList params = {});
 
     void sgWriteToInterface(QByteArray data, bool logCommand = true);
     void sgPushCommandToQueue(QByteArray command, bool finalize = true);

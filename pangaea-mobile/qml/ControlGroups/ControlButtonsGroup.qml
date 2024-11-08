@@ -21,7 +21,6 @@ GridLayout
 
     property bool copyFirst: false
     property bool presetEdited: UiCore.currentDevice.deviceParamsModified
-    property bool compareState: AppProperties.compareState
 
     signal openPresetsList()
 
@@ -91,7 +90,7 @@ GridLayout
 
             //: Button text. Export preset
             textButton: qsTr("Export")
-            enabled: !AppProperties.compareState
+            enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
 
             onMbPressed: {
                 if(_root.presetEdited)
@@ -111,7 +110,7 @@ GridLayout
             // Почему-то именно кнопка save при смене своего состояния
             // через свойство "enabled" отключала обновление SwipeView до любого следующего действия
             // поэтому добавлено своё свойство "enabled" отключающее только нужные свойства
-            enabledKostyl: _root.presetEdited & !AppProperties.compareState
+            enabledKostyl: _root.presetEdited & (UiCore.currentDevice.presetManager.currentState !== PresetState.Compare)
 
             //: Button text. Save preset
             textButton: qsTr("Save")

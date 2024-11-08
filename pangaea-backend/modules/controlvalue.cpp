@@ -20,6 +20,11 @@ ControlValue::ControlValue(AbstractModule *owner, QString commandName,
     frameTimer.start(50);
 }
 
+ControlValue::~ControlValue()
+{
+    frameTimer.stop();
+}
+
 void ControlValue::setDisplayValue(double newDisplayValue)
 {
     if (qFuzzyCompare(m_displayValue, newDisplayValue))

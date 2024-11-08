@@ -271,20 +271,6 @@ ApplicationWindow
                 _msgCommon.text = qsTr("You must save preset before export");
                 _msgCommon.open();
             }
-
-            if(nameParam === "preset_import_unsuccecfull")
-            {
-                _msgCommon.headerText = qsTr("Warning");
-                _msgCommon.text = qsTr("Preset import error!");
-                _msgCommon.open();
-            }
-
-            if(nameParam === "preset_exported")
-            {
-                _msgCommon.headerText = qsTr("Preset export finished");
-                _msgCommon.text = qsTr("Preset exported to:\n" + value);
-                _msgCommon.open();
-            }
         }
     }
 
@@ -295,7 +281,7 @@ ApplicationWindow
         {
             switch(type)
             {
-                case DeviceError.UndefinedCommand:
+                case DeviceErrorType.UndefinedCommand:
                 {
                     _msgCommon.headerText = qsTr("Device parse error");
                     _msgCommon.text = qsTr("Device can't recognize command: \n" + params + "\nTry to update firmware");
@@ -303,11 +289,34 @@ ApplicationWindow
                     break;
                 }
 
-                case DeviceError.IrSaveError:
+                case DeviceErrorType.IrSaveError:
                 {
                     _msgCommon.headerText = qsTr("Error");
                     _msgCommon.text = qsTr("Error while saving IR. Please, try to reload impulse.");
                     _msgCommon.open();
+                    break;
+                }
+
+                case DeviceErrorType.PresetImportUnsuccesfull:
+                {
+                    _msgCommon.headerText = qsTr("Warning");
+                    _msgCommon.text = qsTr("Preset import error!");
+                    _msgCommon.open();
+                    break;
+                }
+            }
+        }
+
+        function onSgDeviceMessage(type, message, params)
+        {
+            switch(type)
+            {
+                case DeviceMessageType.PresetExportFinished:
+                {
+                    _msgCommon.headerText = qsTr("Preset export finished");
+                    _msgCommon.text = qsTr("Preset exported to:\n" + message);
+                    _msgCommon.open();
+                    break;
                 }
             }
         }
@@ -325,7 +334,6 @@ ApplicationWindow
         function onSgExchangeError()
         {
             _msgExchangeError.open();
-
             mBusy.visible = false;
         }
 

@@ -68,7 +68,7 @@ BaseModule
 
         function onSgDeviceError(type, description, params)
         {
-            if(type === DeviceError.IrFormatNotSupported)
+            if(type === DeviceErrorType.IrFormatNotSupported)
             {
                 _msgNotSupportedIrFormat.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
                                      description + "\n" +

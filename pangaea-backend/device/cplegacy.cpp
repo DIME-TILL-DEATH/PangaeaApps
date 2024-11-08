@@ -1,7 +1,7 @@
 #include "cplegacy.h"
 
 #include <QDir>
-
+#include <QStandardPaths>
 
 #include "core.h"
 
@@ -102,7 +102,6 @@ void CPLegacy::pushReadPresetCommands()
 
 void CPLegacy::setPresetData(const Preset &preset)
 {
-    qDebug() << "Settling preset data: " << preset.rawData();
     QByteArray ba;
 
     ba.append("gs 1\r");
@@ -122,7 +121,7 @@ void CPLegacy::sendCommandToCP(const QByteArray &command)
 
 void CPLegacy::saveChanges()
 {
-    qDebug()<<__FUNCTION__;
+    qInfo()<<__FUNCTION__;
 
     if(m_presetManager.currentState() == PresetState::Compare)
     {
@@ -146,8 +145,6 @@ void CPLegacy::saveChanges()
     {
         uploadImpulseData(currentPreset.waveData(), false, currentPreset.impulseName());
     }
-
-    qDebug() << "Current preset bp: " << currentPreset.bankNumber() << ":" << currentPreset.presetNumber() << "impulse name:" << currentPreset.impulseName();
 
     currentSavedPreset = currentPreset;
     m_presetListModel.updatePreset(currentSavedPreset);
@@ -179,7 +176,6 @@ void CPLegacy::comparePreset()
 {
     if(m_presetManager.currentState() != PresetState::Compare)
     {
-        // emit sgSetAppParameter(AppParameter::COMPARE_STATE, true);
         emit sgPushCommandToQueue("gs");
         emit sgPushCommandToQueue("esc");
     }
@@ -188,7 +184,6 @@ void CPLegacy::comparePreset()
         m_presetManager.returnToPreviousState();
         setPresetData(currentPreset);
         uploadImpulseData(currentPreset.waveData(), true, currentPreset.impulseName());
-        // emit sgSetAppParameter(AppParameter::COMPARE_STATE, false);
     }
     emit sgProcessCommands();
 }
@@ -197,50 +192,89 @@ void CPLegacy::copyPreset()
 {
     m_presetManager.setCurrentState(PresetState::Copying);
 
-
     if(currentPreset.wavSize() == 0)
         emit sgPushCommandToQueue("cc");
 
     emit sgPushCommandToQueue("gs");
-
     emit sgProcessCommands();
 }
 
 void CPLegacy::pastePreset()
 {
-        setPresetData(copiedPreset);
+    setPresetData(copiedPreset);
 
-        quint8 currentBankNumber = currentPreset.bankNumber();
-        quint8 currentPresetNumber = currentPreset.presetNumber();
+    quint8 currentBankNumber = currentPreset.bankNumber();
+    quint8 currentPresetNumber = currentPreset.presetNumber();
 
-        // TODO для исправления бага с обновлением пресета после вставки
-        // эта часть должна быть в getStatus по ключу PresetState::Pasting
-        // но это немного костыльно и MAP для актуального пресета должен обновляться
-        // и хранится как-то по-другому. При этом при переключении применятся старый
-        if(copiedPreset.waveData().isEmpty())
+    // TODO для исправления бага с обновлением пресета после вставки
+    // эта часть должна быть в getStatus по ключу PresetState::Pasting
+    // но это немного костыльно и MAP для актуального пресета должен обновляться
+    // и хранится как-то по-другому. При этом при переключении применятся старый
+    if(copiedPreset.waveData().isEmpty())
+    {
+        if(currentPreset.impulseName() != "")
         {
-            if(currentPreset.impulseName() != "")
-            {
-                copiedPreset.setWaveData(IRWorker::flatIr());
-                copiedPreset.setImpulseName("");
-            }
+            copiedPreset.setWaveData(IRWorker::flatIr());
+            copiedPreset.setImpulseName("");
         }
-        uploadImpulseData(copiedPreset.waveData(), true, copiedPreset.impulseName());
-        currentPreset = copiedPreset;
-        currentPreset.setBankPreset(currentBankNumber, currentPresetNumber);
+    }
+    uploadImpulseData(copiedPreset.waveData(), true, copiedPreset.impulseName());
+    currentPreset = copiedPreset;
+    currentPreset.setBankPreset(currentBankNumber, currentPresetNumber);
 
-        m_deviceParamsModified = true;
-        emit deviceParamsModifiedChanged();
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
 }
 
 void CPLegacy::importPreset(QString filePath, QString fileName)
 {
+    Q_UNUSED(fileName)
 
+    Preset importedPreset{this};
+
+    if(!importedPreset.importData(filePath))
+    {
+        emit sgDeviceError(DeviceErrorType::PresetImportUnsuccesfull);
+        return;
+    }
+
+    setPresetData(importedPreset);
+
+    if(importedPreset.waveData().isEmpty())
+    {
+        if(currentPreset.impulseName() != "")
+        {
+            importedPreset.setWaveData(IRWorker::flatIr());
+            importedPreset.setImpulseName("");
+        }
+    }
+    uploadImpulseData(importedPreset.waveData(), true, importedPreset.impulseName());
+    currentPreset = importedPreset;
+
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
 }
 
 void CPLegacy::exportPreset(QString filePath, QString fileName)
 {
+    if(m_presetManager.currentState() != PresetState::Exporting)
+    {
+        QString folderPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/presets/";
 
+        qInfo() << __FUNCTION__ << "Preset name: " << fileName;
+
+        m_presetManager.setCurrentState(PresetState::Exporting);
+
+        if(!QDir(folderPath).exists())
+        {
+            QDir().mkpath(folderPath);
+        }
+
+        emit sgPushCommandToQueue("gs");
+        currentPreset.setPathToExport(filePath);
+        emit sgPushCommandToQueue("cc");
+        emit sgProcessCommands();
+    }
 }
 
 void CPLegacy::restoreValue(QString name)
@@ -251,7 +285,6 @@ void CPLegacy::restoreValue(QString name)
         m_bank = currentPreset.bankNumber();
         m_preset = currentPreset.presetNumber();
         emit bankPresetChanged();
-        //emit deviceUpdatingValues(); // так стираются марки модификации
     }
 }
 
@@ -272,7 +305,7 @@ void CPLegacy::setImpulse(QString filePath)
     if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
     {
         qWarning() << __FUNCTION__ << "Not supported wav format";
-        emit sgDeviceError(DeviceError::IrFormatNotSupported, QString().setNum(wavHead.sampleRate)+" Hz/"+
+        emit sgDeviceError(DeviceErrorType::IrFormatNotSupported, QString().setNum(wavHead.sampleRate)+" Hz/"+
                                                             QString().setNum(wavHead.bitsPerSample)+" bits/"+
                                                             QString().setNum(wavHead.numChannels)+" channel");
     }
@@ -369,11 +402,11 @@ void CPLegacy::getBankPresetCommHandler(const QString &command, const QByteArray
 {
     m_bank = arguments.left(2).toUInt();
     m_preset  = arguments.right(2).toUInt();
-    emit bankPresetChanged();
 
     currentPreset.setBankPreset(m_bank, m_preset);
 
     qInfo() << "bank:" << m_bank << "preset:" << m_preset;
+    emit bankPresetChanged();
 }
 
 void CPLegacy::getOutputModeCommHandler(const QString &command, const QByteArray &arguments)
@@ -445,7 +478,6 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
 
         copiedPreset.setRawData(baPresetData);
         m_presetManager.returnToPreviousState();
-        qDebug() << "copied preset recieve raw data" << copiedPreset.rawData();
         break;
     }
 
@@ -625,7 +657,7 @@ void CPLegacy::getIrCommHandler(const QList<QByteArray> &arguments)
         currentPreset.setWaveData(impulseData);
         currentPreset.exportData();
 
-        // emit sgSetUIText("preset_exported", currentPreset.pathToExport());
+        emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, currentPreset.pathToExport());
 
         m_presetManager.returnToPreviousState();
         break;
@@ -659,6 +691,7 @@ void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArr
     currentPreset.clearWavData();
     m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
+    emit sgProcessCommands();
 }
 
 
@@ -679,5 +712,5 @@ void CPLegacy::errorCCCommHandler(const QString &command, const QByteArray &argu
 {
     emit sgEnableTimeoutTimer();
     m_presetManager.returnToPreviousState();
-    emit sgDeviceError(DeviceError::IrSaveError, currentPreset.impulseName());
+    emit sgDeviceError(DeviceErrorType::IrSaveError, currentPreset.impulseName());
 }

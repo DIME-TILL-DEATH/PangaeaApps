@@ -55,10 +55,9 @@ qt_add_library(pangaea-backend STATIC
     utils/maskedparser.cpp utils/maskedparser.h
     utils/parser.h utils/parser.cpp
 
-    uihelpers/appproperties.h uihelpers/appproperties.cpp
-    uihelpers/deviceproperties.cpp uihelpers/deviceproperties.h
     uihelpers/devicetypeenum.h
     uihelpers/deviceerrorenum.h
+    uihelpers/devicemessageenum.h
     uihelpers/moduletypeenum.h
     uihelpers/presetstateenum.h
 

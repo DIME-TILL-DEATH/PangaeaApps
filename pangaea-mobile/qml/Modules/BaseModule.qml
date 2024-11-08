@@ -6,13 +6,14 @@ import Elements 1.0
 import StyleSettings 1.0
 
 import CppObjects
+import CppEnums
 
 Rectangle {
     id: _main
 
     property bool on: module.moduleEnabled
 
-    property bool disabled: AppProperties.compareState
+    property bool disabled: UiCore.currentDevice.presetManager.currentState === PresetState.Compare
 
     property string moduleName: module.moduleName
     property string moduleDescription: "Description"

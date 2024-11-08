@@ -51,7 +51,7 @@ void AbstractDevice::userModifiedModules()
 void AbstractDevice::undefinedCommandCommHandler(const QString &command, const QByteArray &arguments)
 {
     qDebug() << "callback for undefined command";
-    emit sgDeviceError(DeviceError::UndefinedCommand, "", {command, arguments});
+    emit sgDeviceError(DeviceErrorType::UndefinedCommand, "", {command, arguments});
 }
 
 bool AbstractDevice::deviceParamsModified() const

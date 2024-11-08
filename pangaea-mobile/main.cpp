@@ -9,8 +9,6 @@
 #include <QDebug>
 
 #include "core.h"
-#include "appproperties.h"
-#include "deviceproperties.h"
 #include "uicore.h"
 #include "uiinterfacemanager.h"
 #include "netcore.h"
@@ -21,6 +19,7 @@
 #include "interfacecore.h"
 
 #include "deviceerrorenum.h"
+#include "devicemessageenum.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
@@ -95,8 +94,7 @@ int main(int argc, char *argv[])
     UiCore uiCore;
     UiInterfaceManager uiInterfaceManager;
 
-    AppProperties appProperties(core);
-    DeviceProperties deviceProperties(core);
+
 
     QQmlApplicationEngine engine;
     engine.addImportPath(":/qml");
@@ -105,19 +103,14 @@ int main(int argc, char *argv[])
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
-
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "AppProperties", &appProperties);
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "DeviceProperties", &deviceProperties);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
-    // qmlRegisterSingletonInstance("CppObjects", 1, 0, "PresetListModel", &presetListModel);
 
-    qmlRegisterUncreatableType<Core>("CppObjects", 1, 0, "AppParameter", "Cannot create AppParameter in QML");
-    qmlRegisterUncreatableType<DeviceParameter>("CppObjects", 1, 0, "DeviceParameter", "Cannot create DeviceParameter in QML");
     qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
 
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<PresetStateEnum>("CppEnums", 1, 0, "PresetState", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<DeviceErrorEnum>("CppEnums", 1, 0, "DeviceError", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<DeviceErrorEnum>("CppEnums", 1, 0, "DeviceErrorType", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<DeviceMessageEnum>("CppEnums", 1, 0, "DeviceMessageType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<ModuleTypeEnum>("CppEnums", 1, 0, "ModuleType", "Not creatable as it is an enum type");
 
     AbstractModule::registerTypestoQml();
@@ -127,7 +120,6 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    QObject::connect(&uiCore, &UiCore::sgSetFirmware, core, &Core::setFirmware, Qt::QueuedConnection);
     // QObject::connect(&uiCore, &UiCore::sgSw4Enable, core, &Core::sw4Enable);
     QObject::connect(&uiCore, &UiCore::sgDisconnesctFromDevice, core, &Core::disconnectFromDevice);
 

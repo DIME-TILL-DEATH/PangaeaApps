@@ -85,7 +85,6 @@ Rectangle
 
             onCurrentIndexChanged:
             {
-                console.log("bank upd3", main.deviceUpdatingValues)
                 if(!main.deviceUpdatingValues)
                 {
                     timer.restart();

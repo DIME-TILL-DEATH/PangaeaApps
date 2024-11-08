@@ -118,25 +118,25 @@ Rectangle{
         }
     }
 
-    Connections{
-        target: DeviceProperties
+    // Connections{
+    //     target: DeviceProperties
 
-        function onLa3ChannelChanged(){
-            if(DeviceProperties.isLa3Mode){
-                if(index === DeviceProperties.la3CleanPreset)
-                {
-                    _root.fonColor = "lightgreen";
-                }
-                else if(index === DeviceProperties.la3DrivePreset)
-                {
-                    _root.fonColor = "red";
-                }
-                else
-                {
-                    _root.fonColor = Style.colorFon;
-                }
-            }
-        }
-    }
+    //     function onLa3ChannelChanged(){
+    //         if(DeviceProperties.isLa3Mode){
+    //             if(index === DeviceProperties.la3CleanPreset)
+    //             {
+    //                 _root.fonColor = "lightgreen";
+    //             }
+    //             else if(index === DeviceProperties.la3DrivePreset)
+    //             {
+    //                 _root.fonColor = "red";
+    //             }
+    //             else
+    //             {
+    //                 _root.fonColor = Style.colorFon;
+    //             }
+    //         }
+    //     }
+    // }
 }
 

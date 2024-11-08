@@ -10,7 +10,6 @@
 ModulesListModel::ModulesListModel(QObject *parent)
     : QAbstractListModel{parent}
 {
-     this->moveToThread(QGuiApplication::instance()->thread());
 }
 
 ModulesListModel::~ModulesListModel()

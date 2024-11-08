@@ -48,9 +48,9 @@ void Core::disconnectFromDevice()
 
 void Core::slInterfaceConnected(DeviceDescription interfaceDescription)
 {
-    pushCommandToQueue("amtdev");
     timeoutTimer->start(1000);
 
+    pushCommandToQueue("amtdev");
     processCommands();
 }
 
@@ -66,7 +66,6 @@ void Core::parseInputData(QByteArray ba)
 
     updateProgressBar();
 
-    lastRecievedData += ba;
     commandWorker.parseAnswers(ba);
 
     QList<QByteArray> recievedAnswer;
@@ -77,12 +76,8 @@ void Core::parseInputData(QByteArray ba)
 
     while(commandWorker.haveAnswer())
     {
-        lastRecievedData.clear();
-
-
         DeviceAnswer recievedCommand = commandWorker.popAnswer();
         QList<QByteArray> parseResult = recievedCommand.parseResult();
-        recieveEnabled = recievedCommand.isEnableRecieve();
 
         switch(recievedCommand.answerType())
         {
@@ -103,16 +98,6 @@ void Core::parseInputData(QByteArray ba)
 
                         timeoutTimer->setInterval(10000);
                     }
-
-
-                    if(controlledDevice.deviceType() == DeviceType::LA3)
-                    {
-                        // request LA3 maps
-                        pushCommandToQueue("sm0");
-                        pushCommandToQueue("sm1");
-                        pushCommandToQueue("sw1");
-                    }
-
                     commandsSended.removeFirst();
                 }
                 break;
@@ -162,7 +147,7 @@ void Core::parseInputData(QByteArray ba)
                     quint8 bankPreset = parseResult.at(0).toUInt();
 
                     qInfo() << "LA3 clean preset mapping: " << bankPreset;
-                    emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_CLEAN_PRESET, bankPreset);
+                    // emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_CLEAN_PRESET, bankPreset);
                 }
                 break;
             }
@@ -173,7 +158,7 @@ void Core::parseInputData(QByteArray ba)
                 {
                     quint8 bankPreset = parseResult.at(0).toUInt();
                     qInfo() << "LA3 drive preset mapping: " << bankPreset;
-                    emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_DRIVE_PRESET, bankPreset);
+                    // emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_DRIVE_PRESET, bankPreset);
                 }
                 break;
             }
@@ -205,111 +190,21 @@ void Core::parseInputData(QByteArray ba)
                         currentLa3Mode = 1;
                         qInfo() << "LA3 current mode: " << "clean channel";
                     }
-                    emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_CURRENT_CHANNEL, currentLa3Mode);
+                    // emit sgRecieveDeviceParameter(DeviceParameter::Type::LA3_CURRENT_CHANNEL, currentLa3Mode);
                 }
                 break;
             }
 
-            // case AnswerType::getIrNameSize:
-            // {
-            //     if(recievedCommand.parseResult().length()==1)
-            //     {
-            //         QByteArray baAnswer = recievedCommand.parseResult().at(0);
-            //         QString wavName;
-            //         int wavSize=0;
-            //         if(baAnswer.indexOf("FILE_NOT_FIND") == 0)
-            //         {
-            //             wavName= "";
-            //             break;
-            //         }
-            //         else
-            //         {
-            //             quint16 positionEndName = baAnswer.lastIndexOf(".wav");
-            //             wavName = QString::fromUtf8(baAnswer.left(positionEndName+4));
-            //             wavName.replace(" ","_");
-
-            //             QByteArray baWavSize = baAnswer.mid(positionEndName+5);
-            //             wavSize = baWavSize.toInt();
-            //         }
-
-            //         switch(presetManager.currentState())
-            //         {
-            //             //Повтор необходим. Надо чтобы обрабатывало cc/r ТОЛЬКО в состоянии копирования и экспорта
-            //             case PresetState::Copying:
-            //             {
-            //                 // copiedPreset.setImpulseName(wavName);
-
-            //                 bytesToRecieve = wavSize;
-            //                 qDebug() << "Recieve Ir. Name:" << wavName << " ,size:" << bytesToRecieve;
-            //                 emit sgSetUIParameter("ir_downloading", true);
-            //                 break;
-            //             }
-
-            //             case PresetState::Exporting:
-            //             {
-            //                 bytesToRecieve = wavSize;
-            //                 // currentPreset.setImpulseName(wavName);
-            //                 emit sgSetUIParameter("ir_downloading", true);
-            //                 break;
-            //             }
-
-            //             default:
-            //             {
-            //                 // currentPreset.setImpulseName(wavName);
-            //             }
-            //         }
-            //             recieveEnabled = false; // команда cc обрабатывается двумя парсерами. Этим и getIr при полном выполнении
-            //     }
-            //     break;
-            // }
-
-            // case AnswerType::getIr:
-            // {
-            //     QByteArray impulseData;
-            //     if(recievedCommand.parseResult().length()==2)
-            //     {
-            //         impulseData = QByteArray::fromHex(parseResult.at(1));
-            //     }
-
-            //     switch(presetManager.currentState())
-            //     {
-            //         case PresetState::Copying:
-            //         {
-            //             // copiedPreset.setWaveData(impulseData);
-            //             break;
-            //         }
-
-            //         case PresetState::Exporting:
-            //         {
-            //             // currentPreset.setWaveData(impulseData);
-            //             // currentPreset.exportData();
-
-            //             // emit sgSetUIText("preset_exported", currentPreset.pathToExport());
-
-            //             presetManager.returnToPreviousState();
-            //             break;
-            //         }
-
-            //         default:{}
-            //     }
-            //     bytesToRecieve=0;
-
-            //     timeoutTimer->start();
-
-            //     qInfo() << recievedCommand.description();
-            //     break;
-            // }
-
             case AnswerType::requestNextChunk:
             {
-                qInfo() << recievedCommand.description();
-                if(!fwUpdate)
-                {
-                   recieveEnabled = false;
+                // qInfo() << recievedCommand.description();
+                // if(!fwUpdate)
+                // {
+                //    recieveEnabled = false;
 
-                }
-                else
-                {
+                // }
+                // else
+                // {
                     if(m_rawFirmwareData.length() > 0)
                     {
                         QByteArray baSend, baTmp;
@@ -326,7 +221,7 @@ void Core::parseInputData(QByteArray ba)
                         commandsPending.append("0\n"); // нулевой блок это знак что файл загружен
                     }
                     processCommands();
-                }
+                // }
                 break;
             }
 
@@ -377,6 +272,14 @@ void Core::slDeviceInstanciated(DeviceType deviceType)
     connect(currentDevice, &AbstractDevice::sgProcessCommands, this, &Core::processCommands, Qt::QueuedConnection);
 
     currentDevice->readFullState();
+
+    if(controlledDevice.deviceType() == DeviceType::LA3)
+    {
+        // request LA3 maps
+        pushCommandToQueue("sm0");
+        pushCommandToQueue("sm1");
+        pushCommandToQueue("sw1");
+    }
 }
 
 void Core::pushCommandToQueue(QByteArray command, bool finalize)
@@ -438,10 +341,8 @@ void Core::uploadFirmware(const QByteArray& firmware)
 
         emit sgSetUIParameter("fw_update_enabled", true);
         timeoutTimer->stop();
-        // timeoutTimer->setInterval(5000);
 
         fwUpdate = true;
-        recieveEnabled = false;
 
         QByteArray baTmp, baSend;
         baSend.append("fwu\r");
@@ -458,59 +359,6 @@ void Core::uploadFirmware(const QByteArray& firmware)
 }
 
 
-// void Core::importPreset(QString filePath, QString fileName)
-// {
-//     Q_UNUSED(fileName)
-
-//     Preset importedPreset;
-
-//     if(!importedPreset.importData(filePath))
-//     {
-//         emit sgSetUIText("preset_import_unsuccecfull", "");
-//         return;
-//     }
-
-//     // TODO: paste и import одинаковые операции. Закинуть в один метод и вызывать его
-//     // setPresetData(importedPreset);
-
-//     if(importedPreset.waveData().isEmpty())
-//     {
-//         if(currentPreset.impulseName() != "")
-//         {
-//             importedPreset.setWaveData(IRWorker::flatIr());
-//             importedPreset.setImpulseName("");
-//         }
-//     }
-//     uploadImpulseData(importedPreset.waveData(), true, importedPreset.impulseName());
-//     currentPreset = importedPreset;
-
-//     isPresetEdited = true;
-//     emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
-// }
-
-// void Core::exportPreset(QString filePath, QString fileName)
-// {
-//     if(presetManager.currentState() != PresetState::Exporting)
-//     {
-//         QString folderPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/presets/";
-
-//         qDebug() << "Preset name: " <<fileName;
-
-//         presetManager.setCurrentState(PresetState::Exporting);
-
-//         if(!QDir(folderPath).exists())
-//         {
-//             QDir().mkpath(folderPath);
-//         }
-
-//         pushCommandToQueue("gs");
-//         currentPreset.setPathToExport(filePath);
-//         pushCommandToQueue("cc");
-//         processCommands();
-//     }
-// }
-
-
 void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameters)
 {
     switch(appParameterType)
@@ -524,7 +372,6 @@ void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameter
         timeoutTimer->setInterval(10000);
 
         emit sgWriteToInterface(QString("fsf\r\n").toUtf8());
-        recieveEnabled = false;
         break;
     }
 
@@ -578,18 +425,6 @@ void Core::processCommands()
             sendCommand(commandToSend);
         }
         commandsSended.append(commandToSend);
-
-
-        // quint32 timeoutInterval=1000;
-        // if(commandToSend.indexOf("rns")==0)
-        // {
-        //     timeoutInterval = 10000;
-        // }
-
-        // if(!fwUpdate)
-        // {
-        //     timeoutTimer->start(timeoutInterval);
-        // }
     }
     else
     {
@@ -600,7 +435,6 @@ void Core::processCommands()
 void Core::sendCommand(QByteArray val)
 {
     symbolsSended += val.size();
-    recieveEnabled = false;
     emit sgWriteToInterface(val);
 
     updateProgressBar();
@@ -626,34 +460,31 @@ void Core::recieveTimeout()
     {
         QByteArray commandWithoutAnswer = commandsSended.first();
 
-        if(recieveEnabled)
+        sendCount++;
+        qInfo("!!!!!!!!!!!!!!!!! recieve timeout, attempt=%d !!!!!!!!!!!!!!!!!", sendCount);
+
+        sendCommand(commandWithoutAnswer);
+        // timeoutTimer->setInterval(1000);
+
+        if(sendCount>3)
         {
             sendCount = 0;
-        }
-        else
-        {
-            sendCount++;
-            qInfo("!!!!!!!!!!!!!!!!! recieve timeout, attempt=2%d !!!!!!!!!!!!!!!!!", sendCount);
 
-            sendCommand(commandWithoutAnswer);
-            // timeoutTimer->setInterval(1000);
+            disconnectFromDevice();
 
-            if(sendCount>3)
+            if(fwUpdate)
             {
-                sendCount = 0;
-
-                disconnectFromDevice();
-
-                if(fwUpdate)
-                {
-                    fwUpdate = false;
-                }
-
-                commandsPending.clear();
-                commandsSended.clear();
-                emit sgExchangeError();
-                return;
+                fwUpdate = false;
             }
+
+            commandsPending.clear();
+            commandsSended.clear();
+            emit sgExchangeError();
+            return;
         }
+    }
+    else
+    {
+        sendCount = 0;
     }
 }

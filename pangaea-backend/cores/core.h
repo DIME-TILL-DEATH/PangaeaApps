@@ -58,8 +58,6 @@ signals:
 
     void sgCurrentDeviceChanged(AbstractDevice* device);
 
-    void sgRecieveDeviceParameter(DeviceParameter::Type deviceParameterType, qint32 value);
-    void sgSetAppParameter(AppParameter appParameterType, QVariant content);
     void sgSetUIParameter(QString nameParam, qint32 value);
     void sgSetUIText(QString nameParam, QString value);
 
@@ -83,10 +81,8 @@ private slots:
     void recieveTimeout();
 
 private:
-    // IRWorker irWorker;
     AnswerWorker commandWorker;
 
-    QByteArray lastRecievedData;
 
     const uint32_t fwUploadBlockSize = 100;
     QByteArray m_rawFirmwareData;
@@ -100,11 +96,9 @@ private:
     bool fwUpdate{false};
     bool isFormatting{false};
 
-    PresetManager presetManager;
 
     QSettings* appSettings;
     
-    bool recieveEnabled{true};
     quint8 sendCount{0};
     QList<QByteArray> commandsPending;
     QList<QByteArray> commandsSended;
