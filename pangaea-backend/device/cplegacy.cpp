@@ -28,6 +28,9 @@ CPLegacy::CPLegacy(Core *parent)
 
     m_parser.addCommandHandler("SYNC ERROR", std::bind(&CPLegacy::errorCCCommHandler, this, _1, _2));
 
+    m_parser.addCommandHandler("REQUEST_CHUNK_SIZE", std::bind(&CPLegacy::requestNextChunkCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("FR_OK", std::bind(&CPLegacy::fwuFinishedCommHandler, this, _1, _2));
+
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                                     + "/settings.conf", QSettings::NativeFormat);
@@ -437,8 +440,6 @@ void CPLegacy::uploadImpulseData(const QByteArray &impulseData, bool isPreview, 
     IR->setEnabled(true); // загрузка импульса автоматом включает модуль в устройстве, отобразить это визуально
 }
 
-
-
 void CPLegacy::escImpulse()
 {
     emit sgPushCommandToQueue("lcc");
@@ -446,6 +447,73 @@ void CPLegacy::escImpulse()
     emit sgProcessCommands();
 }
 
+void CPLegacy::setFirmware(QString fullFilePath)
+{
+    qDebug()<< __FUNCTION__ << "fullFilePath" << fullFilePath;
+
+    emit sgDeviceMessage(DeviceMessageType::FirmwareFilePath, fullFilePath);
+
+    if(!Firmware::isFirmwareFile(fullFilePath))
+    {
+        qWarning() << __FUNCTION__ << "Not firmware file";
+        emit sgDeviceError(DeviceErrorType::FirmwareFileError, "Not firmware file.");
+        return;
+    }
+
+    QFile file(fullFilePath.toUtf8());
+
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QByteArray baFW = file.read(file.size());
+        uploadFirmware(baFW);
+
+        file.close();
+    }
+    else
+    {
+        qWarning() << __FUNCTION__ << __LINE__ << "Can not open file " << fullFilePath;
+        emit sgDeviceError(DeviceErrorType::FirmwareFileError, "Can't open file.");
+    }
+}
+
+void CPLegacy::uploadFirmware(const QByteArray& firmware)
+{
+    if(firmware.length()>0)
+    {
+        m_rawFirmwareData = firmware;
+
+        qint64 symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / fwUploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
+        qint64 symbolsToRecieve = 0;// 18 * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
+
+        emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateStarted);
+        emit sgDisableTimeoutTimer();
+
+        fwUpdate = true;
+
+        QByteArray baTmp, baSend;
+        baSend.append("fwu\r");
+
+        baTmp = m_rawFirmwareData.left(fwUploadBlockSize);
+        m_rawFirmwareData.remove(0, baTmp.length());
+
+        baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());
+        baSend.append(baTmp);
+
+        emit sgSendWithoutConfirmation(baSend, symbolsToSend, symbolsToRecieve);
+        emit sgProcessCommands();
+    }
+}
+
+void CPLegacy::formatMemory()
+{
+    emit sgDeviceMessage(DeviceMessageType::FormatMemoryStarted);
+
+    isFormatting = true;
+    // timeoutTimer->setInterval(10000);
+    emit sgDisableTimeoutTimer();
+    emit sgSendWithoutConfirmation(QString("fsf").toUtf8());
+    emit sgProcessCommands();
+}
 //===================================Setters-getters=================
 void CPLegacy::setOutputMode(quint8 newOutputMode)
 {
@@ -764,6 +832,44 @@ void CPLegacy::getIrCommHandler(const QList<QByteArray> &arguments)
     emit sgEnableTimeoutTimer();
 }
 
+void CPLegacy::requestNextChunkCommHandler(const QString &command, const QByteArray &arguments)
+{
+    qDebug() << "remaining part " << m_rawFirmwareData.size();
+
+    if(m_rawFirmwareData.length() > 0)
+    {
+        QByteArray baSend, baTmp;
+        baTmp = m_rawFirmwareData.left(fwUploadBlockSize);
+        m_rawFirmwareData.remove(0, baTmp.length());
+
+        baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());
+        baSend.append(baTmp);
+
+        emit sgSendWithoutConfirmation(baSend);
+    }
+    else
+    {
+        // нулевой блок это знак что файл загружен
+        emit sgSendWithoutConfirmation("0\n", false);
+    }
+    emit sgProcessCommands();
+}
+
+void CPLegacy::fwuFinishedCommHandler(const QString &command, const QByteArray &arguments)
+{
+    if(fwUpdate)
+    {
+        emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateFinished);
+        fwUpdate = false;
+    }
+    else
+    {
+        emit sgDeviceMessage(DeviceMessageType::FormatMemoryFinished);
+        isFormatting = false;
+    }
+
+    emit sgDisconnect();
+}
 //-------------------------------------acknowledegs------------------------------------------
 void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &arguments)
 {

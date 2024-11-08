@@ -9,6 +9,7 @@ import Elements 1.0
 import StyleSettings 1.0
 
 import CppObjects
+import CppEnums
 
 Item
 {
@@ -187,7 +188,7 @@ Item
         onAccepted:
         {
             messageAcceptFile.close()
-            UiCore.setFirmware(cleanPath);
+            UiCore.currentDevice.setFirmware(cleanPath);
         }
         onRejected:
         {
@@ -203,7 +204,7 @@ Item
 
     CustomMessageDialog
     {
-        id: message
+        id: messageDialog
 
         //: Complete formatting operation
         headerText: qsTr("Operation complete")
@@ -214,7 +215,6 @@ Item
         onRejected:
         {
             _main.openConnectPage();
-            // UiCore.sgSetUIParameter("fw_update_complete", true);
             InterfaceManager.disconnectFromDevice();
         }
     }
@@ -254,7 +254,7 @@ Item
 
         closeOnDisconnect: true
 
-        onAccepted: AppProperties.formatFlash();
+        onAccepted: UiCore.currentDevice.formatMemory();
     }
 
     EditTextDialog
@@ -280,50 +280,8 @@ Item
     {
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if( nameParam === "format_complete" )
-            {
-                message.headerText = qsTr("Operation complete");
-                message.text = qsTr("Formatting is complete\nPlease reset the device power and reconnect");
-                message.standardButtons = Dialog.Close;
-                message.open();
-            }
-
-            if( nameParam === "format_error" )
-            {
-                message.headerText = qsTr("Error");
-                message.text = qsTr("Format error");
-                message.standardButtons = StandardButton.Ok;
-                message.open();
-            }
-
-            if(nameParam === ("fw_update_enabled"))
-            {
-                if(inValue === 1)
-                {
-                    mLoadFirmwareScreen.open()
-                }
-                else
-                {
-                    mLoadFirmwareScreen.close()
-
-                    message.headerText = qsTr("Operation complete");
-                    message.text = qsTr("The Firmware file has been transmitted\nPlease, reconnect to device");
-                    message.standardButtons = Dialog.Close;
-                    message.open();
-                }
-            }
-        }
-
         function onSgSetUIText(nameParam, value)
         {
-            if(nameParam === "open_fw_file_error")
-            {
-                mesNoFW.text = qsTr("Can't open file " + value)
-                mesNoFW.open()
-            }
-
             if(nameParam === "firmware_file_picked")
             {
                 var dataArray = value.split(',');
@@ -333,6 +291,64 @@ Item
                 // messageAcceptFile.open()
                 rssiNotificationDialog.open()
                 InterfaceManager.rssiMeasuring(true);
+            }
+        }
+    }
+
+    Connections
+    {
+        target: UiCore.currentDevice
+
+        function onSgDeviceMessage(type, description, params)
+        {
+            switch(type)
+            {
+                case DeviceMessageType.FirmwareUpdateStarted:
+                {
+                    mLoadFirmwareScreen.open()
+                    break;
+                }
+
+                case DeviceMessageType.FirmwareUpdateFinished:
+                {
+                    mLoadFirmwareScreen.close()
+
+                    messageDialog.headerText = qsTr("Operation complete");
+                    messageDialog.text = qsTr("The Firmware file has been transmitted\nPlease, reconnect to device");
+                    messageDialog.standardButtons = Dialog.Close;
+                    messageDialog.open();
+                    break;
+                }
+
+                case DeviceMessageType.FormatMemoryFinished:
+                {
+                    messageDialog.headerText = qsTr("Operation complete");
+                    messageDialog.text = qsTr("Formatting is complete\nPlease reset the device power and reconnect");
+                    messageDialog.standardButtons = Dialog.Close;
+                    messageDialog.open();
+                    break;
+                }
+            }
+        }
+
+        function onSgDeviceError(type, description, params)
+        {
+            switch(type)
+            {
+                case DeviceErrorType.FormatMemoryError:
+                {
+                    messageDialog.headerText = qsTr("Error");
+                    messageDialog.text = qsTr("Format error");
+                    messageDialog.standardButtons = StandardButton.Ok;
+                    messageDialog.open();
+                    break;
+                }
+
+                case DeviceErrorType.FirmwareFileError:
+                {
+                    mesNoFW.text = qsTr("Firmware file error:  " + description)
+                    mesNoFW.open()
+                }
             }
         }
     }

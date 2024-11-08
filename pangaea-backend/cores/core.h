@@ -7,13 +7,10 @@
 
 #include <QSettings>
 
-#include "firmware.h"
-
-#include "answerworker.h"
-#include "preset.h"
 #include "devicedescription.h"
-
 #include "abstractdevice.h"
+
+#include "maskedparser.h"
 
 class Core : public QObject
 {
@@ -21,17 +18,12 @@ class Core : public QObject
 public:
     explicit Core(QObject *parent = nullptr);
 
-
-    void setFirmware (QString fullFilePath);
-    void uploadFirmware(const QByteArray &firmware);
-
     QTimer *timeoutTimer;
 
 signals:
     void sgWriteToInterface(QByteArray data, bool logCommand = true);
     void sgExchangeError();
 
-    void sgFirmwareVersionInsufficient(Firmware *minimalFirmware, Firmware *actualFirmware);
     void sgRequestNewestFirmware(Firmware* actualFirmware);
 
     void sgCurrentDeviceChanged(AbstractDevice* device);
@@ -41,7 +33,7 @@ signals:
 
     void sgSetProgress(float val, QString extText);
 
-    void sgReadyTodisconnect();
+    void sgReadyToDisconnect();
     void sgImmediatelyDisconnect(); // Принудительное после обновления
 
 public slots:
@@ -51,23 +43,19 @@ public slots:
     void slInterfaceConnected(DeviceDescription interfaceDescription);
 
     void parseInputData(QByteArray data);
+    void pushCommandToQueue(QByteArray command, bool finalize = true);
+    void sendWithoutConfirmation(QByteArray data, qint64 dataSizeToSend = -1, qint64 dataSizeTorecieve = -1);
     void processCommands();
 
 private slots:
     void recieveTimeout();
 
 private:
-    AnswerWorker commandWorker;
-
-    const uint32_t fwUploadBlockSize = 100;
-    QByteArray m_rawFirmwareData;
+    MaskedParser amtDevParser{"amtdev\rX\n", "1111111X1"};
 
     AbstractDevice* currentDevice{nullptr};
 
-    bool fwUpdate{false};
-    bool isFormatting{false};
-
-    QSettings* appSettings;
+    DeviceConnectionType m_currentConnectionType;
     
     quint8 sendCount{0};
     QList<QByteArray> commandsPending;
@@ -76,10 +64,9 @@ private:
 
     quint32 symbolsToSend{0};
     quint32 symbolsSended{0};
-    quint32 bytesToRecieve{0};
-    quint32 bytesRecieved{0};
+    quint32 symbolsToRecieve{0};
+    quint32 symbolsRecieved{0};
 
-    void pushCommandToQueue(QByteArray command, bool finalize = true);
     void calculateSendVolume();
     void updateProgressBar();
     void sendCommand(QByteArray);

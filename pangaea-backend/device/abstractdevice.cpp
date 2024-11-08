@@ -7,7 +7,7 @@ AbstractDevice::AbstractDevice(Core *owner)
 {
     if(owner)
     {
-        connect(this, &AbstractDevice::sgWriteToInterface, owner, &Core::sgWriteToInterface);
+        // connect(this, &AbstractDevice::sgWriteToInterface, owner, &Core::sgWriteToInterface);
 
         connect(this, &AbstractDevice::sgEnableTimeoutTimer, owner->timeoutTimer, qOverload<>(&QTimer::start));
         connect(this, &AbstractDevice::sgDisableTimeoutTimer, owner->timeoutTimer, &QTimer::stop);

@@ -7,14 +7,14 @@
 // 1 - должно совпадать
 // 0 - может не совпадать, помещается в возвращаемые параметры
 
-MaksedParser::MaksedParser(QByteArray inVal, QByteArray inMask) : QObject()
+MaskedParser::MaskedParser(QByteArray inVal, QByteArray inMask) : QObject()
 {
     val  = inVal;
     mask = inMask;
     clearAll();
 }
 
-bool MaksedParser::getParse(QByteArray inBa, QList<QByteArray> *inRet)
+bool MaskedParser::getParse(QByteArray inBa, QList<QByteArray> *inRet)
 {
     quint8 afterX;
     bool kostyl;
@@ -89,7 +89,7 @@ bool MaksedParser::getParse(QByteArray inBa, QList<QByteArray> *inRet)
     return false;
 }
 
-void MaksedParser::clearAll()
+void MaskedParser::clearAll()
 {
     curParam = curPos = maskPos = 0;
     prevMask = '1';

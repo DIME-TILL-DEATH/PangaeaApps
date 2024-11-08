@@ -20,7 +20,7 @@ qt_add_library(pangaea-backend STATIC
     interfaces/devicedescription.cpp interfaces/devicedescription.h
     interfaces/offlineinterface.h interfaces/offlineinterface.cpp
 
-    device/answerworker.cpp device/answerworker.h
+
     device/defines.h
 
     device/deviceanswer.cpp device/deviceanswer.h
@@ -29,6 +29,8 @@ qt_add_library(pangaea-backend STATIC
     device/deviceparameter.h device/deviceparameter.cpp
     device/abstractdevice.h device/abstractdevice.cpp
     device/cplegacy.h device/cplegacy.cpp
+    device/cpmodern.h device/cpmodern.cpp
+    device/lapreamp.h device/lapreamp.cpp
 
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h

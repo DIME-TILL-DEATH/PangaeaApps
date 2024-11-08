@@ -12,9 +12,6 @@ QList<QByteArray> Parser::parseNewData(const QByteArray &newData)
 
     QList<QByteArray> recievedCommands;
 
-    // partial analize(for legacy cc command)
-
-
     int lineSepPos;
     do
     {
@@ -30,16 +27,24 @@ QList<QByteArray> Parser::parseNewData(const QByteArray &newData)
 
         int commTabSepPos = readedLine.indexOf("\r");
         int commSpaceSepPos = readedLine.indexOf(" ");
-        int sepPosition;
+        int commSepPosition;
 
-        if(commSpaceSepPos>0 && commTabSepPos > commSpaceSepPos) sepPosition = commSpaceSepPos;
-        else sepPosition = commTabSepPos;
+        if(commSpaceSepPos>0 && commTabSepPos > commSpaceSepPos) commSepPosition = commSpaceSepPos;
+        else commSepPosition = commTabSepPos;
 
-        if(sepPosition == -1) continue;
+        // if(sepPosition == -1) continue;
 
-        QString command = readedLine.left(sepPosition);
-        QByteArray arguments = readedLine.right(readedLine.size() - sepPosition - 1);
-
+        QString command;
+        QByteArray arguments;
+        if(commSepPosition>-1)
+        {
+            command = readedLine.left(commSepPosition);
+            arguments = readedLine.right(readedLine.size() - commSepPosition - 1);
+        }
+        else
+        {
+            command = readedLine;
+        }
 
         qDebug() << m_parserName << " --> command: " << command << "arguments: " << arguments;
         recievedCommands.append(command.toUtf8());

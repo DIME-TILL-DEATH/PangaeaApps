@@ -50,6 +50,9 @@ public:
 
     PresetVolume* getMV() {return MV;};
 
+    Q_INVOKABLE void setFirmware(QString fullFilePath) override;
+    Q_INVOKABLE void formatMemory() override;
+
 public slots:
      QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
 
@@ -70,6 +73,8 @@ private:
     CabSim* IR;
     EqParametric* EQ;
 
+    QSettings* appSettings;
+
     void setDeviceType(DeviceType newDeviceType);
 
     void sendCommandToCP(const QByteArray &command);
@@ -78,6 +83,8 @@ private:
 
     void setPresetData(const Preset &preset);
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
+
+    void uploadFirmware(const QByteArray& fwData);
 
     void amtVerCommHandler(const QString &command, const QByteArray &arguments);
     void getIrNameCommHandler(const QString &command, const QByteArray &arguments);
@@ -92,10 +99,10 @@ private:
     void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments);
 
     // команды cc обрабатывается маскированным парсером
-    MaksedParser getIr{"cc\r0\n0\n", "111X1X1"};
-    MaksedParser getIrNameSize{"cc\r0\n", "111X1"};
-    MaksedParser ackCC{"cc * *\r", "111X1X1"}; //upload save
-    MaksedParser endCC{"ccEND\n", "111111"};
+    MaskedParser getIr{"cc\r0\n0\n", "111X1X1"};
+    MaskedParser getIrNameSize{"cc\r0\n", "111X1"};
+    MaskedParser ackCC{"cc * *\r", "111X1X1"}; //upload save
+    MaskedParser endCC{"ccEND\n", "111111"};
     void getIrCommHandler(const QList<QByteArray> &arguments);
     void getIrNameSizeCommHandler(const QList<QByteArray> &arguments);
     void ackCCCommHandler(const QList<QByteArray> &arguments);
@@ -103,7 +110,10 @@ private:
 
     void errorCCCommHandler(const QString &command, const QByteArray &arguments);
 
-    QSettings* appSettings;
+    QByteArray m_rawFirmwareData;
+    const uint32_t fwUploadBlockSize = 100;
+    void requestNextChunkCommHandler(const QString &command, const QByteArray &arguments);
+    void fwuFinishedCommHandler(const QString &command, const QByteArray &arguments);
 };
 
 #endif // CPLEGACY_H

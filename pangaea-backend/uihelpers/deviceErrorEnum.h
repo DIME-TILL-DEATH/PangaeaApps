@@ -16,7 +16,9 @@ public:
         IrFormatNotSupported,
         IrSaveError,
         PresetImportUnsuccesfull,
-        FimrmwareVersionInsufficient
+        FimrmwareVersionInsufficient,
+        FirmwareFileError,
+        FormatMemoryError
     };
     Q_ENUM(Value)
 };

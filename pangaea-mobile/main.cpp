@@ -116,27 +116,25 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    // QObject::connect(&uiCore, &UiCore::sgSw4Enable, core, &Core::sw4Enable);
     QObject::connect(&uiCore, &UiCore::sgDisconnesctFromDevice, core, &Core::disconnectFromDevice);
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgCurrentDeviceChanged, &uiCore, &UiCore::slCurrentDeviceChanged);
 
-    QObject::connect(core, &Core::sgSetUIText, &uiCore, &UiCore::sgSetUIText);
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiCore::sgSetProgress);
 
-    QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
+    // QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
     QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
     QObject::connect(&uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
-    QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
+    // QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
     QObject::connect(netCore, &NetCore::sgDownloadProgress, &uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);
 
     Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData);
     Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::slInterfaceConnected);
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
     Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
-    Core::connect(core, &Core::sgReadyTodisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
+    Core::connect(core, &Core::sgReadyToDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
 
 
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);

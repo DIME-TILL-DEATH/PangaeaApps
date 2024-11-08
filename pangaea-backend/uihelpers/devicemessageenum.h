@@ -15,7 +15,11 @@ public:
         PresetExportFinished,
         PresetNotSaved,
         NewFirmwareAvaliable,
-        FimrmwareVersionInnsufficient
+        FirmwareFilePath,
+        FirmwareUpdateStarted,
+        FirmwareUpdateFinished,
+        FormatMemoryStarted,
+        FormatMemoryFinished
     };
     Q_ENUM(Value)
 };

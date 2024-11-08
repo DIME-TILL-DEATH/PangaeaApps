@@ -53,7 +53,7 @@ class DeviceAnswer
 {
 public:
 
-    explicit DeviceAnswer(MaksedParser* parser, AnswerType type = AnswerType::unknown, QString description="", quint32 timeout=1000, bool displayble=true);
+    explicit DeviceAnswer(MaskedParser* parser, AnswerType type = AnswerType::unknown, QString description="", quint32 timeout=1000, bool displayble=true);
 
     bool processRawData(QByteArray rawData);
 
@@ -66,7 +66,7 @@ public:
     bool displayble() const;
 
 private:
-    MaksedParser* m_parser;
+    MaskedParser* m_parser;
 
     AnswerType m_answerType;
     QString m_description;

@@ -5,11 +5,11 @@
 //#include <QRegExp>
 #include <QString>
 
-class MaksedParser : public QObject
+class MaskedParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit MaksedParser(QByteArray val, QByteArray mask);
+    explicit MaskedParser(QByteArray val, QByteArray mask);
     QList<QByteArray> ret;
     bool getParse(QByteArray, QList<QByteArray>*);
     void clearAll();

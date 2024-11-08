@@ -67,6 +67,8 @@ public:
     Q_INVOKABLE virtual void exportPreset(QString filePath, QString fileName) {};
 
     virtual void setImpulse(QString filePath) {};
+    virtual void setFirmware(QString fullFilePath) {};
+    virtual void formatMemory() {};
 
     quint8 bank() const {return m_bank;};
     quint8 preset() const {return m_preset;};
@@ -80,6 +82,9 @@ public:
     PresetManager* presetManager() {return &m_presetManager;};
 
     qint64 bytesToRecieve() {return m_bytesToRecieve;};
+
+    bool isUpdatingFirmware() {return fwUpdate;};
+    bool isMemoryFormatting() {return isFormatting;};
 
 public slots:
     virtual QList<QByteArray> parseAnswers(QByteArray& baAnswer);
@@ -97,6 +102,7 @@ signals:
 
     void sgWriteToInterface(QByteArray data, bool logCommand = true);
     void sgPushCommandToQueue(QByteArray command, bool finalize = true);
+    void sgSendWithoutConfirmation(QByteArray data, qint64 symbolsToSend = -1, qint64 symbolsTorecieve = -1); // -1 don't update
     void sgProcessCommands();
 
     void sgModuleListUpdated(QList<AbstractModule*> modulesList);
@@ -109,6 +115,8 @@ signals:
     void firmwareNameChanged();
     void bankPresetChanged();
     void deviceParamsModifiedChanged();
+
+    void sgDisconnect();
 
 protected:
     Parser m_parser;
@@ -133,10 +141,13 @@ protected:
     ModulesListModel m_modulesListModel{this};
     PresetListModel m_presetListModel{this};
 
+    bool fwUpdate{false};
+    bool isFormatting{false};
+
     // TODO: m_presetsList живёт внутри модели или modulesList тут
     QList<Preset> m_presetsList;
 
-    bool m_deviceParamsModified;
+    bool m_deviceParamsModified{false};
 
     void undefinedCommandCommHandler(const QString &command, const QByteArray& arguments);
     void modulesParamsSetCommHandler(const QString &command, const QByteArray& arguments);

@@ -5,6 +5,7 @@ import Elements 1.0
 import StyleSettings 1.0
 
 import CppObjects
+import CppEnums
 
 CustomMessageDialog {
     id: _root
@@ -124,11 +125,6 @@ CustomMessageDialog {
 
         function onSgSetUIText(nameParam, value)
         {
-            if(nameParam===("firmware_path"))
-            {
-                console.log("firmware path:" + value)
-                _root.firmwareFile = decodeURIComponent(value.replace(/^(file:\/{2})|(qrc:\/{2})|(content:\/{2})|(http:\/{2})|(:)/,""));
-            }
 
             if(nameParam===("new_firmware_avaliable"))
             {
@@ -147,6 +143,23 @@ CustomMessageDialog {
         function onSgSetProgress(val)
         {
             uploadProgressBar.progressBarValue = val;
+        }
+    }
+
+    Connections
+    {
+        target: UiCore.currentDevice
+
+        function onSgDeviceMessage(type, value, params)
+        {
+            switch(type)
+            {
+                case DeviceMessageType.FirmwareFilePath:
+                {
+                    console.log("firmware path:" + value)
+                    _root.firmwareFile = decodeURIComponent(value.replace(/^(file:\/{2})|(qrc:\/{2})|(content:\/{2})|(http:\/{2})|(:)/,""));
+                }
+            }
         }
     }
 }
