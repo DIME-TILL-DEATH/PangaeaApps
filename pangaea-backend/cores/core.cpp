@@ -211,95 +211,95 @@ void Core::parseInputData(QByteArray ba)
                 break;
             }
 
-            case AnswerType::getIrNameSize:
-            {
-                if(recievedCommand.parseResult().length()==1)
-                {
-                    QByteArray baAnswer = recievedCommand.parseResult().at(0);
-                    QString wavName;
-                    int wavSize=0;
-                    if(baAnswer.indexOf("FILE_NOT_FIND") == 0)
-                    {
-                        wavName= "";
-                        break;
-                    }
-                    else
-                    {
-                        quint16 positionEndName = baAnswer.lastIndexOf(".wav");
-                        wavName = QString::fromUtf8(baAnswer.left(positionEndName+4));
-                        wavName.replace(" ","_");
+            // case AnswerType::getIrNameSize:
+            // {
+            //     if(recievedCommand.parseResult().length()==1)
+            //     {
+            //         QByteArray baAnswer = recievedCommand.parseResult().at(0);
+            //         QString wavName;
+            //         int wavSize=0;
+            //         if(baAnswer.indexOf("FILE_NOT_FIND") == 0)
+            //         {
+            //             wavName= "";
+            //             break;
+            //         }
+            //         else
+            //         {
+            //             quint16 positionEndName = baAnswer.lastIndexOf(".wav");
+            //             wavName = QString::fromUtf8(baAnswer.left(positionEndName+4));
+            //             wavName.replace(" ","_");
 
-                        QByteArray baWavSize = baAnswer.mid(positionEndName+5);
-                        wavSize = baWavSize.toInt();
-                    }
+            //             QByteArray baWavSize = baAnswer.mid(positionEndName+5);
+            //             wavSize = baWavSize.toInt();
+            //         }
 
-                    switch(presetManager.currentState())
-                    {
-                        //Повтор необходим. Надо чтобы обрабатывало cc/r ТОЛЬКО в состоянии копирования и экспорта
-                        case PresetState::Copying:
-                        {
-                            // copiedPreset.setImpulseName(wavName);
+            //         switch(presetManager.currentState())
+            //         {
+            //             //Повтор необходим. Надо чтобы обрабатывало cc/r ТОЛЬКО в состоянии копирования и экспорта
+            //             case PresetState::Copying:
+            //             {
+            //                 // copiedPreset.setImpulseName(wavName);
 
-                            bytesToRecieve = wavSize;
-                            qDebug() << "Recieve Ir. Name:" << wavName << " ,size:" << bytesToRecieve;
-                            emit sgSetUIParameter("ir_downloading", true);
-                            break;
-                        }
+            //                 bytesToRecieve = wavSize;
+            //                 qDebug() << "Recieve Ir. Name:" << wavName << " ,size:" << bytesToRecieve;
+            //                 emit sgSetUIParameter("ir_downloading", true);
+            //                 break;
+            //             }
 
-                        case PresetState::Exporting:
-                        {
-                            bytesToRecieve = wavSize;
-                            // currentPreset.setImpulseName(wavName);
-                            emit sgSetUIParameter("ir_downloading", true);
-                            break;
-                        }
+            //             case PresetState::Exporting:
+            //             {
+            //                 bytesToRecieve = wavSize;
+            //                 // currentPreset.setImpulseName(wavName);
+            //                 emit sgSetUIParameter("ir_downloading", true);
+            //                 break;
+            //             }
 
-                        default:
-                        {
-                            // currentPreset.setImpulseName(wavName);
-                        }
-                    }
-                        recieveEnabled = false; // команда cc обрабатывается двумя парсерами. Этим и getIr при полном выполнении
-                }
-                break;
-            }
+            //             default:
+            //             {
+            //                 // currentPreset.setImpulseName(wavName);
+            //             }
+            //         }
+            //             recieveEnabled = false; // команда cc обрабатывается двумя парсерами. Этим и getIr при полном выполнении
+            //     }
+            //     break;
+            // }
 
-            case AnswerType::getIr:
-            {
-                QByteArray impulseData;
-                if(recievedCommand.parseResult().length()==2)
-                {
-                    impulseData = QByteArray::fromHex(parseResult.at(1));
-                }
+            // case AnswerType::getIr:
+            // {
+            //     QByteArray impulseData;
+            //     if(recievedCommand.parseResult().length()==2)
+            //     {
+            //         impulseData = QByteArray::fromHex(parseResult.at(1));
+            //     }
 
-                switch(presetManager.currentState())
-                {
-                    case PresetState::Copying:
-                    {
-                        // copiedPreset.setWaveData(impulseData);
-                        break;
-                    }
+            //     switch(presetManager.currentState())
+            //     {
+            //         case PresetState::Copying:
+            //         {
+            //             // copiedPreset.setWaveData(impulseData);
+            //             break;
+            //         }
 
-                    case PresetState::Exporting:
-                    {
-                        // currentPreset.setWaveData(impulseData);
-                        // currentPreset.exportData();
+            //         case PresetState::Exporting:
+            //         {
+            //             // currentPreset.setWaveData(impulseData);
+            //             // currentPreset.exportData();
 
-                        // emit sgSetUIText("preset_exported", currentPreset.pathToExport());
+            //             // emit sgSetUIText("preset_exported", currentPreset.pathToExport());
 
-                        presetManager.returnToPreviousState();
-                        break;
-                    }
+            //             presetManager.returnToPreviousState();
+            //             break;
+            //         }
 
-                    default:{}
-                }
-                bytesToRecieve=0;
+            //         default:{}
+            //     }
+            //     bytesToRecieve=0;
 
-                timeoutTimer->start();
+            //     timeoutTimer->start();
 
-                qInfo() << recievedCommand.description();
-                break;
-            }
+            //     qInfo() << recievedCommand.description();
+            //     break;
+            // }
 
             case AnswerType::requestNextChunk:
             {
@@ -506,43 +506,6 @@ void Core::uploadFirmware(const QByteArray& firmware)
 //     }
 // }
 
-// void Core::copyPreset()
-// {
-//     presetManager.setCurrentState(PresetState::Copying);
-
-//     if(currentPreset.wavSize() == 0)
-//         pushCommandToQueue("cc");
-
-//     pushCommandToQueue("gs");
-//     processCommands();
-// }
-
-// void Core::pastePreset()
-// {
-//     // setPresetData(copiedPreset);
-
-//     quint8 currentBankNumber = currentPreset.bankNumber();
-//     quint8 currentPresetNumber = currentPreset.presetNumber();
-
-//     // TODO для исправления бага с обновлением пресета после вставки
-//     // эта часть должна быть в getStatus по ключу PresetState::Pasting
-//     // но это немного костыльно и MAP для актуального пресета должен обновляться
-//     // и хранится как-то по-другому. При этом при переключении применятся старый
-//     if(copiedPreset.waveData().isEmpty())
-//     {
-//         if(currentPreset.impulseName() != "")
-//         {
-//             copiedPreset.setWaveData(IRWorker::flatIr());
-//             copiedPreset.setImpulseName("");
-//         }
-//     }
-//     uploadImpulseData(copiedPreset.waveData(), true, copiedPreset.impulseName());
-//     currentPreset = copiedPreset;
-//     currentPreset.setBankPreset(currentBankNumber, currentPresetNumber);
-
-//     isPresetEdited = true;
-//     emit sgSetAppParameter(AppParameter::PRESET_MODIFIED, isPresetEdited);
-// }
 
 void Core::slRecieveAppAction(AppAction appParameterType, QVariantList parameters)
 {
@@ -584,7 +547,7 @@ void Core::processCommands()
         int chunckSize;
         int sleepTime;
 
-        if(controlledDevice.deviceType() == DeviceType::legacyCP100 || controlledDevice.deviceType() == DeviceType::legacyCP100PA)
+        if(controlledDevice.deviceType() == DeviceType::legacyCP100 || controlledDevice.deviceType() == DeviceType::legacyCP100PA) // TODO chunkSize зависит от интерфейса
         {
             chunckSize=512;
             sleepTime=50;
@@ -599,6 +562,7 @@ void Core::processCommands()
         {
             for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
             {
+                timeoutTimer->stop();
                 sendCommand(commandToSend.mid(sendPosition, chunckSize));
                 QThread::msleep(sleepTime);
             }
@@ -610,22 +574,16 @@ void Core::processCommands()
         }
         commandsSended.append(commandToSend);
 
-        if(commandToSend.indexOf("cc\r\n")==0)
-        {
-            timeoutTimer->stop();
-        }
-        else
-        {
-            quint32 timeoutInterval=1000;
-            if(commandToSend.indexOf("rns")==0)
-            {
-                timeoutInterval = 10000;
-            }
 
-            if(!fwUpdate)
-            {
-                timeoutTimer->start(timeoutInterval);
-            }
+        quint32 timeoutInterval=1000;
+        if(commandToSend.indexOf("rns")==0)
+        {
+            timeoutInterval = 10000;
+        }
+
+        if(!fwUpdate)
+        {
+            timeoutTimer->start(timeoutInterval);
         }
     }
     else
@@ -645,6 +603,8 @@ void Core::sendCommand(QByteArray val)
 
 void Core::updateProgressBar()
 {
+    if(currentDevice) bytesToRecieve = currentDevice->bytesToRecieve();
+
     float fVal = (double)(symbolsSended+bytesRecieved) / (double)(symbolsToSend+bytesToRecieve);
     emit sgSetProgress(fVal, "");
 }

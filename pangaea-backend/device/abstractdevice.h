@@ -74,6 +74,8 @@ public:
     PresetListModel* presetListModel() {return &m_presetListModel;};
     PresetManager* presetManager() {return &m_presetManager;};
 
+    qint64 bytesToRecieve() {return m_bytesToRecieve;};
+
 public slots:
     virtual QList<QByteArray> parseAnswers(QByteArray& baAnswer);
 
@@ -132,6 +134,8 @@ protected:
 
     void undefinedCommandCommHandler(const QString &command, const QByteArray& arguments);
     void modulesParamsSetCommHandler(const QString &command, const QByteArray& arguments);
+
+    qint64 m_bytesToRecieve;
 };
 
 

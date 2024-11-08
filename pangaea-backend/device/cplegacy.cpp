@@ -63,9 +63,13 @@ QList<QByteArray> CPLegacy::parseAnswers(QByteArray &baAnswer)
 {
     QList<QByteArray> parseResults, recievedCommAnswers;
 
+    recievedCommAnswers += m_parser.parseNewData(baAnswer);
+
     if(getIrNameSize.getParse(baAnswer, &parseResults))
     {
         getIrNameSizeCommHandler(parseResults); // это лишь начало команды. Не считаем что она выполнена
+        recievedCommAnswers.removeAll(QString("cc").toUtf8());
+
     }
     if(getIr.getParse(baAnswer, &parseResults))
     {
@@ -83,7 +87,6 @@ QList<QByteArray> CPLegacy::parseAnswers(QByteArray &baAnswer)
         recievedCommAnswers.append("cc");
     }
 
-    recievedCommAnswers += m_parser.parseNewData(baAnswer);
     return recievedCommAnswers;
 }
 
@@ -96,6 +99,7 @@ void CPLegacy::pushReadPresetCommands()
 
 void CPLegacy::setPresetData(const Preset &preset)
 {
+    qDebug() << "Settling preset data: " << preset.rawData();
     QByteArray ba;
 
     ba.append("gs 1\r");
@@ -147,6 +151,7 @@ void CPLegacy::saveChanges()
 
     m_deviceParamsModified = false;
     emit deviceParamsModifiedChanged();
+    emit deviceUpdatingValues(); // clear modified marks on control values
 }
 
 void CPLegacy::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges)
@@ -187,12 +192,42 @@ void CPLegacy::comparePreset()
 
 void CPLegacy::copyPreset()
 {
+    m_presetManager.setCurrentState(PresetState::Copying);
 
+
+    if(currentPreset.wavSize() == 0)
+        emit sgPushCommandToQueue("cc");
+
+    emit sgPushCommandToQueue("gs");
+
+    emit sgProcessCommands();
 }
 
 void CPLegacy::pastePreset()
 {
+        setPresetData(copiedPreset);
 
+        quint8 currentBankNumber = currentPreset.bankNumber();
+        quint8 currentPresetNumber = currentPreset.presetNumber();
+
+        // TODO для исправления бага с обновлением пресета после вставки
+        // эта часть должна быть в getStatus по ключу PresetState::Pasting
+        // но это немного костыльно и MAP для актуального пресета должен обновляться
+        // и хранится как-то по-другому. При этом при переключении применятся старый
+        if(copiedPreset.waveData().isEmpty())
+        {
+            if(currentPreset.impulseName() != "")
+            {
+                copiedPreset.setWaveData(IRWorker::flatIr());
+                copiedPreset.setImpulseName("");
+            }
+        }
+        uploadImpulseData(copiedPreset.waveData(), true, copiedPreset.impulseName());
+        currentPreset = copiedPreset;
+        currentPreset.setBankPreset(currentBankNumber, currentPresetNumber);
+
+        m_deviceParamsModified = true;
+        emit deviceParamsModifiedChanged();
 }
 
 void CPLegacy::importPreset(QString filePath, QString fileName)
@@ -347,43 +382,9 @@ void CPLegacy::getOutputModeCommHandler(const QString &command, const QByteArray
 
 void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arguments)
 {
+    if(arguments.size() < sizeof(preset_data_legacy_t)*2) return;
+
     QByteArray baPresetData = arguments;
-
-    switch(m_presetManager.currentState())
-    {
-    case PresetState::Copying:
-    {
-        // copy preview wave data
-        if(currentPreset.wavSize() != 0)
-            copiedPreset = currentPreset;
-
-        copiedPreset.setRawData(baPresetData);
-        m_presetManager.returnToPreviousState();
-        break;
-    }
-
-    case PresetState::Changing:
-    {
-        currentPreset.setRawData(baPresetData);
-        currentSavedPreset = currentPreset;
-        m_presetListModel.updatePreset(currentSavedPreset);
-        m_presetManager.returnToPreviousState();
-        break;
-    }
-
-    case PresetState::Compare:
-    {
-        // Необходимая заглушка! не удалять
-        break;
-    }
-
-    default:
-    {
-        currentPreset.setRawData(baPresetData);
-        m_presetListModel.updatePreset(currentPreset);
-        break;
-    }
-    }
 
     quint8 count=0;
     quint8 nomByte=0;
@@ -430,10 +431,47 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     IR->setEnabled(legacyData.cab_on);
     PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
 
-    emit deviceUpdatingValues();
 
-    m_deviceParamsModified = false;
-    emit deviceParamsModifiedChanged();
+    switch(m_presetManager.currentState())
+    {
+    case PresetState::Copying:
+    {
+        // copy preview wave data
+        if(currentPreset.wavSize() != 0)
+            copiedPreset = currentPreset;
+
+        copiedPreset.setRawData(baPresetData);
+        m_presetManager.returnToPreviousState();
+        qDebug() << "copied preset recieve raw data" << copiedPreset.rawData();
+        break;
+    }
+
+    case PresetState::Changing:
+    {
+        m_deviceParamsModified = false;
+        emit deviceParamsModifiedChanged();
+        emit deviceUpdatingValues();
+
+        currentPreset.setRawData(baPresetData);
+        currentSavedPreset = currentPreset;
+        m_presetListModel.updatePreset(currentSavedPreset);
+        m_presetManager.returnToPreviousState();
+        break;
+    }
+
+    case PresetState::Compare:
+    {
+        // Необходимая заглушка! не удалять
+        break;
+    }
+
+    default:
+    {
+        currentPreset.setRawData(baPresetData);
+        m_presetListModel.updatePreset(currentPreset);
+        break;
+    }
+    }
 }
 
 void CPLegacy::getIrListCommHandler(const QString &command, const QByteArray &arguments)
@@ -511,6 +549,93 @@ void CPLegacy::getIrNameCommHandler(const QString &command, const QByteArray &ar
     m_presetListModel.updatePreset(currentPreset);
 }
 
+void CPLegacy::getIrNameSizeCommHandler(const QList<QByteArray> &arguments)
+{
+    if(arguments.length()==1)
+    {
+        QByteArray baAnswer = arguments.at(0);
+        QString wavName;
+        int wavSize=0;
+        if(baAnswer.indexOf("FILE_NOT_FIND") == 0)
+        {
+            wavName= "";
+            return;
+        }
+        else
+        {
+            quint16 positionEndName = baAnswer.lastIndexOf(".wav");
+            wavName = QString::fromUtf8(baAnswer.left(positionEndName+4));
+            wavName.replace(" ","_");
+
+            QByteArray baWavSize = baAnswer.mid(positionEndName+5);
+            wavSize = baWavSize.toInt();
+        }
+
+        switch(m_presetManager.currentState())
+        {
+        //Повтор необходим. Надо чтобы обрабатывало cc/r ТОЛЬКО в состоянии копирования и экспорта
+        case PresetState::Copying:
+        {
+            copiedPreset.setImpulseName(wavName);
+
+            m_bytesToRecieve = wavSize;
+            qDebug() << "Recieve Ir. Name:" << wavName << ", size:" << wavSize;
+            break;
+        }
+
+        case PresetState::Exporting:
+        {
+            m_bytesToRecieve = wavSize;
+            currentPreset.setImpulseName(wavName);
+            break;
+        }
+
+        default:
+        {
+            currentPreset.setImpulseName(wavName);
+        }
+        }
+
+        emit m_presetManager.currentStateChanged(); // Для того чтобы экран BUSY правильно отобразил стадию этапа
+        emit sgDisableTimeoutTimer();
+    }
+}
+
+void CPLegacy::getIrCommHandler(const QList<QByteArray> &arguments)
+{
+    QByteArray impulseData;
+    if(arguments.length()==2)
+    {
+        impulseData = QByteArray::fromHex(arguments.at(1));
+    }
+
+    switch(m_presetManager.currentState())
+    {
+    case PresetState::Copying:
+    {
+        copiedPreset.setWaveData(impulseData);
+        break;
+    }
+
+    case PresetState::Exporting:
+    {
+        currentPreset.setWaveData(impulseData);
+        currentPreset.exportData();
+
+        // emit sgSetUIText("preset_exported", currentPreset.pathToExport());
+
+        m_presetManager.returnToPreviousState();
+        break;
+    }
+
+    default:{}
+    }
+
+    m_bytesToRecieve=0;
+
+    emit sgEnableTimeoutTimer();
+}
+
 //-------------------------------------acknowledegs------------------------------------------
 void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &arguments)
 {
@@ -533,15 +658,6 @@ void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArr
     pushReadPresetCommands();
 }
 
-void CPLegacy::getIrCommHandler(const QList<QByteArray> &arguments)
-{
-
-}
-
-void CPLegacy::getIrNameSizeCommHandler(const QList<QByteArray> &arguments)
-{
-
-}
 
 void CPLegacy::ackCCCommHandler(const QList<QByteArray> &arguments)
 {

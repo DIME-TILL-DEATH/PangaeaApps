@@ -12,15 +12,12 @@ public:
     {
         Unknown=0,
         Idle,
-        SendingData,
         Pasting,
-        Imported,
         Compare, // вызван оригинальный пресет
         Copying,
         Exporting,
-        SavingIr,
         UploadingIr,
-        DownloadingIr,
+        SavingIr,
         Changing
     };
     Q_ENUM(Value)

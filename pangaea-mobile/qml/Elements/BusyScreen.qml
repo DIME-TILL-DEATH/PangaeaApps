@@ -171,9 +171,10 @@ Item
                     break;
                 }
 
-                case PresetState.DownloadingIr:
+                case PresetState.Exporting:
+                case PresetState.Copying:
                 {
-                    rWait.visible = inValue;
+                    rWait.visible = true;
                     txt.text = qsTr("Downloading impulse data from device");
                     progressBar.visible = true
                     break;

@@ -8,7 +8,7 @@ import Elements 1.0
 import Modules 1.0
 
 import CppObjects
-
+import CppEnums
 
 GridLayout
 {
@@ -129,11 +129,11 @@ GridLayout
             Layout.fillHeight: true
 
             enabled: _root.presetEdited
-            highlighted: AppProperties.compareState
+            highlighted: UiCore.currentDevice.presetManager.currentState === PresetState.Compare
 
             //: Button text. Compare preset
             textButton: qsTr("Comp")
-            onMbPressed: AppProperties.comparePreset();
+            onMbPressed: UiCore.currentDevice.comparePreset();
         }
     }
 
@@ -150,7 +150,7 @@ GridLayout
 
             //: Button text. Import preset
             textButton: qsTr("Import")
-            enabled: !AppProperties.compareState
+            enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
 
             onMbPressed:
             {
@@ -165,11 +165,11 @@ GridLayout
 
             //: Button text. Copy preset.
             textButton: qsTr("Copy")
-            enabled: !AppProperties.compareState
+            enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
 
             onMbPressed:
             {
-                AppProperties.copyPreset();
+                UiCore.currentDevice.copyPreset();
                 copyFirst=true;
             }
         }
@@ -180,11 +180,11 @@ GridLayout
 
             //: Button text. Paste preset
             textButton: qsTr("Paste")
-            enabled: copyFirst & !AppProperties.compareState
+            enabled: copyFirst & (UiCore.currentDevice.presetManager.currentState !== PresetState.Compare)
 
             onMbPressed:
             {
-                AppProperties.pastePreset();
+                UiCore.currentDevice.pastePreset();
             }
         }
     }
