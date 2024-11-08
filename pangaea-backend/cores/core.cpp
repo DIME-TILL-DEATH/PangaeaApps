@@ -35,7 +35,6 @@ void Core::disconnectFromDevice()
     timeoutTimer->stop();
 
     commandsPending.clear();
-    // recieveEnabled = true;
 
     if(currentDevice)
     {
@@ -50,6 +49,7 @@ void Core::disconnectFromDevice()
 void Core::slInterfaceConnected(DeviceDescription interfaceDescription)
 {
     pushCommandToQueue("amtdev");
+    timeoutTimer->start(1000);
 
     processCommands();
 }
@@ -99,10 +99,9 @@ void Core::parseInputData(QByteArray ba)
 
                         connect(currentDevice, &AbstractDevice::sgDeviceInstanciated, this, &Core::slDeviceInstanciated);
 
-                        connect(currentDevice, &AbstractDevice::sgPushCommandToQueue, this, &Core::pushCommandToQueue);
-                        connect(currentDevice, &AbstractDevice::sgProcessCommands, this, &Core::processCommands);
-
                         currentDevice->initDevice(deviceType);
+
+                        timeoutTimer->setInterval(10000);
                     }
 
 
@@ -373,11 +372,16 @@ void Core::slDeviceInstanciated(DeviceType deviceType)
 {
     emit sgCurrentDeviceChanged(currentDevice);
     currentDevice->moveToThread(QGuiApplication::instance()->thread());
+
+    connect(currentDevice, &AbstractDevice::sgPushCommandToQueue, this, &Core::pushCommandToQueue, Qt::QueuedConnection);
+    connect(currentDevice, &AbstractDevice::sgProcessCommands, this, &Core::processCommands, Qt::QueuedConnection);
+
+    currentDevice->readFullState();
 }
 
 void Core::pushCommandToQueue(QByteArray command, bool finalize)
 {
-    if(finalize) command.append("\r\n");
+    if(finalize) command.append("\r\n"); // \r
 
     commandsPending.append(command);
     calculateSendVolume();
@@ -565,6 +569,7 @@ void Core::processCommands()
                 timeoutTimer->stop();
                 sendCommand(commandToSend.mid(sendPosition, chunckSize));
                 QThread::msleep(sleepTime);
+                timeoutTimer->start();
             }
         }
         else
@@ -575,16 +580,16 @@ void Core::processCommands()
         commandsSended.append(commandToSend);
 
 
-        quint32 timeoutInterval=1000;
-        if(commandToSend.indexOf("rns")==0)
-        {
-            timeoutInterval = 10000;
-        }
+        // quint32 timeoutInterval=1000;
+        // if(commandToSend.indexOf("rns")==0)
+        // {
+        //     timeoutInterval = 10000;
+        // }
 
-        if(!fwUpdate)
-        {
-            timeoutTimer->start(timeoutInterval);
-        }
+        // if(!fwUpdate)
+        // {
+        //     timeoutTimer->start(timeoutInterval);
+        // }
     }
     else
     {
@@ -628,10 +633,10 @@ void Core::recieveTimeout()
         else
         {
             sendCount++;
-            qInfo() << "!!!!!!!!!!!!!!!!! recieve timeout !!!!!!!!!!!!!!!!!" << sendCount;
+            qInfo("!!!!!!!!!!!!!!!!! recieve timeout, attempt=2%d !!!!!!!!!!!!!!!!!", sendCount);
 
             sendCommand(commandWithoutAnswer);
-            timeoutTimer->setInterval(1000);
+            // timeoutTimer->setInterval(1000);
 
             if(sendCount>3)
             {

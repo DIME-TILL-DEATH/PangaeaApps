@@ -46,8 +46,11 @@ void CPLegacy::initDevice(DeviceType deviceType)
     emit modulesListModelChanged();
     emit presetListModelChanged();
 
-    emit sgDeviceInstanciated(DeviceType::LEGACY_DEVICES);
+    emit sgDeviceInstanciated(DeviceType::LEGACY_DEVICES);  
+}
 
+void CPLegacy::readFullState()
+{
     m_parser.enableFullEndMode();
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("rns");
@@ -287,7 +290,7 @@ void CPLegacy::uploadImpulseData(const QByteArray &impulseData, bool isPreview, 
 {
     if(impulseData.isEmpty())
     {
-        qWarning() << __FUNCTION__ << "no wave data";
+        qInfo() << __FUNCTION__ << "no wave data";
         return;
     }
 

@@ -28,6 +28,7 @@ public:
 
 public:
     void initDevice(DeviceType deviceType) override;
+    void readFullState() override;
 
     Q_INVOKABLE void saveChanges() override;
     Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) override;

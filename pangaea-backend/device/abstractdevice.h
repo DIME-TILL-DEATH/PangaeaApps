@@ -47,6 +47,7 @@ public:
     DeviceClass deviceClass() {return m_deviceClass;}
 
     virtual void initDevice(DeviceType deviceType);
+    virtual void readFullState() {};
 
     // TODO: пока умеет только Preset и bank!!!! Дописать
     Q_INVOKABLE virtual void restoreValue(QString name) {};  // restore parameter
@@ -124,8 +125,8 @@ protected:
     Preset copiedPreset{this};
     PresetManager m_presetManager{this};
 
-    ModulesListModel m_modulesListModel;
-    PresetListModel m_presetListModel;
+    ModulesListModel m_modulesListModel{this};
+    PresetListModel m_presetListModel{this};
 
     // TODO: m_presetsList живёт внутри модели или modulesList тут
     QList<Preset> m_presetsList;
