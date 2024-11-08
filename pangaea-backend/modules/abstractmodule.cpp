@@ -46,6 +46,12 @@ void AbstractModule::setModuleEnabled(bool newEnabled)
 
     QString fullCommand = m_commandOnOff + QString(" %1\r\n").arg(m_moduleEnabled, 0, 16);
     if(m_owner) emit m_owner->sgWriteToInterface(fullCommand.toUtf8(), true);
+
+    // if(m_owner)
+    // {
+    //     emit m_owner->sgPushCommandToQueue(fullCommand.toUtf8(), true);
+    //     emit m_owner->sgProcessCommands();
+    // }
     emit dataChanged();
     emit userModifiedModuleParameters();
 }

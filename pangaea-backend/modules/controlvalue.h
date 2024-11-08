@@ -2,6 +2,7 @@
 #define CONTROLVALUE_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "abstractmodule.h"
 
@@ -63,6 +64,12 @@ private:
     QString m_units;
 
     AbstractModule* m_owner;
+
+    QList<QByteArray> buffer;
+    QTimer frameTimer{this};
+
+private slots:
+    void sendFrame();
 };
 Q_DECLARE_METATYPE(ControlValue)
 

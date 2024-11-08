@@ -15,6 +15,9 @@ ControlValue::ControlValue(AbstractModule *owner, QString commandName,
     m_units{units}
 {
     if(owner) connect(this, &ControlValue::userModifiedValue, owner, &AbstractModule::userModifiedModuleParameters);
+
+    connect(&frameTimer, &QTimer::timeout, this, &ControlValue::sendFrame);
+    frameTimer.start(50);
 }
 
 void ControlValue::setDisplayValue(double newDisplayValue)
@@ -32,10 +35,35 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     double k1 = m_minDisplayValue-(m_minControlValue*k2);
     quint8 controlValue = (m_displayValue - k1)/k2;
 
-    QString fullCommand = m_commandName + QString(" %1\r\n").arg(controlValue, 0, 16);
-    if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
+    QString fullCommand = m_commandName + QString(" %1\r\n").arg(controlValue, 0, 16); //\r
+
+    if(buffer.isEmpty())
+    {
+        buffer.append(fullCommand.toUtf8());
+    }
+    else
+    {
+        // drop same values
+        if(buffer.last() != fullCommand.toUtf8()) buffer.append(fullCommand.toUtf8());
+    }
+    // if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
 
     emit userModifiedValue();
+}
+
+void ControlValue::sendFrame()
+{
+    if(buffer.size() > 0)
+    {
+        QByteArray resultBa;
+        foreach(QByteArray comm, buffer)
+        {
+            resultBa.append(comm);
+        }
+
+        if(m_owner) m_owner->sendDataToDevice(resultBa);
+        buffer.clear();
+    }
 }
 
 bool ControlValue::enabled() const
@@ -45,6 +73,7 @@ bool ControlValue::enabled() const
     else
         return true;
 }
+
 
 void ControlValue::setControlValue(qint32 value)
 {
