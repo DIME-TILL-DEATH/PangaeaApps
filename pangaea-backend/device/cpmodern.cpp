@@ -1,3 +1,7 @@
 #include "cpmodern.h"
 
-CPModern::CPModern() {}
+CPModern::CPModern(Core *parent)
+    :AbstractDevice{parent}
+{
+
+}

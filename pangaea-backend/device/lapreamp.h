@@ -6,7 +6,7 @@
 class LAPreamp : public CPModern
 {
 public:
-    LAPreamp();
+    LAPreamp(Core *parent);
 };
 
 #endif // LAPREAMP_H

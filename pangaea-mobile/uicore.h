@@ -88,6 +88,8 @@ public slots:
     void slExportPreset(QString fullFilePath, QString fileName);
     void slImportPreset(QString fullFilePath, QString fileName);
 
+    void slDeviceDisconnected();
+
 private slots:
     void slImpulseFilePicked(QString filePath, QString fileName);
 

@@ -213,6 +213,19 @@ void UiCore::slImportPreset(QString fullFilePath, QString fileName)
     m_currentDevice->importPreset(fullFilePath, fileName);
 }
 
+void UiCore::slDeviceDisconnected()
+{
+    disconnect(m_currentDevice);
+    AbstractDevice* oldPtr = m_currentDevice;
+    m_currentDevice = &dummyDevice;
+    emit currentDeviceChanged();
+
+    if(oldPtr)
+    {
+        oldPtr->deleteLater();
+    }
+}
+
 void UiCore::setLanguage(QString languageCode)
 {
     appSettings->setValue("application_language", languageCode);

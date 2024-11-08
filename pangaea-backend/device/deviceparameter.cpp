@@ -46,9 +46,9 @@ QString DeviceParameter::sendString(Type parameterType, quint8 value)
     case Type::GATE_THRESHOLD: fullString += "gt"; break;   //+
     case Type::GATE_DECAY: fullString += "gd"; break;       //+
 
-    case Type::COMPRESSOR_ON: fullString += "co"; break;
-    case Type::COMPRESSOR_SUSTAIN: fullString += "cs"; break;
-    case Type::COMPRESSOR_VOLUME: fullString += "cv"; break;
+    case Type::COMPRESSOR_ON: fullString += "co"; break;        //+
+    case Type::COMPRESSOR_SUSTAIN: fullString += "cs"; break;   //+
+    case Type::COMPRESSOR_VOLUME: fullString += "cv"; break;    //+
 
     case Type::EQ_FREQ1: fullString += "eqf 0"; break;  //+
     case Type::EQ_FREQ2: fullString += "eqf 1"; break;  //+

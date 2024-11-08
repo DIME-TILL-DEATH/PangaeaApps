@@ -7,7 +7,7 @@
 class CPModern : public AbstractDevice
 {
 public:
-    CPModern();
+    CPModern(Core *parent);
 };
 
 #endif // CPMODERN_H

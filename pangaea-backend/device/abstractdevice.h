@@ -16,6 +16,7 @@
 #include "presetlistmodel.h"
 
 #include "presetmanager.h"
+#include "deviceclassenum.h"
 
 class Core;
 
@@ -23,6 +24,7 @@ class AbstractDevice : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(DeviceClass deviceClass READ deviceClass CONSTANT)
     Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)
 
     Q_PROPERTY(quint8 bank READ bank NOTIFY bankPresetChanged FINAL)
@@ -36,14 +38,6 @@ class AbstractDevice : public QObject
     Q_PROPERTY(ModulesListModel* modulesListModel READ modulesListModel NOTIFY modulesListModelChanged FINAL)
     Q_PROPERTY(PresetListModel* presetListModel READ presetListModel NOTIFY presetListModelChanged FINAL)
 public:
-    enum DeviceClass
-    {
-        ABSTRACT = 0,
-        CP_LEGACY,
-        CP_MODERN
-    };
-    Q_ENUM(DeviceClass)
-
     explicit AbstractDevice(Core *owner);
     ~AbstractDevice();
 
@@ -112,6 +106,7 @@ signals:
     void sgDisableTimeoutTimer();
 
     void deviceUpdatingValues();
+
     void firmwareNameChanged();
     void bankPresetChanged();
     void deviceParamsModifiedChanged();

@@ -39,6 +39,7 @@ qt_add_library(pangaea-backend STATIC
     modules/controlvalue.cpp modules/controlvalue.h
     modules/abstractmodule.cpp modules/abstractmodule.h
     modules/presetvolume.h modules/presetvolume.cpp
+    modules/compressor.h modules/compressor.cpp
     modules/noisegate.h modules/noisegate.cpp
     modules/poweramp.cpp modules/poweramp.h
     modules/cabsim.h modules/cabsim.cpp
@@ -56,6 +57,7 @@ qt_add_library(pangaea-backend STATIC
     uihelpers/devicemessageenum.h
     uihelpers/moduletypeenum.h
     uihelpers/presetstateenum.h
+    uihelpers/deviceclassenum.h
 
     mock/abstractmockdevice.h mock/abstractmockdevice.cpp
     mock/mockcp16legacy.h mock/mockcp16legacy.cpp

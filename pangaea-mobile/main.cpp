@@ -20,6 +20,7 @@
 
 #include "deviceerrorenum.h"
 #include "devicemessageenum.h"
+#include "deviceclassenum.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
@@ -103,6 +104,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
 
+    qmlRegisterUncreatableType<DeviceClassEnum>("CppEnums", 1, 0, "DeviceClass", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<PresetStateEnum>("CppEnums", 1, 0, "PresetState", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceErrorEnum>("CppEnums", 1, 0, "DeviceErrorType", "Not creatable as it is an enum type");
@@ -135,7 +137,7 @@ int main(int argc, char *argv[])
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
     Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
     Core::connect(core, &Core::sgReadyToDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
-
+    Core::connect(core, &Core::sgReadyToDisconnect, &uiCore, &UiCore::slDeviceDisconnected);
 
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);
 

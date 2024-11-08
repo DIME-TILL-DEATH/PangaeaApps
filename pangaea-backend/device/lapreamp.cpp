@@ -1,6 +1,10 @@
 #include "lapreamp.h"
 
-LAPreamp::LAPreamp() {}
+LAPreamp::LAPreamp(Core *parent)
+    : CPModern{parent}
+{
+
+}
 // m_devCommandList.append(DeviceAnswer(new MaskedParser("sm0*END\n", "111X1111"), AnswerType::la3CleanPreset, "la3 clean preset mappings"));
 // m_devCommandList.append(DeviceAnswer(new MaskedParser("sm1*END\n", "111X1111"), AnswerType::la3DrivePreset, "la3 drive preset mappings"));
 // m_devCommandList.append(DeviceAnswer(new MaskedParser("umx\rEND\n", "11011111"), AnswerType::la3ModeChange, "la3 hardware switch occured"));
