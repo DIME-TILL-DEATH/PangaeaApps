@@ -6,69 +6,40 @@ import Elements 1.0
 
 import CppObjects
 
-Item
+BaseModule
 {
     id: main
 
-    property string name: "LP"
-    property bool on: true
+    property LowPassFilter module
 
-    property int paramType: DeviceParameter.LPF_ON
+    moduleDescription: qsTr("Low-pass filter")
 
-    BaseModule{
-        id: _baseModule
+    showDescription: false
 
-        moduleName: qsTr("LP")
-        moduleDescription: qsTr("Low-pass filter")
+    contentItem: Row
+    {
+        anchors.fill: parent
+        spacing: 0
 
-        showDescription: false
-
-        contentItem: Row
+        Column
         {
-            anchors.fill: parent
-            spacing: 0
-
-            Column
+            height: parent.height
+            width: parent.width
+            CustomSlider
             {
+                // units: "Hz"
+                // dispMax: 20000
+                // dispMin: 1000
+                // valueMax: 0
+                // valueMin: 195
                 height: parent.height
                 width: parent.width
-                CustomizerSlider
-                {
-                    units: "Hz"
-                    dispMax: 20000
-                    dispMin: 1000
-                    valueMax: 0
-                    valueMin: 195
-                    height: parent.height
-                    width: parent.width
-                    name: "Low-pass filter"
-                    paramType: DeviceParameter.LPF_VOLUME
 
-                    bottomLineEnabled: false
-                    moduleOn: on
-                }
+                ctrlValInstance: module.lpf
+
+                bottomLineEnabled: false
+                moduleOn: on
             }
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-                main.on=value
-            }
-        }
-    }
-
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
-        {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on)
         }
     }
 }

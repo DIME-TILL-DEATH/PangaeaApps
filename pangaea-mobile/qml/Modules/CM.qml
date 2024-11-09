@@ -6,67 +6,35 @@ import Elements 1.0
 
 import CppObjects
 
-Item
-{
+BaseModule{
     id: main
 
-    property bool on: true
-    property int paramType: DeviceParameter.COMPRESSOR_ON
+    property Compressor module
 
-    BaseModule{
-        id: _baseModule
+    moduleDescription: qsTr("Compressor")
 
-        moduleName: qsTr("CM")
-        moduleDescription: qsTr("Compressor")
-
-        contentItem: Column
-        {
-            height: parent.height
-            width: parent.width
-            CustomizerSlider
-            {
-                height: parent.height/2
-                width: parent.width
-
-                name: "Sustain"
-                paramType: DeviceParameter.COMPRESSOR_SUSTAIN
-
-                moduleOn: on
-            }
-
-            CustomizerSlider
-            {
-                height: parent.height/2
-                width: parent.width
-
-                name: "Volume"
-                paramType: DeviceParameter.COMPRESSOR_VOLUME
-
-                bottomLineEnabled: false
-                moduleOn: on
-            }
-        }
-    }
-
-
-    Connections
+    contentItem: Column
     {
-        target: UiCore
-        function onSgSetUiDeviceParameter(paramType, value)
+        height: parent.height
+        width: parent.width
+        CustomSlider
         {
-            if(paramType === main.paramType)
-            {
-                main.on=value
-            }
-        }
-    }
+            height: parent.height/2
+            width: parent.width
 
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
+            ctrlValInstance: module.sustain
+
+            moduleOn: main.on
+        }
+
+        CustomSlider
         {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on)
+            height: parent.height/2
+            width: parent.width
+
+            ctrlValInstance: module.volume
+
+            moduleOn: main.on
         }
     }
 }

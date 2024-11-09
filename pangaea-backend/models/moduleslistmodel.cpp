@@ -57,39 +57,7 @@ QVariant ModulesListModel::data(const QModelIndex &index, int role) const
     case ListRoles::ModuleInstanceRole:
     {
         AbstractModule* module = m_moduleList.at(index.row());
-
-        switch(module->moduleType())
-        {
-        case ModuleTypeEnum::BYPASS: break;
-        case ModuleTypeEnum::CM:
-        case ModuleTypeEnum::PR:
-        case ModuleTypeEnum::IR:
-        {
-            CabSim* irModule = dynamic_cast<CabSim*>(module);
-            if(irModule)return QVariant::fromValue(irModule);
-            break;
-        }
-        case ModuleTypeEnum::HP:
-        case ModuleType::PA:
-        {
-            PowerAmp* paModule = dynamic_cast<PowerAmp*>(module);
-            if(paModule)return QVariant::fromValue(paModule);
-        }
-        case ModuleTypeEnum::EQ:
-        {
-            EqParametric* eqModule = dynamic_cast<EqParametric*>(module);
-            if(eqModule)return QVariant::fromValue(eqModule);
-            break;
-        }
-        case ModuleTypeEnum::LP:
-        case ModuleTypeEnum::NG:
-        {
-            NoiseGate* ngModule = dynamic_cast<NoiseGate*>(module);
-            if(ngModule)return QVariant::fromValue(ngModule);
-            break;
-        }
-        case ModuleTypeEnum::MASTER: break;
-        }
+        return QVariant::fromValue(module);
     }
 
     default:

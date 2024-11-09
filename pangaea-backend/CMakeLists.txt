@@ -43,8 +43,10 @@ qt_add_library(pangaea-backend STATIC
     modules/noisegate.h modules/noisegate.cpp
     modules/poweramp.cpp modules/poweramp.h
     modules/cabsim.h modules/cabsim.cpp
+    modules/hipassfilter.h modules/hipassfilter.cpp
     modules/eqband.cpp modules/eqband.h
     modules/eqparametric.cpp modules/eqparametric.h
+    modules/lowpassfilter.h modules/lowpassfilter.cpp
 
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h

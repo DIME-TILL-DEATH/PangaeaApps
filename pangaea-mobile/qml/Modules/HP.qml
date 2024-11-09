@@ -6,64 +6,35 @@ import Elements 1.0
 
 import CppObjects
 
-Item
+BaseModule
 {
     id: main
 
-    property bool on: true
-    property int paramType: DeviceParameter.HPF_ON
+    property HiPassFilter module
 
+    moduleDescription: qsTr("High-pass filter")
 
-    BaseModule{
-        id: _baseModule
+    showDescription: false
 
-        moduleName: qsTr("HP")
-        moduleDescription: qsTr("High-pass filter")
+    contentItem: Column{
+        height: parent.height
+        width: parent.width
+        CustomSlider
+        {
+            // dispMax: 1000
+            // dispMin: 20
+            // valueMax: 255
+            // valueMin: 0
 
-        showDescription: false
-
-        contentItem: Column{
             height: parent.height
             width: parent.width
-            CustomizerSlider
-            {
-                dispMax: 1000
-                dispMin: 20
-                valueMax: 255
-                valueMin: 0
 
-                height: parent.height
-                width: parent.width
+            ctrlValInstance: module.hpf
 
-                name: "High pass filter"
-                paramType: DeviceParameter.HPF_VOLUME
+            inverse: true
+            bottomLineEnabled: false
 
-                inverse: true
-                bottomLineEnabled: false
-
-                moduleOn: on
-            }
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-                main.on=value
-            }
-        }
-    }
-
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
-        {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on)
+            moduleOn: main.on
         }
     }
 }

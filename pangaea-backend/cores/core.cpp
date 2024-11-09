@@ -25,13 +25,7 @@ void Core::disconnectFromDevice()
 
     commandsPending.clear();
 
-    // if(currentDevice)
-    // {
-    //     disconnect(currentDevice);
-    //     delete(currentDevice);
-        currentDevice = nullptr;
-    // }
-
+    currentDevice = nullptr;
     emit sgReadyToDisconnect();
 }
 
@@ -103,14 +97,14 @@ void Core::parseInputData(QByteArray ba)
 
 void Core::slDeviceInstanciated()
 {
-    emit sgCurrentDeviceChanged(currentDevice);
     currentDevice->moveToThread(QGuiApplication::instance()->thread());
 
     connect(currentDevice, &AbstractDevice::sgWriteToInterface, this, &Core::sgWriteToInterface, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgPushCommandToQueue, this, &Core::pushCommandToQueue, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgSendWithoutConfirmation, this, &Core::sendWithoutConfirmation, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgProcessCommands, this, &Core::processCommands, Qt::QueuedConnection);
-    connect(currentDevice, &AbstractDevice::sgDisconnect, this, &Core::sgImmediatelyDisconnect, Qt::QueuedConnection);
+    connect(currentDevice, &AbstractDevice::sgDisconnect, this, &Core::disconnectFromDevice, Qt::QueuedConnection);
+    emit sgCurrentDeviceChanged(currentDevice);
 
     currentDevice->readFullState();
 }

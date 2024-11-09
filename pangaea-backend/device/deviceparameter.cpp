@@ -62,10 +62,10 @@ QString DeviceParameter::sendString(Type parameterType, quint8 value)
     case Type::EQ_Q4: fullString += "eqq 3"; break; //+
     case Type::EQ_Q5: fullString += "eqq 4"; break; //+
 
-    case Type::LPF_VOLUME: fullString += "lv"; break;
-    case Type::HPF_VOLUME: fullString += "hv"; break;
-    case Type::HPF_ON: fullString += "ho"; break;
-    case Type::LPF_ON: fullString += "lo"; break;
+    case Type::LPF_VOLUME: fullString += "lv"; break;   //+
+    case Type::HPF_VOLUME: fullString += "hv"; break;   //+
+    case Type::HPF_ON: fullString += "ho"; break;       //+
+    case Type::LPF_ON: fullString += "lo"; break;       //+
 
     case Type::PRESENCE_ON: fullString += "po"; break;        //+
     case Type::PRESENCE_VOLUME: fullString += "pv"; break;    //+

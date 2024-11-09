@@ -322,6 +322,7 @@ Item
 
                 case DeviceMessageType.FormatMemoryFinished:
                 {
+                    console.log("message recieved")
                     messageDialog.headerText = qsTr("Operation complete");
                     messageDialog.text = qsTr("Formatting is complete\nPlease reset the device power and reconnect");
                     messageDialog.standardButtons = Dialog.Close;

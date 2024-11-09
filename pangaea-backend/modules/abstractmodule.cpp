@@ -8,11 +8,14 @@
 
 #include "presetvolume.h"
 
+#include "compressor.h"
 #include "noisegate.h"
 #include "poweramp.h"
 #include "eqband.h"
 #include "cabsim.h"
+#include "hipassfilter.h"
 #include "eqparametric.h"
+#include "lowpassfilter.h"
 
 
 AbstractModule::AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff)
@@ -31,11 +34,13 @@ void AbstractModule::registerTypestoQml()
     qmlRegisterUncreatableType<AbstractModule>("CppObjects", 1, 0, "Module", "Cannot create Module in QML");
     qmlRegisterUncreatableType<PresetVolume>("CppObjects", 1, 0, "PresetVolume", "Cannot create MasterVolume in QML");
     qmlRegisterUncreatableType<NoiseGate>("CppObjects", 1, 0, "NoiseGate", "Cannot create NoiseGate in QML");
+    qmlRegisterUncreatableType<Compressor>("CppObjects", 1, 0, "Compressor", "Cannot create Compressor in QML");
     qmlRegisterUncreatableType<PowerAmp>("CppObjects", 1, 0, "PowerAmp", "Cannot create PowerAmp in QML");
     qmlRegisterUncreatableType<CabSim>("CppObjects", 1, 0, "CabSim", "Cannot create CabSim in QML");
+    qmlRegisterUncreatableType<HiPassFilter>("CppObjects", 1, 0, "HiPassFilter", "Cannot create HP in QML");
     qmlRegisterUncreatableType<EqParametric>("CppObjects", 1, 0, "EqParametric", "Cannot create EQ in QML");
     qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
-
+    qmlRegisterUncreatableType<LowPassFilter>("CppObjects", 1, 0, "LowPassFilter", "Cannot create LP in QML");
 }
 
 void AbstractModule::setModuleEnabled(bool newEnabled)

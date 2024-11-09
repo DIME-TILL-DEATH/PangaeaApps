@@ -85,12 +85,12 @@ void MockCP16Legacy::initFolders()
 
 void MockCP16Legacy::amtDevCommHandler(const QString &command, const QByteArray& arguments)
 {
-    emit answerReady(QString("amtdev\r3\n").toUtf8());
+    emit answerReady(QString("amtdev\r3\nEND\n").toUtf8());
 }
 
 void MockCP16Legacy::amtVerCommHandler(const QString &command, const QByteArray& arguments)
 {
-    emit answerReady(QString("amtver\r1.04.04\n").toUtf8());
+    emit answerReady(QString("amtver\r1.04.04\nEND\n").toUtf8());
 }
 
 void MockCP16Legacy::bankPresetCommHandler(const QString &command, const QByteArray& arguments)

@@ -30,6 +30,7 @@ CPLegacy::CPLegacy(Core *parent)
 
     m_parser.addCommandHandler("REQUEST_CHUNK_SIZE", std::bind(&CPLegacy::requestNextChunkCommHandler, this, _1, _2));
     m_parser.addCommandHandler("FR_OK", std::bind(&CPLegacy::fwuFinishedCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("fsf", std::bind(&CPLegacy::formatFinishedCommHandler, this, _1, _2));
 
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
@@ -48,14 +49,20 @@ void CPLegacy::initDevice(DeviceType deviceType)
     MV = new PresetVolume(this);
 
     NG = new NoiseGate(this);
+    CM = new Compressor(this);
     PA = new PowerAmp(this);
     IR = new CabSim(this);
+    HPF = new HiPassFilter(this);
     EQ = new EqParametric(this);
+    LPF = new LowPassFilter(this);
 
     m_modulesListModel.insertModule(NG, 0);
-    m_modulesListModel.insertModule(PA, 1);
-    m_modulesListModel.insertModule(IR, 2);
-    m_modulesListModel.insertModule(EQ, 3);
+    m_modulesListModel.insertModule(CM, 1);
+    m_modulesListModel.insertModule(PA, 2);
+    m_modulesListModel.insertModule(IR, 3);
+    m_modulesListModel.insertModule(HPF, 4);
+    m_modulesListModel.insertModule(EQ, 5);
+    m_modulesListModel.insertModule(LPF, 6);
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
@@ -509,9 +516,8 @@ void CPLegacy::formatMemory()
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryStarted);
 
     isFormatting = true;
-    // timeoutTimer->setInterval(10000);
     emit sgDisableTimeoutTimer();
-    emit sgSendWithoutConfirmation(QString("fsf").toUtf8());
+    emit sgSendWithoutConfirmation(QString("fsf\r\n").toUtf8());
     emit sgProcessCommands();
 }
 //===================================Setters-getters=================
@@ -615,6 +621,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     MV->setValue(legacyData.preset_volume);
 
     NG->setValues(legacyData.gate_on, legacyData.gate_threshold, legacyData.gate_decay);
+    CM->setValues(legacyData.compressor_on, legacyData.compressor_sustain, legacyData.compressor_volume);
 
     eq_t eqData;
     for(int i=0; i<5; i++)
@@ -625,6 +632,8 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         eqData.Q[i] = legacyData.eq_Q[i];
     }
     EQ->setBandsData(eqData);
+    HPF->setValues(legacyData.hp_on, legacyData.hp_freq);
+    LPF->setValues(legacyData.lp_on, legacyData.lp_freq);
     IR->setEnabled(legacyData.cab_on);
     PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
 
@@ -862,13 +871,14 @@ void CPLegacy::fwuFinishedCommHandler(const QString &command, const QByteArray &
         emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateFinished);
         fwUpdate = false;
     }
-    else
-    {
-        emit sgDeviceMessage(DeviceMessageType::FormatMemoryFinished);
-        isFormatting = false;
-    }
+}
 
-    emit sgDisconnect();
+void CPLegacy::formatFinishedCommHandler(const QString &command, const QByteArray &arguments)
+{
+    qDebug() << __FUNCTION__;
+    emit sgDeviceMessage(DeviceMessageType::FormatMemoryFinished);
+    isFormatting = false;
+    // emit sgDisconnect();
 }
 //-------------------------------------acknowledegs------------------------------------------
 void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &arguments)

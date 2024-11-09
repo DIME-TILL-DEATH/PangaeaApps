@@ -10,10 +10,13 @@
 #include "preset.h"
 
 #include "presetvolume.h"
+#include "compressor.h"
 #include "noisegate.h"
 #include "poweramp.h"
 #include "cabsim.h"
+#include "hipassfilter.h"
 #include "eqparametric.h"
+#include "lowpassfilter.h"
 
 #include "maskedparser.h"
 
@@ -68,10 +71,13 @@ private:
 
     // avaliable modules
     PresetVolume* MV;
+    Compressor* CM;
     NoiseGate* NG;
     PowerAmp* PA;
     CabSim* IR;
+    HiPassFilter* HPF;
     EqParametric* EQ;
+    LowPassFilter* LPF;
 
     QSettings* appSettings;
 
@@ -114,6 +120,7 @@ private:
     const uint32_t fwUploadBlockSize = 100;
     void requestNextChunkCommHandler(const QString &command, const QByteArray &arguments);
     void fwuFinishedCommHandler(const QString &command, const QByteArray &arguments);
+    void formatFinishedCommHandler(const QString &command, const QByteArray &arguments);
 };
 
 #endif // CPLEGACY_H
