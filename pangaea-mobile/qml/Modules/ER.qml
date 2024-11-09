@@ -6,89 +6,68 @@ import Elements 1.0
 
 import CppObjects
 
-Item
+BaseModule
 {
     id: main
 
-    property bool on: true
-    property int paramType: DeviceParameter.EARLY_ON
+    property EarlyReflections module
 
     property int currentType
 
-    BaseModule{
-        id: _baseModule
+    moduleDescription: qsTr("Early reflections")
 
-        moduleName: qsTr("ER")
-        moduleDescription: qsTr("Early reflections")
+    width: parent.width
+    height: parent.height
 
-        width: parent.width
+    contentItem: Column
+    {
         height: parent.height
-
-        contentItem: Column
+        width: parent.width
+        CustomSlider
         {
-            height: parent.height
+            id: _slider
+
+            height: parent.height/2
             width: parent.width
-            CustomizerSlider
+
+            ctrlValInstance: module.reflectionsVolume
+
+            bottomLineEnabled: false
+            moduleOn: main.on
+
+        }
+
+        MComboBox
+        {
+            id: _comboBox
+
+            property bool deviceUpdatingValues
+
+            height: parent.height/2
+            width: parent.width
+
+            on: main.on
+
+            currentIndex: module.reflectionsType.displayValue
+
+            model: ["SHORT","MEDIUM","LONG"]
+
+            onActivated:
             {
-                id: _slider
-
-                height: parent.height/2
-                width: parent.width
-                name: "Early reflection"
-                paramType: DeviceParameter.EARLY_VOLUME
-
-                bottomLineEnabled: false
-                moduleOn: on        
-
+                if(!deviceUpdatingValues)
+                    module.reflectionsType.displayValue = currentIndex;
             }
 
-            MComboBox
-            {
-                id: _combo
+            Connections{
+                target: UiCore.currentDevice
 
-                height: parent.height/2
-                width: parent.width
-
-                on: main.on
-
-                currentIndex: main.currentType
-
-                model: ["SHORT","MEDIUM","LONG"]
-
-                onActivated:
+                function onDeviceUpdatingValues()
                 {
-                    UiCore.setDeviceParameter(DeviceParameter.EARLY_TYPE, currentIndex);
+                    _comboBox.deviceUpdatingValues = true;
+                    _comboBox.currentIndex = module.reflectionsType.displayValue;
+                    _comboBox.deviceUpdatingValues = false;
                 }
             }
         }
     }
-
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-                main.on=value
-            }
-
-            if(paramType === DeviceParameter.EARLY_TYPE)
-            {
-                main.currentType = value               
-            }
-        }
-    }
-
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
-        {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on)
-        }
-    }
-
-
 }

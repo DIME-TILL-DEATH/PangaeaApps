@@ -6,95 +6,69 @@ import StyleSettings 1.0
 
 import CppObjects
 
-Item
+
+BaseModule
 {
     id: main
 
-    property bool on: true
-    property int paramType: DeviceParameter.PREAMP_ON
+    property Preamp module
 
-    BaseModule{
-        id: _baseModule
+    moduleDescription: qsTr("Preamp")
 
-        moduleName: qsTr("PR")
-        moduleDescription: qsTr("Preamp")
-
-        contentItem: Column
-        {
-            height: parent.height
-            width: parent.width
-            CustomizerSlider
-            {
-                paramType: DeviceParameter.PREAMP_HIGH
-                name: "High"
-
-                valueMin: (-64)
-                valueMax: (63)
-                dispMin:  (0)
-                dispMax:  (127)
-                height: parent.height/4
-                width: parent.width
-                moduleOn: on
-            }
-
-            CustomizerSlider
-            {
-                paramType: DeviceParameter.PREAMP_MID
-                name: "Mid"
-
-                valueMin: (-64)
-                valueMax: (63)
-                dispMin:  (0)
-                dispMax:  (127)
-                height: parent.height/4
-                width: parent.width
-                moduleOn: on
-            }
-            CustomizerSlider
-            {
-                paramType: DeviceParameter.PREAMP_LOW
-                name: "Low"
-
-                valueMin: (-64)
-                valueMax: (63)
-                dispMin:  (0)
-                dispMax:  (127)
-                height: parent.height/4
-                width: parent.width
-                moduleOn: on
-            }
-
-            CustomizerSlider
-            {
-                paramType: DeviceParameter.PREAMP_VOLUME
-                name: "Volume"
-
-                height: parent.height/4
-                width: parent.width
-                bottomLineEnabled: false
-                moduleOn: on
-            }
-        }
-    }
-
-    Connections
+    contentItem: Column
     {
-        target: UiCore
-        function onSgSetUiDeviceParameter(paramType, value)
+        height: parent.height
+        width: parent.width
+        CustomSlider
         {
-            if(paramType === main.paramType)
-            {
-                main.on=value
-            }
-        }
-    }
+            // valueMin: (-64)
+            // valueMax: (63)
+            // dispMin:  (0)
+            // dispMax:  (127)
+            height: parent.height/4
+            width: parent.width
 
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
+            ctrlValInstance: module.low
+
+            moduleOn: main.on
+        }
+
+        CustomSlider
         {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on)
+            // valueMin: (-64)
+            // valueMax: (63)
+            // dispMin:  (0)
+            // dispMax:  (127)
+            height: parent.height/4
+            width: parent.width
+
+            ctrlValInstance: module.mid
+
+            moduleOn: main.on
+        }
+        CustomSlider
+        {
+            // valueMin: (-64)
+            // valueMax: (63)
+            // dispMin:  (0)
+            // dispMax:  (127)
+            height: parent.height/4
+            width: parent.width
+
+            ctrlValInstance: module.high
+
+            moduleOn: main.on
+        }
+
+        CustomSlider
+        {
+            height: parent.height/4
+            width: parent.width
+            bottomLineEnabled: false
+
+            ctrlValInstance: module.volume
+
+            moduleOn: main.on
         }
     }
 }

@@ -12,11 +12,13 @@
 #include "presetvolume.h"
 #include "compressor.h"
 #include "noisegate.h"
+#include "preamp.h"
 #include "poweramp.h"
 #include "cabsim.h"
 #include "hipassfilter.h"
 #include "eqparametric.h"
 #include "lowpassfilter.h"
+#include "earlyreflections.h"
 
 #include "maskedparser.h"
 
@@ -24,7 +26,7 @@ class CPLegacy : public AbstractDevice
 {
     Q_OBJECT
 
-    Q_PROPERTY(quint8 outputMode READ outputMode WRITE setOutputMode NOTIFY outputModeChanged FINAL)
+
 
     Q_PROPERTY(PresetVolume* MV READ getMV NOTIFY MVChanged FINAL)
 public:
@@ -48,8 +50,6 @@ public:
     void setImpulse(QString filePath) override;
     Q_INVOKABLE void escImpulse(); // TODO где используется? В мобильном не нашёл вызовов из QML
 
-    quint8 outputMode() const {return m_outputMode;};
-    void setOutputMode(quint8 newOutputMode);
 
     PresetVolume* getMV() {return MV;};
 
@@ -60,30 +60,26 @@ public slots:
      QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
 
 signals:
-    void outputModeChanged();
 
     void MVChanged();
 private:
     IRWorker irWorker;
 
-
-    quint8 m_outputMode;
-
     // avaliable modules
     PresetVolume* MV;
     Compressor* CM;
     NoiseGate* NG;
+    Preamp* PR;
     PowerAmp* PA;
     CabSim* IR;
     HiPassFilter* HPF;
     EqParametric* EQ;
     LowPassFilter* LPF;
+    EarlyReflections* ER;
 
     QSettings* appSettings;
 
     void setDeviceType(DeviceType newDeviceType);
-
-    void sendCommandToCP(const QByteArray &command);
 
     void pushReadPresetCommands();
 
@@ -103,6 +99,9 @@ private:
     void ackEscCommHandler(const QString &command, const QByteArray &arguments);
     void ackSaveChanges(const QString &command, const QByteArray &arguments);
     void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments);
+
+    // gm не имеет \n в конце на старых прошивках. Ловим MaskedParser'ом
+    MaskedParser getGm{"gm x\r", "111X1"};
 
     // команды cc обрабатывается маскированным парсером
     MaskedParser getIr{"cc\r0\n0\n", "111X1X1"};

@@ -32,6 +32,9 @@ class AbstractDevice : public QObject
     Q_PROPERTY(quint8 maxBankCount READ maxBankCount CONSTANT)
     Q_PROPERTY(quint8 maxPresetCount READ maxPresetCount CONSTANT)
 
+    Q_PROPERTY(QStringList avaliableOutputModes READ avaliableOutputModes CONSTANT)
+    Q_PROPERTY(quint8 outputMode READ outputMode WRITE setOutputMode NOTIFY outputModeChanged FINAL)
+
     Q_PROPERTY(PresetManager* presetManager READ presetManager CONSTANT)
 
     Q_PROPERTY(bool deviceParamsModified READ deviceParamsModified NOTIFY deviceParamsModifiedChanged FINAL)
@@ -44,8 +47,13 @@ public:
     DeviceClass deviceClass() {return m_deviceClass;}
     QString firmwareName() {return m_firmwareName;};
 
-    virtual void initDevice(DeviceType deviceType);
+    QStringList avaliableOutputModes() {return m_avaliableOutputModes;};
+
+    virtual void initDevice(DeviceType deviceType) {};
     virtual void readFullState() {};
+
+    quint8 outputMode() const {return m_outputMode;};
+    void setOutputMode(quint8 newOutputMode);
 
     // TODO: пока умеет только Preset и bank!!!! Дописать
     Q_INVOKABLE virtual void restoreValue(QString name) {};  // restore parameter
@@ -109,6 +117,7 @@ signals:
 
     void firmwareNameChanged();
     void bankPresetChanged();
+    void outputModeChanged();
     void deviceParamsModifiedChanged();
 
     void sgDisconnect();
@@ -122,6 +131,9 @@ protected:
     Firmware* m_actualFirmware{nullptr};
     Firmware* m_minimalFirmware{nullptr}; 
     QString m_firmwareName;
+
+    QStringList m_avaliableOutputModes;
+    quint8 m_outputMode;
 
     quint8 m_bank;
     quint8 m_preset;

@@ -21,6 +21,9 @@ public:
         NG,
 
         //=====================
+        // Stereo moduls
+        ER = 64,
+        //====================
         MASTER=128
     };
     Q_ENUM(Value)

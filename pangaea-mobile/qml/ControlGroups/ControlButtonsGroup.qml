@@ -26,81 +26,12 @@ GridLayout
 
     ColumnLayout
     {
-        Layout.preferredWidth: parent.width*2/5 - borderSpacings*2
-        Layout.preferredHeight: parent.height*11/15
+        Layout.preferredWidth: parent.width*1/3 - borderSpacings*2
+        Layout.preferredHeight: parent.height*9/15
         Layout.fillWidth: true
         Layout.fillHeight: true
 
         spacing: borderSpacings
-
-        MButton
-        {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            //: Output mode. Phones.
-            textButton: qsTr("Phones")
-            active: (mode == 0)
-            onMbPressed:
-            {
-                mode = 0;
-                UiCore.currentDevice.outputMode = 0;
-            }
-        }
-
-        MButton
-        {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            //: Output mode. Balanced out.
-            textButton: qsTr("Balanced")
-            active: (mode == 2)
-            onMbPressed:
-            {
-                UiCore.currentDevice.outputMode = 2;
-            }
-        }
-
-        MButton
-        {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            //: Output mode. Line out.
-            textButton: qsTr("Line")
-            active: (mode == 1)
-            onMbPressed:
-            {
-                UiCore.currentDevice.outputMode = 1;
-            }
-        }
-    }
-
-    ColumnLayout
-    {
-        Layout.preferredWidth: parent.width*3/10
-        Layout.preferredHeight: parent.height*11/15
-        spacing: borderSpacings
-
-        MButton
-        {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            //: Button text. Export preset
-            textButton: qsTr("Export")
-            enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
-
-            onMbPressed: {
-                if(_root.presetEdited)
-                    UiCore.sgSetUIText("preset_not_saved", "");
-                else
-                    UiCore.exportPreset("");
-            }
-
-
-        }
 
         MButton
         {
@@ -138,24 +69,9 @@ GridLayout
 
     ColumnLayout
     {
-        Layout.preferredWidth: parent.width*3/10
-        Layout.preferredHeight: parent.height*11/15
+        Layout.preferredWidth: parent.width*1/3
+        Layout.preferredHeight: parent.height*9/15
         spacing: borderSpacings
-
-        MButton
-        {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            //: Button text. Import preset
-            textButton: qsTr("Import")
-            enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
-
-            onMbPressed:
-            {
-                UiCore.importPreset("");
-            }
-        }
 
         MButton
         {
@@ -186,6 +102,56 @@ GridLayout
                 UiCore.currentDevice.pastePreset();
             }
         }
+    }
+
+    ColumnLayout
+    {
+        Layout.preferredWidth: parent.width*1/3
+        Layout.preferredHeight: parent.height*9/15
+        spacing: borderSpacings
+
+        MButton
+        {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            //: Button text. Import preset
+            textButton: qsTr("Import")
+            enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
+
+            onMbPressed:
+            {
+                UiCore.importPreset("");
+            }
+        }
+
+        MButton
+        {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            //: Button text. Export preset
+            textButton: qsTr("Export")
+            enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
+
+            onMbPressed: {
+                if(_root.presetEdited)
+                    UiCore.sgSetUIText("preset_not_saved", "");
+                else
+                    UiCore.exportPreset("");
+            }
+        }
+    }
+
+
+    OutputMode {
+        id: _outputModeModule
+
+        Layout.preferredWidth: parent.width
+        Layout.preferredHeight:  parent.height*3/15
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.columnSpan: 3
     }
 
     VL

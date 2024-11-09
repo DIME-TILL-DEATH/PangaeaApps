@@ -24,7 +24,7 @@ public:
     QString moduleName() const {return m_moduleName;};
     ModuleType moduleType() const {return m_moduleType;};
 
-    void sendDataToDevice(const QByteArray& data);
+    virtual void sendDataToDevice(const QByteArray& data);
 
 signals:
     void dataChanged();

@@ -56,5 +56,6 @@
         <file>qml/ControlGroups/MasterControls_LA.qml</file>
         <file>qml/ControlGroups/MasterControls_CP.qml</file>
         <file>qml/Elements/PresetSpin_LA.qml</file>
+        <file>qml/Modules/OutputMode.qml</file>
     </qresource>
 </RCC>

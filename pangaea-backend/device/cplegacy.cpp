@@ -12,6 +12,11 @@ CPLegacy::CPLegacy(Core *parent)
 {
     m_deviceClass = DeviceClass::CP_LEGACY;
 
+    m_avaliableOutputModes.append(QObject::tr("Phones"));
+    m_avaliableOutputModes.append(QObject::tr("Line"));
+    m_avaliableOutputModes.append(QObject::tr("Balanced"));
+    // m_avaliableOutputModes.append(QObject::tr("L: Processed/R: Monitor"));
+
     using namespace std::placeholders;
     m_parser.addCommandHandler("amtver", std::bind(&CPLegacy::amtVerCommHandler, this, _1, _2));
 
@@ -50,19 +55,23 @@ void CPLegacy::initDevice(DeviceType deviceType)
 
     NG = new NoiseGate(this);
     CM = new Compressor(this);
+    PR = new Preamp(this);
     PA = new PowerAmp(this);
     IR = new CabSim(this);
     HPF = new HiPassFilter(this);
     EQ = new EqParametric(this);
     LPF = new LowPassFilter(this);
+    ER = new EarlyReflections(this);
 
     m_modulesListModel.insertModule(NG, 0);
     m_modulesListModel.insertModule(CM, 1);
     m_modulesListModel.insertModule(PA, 2);
-    m_modulesListModel.insertModule(IR, 3);
-    m_modulesListModel.insertModule(HPF, 4);
-    m_modulesListModel.insertModule(EQ, 5);
-    m_modulesListModel.insertModule(LPF, 6);
+    m_modulesListModel.insertModule(PR, 3);
+    m_modulesListModel.insertModule(IR, 4);
+    m_modulesListModel.insertModule(HPF, 5);
+    m_modulesListModel.insertModule(EQ, 6);
+    m_modulesListModel.insertModule(LPF, 7);
+    m_modulesListModel.insertModule(ER, 8);
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
@@ -179,13 +188,6 @@ void CPLegacy::setPresetData(const Preset &preset)
 
     emit sgPushCommandToQueue(ba);
     emit sgPushCommandToQueue("gs"); // read settled state
-    emit sgProcessCommands();
-}
-
-
-void CPLegacy::sendCommandToCP(const QByteArray &command)
-{
-    emit sgPushCommandToQueue(command);
     emit sgProcessCommands();
 }
 
@@ -520,16 +522,6 @@ void CPLegacy::formatMemory()
     emit sgSendWithoutConfirmation(QString("fsf\r\n").toUtf8());
     emit sgProcessCommands();
 }
-//===================================Setters-getters=================
-void CPLegacy::setOutputMode(quint8 newOutputMode)
-{
-    if (m_outputMode == newOutputMode)
-        return;
-    m_outputMode = newOutputMode;
-    emit outputModeChanged();
-
-    sendCommandToCP(QString("gm %1").arg(m_outputMode, 0, 16).toUtf8());
-}
 
 //=======================================================================================
 //                  ***************Comm handlers************
@@ -636,6 +628,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     LPF->setValues(legacyData.lp_on, legacyData.lp_freq);
     IR->setEnabled(legacyData.cab_on);
     PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
+    ER->setValues(legacyData.early_on, legacyData.early_volume, legacyData.early_type);
 
 
     switch(m_presetManager.currentState())

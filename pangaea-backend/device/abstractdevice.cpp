@@ -35,9 +35,17 @@ AbstractDevice::~AbstractDevice()
     if(m_minimalFirmware) delete(m_minimalFirmware);
 }
 
-void AbstractDevice::initDevice(DeviceType deviceType)
-{
 
+void AbstractDevice::setOutputMode(quint8 newOutputMode)
+{
+    if (m_outputMode == newOutputMode)
+        return;
+    m_outputMode = newOutputMode;
+    emit outputModeChanged();
+
+    // Второй gm потому что CPLegacy не ставит \n в конце
+    emit sgPushCommandToQueue(QString("gm %1\r\ngm\r\n").arg(m_outputMode, 0, 16).toUtf8());
+    emit sgProcessCommands();
 }
 
 QList<QByteArray> AbstractDevice::parseAnswers(QByteArray &baAnswer)
