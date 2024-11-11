@@ -10,7 +10,7 @@ Preamp::Preamp(AbstractDevice *owner)
     m_high = new ControlValue(this, "prh", "High", "", -64, 63, 0, 127);
 }
 
-void Preamp::setValues(bool enabled, quint8 volume, quint8 low, quint8 mid, quint8 high)
+void Preamp::setValues(bool enabled, quint8 volume, qint8 low, qint8 mid, qint8 high)
 {
     m_moduleEnabled = enabled;
     m_volume->setControlValue(volume);

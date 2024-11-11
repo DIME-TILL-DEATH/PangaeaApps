@@ -19,6 +19,10 @@ public slots:
 
 protected:
     Parser m_parser{"Mock device recieve"};
+
+    quint8 m_outputMode{0};
+    quint8 m_bank{0};
+    quint8 m_preset{0};
 };
 
 #endif // ABSTRACTMOCKDEVICE_H

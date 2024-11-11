@@ -25,7 +25,7 @@ public:
     ControlValue* mid() {return m_mid;};
     ControlValue* high() {return m_high;};
 
-    void setValues(bool enabled, quint8 volume, quint8 low, quint8 mid, quint8 high);
+    void setValues(bool enabled, quint8 volume, qint8 low, qint8 mid, qint8 high);
     void setValues(const preamp_data_t& paData);
 
 private:

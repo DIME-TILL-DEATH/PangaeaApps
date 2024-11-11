@@ -22,6 +22,8 @@
 
 #include "maskedparser.h"
 
+
+
 class CPLegacy : public AbstractDevice
 {
     Q_OBJECT
@@ -32,7 +34,6 @@ class CPLegacy : public AbstractDevice
 public:
     explicit CPLegacy(Core *parent);
 
-public:
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
 
@@ -99,9 +100,6 @@ private:
     void ackEscCommHandler(const QString &command, const QByteArray &arguments);
     void ackSaveChanges(const QString &command, const QByteArray &arguments);
     void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments);
-
-    // gm не имеет \n в конце на старых прошивках. Ловим MaskedParser'ом
-    MaskedParser getGm{"gm x\r", "111X1"};
 
     // команды cc обрабатывается маскированным парсером
     MaskedParser getIr{"cc\r0\n0\n", "111X1X1"};

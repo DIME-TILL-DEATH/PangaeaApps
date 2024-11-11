@@ -65,8 +65,8 @@ void CPLegacy::initDevice(DeviceType deviceType)
 
     m_modulesListModel.insertModule(NG, 0);
     m_modulesListModel.insertModule(CM, 1);
-    m_modulesListModel.insertModule(PA, 2);
-    m_modulesListModel.insertModule(PR, 3);
+    m_modulesListModel.insertModule(PR, 2);
+    m_modulesListModel.insertModule(PA, 3);
     m_modulesListModel.insertModule(IR, 4);
     m_modulesListModel.insertModule(HPF, 5);
     m_modulesListModel.insertModule(EQ, 6);
@@ -432,10 +432,7 @@ void CPLegacy::uploadImpulseData(const QByteArray &impulseData, bool isPreview, 
         else
         {
             chr = irData.at(i);
-            if(chr <= 0xF) //15
-                sTmp = QString("0%1").arg(chr, 1, 16);
-            else
-                sTmp = QString("%1").arg (chr, 2, 16);
+            sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
         }
         baSend.append(sTmp.toUtf8());
     }
@@ -614,6 +611,8 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
 
     NG->setValues(legacyData.gate_on, legacyData.gate_threshold, legacyData.gate_decay);
     CM->setValues(legacyData.compressor_on, legacyData.compressor_sustain, legacyData.compressor_volume);
+    PR->setValues(legacyData.preamp_on, legacyData.preamp_volume, legacyData.preamp_low, legacyData.preamp_mid, legacyData.preamp_high);
+    PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
 
     eq_t eqData;
     for(int i=0; i<5; i++)
@@ -627,7 +626,6 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     HPF->setValues(legacyData.hp_on, legacyData.hp_freq);
     LPF->setValues(legacyData.lp_on, legacyData.lp_freq);
     IR->setEnabled(legacyData.cab_on);
-    PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
     ER->setValues(legacyData.early_on, legacyData.early_volume, legacyData.early_type);
 
 

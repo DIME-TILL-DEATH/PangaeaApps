@@ -3,8 +3,6 @@
 #include <QStandardPaths>
 #include <QDir>
 
-#include "preset.h"
-
 MockCP16Legacy::MockCP16Legacy(QObject *parent)
     : AbstractMockDevice{parent}
 {
@@ -16,7 +14,29 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
     m_parser.addCommandHandler("gb", std::bind(&MockCP16Legacy::bankPresetCommHandler, this, _1, _2));
     m_parser.addCommandHandler("gm", std::bind(&MockCP16Legacy::outputModeCommHandler, this,  _1, _2));
     m_parser.addCommandHandler("gs", std::bind(&MockCP16Legacy::getStateCommHandler, this,  _1, _2));
-    m_parser.addCommandHandler("rn", std::bind(&MockCP16Legacy::reqImpulseName, this, _1, _2));
+    m_parser.addCommandHandler("rn", std::bind(&MockCP16Legacy::getImpulseNameCommHandler, this, _1, _2));
+
+    m_parser.addCommandHandler("rns", std::bind(&MockCP16Legacy::getRnsCommHandler, this, _1, _2));
+
+    m_parser.addCommandHandler("sp", std::bind(&MockCP16Legacy::savePresetCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("pc", std::bind(&MockCP16Legacy::presetChangeCommHandler, this, _1, _2));
+
+    m_parser.addCommandHandler("cc", std::bind(&MockCP16Legacy::ccCommHandler, this, _1, _2));
+
+    m_parser.addCommandHandler("fsf", std::bind(&MockCP16Legacy::formatMemoryCommHandler, this, _1, _2));
+
+    QFile systemFile(basePath + "/system.pan");
+    system_parameters_t sysParameters;
+    memset(&sysParameters, 0, sizeof(system_parameters_t));
+    if(systemFile.open(QIODevice::ReadOnly))
+    {
+        QByteArray readedData = systemFile.read(sizeof(system_parameters_t));
+        memcpy(&sysParameters, readedData.data(), sizeof(system_parameters_t));
+        m_outputMode = sysParameters.output_mode;
+        systemFile.close();
+    }
+
+    loadPresetData(m_bank, m_preset, &currentPresetData);
 }
 
 void MockCP16Legacy::initFolders()
@@ -36,9 +56,8 @@ void MockCP16Legacy::initFolders()
     QFile systemFile(basePath + "/system.pan");
     if(!systemFile.exists())
     {
-        systemFile.open(QIODevice::WriteOnly);
-
-        systemFile.close();
+        m_outputMode = 0;
+        saveSysParameters();
     }
 
     for(int b = 0; b <4; b++)
@@ -58,6 +77,8 @@ void MockCP16Legacy::initFolders()
 
                 preset_data_legacy_t defaultData;
                 memset(&defaultData, 0, sizeof(preset_data_legacy_t));
+
+                defaultData.preset_volume = 31;
 
                 defaultData.eq_band_vol[0] = 15;
                 defaultData.eq_band_vol[1] = 15;
@@ -83,6 +104,61 @@ void MockCP16Legacy::initFolders()
     }
 }
 
+bool MockCP16Legacy::saveSysParameters()
+{
+    QFile systemFile(basePath + "/system.pan");
+
+    system_parameters_t sysParameters;
+    memset(&sysParameters, 0, sizeof(system_parameters_t));
+    sysParameters.output_mode = m_outputMode;
+    QString ver("1.04.04");
+    memcpy(sysParameters.firmware_version, ver.data(), ver.size());
+
+    if(systemFile.open(QIODevice::WriteOnly))
+    {
+        char rawData[sizeof(system_parameters_t)];
+        memcpy(rawData, &sysParameters, sizeof(system_parameters_t));
+        systemFile.write(rawData, sizeof(system_parameters_t));
+
+        systemFile.close();
+        return true;
+    }
+    else return false;
+}
+
+bool MockCP16Legacy::loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t *presetData)
+{
+    QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
+    QFile presetFile(dirPath + "/preset.pan");
+    if(presetFile.open(QIODevice::ReadOnly))
+    {
+        QByteArray readedData = presetFile.read(sizeof(preset_data_legacy_t));
+        memcpy(presetData, readedData.data(), sizeof(preset_data_legacy_t));
+        presetFile.close();
+        return true;
+    }
+    else return false;
+}
+
+bool MockCP16Legacy::savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t *presetData)
+{
+    QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
+    QFile presetFile(dirPath + "/preset.pan");
+    if(presetFile.open(QIODevice::WriteOnly))
+    {
+        char rawData[sizeof(preset_data_legacy_t)];
+        memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
+
+        presetFile.write(rawData, sizeof(preset_data_legacy_t));
+        presetFile.close();
+        return true;
+    }
+    else return false;
+}
+
+//===========================================================================================
+//  base comm handlers
+//===========================================================================================
 void MockCP16Legacy::amtDevCommHandler(const QString &command, const QByteArray& arguments)
 {
     emit answerReady(QString("amtdev\r3\nEND\n").toUtf8());
@@ -95,40 +171,26 @@ void MockCP16Legacy::amtVerCommHandler(const QString &command, const QByteArray&
 
 void MockCP16Legacy::bankPresetCommHandler(const QString &command, const QByteArray& arguments)
 {
-    emit answerReady(QString("gb\r0000\n").toUtf8());
+    QString answer = QString("gb\r0%10%20\n").arg(m_bank).arg(m_preset);
+    emit answerReady(answer.toUtf8());
 }
 
 void MockCP16Legacy::outputModeCommHandler(const QString &command, const QByteArray& arguments)
 {
-    quint8 outputMode = 2;
-    QString answer = "gm\r0" + QString().setNum(outputMode) + "\n";
+
+    if(arguments.size()>0)
+    {
+        m_outputMode = QString(arguments.at(0)).toInt();
+        saveSysParameters();
+    }
+    QString answer = "gm\r0" + QString().setNum(m_outputMode) + "\n";
     emit answerReady(answer.toUtf8());
 }
 
 void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArray& arguments)
 {
-    preset_data_legacy_t legacyData;
     quint8 rawData[sizeof(preset_data_legacy_t)];
-
-    memset(&legacyData, 0, sizeof(preset_data_legacy_t));
-
-    legacyData.preset_volume = 20;
-
-    legacyData.eq_on = 1;
-
-    legacyData.eq_band_vol[0] = 15;
-    legacyData.eq_band_vol[1] = 15;
-    legacyData.eq_band_vol[2] = 15;
-    legacyData.eq_band_vol[3] = 15;
-    legacyData.eq_band_vol[4] = 15;
-
-    legacyData.amp_on = 1;
-    legacyData.amp_slave = 10;
-    legacyData.amp_volume = 5;
-    legacyData.amp_type = 3;
-    legacyData.presence_vol = 15;
-
-    memcpy(rawData, &legacyData, sizeof(preset_data_legacy_t));
+    memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
 
     QByteArray baData = QString("gs\r").toUtf8();
 
@@ -144,10 +206,170 @@ void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArra
     emit answerReady(baData);
 }
 
-void MockCP16Legacy::reqImpulseName(const QString &command, const QByteArray& arguments)
+void MockCP16Legacy::getImpulseNameCommHandler(const QString &command, const QByteArray& arguments)
 {
-    QString impulseName = "impulse.wav";
-    QByteArray baData = QString("rn\r").toUtf8() + impulseName.toUtf8() + QString("\n").toUtf8();
+    QString impulseName = "";
 
+    QDir presetDir(basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset));
+    presetDir.setNameFilters({"*.wav"});
+
+    QFileInfoList filesInDir = presetDir.entryInfoList();
+    if(!filesInDir.empty())
+    {
+        impulseName = filesInDir.first().fileName();
+    }
+
+    QByteArray baData = QString("rn\r").toUtf8() + impulseName.toUtf8() + QString("\n").toUtf8();
     emit answerReady(baData);
 }
+
+void MockCP16Legacy::getRnsCommHandler(const QString &command, const QByteArray &arguments)
+{
+    QString answer("rns\r");
+
+    for(int b = 0; b <4; b++)
+    {
+        for(int p=0; p<4; p++)
+        {
+            QString irName = "*";
+            QString dirPath = basePath + "/bank_" + QString().setNum(b) + "/preset_" + QString().setNum(p);
+            QDir presetDir(dirPath);
+            presetDir.setNameFilters({"*.wav"});
+
+            QFileInfoList filesInDir = presetDir.entryInfoList();
+            if(!filesInDir.empty())
+            {
+                irName = filesInDir.first().fileName();
+            }
+            answer += irName + "\n";
+
+            QString enabled = "00";
+            preset_data_legacy_t presetData;
+            if(loadPresetData(m_bank, m_preset, &presetData))
+            {
+                enabled.setNum(presetData.cab_on);
+                enabled.prepend("0");
+            }
+
+            answer += enabled + "\n";
+        }
+    }
+    answer += "END\n";
+    emit answerReady(answer.toUtf8());
+}
+
+void MockCP16Legacy::savePresetCommHandler(const QString &command, const QByteArray &arguments)
+{
+    savePresetData(m_bank, m_preset, &currentPresetData);
+    emit answerReady("sp\r\n");
+}
+
+void MockCP16Legacy::presetChangeCommHandler(const QString &command, const QByteArray &arguments)
+{
+    m_bank = QString(arguments.at(0)).toInt(nullptr, 16);
+    m_preset = QString(arguments.at(1)).toInt(nullptr, 16);
+
+    loadPresetData(m_bank, m_preset, &currentPresetData);
+
+    QString answer = QString("pc %1%2\rEND\n").arg(m_bank).arg(m_preset);
+    emit answerReady(answer.toUtf8());
+}
+
+void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arguments)
+{
+    QString dirPath = basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/";
+    if(arguments.size() == 0)
+    {
+        // file request
+        QByteArray answer("cc\r");
+        QDir presetDir(dirPath);
+        presetDir.setNameFilters({"*.wav"});
+
+        QFileInfoList filesInDir = presetDir.entryInfoList();
+        if(!filesInDir.empty())
+        {
+            QString irName = filesInDir.first().fileName();
+            int irSize = filesInDir.first().size();
+
+            QByteArray fileData;
+            QFile irFile(dirPath + irName);
+            if(irFile.open(QIODevice::ReadOnly))
+            {
+                fileData = irFile.readAll();
+                irFile.close();
+                QByteArray convertedBa;
+                for(quint16 i=0; i<fileData.size(); i++)
+                {
+                    QString sTmp;
+                    quint8  chr;
+
+                    chr = fileData.at(i);
+                    sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
+
+                    convertedBa.append(sTmp.toUtf8());
+                }
+
+                answer += convertedBa;
+            }
+            answer += irName.toUtf8() + " " + QString().setNum(irSize).toUtf8() + "\n";
+            answer += "\nEND\n";
+        }
+        else
+        {
+            answer += "\nFILE_NOT_FIND\n";
+        }
+
+        emit answerReady(answer);
+    }
+    else
+    {
+        // file upload(preview and save)
+        QByteArray answer("CC ");
+
+        QList<QByteArray> splitBa = arguments.split('\r');
+        if(splitBa.size() > 1)
+        {
+            QByteArray commArgs = splitBa.at(0);
+            QByteArray fileData = splitBa.at(1);
+
+            QList<QByteArray> argsArr = commArgs.split(' ');
+            if(argsArr.size() > 1)
+            {
+                QString fileName = argsArr.at(0);
+                qint8 mode = QString(argsArr.at(1)).toInt();
+                qDebug() << fileName << mode;
+                if(mode == 0)
+                {
+                    qDebug() << "saving file";
+                    QFile irFile(dirPath + fileName);
+                    if(irFile.open(QIODevice::WriteOnly))
+                    {
+                        QByteArray convertedFileData;
+
+                        for(int i=0; i<fileData.size(); i+=2)
+                        {
+                            QString chStr(QString(fileData.at(i)) + QString(fileData.at(i+1)));
+                            convertedFileData.append(chStr.toInt(nullptr, 16));
+                        }
+
+                        irFile.write(convertedFileData);
+                        irFile.close();
+                    }
+                }
+                answer += fileName.toUtf8() + " " + QString().setNum(mode).toUtf8();
+            }
+        }
+        answer += "\rccEND\n";
+        emit answerReady(answer);
+    }
+}
+
+void MockCP16Legacy::formatMemoryCommHandler(const QString &command, const QByteArray &arguments)
+{
+    QDir homeDir(basePath);
+    homeDir.removeRecursively();
+    initFolders();
+
+    emit answerReady("fsf\rFR_OK\n");
+}
+
