@@ -25,6 +25,50 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
 
     m_parser.addCommandHandler("fsf", std::bind(&MockCP16Legacy::formatMemoryCommHandler, this, _1, _2));
 
+    //--------------------------params handler----------------------
+
+    setParamsHandler("mv", &currentPresetData.preset_volume);   // Type::MASTER_VOLUME: fullString += "mv";
+
+    setParamsHandler("eo", &currentPresetData.early_on);        // Type::EARLY_ON: fullString += "eo";
+    setParamsHandler("ev", &currentPresetData.early_volume);    // Type::EARLY_VOLUME: fullString += "ev";
+    setParamsHandler("et", &currentPresetData.early_type);      // Type::EARLY_TYPE: fullString += "et";
+
+    setParamsHandler("ce", &currentPresetData.cab_on);          // Type::CABINET_ENABLE: fullString += "ce";
+
+    setParamsHandler("ao", &currentPresetData.amp_on);          // case Type::AMP_ON: fullString += "ao";
+    setParamsHandler("av", &currentPresetData.amp_volume);      // case Type::AMP_VOLUME: fullString += "av";
+    setParamsHandler("as", &currentPresetData.amp_slave);       // case Type::AMP_SLAVE: fullString += "as";
+    setParamsHandler("at", &currentPresetData.amp_type);        // case Type::AMP_TYPE: fullString += "at";
+
+    setParamsHandler("pro", &currentPresetData.preamp_on);      // Type::PREAMP_ON: fullString += "pro";
+    setParamsHandler("prv", &currentPresetData.preamp_volume);  // Type::PREAMP_VOLUME: fullString += "prv";
+    setParamsHandler("prl", &currentPresetData.preamp_low);     // Type::PREAMP_LOW: fullString += "prl";
+    setParamsHandler("prm", &currentPresetData.preamp_mid);     // Type::PREAMP_MID: fullString += "prm";
+    setParamsHandler("prh", &currentPresetData.preamp_high);    // Type::PREAMP_HIGH: fullString += "prh";
+
+    setParamsHandler("go", &currentPresetData.gate_on);         // Type::GATE_ON: fullString += "go";
+    setParamsHandler("gt", &currentPresetData.gate_threshold);  // Type::GATE_THRESHOLD: fullString += "gt";
+    setParamsHandler("gd", &currentPresetData.gate_decay);      // Type::GATE_DECAY: fullString += "gd";
+
+    setParamsHandler("co", &currentPresetData.compressor_on);       // Type::COMPRESSOR_ON: fullString += "co";
+    setParamsHandler("cs", &currentPresetData.compressor_sustain);  // Type::COMPRESSOR_SUSTAIN: fullString += "cs";
+    setParamsHandler("cv", &currentPresetData.compressor_volume);   // Type::COMPRESSOR_VOLUME: fullString += "cv";
+
+    setParamsHandler("lv", &currentPresetData.lp_freq);     // Type::LPF_VOLUME: fullString += "lv";
+    setParamsHandler("hv", &currentPresetData.hp_freq);     // Type::HPF_VOLUME: fullString += "hv";
+    setParamsHandler("ho", &currentPresetData.lp_on);       // Type::HPF_ON: fullString += "ho";
+    setParamsHandler("lo", &currentPresetData.hp_on);       // Type::LPF_ON: fullString += "lo";
+    setParamsHandler("po", &currentPresetData.presence_on);     // Type::PRESENCE_ON: fullString += "po";
+    setParamsHandler("pv", &currentPresetData.presence_vol);    // Type::PRESENCE_VOLUME: fullString += "pv";
+
+    setParamsHandler("eqo", &currentPresetData.eq_on);          // Type::EQ_ON: fullString += "eqo";
+    setEqHandler("eqv", currentPresetData.eq_band_vol);     // Type::EQ_VOLUME1: fullString += "eqv 0";
+    setEqHandler("eqf", currentPresetData.eq_freq);         // Type::EQ_FREQ1: fullString += "eqf 0";
+    setEqHandler("eqq", currentPresetData.eq_Q);            // Type::EQ_Q1: fullString += "eqq 0";
+    setParamsHandler("eqp", &currentPresetData.eq_pre);     // Type::EQ_PRE: fullString += "eqp";
+
+    //--------------------------------------------------------------
+
     QFile systemFile(basePath + "/system.pan");
     system_parameters_t sysParameters;
     memset(&sysParameters, 0, sizeof(system_parameters_t));
@@ -189,21 +233,28 @@ void MockCP16Legacy::outputModeCommHandler(const QString &command, const QByteAr
 
 void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArray& arguments)
 {
-    quint8 rawData[sizeof(preset_data_legacy_t)];
-    memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
-
-    QByteArray baData = QString("gs\r").toUtf8();
-
-    for(int i=0; i < sizeof(preset_data_legacy_t);  i++)
+    if(arguments.size() == 0)
     {
-        QByteArray tempBa = QString().setNum(rawData[i], 16).toUtf8();
+        quint8 rawData[sizeof(preset_data_legacy_t)];
+        memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
 
-        if(tempBa.size() == 1) tempBa.push_front("0");
-        baData.append(tempBa);
+        QByteArray baData = QString("gs\r").toUtf8();
+
+        for(int i=0; i < sizeof(preset_data_legacy_t);  i++)
+        {
+            QByteArray tempBa = QString().setNum(rawData[i], 16).toUtf8();
+
+            if(tempBa.size() == 1) tempBa.push_front("0");
+            baData.append(tempBa);
+        }
+        baData.append("\n");
+
+        emit answerReady(baData);
     }
-    baData.append("\n");
+    else
+    {
 
-    emit answerReady(baData);
+    }
 }
 
 void MockCP16Legacy::getImpulseNameCommHandler(const QString &command, const QByteArray& arguments)
@@ -373,3 +424,48 @@ void MockCP16Legacy::formatMemoryCommHandler(const QString &command, const QByte
     emit answerReady("fsf\rFR_OK\n");
 }
 
+void MockCP16Legacy::setParamsHandler(QString commStr, quint8 *commPtr)
+{
+    paramsMap.insert(commStr, commPtr);
+    using namespace std::placeholders;
+    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Legacy::parametersCommHandler, this, _1, _2));
+}
+
+void MockCP16Legacy::setEqHandler(QString commStr, quint8* commPtr)
+{
+    paramsMap.insert(commStr, commPtr);
+    using namespace std::placeholders;
+    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Legacy::eqParametersCommHandler, this, _1, _2));
+}
+
+void MockCP16Legacy::parametersCommHandler(const QString &command, const QByteArray &arguments)
+{
+    quint8* paramPtr = paramsMap.value(command);
+
+    QString strEdit(arguments);
+    strEdit.remove('\r');
+    QByteArray correctedArgs = strEdit.toUtf8();
+    if(!correctedArgs.isEmpty())
+    {
+        *paramPtr = correctedArgs.toInt(nullptr, 16);
+    }
+    emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
+}
+
+void MockCP16Legacy::eqParametersCommHandler(const QString &command, const QByteArray &arguments)
+{
+    quint8* paramPtr = nullptr;
+
+    QString strEdit(arguments);
+    strEdit.remove('\r');
+    QByteArray correctedArgs = strEdit.toUtf8();
+    if(!correctedArgs.isEmpty())
+    {
+        QList<QByteArray> argsList = correctedArgs.split(' ');
+        paramPtr = paramsMap.value(command);
+        paramPtr += QString(argsList.at(0)).toInt(); // array address
+        if(argsList.size() > 1) *paramPtr = QString(argsList.at(1)).toInt(nullptr, 16);
+
+        emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
+    }
+}

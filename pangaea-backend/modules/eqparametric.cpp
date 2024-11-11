@@ -8,7 +8,7 @@ EqParametric::EqParametric(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::EQ, "EQ", "eqo"}
 {
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 20, 220, 0));
-    m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 260, 440, 1));
+    m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 260, 460, 1));
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 600, 1000, 2));
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 1000, 3000, 3));
     m_EqBands.append(new EqBand(this, EqBand::FilterType::PEAKING, 1000, 11000, 4));

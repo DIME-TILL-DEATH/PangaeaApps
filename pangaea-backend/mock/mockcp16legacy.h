@@ -51,6 +51,12 @@ private:
     void ccCommHandler(const QString &command, const QByteArray& arguments);
 
     // Parameters comm handlers
+    QMap<QString, quint8*> paramsMap;
+    void setParamsHandler(QString commStr, quint8* commPtr);
+    void setEqHandler(QString commStr, quint8* commPtr);
+    void parametersCommHandler(const QString &command, const QByteArray& arguments);
+
+    void eqParametersCommHandler(const QString &command, const QByteArray& arguments);
 };
 
 #endif // MOCKCP16LEGACY_H

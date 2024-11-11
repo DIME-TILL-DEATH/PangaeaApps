@@ -82,9 +82,9 @@ typedef struct
     uint8_t on;
     uint8_t type;
     uint8_t volume;
-    uint8_t low;
-    uint8_t mid;
-    uint8_t high;
+    int8_t low;
+    int8_t mid;
+    int8_t high;
     uint8_t reserved[2];
 }preamp_data_t;
 
@@ -108,8 +108,8 @@ typedef struct
     uint8_t lp_freq;
     uint8_t hp_freq;
 
-    uint8_t band_vol[EQ_BANDS_COUNT];
-    uint8_t freq[EQ_BANDS_COUNT];
+    int8_t band_vol[EQ_BANDS_COUNT];
+    int8_t freq[EQ_BANDS_COUNT];
     uint8_t Q[EQ_BANDS_COUNT];
     uint8_t band_type[EQ_BANDS_COUNT];
 
