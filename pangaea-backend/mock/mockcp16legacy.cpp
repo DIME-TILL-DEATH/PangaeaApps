@@ -23,7 +23,10 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
 
     m_parser.addCommandHandler("cc", std::bind(&MockCP16Legacy::ccCommHandler, this, _1, _2));
 
+    m_parser.addCommandHandler("esc", std::bind(&MockCP16Legacy::escAckCommHandler, this, _1, _2));
+
     m_parser.addCommandHandler("fsf", std::bind(&MockCP16Legacy::formatMemoryCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("fwu", std::bind(&MockCP16Legacy::startFwUpdateCommHandler, this, _1, _2));
 
     //--------------------------params handler----------------------
 
@@ -81,6 +84,41 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
     }
 
     loadPresetData(m_bank, m_preset, &currentPresetData);
+}
+
+void MockCP16Legacy::writeToDevice(const QByteArray &data)
+{
+    if(fwUpdateMode)
+    {
+        fwPart.append(data);
+        if(fwPart.indexOf('\n') != -1)
+        {
+            qint64 separatorPos = fwPart.indexOf('\n');
+            fwChunkSize = QString(fwPart.left(separatorPos)).toInt();
+            fwPart.remove(0, separatorPos + 1);
+        }
+
+        if(fwChunkSize == 0)
+        {
+            fwFile.close();
+            fwUpdateMode = false;
+            emit answerReady("FR_OK\n");
+        }
+        else
+        {
+            if(fwPart.size() >= fwChunkSize)
+            {
+                qint64 written = fwFile.write(fwPart);
+                qDebug() << "Bytes written: " << written << "file size" << fwFile.size();
+                fwPart.clear();
+                emit answerReady("REQUEST_CHUNK_SIZE\n");
+            }
+        }
+    }
+    else
+    {
+        m_parser.parseNewData(data);
+    }
 }
 
 void MockCP16Legacy::initFolders()
@@ -447,6 +485,11 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
     }
 }
 
+void MockCP16Legacy::escAckCommHandler(const QString &command, const QByteArray &arguments)
+{
+    emit answerReady("esc\r\n");
+}
+
 void MockCP16Legacy::formatMemoryCommHandler(const QString &command, const QByteArray &arguments)
 {
     QDir homeDir(basePath);
@@ -500,4 +543,26 @@ void MockCP16Legacy::eqParametersCommHandler(const QString &command, const QByte
 
         emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r"); // в прошивках до 1.04.04 включительно нет \n в конце команд eq(и ряде других)
     }
+}
+
+void MockCP16Legacy::startFwUpdateCommHandler(const QString &command, const QByteArray &arguments)
+{
+    fwUpdateMode = true;
+    fwChunkSize = QString(arguments).toInt();
+    qDebug () << "FW chunk size: " << fwChunkSize;
+
+    fwPart = m_parser.getBufferAndFlush();
+
+    qDebug() << fwPart;
+
+    fwFile.setFileName(basePath + "/firmware.bin");
+    if(fwFile.open(QIODevice::WriteOnly))
+    {
+        fwFile.write(fwPart);
+    }
+
+    fwPart.clear();
+
+    emit answerReady("fwu\rCHUNK_MAX_SIZE_4096\n");
+    emit answerReady("REQUEST_CHUNK_SIZE\n");
 }

@@ -24,6 +24,8 @@ class MockCP16Legacy : public AbstractMockDevice
 public:
     explicit MockCP16Legacy(QObject *parent = nullptr);
 
+    void writeToDevice(const QByteArray& data) override;
+
 private:
     QString basePath;
 
@@ -50,6 +52,8 @@ private:
 
     void ccCommHandler(const QString &command, const QByteArray& arguments);
 
+    void escAckCommHandler(const QString &command, const QByteArray& arguments);
+
     // Parameters comm handlers
     QMap<QString, quint8*> paramsMap;
     void setParamsHandler(QString commStr, quint8* commPtr);
@@ -60,6 +64,9 @@ private:
 
     // fw update simulation
     bool fwUpdateMode{false};
+    QByteArray fwPart;
+    QFile fwFile;
+    int fwChunkSize;
     void startFwUpdateCommHandler(const QString &command, const QByteArray& arguments);
 };
 

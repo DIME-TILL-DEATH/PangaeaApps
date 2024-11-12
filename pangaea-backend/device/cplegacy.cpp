@@ -247,22 +247,22 @@ void CPLegacy::saveChanges()
     emit sgProcessCommands();
 
     // impulse data uploading after answer
-    if(currentPreset.waveData() == IRWorker::flatIr())
+    if(actualPreset.waveData() == IRWorker::flatIr())
     {
         if(m_deviceType==DeviceType::legacyCP16 || m_deviceType==DeviceType::legacyCP16PA)
             emit sgPushCommandToQueue("pwsd");
         else
             emit sgPushCommandToQueue("dcc");
 
-        currentPreset.clearWavData();
+        actualPreset.clearWavData();
     }
     else
     {
-        uploadImpulseData(currentPreset.waveData(), false, currentPreset.impulseName());
+        uploadImpulseData(actualPreset.waveData(), false, actualPreset.impulseName());
     }
 
-    currentSavedPreset = currentPreset;
-    m_presetListModel.updatePreset(currentSavedPreset);
+    savedPreset = actualPreset;
+    m_presetListModel.updatePreset(savedPreset);
 
     m_deviceParamsModified = false;
     emit deviceParamsModifiedChanged();
@@ -281,7 +281,7 @@ void CPLegacy::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges
         comparePreset();
     }
 
-    m_presetListModel.updatePreset(currentSavedPreset); // Обновить актуальный пресет перед переключением
+    m_presetListModel.updatePreset(savedPreset); // Обновить актуальный пресет перед переключением
 
     emit sgPushCommandToQueue(QString("pc %2").arg(val, 2, 16, QChar('0')).toUtf8());
     emit sgProcessCommands();
@@ -297,8 +297,8 @@ void CPLegacy::comparePreset()
     else
     {
         m_presetManager.returnToPreviousState();
-        setPresetData(currentPreset);
-        uploadImpulseData(currentPreset.waveData(), true, currentPreset.impulseName());
+        setPresetData(actualPreset);
+        uploadImpulseData(actualPreset.waveData(), true, actualPreset.impulseName());
     }
     emit sgProcessCommands();
 }
@@ -307,7 +307,7 @@ void CPLegacy::copyPreset()
 {
     m_presetManager.setCurrentState(PresetState::Copying);
 
-    if(currentPreset.wavSize() == 0)
+    if(actualPreset.wavSize() == 0)
         emit sgPushCommandToQueue("cc");
 
     emit sgPushCommandToQueue("gs");
@@ -318,8 +318,8 @@ void CPLegacy::pastePreset()
 {
     setPresetData(copiedPreset);
 
-    quint8 currentBankNumber = currentPreset.bankNumber();
-    quint8 currentPresetNumber = currentPreset.presetNumber();
+    quint8 currentBankNumber = actualPreset.bankNumber();
+    quint8 currentPresetNumber = actualPreset.presetNumber();
 
     // TODO для исправления бага с обновлением пресета после вставки
     // эта часть должна быть в getStatus по ключу PresetState::Pasting
@@ -327,15 +327,15 @@ void CPLegacy::pastePreset()
     // и хранится как-то по-другому. При этом при переключении применятся старый
     if(copiedPreset.waveData().isEmpty())
     {
-        if(currentPreset.impulseName() != "")
+        if(actualPreset.impulseName() != "")
         {
             copiedPreset.setWaveData(IRWorker::flatIr());
             copiedPreset.setImpulseName("");
         }
     }
     uploadImpulseData(copiedPreset.waveData(), true, copiedPreset.impulseName());
-    currentPreset = copiedPreset;
-    currentPreset.setBankPreset(currentBankNumber, currentPresetNumber);
+    actualPreset = copiedPreset;
+    actualPreset.setBankPreset(currentBankNumber, currentPresetNumber);
 
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
@@ -357,14 +357,14 @@ void CPLegacy::importPreset(QString filePath, QString fileName)
 
     if(importedPreset.waveData().isEmpty())
     {
-        if(currentPreset.impulseName() != "")
+        if(actualPreset.impulseName() != "")
         {
             importedPreset.setWaveData(IRWorker::flatIr());
             importedPreset.setImpulseName("");
         }
     }
     uploadImpulseData(importedPreset.waveData(), true, importedPreset.impulseName());
-    currentPreset = importedPreset;
+    actualPreset = importedPreset;
 
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
@@ -386,7 +386,7 @@ void CPLegacy::exportPreset(QString filePath, QString fileName)
         }
 
         emit sgPushCommandToQueue("gs");
-        currentPreset.setPathToExport(filePath);
+        actualPreset.setPathToExport(filePath);
         emit sgPushCommandToQueue("cc");
         emit sgProcessCommands();
     }
@@ -397,8 +397,8 @@ void CPLegacy::restoreValue(QString name)
     //  TODO пока костыль для отмены сохранения пресета!!!!!
     if(name == "bank-preset")
     {
-        m_bank = currentPreset.bankNumber();
-        m_preset = currentPreset.presetNumber();
+        m_bank = actualPreset.bankNumber();
+        m_preset = actualPreset.presetNumber();
         emit bankPresetChanged();
     }
 }
@@ -429,7 +429,7 @@ void CPLegacy::setImpulse(QString filePath)
         irWorker.decodeWav(filePath);
 
         QByteArray fileData = irWorker.formFileData();
-        currentPreset.setWaveData(fileData);
+        actualPreset.setWaveData(fileData);
         uploadImpulseData(fileData, true, fileName);
     }
 }
@@ -446,7 +446,7 @@ void CPLegacy::uploadImpulseData(const QByteArray &impulseData, bool isPreview, 
 
     impulseName.replace(QString(" "), QString("_"), Qt::CaseInsensitive);
 
-    currentPreset.setImpulseName(impulseName);
+    actualPreset.setImpulseName(impulseName);
 
     QByteArray baSend, irData;
     quint16 bytesToUpload;
@@ -462,9 +462,9 @@ void CPLegacy::uploadImpulseData(const QByteArray &impulseData, bool isPreview, 
         baSend.append(QString("cc %1 0\r").arg(impulseName).toUtf8());
         irData = impulseData;
         bytesToUpload = impulseData.size();
-        currentPreset.setImpulseName(impulseName);
+        actualPreset.setImpulseName(impulseName);
     }
-    m_presetListModel.updatePreset(currentPreset);
+    m_presetListModel.updatePreset(actualPreset);
 
     for(quint16 i=0; i<bytesToUpload; i++)
     {
@@ -635,7 +635,7 @@ void CPLegacy::getBankPresetCommHandler(const QString &command, const QByteArray
     m_bank = arguments.left(2).toUInt();
     m_preset  = arguments.right(2).toUInt();
 
-    currentPreset.setBankPreset(m_bank, m_preset);
+    actualPreset.setBankPreset(m_bank, m_preset);
 
     qInfo() << "bank:" << m_bank << "preset:" << m_preset;
     emit bankPresetChanged();
@@ -713,8 +713,8 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     case PresetState::Copying:
     {
         // copy preview wave data
-        if(currentPreset.wavSize() != 0)
-            copiedPreset = currentPreset;
+        if(actualPreset.wavSize() != 0)
+            copiedPreset = actualPreset;
 
         copiedPreset.setRawData(baPresetData);
         m_presetManager.returnToPreviousState();
@@ -727,9 +727,9 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         emit deviceParamsModifiedChanged();
         emit deviceUpdatingValues();
 
-        currentPreset.setRawData(baPresetData);
-        currentSavedPreset = currentPreset;
-        m_presetListModel.updatePreset(currentSavedPreset);
+        actualPreset.setRawData(baPresetData);
+        savedPreset = actualPreset;
+        m_presetListModel.updatePreset(savedPreset);
         m_presetManager.returnToPreviousState();
         break;
     }
@@ -742,8 +742,8 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
 
     default:
     {
-        currentPreset.setRawData(baPresetData);
-        m_presetListModel.updatePreset(currentPreset);
+        actualPreset.setRawData(baPresetData);
+        m_presetListModel.updatePreset(actualPreset);
         break;
     }
     }
@@ -809,25 +809,26 @@ void CPLegacy::getIrNameCommHandler(const QString &command, const QByteArray &ar
     {
     case PresetState::Compare:
     {
+        IR->setImpulseName(impulseName);
         // Необходимая заглушка. Не удалять!
         break;
     }
 
     case PresetState::Changing:
     {
-        currentPreset.setImpulseName(impulseName);
-        currentSavedPreset.setImpulseName(impulseName);
+        actualPreset.setImpulseName(impulseName);
+        savedPreset.setImpulseName(impulseName);
         IR->setImpulseName(impulseName);
     }
 
     default:
     {
-        currentPreset.setImpulseName(impulseName);
+        actualPreset.setImpulseName(impulseName);
         IR->setImpulseName(impulseName);
     }
     }
 
-    m_presetListModel.updatePreset(currentPreset);
+    m_presetListModel.updatePreset(actualPreset);
 }
 
 void CPLegacy::getIrNameSizeCommHandler(const QList<QByteArray> &arguments)
@@ -867,13 +868,13 @@ void CPLegacy::getIrNameSizeCommHandler(const QList<QByteArray> &arguments)
         case PresetState::Exporting:
         {
             m_bytesToRecieve = wavSize;
-            currentPreset.setImpulseName(wavName);
+            actualPreset.setImpulseName(wavName);
             break;
         }
 
         default:
         {
-            currentPreset.setImpulseName(wavName);
+            actualPreset.setImpulseName(wavName);
         }
         }
 
@@ -900,10 +901,10 @@ void CPLegacy::getIrCommHandler(const QList<QByteArray> &arguments)
 
     case PresetState::Exporting:
     {
-        currentPreset.setWaveData(impulseData);
-        currentPreset.exportData();
+        actualPreset.setWaveData(impulseData);
+        actualPreset.exportData();
 
-        emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, currentPreset.pathToExport());
+        emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, actualPreset.pathToExport());
 
         m_presetManager.returnToPreviousState();
         break;
@@ -960,20 +961,22 @@ void CPLegacy::formatFinishedCommHandler(const QString &command, const QByteArra
 void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &arguments)
 {
     m_presetManager.setCurrentState(PresetState::Compare);
-    emit sgPushCommandToQueue("gs");
+    setPresetData(savedPreset);
+    // emit sgPushCommandToQueue("gs");
     emit sgPushCommandToQueue("rn");
+    emit sgProcessCommands();
 }
 
 void CPLegacy::ackSaveChanges(const QString &command, const QByteArray &arguments)
 {
     qInfo() << "Preset data saved to device";
-    currentPreset.clearWavData();
+    actualPreset.clearWavData();
 }
 
 void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments)
 {
     qInfo() << __FUNCTION__ << "Preset change, updating state";
-    currentPreset.clearWavData();
+    actualPreset.clearWavData();
     m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
@@ -997,5 +1000,5 @@ void CPLegacy::errorCCCommHandler(const QString &command, const QByteArray &argu
 {
     emit sgEnableTimeoutTimer();
     m_presetManager.returnToPreviousState();
-    emit sgDeviceError(DeviceErrorType::IrSaveError, currentPreset.impulseName());
+    emit sgDeviceError(DeviceErrorType::IrSaveError, actualPreset.impulseName());
 }

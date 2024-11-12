@@ -66,8 +66,6 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
         case ListRoles::ImpulseNameRole:
         {
             QString impulseName = m_presetList->at(index.row()).impulseName();
-            // if(impulseName == "") impulseName = QObject::tr("empty");
-
             return QVariant::fromValue(impulseName);
         }
 
@@ -107,7 +105,7 @@ void PresetListModel::updatePreset(const Preset& newPreset)
         return;
     }
 
-    qDebug() << "Updating preset, b:" << newPreset.bankNumber() << "p: " << newPreset.presetNumber() << "impulse name:" << newPreset.impulseName();
+    // qDebug() << "Updating preset, b:" << newPreset.bankNumber() << "p: " << newPreset.presetNumber() << "impulse name:" << newPreset.impulseName();
     m_presetList->replace(index, newPreset);
 
     emit dataChanged(createIndex(0, 0), createIndex(m_presetList->size(), 0));

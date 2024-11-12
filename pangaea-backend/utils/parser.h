@@ -22,6 +22,8 @@ public:
     // Костыль для старого формата rns
     void enableFullEndMode() {fullEndModeEnabled=true;};
     void disableFullEndMode() {fullEndModeEnabled=false;};
+
+    QByteArray getBufferAndFlush();
 private:
     QByteArray m_buffer;
 

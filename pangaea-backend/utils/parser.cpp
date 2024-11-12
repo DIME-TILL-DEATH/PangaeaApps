@@ -99,3 +99,10 @@ void Parser::addCureParser(QString comm, MaskedParser *parser)
 {
     m_mskParserList.append({comm, parser});
 }
+
+QByteArray Parser::getBufferAndFlush()
+{
+    QByteArray answer = m_buffer;
+    m_buffer.clear();
+    return answer;
+}

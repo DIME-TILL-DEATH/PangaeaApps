@@ -141,8 +141,8 @@ protected:
     quint8 m_maxBankCount{4};
     quint8 m_maxPresetCount{4};
 
-    Preset currentPreset{this};
-    Preset currentSavedPreset{this}; // TODO живёт в модели
+    Preset actualPreset{this};
+    Preset savedPreset{this}; // TODO живёт в модели
     Preset copiedPreset{this};
     PresetManager m_presetManager{this};
 

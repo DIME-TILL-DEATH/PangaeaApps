@@ -65,7 +65,7 @@ private:
 
     DevicesListModel m_devicesListModel;
     QString m_moduleName;
-    qint16 m_bleRssi;
+    qint16 m_bleRssi{-50};
 };
 
 #endif // UIINTERFACEMANAGER_H

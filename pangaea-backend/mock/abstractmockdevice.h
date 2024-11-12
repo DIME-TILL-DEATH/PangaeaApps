@@ -15,7 +15,7 @@ signals:
     void answerReady(const QByteArray& answerData);
 
 public slots:
-    void writeToDevice(const QByteArray& data);
+    virtual void writeToDevice(const QByteArray& data);
 
 protected:
     Parser m_parser{"Mock device recieve"};

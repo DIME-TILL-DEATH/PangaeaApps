@@ -30,6 +30,7 @@ bool OfflineInterface::connect(DeviceDescription device)
     {
         QObject::connect(m_mockDevice, &AbstractMockDevice::answerReady, this, &AbstractInterface::sgNewData);
         qDebug() << "Virtual device connected" << m_mockDevice;
+        setState(InterfaceState::Connected);
         emit sgInterfaceConnected(device);
         return true;
     }
@@ -41,6 +42,9 @@ void OfflineInterface::disconnectFromDevice()
     disconnect(m_mockDevice);
     delete(m_mockDevice);
     m_mockDevice = nullptr;
+
+    emit sgInterfaceDisconnected(m_connectedDevice);
+    setState(InterfaceState::Idle);
 }
 
 void OfflineInterface::write(const QByteArray &data)

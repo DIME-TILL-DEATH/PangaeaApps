@@ -159,7 +159,6 @@ Rectangle {
                 z: 5
                 onClicked: {
                         module.moduleEnabled = !module.moduleEnabled
-                        main.on = module.moduleEnabled
                 }
             }
         }
@@ -195,16 +194,6 @@ Rectangle {
                     sourceComponent: contentItem
                 }
             }
-        }
-    }
-
-    Connections
-    {
-        target: UiCore.currentDevice
-
-        function onDeviceUpdatingValues()
-        {
-            _main.on = module.moduleEnabled
         }
     }
 }
