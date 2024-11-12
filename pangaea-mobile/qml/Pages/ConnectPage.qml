@@ -291,7 +291,7 @@ Item
         {
             // ....and disconnect
             // UiCore.sgSw4Enable();
-            UiCore.sgDisconnesctFromDevice();
+            UiCore.sgDisconnectFromDevice();
             isConnected = false;
         }
     }

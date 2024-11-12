@@ -16,17 +16,23 @@ strVersion Firmware::extractVerFromString(QString versionString)
 
     strVersion result;
 
-    if(resultList.at(0) == "PA")
+    if(resultList.size()>3)
     {
-        result.isPA = true;
-        resultList.removeFirst();
-    }
+        // Legacy versioning support
+        if(resultList.at(0) == "PA")
+        {
+            result.isPA = true;
+            resultList.removeFirst();
+        }
 
-    if(resultList.at(0) == "RV")
-    {
-        result.isPA = false;
-        resultList.removeFirst();
+        if(resultList.at(0) == "RV")
+        {
+            result.isPA = false;
+            resultList.removeFirst();
+        }
     }
+    else result.isPA = true;
+
 
     if(resultList.count()==3)
     {

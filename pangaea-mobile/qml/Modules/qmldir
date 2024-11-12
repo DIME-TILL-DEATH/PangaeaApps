@@ -4,7 +4,7 @@ BaseModule 1.0 BaseModule.qml
 OutputMode  1.0 OutputMode.qml
 CM	1.0 CM.qml
 EQExt  1.0 EQExt.qml
-EQPreview     1.0 EQPreview.qml
+EQPreviewLegacy     1.0 EQPreviewLegacy.qml
 ER      1.0 ER.qml
 HP      1.0 HP.qml
 IR      1.0 IR.qml

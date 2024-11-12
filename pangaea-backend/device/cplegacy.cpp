@@ -43,6 +43,24 @@ CPLegacy::CPLegacy(Core *parent)
 #else
     appSettings = new QSettings();
 #endif
+    // cure forn non-\n commands
+    m_parser.addCureParser("gm", new MaskedParser("gm x\r", "111X1"));
+
+    m_parser.addCureParser("mv", new MaskedParser("mv x\r", "111X1"));
+    m_parser.addCureParser("ce", new MaskedParser("ce x\r", "111X1"));
+    m_parser.addCureParser("eqo", new MaskedParser("eqo x\r", "111X1"));
+    m_parser.addCureParser("eqv", new MaskedParser("eqv x x\r", "1111X1X1"));
+    m_parser.addCureParser("eqf", new MaskedParser("eqf x x\r", "1111X1X1"));
+    m_parser.addCureParser("eqq", new MaskedParser("eqq x x\r", "1111X1X1"));
+
+    m_parser.addCureParser("ho", new MaskedParser("ho x\r", "111X1"));
+    m_parser.addCureParser("lo", new MaskedParser("lo x\r", "111X1"));
+    m_parser.addCureParser("hv", new MaskedParser("hv x\r", "111X1"));
+    m_parser.addCureParser("lv", new MaskedParser("lv x\r", "111X1"));
+
+    m_parser.addCureParser("eo", new MaskedParser("eo x\r", "111X1"));
+    m_parser.addCureParser("ev", new MaskedParser("ev x\r", "111X1"));
+    m_parser.addCureParser("et", new MaskedParser("et x\r", "111X1"));
 }
 
 void CPLegacy::initDevice(DeviceType deviceType)
@@ -63,15 +81,21 @@ void CPLegacy::initDevice(DeviceType deviceType)
     LPF = new LowPassFilter(this);
     ER = new EarlyReflections(this);
 
-    m_modulesListModel.insertModule(NG, 0);
-    m_modulesListModel.insertModule(CM, 1);
-    m_modulesListModel.insertModule(PR, 2);
-    m_modulesListModel.insertModule(PA, 3);
-    m_modulesListModel.insertModule(IR, 4);
-    m_modulesListModel.insertModule(HPF, 5);
-    m_modulesListModel.insertModule(EQ, 6);
-    m_modulesListModel.insertModule(LPF, 7);
-    m_modulesListModel.insertModule(ER, 8);
+    m_moduleList.append(NG);
+    m_moduleList.append(CM);
+    m_moduleList.append(PR);
+    m_moduleList.append(IR);
+    if(m_deviceType == DeviceType::legacyCP16PA || m_deviceType == DeviceType::legacyCP100PA)
+    {
+        m_moduleList.append(PA);
+        connect(this, &CPLegacy::isPreEqChanged, this, &CPLegacy::arrangePrePost);
+    }
+    m_moduleList.append(HPF);
+    m_moduleList.append(EQ);
+    m_moduleList.append(LPF);
+    m_moduleList.append(ER);
+
+    m_modulesListModel.refreshModel(&m_moduleList);
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
@@ -96,24 +120,28 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP-16M Blue";
+        m_isPaFw = false;
         break;
     case DeviceType::legacyCP16PA:
         m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP-16M-PA Green";
+        m_isPaFw = true;
         break;
     case DeviceType::legacyCP100:
         m_minimalFirmware = new Firmware("2.08.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
         m_maxBankCount = 10;
         m_maxPresetCount = 10;
         m_firmwareName = "CP-100";
+        m_isPaFw = false;
         break;
     case DeviceType::legacyCP100PA:
         m_minimalFirmware = new Firmware("6.08.04", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
         m_maxBankCount = 10;
         m_maxPresetCount = 10;
         m_firmwareName = "CP-100PA";
+        m_isPaFw = true;
         break;
 
     // case DeviceType::LA3:
@@ -123,13 +151,20 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
     //     m_firmwareName = "LA3";
     //     break;
     default:
-        qDebug() << __FUNCTION__ << "Unknown device type";
+        qWarning() << __FUNCTION__ << "Unknown device type";
+
+        m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::DeviceInternal, "");
+        m_maxBankCount = 4;
+        m_maxPresetCount = 4;
+        m_firmwareName = "Unknown CP device";
+        break;
         break;
     }
 }
 
 void CPLegacy::readFullState()
 {
+    m_presetManager.setCurrentState(PresetState::Changing);
     m_parser.enableFullEndMode();
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("rns");
@@ -167,6 +202,14 @@ QList<QByteArray> CPLegacy::parseAnswers(QByteArray &baAnswer)
     {
         endCCCommHandler(parseResults);
         recievedCommAnswers.append("cc");
+    }
+
+    QList<QByteArray> args;
+    if(undefCommParser.getParse(baAnswer, &args))
+    {
+        QByteArray data;
+        if(!args.isEmpty()) data = args.first();
+        undefinedCommandCommHandler("", data);
     }
 
     return recievedCommAnswers;
@@ -510,6 +553,26 @@ void CPLegacy::uploadFirmware(const QByteArray& firmware)
     }
 }
 
+void CPLegacy::arrangePrePost()
+{
+    int prePosition = 2;
+    int postPosition = 6;
+    if(m_isPreEq)
+    {
+        if(m_moduleList.at(prePosition)->moduleType() != ModuleType::EQ)
+        {
+            m_modulesListModel.moveModule(postPosition, prePosition);
+        }
+    }
+    else
+    {
+        if(m_moduleList.at(postPosition)->moduleType() != ModuleType::EQ)
+        {
+            m_modulesListModel.moveModule(prePosition, postPosition);
+        }
+    }
+}
+
 void CPLegacy::formatMemory()
 {
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryStarted);
@@ -518,6 +581,19 @@ void CPLegacy::formatMemory()
     emit sgDisableTimeoutTimer();
     emit sgSendWithoutConfirmation(QString("fsf\r\n").toUtf8());
     emit sgProcessCommands();
+}
+
+void CPLegacy::setIsPreEq(bool newIsPreEq)
+{
+    if (m_isPreEq == newIsPreEq)
+        return;
+    m_isPreEq = newIsPreEq;
+    emit isPreEqChanged();
+
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
+    emit sgWriteToInterface(QString("eqp %1\r\n").arg(m_isPreEq).toUtf8());
 }
 
 //=======================================================================================
@@ -628,6 +704,9 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     IR->setEnabled(legacyData.cab_on);
     ER->setValues(legacyData.early_on, legacyData.early_volume, legacyData.early_type);
 
+    m_isPreEq = legacyData.eq_pre;
+    emit isPreEqChanged();
+
 
     switch(m_presetManager.currentState())
     {
@@ -734,13 +813,19 @@ void CPLegacy::getIrNameCommHandler(const QString &command, const QByteArray &ar
         break;
     }
 
+    case PresetState::Changing:
+    {
+        currentPreset.setImpulseName(impulseName);
+        currentSavedPreset.setImpulseName(impulseName);
+        IR->setImpulseName(impulseName);
+    }
+
     default:
     {
         currentPreset.setImpulseName(impulseName);
+        IR->setImpulseName(impulseName);
     }
     }
-
-    IR->setImpulseName(impulseName);
 
     m_presetListModel.updatePreset(currentPreset);
 }

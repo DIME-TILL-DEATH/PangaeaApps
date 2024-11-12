@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    QObject::connect(&uiCore, &UiCore::sgDisconnesctFromDevice, core, &Core::disconnectFromDevice);
+    QObject::connect(&uiCore, &UiCore::sgDisconnectFromDevice, core, &Core::disconnectFromDevice);
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgCurrentDeviceChanged, &uiCore, &UiCore::slCurrentDeviceChanged);

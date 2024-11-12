@@ -49,6 +49,7 @@ qt_add_library(pangaea-backend STATIC
     modules/eqparametric.cpp modules/eqparametric.h
     modules/lowpassfilter.h modules/lowpassfilter.cpp
     modules/earlyreflections.h modules/earlyreflections.cpp
+    modules/controlqlegacy.h modules/controlqlegacy.cpp
 
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h

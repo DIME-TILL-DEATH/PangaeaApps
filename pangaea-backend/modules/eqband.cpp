@@ -17,9 +17,7 @@ EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, 
                             "Gain", "dB",
                               0x0000, 0x001E, -15, 15);
 
-    m_Q = new ControlValue(ownerModule, "eqq " + QString().setNum(m_bandNum),
-                            "Q-Factor", "",
-                           100, -100, 0.2, 5.2);//-100, 0, 0.1, 10.1);
+    m_Q = new ControlQLegacy(ownerModule, "eqq " + QString().setNum(m_bandNum));
 
     connect(m_Fc, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);
     connect(m_gain, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);

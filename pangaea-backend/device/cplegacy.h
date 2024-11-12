@@ -31,6 +31,8 @@ class CPLegacy : public AbstractDevice
 
 
     Q_PROPERTY(PresetVolume* MV READ getMV NOTIFY MVChanged FINAL)
+    Q_PROPERTY(bool isPaFw READ isPaFw CONSTANT)
+    Q_PROPERTY(bool isPreEq READ isPreEq WRITE setIsPreEq NOTIFY isPreEqChanged FINAL)
 public:
     explicit CPLegacy(Core *parent);
 
@@ -57,12 +59,18 @@ public:
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
     Q_INVOKABLE void formatMemory() override;
 
+    bool isPaFw() const {return m_isPaFw;};
+    bool isPreEq() const {return m_isPreEq;};
+    void setIsPreEq(bool newIsPreEq);
+
 public slots:
      QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
 
 signals:
 
     void MVChanged();
+    void isPreEqChanged();
+
 private:
     IRWorker irWorker;
 
@@ -78,16 +86,22 @@ private:
     LowPassFilter* LPF;
     EarlyReflections* ER;
 
+    bool m_isPreEq{false};
+    bool m_isPaFw{false};
+
     QSettings* appSettings;
 
     void setDeviceType(DeviceType newDeviceType);
 
     void pushReadPresetCommands();
 
+
     void setPresetData(const Preset &preset);
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
 
     void uploadFirmware(const QByteArray& fwData);
+
+    void arrangePrePost();
 
     void amtVerCommHandler(const QString &command, const QByteArray &arguments);
     void getIrNameCommHandler(const QString &command, const QByteArray &arguments);

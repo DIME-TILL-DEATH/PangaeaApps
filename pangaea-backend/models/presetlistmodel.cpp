@@ -107,7 +107,7 @@ void PresetListModel::updatePreset(const Preset& newPreset)
         return;
     }
 
-    //qDebug() << "Updating preset, impulse name:"; newPreset.impulseName();
+    qDebug() << "Updating preset, b:" << newPreset.bankNumber() << "p: " << newPreset.presetNumber() << "impulse name:" << newPreset.impulseName();
     m_presetList->replace(index, newPreset);
 
     emit dataChanged(createIndex(0, 0), createIndex(m_presetList->size(), 0));

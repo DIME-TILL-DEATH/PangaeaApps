@@ -284,7 +284,7 @@ ApplicationWindow
                 case DeviceErrorType.UndefinedCommand:
                 {
                     _msgCommon.headerText = qsTr("Device parse error");
-                    _msgCommon.text = qsTr("Device can't recognize command: \n" + params + "\nTry to update firmware");
+                    _msgCommon.text = qsTr("Device can't recognize command:\n'" + params[1] + "'\nTry to update firmware");
                     _msgCommon.open();
                     break;
                 }

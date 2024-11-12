@@ -7,6 +7,8 @@
 
 #include <functional>
 
+#include "maskedparser.h"
+
 class Parser
 {
 public:
@@ -15,6 +17,7 @@ public:
     QList<QByteArray> parseNewData(const QByteArray& newData);
 
     void addCommandHandler(const QString& command, std::function<void (const QString &, const QByteArray &)> callback);
+    void addCureParser(QString comm, MaskedParser* parser);
 
     // Костыль для старого формата rns
     void enableFullEndMode() {fullEndModeEnabled=true;};
@@ -27,6 +30,9 @@ private:
     bool fullEndModeEnabled{true};
 
     QMap<QString, std::function<void(const QString& command, const QByteArray&)> > m_callbacks;
+
+    // cure for non-\n commands
+    QList<QPair<QString, MaskedParser*> > m_mskParserList;
 };
 
 #endif // PARSER_H

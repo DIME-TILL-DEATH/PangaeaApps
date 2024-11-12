@@ -7,6 +7,7 @@
 #include "deviceparameter.h"
 
 #include "controlvalue.h"
+#include "controlqlegacy.h"
 
 class EqBand : public QObject
 {
@@ -62,7 +63,7 @@ private:
     FilterType m_type;
 
     ControlValue* m_Fc;
-    ControlValue* m_Q;
+    ControlQLegacy* m_Q;
     ControlValue* m_gain;
 
     double m_fStart;

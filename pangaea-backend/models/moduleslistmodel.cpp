@@ -1,12 +1,5 @@
 #include "moduleslistmodel.h"
 
-#include "noisegate.h"
-#include "poweramp.h"
-#include "cabsim.h"
-#include "eqparametric.h"
-
-#include <QtQuick/QQuickView>
-
 ModulesListModel::ModulesListModel(QObject *parent)
     : QAbstractListModel{parent}
 {
@@ -14,8 +7,7 @@ ModulesListModel::ModulesListModel(QObject *parent)
 
 ModulesListModel::~ModulesListModel()
 {
-    qDebug() << "Delete module list model";
-    qDeleteAll(m_moduleList);
+
 }
 
 QHash<int, QByteArray> ModulesListModel::roleNames() const
@@ -30,14 +22,24 @@ QHash<int, QByteArray> ModulesListModel::roleNames() const
 void ModulesListModel::insertModule(AbstractModule *newModule, int position)
 {
     beginInsertRows(QModelIndex(), position, position);
-    m_moduleList.insert(position, 1, newModule);
+    m_moduleList->insert(position, 1, newModule);
     endInsertRows();
+}
+
+void ModulesListModel::moveModule(int from, int to)
+{
+    qint32 indexToInModel = to;
+    if(to > from) indexToInModel++;
+    beginMoveRows(QModelIndex(), from, from, QModelIndex(), indexToInModel);
+    m_moduleList->move(from, to);
+    endMoveRows();
 }
 
 int ModulesListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    return m_moduleList.size();
+    if(m_moduleList) return m_moduleList->size();
+    else return 0;
 }
 
 QVariant ModulesListModel::data(const QModelIndex &index, int role) const
@@ -51,12 +53,12 @@ QVariant ModulesListModel::data(const QModelIndex &index, int role) const
     {
     case ListRoles::ModuleTypeRole:
     {
-        return QVariant::fromValue(m_moduleList.at(index.row())->moduleType());
+        return QVariant::fromValue(m_moduleList->at(index.row())->moduleType());
     }
 
     case ListRoles::ModuleInstanceRole:
     {
-        AbstractModule* module = m_moduleList.at(index.row());
+        AbstractModule* module = m_moduleList->at(index.row());
         return QVariant::fromValue(module);
     }
 
@@ -69,7 +71,7 @@ QVariant ModulesListModel::data(const QModelIndex &index, int role) const
 }
 
 
-void ModulesListModel::refreshModel(const QList<AbstractModule *>& newModulesList)
+void ModulesListModel::refreshModel(QList<AbstractModule *> *newModulesList)
 {
     beginResetModel();
 

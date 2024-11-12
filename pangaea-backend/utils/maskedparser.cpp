@@ -19,13 +19,6 @@ bool MaskedParser::getParse(QByteArray inBa, QList<QByteArray> *inRet)
     quint8 afterX;
     bool kostyl;
 
-    if(inBa.indexOf("amtver")>=0)
-    {
-        quint8 kkk = 0;
-        kkk++;
-
-    }
-
     foreach (char chr, inBa)
     {
         kostyl = true;

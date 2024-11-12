@@ -69,7 +69,7 @@ signals:
     void sgExportPreset(QString filePath, QString fileName);
     void sgImportPreset(QString filePath, QString fileName);
 
-    void sgDisconnesctFromDevice();
+    void sgDisconnectFromDevice();
     void sgModuleNameChanged(QString name);
 
     void sgDoOnlineFirmwareUpdate();

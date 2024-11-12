@@ -57,6 +57,10 @@ private:
     void parametersCommHandler(const QString &command, const QByteArray& arguments);
 
     void eqParametersCommHandler(const QString &command, const QByteArray& arguments);
+
+    // fw update simulation
+    bool fwUpdateMode{false};
+    void startFwUpdateCommHandler(const QString &command, const QByteArray& arguments);
 };
 
 #endif // MOCKCP16LEGACY_H

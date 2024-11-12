@@ -174,6 +174,7 @@ bool MockCP16Legacy::loadPresetData(quint8 prBank, quint8 prPreset, preset_data_
 {
     QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
     QFile presetFile(dirPath + "/preset.pan");
+    qDebug() << "loading preset data, path:" << dirPath;
     if(presetFile.open(QIODevice::ReadOnly))
     {
         QByteArray readedData = presetFile.read(sizeof(preset_data_legacy_t));
@@ -215,7 +216,9 @@ void MockCP16Legacy::amtVerCommHandler(const QString &command, const QByteArray&
 
 void MockCP16Legacy::bankPresetCommHandler(const QString &command, const QByteArray& arguments)
 {
-    QString answer = QString("gb\r0%10%20\n").arg(m_bank).arg(m_preset);
+    QString answer = QString("gb\r")
+                    + QString("0%1").arg(m_bank)
+                    + QString("0%1").arg(m_preset) + "\n";
     emit answerReady(answer.toUtf8());
 }
 
@@ -253,7 +256,19 @@ void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArra
     }
     else
     {
-
+        QList<QByteArray> argsList = arguments.split('\r');
+        if(argsList.size()>1)
+        {
+            qDebug() << "Mock device, set state arguments:" << argsList.at(1);
+            quint8 rawArr[sizeof(preset_data_legacy_t)];
+            for(int i = 0; i < argsList.at(1).size(); i += 2)
+            {
+                QString chByte = QString(argsList.at(1).at(i)) + QString(argsList.at(1).at(i+1));
+                rawArr[i/2] = chByte.toInt(nullptr, 16);
+            }
+            memcpy(&currentPresetData, rawArr, sizeof(preset_data_legacy_t));
+        }
+        emit answerReady("gs 1\rgsEND\n");
     }
 }
 
@@ -322,7 +337,7 @@ void MockCP16Legacy::presetChangeCommHandler(const QString &command, const QByte
 
     loadPresetData(m_bank, m_preset, &currentPresetData);
 
-    QString answer = QString("pc %1%2\rEND\n").arg(m_bank).arg(m_preset);
+    QString answer = QString("pc %1%2\rEND\n").arg(QString().setNum(m_bank, 16)).arg(QString().setNum(m_preset, 16));
     emit answerReady(answer.toUtf8());
 }
 
@@ -331,6 +346,7 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
     QString dirPath = basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/";
     if(arguments.size() == 0)
     {
+        qDebug() << " Mock device: " << "cc, no arguments";
         // file request
         QByteArray answer("cc\r");
         QDir presetDir(dirPath);
@@ -341,6 +357,10 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
         {
             QString irName = filesInDir.first().fileName();
             int irSize = filesInDir.first().size();
+
+            qDebug() << "Files in dir:" << filesInDir;
+            qDebug() << " Mock device: " << "cc, file name, size" << irName << irSize;
+            answer += irName.toUtf8() + " " + QString().setNum(irSize).toUtf8() + "\n";
 
             QByteArray fileData;
             QFile irFile(dirPath + irName);
@@ -362,7 +382,6 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
 
                 answer += convertedBa;
             }
-            answer += irName.toUtf8() + " " + QString().setNum(irSize).toUtf8() + "\n";
             answer += "\nEND\n";
         }
         else
@@ -391,7 +410,20 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
                 qDebug() << fileName << mode;
                 if(mode == 0)
                 {
-                    qDebug() << "saving file";
+                    QDir presetDir(dirPath);
+                    presetDir.setNameFilters({"*.wav"});
+
+                    QFileInfoList wavsInDir = presetDir.entryInfoList();
+                    if(!wavsInDir.empty())
+                    {
+                        foreach(QFileInfo curFileInfo, wavsInDir)
+                        {
+                            QFile wavFile(curFileInfo.absoluteFilePath());
+                            wavFile.remove();
+                            qDebug() << curFileInfo.absoluteFilePath() << "removed";
+                        }
+                    }
+
                     QFile irFile(dirPath + fileName);
                     if(irFile.open(QIODevice::WriteOnly))
                     {
@@ -466,6 +498,6 @@ void MockCP16Legacy::eqParametersCommHandler(const QString &command, const QByte
         paramPtr += QString(argsList.at(0)).toInt(); // array address
         if(argsList.size() > 1) *paramPtr = QString(argsList.at(1)).toInt(nullptr, 16);
 
-        emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r"); // в прошивках до 1.04.04 включительно нет \n в конце команд eq(и ряде других)
     }
 }

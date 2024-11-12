@@ -17,10 +17,11 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     void insertModule(AbstractModule* newModule, int position);
+    void moveModule(int from, int to);
 
-    void refreshModel(const QList<AbstractModule *> &newModulesList);
+    void refreshModel(QList<AbstractModule *> *newModulesList);
 private:
-    QList<AbstractModule*> m_moduleList;
+    QList<AbstractModule*>* m_moduleList;
 
     enum ListRoles{
         ModuleTypeRole = Qt::UserRole + 1,

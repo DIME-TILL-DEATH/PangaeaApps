@@ -14,7 +14,7 @@ BaseModule{
 
     property bool isPrePostVisible: true
 
-    property bool isPreEQ: true
+    property bool isPreEQ: UiCore.currentDevice.isPreEq
 
     property EqParametric module
 
@@ -147,6 +147,8 @@ BaseModule{
                 Item{
                     id: _prePostEQ
 
+                    visible: UiCore.currentDevice.isPaFw
+
                     height: parent.height
                     width: parent.width*2/10
 
@@ -155,7 +157,7 @@ BaseModule{
                        enabled: isPrePostVisible
 
                         onClicked: {
-                            UiCore.setDeviceParameter(DeviceParameter.EQ_PRE, !isPreEQ);
+                            UiCore.currentDevice.isPreEq = !isPreEQ
                         }
                     }
 

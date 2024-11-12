@@ -9,6 +9,7 @@
 #include "deviceerrorenum.h"
 #include "devicemessageenum.h"
 #include "parser.h"
+#include "maskedparser.h"
 
 #include "firmware.h"
 
@@ -145,21 +146,23 @@ protected:
     Preset copiedPreset{this};
     PresetManager m_presetManager{this};
 
+    QList<AbstractModule*> m_moduleList;
+    QList<Preset> m_presetsList;
+
     ModulesListModel m_modulesListModel{this};
     PresetListModel m_presetListModel{this};
 
     bool fwUpdate{false};
     bool isFormatting{false};
 
-    // TODO: m_presetsList живёт внутри модели или modulesList тут
-    QList<Preset> m_presetsList;
-
     bool m_deviceParamsModified{false};
+    qint64 m_bytesToRecieve;
+
+    MaskedParser undefCommParser{"undefind command x\n", "11111111111111111X1"};
 
     void undefinedCommandCommHandler(const QString &command, const QByteArray& arguments);
     void modulesParamsSetCommHandler(const QString &command, const QByteArray& arguments);
 
-    qint64 m_bytesToRecieve;
 };
 
 

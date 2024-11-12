@@ -17,7 +17,7 @@ public:
         legacyCP100PA,
 
         //-------------------------------
-        LEGACY_DEVICES,
+        LEGACY_DEVICES = 16,
         CP,
         LA3
     };

@@ -25,7 +25,11 @@ void Core::disconnectFromDevice()
 
     commandsPending.clear();
 
-    currentDevice = nullptr;
+    // if(currentDevice)
+    // {
+    //     delete(currentDevice);
+        currentDevice = nullptr;
+    // }
     emit sgReadyToDisconnect();
 }
 

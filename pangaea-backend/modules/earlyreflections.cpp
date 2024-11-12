@@ -27,10 +27,10 @@ void EarlyReflections::setValues(const reverb_data_t &rvData)
     emit dataChanged();
 }
 
-void EarlyReflections::sendDataToDevice(const QByteArray &baData)
-{
-    if(m_owner)
-    {
-        emit m_owner->sgWriteToInterface(baData + "et\r\n", true); // костыль чтобы получить нормальный ответ с \n и закончить строку
-    }
-}
+// void EarlyReflections::sendDataToDevice(const QByteArray &baData)
+// {
+//     if(m_owner)
+//     {
+//         emit m_owner->sgWriteToInterface(baData + "et\r\n", true); // костыль чтобы получить нормальный ответ с \n и закончить строку
+//     }
+// }
