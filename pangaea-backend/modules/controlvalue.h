@@ -28,13 +28,13 @@ public:
 
     ~ControlValue();
 
-    void setDisplayValue(double newDisplayValue);
+    virtual void setDisplayValue(double newDisplayValue);
     double displayValue() const {return m_displayValue;};
 
     double minDisplayValue() const {return m_minDisplayValue;};
     double maxDisplayValue() const {return m_maxDisplayValue;};
 
-    void setControlValue(qint32 value);
+    virtual void setControlValue(qint32 value);
 
     bool isModified() const {return m_isModified;};
     void setIsModified(bool newIsModified);
@@ -51,8 +51,8 @@ signals:
     void userModifiedValue();
     void enabledChanged();
 
-private:
-    QString m_commandName;
+protected:
+    QString m_commandString;
 
     qint16 m_minControlValue;
     qint16 m_maxControlValue;

@@ -6,7 +6,7 @@ ControlValue::ControlValue(AbstractModule *owner, QString commandName,
                            double minDisplayValue, double maxDisplayValue)
     :QObject{owner},
     m_owner{owner},
-    m_commandName{commandName},
+    m_commandString{commandName},
     m_minControlValue{minControlValue},
     m_maxControlValue{maxControlValue},
     m_minDisplayValue{minDisplayValue},
@@ -40,7 +40,7 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     double k1 = m_minDisplayValue-(m_minControlValue*k2);
     quint8 controlValue = (m_displayValue - k1)/k2;
 
-    QString fullCommand = m_commandName + QString(" %1\r\n").arg(controlValue, 0, 16); //\r
+    QString fullCommand = m_commandString + QString(" %1\r\n").arg(controlValue, 0, 16); //\r
 
     if(buffer.isEmpty())
     {
