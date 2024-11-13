@@ -12,6 +12,7 @@ OfflineInterface::OfflineInterface(QObject *parent)
 
 void OfflineInterface::startScan()
 {
+    emit sgDeviceListUpdated(DeviceConnectionType::Offline, {DeviceDescription("Offline CP16 legacy", "virtual", DeviceConnectionType::Offline)});
 }
 
 void OfflineInterface::stopScan()
@@ -20,7 +21,7 @@ void OfflineInterface::stopScan()
 
 QList<DeviceDescription> OfflineInterface::discoveredDevicesList()
 {
-    return {DeviceDescription("Offline CP16/CP100 legacy", "virtual", DeviceConnectionType::Offline)};
+    return {DeviceDescription("Offline CP16 legacy", "virtual", DeviceConnectionType::Offline)};
 }
 
 bool OfflineInterface::connect(DeviceDescription device)

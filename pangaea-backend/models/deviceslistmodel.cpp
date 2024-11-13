@@ -56,7 +56,7 @@ void DevicesListModel::appendNewDevices(QList<DeviceDescription>& list)
 
         if(findResult == m_devicesList.end())
         {
-            qDebug() << "New device found: " << newDevice.name() << newDevice.address();
+            qDebug() << __FUNCTION__ << "New device found: " << newDevice.name() << newDevice.address();
             appendDevice(newDevice);
         }
     }

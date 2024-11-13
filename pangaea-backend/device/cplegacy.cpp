@@ -84,12 +84,12 @@ void CPLegacy::initDevice(DeviceType deviceType)
     m_moduleList.append(NG);
     m_moduleList.append(CM);
     m_moduleList.append(PR);
-    m_moduleList.append(IR);
     if(m_deviceType == DeviceType::legacyCP16PA || m_deviceType == DeviceType::legacyCP100PA)
     {
         m_moduleList.append(PA);
         connect(this, &CPLegacy::isPreEqChanged, this, &CPLegacy::arrangePrePost);
     }
+    m_moduleList.append(IR);
     m_moduleList.append(HPF);
     m_moduleList.append(EQ);
     m_moduleList.append(LPF);

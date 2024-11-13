@@ -102,6 +102,7 @@ void InterfaceCore::startScanning()
 {
     QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
     QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
+    QObject::connect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
 
     QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable, Qt::UniqueConnection);
 
@@ -109,10 +110,15 @@ void InterfaceCore::startScanning()
     m_usbInterface->startScan();
 #endif
     m_bleInterface->startScan();
+    m_offlineInterface->startScan();
 }
 
 void InterfaceCore::stopScanning()
 {
+    QObject::disconnect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
+    QObject::disconnect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
+    QObject::disconnect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
+
     m_usbInterface->stopScan();
     m_bleInterface->stopScan();
 }
@@ -128,13 +134,6 @@ void InterfaceCore::rssiMeasuring(bool isEnabled)
     if(m_bleInterface)
         m_bleInterface->rssiMeasuring(isEnabled);
 }
-
-// в таком варианте иногда вызывает crash на ошибки буффера
-//void InterfaceCore::slNewData(QByteArray data)
-//{
-//    qDebug() << "->" << __FUNCTION__ << ":" << data;
-//    emit sgNewData(data);
-//}
 
 void InterfaceCore::slInterfaceError(QString errorDescription)
 {
