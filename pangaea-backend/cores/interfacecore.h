@@ -22,7 +22,7 @@ public:
     void writeToDevice(QByteArray data, bool logCommand = true);
     void silentWriteToDevice(QByteArray data);
 
-    void startScanning();
+    void startScanning(DeviceConnectionType connectionType);
     void stopScanning();
 
     void setModuleName(QString name);

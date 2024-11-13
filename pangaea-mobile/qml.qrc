@@ -57,5 +57,8 @@
         <file>qml/ControlGroups/MasterControls_CP.qml</file>
         <file>qml/Elements/PresetSpin_LA.qml</file>
         <file>qml/Modules/OutputMode.qml</file>
+        <file>qml/Tutorials/TutorialVirtualDevice.qml</file>
+        <file>qml/Tutorials/qmldir</file>
+        <file>qml/Tutorials/SimpleTutorialMessage.qml</file>
     </qresource>
 </RCC>

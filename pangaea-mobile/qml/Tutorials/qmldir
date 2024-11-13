@@ -1,0 +1,4 @@
+module Tutorials
+
+SimpleTutorialMessage 1.0 SimpleTutorialMessage.qml
+TutorialVirtualDevice 1.0 TutorialVirtualDevice.qml

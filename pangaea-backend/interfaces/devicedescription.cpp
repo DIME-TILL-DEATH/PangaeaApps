@@ -13,7 +13,7 @@ QString DeviceDescription::name()
     return m_name;
 }
 
-DeviceDescription::DeviceConnectionType DeviceDescription::connectionType() const
+DeviceConnectionType DeviceDescription::connectionType() const
 {
     return m_connectionType;
 }

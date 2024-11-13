@@ -8,14 +8,18 @@ import Qt5Compat.GraphicalEffects
 
 import StyleSettings 1.0
 import Elements 1.0
+import Tutorials
 
 import CppObjects
+import CppEnums
 
 Item
 {
     id: _main
     property bool findBT: true
     property bool isConnected: false
+
+
 
     Column
     {
@@ -262,20 +266,21 @@ Item
             MText{
                 anchors.centerIn: parent
                 color: Style.colorText
-                text: qsTr("Offline mode")
+                text: qsTr("Show offline(virtual) devices")
             }
 
             MouseArea{
                 anchors.fill: parent
 
                 onClicked: {
-                    console.log("Offline interface")
-
-                    InterfaceManager.connectToVirtualDevice()
-
+                    _tutorialVirtualDevice.process()
                 }
             }
         }
+    }
+
+    TutorialVirtualDevice{
+        id: _tutorialVirtualDevice
     }
 
 
@@ -322,7 +327,7 @@ Item
         function onSgInterfaceDisconnected()
         {
             isConnected = false;
-            InterfaceManager.startScanning();
+            InterfaceManager.startScanning(DeviceConnectionType.BLE);
         }
     }
 }

@@ -6,6 +6,24 @@
 
 #include <QtCore/QtGlobal>
 
+class DeviceConnectionTypeEnum
+{
+    Q_GADGET
+public:
+    explicit DeviceConnectionTypeEnum() {};
+
+    enum Value
+    {
+        Unknown = 0,
+        USB,
+        BLE,
+        Offline
+    };
+    Q_ENUM(Value)
+};
+typedef  DeviceConnectionTypeEnum::Value DeviceConnectionType;
+Q_DECLARE_METATYPE(DeviceConnectionType)
+
 class DeviceDescription
 {
     Q_GADGET
@@ -13,15 +31,6 @@ class DeviceDescription
     Q_PROPERTY(QString address READ address)
     Q_PROPERTY(DeviceConnectionType connectionType READ connectionType)
 public:
-    enum class DeviceConnectionType
-    {
-        Unknown = 0,
-        USBAuto,
-        USBManual,
-        BLE,
-        Offline
-    };
-    Q_ENUM(DeviceConnectionType)
 
     DeviceDescription() = default;
     DeviceDescription(QString name, QString address, DeviceConnectionType connectionType);
@@ -39,6 +48,5 @@ private:
 Q_DECLARE_METATYPE(DeviceDescription)
 
 
-typedef  DeviceDescription::DeviceConnectionType DeviceConnectionType;
 
 #endif // DEVICEDESCRIPTION_H

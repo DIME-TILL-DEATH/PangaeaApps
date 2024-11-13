@@ -18,7 +18,8 @@ Item
         leftPadding: parent.width/20
         anchors.verticalCenter: parent.verticalCenter
 
-        text: modelData.name + "\n" + modelData.address
+        text: deviceDescription.name + "\n" + deviceDescription.address
+        // text: name + "\n" + address
     }
 
 

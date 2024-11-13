@@ -1,8 +1,9 @@
 #ifndef DEVICESLISTMODEL_H
 #define DEVICESLISTMODEL_H
 
-#include <QAbstractListModel>
 #include <QObject>
+#include <QAbstractListModel>
+#include <QSortFilterProxyModel>
 
 #include "devicedescription.h"
 
@@ -28,7 +29,7 @@ private:
     void removeDevice(DeviceDescription& device);
 
     enum ListRoles{
-        DeviceDescriptionRole = Qt::UserRole + 1,
+        DeviceDescriptionRole = Qt::UserRole + 1
     };
 };
 

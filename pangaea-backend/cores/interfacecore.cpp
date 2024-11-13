@@ -41,7 +41,7 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
             m_exchangeInterface = m_bleInterface;
             break;
         }
-        case DeviceConnectionType::USBAuto:
+        case DeviceConnectionType::USB:
         {
             qDebug() << "Settling USB interface";
             m_exchangeInterface = m_usbInterface;
@@ -84,7 +84,7 @@ void InterfaceCore::disconnectFromDevice()
         // clear old devices
         QList<DeviceDescription> emptyList;
         emit sgDeviceListUpdated(DeviceConnectionType::BLE, emptyList);
-        emit sgDeviceListUpdated(DeviceConnectionType::USBAuto, emptyList);
+        emit sgDeviceListUpdated(DeviceConnectionType::USB, emptyList);
     }
 }
 
@@ -98,19 +98,32 @@ void InterfaceCore::writeToDevice(QByteArray data, bool logCommand)
     }
 }
 
-void InterfaceCore::startScanning()
+void InterfaceCore::startScanning(DeviceConnectionType connectionType)
 {
-    QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
-    QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
-    QObject::connect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
-
-    QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable, Qt::UniqueConnection);
-
-#ifndef Q_OS_ANDROID
-    m_usbInterface->startScan();
-#endif
-    m_bleInterface->startScan();
-    m_offlineInterface->startScan();
+    qDebug() << __FUNCTION__ << "recieve start scanning" << "connection type:" << connectionType;
+    switch(connectionType)
+    {
+    case DeviceConnectionType::BLE:
+    {
+        QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
+        QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable, Qt::UniqueConnection);
+        m_bleInterface->startScan();
+        break;
+    }
+    case DeviceConnectionType::USB:
+    {
+        QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
+        m_usbInterface->startScan();
+        break;
+    }
+    case DeviceConnectionType::Offline:
+    {
+        QObject::connect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
+        m_offlineInterface->startScan();
+        break;
+    }
+    default:{}
+    }
 }
 
 void InterfaceCore::stopScanning()
@@ -167,9 +180,21 @@ void InterfaceCore::slDeviceListUpdated(DeviceConnectionType connectionType, QLi
 
     if(m_exchangeInterface == nullptr && makeAutoconnect)
     {
-        if(!list.empty())
+        // if(!list.empty())
+        // {
+        //     connectToDevice(list.first());
+        // }
+        foreach(DeviceDescription device, list)
         {
-            connectToDevice(list.first());
+            if(device.connectionType() == DeviceConnectionType::Offline)
+            {
+                continue;
+            }
+            else
+            {
+                connectToDevice(device);
+                break;
+            }
         }
     }
 }

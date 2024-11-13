@@ -21,7 +21,7 @@ UsbInterface::UsbInterface(QObject *parent)
     QTimer::connect(m_timer, &QTimer::timeout, this, &UsbInterface::slPortTimer);
 
     m_description = "USB";
-    m_connectionType = DeviceConnectionType::USBAuto;
+    m_connectionType = DeviceConnectionType::USB;
 }
 
 void UsbInterface::startScan()
@@ -52,7 +52,7 @@ void UsbInterface::slPortTimer()
                 qInfo() << "Finded USB device name:" << device.name() << "Address:" << device.address();
             }
         }
-        emit sgDeviceListUpdated(DeviceConnectionType::USBAuto, m_discoveredDevices);
+        emit sgDeviceListUpdated(DeviceConnectionType::USB, m_discoveredDevices);
     }
     else
     {
@@ -64,10 +64,10 @@ void UsbInterface::discoverDevices()
 {
     m_discoveredDevices.clear();
 
-    if(isManualConnectAllowed)
-    {
-        m_discoveredDevices.append(DeviceDescription("Manual connection", manualConnectionPortName, DeviceConnectionType::USBManual));
-    }
+    // if(isManualConnectAllowed)
+    // {
+    //     m_discoveredDevices.append(DeviceDescription("Manual connection", manualConnectionPortName, DeviceConnectionType::USBManual));
+    // }
 
     auto portList = QSerialPortInfo::availablePorts();
     foreach (const QSerialPortInfo &info, portList)
@@ -83,7 +83,7 @@ void UsbInterface::discoverDevices()
 
             m_discoveredDevices.append(DeviceDescription("AMT " + info.description(),
                                                          info.systemLocation(),
-                                                         DeviceConnectionType::USBAuto));
+                                                         DeviceConnectionType::USB));
         }
     }
 }

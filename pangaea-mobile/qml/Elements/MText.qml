@@ -10,7 +10,7 @@ Text{
     font.bold: true
 
     property int textWidth: _tMetrics.tightBoundingRect.width
-    property int textHeight: _tMetrics.height
+    property int textHeight: _tMetrics.boundingRect.height // _tMetrics.height
 
     TextMetrics{
         id: _tMetrics

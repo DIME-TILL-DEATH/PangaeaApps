@@ -12,27 +12,6 @@ UiInterfaceManager::~UiInterfaceManager()
 {
 }
 
-void UiInterfaceManager::startScanning()
-{
-    emit sgStartScanning();
-}
-
-void UiInterfaceManager::connectToDevice(DeviceDescription device)
-{
-    emit sgConnectToDevice(device);
-}
-
-void UiInterfaceManager::connectToVirtualDevice()
-{
-    DeviceDescription virtualDevice("CP16/C100", "offline", DeviceConnectionType::Offline);
-    emit sgConnectToDevice(virtualDevice);
-}
-
-void UiInterfaceManager::disconnectFromDevice()
-{
-    emit sgDisconnectFromDevice();
-}
-
 void UiInterfaceManager::updateDevicesList(DeviceConnectionType connectionType, QList<DeviceDescription> list)
 {
     if(connectionType == DeviceConnectionType::BLE)

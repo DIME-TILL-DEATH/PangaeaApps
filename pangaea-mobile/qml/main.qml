@@ -197,14 +197,14 @@ ApplicationWindow
 
         onAccepted:
         {
-            InterfaceManager.startScanning()
+            InterfaceManager.startScanning(DeviceConnectionType.BLE)
         }
     }
 
     Component.onCompleted:
     {
         UiCore.setupApplication();
-        InterfaceManager.startScanning();
+        InterfaceManager.startScanning(DeviceConnectionType.BLE);
     }
 
     Connections{
@@ -397,7 +397,7 @@ ApplicationWindow
             _msgBluetoothNotReady.text = qsTr("Device disconnected\n") + errorDescription
             _msgBluetoothNotReady.open();
 
-            InterfaceManager.startScanning();
+            InterfaceManager.startScanning(DeviceConnectionType.BLE);
             mBusy.visible = false;
         }
 

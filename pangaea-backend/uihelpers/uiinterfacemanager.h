@@ -17,10 +17,6 @@ public:
     explicit UiInterfaceManager(QObject *parent = nullptr);
     ~UiInterfaceManager();
 
-    Q_INVOKABLE void startScanning();
-    Q_INVOKABLE void connectToDevice(DeviceDescription device);
-    Q_INVOKABLE void connectToVirtualDevice();
-    Q_INVOKABLE void disconnectFromDevice();
     Q_INVOKABLE void rssiMeasuring(bool enabled) {emit sgRssiMeasuring(enabled);}
 
     void updateDevicesList(DeviceConnectionType connectionType, QList<DeviceDescription> list);
@@ -40,11 +36,11 @@ public slots:
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
 
 signals:
-    void sgStartScanning();
+    void startScanning(DeviceConnectionType);
 
+    void connectToDevice(DeviceDescription device);
+    void disconnectFromDevice();
     void sgInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
-    void sgConnectToDevice(DeviceDescription device);
-    void sgDisconnectFromDevice();
     void sgDeviceUnavaliable(DeviceConnectionType senderType, QString reason);
     void sgExchangeError();
 

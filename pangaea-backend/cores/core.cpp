@@ -155,15 +155,15 @@ void Core::processCommands()
 
         switch(m_currentConnectionType)
         {
-        case DeviceDescription::DeviceConnectionType::USBManual:
-        case DeviceDescription::DeviceConnectionType::USBAuto:
+        // case DeviceDescription::DeviceConnectionType::USBManual:
+        case DeviceConnectionType::USB:
         {
             // возможно для CP16 нужен больше sleep time
             chunckSize=512;
             sleepTime=50;
             break;
         }
-        case DeviceDescription::DeviceConnectionType::BLE:
+        case DeviceConnectionType::BLE:
         {
             chunckSize=120;
             sleepTime=150;
