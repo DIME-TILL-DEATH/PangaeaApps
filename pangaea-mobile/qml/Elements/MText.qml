@@ -9,8 +9,8 @@ Text{
     font.pixelSize: 10 * Style.dip
     font.bold: true
 
-    property int textWidth: _tMetrics.tightBoundingRect.width
-    property int textHeight: _tMetrics.boundingRect.height // _tMetrics.height
+    property alias textWidth: _tMetrics.tightBoundingRect.width
+    property alias textHeight: _tMetrics.tightBoundingRect.height // _tMetrics.height
 
     TextMetrics{
         id: _tMetrics

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.11
 
 import Elements 1.0
+import Tutorials
 import StyleSettings 1.0
 
 import CppObjects
@@ -21,6 +22,9 @@ Rectangle {
     property bool showDescription : true
 
     property Component contentItem
+    property SimpleTutorialMessage tutorialItem
+
+    signal showTutorial()
 
     width: parent.width
     height: parent.height
@@ -157,8 +161,14 @@ Rectangle {
             MouseArea{
                 anchors.fill: parent
                 z: 5
+                pressAndHoldInterval: 500
+
+                onPressAndHold: {
+                    tutorialItem.open()
+                }
+
                 onClicked: {
-                        module.moduleEnabled = !module.moduleEnabled
+                    module.moduleEnabled = !module.moduleEnabled
                 }
             }
         }

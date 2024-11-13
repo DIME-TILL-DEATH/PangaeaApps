@@ -5,7 +5,7 @@
 EarlyReflections::EarlyReflections(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::ER, "ER", "eo"}
 {
-    m_reflectionsVolume = new ControlValue(this, "ev", "Early reflections");
+    m_reflectionsVolume = new ControlValue(this, "ev", "Volume");
     m_reflectionsType = new ControlValue(this, "et", "ER Type");
 }
 

@@ -5,7 +5,7 @@ import Elements 1.0
 import StyleSettings 1.0
 
 import CppObjects
-
+import Tutorials
 
 BaseModule
 {
@@ -70,5 +70,18 @@ BaseModule
 
             moduleOn: main.on
         }
+    }
+
+    tutorialItem: SimpleTutorialMessage{
+        buttons: Dialog.Ok
+
+        headerText: qsTr("Preamp")
+
+        text: qsTr("Represents EQ response of guitar preamp.
+
+LOW, MID, HIGH: Corresponding frequency bands.
+
+VOLUME: Output signal level.");
+
     }
 }

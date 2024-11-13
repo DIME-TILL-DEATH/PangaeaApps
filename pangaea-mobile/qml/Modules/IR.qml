@@ -5,6 +5,7 @@ import QtQuick.Window 2.0
 
 import StyleSettings 1.0
 import Elements 1.0
+import Tutorials
 
 import CppObjects
 import CppEnums
@@ -76,5 +77,13 @@ BaseModule
                 _msgNotSupportedIrFormat.open();
             }
         }
+    }
+
+    tutorialItem: SimpleTutorialMessage{
+        buttons: Dialog.Ok
+
+        headerText: qsTr("Impulse responce(cabinet simulator)")
+
+        text: qsTr("Impulse Response or IR is a sonic fingerprint of a certain speaker, cabinet, mic, mic preamp and room where the profile was captured.");
     }
 }

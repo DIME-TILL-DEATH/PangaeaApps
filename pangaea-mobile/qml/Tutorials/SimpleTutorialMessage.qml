@@ -24,7 +24,7 @@ Dialog
     closePolicy: Popup.NoAutoClose
 
     width: parent.width * 0.9
-    height: (_text.textHeight+5)*_text.font.pixelSize*0.9
+    height: _text.contentHeight + _title.height/2
             +_title.height+_dialogButtonBox.height
 
     property int parentHeight: parent.height*0.34
@@ -53,7 +53,7 @@ Dialog
                id: _title
 
                width: _root.width
-               height: (_titleLabel.textHeight*2) //headerHeight
+               height: (_titleLabel.contentHeight*2) //headerHeight
 
                Rectangle{
                    id: _headerDivider
@@ -99,6 +99,8 @@ Dialog
 
         width: _root.width
         height: _title.height*1.5 //footerHeight
+
+        standardButtons: Dialog.Ok
 
         alignment: Qt.AlignHCenter
 

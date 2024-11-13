@@ -3,6 +3,7 @@ import QtQuick.Controls 2.12
 
 import StyleSettings 1.0
 import Elements 1.0
+import Tutorials
 
 import CppObjects
 
@@ -41,5 +42,13 @@ BaseModule
                 moduleOn: on
             }
         }
+    }
+
+    tutorialItem: SimpleTutorialMessage{
+        buttons: Dialog.Ok
+
+        headerText: qsTr("Low pass filter")
+
+        text: qsTr("Low-pass filter passes through frequencies below the cutoff frequency and attenuates everything above that point");
     }
 }
