@@ -6,6 +6,8 @@
 MockCP16Legacy::MockCP16Legacy(QObject *parent)
     : AbstractMockDevice{parent}
 {
+    m_mockDeviceType = MockDeviceType::Mock_Abstract;
+
     initFolders();
 
     using namespace std::placeholders;
@@ -212,7 +214,6 @@ bool MockCP16Legacy::loadPresetData(quint8 prBank, quint8 prPreset, preset_data_
 {
     QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
     QFile presetFile(dirPath + "/preset.pan");
-    qDebug() << "loading preset data, path:" << dirPath;
     if(presetFile.open(QIODevice::ReadOnly))
     {
         QByteArray readedData = presetFile.read(sizeof(preset_data_legacy_t));

@@ -31,8 +31,8 @@ Slider
 
     onMoved:
     {
-            ctrlValInstance.displayValue = root.value;
-            ctrlValInstance.isModified = true;
+        ctrlValInstance.displayValue = root.value;
+        ctrlValInstance.isModified = true;
     }
 
     leftPadding: 0

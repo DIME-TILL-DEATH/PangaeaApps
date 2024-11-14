@@ -10,7 +10,7 @@
         <file>qml/Elements/qmldir</file>
         <file>qml/main.qml</file>
         <file>qml/Modules/CM.qml</file>
-        <file>qml/Modules/EQExt.qml</file>
+        <file>qml/Modules/EQExtLegacy.qml</file>
         <file>qml/Modules/ER.qml</file>
         <file>qml/Modules/HP.qml</file>
         <file>qml/Modules/IR.qml</file>

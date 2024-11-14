@@ -4,11 +4,13 @@
 #include "eqband.h"
 
 EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, double fStop, int bandNum)
-    : m_type{bandType},
+    :QObject{ownerModule},
+    m_type{bandType},
     m_fStart{fStart},
     m_fStop{fStop},
     m_bandNum{bandNum}
 {
+    qDebug() << "Eq band thread " << thread();
 
     m_Fc = new ControlValue(ownerModule, "eqf " + QString().setNum(m_bandNum),
                             "Central Frequency", "Hz",
@@ -127,6 +129,7 @@ void EqBand::calcBandResponse(quint16 pointsNum)
         currFreq = pow(10, power);
     }
     emit bandPointsChanged();
+
 }
 
 EqBand::FilterType EqBand::type() const

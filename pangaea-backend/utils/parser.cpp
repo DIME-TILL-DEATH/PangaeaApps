@@ -36,7 +36,7 @@ QList<QByteArray> Parser::parseNewData(const QByteArray &newData)
             while(m_buffer.indexOf(dataForRemove) != -1)
             {
                 m_buffer.remove(m_buffer.indexOf(dataForRemove), dataForRemove.size());
-                qDebug () << "Data for remove from buffer: " << dataForRemove << "Result buffer: " << m_buffer;
+                // qDebug () << "Data for remove from buffer: " << dataForRemove << "Result buffer: " << m_buffer;
             }
         }
     }
@@ -79,7 +79,7 @@ QList<QByteArray> Parser::parseNewData(const QByteArray &newData)
             command = readedLine;
         }
 
-        qDebug() << m_parserName << " --> command: " << command << "arguments: " << arguments;
+        // qDebug() << m_parserName << " --> command: " << command << "arguments: " << arguments;
         recievedCommands.append(command.toUtf8());
         std::function<void (const QString& command, const QByteArray &)> callback = m_callbacks.value(command);
 

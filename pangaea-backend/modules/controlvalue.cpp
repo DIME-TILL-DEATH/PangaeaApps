@@ -1,5 +1,7 @@
 #include "controlvalue.h"
 
+#include <QDebug>
+
 ControlValue::ControlValue(AbstractModule *owner, QString commandName,
                            QString name, QString units,
                            qint16 minControlValue, qint16 maxControlValue,
@@ -17,7 +19,7 @@ ControlValue::ControlValue(AbstractModule *owner, QString commandName,
     if(owner) connect(this, &ControlValue::userModifiedValue, owner, &AbstractModule::userModifiedModuleParameters);
 
     connect(&frameTimer, &QTimer::timeout, this, &ControlValue::sendFrame);
-    frameTimer.start(50);
+    frameTimer.start(100);
 }
 
 ControlValue::~ControlValue()
@@ -66,7 +68,10 @@ void ControlValue::sendFrame()
             resultBa.append(comm);
         }
 
-        if(m_owner) m_owner->sendDataToDevice(resultBa);
+        if(m_owner)
+        {
+            m_owner->sendDataToDevice(resultBa);
+        }
         buffer.clear();
     }
 }

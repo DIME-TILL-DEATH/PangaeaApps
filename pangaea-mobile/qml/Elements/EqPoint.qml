@@ -1,5 +1,7 @@
 import QtQuick
 
+import StyleSettings
+
 import CppObjects
 
 Rectangle{
@@ -19,7 +21,7 @@ Rectangle{
 
     transformOrigin: Item.Center
 
-    width: Math.min(parent.width/8, parent.height/8)
+    width: Math.min(parent.width/6, parent.height/6)
     height: width
 
     radius: width/2
@@ -36,6 +38,15 @@ Rectangle{
     Drag.active: ma.drag.active
     Drag.hotSpot.x: width/2
     Drag.hotSpot.y: height/2
+
+    MText{
+        id: _textBandNum
+
+        anchors.centerIn: parent
+        text: index + 1
+
+        color: Style.currentTheme.colorModulOn //colorLedOn
+    }
 
     MouseArea{
         id: ma

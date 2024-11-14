@@ -15,6 +15,8 @@ Core::Core(QObject *parent) : QObject(parent)
 {
     timeoutTimer = new QTimer(this);
     connect(timeoutTimer, &QTimer::timeout, this, &Core::recieveTimeout);
+
+
 }
 
 void Core::disconnectFromDevice()
@@ -102,14 +104,20 @@ void Core::parseInputData(QByteArray ba)
 void Core::slDeviceInstanciated()
 {
     currentDevice->moveToThread(QGuiApplication::instance()->thread());
+    emit sgCurrentDeviceChanged(currentDevice);
 
     connect(currentDevice, &AbstractDevice::sgWriteToInterface, this, &Core::sgWriteToInterface, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgPushCommandToQueue, this, &Core::pushCommandToQueue, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgSendWithoutConfirmation, this, &Core::sendWithoutConfirmation, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgProcessCommands, this, &Core::processCommands, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgDisconnect, this, &Core::disconnectFromDevice, Qt::QueuedConnection);
-    emit sgCurrentDeviceChanged(currentDevice);
 
+    if(m_currentConnectionType == DeviceConnectionType::Offline)
+    {
+        // Подождать пока прогрузится интерфейс, тк MOCK устройства отвечают слишком быстро в том же потоке
+        // TODO возможно нужны сигналы подтверждения от loader
+        QThread::msleep(500);
+    }
     currentDevice->readFullState();
 }
 

@@ -44,10 +44,6 @@ void EqParametric::calcEqResponse()
         eqBand->calcBandResponse(pointsNum);
     }
 
-    // TODO: recalc from calculated bands response
-    // double currFreq = 10;
-    // double power = log10(currFreq);
-    // double powerStep = (log10(EqBand::Fs/2)-power)/pointsNum;
     for(int i=0; i<pointsNum+1; i++)
     {
         double eqPointResponse = 0;
@@ -59,10 +55,7 @@ void EqParametric::calcEqResponse()
             currFreq = eqBand->bandPoints().at(i).x();
             eqPointResponse += eqBand->bandPoints().at(i).y();
         }
-        // m_points.append(QPointF(currFreq, getEqResponse(currFreq)));
         m_points.append(QPointF(currFreq, eqPointResponse));
-        // power += powerStep;
-        // currFreq = pow(10, power);
     }
    emit pointsChanged();
 }

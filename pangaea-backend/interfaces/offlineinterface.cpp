@@ -3,6 +3,7 @@
 #include <QDebug>
 
 #include "mockcp16legacy.h"
+#include "mockcp16modern.h"
 
 OfflineInterface::OfflineInterface(QObject *parent)
     : AbstractInterface{parent}
@@ -12,7 +13,9 @@ OfflineInterface::OfflineInterface(QObject *parent)
 
 void OfflineInterface::startScan()
 {
-    emit sgDeviceListUpdated(DeviceConnectionType::Offline, {DeviceDescription("Offline CP16 legacy", "virtual", DeviceConnectionType::Offline)});
+    m_discoveredDevicesList.append({DeviceDescription(MockCP16Legacy::mockName(), "virtual", DeviceConnectionType::Offline)});
+    m_discoveredDevicesList.append({DeviceDescription(MockCP16Modern::mockName(), "virtual", DeviceConnectionType::Offline)});
+    emit sgDeviceListUpdated(DeviceConnectionType::Offline, m_discoveredDevicesList);
 }
 
 void OfflineInterface::stopScan()
@@ -21,16 +24,28 @@ void OfflineInterface::stopScan()
 
 QList<DeviceDescription> OfflineInterface::discoveredDevicesList()
 {
-    return {DeviceDescription("Offline CP16 legacy", "virtual", DeviceConnectionType::Offline)};
+    return m_discoveredDevicesList;
 }
 
 bool OfflineInterface::connect(DeviceDescription device)
 {
-    m_mockDevice = new MockCP16Legacy;
+    if(device.name() == MockCP16Legacy::mockName())
+    {
+        m_mockDevice = new MockCP16Legacy(this);
+    }
+    else if(device.name() == MockCP16Modern::mockName())
+    {
+        m_mockDevice = new MockCP16Modern(this);
+    }
+    else
+    {
+        m_mockDevice = new AbstractMockDevice(this);
+    }
+
     if(m_mockDevice)
     {
         QObject::connect(m_mockDevice, &AbstractMockDevice::answerReady, this, &AbstractInterface::sgNewData);
-        qDebug() << "Virtual device connected" << m_mockDevice;
+        qInfo() << "Virtual device connected" << m_mockDevice->mockDeviceType();
         setState(InterfaceState::Connected);
         emit sgInterfaceConnected(device);
         return true;

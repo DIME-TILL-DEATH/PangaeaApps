@@ -23,10 +23,10 @@ Item
     }
 
     // TODO MapCPLegacy.qml
-    // Item{
-    //     id: _mapContentLoader
+    Item{
+        id: _mapContent
 
-        // anchors.fill: parent
+        anchors.fill: parent
 
         PresetsWindow
         {
@@ -135,9 +135,9 @@ Item
                             _delegateLoader.source = "../Modules/EQPreviewLegacy.qml";
                             _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
 
-                            _eqExtLoader.source = "../Modules/EQExt.qml";
-                            _delegateLoader.item.extVisible.connect(showFullEq);
-                            _eqExtLoader.item.hide.connect(hideFullEq);
+                            _eqExtLoader.source = "../Modules/EQExtLegacy.qml";
+                            _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
+                            _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
                             _eqExtLoader.item.eqModule = moduleInstance;
                             break;
                         }
@@ -179,10 +179,9 @@ Item
 
             height: parent.height/1.5
             width:  parent.width*0.95
-            z: _main.z+1
-
+            z: parent.z+1
         }
-    // }
+    }
 
     CustomMessageDialog
     {
@@ -231,6 +230,12 @@ Item
                     break;
                 }
                 case DeviceClass.CP_LEGACY:
+                {
+                    _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
+                    listViewModules.model = UiCore.currentDevice.modulesListModel;
+                    break;
+                }
+                case DeviceClass.CP_MODERN:
                 {
                     _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
                     listViewModules.model = UiCore.currentDevice.modulesListModel;

@@ -18,6 +18,8 @@ public:
 
 private:
     AbstractMockDevice* m_mockDevice;
+
+    QList<DeviceDescription> m_discoveredDevicesList;
 };
 
 #endif // OFFLINEINTERFACE_H

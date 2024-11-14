@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     core->moveToThread(threadController.backendThread());
     netCore->moveToThread(threadController.backendThread());
 #if !defined(Q_OS_MACOS)
-    //interfaceManager->moveToThread(threadController.connectionsThread()); // On MAC BLE can work only on the main thread
+    interfaceManager->moveToThread(threadController.connectionsThread()); // On MAC BLE can work only on the main thread
 #endif
 
     QObject::connect(threadController.backendThread(), &QThread::finished, core, &QObject::deleteLater);

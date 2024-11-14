@@ -1,43 +1,31 @@
-#ifndef MOCKCP16LEGACY_H
-#define MOCKCP16LEGACY_H
+#ifndef MOCKCP16MODERN_H
+#define MOCKCP16MODERN_H
 
+#include <QObject>
 #include "abstractmockdevice.h"
 
 #include "preset.h"
 
-#define FIRMWARE_STRING_SIZE 20
-typedef struct system_parameters_t
+class MockCP16Modern : public AbstractMockDevice
 {
-    uint8_t empty[2];
-    uint8_t output_mode;
-    uint8_t reserved[8];
-    uint8_t eol_symb = '\n';
-    char firmware_version[FIRMWARE_STRING_SIZE];
-#ifdef __LA3_MOD__
-    uint8_t la3_cln_preset;
-    uint8_t la3_drv_preset;
-#endif
-}system_parameters_t;
-
-class MockCP16Legacy : public AbstractMockDevice
-{
+    Q_OBJECT
 public:
-    explicit MockCP16Legacy(QObject *parent = nullptr);
+    explicit MockCP16Modern(QObject *parent = nullptr);
 
     void writeToDevice(const QByteArray& data) override;
 
-    static QString mockName() {return "offline CP16(LEGACY)";};
+    static QString mockName() {return "offline CP16(MODERN)";};
 
 private:
     QString basePath;
 
     void initFolders();
 
-    preset_data_legacy_t currentPresetData;
+    preset_data_t currentPresetData;
 
     bool saveSysParameters();
-    bool loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t* presetData);
-    bool savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t* presetData);
+    bool loadPresetData(quint8 prBank, quint8 prPreset, preset_data_t* presetData);
+    bool savePresetData(quint8 prBank, quint8 prPreset, const preset_data_t* presetData);
 
     void amtDevCommHandler(const QString &command, const QByteArray& arguments);
     void amtVerCommHandler(const QString &command, const QByteArray& arguments);
@@ -72,4 +60,4 @@ private:
     void startFwUpdateCommHandler(const QString &command, const QByteArray& arguments);
 };
 
-#endif // MOCKCP16LEGACY_H
+#endif // MOCKCP16MODERN_H
