@@ -28,8 +28,6 @@ class CPLegacy : public AbstractDevice
 {
     Q_OBJECT
 
-
-
     Q_PROPERTY(PresetVolume* MV READ getMV NOTIFY MVChanged FINAL)
     Q_PROPERTY(bool isPaFw READ isPaFw CONSTANT)
     Q_PROPERTY(bool isPreEq READ isPreEq WRITE setIsPreEq NOTIFY isPreEqChanged FINAL)

@@ -66,7 +66,6 @@ CPLegacy::CPLegacy(Core *parent)
 void CPLegacy::initDevice(DeviceType deviceType)
 {
     m_deviceType = deviceType;
-
     setDeviceType(m_deviceType);
 
     MV = new PresetVolume(this);
@@ -99,7 +98,6 @@ void CPLegacy::initDevice(DeviceType deviceType)
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
-
     emit sgDeviceInstanciated();
 }
 
@@ -176,6 +174,13 @@ void CPLegacy::readFullState()
     emit sgProcessCommands();
 }
 
+void CPLegacy::pushReadPresetCommands()
+{
+    emit sgPushCommandToQueue("gb");
+    emit sgPushCommandToQueue("rn");
+    emit sgPushCommandToQueue("gs");
+}
+
 QList<QByteArray> CPLegacy::parseAnswers(QByteArray &baAnswer)
 {
     QList<QByteArray> parseResults, recievedCommAnswers;
@@ -213,25 +218,6 @@ QList<QByteArray> CPLegacy::parseAnswers(QByteArray &baAnswer)
     }
 
     return recievedCommAnswers;
-}
-
-void CPLegacy::pushReadPresetCommands()
-{
-    emit sgPushCommandToQueue("gb");
-    emit sgPushCommandToQueue("rn");
-    emit sgPushCommandToQueue("gs");
-}
-
-void CPLegacy::setPresetData(const Preset &preset)
-{
-    QByteArray ba;
-
-    ba.append("gs 1\r");
-    ba.append(preset.rawData());
-
-    emit sgPushCommandToQueue(ba);
-    emit sgPushCommandToQueue("gs"); // read settled state
-    emit sgProcessCommands();
 }
 
 void CPLegacy::saveChanges()
@@ -493,6 +479,18 @@ void CPLegacy::escImpulse()
 {
     emit sgPushCommandToQueue("lcc");
     emit sgPushCommandToQueue("rn");
+    emit sgProcessCommands();
+}
+
+void CPLegacy::setPresetData(const Preset &preset)
+{
+    QByteArray ba;
+
+    ba.append("gs 1\r");
+    ba.append(preset.rawData());
+
+    emit sgPushCommandToQueue(ba);
+    emit sgPushCommandToQueue("gs"); // read settled state
     emit sgProcessCommands();
 }
 
@@ -962,26 +960,22 @@ void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &argum
 {
     m_presetManager.setCurrentState(PresetState::Compare);
     setPresetData(savedPreset);
-    // emit sgPushCommandToQueue("gs");
     emit sgPushCommandToQueue("rn");
     emit sgProcessCommands();
 }
 
 void CPLegacy::ackSaveChanges(const QString &command, const QByteArray &arguments)
 {
-    qInfo() << "Preset data saved to device";
     actualPreset.clearWavData();
 }
 
 void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments)
 {
-    qInfo() << __FUNCTION__ << "Preset change, updating state";
     actualPreset.clearWavData();
     m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
 }
-
 
 void CPLegacy::ackCCCommHandler(const QList<QByteArray> &arguments)
 {

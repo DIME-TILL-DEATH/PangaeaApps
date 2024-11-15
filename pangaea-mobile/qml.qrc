@@ -60,5 +60,8 @@
         <file>qml/Tutorials/TutorialVirtualDevice.qml</file>
         <file>qml/Tutorials/qmldir</file>
         <file>qml/Tutorials/SimpleTutorialMessage.qml</file>
+        <file>qml/ControlGroups/MapCPLegacy.qml</file>
+        <file>qml/ControlGroups/MapCPModern.qml</file>
+        <file>qml/Elements/EditValueDialog.qml</file>
     </qresource>
 </RCC>

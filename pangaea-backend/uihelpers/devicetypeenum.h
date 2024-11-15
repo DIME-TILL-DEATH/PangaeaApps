@@ -16,9 +16,9 @@ public:
         legacyCP16PA,
         legacyCP100PA,
 
+        LEGACY_DEVICES = 15,
         //-------------------------------
-        LEGACY_DEVICES = 16,
-        CP,
+        modernCP,
         LA3
     };
     Q_ENUM(Value)

@@ -21,11 +21,11 @@ private:
 
     void initFolders();
 
-    preset_data_t currentPresetData;
+    preset_data_legacy_t currentPresetData;
 
     bool saveSysParameters();
-    bool loadPresetData(quint8 prBank, quint8 prPreset, preset_data_t* presetData);
-    bool savePresetData(quint8 prBank, quint8 prPreset, const preset_data_t* presetData);
+    bool loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t *presetData);
+    bool savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t* presetData);
 
     void amtDevCommHandler(const QString &command, const QByteArray& arguments);
     void amtVerCommHandler(const QString &command, const QByteArray& arguments);

@@ -12,6 +12,20 @@ enum MockDeviceType
     Mock_CPModern
 };
 
+#define FIRMWARE_STRING_SIZE 20
+typedef struct system_parameters_t
+{
+    uint8_t empty[2];
+    uint8_t output_mode;
+    uint8_t reserved[8];
+    uint8_t eol_symb = '\n';
+    char firmware_version[FIRMWARE_STRING_SIZE];
+#ifdef __LA3_MOD__
+    uint8_t la3_cln_preset;
+    uint8_t la3_drv_preset;
+#endif
+}system_parameters_t;
+
 class AbstractMockDevice : public QObject
 {
     Q_OBJECT

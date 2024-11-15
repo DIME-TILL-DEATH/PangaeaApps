@@ -6,7 +6,7 @@
 MockCP16Legacy::MockCP16Legacy(QObject *parent)
     : AbstractMockDevice{parent}
 {
-    m_mockDeviceType = MockDeviceType::Mock_Abstract;
+    m_mockDeviceType = MockDeviceType::Mock_CPLegacy;
 
     initFolders();
 
@@ -263,7 +263,6 @@ void MockCP16Legacy::bankPresetCommHandler(const QString &command, const QByteAr
 
 void MockCP16Legacy::outputModeCommHandler(const QString &command, const QByteArray& arguments)
 {
-
     if(arguments.size()>0)
     {
         m_outputMode = QString(arguments.at(0)).toInt();
@@ -550,7 +549,6 @@ void MockCP16Legacy::startFwUpdateCommHandler(const QString &command, const QByt
 {
     fwUpdateMode = true;
     fwChunkSize = QString(arguments).toInt();
-    qDebug () << "FW chunk size: " << fwChunkSize;
 
     fwPart = m_parser.getBufferAndFlush();
 

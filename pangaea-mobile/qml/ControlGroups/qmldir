@@ -1,5 +1,7 @@
 module ControlGroups
 
+MapCPLegacy 1.0 MapCPLegacy.qml
+MapCPModern 1.0 MapCPModern.qml
 DocumentationWindow 1.0 DocumentationWindow.qml
 MasterControls_CP 1.0 MasterControls_CP.qml
 MasterControls_LA 1.0 MasterControls_LA.qml
