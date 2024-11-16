@@ -64,6 +64,8 @@ Item{
             interactive: false
             orientation: ListView.Vertical
 
+            clip: true
+
             move: Transition {
                  NumberAnimation { properties: "y"; duration: 250 }
             }
@@ -151,6 +153,11 @@ Item{
                 }
             }
         }
+    }
+
+    function centerViewAt(index)
+    {
+        listViewModules.positionViewAtIndex(index, ListView.Center)
     }
 
     function showFullEq(){

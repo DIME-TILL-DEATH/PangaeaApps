@@ -80,7 +80,9 @@ int main(int argc, char *argv[])
     core->moveToThread(threadController.backendThread());
     netCore->moveToThread(threadController.backendThread());
 #if !defined(Q_OS_MACOS)
-    interfaceManager->moveToThread(threadController.connectionsThread()); // On MAC BLE can work only on the main thread
+    // Нам не нужен доп поток для обслуживания соединения нигде?
+    // и UIInterfaceManager тоже не нужен в итоге?
+    // interfaceManager->moveToThread(threadController.connectionsThread()); // On MAC BLE can work only on the main thread
 #endif
 
     QObject::connect(threadController.backendThread(), &QThread::finished, core, &QObject::deleteLater);
@@ -142,10 +144,10 @@ int main(int argc, char *argv[])
 
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);
 
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::startScanning, interfaceManager, &InterfaceCore::startScanning, Qt::QueuedConnection);
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::connectToDevice, interfaceManager, &InterfaceCore::connectToDevice, Qt::QueuedConnection);
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::disconnectFromDevice, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgRssiMeasuring, interfaceManager, &InterfaceCore::rssiMeasuring, Qt::QueuedConnection);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::startScanning, interfaceManager, &InterfaceCore::startScanning);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::connectToDevice, interfaceManager, &InterfaceCore::connectToDevice);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::disconnectFromDevice, interfaceManager, &InterfaceCore::disconnectFromDevice);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgRssiMeasuring, interfaceManager, &InterfaceCore::rssiMeasuring);
 //    Core::connect(core, &Core::sgImmediatelyDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
 
     QObject::connect(&uiCore, &UiCore::sgModuleNameChanged, interfaceManager, &InterfaceCore::setModuleName);

@@ -20,7 +20,7 @@ Rectangle{
 
     property color fonColor: Style.colorFon
 
-    color: ListView.isCurrentItem ? Style.colorItemHighlight  : fonColor
+    color: ListView.isCurrentItem ? Style.currentTheme.colorItemHighlight  : fonColor
 
     radius: Style.baseRadius
     border.width: 1

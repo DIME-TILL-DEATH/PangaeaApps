@@ -156,7 +156,7 @@ protected:
     bool isFormatting{false};
 
     bool m_deviceParamsModified{false};
-    qint64 m_bytesToRecieve;
+    qint64 m_bytesToRecieve{0};
 
     MaskedParser undefCommParser{"undefind command x\n", "11111111111111111X1"};
 

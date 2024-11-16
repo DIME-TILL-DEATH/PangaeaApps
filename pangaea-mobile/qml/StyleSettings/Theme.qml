@@ -1,6 +1,8 @@
 import QtQuick 2.15
 
 QtObject {
+    property color colorItemHighlight
+
     property color colorSlider
 
     property color colorModul

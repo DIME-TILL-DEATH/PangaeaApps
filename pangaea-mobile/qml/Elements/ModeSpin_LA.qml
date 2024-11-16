@@ -34,7 +34,7 @@ Rectangle
 
             enabled: main.isModified
 
-            color: _mapBtnMa.pressed ? Style.colorItemHighlight : Style.colorFon
+            color: _mapBtnMa.pressed ? Style.currentTheme.colorItemHighlight : Style.colorFon
 
             border.width: 1
             border.color: Style.currentTheme.colorBorderOn

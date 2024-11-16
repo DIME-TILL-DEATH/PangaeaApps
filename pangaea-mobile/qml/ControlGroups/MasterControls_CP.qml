@@ -31,7 +31,7 @@ Item
 
         BankSpin
         {
-            width:  parent.width*1/6 - _row.spacing
+            width:  parent.width*1/6
             height: parent.height
 
             onOpenPresetsList: _root.openPresetsList();
@@ -49,7 +49,7 @@ Item
 
         PresetSpin
         {
-            width:  parent.width*1/6 -_row.spacing
+            width:  parent.width*1/6
             height: parent.height
 
             onOpenPresetsList: _root.openPresetsList();

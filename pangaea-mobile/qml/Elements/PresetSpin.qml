@@ -32,7 +32,7 @@ Rectangle
             width: parent.width
             height: parent.height*2.5/10
 
-            color: _mapBtnMa.pressed ? Style.colorItemHighlight : Style.colorFon
+            color: _mapBtnMa.pressed ? Style.currentTheme.colorItemHighlight : Style.colorFon
 
             border.width: 1
             border.color: Style.currentTheme.colorBorderOn

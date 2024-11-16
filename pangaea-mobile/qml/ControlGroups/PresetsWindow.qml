@@ -48,21 +48,21 @@ CustomMessageDialog {
         id: _dialogButtonBox
 
         width: _root.width
-        height: parentHeight*0.2
+        height: parentHeight*0.3
         color: "transparent"
         radius: Style.baseRadius
         border.color: Style.currentTheme.colorBorderOn
         border.width: 1
 
-        MButton{
-            textButton: qsTr("BACK")
+        Button{ //MButton
+            text: qsTr("HIDE")
 
             width: parent.width*0.3
             height: parent.height*0.7
 
             anchors.centerIn: parent
 
-            onMbPressed: {
+            onClicked: {
                 _root.close()
             }
         }

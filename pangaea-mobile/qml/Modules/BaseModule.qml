@@ -26,10 +26,14 @@ Rectangle {
 
     signal showTutorial()
 
+    signal editingChanged(var editingState)
+
     width: parent.width
     height: parent.height
 
     color: Style.colorFon
+
+    property var simmetryElementsWidth: width/6
 
     Rectangle{
         id: _maskCompare
@@ -56,12 +60,12 @@ Rectangle {
         width: _main.width
         height: _main.height
 
-        spacing: Style.mainSpacing //width / 75
+        spacing: Style.mainSpacing
 
         Rectangle {
             id: _headerRect
 
-            width: parent.width * 0.25
+            width: simmetryElementsWidth //parent.width * 0.25
             height: parent.height
 
 

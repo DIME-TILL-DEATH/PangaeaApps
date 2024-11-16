@@ -52,16 +52,18 @@ BleInterface::BleInterface(QObject *parent)
     appSettings = new QSettings(QSettings::UserScope, this);
 #endif
 
+        qDebug() << "BLE thread" << thread();
     m_deviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent(); // parent = this: Main COM uninit tried from another thread
+        qDebug() << "Discovery agent thread" << m_deviceDiscoveryAgent->thread();
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
-            this, &BleInterface::addDevice, Qt::QueuedConnection);
+            this, &BleInterface::addDevice);
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred,
-            this, &BleInterface::deviceScanError, Qt::QueuedConnection);
+            this, &BleInterface::deviceScanError);
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
-            this, &BleInterface::scanTimeout, Qt::QueuedConnection);
+            this, &BleInterface::scanTimeout);
 
 
     QObject::connect(this, &QObject::destroyed, m_deviceDiscoveryAgent, &QObject::deleteLater);
@@ -70,6 +72,7 @@ BleInterface::BleInterface(QObject *parent)
     m_connectionType = DeviceConnectionType::BLE;
 
     rssiUpdateTimer = new QTimer(this);
+    qDebug() << "rssi Timer thread" << rssiUpdateTimer->thread();
     rssiUpdateTimer->setInterval(1000);
     QObject::connect(rssiUpdateTimer, &QTimer::timeout, this, &BleInterface::requestRssi);
 }
@@ -338,6 +341,9 @@ void BleInterface::slStartConnect(QString address)
 
     m_control = QLowEnergyController::createCentral(*deviceToConnect, this);
     m_control->setRemoteAddressType(QLowEnergyController::RandomAddress);
+
+    qDebug() << "BLE thread" << thread();
+    qDebug() << "control thread" << m_control->thread();
 
     QBluetoothDeviceDiscoveryAgent::connect(m_control, &QLowEnergyController::connected,
             this, &BleInterface::deviceConnected);

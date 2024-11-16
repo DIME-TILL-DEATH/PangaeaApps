@@ -7,7 +7,7 @@ import Elements 1.0
 
 Rectangle
 {
-    color: Style.colorItemHighlight
+    color: Style.currentTheme.colorItemHighlight
 
     radius: Style.baseRadius
 

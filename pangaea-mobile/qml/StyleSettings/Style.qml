@@ -13,6 +13,8 @@ QtObject {
     property Theme currentTheme : themeBlue
 
     property Theme themeOrange: Theme{
+        colorItemHighlight: "steelblue"
+
         colorSlider: "#769897"
 
         colorModulOn: "darkorange"
@@ -33,6 +35,8 @@ QtObject {
     }
 
     property Theme themeGreen: Theme{
+        colorItemHighlight: "steelblue"
+
         colorSlider: "#769897"
 
         colorModulOn: "#009846"
@@ -52,6 +56,8 @@ QtObject {
     }
 
     property Theme themeBlue: Theme{
+        colorItemHighlight: "burlywood"
+
         colorSlider: "#769897"
 
         colorModulOn: "skyblue"
@@ -69,9 +75,6 @@ QtObject {
 
         materialAccent: Material.Blue
     }
-
-    readonly property color colorItemHighlight: "steelblue"
-
 
     readonly property color colorFon: "#2B2A29"
     readonly property color colorModul: "#5B5B5B"

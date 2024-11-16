@@ -49,7 +49,7 @@ BaseModule{
                     id: canvasBackground
 
                     height: parent.height
-                    width: parent.width*8/10
+                    width: parent.width * 4/5 + Style.mainSpacing * 2
 
                     color: "black"
                     Canvas{
@@ -151,7 +151,7 @@ BaseModule{
                     visible: UiCore.currentDevice.isPaFw
 
                     height: parent.height
-                    width: parent.width*2/10
+                    width: parent.width - canvasBackground.width
 
                     MouseArea{
                        anchors.fill: parent
