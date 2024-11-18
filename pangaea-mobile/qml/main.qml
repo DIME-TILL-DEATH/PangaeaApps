@@ -407,9 +407,11 @@ ApplicationWindow
         }
     }
 
-    // onClosing:
-    // {
-    //     UiCore.sgSw4Enable();
-    //     console.log("Close");
-    // }
+    onClosing: function(close)
+    {
+        close.accepted = false;
+        // UiCore.sgSw4Enable();
+        // console.log("Close");
+
+    }
 }

@@ -716,6 +716,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
 
         copiedPreset.setRawData(baPresetData);
         m_presetManager.returnToPreviousState();
+        emit presetCopied();
         break;
     }
 
@@ -729,6 +730,8 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         savedPreset = actualPreset;
         m_presetListModel.updatePreset(savedPreset);
         m_presetManager.returnToPreviousState();
+
+        emit presetSwitched();
         break;
     }
 
@@ -988,6 +991,8 @@ void CPLegacy::endCCCommHandler(const QList<QByteArray> &arguments)
 {
     emit sgEnableTimeoutTimer();
     m_presetManager.returnToPreviousState();
+
+    emit impulseUploaded();
 }
 
 void CPLegacy::errorCCCommHandler(const QString &command, const QByteArray &arguments)

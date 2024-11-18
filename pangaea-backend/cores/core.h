@@ -20,6 +20,10 @@ public:
 
     QTimer *timeoutTimer;
 
+    // for testing purposes
+    AbstractDevice* currentDevice{nullptr};
+    const QList<QByteArray>& commAwaitsToSend() {return commandsPending;};
+    const QList<QByteArray>& commAwaitsAnswer() {return commandsSended;};
 signals:
     void sgWriteToInterface(QByteArray data, bool logCommand = true);
     void sgExchangeError();
@@ -53,7 +57,6 @@ private slots:
 private:
     MaskedParser amtDevParser{"amtdev\rX\n", "1111111X1"};
 
-    AbstractDevice* currentDevice{nullptr};
 
     DeviceConnectionType m_currentConnectionType;
     

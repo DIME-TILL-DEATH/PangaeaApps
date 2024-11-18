@@ -75,8 +75,9 @@ ComboBox {
     }
 
     background: Rectangle {
-        implicitWidth: 120
-        implicitHeight: 20
+        width: _root.width
+        height: _root.height
+
         radius: _root.width/10
 
         color: Style.colorModul

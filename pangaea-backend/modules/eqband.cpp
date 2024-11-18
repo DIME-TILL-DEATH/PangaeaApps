@@ -10,8 +10,6 @@ EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, 
     m_fStop{fStop},
     m_bandNum{bandNum}
 {
-    qDebug() << "Eq band thread " << thread();
-
     m_Fc = new ControlValue(ownerModule, "eqf " + QString().setNum(m_bandNum),
                             "Central Frequency", "Hz",
                             -100, 100, m_fStart, m_fStop);

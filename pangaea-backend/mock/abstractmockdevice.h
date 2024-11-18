@@ -33,15 +33,19 @@ public:
     explicit AbstractMockDevice(QObject *parent = nullptr);
 
     MockDeviceType mockDeviceType() {return m_mockDeviceType;};
-
+    QString basePath() {return m_basePath;};
 signals:
     void answerReady(const QByteArray& answerData);
 
+    // for testing
+    void impulseUploaded();
 public slots:
     virtual void writeToDevice(const QByteArray& data);
 
 protected:
     Parser m_parser{"Mock device recieve"};
+
+    QString m_basePath;
 
     quint8 m_outputMode{0};
     quint8 m_bank{0};

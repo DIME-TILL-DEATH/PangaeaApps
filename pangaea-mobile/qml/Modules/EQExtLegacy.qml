@@ -270,6 +270,14 @@ Item
         main.update();
     }
 
+    Keys.onReleased: function(event)
+    {
+        if(event.key === Qt.Key_Back)
+        {
+            main.hide();
+        }
+    }
+
     Connections{
         target: eqModule
 

@@ -74,7 +74,7 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
 
     //--------------------------------------------------------------
 
-    QFile systemFile(basePath + "/system.pan");
+    QFile systemFile(m_basePath + "/system.pan");
     system_parameters_t sysParameters;
     memset(&sysParameters, 0, sizeof(system_parameters_t));
     if(systemFile.open(QIODevice::ReadOnly))
@@ -90,6 +90,8 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
 
 void MockCP16Legacy::writeToDevice(const QByteArray &data)
 {
+    // qDebug() << "Mock recieved data:" << data;
+
     if(fwUpdateMode)
     {
         fwPart.append(data);
@@ -126,18 +128,18 @@ void MockCP16Legacy::writeToDevice(const QByteArray &data)
 void MockCP16Legacy::initFolders()
 {
 #ifdef Q_OS_ANDROID
-    basePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
+    m_basePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
 #else
     QString basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/AMT/pangaeaCPPA/";
 
 #endif
-    if(!QDir(basePath).exists()) QDir().mkpath(basePath);
+    if(!QDir(m_basePath).exists()) QDir().mkpath(m_basePath);
 
-    basePath += "virtual_CP16";
+    m_basePath += "virtual_CP16";
 
-    if(!QDir(basePath).exists()) QDir().mkpath(basePath);
+    if(!QDir(m_basePath).exists()) QDir().mkpath(m_basePath);
 
-    QFile systemFile(basePath + "/system.pan");
+    QFile systemFile(m_basePath + "/system.pan");
     if(!systemFile.exists())
     {
         m_outputMode = 0;
@@ -146,7 +148,7 @@ void MockCP16Legacy::initFolders()
 
     for(int b = 0; b <4; b++)
     {
-        QString bankPath = basePath + "/bank_" + QString().setNum(b);
+        QString bankPath = m_basePath + "/bank_" + QString().setNum(b);
         if(!QDir().exists(bankPath)) QDir().mkpath(bankPath);
 
         for(int p=0; p<4; p++)
@@ -190,7 +192,7 @@ void MockCP16Legacy::initFolders()
 
 bool MockCP16Legacy::saveSysParameters()
 {
-    QFile systemFile(basePath + "/system.pan");
+    QFile systemFile(m_basePath + "/system.pan");
 
     system_parameters_t sysParameters;
     memset(&sysParameters, 0, sizeof(system_parameters_t));
@@ -212,7 +214,7 @@ bool MockCP16Legacy::saveSysParameters()
 
 bool MockCP16Legacy::loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t *presetData)
 {
-    QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
+    QString dirPath = m_basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
     QFile presetFile(dirPath + "/preset.pan");
     if(presetFile.open(QIODevice::ReadOnly))
     {
@@ -226,7 +228,7 @@ bool MockCP16Legacy::loadPresetData(quint8 prBank, quint8 prPreset, preset_data_
 
 bool MockCP16Legacy::savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t *presetData)
 {
-    QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
+    QString dirPath = m_basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
     QFile presetFile(dirPath + "/preset.pan");
     if(presetFile.open(QIODevice::WriteOnly))
     {
@@ -314,7 +316,7 @@ void MockCP16Legacy::getImpulseNameCommHandler(const QString &command, const QBy
 {
     QString impulseName = "";
 
-    QDir presetDir(basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset));
+    QDir presetDir(m_basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset));
     presetDir.setNameFilters({"*.wav"});
 
     QFileInfoList filesInDir = presetDir.entryInfoList();
@@ -336,7 +338,7 @@ void MockCP16Legacy::getRnsCommHandler(const QString &command, const QByteArray 
         for(int p=0; p<4; p++)
         {
             QString irName = "*";
-            QString dirPath = basePath + "/bank_" + QString().setNum(b) + "/preset_" + QString().setNum(p);
+            QString dirPath = m_basePath + "/bank_" + QString().setNum(b) + "/preset_" + QString().setNum(p);
             QDir presetDir(dirPath);
             presetDir.setNameFilters({"*.wav"});
 
@@ -381,7 +383,7 @@ void MockCP16Legacy::presetChangeCommHandler(const QString &command, const QByte
 
 void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arguments)
 {
-    QString dirPath = basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/";
+    QString dirPath = m_basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/";
     if(arguments.size() == 0)
     {
         qDebug() << " Mock device: " << "cc, no arguments";
@@ -457,8 +459,7 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
                         foreach(QFileInfo curFileInfo, wavsInDir)
                         {
                             QFile wavFile(curFileInfo.absoluteFilePath());
-                            wavFile.remove();
-                            qDebug() << curFileInfo.absoluteFilePath() << "removed";
+                            qDebug() << curFileInfo.absoluteFilePath() << "removed" << wavFile.remove();;
                         }
                     }
 
@@ -492,7 +493,7 @@ void MockCP16Legacy::escAckCommHandler(const QString &command, const QByteArray 
 
 void MockCP16Legacy::formatMemoryCommHandler(const QString &command, const QByteArray &arguments)
 {
-    QDir homeDir(basePath);
+    QDir homeDir(m_basePath);
     homeDir.removeRecursively();
     initFolders();
 
@@ -554,7 +555,7 @@ void MockCP16Legacy::startFwUpdateCommHandler(const QString &command, const QByt
 
     qDebug() << fwPart;
 
-    fwFile.setFileName(basePath + "/firmware.bin");
+    fwFile.setFileName(m_basePath + "/firmware.bin");
     if(fwFile.open(QIODevice::WriteOnly))
     {
         fwFile.write(fwPart);

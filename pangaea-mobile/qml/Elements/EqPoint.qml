@@ -45,7 +45,7 @@ Rectangle{
         anchors.centerIn: parent
         text: index + 1
 
-        color: Style.currentTheme.colorModulOn //colorLedOn
+        color:  (selectedBandIndex === index) ? "black" : (main.on ? Style.currentTheme.colorLedOn : "darkgrey")
     }
 
     MouseArea{

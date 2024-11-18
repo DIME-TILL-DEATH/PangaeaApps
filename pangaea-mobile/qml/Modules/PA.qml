@@ -64,7 +64,21 @@ BaseModule
             height: parent.height/4
             width: parent.width
 
-            model: ["01.PP 6L6","02.PP EL34","03.SE 6L6","04.SE EL34","05.AMT TC-3","06.CALIF","07.BRIT M","08.BRIT L","09.DEFAULT","10.CALIF MOD","11.CALIF VINT","12.PVH 01","13.PVH 02","14.PVH 03","15.PVH 04"]
+            model: ["01.Push-pull 6L6",
+                    "02.Push-pull EL34",
+                    "03.Single-ended 6L6",
+                    "04.Single-ended EL34",
+                    "05.AMT Tube cake",
+                    "06.California",
+                    "07.British M",
+                    "08.British L",
+                    "09.Flat",
+                    "10.Califonia modern",
+                    "11.California vintage",
+                    "12.PVH Presence 01",
+                    "13.PVH Presence 02",
+                    "14.PVH Presence 03",
+                    "15.PVH Presence 04"]
 
             currentIndex: module.ampType.displayValue
 

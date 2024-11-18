@@ -123,6 +123,13 @@ signals:
 
     void sgDisconnect();
 
+// пока чтобы контролировать тестирование, но в будущем, возможно для работы(в modern)
+    void presetSwitched();
+    void presetCopied();
+    void presetPasted();
+    void presetSaved();
+    void impulseUploaded();
+
 protected:
     Parser m_parser;
 

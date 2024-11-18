@@ -49,7 +49,7 @@ BaseModule{
                     id: canvasBackground
 
                     height: parent.height
-                    width: parent.width * 4/5 + Style.mainSpacing * 2
+                    width: parent.width * 4/5 //+ Style.mainSpacing * 2
 
                     color: "black"
                     Canvas{
@@ -145,13 +145,22 @@ BaseModule{
                     }
                 }
 
+                Rectangle{
+                    id: _separator
+
+                    width: Style.mainSpacing
+                    height: parent.height
+
+                    color: main.on ? Style.colorText : Style.currentTheme.colorTextDisabled
+                }
+
                 Item{
                     id: _prePostEQ
 
                     visible: UiCore.currentDevice.isPaFw
 
                     height: parent.height
-                    width: parent.width - canvasBackground.width
+                    width: parent.width - canvasBackground.width - _separator.width
 
                     MouseArea{
                        anchors.fill: parent

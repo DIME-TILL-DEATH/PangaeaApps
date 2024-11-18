@@ -6,11 +6,11 @@ import StyleSettings 1.0
 
 import CppObjects
 
-Item{
+Row{
     id: _root
 
-    implicitWidth: parent.width
-    implicitHeight: parent.height/12
+    width: parent.width
+    height: parent.height/12
 
     required property ControlValue ctrlValInstance
 
@@ -46,7 +46,7 @@ Item{
             ctrlValInstance.displayValue = _slider.value;
             ctrlValInstance.isModified = true;
 
-            _longPressTimer.restart()
+            // _longPressTimer.restart()
         }
 
         leftPadding: 0
@@ -148,45 +148,6 @@ Item{
         //     z:1
         // }
 
-        //----------------------------Manual enter dialog----------------------
-        onPressedChanged:
-        {
-            if(pressed)
-            {
-                // _toolTip.show(ctrlValInstance.displayValue.toFixed(precision), 1000)
-
-                if(_resetDoubleClickTimer.pressedOnce) _valueDialog.open()
-                else _resetDoubleClickTimer.pressedOnce = true
-                _longPressTimer.restart()
-            }
-            else
-            {
-                _resetDoubleClickTimer.restart()
-                _longPressTimer.running = false
-            }
-        }
-
-        Timer{
-            id: _resetDoubleClickTimer
-
-            property bool pressedOnce: false
-
-            interval: 100
-            repeat: false
-            onTriggered:
-            {
-                pressedOnce = false
-            }
-        }
-
-        Timer{
-            id: _longPressTimer
-            interval: 1000
-            repeat: false
-            onTriggered: {
-                _valueDialog.open()
-            }
-        }
 
         EditValueDialog{
             id: _valueDialog
@@ -196,7 +157,6 @@ Item{
             controlValue: ctrlValInstance
             precision:  _root.precision
         }
-        //---------------------------------------------------------------------
 
         Connections
         {
@@ -210,6 +170,15 @@ Item{
     }
 
     Rectangle{
+        id: _separator
+
+        width: Style.mainSpacing
+        height: parent.height
+
+        color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
+    }
+
+    Item{
         id: _editValueItem
 
         MouseArea{
@@ -226,12 +195,8 @@ Item{
         opacity: _editMa.containsPress ? 0.5 : 1
 
         height: parent.height
-        width: parent.width * 1/5 - Style.mainSpacing * 2
+        width: parent.width * 1/5 - _separator.width //- Style.mainSpacing * 2
 
-        anchors.right: parent.right
-        color: "transparent"
-        border.width: 1
-        border.color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
         TextInput{
             id: textValue
             anchors.fill: parent

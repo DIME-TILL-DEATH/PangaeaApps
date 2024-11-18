@@ -83,7 +83,7 @@ void Core::parseInputData(QByteArray ba)
 
             timeoutTimer->setInterval(10000);
         }
-        commandsSended.removeFirst();
+        if(commandsSended.size()>0) commandsSended.removeFirst();
     }
 
     foreach(QByteArray answer, recievedAnswer)

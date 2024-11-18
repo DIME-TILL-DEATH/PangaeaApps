@@ -17,7 +17,6 @@ public:
     static QString mockName() {return "offline CP16(LEGACY)";};
 
 private:
-    QString basePath;
 
     void initFolders();
 

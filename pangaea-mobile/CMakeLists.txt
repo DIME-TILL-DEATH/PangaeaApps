@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21.1)
-project(Pangaea-mobile VERSION 0.11.2 LANGUAGES CXX)
-set(VERSION_CODE 17)
+project(Pangaea-mobile VERSION 0.11.3 LANGUAGES CXX)
+set(VERSION_CODE 18)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
 
@@ -30,8 +30,6 @@ qt_add_executable(Pangaea-mobile WIN32 MACOSX_BUNDLE
     ../pangaea-backend/utils/logger.cpp ../pangaea-backend/utils/logger.h
 
     ${SOURCES}
-
-
 )
 
 target_include_directories(Pangaea-mobile PUBLIC
