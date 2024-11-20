@@ -7,6 +7,8 @@
 #include "cplegacy.h"
 #include "mockcp16legacy.h"
 
+#include "testutils.h"
+
 class LegacyDevice : public QObject
 {
     Q_OBJECT
@@ -42,7 +44,7 @@ private:
 
     ThreadController* threadController;
 
-    void copyDirectoryNested(QString from, QString to);
+    void copyPaste(quint8 bankFrom, quint8 presetFrom, quint8 bankTo, quint8 presetTo);
 };
 
 void LegacyDevice::initTestCase()
@@ -64,7 +66,7 @@ void LegacyDevice::initTestCase()
 
     emit deviceConnected({MockCP16Legacy::mockName(), "virtual", DeviceConnectionType::Offline});
 
-    copyDirectoryNested(":/resources/device_internal", mockDevice->basePath());
+    TestUtils::copyDirectoryNested(":/resources/device_internal", mockDevice->basePath());
 
     // different threads. All signals catch with timeout
     QTRY_VERIFY_WITH_TIMEOUT(spyCore.count() > 0, 1000);
@@ -112,12 +114,24 @@ void LegacyDevice::cleanupTestCase()
 //16 сохранённый К: параметры и импульс В: параметры и импульс, отмена, переключение, Вставка, сохранение
 void LegacyDevice::testCopyPasteSavedIR()
 {
+    //7	сохранённый К: параметры и импульс В: параметры и импульс, сохранение
+    copyPaste(1, 1, 2, 2);
+    // Сравнить данные в файле до сохранения(preview в MocK) и после сохранения(файл в Mock)
+    //    имя файла надо бы сравнивать по rns до и после сохранения(вычитывать из IR модуля)
+    QSignalSpy spyImpulseUploaded(cpLegacy, &CPLegacy::impulseUploaded);
+    cpLegacy->saveChanges();
+    thread()->yieldCurrentThread();
+    QVERIFY(spyImpulseUploaded.wait(std::chrono::milliseconds{500}));
 
+    // в Mock создавать временный файл-предпросмотр(в корне, например или пресете .tmp)
+    // сравнить структуры пресета
+}
 
-//7	сохранённый К: параметры и импульс В: параметры и импульс, сохранение
+void LegacyDevice::copyPaste(quint8 bankFrom, quint8 presetFrom, quint8 bankTo, quint8 presetTo)
+{
     QSignalSpy spyPresetChange(cpLegacy, &CPLegacy::presetSwitched);
 
-    cpLegacy->changePreset(1, 1);
+    cpLegacy->changePreset(bankFrom, presetFrom);
     thread()->yieldCurrentThread();
     QVERIFY(spyPresetChange.wait(std::chrono::milliseconds{1000}));
 
@@ -126,56 +140,17 @@ void LegacyDevice::testCopyPasteSavedIR()
     thread()->yieldCurrentThread();
     QVERIFY(spyPresetCopied.wait(std::chrono::milliseconds{1000}));
 
-    cpLegacy->changePreset(2, 2);
+    cpLegacy->changePreset(bankTo, presetTo);
     thread()->yieldCurrentThread();
     QVERIFY(spyPresetChange.wait(std::chrono::milliseconds{500}));
-
 
     QSignalSpy spyImpulseUploaded(cpLegacy, &CPLegacy::impulseUploaded);
     cpLegacy->pastePreset();
     thread()->yieldCurrentThread();
     QVERIFY(spyImpulseUploaded.wait(std::chrono::milliseconds{500}));
-
-    cpLegacy->saveChanges();
-    thread()->yieldCurrentThread();
-    QVERIFY(spyImpulseUploaded.wait(std::chrono::milliseconds{500}));
-
-    // Сравнить данные в файле до сохранения и после сохранения
-    // в Mock создавать временный файл-предпросмотр(в корне, например или пресете .tmp)
-    // сравнить структуры пресета
 }
 
-void LegacyDevice::copyDirectoryNested(QString from, QString to)
-{
 
-    QDirIterator it(from, QDirIterator::Subdirectories);
-
-    while (it.hasNext()) {
-
-        QString file_in = it.next();
-
-        QFileInfo file_info = QFileInfo(file_in);
-
-        QString file_out = file_in;
-        file_out.replace(from,to);
-
-        if(file_info.isFile())
-        {
-            //is file copy
-            QFile::copy(file_in, file_out);
-            QFile copiedFile(file_out);
-            copiedFile.setPermissions(QFile::ReadOther | QFile::WriteOther);
-        }
-
-        if(file_info.isDir())
-        {
-            //dir mkdir
-            QDir dir(file_out);
-            if (!dir.exists())
-                dir.mkpath(".");
-        }
-    }
-}
 
 QTEST_GUILESS_MAIN(LegacyDevice)
 

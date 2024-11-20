@@ -83,10 +83,13 @@ add_executable(TestLegacyDevice
     ../../mock/mockcp16modern.h ../../mock/mockcp16modern.cpp
 
     res.qrc
+
+    ../testutils.h
 )
 add_test(NAME LegacyDevice COMMAND LegacyDevice)
 
 target_include_directories(TestLegacyDevice PUBLIC
+    ../
     ../../
     ../../cores
     ../../device
