@@ -47,7 +47,7 @@
         <file>qml/ControlGroups/DocumentationWindow.qml</file>
         <file>qml/Elements/EditTextDialog.qml</file>
         <file>qml/Elements/MComboBox.qml</file>
-        <file>qml/Modules/EQPreviewLegacy.qml</file>
+        <file>qml/Modules/EQPreview.qml</file>
         <file>qml/Elements/EqPoint.qml</file>
         <file>qml/Elements/CustomSlider.qml</file>
         <file>qml/Elements/BankSpin.qml</file>
@@ -63,5 +63,9 @@
         <file>qml/ControlGroups/MapCPLegacy.qml</file>
         <file>qml/ControlGroups/MapCPModern.qml</file>
         <file>qml/Elements/EditValueDialog.qml</file>
+        <file>qml/Modules/EQExtModern.qml</file>
+        <file>qml/ControlGroups/BPeakingControl.qml</file>
+        <file>qml/ControlGroups/BPeakingShelfControl.qml</file>
+        <file>qml/ControlGroups/BCutControl.qml</file>
     </qresource>
 </RCC>

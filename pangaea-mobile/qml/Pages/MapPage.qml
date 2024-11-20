@@ -69,24 +69,19 @@ Item
             {
                 case DeviceClass.ABSTRACT:
                 {
-                    // listViewModules.model = UiCore.currentDevice.modulesListModel;
                     _mapContentLoader.sourceComponent = undefined
-                    // _masterControlsLoader.sourceComponent = undefined
-                    // _eqExtLoader.sourceComponent = undefined
                     break;
                 }
                 case DeviceClass.CP_LEGACY:
                 {
                     // _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
                     _mapContentLoader.source = "../ControlGroups/MapCPLegacy.qml";
-                    // _mapContentLoader.item.modulesModel = UiCore.currentDevice.modulesListModel;
                     break;
                 }
                 case DeviceClass.CP_MODERN:
                 {
                     // _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
                     _mapContentLoader.source = "../ControlGroups/MapCPModern.qml";
-                    // _mapContentLoader.item.listViewModules.model = UiCore.currentDevice.modulesListModel;
                     break;
                 }
             }

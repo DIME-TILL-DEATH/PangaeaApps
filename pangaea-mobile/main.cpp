@@ -18,6 +18,7 @@
 
 #include "interfacecore.h"
 
+#include "filtertypeenum.h"
 #include "deviceerrorenum.h"
 #include "devicemessageenum.h"
 #include "deviceclassenum.h"
@@ -106,6 +107,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
 
+    qmlRegisterUncreatableType<FilterTypeEnum>("CppEnums", 1, 0, "FilterType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceClassEnum>("CppEnums", 1, 0, "DeviceClass", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceConnectionTypeEnum>("CppEnums", 1, 0, "DeviceConnectionType", "Not creatable as it is an enum type");

@@ -8,7 +8,7 @@
 Preset::Preset(AbstractDevice *owner)
 {
     m_ownerDevice = owner;
-    m_rawData.append(sizeof(preset_data_legacy_t) * 2, '0');
+    m_rawData.append(sizeof(preset_data_t) * 2, '0');
 }
 
 quint8 Preset::presetNumber() const

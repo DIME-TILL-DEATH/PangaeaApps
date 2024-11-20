@@ -18,6 +18,8 @@ Row{
     property string units: ctrlValInstance.units
     property int precision: 0
 
+    property real fontSize: 10 * Style.dip
+
     property bool moduleOn: true
 
     property bool inverse: false
@@ -201,27 +203,27 @@ Row{
             id: textValue
             anchors.fill: parent
 
-            text: _slider.value.toFixed(precision) //+ " " + units + " "
-            font.pixelSize: 10 * Style.dip
+            text: _slider.value.toFixed(precision) + " " + units + " "
+            font.pixelSize: fontSize
             font.bold: true
 
             horizontalAlignment: TextInput.AlignHCenter
             verticalAlignment: TextInput.AlignVCenter
-            // color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
+            color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
             z:1
 
-            inputMethodHints: Qt.ImhFormattedNumbersOnly
+            // inputMethodHints: Qt.ImhFormattedNumbersOnly
 
-            color: acceptableInput ? (moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled)
-                                   : "red"
+            // color: acceptableInput ? (moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled)
+            //                        : "red"
 
-            validator: DoubleValidator{
-                bottom: ctrlValInstance.minDisplayValue
-                top: ctrlValInstance.maxDisplayValue
-                decimals: _root.precision
+            // validator: DoubleValidator{
+            //     bottom: ctrlValInstance.minDisplayValue
+            //     top: ctrlValInstance.maxDisplayValue
+            //     decimals: _root.precision
 
-                locale: "en"
-            }
+            //     locale: "en"
+            // }
 
             // на яндекс клавиатуре не выдаёт сигнал
             // onAccepted: {
@@ -234,13 +236,13 @@ Row{
             //     _root.ctrlValInstance.isModified = true;
             // }
 
-            onActiveFocusChanged: function(focusState){
-                if(parseFloat(text) > _root.ctrlValInstance.maxDisplayValue) text = _root.ctrlValInstance.maxDisplayValue
-                if(parseFloat(text) < _root.ctrlValInstance.minDisplayValue) text = _root.ctrlValInstance.minDisplayValue
+            // onActiveFocusChanged: function(focusState){
+            //     if(parseFloat(text) > _root.ctrlValInstance.maxDisplayValue) text = _root.ctrlValInstance.maxDisplayValue
+            //     if(parseFloat(text) < _root.ctrlValInstance.minDisplayValue) text = _root.ctrlValInstance.minDisplayValue
 
-                _root.ctrlValInstance.displayValue = text;
-                _root.ctrlValInstance.isModified = true;
-            }
+            //     _root.ctrlValInstance.displayValue = text;
+            //     _root.ctrlValInstance.isModified = true;
+            // }
         }
     }
 }

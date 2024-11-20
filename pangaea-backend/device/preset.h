@@ -126,7 +126,7 @@ typedef struct
 
 typedef struct
 {
-    uint8_t name[16];
+    uint8_t name[32];
     uint8_t modules_order[16];
     uint8_t volume;
 
@@ -144,7 +144,7 @@ typedef struct
 
     // IR data
     uint8_t cab_sim_on;
-    uint8_t reserved_post[3];
+    uint8_t irPathName[128];
 }preset_data_t;
 
 class Preset
@@ -214,9 +214,6 @@ private:
         QString irNameId{"IR_NAME"};
         QString irDataId{"IR_DATA"};
     } presetHeaderId;
-
-
-    preset_data_legacy_t legacyDataStruct;
 };
 
 #endif // PRESET_H

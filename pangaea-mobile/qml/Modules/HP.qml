@@ -26,6 +26,7 @@ BaseModule
             // dispMin: 20
             // valueMax: 255
             // valueMin: 0
+            fontSize: 8 * Style.dip
 
             height: parent.height
             width: parent.width

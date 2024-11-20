@@ -61,6 +61,19 @@ public:
     bool isPreEq() const {return m_isPreEq;};
     void setIsPreEq(bool newIsPreEq);
 
+    // avaliable modules
+    // вынести создание наружу?
+    // public для тестов
+    PresetVolume* MV;
+    Compressor* CM;
+    NoiseGate* NG;
+    Preamp* PR;
+    PowerAmp* PA;
+    CabSim* IR;
+    HiPassFilter* HPF;
+    EqParametric* EQ;
+    LowPassFilter* LPF;
+    EarlyReflections* ER;
 public slots:
      QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
 
@@ -72,17 +85,6 @@ signals:
 private:
     IRWorker irWorker;
 
-    // avaliable modules
-    PresetVolume* MV;
-    Compressor* CM;
-    NoiseGate* NG;
-    Preamp* PR;
-    PowerAmp* PA;
-    CabSim* IR;
-    HiPassFilter* HPF;
-    EqParametric* EQ;
-    LowPassFilter* LPF;
-    EarlyReflections* ER;
 
     bool m_isPreEq{false};
     bool m_isPaFw{false};

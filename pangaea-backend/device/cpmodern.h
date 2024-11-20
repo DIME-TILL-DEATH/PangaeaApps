@@ -25,10 +25,9 @@
 
 class CPModern : public AbstractDevice
 {
-    Q_PROPERTY(PresetVolume* MV READ getMV NOTIFY MVChanged FINAL)
-    Q_PROPERTY(bool isPaFw READ isPaFw CONSTANT)
-    Q_PROPERTY(bool isPreEq READ isPreEq WRITE setIsPreEq NOTIFY isPreEqChanged FINAL)
+    Q_OBJECT
 
+    Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
 public:
     CPModern(Core *parent);
 
@@ -55,26 +54,27 @@ public:
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
     Q_INVOKABLE void formatMemory() override;
 
-public slots:
-    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
-
-signals:
-    void MVChanged();
-
-private:
-    IRWorker irWorker;
-
     // avaliable modules
+    // вынести создание наружу?
+    // public для тестов
     PresetVolume* MV;
     Compressor* CM;
     NoiseGate* NG;
     Preamp* PR;
     PowerAmp* PA;
     CabSim* IR;
-    HiPassFilter* HPF;
+    // HiPassFilter* HPF;
     EqParametric* EQ;
-    LowPassFilter* LPF;
+    // LowPassFilter* LPF;
     EarlyReflections* ER;
+public slots:
+    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+
+signals:
+
+private:
+    IRWorker irWorker;
+
 
     QSettings* appSettings;
 

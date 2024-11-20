@@ -16,6 +16,9 @@ Rectangle
     property bool enabledKostyl: true
 
     property bool highlighted: false
+    property color highlightColor: "red"
+    property color textColor: main.active ? Style.currentTheme.colorTextEnabled:
+                                            ((main.enabled & main.enabledKostyl) ? Style.colorText : Style.colorBtnDisabled)
 
     signal mbPressed()
 
@@ -27,7 +30,7 @@ Rectangle
     border.color: main.active ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorBorderOff
 
     gradient: Gradient{
-                GradientStop{position: 0.0; color: highlighted ? "red" : Style.colorModul}
+                GradientStop{position: 0.0; color: highlighted ? highlightColor : Style.colorModul}
                 GradientStop{position: 1.0; color: Style.currentTheme.colorModulOff}}
 
 
@@ -44,8 +47,7 @@ Rectangle
         text: qsTr(textButton)
 
         font.bold: true
-        color: main.active ? Style.currentTheme.colorTextEnabled:
-                             ((main.enabled & main.enabledKostyl) ? Style.colorText : Style.colorBtnDisabled)
+        color: textColor
 
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter

@@ -1,5 +1,8 @@
 module ControlGroups
 
+BPeakingControl 1.0 BPeakingControl.qml
+BPeakingShelfControl 1.0 BPeakingShelfControl.qml
+BCutControl 1.0 BCutControl.qml
 MapCPLegacy 1.0 MapCPLegacy.qml
 MapCPModern 1.0 MapCPModern.qml
 DocumentationWindow 1.0 DocumentationWindow.qml

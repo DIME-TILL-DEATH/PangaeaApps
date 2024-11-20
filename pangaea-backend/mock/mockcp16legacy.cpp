@@ -61,8 +61,8 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
 
     setParamsHandler("lv", &currentPresetData.lp_freq);     // Type::LPF_VOLUME: fullString += "lv";
     setParamsHandler("hv", &currentPresetData.hp_freq);     // Type::HPF_VOLUME: fullString += "hv";
-    setParamsHandler("ho", &currentPresetData.lp_on);       // Type::HPF_ON: fullString += "ho";
-    setParamsHandler("lo", &currentPresetData.hp_on);       // Type::LPF_ON: fullString += "lo";
+    setParamsHandler("ho", &currentPresetData.hp_on);       // Type::HPF_ON: fullString += "ho";
+    setParamsHandler("lo", &currentPresetData.lp_on);       // Type::LPF_ON: fullString += "lo";
     setParamsHandler("po", &currentPresetData.presence_on);     // Type::PRESENCE_ON: fullString += "po";
     setParamsHandler("pv", &currentPresetData.presence_vol);    // Type::PRESENCE_VOLUME: fullString += "pv";
 

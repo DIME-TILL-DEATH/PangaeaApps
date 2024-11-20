@@ -10,6 +10,7 @@
 #include "core.h"
 
 #include "cplegacy.h"
+#include "cpmodern.h"
 
 Core::Core(QObject *parent) : QObject(parent)
 {
@@ -77,12 +78,15 @@ void Core::parseInputData(QByteArray ba)
         {
             currentDevice = new CPLegacy(this);
 
-            connect(currentDevice, &AbstractDevice::sgDeviceInstanciated, this, &Core::slDeviceInstanciated);
-
-            currentDevice->initDevice(deviceType);
-
-            timeoutTimer->setInterval(10000);
         }
+        else
+        {
+            currentDevice = new CPModern(this);
+        }
+        connect(currentDevice, &AbstractDevice::sgDeviceInstanciated, this, &Core::slDeviceInstanciated);
+        currentDevice->initDevice(deviceType);
+        timeoutTimer->setInterval(10000);
+
         if(commandsSended.size()>0) commandsSended.removeFirst();
     }
 

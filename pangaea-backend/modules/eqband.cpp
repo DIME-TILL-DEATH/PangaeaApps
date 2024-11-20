@@ -3,21 +3,47 @@
 
 #include "eqband.h"
 
-EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, double fStop, int bandNum)
+EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, double fStop, int bandNum, qint32 fControlStart, qint32 fControlStop)
     :QObject{ownerModule},
-    m_type{bandType},
+    m_filterType{bandType},
     m_fStart{fStart},
     m_fStop{fStop},
     m_bandNum{bandNum}
 {
-    m_Fc = new ControlValue(ownerModule, "eqf " + QString().setNum(m_bandNum),
-                            "Central Frequency", "Hz",
-                            -100, 100, m_fStart, m_fStop);
-    m_gain = new ControlValue(ownerModule, "eqv " + QString().setNum(m_bandNum),
-                            "Gain", "dB",
-                              0x0000, 0x001E, -15, 15);
+    switch(bandType)
+    {
+        case FilterType::PEAKING:
+        {
+            m_Fc = new ControlValue(ownerModule, "eqf " + QString().setNum(m_bandNum),
+                                    "Central Frequency", "Hz",
+                                    fControlStart, fControlStop, m_fStart, m_fStop);
+            m_gain = new ControlValue(ownerModule, "eqv " + QString().setNum(m_bandNum),
+                                    "Gain", "dB",
+                                    0x0000, 0x001E, -15, 15);
 
-    m_Q = new ControlQLegacy(ownerModule, "eqq " + QString().setNum(m_bandNum));
+            m_Q = new ControlQLegacy(ownerModule, "eqq " + QString().setNum(m_bandNum));
+            break;
+        }
+
+        case FilterType::LOW_CUT:
+        {
+            m_Fc = new ControlValue(ownerModule, "hv", "Cut frequency", "Hz", fControlStart, fControlStop, fStart, fStop);
+            m_gain = new ControlValue(ownerModule, "");
+            m_Q = new ControlQLegacy(ownerModule, "");
+            break;
+        }
+
+        case FilterType::HIGH_CUT:
+        {
+            m_Fc = new ControlValue(ownerModule, "lv", "Cut frequency", "Hz", fControlStart, fControlStop, fStart, fStop);
+            m_gain = new ControlValue(ownerModule, "");
+            m_Q = new ControlQLegacy(ownerModule, "");
+            break;
+        }
+        case FilterType::LOW_SHELF:
+        case FilterType::HIGH_SHELF:
+            break;
+    }
 
     connect(m_Fc, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);
     connect(m_gain, &ControlValue::displayValueChanged, this, &EqBand::calcFilterCoefs);
@@ -26,7 +52,11 @@ EqBand::EqBand(AbstractModule *ownerModule, FilterType bandType, double fStart, 
     connect(m_Fc, &ControlValue::userModifiedValue, this, &EqBand::calcFilterCoefs);
     connect(m_gain, &ControlValue::userModifiedValue, this, &EqBand::calcFilterCoefs);
     connect(m_Q, &ControlValue::userModifiedValue, this, &EqBand::calcFilterCoefs);
+
+    connect(this, &EqBand::filterTypeChanged, this, &EqBand::calcFilterCoefs);
     calcFilterCoefs();
+
+    if(ownerModule) connect(this, &EqBand::userModifiedBandParameters, ownerModule, &AbstractModule::userModifiedModuleParameters);
 }
 
 EqBand::~EqBand()
@@ -42,7 +72,7 @@ void EqBand::calcFilterCoefs()
     double w0 = 2 * M_PI * m_Fc->displayValue()/Fs;
     double a = sin(w0)/(2*m_Q->displayValue());
 
-    switch(m_type)
+    switch(m_filterType)
     {
     case FilterType::LOW_CUT:
     {
@@ -102,15 +132,22 @@ void EqBand::calcFilterCoefs()
     }
     }
 
-    emit filterChanged();
+    emit bandParametersChanged();
 }
 
 double EqBand::getFilterResponse(double f)
 {
-    std::complex<double> z = std::polar(1.0, 2*M_PI*f/Fs);
-    std::complex<double> z2 = z*z;
-    std::complex<double> h = (m_coefs.b0*z2 + m_coefs.b1*z + m_coefs.b2) / (m_coefs.a0*z2 + m_coefs.a1*z + m_coefs.a2);
-    return 20*log10(abs(h));
+    if(m_enabled)
+    {
+        std::complex<double> z = std::polar(1.0, 2*M_PI*f/Fs);
+        std::complex<double> z2 = z*z;
+        std::complex<double> h = (m_coefs.b0*z2 + m_coefs.b1*z + m_coefs.b2) / (m_coefs.a0*z2 + m_coefs.a1*z + m_coefs.a2);
+        return 20*log10(abs(h));
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void EqBand::calcBandResponse(quint16 pointsNum)
@@ -130,34 +167,38 @@ void EqBand::calcBandResponse(quint16 pointsNum)
 
 }
 
-EqBand::FilterType EqBand::type() const
+void EqBand::setRawBandParams(FilterType bandType, quint16 gain, qint16 Fc, qint16 Q, bool enabled)
 {
-    return m_type;
-}
+    m_filterType = bandType;
+    emit filterTypeChanged();
 
-ControlValue* EqBand::getFc() const
-{
-    return m_Fc;
-}
-
-ControlValue* EqBand::getQ() const
-{
-    return m_Q;
-}
-
-ControlValue* EqBand::getGain() const
-{
-    return m_gain;
-}
-
-void EqBand::setRawBandParams(FilterType bandType, quint16 gain, qint16 Fc, qint16 Q)
-{
     m_gain->setControlValue(gain);
     m_Fc->setControlValue(Fc);
     m_Q->setControlValue(Q);
+
+    m_enabled = enabled;
+    emit enabledChanged();
 }
 
-QList<QPointF> EqBand::bandPoints()
+void EqBand::setEnabled(bool newEnabled)
 {
-    return m_bandPoints;
+    if (m_enabled == newEnabled)
+        return;
+
+    m_enabled = newEnabled;
+    emit enabledChanged();
+    emit bandParametersChanged();
+    emit userModifiedBandParameters();
+    // interface write outside band. In the module
+}
+
+void EqBand::setFilterType(FilterType newFilterType)
+{
+    if(newFilterType == m_filterType) return;
+
+    m_filterType = newFilterType;
+
+    emit filterTypeChanged();
+    emit bandParametersChanged();
+    emit userModifiedBandParameters();
 }

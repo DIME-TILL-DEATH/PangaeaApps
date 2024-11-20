@@ -57,10 +57,18 @@ void CPModern::initDevice(DeviceType deviceType)
     PR = new Preamp(this);
     PA = new PowerAmp(this);
     IR = new CabSim(this);
-    HPF = new HiPassFilter(this);
-    EQ = new EqParametric(this);
-    LPF = new LowPassFilter(this);
+    // HPF = new HiPassFilter(this);
+    EQ = new EqParametric(this, EqParametric::EqMode::Modern);
+    // LPF = new LowPassFilter(this);
     ER = new EarlyReflections(this);
+
+    m_moduleList.append(NG);
+    m_moduleList.append(CM);
+    m_moduleList.append(PR);
+    m_moduleList.append(PA);
+    m_moduleList.append(IR);
+    m_moduleList.append(EQ);
+    m_moduleList.append(ER);
 
     m_modulesListModel.refreshModel(&m_moduleList);
 
@@ -81,11 +89,12 @@ void CPModern::setDeviceType(DeviceType newDeviceType)
 
     switch(m_deviceType)
     {
-    case DeviceType::legacyCP16:
-        m_minimalFirmware = new Firmware("2.00.01", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
+    case DeviceType::modernCP:
+        m_minimalFirmware = new Firmware("2.00.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16Modern.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
-        m_firmwareName = "CP-16 Modern";
+        m_firmwareName = "CP16 Modern";
+        // m_isPaFw = true;
         break;
     default:
         qWarning() << __FUNCTION__ << "Unknown device type";
@@ -662,14 +671,17 @@ void CPModern::getStateCommHandler(const QString &command, const QByteArray &arg
     eq_t eqData;
     for(int i=0; i<5; i++)
     {
-        eqData.band_type[i] = static_cast<quint8>(EqBand::PEAKING);
+        eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);
         eqData.band_vol[i] = legacyData.eq_band_vol[i];
         eqData.freq[i] = legacyData.eq_freq[i];
         eqData.Q[i] = legacyData.eq_Q[i];
     }
+    eqData.hp_freq = legacyData.hp_freq;
+    eqData.hp_on = legacyData.hp_on;
+    eqData.lp_freq = legacyData.lp_freq;
+    eqData.lp_on = legacyData.lp_on;
     EQ->setBandsData(eqData);
-    HPF->setValues(legacyData.hp_on, legacyData.hp_freq);
-    LPF->setValues(legacyData.lp_on, legacyData.lp_freq);
+
     IR->setEnabled(legacyData.cab_on);
     ER->setValues(legacyData.early_on, legacyData.early_volume, legacyData.early_type);
 
@@ -683,6 +695,7 @@ void CPModern::getStateCommHandler(const QString &command, const QByteArray &arg
 
         copiedPreset.setRawData(baPresetData);
         m_presetManager.returnToPreviousState();
+        emit presetCopied();
         break;
     }
 
@@ -696,6 +709,7 @@ void CPModern::getStateCommHandler(const QString &command, const QByteArray &arg
         savedPreset = actualPreset;
         m_presetListModel.updatePreset(savedPreset);
         m_presetManager.returnToPreviousState();
+        emit presetSwitched();
         break;
     }
 
@@ -894,6 +908,8 @@ void CPModern::endCCCommHandler(const QList<QByteArray> &arguments)
 {
     emit sgEnableTimeoutTimer();
     m_presetManager.returnToPreviousState();
+
+    emit impulseUploaded();
 }
 
 void CPModern::errorCCCommHandler(const QString &command, const QByteArray &arguments)

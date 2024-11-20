@@ -4,44 +4,37 @@
 #include <QObject>
 #include <QPointF>
 
-#include "deviceparameter.h"
-
 #include "controlvalue.h"
 #include "controlqlegacy.h"
+
+#include "filtertypeenum.h"
 
 class EqBand : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(FilterType type READ type MEMBER m_type NOTIFY typeChanged FINAL)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged FINAL)
+    Q_PROPERTY(FilterType filterType READ filterType WRITE setFilterType NOTIFY filterTypeChanged FINAL)
     Q_PROPERTY(ControlValue* Fc READ getFc CONSTANT)
     Q_PROPERTY(ControlValue* Q READ getQ CONSTANT)
     Q_PROPERTY(ControlValue* gain READ getGain CONSTANT)
 
     Q_PROPERTY(QList<QPointF> bandPoints READ bandPoints NOTIFY bandPointsChanged)
 public:    
-    enum FilterType
-    {
-        HIGH_CUT,
-        LOW_CUT,
-        LOW_SHELF,
-        HIGH_SHELF,
-        PEAKING
-    };
 
-    explicit EqBand(AbstractModule* ownerModule, FilterType bandType, double fStart, double fStop, int bandNum);
+    explicit EqBand(AbstractModule* ownerModule, FilterType bandType,
+                    double fStart, double fStop, int bandNum,
+                    qint32 fControlStart = -100, qint32 fControlStop = 100);
 
     ~EqBand();
 
     static constexpr double Fs = 48000;
 
-    FilterType type() const;
+    ControlValue* getFc() const {return m_Fc;};
+    ControlValue* getGain() const {return m_gain;};
+    ControlValue* getQ() const {return m_Q;};
 
-    ControlValue* getFc() const;
-    ControlValue* getQ() const;
-    ControlValue* getGain() const;
-
-    void setRawBandParams(FilterType bandType, quint16 gain, qint16 Fc, qint16 Q);
+    void setRawBandParams(FilterType bandType, quint16 gain, qint16 Fc, qint16 Q, bool enabled=true);
 
     double fStart() {return m_fStart;};
     double fStop() {return m_fStop;};
@@ -49,18 +42,26 @@ public:
     double getFilterResponse(double f);
     void calcBandResponse(quint16 pointsNum);
 
-    QList<QPointF> bandPoints();
+    QList<QPointF> bandPoints() {return m_bandPoints;};
+
+    bool enabled() const {return m_enabled;};
+    void setEnabled(bool newEnabled);
+
+    void setFilterType(FilterType newFilterType);
+    FilterType filterType() const {return m_filterType;};
 
 signals:
-    void typeChanged();
-    void filterChanged();
+    void filterTypeChanged();
+    void bandParametersChanged();
 
-    void sgSetDeviceParameter(DeviceParameter::Type deviceParameterType, quint8 value);
 
     void bandPointsChanged();
+    void enabledChanged();
+
+    void userModifiedBandParameters();
 
 private:
-    FilterType m_type;
+    FilterType m_filterType;
 
     ControlValue* m_Fc;
     ControlQLegacy* m_Q;
@@ -83,6 +84,7 @@ private:
 
     void calcFilterCoefs();
     QList<QPointF> m_bandPoints;
+    bool m_enabled{true};
 };
 
 #endif // EQBAND_H

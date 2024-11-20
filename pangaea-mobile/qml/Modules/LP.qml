@@ -33,6 +33,8 @@ BaseModule
                 // dispMin: 1000
                 // valueMax: 0
                 // valueMin: 195
+                fontSize: 8 * Style.dip
+
                 height: parent.height
                 width: parent.width
 
