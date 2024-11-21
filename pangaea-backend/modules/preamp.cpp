@@ -27,9 +27,9 @@ void Preamp::setValues(const preamp_data_t &preData)
     m_moduleEnabled = preData.on;
     m_volume->setControlValue(preData.volume);
 
-    m_low->setControlValue(preData.low);
-    m_mid->setControlValue(preData.mid);
-    m_high->setControlValue(preData.high);
+    m_low->setControlValue((qint8)preData.low);
+    m_mid->setControlValue((qint8)preData.mid);
+    m_high->setControlValue((qint8)preData.high);
 
     emit dataChanged();
 }

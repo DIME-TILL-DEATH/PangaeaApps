@@ -692,7 +692,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     for(int i=0; i<5; i++)
     {
         eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);
-        eqData.band_vol[i] = legacyData.eq_band_vol[i];
+        eqData.gain[i] = legacyData.eq_band_vol[i];
         eqData.freq[i] = legacyData.eq_freq[i];
         eqData.Q[i] = legacyData.eq_Q[i];
     }
@@ -701,7 +701,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     eqData.lp_freq = legacyData.lp_freq;
     eqData.lp_on = legacyData.lp_on;
 
-    EQ->setBandsData(eqData);
+    EQ->setEqData(eqData);
     HPF->setValues(legacyData.hp_on, legacyData.hp_freq);
     LPF->setValues(legacyData.lp_on, legacyData.lp_freq);
     IR->setEnabled(legacyData.cab_on);

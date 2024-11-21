@@ -4,18 +4,35 @@
 #include "eqparametric.h"
 
 
-EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode)
+EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber)
     : AbstractModule{owner, ModuleType::EQ, "EQ", "eqo"},
-    m_eqMode{eqMode}
+    m_eqMode{eqMode},
+    m_eqNumber{eqNumber}
 {
-    m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 220, 0));
-    m_EqBands.append(new EqBand(this, FilterType::PEAKING, 260, 460, 1));
-    m_EqBands.append(new EqBand(this, FilterType::PEAKING, 600, 1000, 2));
-    m_EqBands.append(new EqBand(this, FilterType::PEAKING, 1000, 3000, 3));
-    m_EqBands.append(new EqBand(this, FilterType::PEAKING, 1000, 11000, 4));
+    if(m_eqMode == EqMode::Modern)
+    {
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 0, 20, 12000));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 1, 20, 12000));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 2, 20, 12000));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 3, 20, 12000));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 4, 20, 12000));
 
-    m_hpf = new EqBand(this, FilterType::LOW_CUT, 20, 1000, 5, 0, 255);
-    m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 195, 0);
+        m_hpf = new EqBand(this, FilterType::LOW_CUT, 20, 1000, 5, 0, 255);
+        m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 195, 0);
+
+        m_commandOnOff = "eq" + QString().setNum(eqNumber) + " par o";
+    }
+    else
+    {
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 220, 0));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 260, 460, 1));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 600, 1000, 2));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 1000, 3000, 3));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 1000, 11000, 4));
+
+        m_hpf = new EqBand(this, FilterType::LOW_CUT, 20, 1000, 5, 0, 255);
+        m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 195, 0);
+    }
 
     if(m_eqMode == EqMode::Modern)
     {
@@ -31,6 +48,7 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode)
     {
         EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
         connect(eqBand, &EqBand::bandParametersChanged, this, &EqParametric::calcEqResponse);
+        connect(eqBand, &EqBand::filterTypeChanged, this, &EqParametric::bandTypeChanged);
     }
 }
 
@@ -62,12 +80,40 @@ void EqParametric::reset()
 
 void EqParametric::hpfEnabledChanged()
 {
-    emit m_owner->sgWriteToInterface(QString("ho " + QString("%1").arg(m_hpf->enabled()) + "\r\n").toUtf8());
+    if(m_eqMode == EqParametric::EqMode::Legacy)
+    {
+        emit m_owner->sgWriteToInterface(QString("ho " + QString("%1").arg(m_hpf->enabled()) + "\r\n").toUtf8());
+    }
+    else
+    {
+        emit m_owner->sgWriteToInterface(
+            QString("eq" + QString().setNum(m_eqNumber) + " hp o " + QString("%1").arg(m_hpf->enabled()) + "\r\n").toUtf8());
+    }
 }
 
 void EqParametric::lpfEnabledChanged()
 {
-    emit m_owner->sgWriteToInterface(QString("lo " + QString("%1").arg(m_lpf->enabled()) + "\r\n").toUtf8());
+    if(m_eqMode == EqParametric::EqMode::Legacy)
+    {
+        emit m_owner->sgWriteToInterface(QString("lo " + QString("%1").arg(m_lpf->enabled()) + "\r\n").toUtf8());
+    }
+    else
+    {
+        emit m_owner->sgWriteToInterface(
+            QString("eq" + QString().setNum(m_eqNumber) + " lp o " + QString("%1").arg(m_hpf->enabled()) + "\r\n").toUtf8());
+    }
+}
+
+void EqParametric::bandTypeChanged(int bandNum)
+{
+    if(m_eqMode == EqParametric::EqMode::Modern)
+    {
+        EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(bandNum));
+        FilterType bandType = eqBand->filterType();
+
+        emit m_owner->sgWriteToInterface(
+            QString("eq" + QString().setNum(m_eqNumber) + " b" + QString().setNum(bandNum) + " t " + QString("%1").arg(bandType) + "\r\n").toUtf8());
+    }
 }
 
 void EqParametric::calcEqResponse()
@@ -97,14 +143,16 @@ void EqParametric::calcEqResponse()
    emit pointsChanged();
 }
 
-void EqParametric::setBandsData(eq_t eqData)
+void EqParametric::setEqData(eq_t eqData)
 {
+    m_moduleEnabled = eqData.parametric_on;
+
     for(int i=0; i < 5; i++)
     {
         EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
 
         eqBand->setRawBandParams(static_cast<FilterType>(eqData.band_type[i]),
-                                 eqData.band_vol[i],
+                                 eqData.gain[i],
                                  eqData.freq[i],
                                  eqData.Q[i]);
     }

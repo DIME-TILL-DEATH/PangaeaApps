@@ -75,7 +75,6 @@ signals:
 private:
     IRWorker irWorker;
 
-
     QSettings* appSettings;
 
     void setDeviceType(DeviceType newDeviceType);
@@ -94,17 +93,12 @@ private:
 
     void getBankPresetCommHandler(const QString &command, const QByteArray &arguments);
     void getOutputModeCommHandler(const QString &command, const QByteArray &arguments);
-    void getStateCommHandler(const QString &command, const QByteArray &arguments);
+    void stateCommHandler(const QString &command, const QByteArray &arguments);
 
     void ackEscCommHandler(const QString &command, const QByteArray &arguments);
     void ackSaveChanges(const QString &command, const QByteArray &arguments);
     void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments);
 
-    // команды cc обрабатывается маскированным парсером
-    // MaskedParser getIr{"cc\r0\n0\n", "111X1X1"};
-    // MaskedParser getIrNameSize{"cc\r0\n", "111X1"};
-    // MaskedParser ackCC{"cc * *\r", "111X1X1"}; //upload save
-    // MaskedParser endCC{"ccEND\n", "111111"};
     void getCCCommHandler(const QList<QByteArray> &arguments);
     void getCCNameSizeCommHandler(const QList<QByteArray> &arguments);
     void ackCCCommHandler(const QList<QByteArray> &arguments);

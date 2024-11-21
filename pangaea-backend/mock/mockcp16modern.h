@@ -4,6 +4,7 @@
 #include <QObject>
 #include "abstractmockdevice.h"
 
+#include "hardwarepreset.h"
 #include "preset.h"
 
 class MockCP16Modern : public AbstractMockDevice
@@ -21,17 +22,18 @@ private:
 
     void initFolders();
 
-    preset_data_legacy_t currentPresetData;
+    QString currentPresetName;
+    preset_data_t currentPresetData;
 
     bool saveSysParameters();
-    bool loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t *presetData);
-    bool savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t* presetData);
+    bool loadPresetData(quint8 prBank, quint8 prPreset, save_data_t *presetSavedData);
+    bool savePresetData(quint8 prBank, quint8 prPreset, const save_data_t *presetSaveData);
 
     void amtDevCommHandler(const QString &command, const QByteArray& arguments);
     void amtVerCommHandler(const QString &command, const QByteArray& arguments);
     void bankPresetCommHandler(const QString &command, const QByteArray& arguments);
     void outputModeCommHandler(const QString &command, const QByteArray& arguments);
-    void getStateCommHandler(const QString &command, const QByteArray& arguments);
+    void stateCommHandler(const QString &command, const QByteArray& arguments);
     void getImpulseNameCommHandler(const QString &command, const QByteArray& arguments);
     void getRnsCommHandler(const QString &command, const QByteArray& arguments);
 
@@ -47,10 +49,9 @@ private:
     // Parameters comm handlers
     QMap<QString, quint8*> paramsMap;
     void setParamsHandler(QString commStr, quint8* commPtr);
-    void setEqHandler(QString commStr, quint8* commPtr);
     void parametersCommHandler(const QString &command, const QByteArray& arguments);
-
     void eqParametersCommHandler(const QString &command, const QByteArray& arguments);
+
 
     // fw update simulation
     bool fwUpdateMode{false};

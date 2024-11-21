@@ -32,6 +32,9 @@ qt_add_library(pangaea-backend STATIC
     device/cpmodern.h device/cpmodern.cpp
     device/lapreamp.h device/lapreamp.cpp
 
+    device/hardwarepreset.h
+    device/hardwarepreset.cpp
+
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
     models/moduleslistmodel.h models/moduleslistmodel.cpp

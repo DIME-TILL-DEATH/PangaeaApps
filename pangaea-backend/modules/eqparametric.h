@@ -24,9 +24,9 @@ public:
         Modern
     };
 
-    explicit EqParametric(AbstractDevice *owner, EqMode eqMode = EqMode::Legacy);
+    explicit EqParametric(AbstractDevice *owner, EqMode eqMode = EqMode::Legacy, quint8 eqNumber = 0);
 
-    void setBandsData(eq_t eqData);
+    void setEqData(eq_t eqData);
 
     double getEqResponse(double f);
 
@@ -37,7 +37,8 @@ public:
 
     Q_INVOKABLE void reset();
 
-
+    EqMode eqMode() const {return m_eqMode;};
+    quint8 eqNumber() const {return m_eqNumber;};
 signals:
     void pointsChanged();
     void eqBandsChanged();
@@ -45,18 +46,19 @@ signals:
 private slots:
     void hpfEnabledChanged();
     void lpfEnabledChanged();
+    void bandTypeChanged(int bandNum);
 
 private:
     static constexpr quint16 pointsNum = 250;
 
     EqMode m_eqMode;
     quint8 m_parametricBandCount;
+    quint8 m_eqNumber{0};
 
     QList<QPointF> m_points;
     QObjectList m_EqBands;
     EqBand* m_lpf;
     EqBand* m_hpf;
-
 
     void calcEqResponse();
 };

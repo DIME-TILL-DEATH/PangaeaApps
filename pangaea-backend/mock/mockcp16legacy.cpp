@@ -135,7 +135,7 @@ void MockCP16Legacy::initFolders()
 #endif
     if(!QDir(m_basePath).exists()) QDir().mkpath(m_basePath);
 
-    m_basePath += "virtual_CP16";
+    m_basePath += "virtual_CP16Legacy";
 
     if(!QDir(m_basePath).exists()) QDir().mkpath(m_basePath);
 

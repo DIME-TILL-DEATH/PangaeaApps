@@ -25,7 +25,7 @@ CPModern::CPModern(Core *parent)
 
     m_parser.addCommandHandler("gb", std::bind(&CPModern::getBankPresetCommHandler, this, _1, _2));
     m_parser.addCommandHandler("gm", std::bind(&CPModern::getOutputModeCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("gs", std::bind(&CPModern::getStateCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("state", std::bind(&CPModern::stateCommHandler, this, _1, _2));
 
     m_parser.addCommandHandler("sp", std::bind(&CPModern::ackSaveChanges, this, _1, _2));
     m_parser.addCommandHandler("pc", std::bind(&CPModern::ackPresetChangeCommHandler, this, _1, _2));
@@ -57,9 +57,7 @@ void CPModern::initDevice(DeviceType deviceType)
     PR = new Preamp(this);
     PA = new PowerAmp(this);
     IR = new CabSim(this);
-    // HPF = new HiPassFilter(this);
-    EQ = new EqParametric(this, EqParametric::EqMode::Modern);
-    // LPF = new LowPassFilter(this);
+    EQ = new EqParametric(this, EqParametric::EqMode::Modern, 0);
     ER = new EarlyReflections(this);
 
     m_moduleList.append(NG);
@@ -126,7 +124,7 @@ void CPModern::pushReadPresetCommands()
 {
     emit sgPushCommandToQueue("gb");
     emit sgPushCommandToQueue("rn");
-    emit sgPushCommandToQueue("gs");
+    emit sgPushCommandToQueue("state");
 }
 
 QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
@@ -225,7 +223,7 @@ void CPModern::comparePreset()
 {
     if(m_presetManager.currentState() != PresetState::Compare)
     {
-        emit sgPushCommandToQueue("gs");
+        emit sgPushCommandToQueue("state");
         emit sgPushCommandToQueue("esc");
     }
     else
@@ -244,7 +242,7 @@ void CPModern::copyPreset()
     if(actualPreset.wavSize() == 0)
         emit sgPushCommandToQueue("cc");
 
-    emit sgPushCommandToQueue("gs");
+    emit sgPushCommandToQueue("state");
     emit sgProcessCommands();
 }
 
@@ -319,7 +317,7 @@ void CPModern::exportPreset(QString filePath, QString fileName)
             QDir().mkpath(folderPath);
         }
 
-        emit sgPushCommandToQueue("gs");
+        emit sgPushCommandToQueue("state");
         actualPreset.setPathToExport(filePath);
         emit sgPushCommandToQueue("cc");
         emit sgProcessCommands();
@@ -434,11 +432,11 @@ void CPModern::setPresetData(const Preset &preset)
 {
     QByteArray ba;
 
-    ba.append("gs 1\r");
+    ba.append("state wr\r");
     ba.append(preset.rawData());
 
     emit sgPushCommandToQueue(ba);
-    emit sgPushCommandToQueue("gs"); // read settled state
+    emit sgPushCommandToQueue("state"); // read settled state
     emit sgProcessCommands();
 }
 
@@ -623,12 +621,10 @@ void CPModern::formatFinishedCommHandler(const QString &command, const QByteArra
     isFormatting = false;
 }
 
-//===========================================================
-// Legacy comm handlers
-//========================================================
-void CPModern::getStateCommHandler(const QString &command, const QByteArray &arguments)
+
+void CPModern::stateCommHandler(const QString &command, const QByteArray &arguments)
 {
-    if(arguments.size() < sizeof(preset_data_legacy_t)*2) return;
+    if(arguments.size() < sizeof(preset_data_t)*2) return;
 
     QByteArray baPresetData = arguments;
 
@@ -636,11 +632,7 @@ void CPModern::getStateCommHandler(const QString &command, const QByteArray &arg
     quint8 nomByte=0;
     QString curByte;
 
-    quint8 dataBuffer[256];
-
-    preset_data_legacy_t str;
-    memcpy(&str, baPresetData.data(), sizeof(preset_data_legacy_t));
-
+    quint8 dataBuffer[sizeof(preset_data_t)*2];
 
     foreach(QChar val, baPresetData) //quint8
     {
@@ -658,32 +650,18 @@ void CPModern::getStateCommHandler(const QString &command, const QByteArray &arg
         nomByte++;
     }
 
-    preset_data_legacy_t legacyData;
-    memcpy(&legacyData, dataBuffer, sizeof(preset_data_legacy_t));
+    preset_data_t presetData;
+    memcpy(&presetData, dataBuffer, sizeof(preset_data_t));
 
-    MV->setValue(legacyData.preset_volume);
+    MV->setValue(presetData.volume);
 
-    NG->setValues(legacyData.gate_on, legacyData.gate_threshold, legacyData.gate_decay);
-    CM->setValues(legacyData.compressor_on, legacyData.compressor_sustain, legacyData.compressor_volume);
-    PR->setValues(legacyData.preamp_on, legacyData.preamp_volume, legacyData.preamp_low, legacyData.preamp_mid, legacyData.preamp_high);
-    PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
-
-    eq_t eqData;
-    for(int i=0; i<5; i++)
-    {
-        eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);
-        eqData.band_vol[i] = legacyData.eq_band_vol[i];
-        eqData.freq[i] = legacyData.eq_freq[i];
-        eqData.Q[i] = legacyData.eq_Q[i];
-    }
-    eqData.hp_freq = legacyData.hp_freq;
-    eqData.hp_on = legacyData.hp_on;
-    eqData.lp_freq = legacyData.lp_freq;
-    eqData.lp_on = legacyData.lp_on;
-    EQ->setBandsData(eqData);
-
-    IR->setEnabled(legacyData.cab_on);
-    ER->setValues(legacyData.early_on, legacyData.early_volume, legacyData.early_type);
+    NG->setValues(presetData.gate);
+    CM->setValues(presetData.compressor);
+    PR->setValues(presetData.preamp);
+    PA->setValues(presetData.power_amp);
+    EQ->setEqData(presetData.eq1);
+    IR->setEnabled(presetData.cab_sim_on);
+    ER->setValues(presetData.reverb);
 
     switch(m_presetManager.currentState())
     {
@@ -728,6 +706,9 @@ void CPModern::getStateCommHandler(const QString &command, const QByteArray &arg
     }
 }
 
+//===========================================================
+// Legacy comm handlers
+//========================================================
 void CPModern::getCCCommHandler(const QList<QByteArray> &arguments)
 {
     QByteArray impulseData;

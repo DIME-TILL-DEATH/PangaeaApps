@@ -40,9 +40,18 @@ void ControlValue::setDisplayValue(double newDisplayValue)
 
     double k2 = (m_minDisplayValue-m_maxDisplayValue)/(m_minControlValue-m_maxControlValue);
     double k1 = m_minDisplayValue-(m_minControlValue*k2);
-    quint8 controlValue = (m_displayValue - k1)/k2;
 
-    QString fullCommand = m_commandString + QString(" %1\r\n").arg(controlValue, 0, 16); //\r
+    QString fullCommand;
+    if(m_maxControlValue>0xFF)
+    {
+        quint16 controlValue = (m_displayValue - k1)/k2;
+        fullCommand = m_commandString + QString(" %1\r\n").arg(controlValue, 0, 16);
+    }
+    else
+    {
+        quint8 controlValue = (m_displayValue - k1)/k2;
+        fullCommand = m_commandString + QString(" %1\r\n").arg(controlValue, 0, 16);
+    }
 
     if(buffer.isEmpty())
     {

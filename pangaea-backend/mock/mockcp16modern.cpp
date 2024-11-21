@@ -15,7 +15,7 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
     m_parser.addCommandHandler("amtver", std::bind(&MockCP16Modern::amtVerCommHandler, this, _1, _2));
     m_parser.addCommandHandler("gb", std::bind(&MockCP16Modern::bankPresetCommHandler, this, _1, _2));
     m_parser.addCommandHandler("gm", std::bind(&MockCP16Modern::outputModeCommHandler, this,  _1, _2));
-    m_parser.addCommandHandler("gs", std::bind(&MockCP16Modern::getStateCommHandler, this,  _1, _2));
+    m_parser.addCommandHandler("state", std::bind(&MockCP16Modern::stateCommHandler, this,  _1, _2));
     m_parser.addCommandHandler("rn", std::bind(&MockCP16Modern::getImpulseNameCommHandler, this, _1, _2));
 
     m_parser.addCommandHandler("rns", std::bind(&MockCP16Modern::getRnsCommHandler, this, _1, _2));
@@ -31,46 +31,46 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
     m_parser.addCommandHandler("fwu", std::bind(&MockCP16Modern::startFwUpdateCommHandler, this, _1, _2));
 
     //--------------------------params handler----------------------
+    m_parser.addCommandHandler("eq0", std::bind(&MockCP16Modern::eqParametersCommHandler, this, _1, _2));
 
-    setParamsHandler("mv", &currentPresetData.preset_volume);   // Type::MASTER_VOLUME: fullString += "mv";
+    setParamsHandler("mv", &currentPresetData.volume);   // Type::MASTER_VOLUME: fullString += "mv";
 
-    setParamsHandler("eo", &currentPresetData.early_on);        // Type::EARLY_ON: fullString += "eo";
-    setParamsHandler("ev", &currentPresetData.early_volume);    // Type::EARLY_VOLUME: fullString += "ev";
-    setParamsHandler("et", &currentPresetData.early_type);      // Type::EARLY_TYPE: fullString += "et";
+    setParamsHandler("eo", &currentPresetData.reverb.on);        // Type::EARLY_ON: fullString += "eo";
+    setParamsHandler("ev", &currentPresetData.reverb.volume);    // Type::EARLY_VOLUME: fullString += "ev";
+    setParamsHandler("et", &currentPresetData.reverb.type);      // Type::EARLY_TYPE: fullString += "et";
 
-    setParamsHandler("ce", &currentPresetData.cab_on);          // Type::CABINET_ENABLE: fullString += "ce";
+    setParamsHandler("ce", &currentPresetData.cab_sim_on);          // Type::CABINET_ENABLE: fullString += "ce";
 
-    setParamsHandler("ao", &currentPresetData.amp_on);          // case Type::AMP_ON: fullString += "ao";
-    setParamsHandler("av", &currentPresetData.amp_volume);      // case Type::AMP_VOLUME: fullString += "av";
-    setParamsHandler("as", &currentPresetData.amp_slave);       // case Type::AMP_SLAVE: fullString += "as";
-    setParamsHandler("at", &currentPresetData.amp_type);        // case Type::AMP_TYPE: fullString += "at";
+    setParamsHandler("ao", &currentPresetData.power_amp.on);          // case Type::AMP_ON: fullString += "ao";
+    setParamsHandler("av", &currentPresetData.power_amp.volume);      // case Type::AMP_VOLUME: fullString += "av";
+    setParamsHandler("as", &currentPresetData.power_amp.slave);       // case Type::AMP_SLAVE: fullString += "as";
+    setParamsHandler("at", &currentPresetData.power_amp.type);        // case Type::AMP_TYPE: fullString += "at";
+    setParamsHandler("pv", &currentPresetData.power_amp.presence_vol);    // Type::PRESENCE_VOLUME: fullString += "pv";
 
-    setParamsHandler("pro", &currentPresetData.preamp_on);      // Type::PREAMP_ON: fullString += "pro";
-    setParamsHandler("prv", &currentPresetData.preamp_volume);  // Type::PREAMP_VOLUME: fullString += "prv";
-    setParamsHandler("prl", &currentPresetData.preamp_low);     // Type::PREAMP_LOW: fullString += "prl";
-    setParamsHandler("prm", &currentPresetData.preamp_mid);     // Type::PREAMP_MID: fullString += "prm";
-    setParamsHandler("prh", &currentPresetData.preamp_high);    // Type::PREAMP_HIGH: fullString += "prh";
+    setParamsHandler("pro", &currentPresetData.preamp.on);      // Type::PREAMP_ON: fullString += "pro";
+    setParamsHandler("prv", &currentPresetData.preamp.volume);  // Type::PREAMP_VOLUME: fullString += "prv";
+    setParamsHandler("prl", &currentPresetData.preamp.low);     // Type::PREAMP_LOW: fullString += "prl";
+    setParamsHandler("prm", &currentPresetData.preamp.mid);     // Type::PREAMP_MID: fullString += "prm";
+    setParamsHandler("prh", &currentPresetData.preamp.high);    // Type::PREAMP_HIGH: fullString += "prh";
 
-    setParamsHandler("go", &currentPresetData.gate_on);         // Type::GATE_ON: fullString += "go";
-    setParamsHandler("gt", &currentPresetData.gate_threshold);  // Type::GATE_THRESHOLD: fullString += "gt";
-    setParamsHandler("gd", &currentPresetData.gate_decay);      // Type::GATE_DECAY: fullString += "gd";
+    setParamsHandler("go", &currentPresetData.gate.on);         // Type::GATE_ON: fullString += "go";
+    setParamsHandler("gt", &currentPresetData.gate.threshold);  // Type::GATE_THRESHOLD: fullString += "gt";
+    setParamsHandler("gd", &currentPresetData.gate.decay);      // Type::GATE_DECAY: fullString += "gd";
 
-    setParamsHandler("co", &currentPresetData.compressor_on);       // Type::COMPRESSOR_ON: fullString += "co";
-    setParamsHandler("cs", &currentPresetData.compressor_sustain);  // Type::COMPRESSOR_SUSTAIN: fullString += "cs";
-    setParamsHandler("cv", &currentPresetData.compressor_volume);   // Type::COMPRESSOR_VOLUME: fullString += "cv";
+    setParamsHandler("co", &currentPresetData.compressor.on);       // Type::COMPRESSOR_ON: fullString += "co";
+    setParamsHandler("cs", &currentPresetData.compressor.sustain);  // Type::COMPRESSOR_SUSTAIN: fullString += "cs";
+    setParamsHandler("cv", &currentPresetData.compressor.volume);   // Type::COMPRESSOR_VOLUME: fullString += "cv";
 
-    setParamsHandler("lv", &currentPresetData.lp_freq);     // Type::LPF_VOLUME: fullString += "lv";
-    setParamsHandler("hv", &currentPresetData.hp_freq);     // Type::HPF_VOLUME: fullString += "hv";
-    setParamsHandler("ho", &currentPresetData.hp_on);       // Type::HPF_ON: fullString += "ho";
-    setParamsHandler("lo", &currentPresetData.lp_on);       // Type::LPF_ON: fullString += "lo";
-    setParamsHandler("po", &currentPresetData.presence_on);     // Type::PRESENCE_ON: fullString += "po";
-    setParamsHandler("pv", &currentPresetData.presence_vol);    // Type::PRESENCE_VOLUME: fullString += "pv";
+    // обратная совместимость
+    setParamsHandler("lv", &currentPresetData.eq1.lp_freq);     // Type::LPF_VOLUME: fullString += "lv";
+    setParamsHandler("hv", &currentPresetData.eq1.hp_freq);     // Type::HPF_VOLUME: fullString += "hv";
+    setParamsHandler("ho", &currentPresetData.eq1.hp_on);       // Type::HPF_ON: fullString += "ho";
+    setParamsHandler("lo", &currentPresetData.eq1.lp_on);       // Type::LPF_ON: fullString += "lo";
 
-    setParamsHandler("eqo", &currentPresetData.eq_on);          // Type::EQ_ON: fullString += "eqo";
-    setEqHandler("eqv", currentPresetData.eq_band_vol);     // Type::EQ_VOLUME1: fullString += "eqv 0";
-    setEqHandler("eqf", currentPresetData.eq_freq);         // Type::EQ_FREQ1: fullString += "eqf 0";
-    setEqHandler("eqq", currentPresetData.eq_Q);            // Type::EQ_Q1: fullString += "eqq 0";
-    setParamsHandler("eqp", &currentPresetData.eq_pre);     // Type::EQ_PRE: fullString += "eqp";
+    // setParamsHandler("eqo", &currentPresetData.eq1.parametric_on);          // Type::EQ_ON: fullString += "eqo";
+    // setEqHandler("eqv", currentPresetData.eq1.band_vol);     // Type::EQ_VOLUME1: fullString += "eqv 0";
+    // // setEqHandler("eqf", currentPresetData.eq1.freq);         // Type::EQ_FREQ1: fullString += "eqf 0";
+    // setEqHandler("eqq", currentPresetData.eq1.Q);            // Type::EQ_Q1: fullString += "eqq 0";
 
     //--------------------------------------------------------------
 
@@ -85,8 +85,10 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
         systemFile.close();
     }
 
-    loadPresetData(m_bank, m_preset, &currentPresetData);
-
+    save_data_t saveData{0};
+    loadPresetData(m_bank, m_preset, &saveData);
+    currentPresetName = QString(saveData.name);
+    memcpy(&currentPresetData, &saveData.parametersData, sizeof(preset_data_t));
 }
 
 void MockCP16Modern::writeToDevice(const QByteArray &data)
@@ -134,7 +136,7 @@ void MockCP16Modern::initFolders()
 #endif
     if(!QDir(basePath).exists()) QDir().mkpath(basePath);
 
-    basePath += "virtual_CP16";
+    basePath += "virtual_CP16Modern";
 
     if(!QDir(basePath).exists()) QDir().mkpath(basePath);
 
@@ -196,7 +198,7 @@ bool MockCP16Modern::saveSysParameters()
     system_parameters_t sysParameters;
     memset(&sysParameters, 0, sizeof(system_parameters_t));
     sysParameters.output_mode = m_outputMode;
-    QString ver("1.04.04");
+    QString ver("2.01.00");
     memcpy(sysParameters.firmware_version, ver.data(), ver.size());
 
     if(systemFile.open(QIODevice::WriteOnly))
@@ -211,30 +213,47 @@ bool MockCP16Modern::saveSysParameters()
     else return false;
 }
 
-bool MockCP16Modern::loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t *presetData)
+bool MockCP16Modern::loadPresetData(quint8 prBank, quint8 prPreset, save_data_t *presetSavedData)
 {
     QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
-    QFile presetFile(dirPath + "/preset.pan");
+    QFile presetFile(dirPath + "/preset.pa2");
     if(presetFile.open(QIODevice::ReadOnly))
     {
-        QByteArray readedData = presetFile.read(sizeof(preset_data_legacy_t));
-        memcpy(presetData, readedData.data(), sizeof(preset_data_legacy_t));
+        QByteArray readedData = presetFile.read(sizeof(save_data_t));
+        memcpy(presetSavedData, readedData.data(), sizeof(save_data_t));
         presetFile.close();
         return true;
     }
-    else return false;
+    else
+    {
+        QFile presetFile(dirPath + "/preset.pan");
+        if(presetFile.open(QIODevice::ReadOnly))
+        {
+            preset_data_legacy_t legacydata;
+            QByteArray readedData = presetFile.read(sizeof(preset_data_legacy_t));
+            memcpy(&legacydata, readedData.data(), sizeof(preset_data_legacy_t));
+            presetFile.close();
+            presetSavedData->parametersData = HardwarePreset::convertLegacyToModern(legacydata);
+            return true;
+        }
+        else
+        {
+            qWarning() << "MOCK DEVICE: can't open any preset file, b:" << prBank << "p:" << prPreset;
+            return false;
+        }
+    }
 }
 
-bool MockCP16Modern::savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t *presetData)
+bool MockCP16Modern::savePresetData(quint8 prBank, quint8 prPreset, const save_data_t* presetSaveData)
 {
     QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
-    QFile presetFile(dirPath + "/preset.pan");
+    QFile presetFile(dirPath + "/preset.pa2");
     if(presetFile.open(QIODevice::WriteOnly))
     {
-        char rawData[sizeof(preset_data_legacy_t)];
-        memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
+        char rawData[sizeof(save_data_t)];
+        memcpy(rawData, presetSaveData, sizeof(save_data_t));
 
-        presetFile.write(rawData, sizeof(preset_data_legacy_t));
+        presetFile.write(rawData, sizeof(save_data_t));
         presetFile.close();
         return true;
     }
@@ -274,16 +293,16 @@ void MockCP16Modern::outputModeCommHandler(const QString &command, const QByteAr
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Modern::getStateCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::stateCommHandler(const QString &command, const QByteArray &arguments)
 {
     if(arguments.size() == 0)
     {
-        quint8 rawData[sizeof(preset_data_legacy_t)];
-        memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
+        quint8 rawData[sizeof(preset_data_t)];
+        memcpy(rawData, &currentPresetData, sizeof(preset_data_t));
 
-        QByteArray baData = QString("gs\r").toUtf8();
+        QByteArray baData = QString("state\r").toUtf8();
 
-        for(int i=0; i < sizeof(preset_data_legacy_t);  i++)
+        for(int i=0; i < sizeof(preset_data_t);  i++)
         {
             QByteArray tempBa = QString().setNum(rawData[i], 16).toUtf8();
 
@@ -300,15 +319,15 @@ void MockCP16Modern::getStateCommHandler(const QString &command, const QByteArra
         if(argsList.size()>1)
         {
             qDebug() << "Mock device, set state arguments:" << argsList.at(1);
-            quint8 rawArr[sizeof(preset_data_legacy_t)];
+            quint8 rawArr[sizeof(preset_data_t)];
             for(int i = 0; i < argsList.at(1).size(); i += 2)
             {
                 QString chByte = QString(argsList.at(1).at(i)) + QString(argsList.at(1).at(i+1));
                 rawArr[i/2] = chByte.toInt(nullptr, 16);
             }
-            memcpy(&currentPresetData, rawArr, sizeof(preset_data_legacy_t));
+            memcpy(&currentPresetData, rawArr, sizeof(preset_data_t));
         }
-        emit answerReady("gs 1\rgsEND\n");
+        emit answerReady("state wr\r\n");
     }
 }
 
@@ -350,10 +369,10 @@ void MockCP16Modern::getRnsCommHandler(const QString &command, const QByteArray 
             answer += irName + "\n";
 
             QString enabled = "00";
-            preset_data_legacy_t presetData;
+            save_data_t presetData;
             if(loadPresetData(m_bank, m_preset, &presetData))
             {
-                enabled.setNum(presetData.cab_on);
+                enabled.setNum(presetData.parametersData.cab_sim_on);
                 enabled.prepend("0");
             }
 
@@ -366,7 +385,12 @@ void MockCP16Modern::getRnsCommHandler(const QString &command, const QByteArray 
 
 void MockCP16Modern::savePresetCommHandler(const QString &command, const QByteArray &arguments)
 {
-    savePresetData(m_bank, m_preset, &currentPresetData);
+    save_data_t saveData;
+
+    memcpy(&saveData.name, currentPresetName.data(), 64);
+    saveData.parametersData = currentPresetData;
+
+    savePresetData(m_bank, m_preset, &saveData);
     emit answerReady("sp\r\n");
 }
 
@@ -375,7 +399,10 @@ void MockCP16Modern::presetChangeCommHandler(const QString &command, const QByte
     m_bank = QString(arguments.at(0)).toInt(nullptr, 16);
     m_preset = QString(arguments.at(1)).toInt(nullptr, 16);
 
-    loadPresetData(m_bank, m_preset, &currentPresetData);
+    save_data_t saveData{};
+    loadPresetData(m_bank, m_preset, &saveData);
+    currentPresetName = QString(saveData.name);
+    memcpy(&currentPresetData, &saveData.parametersData, sizeof(preset_data_t));
 
     QString answer = QString("pc %1%2\rEND\n").arg(QString().setNum(m_bank, 16)).arg(QString().setNum(m_preset, 16));
     emit answerReady(answer.toUtf8());
@@ -400,14 +427,6 @@ void MockCP16Modern::setParamsHandler(QString commStr, quint8 *commPtr)
     paramsMap.insert(commStr, commPtr);
     using namespace std::placeholders;
     m_parser.addCommandHandler(commStr, std::bind(&MockCP16Modern::parametersCommHandler, this, _1, _2));
-
-}
-
-void MockCP16Modern::setEqHandler(QString commStr, quint8 *commPtr)
-{
-    paramsMap.insert(commStr, commPtr);
-    using namespace std::placeholders;
-    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Modern::eqParametersCommHandler, this, _1, _2));
 
 }
 
@@ -436,11 +455,57 @@ void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByte
     if(!correctedArgs.isEmpty())
     {
         QList<QByteArray> argsList = correctedArgs.split(' ');
-        paramPtr = paramsMap.value(command);
-        paramPtr += QString(argsList.at(0)).toInt(); // array address
-        if(argsList.size() > 1) *paramPtr = QString(argsList.at(1)).toInt(nullptr, 16);
+        if(argsList.size() < 3)
+        {
+            qWarning() << "MOCK DEVICE: incomplete eq args:" << argsList;
+        }
 
-        emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
+        qint8 band = -1;
+        if(argsList.at(0) == "b0") band=0;
+        if(argsList.at(0) == "b1") band=1;
+        if(argsList.at(0) == "b2") band=2;
+        if(argsList.at(0) == "b3") band=3;
+        if(argsList.at(0) == "b4") band=4;
+
+        qint8 val = argsList.at(2).toInt(nullptr, 16);
+        qint16 freqBand = argsList.at(2).toInt(nullptr, 16);
+        qDebug() << "Parsed int value: " << val << freqBand;
+
+        if(command == "eq0")
+        {
+            qDebug() << "eq0: " << argsList;
+            if(band != -1)
+            {
+                if(argsList.at(1) == "f") currentPresetData.eq1.freq[band] = freqBand;
+
+                if(argsList.at(1) == "g") {currentPresetData.eq1.gain[band] = val; qDebug() << "Set band, gain" << band << val;}
+
+                if(argsList.at(1) == "q") {currentPresetData.eq1.Q[band] = val; qDebug() << "Set band, Q" << band << val;}
+
+                if(argsList.at(1) == "t") {currentPresetData.eq1.band_type[band] = val; qDebug() << "Set band, type" << band << val;}
+            }
+            else
+            {
+                if(argsList.at(0) == "hp")
+                {
+                    if(argsList.at(1) == "o") currentPresetData.eq1.hp_on = val;
+                    if(argsList.at(1) == "f") currentPresetData.eq1.hp_freq = val;
+                }
+                if(argsList.at(0) == "lp")
+                {
+                    if(argsList.at(1) == "o") currentPresetData.eq1.lp_on = val;
+                    if(argsList.at(1) == "f") currentPresetData.eq1.lp_freq = val;
+                }
+                if(argsList.at(0) == "par")
+                {
+                    currentPresetData.eq1.parametric_on = val;
+                }
+            }
+        }
+        else
+        {
+            qDebug() << "eq1: " << argsList;
+        }
     }
 }
 

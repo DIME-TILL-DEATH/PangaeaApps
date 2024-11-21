@@ -5,6 +5,7 @@
 
 #include "abstractdevice.h"
 
+
 Preset::Preset(AbstractDevice *owner)
 {
     m_ownerDevice = owner;

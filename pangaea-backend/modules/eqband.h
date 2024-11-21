@@ -9,12 +9,13 @@
 
 #include "filtertypeenum.h"
 
+class EqParametric;
 class EqBand : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged FINAL)
-    Q_PROPERTY(FilterType filterType READ filterType WRITE setFilterType NOTIFY filterTypeChanged FINAL)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY bandParametersChanged FINAL)
+    Q_PROPERTY(FilterType filterType READ filterType WRITE setFilterType NOTIFY bandParametersChanged FINAL)
     Q_PROPERTY(ControlValue* Fc READ getFc CONSTANT)
     Q_PROPERTY(ControlValue* Q READ getQ CONSTANT)
     Q_PROPERTY(ControlValue* gain READ getGain CONSTANT)
@@ -22,7 +23,7 @@ class EqBand : public QObject
     Q_PROPERTY(QList<QPointF> bandPoints READ bandPoints NOTIFY bandPointsChanged)
 public:    
 
-    explicit EqBand(AbstractModule* ownerModule, FilterType bandType,
+    explicit EqBand(EqParametric* ownerModule, FilterType bandType,
                     double fStart, double fStop, int bandNum,
                     qint32 fControlStart = -100, qint32 fControlStop = 100);
 
@@ -34,7 +35,7 @@ public:
     ControlValue* getGain() const {return m_gain;};
     ControlValue* getQ() const {return m_Q;};
 
-    void setRawBandParams(FilterType bandType, quint16 gain, qint16 Fc, qint16 Q, bool enabled=true);
+    void setRawBandParams(FilterType bandType, qint16 gain, qint16 Fc, qint16 Q, bool enabled=true);
 
     double fStart() {return m_fStart;};
     double fStop() {return m_fStop;};
@@ -51,12 +52,12 @@ public:
     FilterType filterType() const {return m_filterType;};
 
 signals:
-    void filterTypeChanged();
+    void filterTypeChanged(int bandNum);
     void bandParametersChanged();
 
 
     void bandPointsChanged();
-    void enabledChanged();
+    void enabledChanged(int bandNum);
 
     void userModifiedBandParameters();
 
