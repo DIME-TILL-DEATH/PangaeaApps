@@ -5,7 +5,8 @@ OutputMode  1.0 OutputMode.qml
 CM	1.0 CM.qml
 EQExtLegacy  1.0 EQExtLegacy.qml
 EQExtModern  1.0 EQExtModern.qml
-EQPreview    1.0 EQPreview.qml
+EQPreviewLegacy    1.0 EQPreviewLegacy.qml
+EQPreviewModern    1.0 EQPreviewModern.qml
 ER      1.0 ER.qml
 HP      1.0 HP.qml
 IR      1.0 IR.qml

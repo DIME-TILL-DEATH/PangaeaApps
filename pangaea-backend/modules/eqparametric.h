@@ -35,6 +35,8 @@ public:
     EqBand* lpf() {return m_lpf;};
     EqBand* hpf() {return m_hpf;};
 
+    Q_INVOKABLE void reset();
+
 
 signals:
     void pointsChanged();

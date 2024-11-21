@@ -117,15 +117,9 @@ Item{
                         break;
                     }
 
-                    // case ModuleType.HP:
-                    // {
-                    //     _delegateLoader.source = "../Modules/HP.qml";
-                    //     _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
-                    //     break;
-                    // }
                     case ModuleType.EQ:
                     {
-                        _delegateLoader.source = "../Modules/EQPreview.qml";
+                        _delegateLoader.source = "../Modules/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
 
                         _eqExtLoader.source = "../Modules/EQExtModern.qml";
@@ -134,12 +128,6 @@ Item{
                         _eqExtLoader.item.eqModule = moduleInstance;
                         break;
                     }
-                    // case ModuleType.LP:
-                    // {
-                    //     _delegateLoader.source = "../Modules/LP.qml";
-                    //     _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
-                    //     break;
-                    // }
 
                     case ModuleType.ER:
                     {

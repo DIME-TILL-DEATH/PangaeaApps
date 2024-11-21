@@ -125,7 +125,7 @@ Item{
                     }
                     case ModuleType.EQ:
                     {
-                        _delegateLoader.source = "../Modules/EQPreview.qml";
+                        _delegateLoader.source = "../Modules/EQPreviewLegacy.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
 
                         _eqExtLoader.source = "../Modules/EQExtLegacy.qml";

@@ -54,7 +54,7 @@ Item
                     textButton: "EQ ON"
                     textColor: main.on ? Style.colorText : Style.currentTheme.colorTextDisabled
 
-                    width: parent.width/3
+                    width: parent.width * 2/5
                     height: parent.height
                     anchors.left: parent.left
 
@@ -66,9 +66,11 @@ Item
                 MButton{
                     textButton: qsTr("RESET")
 
-                    width: parent.width/3
+                    width: parent.width * 2/5
                     height: parent.height
                     anchors.right: parent.right
+
+                    onMbPressed: eqModule.reset()
                 }
             }
 

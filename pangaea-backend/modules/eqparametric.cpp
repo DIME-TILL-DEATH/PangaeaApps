@@ -45,6 +45,21 @@ double EqParametric::getEqResponse(double f)
     return response;
 }
 
+void EqParametric::reset()
+{
+    double defaultFrequencies[] = {120, 360, 800, 2000, 6000};
+
+    for(int i=0; i<5; i++)
+    {
+        EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
+
+        eqBand->setFilterType(FilterType::PEAKING);
+        eqBand->getFc()->setDisplayValue(defaultFrequencies[i]);
+        eqBand->getGain()->setDisplayValue(0);
+        eqBand->getQ()->setDisplayValue(0.8);
+    }
+}
+
 void EqParametric::hpfEnabledChanged()
 {
     emit m_owner->sgWriteToInterface(QString("ho " + QString("%1").arg(m_hpf->enabled()) + "\r\n").toUtf8());
