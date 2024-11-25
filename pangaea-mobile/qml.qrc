@@ -68,5 +68,6 @@
         <file>qml/ControlGroups/BPeakingShelfControl.qml</file>
         <file>qml/ControlGroups/BCutControl.qml</file>
         <file>qml/Modules/EQPreviewModern.qml</file>
+        <file>qml/Elements/CustomLogSlider.qml</file>
     </qresource>
 </RCC>

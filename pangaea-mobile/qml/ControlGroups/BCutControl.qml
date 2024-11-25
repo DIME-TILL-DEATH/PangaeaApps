@@ -14,7 +14,7 @@ Column
 
     spacing: parent.height/3
 
-    CustomSlider
+    CustomLogSlider
     {
         ctrlValInstance: eqBand.Fc
         moduleOn: eqBand.enabled

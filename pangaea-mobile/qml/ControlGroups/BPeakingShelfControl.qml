@@ -17,7 +17,7 @@ Column
 
     spacing: parent.height/12
 
-    CustomSlider
+    CustomLogSlider
     {
         ctrlValInstance: eqBand.Fc
         fontSize: 8 * Style.dip

@@ -26,8 +26,9 @@ Row{
     property bool bottomLineEnabled: true
 
     onCtrlValInstanceChanged: {
-        _slider.from = ctrlValInstance.minDisplayValue
-        _slider.to = ctrlValInstance.maxDisplayValue
+        _slider.fromLog = Math.log10(ctrlValInstance.minDisplayValue)
+        _slider.toLog = Math.log10(ctrlValInstance.maxDisplayValue)
+        _slider.value = (Math.log10(ctrlValInstance.displayValue) - _slider.fromLog)/_slider.scale + _slider.from
     }
 
     Slider
@@ -37,22 +38,31 @@ Row{
         width: parent.width - _editValueItem.width
         height: parent.height
 
+        from: 0
+        to: 10
 
-        from: ctrlValInstance.minDisplayValue
-        to: ctrlValInstance.maxDisplayValue
-        value: ctrlValInstance.displayValue
+        property real fromLog: Math.log10(ctrlValInstance.minDisplayValue);
+        property real toLog: Math.log10(ctrlValInstance.maxDisplayValue);
 
+        property real scale: (toLog-fromLog) / (to-from);
 
         onMoved:
         {
-            ctrlValInstance.displayValue = _slider.value;
+            ctrlValInstance.displayValue = Math.pow(10, fromLog + scale*(value-from));
             ctrlValInstance.isModified = true;
-
-            // _longPressTimer.restart()
         }
 
         leftPadding: 0
         rightPadding: 0
+
+        Connections{
+            target: ctrlValInstance
+
+            function onDisplayValueChanged()
+            {
+                _slider.value = (Math.log10(ctrlValInstance.displayValue) - _slider.fromLog)/_slider.scale + _slider.from
+            }
+        }
 
         ToolTip
         {
@@ -60,16 +70,8 @@ Row{
 
             parent: _slider.handle
             visible: _slider.pressed
-            text: _slider.value.toFixed(_root.precision)
+            text: ctrlValInstance.displayValue.toFixed(_root.precision)
             y : -40
-
-            // timeout: 5000
-            // MouseArea{
-            //     anchors.fill: parent
-            //     onClicked: {
-            //         _valueDialog.open()
-            //     }
-            // }
         }
 
         background: Rectangle
@@ -139,17 +141,6 @@ Row{
             z:1
         }
 
-        // MText
-        // {
-        //     id: textValue
-        //     anchors.fill: parent
-        //     text: value.toFixed(precision) + " " + units + " "
-        //     horizontalAlignment: Text.AlignRight
-        //     verticalAlignment: Text.AlignVCenter
-        //     color: moduleOn ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
-        //     z:1
-        // }
-
 
         EditValueDialog{
             id: _valueDialog
@@ -203,7 +194,7 @@ Row{
             id: textValue
             anchors.fill: parent
 
-            text: _slider.value.toFixed(precision) + " " + units + " "
+            text: ctrlValInstance.displayValue.toFixed(precision) + " " + units + " "
             font.pixelSize: fontSize
             font.bold: true
 
@@ -211,38 +202,6 @@ Row{
             verticalAlignment: TextInput.AlignVCenter
             color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
             z:1
-
-            // inputMethodHints: Qt.ImhFormattedNumbersOnly
-
-            // color: acceptableInput ? (moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled)
-            //                        : "red"
-
-            // validator: DoubleValidator{
-            //     bottom: ctrlValInstance.minDisplayValue
-            //     top: ctrlValInstance.maxDisplayValue
-            //     decimals: _root.precision
-
-            //     locale: "en"
-            // }
-
-            // на яндекс клавиатуре не выдаёт сигнал
-            // onAccepted: {
-            // }
-            // onEditingFinished:{
-            //     if(parseFloat(text) > _root.ctrlValInstance.maxDisplayValue) contentText = _root.ctrlValInstance.maxDisplayValue
-            //     if(parseFloat(text) < _root.ctrlValInstance.minDisplayValue) contentText = _root.ctrlValInstance.minDisplayValue
-
-            //     _root.ctrlValInstance.displayValue = text;
-            //     _root.ctrlValInstance.isModified = true;
-            // }
-
-            // onActiveFocusChanged: function(focusState){
-            //     if(parseFloat(text) > _root.ctrlValInstance.maxDisplayValue) text = _root.ctrlValInstance.maxDisplayValue
-            //     if(parseFloat(text) < _root.ctrlValInstance.minDisplayValue) text = _root.ctrlValInstance.minDisplayValue
-
-            //     _root.ctrlValInstance.displayValue = text;
-            //     _root.ctrlValInstance.isModified = true;
-            // }
         }
     }
 }
