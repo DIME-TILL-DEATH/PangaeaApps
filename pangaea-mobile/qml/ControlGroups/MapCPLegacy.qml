@@ -12,7 +12,8 @@ import CppEnums
 Item{
     id: _mapContent
 
-    // anchors.fill: parent
+    property int countElements: 25
+    property int masterControlsHeight: height*5/countElements
 
     property alias modulesModel: listViewModules.model
 
@@ -175,7 +176,7 @@ Item{
 
         visible: false
 
-        height: parent.height/1.5
+        height: parent.height/1.2
         width:  parent.width*0.95
         z: parent.z+1
     }

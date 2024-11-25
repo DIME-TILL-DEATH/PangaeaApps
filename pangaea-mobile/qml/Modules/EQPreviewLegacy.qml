@@ -151,7 +151,7 @@ BaseModule{
                     width: Style.mainSpacing
                     height: parent.height
 
-                    color: main.on ? Style.colorText : Style.currentTheme.colorTextDisabled
+                    color: main.on ? Style.currentTheme.colorBorderOn : Style.currentTheme.colorTextDisabled
                 }
 
                 Item{

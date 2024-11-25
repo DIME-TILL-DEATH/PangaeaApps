@@ -39,10 +39,38 @@ Item
         Column
         {
             width: parent.width/10*9
-            height: parent.height/10*8
+            height: parent.height/10*9
             anchors.centerIn: parent
 
-            spacing: height/36
+            spacing: height/45
+
+            Item {
+                width: parent.width
+                height: parent.height/15
+
+                MButton{
+                    textButton: "EQ ON"
+                    textColor: main.on ? Style.colorText : Style.currentTheme.colorTextDisabled
+
+                    width: parent.width * 2/5
+                    height: parent.height
+                    anchors.left: parent.left
+
+                    highlighted: main.on
+
+                    onMbPressed: eqModule.moduleEnabled = !eqModule.moduleEnabled
+                }
+
+                MButton{
+                    textButton: qsTr("RESET")
+
+                    width: parent.width * 2/5
+                    height: parent.height
+                    anchors.right: parent.right
+
+                    onMbPressed: eqModule.reset()
+                }
+            }
 
             Item {
                 width: parent.width
@@ -217,7 +245,7 @@ Item
 
             Item{
                 width: parent.width*0.9
-                height: parent.height*1/10
+                height: parent.height*1/15
 
                 MText{
                     anchors.verticalCenter: parent.verticalCenter
@@ -233,18 +261,23 @@ Item
             CustomSlider
             {
                 ctrlValInstance: eqModule.EqBands[currentBandIndex].Fc
+
+                height: parent.height*1/15
             }
 
             CustomSlider
             {
                 ctrlValInstance: eqModule.EqBands[currentBandIndex].gain
 
+                height: parent.height*1/15
             }
 
             CustomSlider
             {
                 ctrlValInstance: eqModule.EqBands[currentBandIndex].Q
                 precision: 1
+
+                height: parent.height*1/15
             }
 
             Button
@@ -252,7 +285,7 @@ Item
                 id: btn
 
                 width: parent.width
-                height: parent.height*2/15
+                height: parent.height*1/15
 
                 text: qsTr("HIDE")
 

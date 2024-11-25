@@ -12,7 +12,8 @@ import CppEnums
 Item{
     id: _mapContent
 
-    // anchors.fill: parent
+    property int countElements: 25
+    property int masterControlsHeight: height*5/countElements
 
     property alias modulesModel: listViewModules.model
 
@@ -51,12 +52,68 @@ Item{
             }
         }
 
+        Rectangle {
+            id: _presetNameContainer
+
+            width: parent.width
+            height: _main.height/countElements
+            color: Style.colorModul
+
+            clip: true
+
+            radius: Style.baseRadius
+            border.width: 1
+            border.color: Style.currentTheme.colorBorderOn
+
+            Item {
+                id: _contentItem
+
+                anchors.fill: parent
+                anchors.rightMargin: parent.width/50
+                anchors.leftMargin: parent.width/50
+                anchors.bottomMargin: 3
+                anchors.topMargin: 3
+
+                MText{
+                    width: parent.width * 0.9
+                    elide: Text.ElideRight
+                    text: qsTr("Preset name: ") + UiCore.currentDevice.currentPresetName
+                    color: Style.colorText
+                }
+            }
+
+            MouseArea{
+                anchors.fill: parent
+
+                onClicked: _presetNameDialog.open();
+            }
+
+            EditTextDialog
+            {
+                id: _presetNameDialog
+
+                contentText: UiCore.currentDevice.currentPresetName
+
+                headerText: qsTr("Set preset name")
+                text: qsTr("Set name for current preset:")
+
+                onAccepted:
+                {
+                    UiCore.currentDevice.currentPresetName = contentText;
+                }
+                onRejected:
+                {
+                    contentText = UiCore.currentDevice.currentPresetName;
+                }
+            }
+        }
+
 
         ListView
         {
             id: listViewModules
             width: parent.width
-            height: parent.height - masterControlsHeight - _moduleColumn.spacing
+            height: parent.height - masterControlsHeight - _presetNameContainer.height //- _moduleColumn.spacing
             spacing: 2
 
             model: UiCore.currentDevice.modulesListModel;
