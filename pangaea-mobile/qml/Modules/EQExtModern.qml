@@ -228,6 +228,9 @@ Item
 
                     property var startPinchQ
 
+                    enabled: (eqModule.EqBands[currentBandIndex].filterType !== FilterType.HIGH_CUT) &
+                             (eqModule.EqBands[currentBandIndex].filterType !== FilterType.LOW_CUT)
+
                     onPinchStarted: {
                         startPinchQ = eqModule.EqBands[currentBandIndex].Q.displayValue;
                     }
