@@ -177,6 +177,17 @@ VOLUME: Sets the output volume. It can be used to compensate for signal attenuat
     </message>
 </context>
 <context>
+    <name>EQExtModern</name>
+    <message>
+        <source>RESET</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HIDE</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EQPreviewLegacy</name>
     <message>
         <source>Equalizer</source>
@@ -188,6 +199,29 @@ VOLUME: Sets the output volume. It can be used to compensate for signal attenuat
     </message>
     <message>
         <source>POST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Parametric EQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This effect block provides 5-band parametric equalizer for fine-tuning your tone.
+
+Parameters for each band:
+
+FREQUENCY: Central frequency of the band.
+
+GAIN: Amplification/attenuation factor of the band.
+
+Q(quality): Bandwidth - the area around the set frequency that the EQ will amplify or attenuate.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EQPreviewModern</name>
+    <message>
+        <source>Equalizer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -365,6 +399,21 @@ TYPE: There are 3 types of the effect to choose from:
     <message>
         <source>Select IR</source>
         <translation type="vanished">IR auswählen</translation>
+    </message>
+</context>
+<context>
+    <name>MapCPModern</name>
+    <message>
+        <source>Preset name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set preset name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set name for current preset:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

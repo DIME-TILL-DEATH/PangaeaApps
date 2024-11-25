@@ -177,6 +177,17 @@ VOLUME: Sets the output volume. It can be used to compensate for signal attenuat
     </message>
 </context>
 <context>
+    <name>EQExtModern</name>
+    <message>
+        <source>RESET</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HIDE</source>
+        <translation>ЗАКРЫТЬ</translation>
+    </message>
+</context>
+<context>
     <name>EQPreviewLegacy</name>
     <message>
         <source>Equalizer</source>
@@ -188,6 +199,29 @@ VOLUME: Sets the output volume. It can be used to compensate for signal attenuat
     </message>
     <message>
         <source>POST</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Parametric EQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This effect block provides 5-band parametric equalizer for fine-tuning your tone.
+
+Parameters for each band:
+
+FREQUENCY: Central frequency of the band.
+
+GAIN: Amplification/attenuation factor of the band.
+
+Q(quality): Bandwidth - the area around the set frequency that the EQ will amplify or attenuate.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EQPreviewModern</name>
+    <message>
+        <source>Equalizer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -318,31 +352,31 @@ TYPE: There are 3 types of the effect to choose from:
     <name>IR</name>
     <message>
         <source>Impulse response</source>
-        <translation type="unfinished">Импульс</translation>
+        <translation>Импульс</translation>
     </message>
     <message>
         <source>empty</source>
-        <translation type="unfinished">пусто</translation>
+        <translation>пусто</translation>
     </message>
     <message>
         <source>Not supported format</source>
-        <translation type="unfinished">Неподдерживаемый формат</translation>
+        <translation>Неподдерживаемый формат</translation>
     </message>
     <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
-        <translation type="unfinished">Pangaea не поддерживает данный формат:</translation>
+        <translation>Pangaea не поддерживает данный формат:</translation>
     </message>
     <message>
         <source>Do you want to convert it before upload?</source>
-        <translation type="unfinished">Конвертировать файл перед загрузкой?</translation>
+        <translation>Конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
         <source>Impulse responce(cabinet simulator)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Impulse Response or IR is a sonic fingerprint of a certain speaker, cabinet, mic, mic preamp and room where the profile was captured.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -394,6 +428,21 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <message>
         <source>Select IR</source>
         <translation type="vanished">Выберите файл импульса гитарного кабинета</translation>
+    </message>
+</context>
+<context>
+    <name>MapCPModern</name>
+    <message>
+        <source>Preset name: </source>
+        <translation>Имя пресета: </translation>
+    </message>
+    <message>
+        <source>Set preset name</source>
+        <translation>Установка имени пресета</translation>
+    </message>
+    <message>
+        <source>Set name for current preset:</source>
+        <translation>Укажите имя для пресета:</translation>
     </message>
 </context>
 <context>
@@ -633,7 +682,7 @@ VOLUME: Output signal level.</source>
     </message>
     <message>
         <source>L: Processed/R: Monitor</source>
-        <translation>Л: Обработанный/П: Мониторный</translation>
+        <translation>Л: Обраб./П: Мониторн.</translation>
     </message>
 </context>
 <context>
