@@ -5,22 +5,10 @@
 
 #include "abstractdevice.h"
 
-
 Preset::Preset(AbstractDevice *owner)
 {
     m_ownerDevice = owner;
     m_rawData.append(sizeof(preset_data_t) * 2, '0');
-}
-
-quint8 Preset::presetNumber() const
-{
-    return m_presetNumber;
-}
-
-void Preset::setBankPreset(quint8 newBankNumber, quint8 newPresetNumber)
-{
-    m_bankNumber = newBankNumber;
-    m_presetNumber = newPresetNumber;
 }
 
 bool Preset::importData(QString filePath)
@@ -54,7 +42,6 @@ bool Preset::importData(QString filePath)
         return false;
     }
 }
-
 
 QByteArray Preset::readPresetChunck(const QByteArray &fileData, QString &chunkName)
 {
@@ -131,31 +118,6 @@ void Preset::writePresetChunk(QByteArray &fileData, QString &chunkName, const QB
     fileData.append(chunkData);
 }
 
-quint8 Preset::bankNumber() const
-{
-    return m_bankNumber;
-}
-
-const QByteArray &Preset::rawData() const
-{
-    return m_rawData;
-}
-
-void Preset::setRawData(const QByteArray &newRawData)
-{
-    m_rawData = newRawData;
-}
-
-const QString &Preset::impulseName() const
-{
-    return m_impulseName;
-}
-
-void Preset::setImpulseName(const QString &newImpulseName)
-{
-    m_impulseName = newImpulseName;
-}
-
 quint8 Preset::calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, quint8 presetNumber)
 {
     if(deviceType==DeviceType::legacyCP100 || (deviceType==DeviceType::legacyCP100PA))
@@ -164,11 +126,11 @@ quint8 Preset::calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, qui
         return (bankNumber<<4) + presetNumber;
 }
 
-quint8 Preset::getPresetFlatIndex() const
-{
-    // return calcPresetFlatIndex(m_ownerDevice->deviceType(), m_bankNumber, m_presetNumber);
-    return 0;
-}
+// quint8 Preset::getPresetFlatIndex() const
+// {
+//     // return calcPresetFlatIndex(m_ownerDevice->deviceType(), m_bankNumber, m_presetNumber);
+//     return 0;
+// }
 
 quint8 Preset::getPresetFlatNumber() const
 {
@@ -189,27 +151,80 @@ quint8 Preset::getPresetFlatNumber() const
 bool Preset::isIrEnabled() const
 {
     //TODO переделать на запрос и установку любого параметра из/в rawData
-    int result = m_rawData.at(17)-'0';
-    return result;
+
+    switch (m_ownerDevice->deviceClass())
+    {
+    case DeviceClass::CP_MODERN:
+        preset_data_t presetData;
+        presetData = charsToPresetData(m_rawData);
+        // memcpy(&actualData, m_rawData.data(), sizeof(preset_data_t));
+        qDebug() << __FUNCTION__ << m_rawData << "b:" << m_bankNumber << "p:" << m_presetNumber << "s:" <<  presetData.cab_sim_on;
+        return presetData.cab_sim_on;
+    default:
+        int result = m_rawData.at(17)-'0';
+        return result;
+    }
 }
 
 void Preset::setIsIrEnabled(bool newIsIrEnabled)
 {
-    char resCh = newIsIrEnabled ? '1' : '0';
-    QByteArray tmpBa;
-    tmpBa.append(resCh);
-
-    m_rawData.replace(17, 1, tmpBa);
+    switch (m_ownerDevice->deviceClass())
+    {
+    case DeviceClass::CP_MODERN:
+    {
+        preset_data_t presetData{0};
+        presetData = charsToPresetData(m_rawData);
+        // memcpy(&actualData, m_rawData.data(), sizeof(preset_data_t));
+        presetData.cab_sim_on = newIsIrEnabled;
+        // memcpy(m_rawData.data(), &actualData, sizeof(preset_data_t));
+        m_rawData = presetDatatoChars(presetData);
+        // qDebug() << __FUNCTION__ << "After: " << m_rawData;
+        break;
+    }
+    default:
+    {
+        char resCh = newIsIrEnabled ? '1' : '0';
+        QByteArray tmpBa;
+        tmpBa.append(resCh);
+        m_rawData.replace(17, 1, tmpBa);
+        break;
+    }
+    }
 }
 
-const QByteArray &Preset::waveData() const
+void Preset::clearWavData()
 {
-    return m_waveData;
+    m_waveData.clear();
+    m_impulseName.clear();
 }
 
-const QString &Preset::pathToExport() const
+preset_data_t Preset::charsToPresetData(const QByteArray &ba)
 {
-    return m_pathToExport;
+    preset_data_t presetData;
+    quint8 rawArr[sizeof(preset_data_t)];
+    for(int i = 0; i < ba.size(); i += 2)
+    {
+        QString chByte = QString(ba.at(i)) + QString(ba.at(i+1));
+        rawArr[i/2] = chByte.toInt(nullptr, 16);
+    }
+    memcpy(&presetData, rawArr, sizeof(preset_data_t));
+    return presetData;
+}
+
+QByteArray Preset::presetDatatoChars(const preset_data_t &presetData)
+{
+    quint8 buffer[sizeof(preset_data_t)];
+    memcpy(buffer, &presetData, sizeof(preset_data_t));
+    QByteArray baData;
+
+    for(int i=0; i < sizeof(preset_data_t);  i++)
+    {
+        QByteArray tempBa = QString().setNum(buffer[i], 16).toUtf8();
+
+        if(tempBa.size() == 1) tempBa.push_front("0");
+        baData.append(tempBa);
+    }
+    return baData;
 }
 
 void Preset::setPathToExport(const QString &newPathToExport)
@@ -222,15 +237,25 @@ void Preset::setWaveData(const QByteArray &newWaveData)
     m_waveData = newWaveData;
 }
 
-void Preset::clearWavData()
+void Preset::setPresetName(const QString &newPresetName)
 {
-    m_waveData.clear();
-    m_impulseName.clear();
+    m_presetName = newPresetName;
 }
 
-quint32 Preset::wavSize() const
+void Preset::setBankPreset(quint8 newBankNumber, quint8 newPresetNumber)
 {
-    return m_waveData.size();
+    m_bankNumber = newBankNumber;
+    m_presetNumber = newPresetNumber;
+}
+
+void Preset::setRawData(const QByteArray &newRawData)
+{
+    m_rawData = newRawData;
+}
+
+void Preset::setImpulseName(const QString &newImpulseName)
+{
+    m_impulseName = newImpulseName;
 }
 
 // Device *Preset::ownerDevice() const

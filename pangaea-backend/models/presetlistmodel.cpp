@@ -40,7 +40,8 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
     {
         case ListRoles::PresetNameRole:
         {
-            return QVariant::fromValue("Preset " + QString().setNum(m_presetList->at(index.row()).presetNumber()));
+            // return QVariant::fromValue("Preset " + QString().setNum(m_presetList->at(index.row()).presetNumber()) + ": " + m_presetList->at(index.row()).presetName());
+            return QVariant::fromValue(m_presetList->at(index.row()).presetName());
         }
 
         case ListRoles::BankNumberRole:
@@ -53,10 +54,10 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
             return QVariant::fromValue(QString().setNum(m_presetList->at(index.row()).presetNumber()));
         }
 
-        case ListRoles::PresetDeviceIndexRole:
-        {
-            return QVariant::fromValue(QString().setNum(m_presetList->at(index.row()).getPresetFlatIndex()));
-        }
+        // case ListRoles::PresetDeviceIndexRole:
+        // {
+        //     return QVariant::fromValue(QString().setNum(m_presetList->at(index.row()).getPresetFlatIndex()));
+        // }
 
         case ListRoles::PresetMapIndexRole:
         {

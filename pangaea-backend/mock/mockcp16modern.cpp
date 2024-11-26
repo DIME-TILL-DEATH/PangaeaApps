@@ -16,9 +16,10 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
     m_parser.addCommandHandler("gb", std::bind(&MockCP16Modern::bankPresetCommHandler, this, _1, _2));
     m_parser.addCommandHandler("gm", std::bind(&MockCP16Modern::outputModeCommHandler, this,  _1, _2));
     m_parser.addCommandHandler("state", std::bind(&MockCP16Modern::stateCommHandler, this,  _1, _2));
+    m_parser.addCommandHandler("pname", std::bind(&MockCP16Modern::pnameCommHandler, this, _1, _2));
     m_parser.addCommandHandler("rn", std::bind(&MockCP16Modern::getImpulseNameCommHandler, this, _1, _2));
 
-    m_parser.addCommandHandler("rns", std::bind(&MockCP16Modern::getRnsCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("plist", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2));
 
     m_parser.addCommandHandler("sp", std::bind(&MockCP16Modern::savePresetCommHandler, this, _1, _2));
     m_parser.addCommandHandler("pc", std::bind(&MockCP16Modern::presetChangeCommHandler, this, _1, _2));
@@ -233,6 +234,7 @@ bool MockCP16Modern::loadPresetData(quint8 prBank, quint8 prPreset, save_data_t 
             QByteArray readedData = presetFile.read(sizeof(preset_data_legacy_t));
             memcpy(&legacydata, readedData.data(), sizeof(preset_data_legacy_t));
             presetFile.close();
+            memset(presetSavedData->name, 0, 64);
             presetSavedData->parametersData = HardwarePreset::convertLegacyToModern(legacydata);
             return true;
         }
@@ -293,24 +295,23 @@ void MockCP16Modern::outputModeCommHandler(const QString &command, const QByteAr
     emit answerReady(answer.toUtf8());
 }
 
+void MockCP16Modern::pnameCommHandler(const QString &command, const QByteArray &arguments)
+{
+    if(arguments.size()>0)
+    {
+        currentPresetName = arguments;
+    }
+    QString answer = "pname\r" + currentPresetName + "\n";
+    emit answerReady(answer.toUtf8());
+}
+
 void MockCP16Modern::stateCommHandler(const QString &command, const QByteArray &arguments)
 {
     if(arguments.size() == 0)
     {
-        quint8 rawData[sizeof(preset_data_t)];
-        memcpy(rawData, &currentPresetData, sizeof(preset_data_t));
-
         QByteArray baData = QString("state\r").toUtf8();
-
-        for(int i=0; i < sizeof(preset_data_t);  i++)
-        {
-            QByteArray tempBa = QString().setNum(rawData[i], 16).toUtf8();
-
-            if(tempBa.size() == 1) tempBa.push_front("0");
-            baData.append(tempBa);
-        }
+        baData.append(Preset::presetDatatoChars(currentPresetData));
         baData.append("\n");
-
         emit answerReady(baData);
     }
     else
@@ -319,13 +320,7 @@ void MockCP16Modern::stateCommHandler(const QString &command, const QByteArray &
         if(argsList.size()>1)
         {
             qDebug() << "Mock device, set state arguments:" << argsList.at(1);
-            quint8 rawArr[sizeof(preset_data_t)];
-            for(int i = 0; i < argsList.at(1).size(); i += 2)
-            {
-                QString chByte = QString(argsList.at(1).at(i)) + QString(argsList.at(1).at(i+1));
-                rawArr[i/2] = chByte.toInt(nullptr, 16);
-            }
-            memcpy(&currentPresetData, rawArr, sizeof(preset_data_t));
+            currentPresetData = Preset::charsToPresetData(argsList.at(1));
         }
         emit answerReady("state wr\r\n");
     }
@@ -348,15 +343,15 @@ void MockCP16Modern::getImpulseNameCommHandler(const QString &command, const QBy
     emit answerReady(baData);
 }
 
-void MockCP16Modern::getRnsCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByteArray &arguments)
 {
-    QString answer("rns\r");
+    QString answer("plist\r");
 
     for(int b = 0; b <4; b++)
     {
         for(int p=0; p<4; p++)
         {
-            QString irName = "*";
+            QString irName;// = "*";
             QString dirPath = basePath + "/bank_" + QString().setNum(b) + "/preset_" + QString().setNum(p);
             QDir presetDir(dirPath);
             presetDir.setNameFilters({"*.wav"});
@@ -366,28 +361,33 @@ void MockCP16Modern::getRnsCommHandler(const QString &command, const QByteArray 
             {
                 irName = filesInDir.first().fileName();
             }
-            answer += irName + "\n";
+            answer += irName + "|";
 
             QString enabled = "00";
+            QString presetName;
             save_data_t presetData;
-            if(loadPresetData(m_bank, m_preset, &presetData))
+            if(loadPresetData(b, p, &presetData))
             {
                 enabled.setNum(presetData.parametersData.cab_sim_on);
                 enabled.prepend("0");
+
+                presetName = presetData.name;
             }
 
-            answer += enabled + "\n";
+            answer += enabled + "|";
+            answer += presetName + "\r";
         }
     }
-    answer += "END\n";
+    answer += "\n";
     emit answerReady(answer.toUtf8());
 }
 
 void MockCP16Modern::savePresetCommHandler(const QString &command, const QByteArray &arguments)
 {
     save_data_t saveData;
+    QByteArray bytesName = currentPresetName.toUtf8();
 
-    memcpy(&saveData.name, currentPresetName.data(), 64);
+    memcpy(&saveData.name, bytesName.data(), 64);
     saveData.parametersData = currentPresetData;
 
     savePresetData(m_bank, m_preset, &saveData);
@@ -399,7 +399,7 @@ void MockCP16Modern::presetChangeCommHandler(const QString &command, const QByte
     m_bank = QString(arguments.at(0)).toInt(nullptr, 16);
     m_preset = QString(arguments.at(1)).toInt(nullptr, 16);
 
-    save_data_t saveData{};
+    save_data_t saveData{0};
     loadPresetData(m_bank, m_preset, &saveData);
     currentPresetName = QString(saveData.name);
     memcpy(&currentPresetData, &saveData.parametersData, sizeof(preset_data_t));
@@ -469,20 +469,15 @@ void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByte
 
         qint8 val = argsList.at(2).toInt(nullptr, 16);
         qint16 freqBand = argsList.at(2).toInt(nullptr, 16);
-        qDebug() << "Parsed int value: " << val << freqBand;
 
         if(command == "eq0")
         {
-            qDebug() << "eq0: " << argsList;
             if(band != -1)
             {
                 if(argsList.at(1) == "f") currentPresetData.eq1.freq[band] = freqBand;
-
-                if(argsList.at(1) == "g") {currentPresetData.eq1.gain[band] = val; qDebug() << "Set band, gain" << band << val;}
-
-                if(argsList.at(1) == "q") {currentPresetData.eq1.Q[band] = val; qDebug() << "Set band, Q" << band << val;}
-
-                if(argsList.at(1) == "t") {currentPresetData.eq1.band_type[band] = val; qDebug() << "Set band, type" << band << val;}
+                if(argsList.at(1) == "g") currentPresetData.eq1.gain[band] = val;
+                if(argsList.at(1) == "q") currentPresetData.eq1.Q[band] = val;
+                if(argsList.at(1) == "t") currentPresetData.eq1.band_type[band] = val;
             }
             else
             {
@@ -504,7 +499,30 @@ void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByte
         }
         else
         {
-            qDebug() << "eq1: " << argsList;
+            if(band != -1)
+            {
+                if(argsList.at(1) == "f") currentPresetData.eq2.freq[band] = freqBand;
+                if(argsList.at(1) == "g") currentPresetData.eq2.gain[band] = val;
+                if(argsList.at(1) == "q") currentPresetData.eq2.Q[band] = val;
+                if(argsList.at(1) == "t") currentPresetData.eq2.band_type[band] = val;
+            }
+            else
+            {
+                if(argsList.at(0) == "hp")
+                {
+                    if(argsList.at(1) == "o") currentPresetData.eq2.hp_on = val;
+                    if(argsList.at(1) == "f") currentPresetData.eq2.hp_freq = val;
+                }
+                if(argsList.at(0) == "lp")
+                {
+                    if(argsList.at(1) == "o") currentPresetData.eq2.lp_on = val;
+                    if(argsList.at(1) == "f") currentPresetData.eq2.lp_freq = val;
+                }
+                if(argsList.at(0) == "par")
+                {
+                    currentPresetData.eq2.parametric_on = val;
+                }
+            }
         }
     }
 }

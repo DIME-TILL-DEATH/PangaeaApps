@@ -351,7 +351,7 @@ void MockCP16Legacy::getRnsCommHandler(const QString &command, const QByteArray 
 
             QString enabled = "00";
             preset_data_legacy_t presetData;
-            if(loadPresetData(m_bank, m_preset, &presetData))
+            if(loadPresetData(b, p, &presetData))
             {
                 enabled.setNum(presetData.cab_on);
                 enabled.prepend("0");

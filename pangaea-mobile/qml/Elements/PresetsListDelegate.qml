@@ -39,7 +39,7 @@ Rectangle{
             id: _presetNameContainer
 
             Layout.preferredWidth: parent.width
-            Layout.preferredHeight: _presetNameText.textHeight*1.4
+            Layout.preferredHeight: _presetNameText.contentHeight * 1.4
             Layout.columnSpan: 2
             Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
             Layout.fillWidth: true
@@ -51,7 +51,7 @@ Rectangle{
 
                 property int la3Preset: (Number(bankNumber)*4 + Number(presetNumber));
 
-                text: "Preset " + presetNumber //(DeviceProperties.isLa3Mode ? la3Preset : presetNumber)
+                text: "Preset " + presetNumber + ": " + presetName//(DeviceProperties.isLa3Mode ? la3Preset : presetNumber)
                 font.pixelSize: 8 * Style.dip
                 color: Style.colorText
 

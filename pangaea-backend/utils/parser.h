@@ -29,7 +29,7 @@ private:
 
     QString m_parserName;
 
-    bool fullEndModeEnabled{true};
+    bool fullEndModeEnabled{false};
 
     QMap<QString, std::function<void(const QString& command, const QByteArray&)> > m_callbacks;
 

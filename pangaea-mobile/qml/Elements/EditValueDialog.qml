@@ -76,7 +76,9 @@ CustomMessageDialog
     }
 
     onOpened: {
-        contentText = controlValue.displayValue.toFixed(precision)
+        contentText = controlValue.displayValue.toFixed(precision);
+        _textField.focus = true
+        _textField.selectAll();
     }
 
     onAccepted: {

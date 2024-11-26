@@ -13,9 +13,6 @@ Item
 {
     id: _main
 
-    property int countElements: 25
-    property int masterControlsHeight: height*5/countElements
-
     Rectangle
     {
         anchors.fill: parent

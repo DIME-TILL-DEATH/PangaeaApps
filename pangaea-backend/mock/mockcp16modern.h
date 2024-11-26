@@ -33,9 +33,10 @@ private:
     void amtVerCommHandler(const QString &command, const QByteArray& arguments);
     void bankPresetCommHandler(const QString &command, const QByteArray& arguments);
     void outputModeCommHandler(const QString &command, const QByteArray& arguments);
+    void pnameCommHandler(const QString &command, const QByteArray& arguments);
     void stateCommHandler(const QString &command, const QByteArray& arguments);
     void getImpulseNameCommHandler(const QString &command, const QByteArray& arguments);
-    void getRnsCommHandler(const QString &command, const QByteArray& arguments);
+    void getPresetListCommHandler(const QString &command, const QByteArray& arguments);
 
     void savePresetCommHandler(const QString &command, const QByteArray& arguments);
     void presetChangeCommHandler(const QString &command, const QByteArray& arguments);

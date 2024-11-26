@@ -16,18 +16,16 @@
 #include "preamp.h"
 #include "poweramp.h"
 #include "cabsim.h"
-#include "hipassfilter.h"
 #include "eqparametric.h"
-#include "lowpassfilter.h"
 #include "earlyreflections.h"
 
-#include "maskedparser.h"
 
 class CPModern : public AbstractDevice
 {
     Q_OBJECT
 
     Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
+    Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
 public:
     CPModern(Core *parent);
 
@@ -51,11 +49,14 @@ public:
 
     PresetVolume* getMV() {return MV;};
 
+    QString currentPresetName() const {return actualPreset.presetName();};
+    void setCurrentPresetName(const QString &newCurrentPresetName);
+
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
     Q_INVOKABLE void formatMemory() override;
 
     // avaliable modules
-    // вынести создание наружу?
+    // вынести создание наружу? DependencyContainer
     // public для тестов
     PresetVolume* MV;
     Compressor* CM;
@@ -63,24 +64,24 @@ public:
     Preamp* PR;
     PowerAmp* PA;
     CabSim* IR;
-    // HiPassFilter* HPF;
     EqParametric* EQ;
-    // LowPassFilter* LPF;
     EarlyReflections* ER;
+
+
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
 
 signals:
 
+    void currentPresetNameChanged();
+
 private:
     IRWorker irWorker;
-
     QSettings* appSettings;
 
     void setDeviceType(DeviceType newDeviceType);
 
     void pushReadPresetCommands();
-
 
     void setPresetData(const Preset &preset);
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
@@ -89,10 +90,12 @@ private:
 
     void amtVerCommHandler(const QString &command, const QByteArray &arguments);
     void getIrNameCommHandler(const QString &command, const QByteArray &arguments);
-    void getIrListCommHandler(const QString &command, const QByteArray &arguments);
+    void irCommHandler(const QString &command, const QByteArray &arguments);
+    void getPresetListCommHandler(const QString &command, const QByteArray &arguments);
 
     void getBankPresetCommHandler(const QString &command, const QByteArray &arguments);
     void getOutputModeCommHandler(const QString &command, const QByteArray &arguments);
+    void pnameCommHandler(const QString &command, const QByteArray &arguments);
     void stateCommHandler(const QString &command, const QByteArray &arguments);
 
     void ackEscCommHandler(const QString &command, const QByteArray &arguments);

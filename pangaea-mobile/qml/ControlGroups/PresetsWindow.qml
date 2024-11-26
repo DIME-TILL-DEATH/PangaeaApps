@@ -57,8 +57,8 @@ CustomMessageDialog {
         Button{ //MButton
             text: qsTr("HIDE")
 
-            width: parent.width*0.3
-            height: parent.height*0.7
+            width: parent.width*0.8
+            height: parent.height*0.6
 
             anchors.centerIn: parent
 
