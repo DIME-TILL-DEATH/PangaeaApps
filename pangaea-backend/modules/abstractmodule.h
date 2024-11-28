@@ -4,6 +4,8 @@
 #include <QObject>
 
 #include "moduletypeenum.h"
+#include "hardwarepreset.h"
+
 
 class AbstractDevice;
 

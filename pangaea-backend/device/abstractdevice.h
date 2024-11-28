@@ -148,16 +148,12 @@ protected:
     quint8 m_maxBankCount{4};
     quint8 m_maxPresetCount{4};
 
-    Preset actualPreset{this};
-    Preset savedPreset{this}; // TODO живёт в модели
-    Preset copiedPreset{this};
     PresetManager m_presetManager{this};
 
-    QList<AbstractModule*> m_moduleList;
-    QList<Preset> m_presetsList;
-
-    ModulesListModel m_modulesListModel{this};
     PresetListModel m_presetListModel{this};
+
+    QList<AbstractModule*> m_moduleList;
+    ModulesListModel m_modulesListModel{this};
 
     bool fwUpdate{false};
     bool isFormatting{false};

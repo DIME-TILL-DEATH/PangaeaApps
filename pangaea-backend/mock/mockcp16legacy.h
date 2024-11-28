@@ -3,8 +3,8 @@
 
 #include "abstractmockdevice.h"
 
-#include "preset.h"
-
+#include "presetlegacy.h"
+#include "hardwarepreset.h"
 
 
 class MockCP16Legacy : public AbstractMockDevice
@@ -26,37 +26,37 @@ private:
     bool loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t* presetData);
     bool savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t* presetData);
 
-    void amtDevCommHandler(const QString &command, const QByteArray& arguments);
-    void amtVerCommHandler(const QString &command, const QByteArray& arguments);
-    void bankPresetCommHandler(const QString &command, const QByteArray& arguments);
-    void outputModeCommHandler(const QString &command, const QByteArray& arguments);
-    void getStateCommHandler(const QString &command, const QByteArray& arguments);
-    void getImpulseNameCommHandler(const QString &command, const QByteArray& arguments);
-    void getRnsCommHandler(const QString &command, const QByteArray& arguments);
+    void amtDevCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void amtVerCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void bankPresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void outputModeCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void getStateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void getImpulseNameCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void getRnsCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
-    void savePresetCommHandler(const QString &command, const QByteArray& arguments);
-    void presetChangeCommHandler(const QString &command, const QByteArray& arguments);
+    void savePresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void presetChangeCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
-    void formatMemoryCommHandler(const QString &command, const QByteArray& arguments);
+    void formatMemoryCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
-    void ccCommHandler(const QString &command, const QByteArray& arguments);
+    void ccCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
-    void escAckCommHandler(const QString &command, const QByteArray& arguments);
+    void escAckCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     // Parameters comm handlers
     QMap<QString, quint8*> paramsMap;
     void setParamsHandler(QString commStr, quint8* commPtr);
     void setEqHandler(QString commStr, quint8* commPtr);
-    void parametersCommHandler(const QString &command, const QByteArray& arguments);
+    void parametersCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
-    void eqParametersCommHandler(const QString &command, const QByteArray& arguments);
+    void eqParametersCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     // fw update simulation
     bool fwUpdateMode{false};
     QByteArray fwPart;
     QFile fwFile;
     int fwChunkSize;
-    void startFwUpdateCommHandler(const QString &command, const QByteArray& arguments);
+    void startFwUpdateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 };
 
 #endif // MOCKCP16LEGACY_H

@@ -16,7 +16,7 @@ public:
 
     QList<QByteArray> parseNewData(const QByteArray& newData);
 
-    void addCommandHandler(const QString& command, std::function<void (const QString &, const QByteArray &)> callback);
+    void addCommandHandler(const QString& command, std::function<void (const QString &, const QByteArray &, const QByteArray&)> callback);
     void addCureParser(QString comm, MaskedParser* parser);
 
     // Костыль для старого формата rns
@@ -31,7 +31,7 @@ private:
 
     bool fullEndModeEnabled{false};
 
-    QMap<QString, std::function<void(const QString& command, const QByteArray&)> > m_callbacks;
+    QMap<QString, std::function<void(const QString& command, const QByteArray&, const QByteArray&)> > m_callbacks;
 
     // cure for non-\n commands
     QList<QPair<QString, MaskedParser*> > m_mskParserList;

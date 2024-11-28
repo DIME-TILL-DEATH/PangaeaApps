@@ -5,7 +5,6 @@
 #include "abstractmodule.h"
 #include "controlvalue.h"
 
-#include "preset.h"
 
 class Compressor : public AbstractModule
 {

@@ -5,6 +5,7 @@ import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 
+import CustomOverlays 1.0
 import ControlGroups 1.0
 import Modules 1.0
 import Elements 1.0

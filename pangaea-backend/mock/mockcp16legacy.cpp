@@ -11,24 +11,24 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
     initFolders();
 
     using namespace std::placeholders;
-    m_parser.addCommandHandler("amtdev", std::bind(&MockCP16Legacy::amtDevCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("amtver", std::bind(&MockCP16Legacy::amtVerCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("gb", std::bind(&MockCP16Legacy::bankPresetCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("gm", std::bind(&MockCP16Legacy::outputModeCommHandler, this,  _1, _2));
-    m_parser.addCommandHandler("gs", std::bind(&MockCP16Legacy::getStateCommHandler, this,  _1, _2));
-    m_parser.addCommandHandler("rn", std::bind(&MockCP16Legacy::getImpulseNameCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("amtdev", std::bind(&MockCP16Legacy::amtDevCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("amtver", std::bind(&MockCP16Legacy::amtVerCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("gb", std::bind(&MockCP16Legacy::bankPresetCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("gm", std::bind(&MockCP16Legacy::outputModeCommHandler, this,  _1, _2, _3));
+    m_parser.addCommandHandler("gs", std::bind(&MockCP16Legacy::getStateCommHandler, this,  _1, _2, _3));
+    m_parser.addCommandHandler("rn", std::bind(&MockCP16Legacy::getImpulseNameCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("rns", std::bind(&MockCP16Legacy::getRnsCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("rns", std::bind(&MockCP16Legacy::getRnsCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("sp", std::bind(&MockCP16Legacy::savePresetCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("pc", std::bind(&MockCP16Legacy::presetChangeCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("sp", std::bind(&MockCP16Legacy::savePresetCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("pc", std::bind(&MockCP16Legacy::presetChangeCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("cc", std::bind(&MockCP16Legacy::ccCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("cc", std::bind(&MockCP16Legacy::ccCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("esc", std::bind(&MockCP16Legacy::escAckCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("esc", std::bind(&MockCP16Legacy::escAckCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("fsf", std::bind(&MockCP16Legacy::formatMemoryCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("fwu", std::bind(&MockCP16Legacy::startFwUpdateCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("fsf", std::bind(&MockCP16Legacy::formatMemoryCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("fwu", std::bind(&MockCP16Legacy::startFwUpdateCommHandler, this, _1, _2, _3));
 
     //--------------------------params handler----------------------
 
@@ -245,17 +245,17 @@ bool MockCP16Legacy::savePresetData(quint8 prBank, quint8 prPreset, const preset
 //===========================================================================================
 //  base comm handlers
 //===========================================================================================
-void MockCP16Legacy::amtDevCommHandler(const QString &command, const QByteArray& arguments)
+void MockCP16Legacy::amtDevCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)
 {
     emit answerReady(QString("amtdev\r3\nEND\n").toUtf8());
 }
 
-void MockCP16Legacy::amtVerCommHandler(const QString &command, const QByteArray& arguments)
+void MockCP16Legacy::amtVerCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)
 {
     emit answerReady(QString("amtver\r1.04.04\nEND\n").toUtf8());
 }
 
-void MockCP16Legacy::bankPresetCommHandler(const QString &command, const QByteArray& arguments)
+void MockCP16Legacy::bankPresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)
 {
     QString answer = QString("gb\r")
                     + QString("0%1").arg(m_bank)
@@ -263,7 +263,7 @@ void MockCP16Legacy::bankPresetCommHandler(const QString &command, const QByteAr
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Legacy::outputModeCommHandler(const QString &command, const QByteArray& arguments)
+void MockCP16Legacy::outputModeCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)
 {
     if(arguments.size()>0)
     {
@@ -274,7 +274,7 @@ void MockCP16Legacy::outputModeCommHandler(const QString &command, const QByteAr
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArray& arguments)
+void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)
 {
     if(arguments.size() == 0)
     {
@@ -312,7 +312,7 @@ void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArra
     }
 }
 
-void MockCP16Legacy::getImpulseNameCommHandler(const QString &command, const QByteArray& arguments)
+void MockCP16Legacy::getImpulseNameCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)
 {
     QString impulseName = "";
 
@@ -329,7 +329,7 @@ void MockCP16Legacy::getImpulseNameCommHandler(const QString &command, const QBy
     emit answerReady(baData);
 }
 
-void MockCP16Legacy::getRnsCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::getRnsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QString answer("rns\r");
 
@@ -364,13 +364,13 @@ void MockCP16Legacy::getRnsCommHandler(const QString &command, const QByteArray 
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Legacy::savePresetCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::savePresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     savePresetData(m_bank, m_preset, &currentPresetData);
     emit answerReady("sp\r\n");
 }
 
-void MockCP16Legacy::presetChangeCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::presetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     m_bank = QString(arguments.at(0)).toInt(nullptr, 16);
     m_preset = QString(arguments.at(1)).toInt(nullptr, 16);
@@ -381,7 +381,7 @@ void MockCP16Legacy::presetChangeCommHandler(const QString &command, const QByte
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QString dirPath = m_basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/";
     if(arguments.size() == 0)
@@ -436,62 +436,59 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
         // file upload(preview and save)
         QByteArray answer("CC ");
 
-        QList<QByteArray> splitBa = arguments.split('\r');
-        if(splitBa.size() > 1)
+        QByteArray commArgs = arguments;
+        QByteArray fileData = data.left(data.size()-1); // отрезать последнюю \r
+
+        QList<QByteArray> argsArr = commArgs.split(' ');
+        if(argsArr.size() > 1)
         {
-            QByteArray commArgs = splitBa.at(0);
-            QByteArray fileData = splitBa.at(1);
-
-            QList<QByteArray> argsArr = commArgs.split(' ');
-            if(argsArr.size() > 1)
+            QString fileName = argsArr.at(0);
+            qint8 mode = QString(argsArr.at(1)).toInt();
+            qDebug() << "Save parameters" << fileName << mode;
+            if(mode == 0)
             {
-                QString fileName = argsArr.at(0);
-                qint8 mode = QString(argsArr.at(1)).toInt();
-                qDebug() << fileName << mode;
-                if(mode == 0)
+                QDir presetDir(dirPath);
+                presetDir.setNameFilters({"*.wav"});
+
+                QFileInfoList wavsInDir = presetDir.entryInfoList();
+                if(!wavsInDir.empty())
                 {
-                    QDir presetDir(dirPath);
-                    presetDir.setNameFilters({"*.wav"});
-
-                    QFileInfoList wavsInDir = presetDir.entryInfoList();
-                    if(!wavsInDir.empty())
+                    foreach(QFileInfo curFileInfo, wavsInDir)
                     {
-                        foreach(QFileInfo curFileInfo, wavsInDir)
-                        {
-                            QFile wavFile(curFileInfo.absoluteFilePath());
-                            qDebug() << curFileInfo.absoluteFilePath() << "removed" << wavFile.remove();;
-                        }
-                    }
-
-                    QFile irFile(dirPath + fileName);
-                    if(irFile.open(QIODevice::WriteOnly))
-                    {
-                        QByteArray convertedFileData;
-
-                        for(int i=0; i<fileData.size(); i+=2)
-                        {
-                            QString chStr(QString(fileData.at(i)) + QString(fileData.at(i+1)));
-                            convertedFileData.append(chStr.toInt(nullptr, 16));
-                        }
-
-                        irFile.write(convertedFileData);
-                        irFile.close();
+                        QFile wavFile(curFileInfo.absoluteFilePath());
+                        qDebug() << curFileInfo.absoluteFilePath() << "removed" << wavFile.remove();;
                     }
                 }
-                answer += fileName.toUtf8() + " " + QString().setNum(mode).toUtf8();
+
+                QFile irFile(dirPath + fileName);
+                if(irFile.open(QIODevice::WriteOnly))
+                {
+                    QByteArray convertedFileData;
+
+                    for(int i=0; i<fileData.size(); i+=2)
+                    {
+                        QString chStr(QString(fileData.at(i)) + QString(fileData.at(i+1)));
+                        convertedFileData.append(chStr.toInt(nullptr, 16));
+                    }
+
+                    irFile.write(convertedFileData);
+                    irFile.close();
+                }
             }
+            answer += fileName.toUtf8() + " " + QString().setNum(mode).toUtf8();
         }
+
         answer += "\rccEND\n";
         emit answerReady(answer);
     }
 }
 
-void MockCP16Legacy::escAckCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::escAckCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     emit answerReady("esc\r\n");
 }
 
-void MockCP16Legacy::formatMemoryCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::formatMemoryCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QDir homeDir(m_basePath);
     homeDir.removeRecursively();
@@ -504,17 +501,17 @@ void MockCP16Legacy::setParamsHandler(QString commStr, quint8 *commPtr)
 {
     paramsMap.insert(commStr, commPtr);
     using namespace std::placeholders;
-    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Legacy::parametersCommHandler, this, _1, _2));
+    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Legacy::parametersCommHandler, this, _1, _2, _3));
 }
 
 void MockCP16Legacy::setEqHandler(QString commStr, quint8* commPtr)
 {
     paramsMap.insert(commStr, commPtr);
     using namespace std::placeholders;
-    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Legacy::eqParametersCommHandler, this, _1, _2));
+    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Legacy::eqParametersCommHandler, this, _1, _2, _3));
 }
 
-void MockCP16Legacy::parametersCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::parametersCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     quint8* paramPtr = paramsMap.value(command);
 
@@ -528,7 +525,7 @@ void MockCP16Legacy::parametersCommHandler(const QString &command, const QByteAr
     emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
 }
 
-void MockCP16Legacy::eqParametersCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::eqParametersCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     quint8* paramPtr = nullptr;
 
@@ -546,7 +543,7 @@ void MockCP16Legacy::eqParametersCommHandler(const QString &command, const QByte
     }
 }
 
-void MockCP16Legacy::startFwUpdateCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Legacy::startFwUpdateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     fwUpdateMode = true;
     fwChunkSize = QString(arguments).toInt();

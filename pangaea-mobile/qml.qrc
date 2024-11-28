@@ -26,15 +26,12 @@
         <file>qml/Pages/MapPage.qml</file>
         <file>qml/Pages/qmldir</file>
         <file>qml/Pages/ServicePage.qml</file>
-        <file>qml/Elements/BusyScreen.qml</file>
         <file>qml/ControlGroups/qmldir</file>
         <file>images/AMT.svg</file>
         <file>images/AMT (Fixed by Ivan).svg</file>
-        <file>qml/Elements/CustomMessageDialog.qml</file>
         <file>qml/StyleSettings/Theme.qml</file>
         <file>qml/Pages/SettingsPage.qml</file>
         <file>qml/Elements/MRadioButton.qml</file>
-        <file>qml/Elements/FirmwareLoadingWindow.qml</file>
         <file>qml/Modules/PS.qml</file>
         <file>images/Arrow Gear new.svg</file>
         <file>images/(V).svg</file>
@@ -45,7 +42,6 @@
         <file>qml/Elements/CustomProgressBar.qml</file>
         <file>qml/ControlGroups/PresetsWindow.qml</file>
         <file>qml/ControlGroups/DocumentationWindow.qml</file>
-        <file>qml/Elements/EditTextDialog.qml</file>
         <file>qml/Elements/MComboBox.qml</file>
         <file>qml/Modules/EQPreviewLegacy.qml</file>
         <file>qml/Elements/EqPoint.qml</file>
@@ -62,12 +58,17 @@
         <file>qml/Tutorials/SimpleTutorialMessage.qml</file>
         <file>qml/ControlGroups/MapCPLegacy.qml</file>
         <file>qml/ControlGroups/MapCPModern.qml</file>
-        <file>qml/Elements/EditValueDialog.qml</file>
         <file>qml/Modules/EQExtModern.qml</file>
         <file>qml/ControlGroups/BPeakingControl.qml</file>
         <file>qml/ControlGroups/BPeakingShelfControl.qml</file>
         <file>qml/ControlGroups/BCutControl.qml</file>
         <file>qml/Modules/EQPreviewModern.qml</file>
         <file>qml/Elements/CustomLogSlider.qml</file>
+        <file>qml/CustomOverlays/BusyScreen.qml</file>
+        <file>qml/CustomOverlays/CustomMessageDialog.qml</file>
+        <file>qml/CustomOverlays/EditTextDialog.qml</file>
+        <file>qml/CustomOverlays/EditValueDialog.qml</file>
+        <file>qml/CustomOverlays/FirmwareLoadingWindow.qml</file>
+        <file>qml/CustomOverlays/qmldir</file>
     </qresource>
 </RCC>

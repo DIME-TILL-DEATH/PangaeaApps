@@ -25,7 +25,9 @@ qt_add_library(pangaea-backend STATIC
 
     device/deviceanswer.cpp device/deviceanswer.h
     device/firmware.cpp device/firmware.h
-    device/preset.cpp device/preset.h
+    device/presetlegacy.cpp device/presetlegacy.h
+    device/presetmodern.h device/presetmodern.cpp
+    device/presetabstract.h device/presetabstract.cpp
     device/deviceparameter.h device/deviceparameter.cpp
     device/abstractdevice.h device/abstractdevice.cpp
     device/cplegacy.h device/cplegacy.cpp

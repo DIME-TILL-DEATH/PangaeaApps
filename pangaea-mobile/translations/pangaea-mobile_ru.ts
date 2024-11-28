@@ -175,6 +175,10 @@ VOLUME: Sets the output volume. It can be used to compensate for signal attenuat
         <source>HIDE</source>
         <translation type="unfinished">ЗАКРЫТЬ</translation>
     </message>
+    <message>
+        <source>RESET</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>EQExtModern</name>

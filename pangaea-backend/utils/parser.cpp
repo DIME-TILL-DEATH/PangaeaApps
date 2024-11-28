@@ -58,38 +58,53 @@ QList<QByteArray> Parser::parseNewData(const QByteArray &newData)
         QByteArray readedLine = m_buffer.left(lineSepPos);
         m_buffer.remove(0, lineSepPos + commSeparator.size());
 
-        int commTabSepPos = readedLine.indexOf("\r");
-        int commSpaceSepPos = readedLine.indexOf(" ");
-        int commSepPosition;
-
-        if(commSpaceSepPos>0 && commTabSepPos > commSpaceSepPos) commSepPosition = commSpaceSepPos;
-        else commSepPosition = commTabSepPos;
-
-        // if(sepPosition == -1) continue;
+        int commSepPosition = readedLine.indexOf("\r");
 
         QString command;
+        QString commandAndArgs;
         QByteArray arguments;
+        QByteArray data;
         if(commSepPosition>-1)
         {
-            command = readedLine.left(commSepPosition);
-            arguments = readedLine.right(readedLine.size() - commSepPosition - 1);
+            commandAndArgs = readedLine.left(commSepPosition);
+            data = readedLine.right(readedLine.size() - commSepPosition - 1);
+
+            int argSepPos = commandAndArgs.indexOf(" ");
+            if(argSepPos>-1)
+            {
+                command = readedLine.left(argSepPos);
+                arguments = readedLine.mid(argSepPos+1, readedLine.size() - data.size() - command.size() - 2);
+            }
+            else
+            {
+                command = readedLine.left(commSepPosition);
+            }
         }
         else
         {
-            command = readedLine;
+            int argSepPos = readedLine.indexOf(" ");
+            if(argSepPos>-1)
+            {
+                command = readedLine.left(argSepPos);
+                arguments = readedLine.right(readedLine.size() - argSepPos - 1);
+            }
+            else
+            {
+                command = readedLine;
+            }
         }
+        // qDebug() << m_parserName << " --> command: " << command << "arguments: " << arguments << "data: " << data;
 
-        // qDebug() << m_parserName << " --> command: " << command << "arguments: " << arguments;
         recievedCommands.append(command.toUtf8());
-        std::function<void (const QString& command, const QByteArray &)> callback = m_callbacks.value(command);
+        std::function<void (const QString& command, const QByteArray &, const QByteArray&)> callback = m_callbacks.value(command);
 
-        if(callback) callback(command, arguments);
+        if(callback) callback(command, arguments, data);
     }while(lineSepPos != -1);
 
     return recievedCommands;
 }
 
-void Parser::addCommandHandler(const QString &command,  std::function<void (const QString& command, const QByteArray &)> callback)
+void Parser::addCommandHandler(const QString &command,  std::function<void (const QString &, const QByteArray &, const QByteArray &)> callback)
 {
 
     m_callbacks.insert(command, callback);

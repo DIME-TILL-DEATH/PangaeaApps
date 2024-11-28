@@ -7,7 +7,7 @@
 
 #include "irworker.h"
 
-#include "preset.h"
+#include "presetlegacy.h"
 
 #include "presetvolume.h"
 #include "compressor.h"
@@ -33,6 +33,7 @@ class CPLegacy : public AbstractDevice
     Q_PROPERTY(bool isPreEq READ isPreEq WRITE setIsPreEq NOTIFY isPreEqChanged FINAL)
 public:
     explicit CPLegacy(Core *parent);
+    ~CPLegacy();
 
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
@@ -85,6 +86,10 @@ signals:
 private:
     IRWorker irWorker;
 
+    QList<PresetAbstract*> m_presetsList;
+    PresetLegacy actualPreset{this};
+    PresetLegacy savedPreset{this}; // TODO используется из листа
+    PresetLegacy copiedPreset{this};
 
     bool m_isPreEq{false};
     bool m_isPaFw{false};
@@ -96,24 +101,24 @@ private:
     void pushReadPresetCommands();
 
 
-    void setPresetData(const Preset &preset);
+    void setPresetData(const PresetLegacy &preset);
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
 
     void uploadFirmware(const QByteArray& fwData);
 
     void arrangePrePost();
 
-    void amtVerCommHandler(const QString &command, const QByteArray &arguments);
-    void getIrNameCommHandler(const QString &command, const QByteArray &arguments);
-    void getIrListCommHandler(const QString &command, const QByteArray &arguments);
+    void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void getIrNameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void getIrListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
-    void getBankPresetCommHandler(const QString &command, const QByteArray &arguments);
-    void getOutputModeCommHandler(const QString &command, const QByteArray &arguments);
-    void getStateCommHandler(const QString &command, const QByteArray &arguments);
+    void getBankPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void getOutputModeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void getStateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
-    void ackEscCommHandler(const QString &command, const QByteArray &arguments);
-    void ackSaveChanges(const QString &command, const QByteArray &arguments);
-    void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments);
+    void ackEscCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void ackSaveChanges(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     // команды cc обрабатывается маскированным парсером
     MaskedParser getIr{"cc\r0\n0\n", "111X1X1"};
@@ -125,13 +130,13 @@ private:
     void ackCCCommHandler(const QList<QByteArray> &arguments);
     void endCCCommHandler(const QList<QByteArray> &arguments);
 
-    void errorCCCommHandler(const QString &command, const QByteArray &arguments);
+    void errorCCCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     QByteArray m_rawFirmwareData;
     const uint32_t fwUploadBlockSize = 100;
-    void requestNextChunkCommHandler(const QString &command, const QByteArray &arguments);
-    void fwuFinishedCommHandler(const QString &command, const QByteArray &arguments);
-    void formatFinishedCommHandler(const QString &command, const QByteArray &arguments);
+    void requestNextChunkCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void fwuFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void formatFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 };
 
 #endif // CPLEGACY_H

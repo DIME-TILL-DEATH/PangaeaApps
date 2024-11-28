@@ -4,7 +4,7 @@
 #include "abstractmodule.h"
 
 #include "controlvalue.h"
-#include "preset.h"
+#include "presetlegacy.h"
 
 class NoiseGate : public AbstractModule
 {

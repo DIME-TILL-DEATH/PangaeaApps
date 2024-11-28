@@ -5,7 +5,19 @@
 PresetListModel::PresetListModel(QObject *parent)
     : QAbstractListModel{parent}
 {
-    m_presetList = new QList<Preset>; // dummy
+    // TODO small memory leak
+    m_presetList = new QList<PresetAbstract*>; // dummy
+}
+
+PresetListModel::~PresetListModel()
+{
+    // beginResetModel();
+    // qDebug() << "Begin elete PresetListModel";
+    // qDeleteAll(m_presetList->begin(), m_presetList->end());
+    // qDebug() << "qDeleteAll";
+    // m_presetList->clear();
+    // qDebug() << "Delete PresetListModel";
+    // endResetModel();
 }
 
 QHash<int, QByteArray> PresetListModel::roleNames() const
@@ -41,43 +53,38 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
         case ListRoles::PresetNameRole:
         {
             // return QVariant::fromValue("Preset " + QString().setNum(m_presetList->at(index.row()).presetNumber()) + ": " + m_presetList->at(index.row()).presetName());
-            return QVariant::fromValue(m_presetList->at(index.row()).presetName());
+            return QVariant::fromValue(m_presetList->at(index.row())->presetName());
         }
 
         case ListRoles::BankNumberRole:
         {
-            return QVariant::fromValue(QString().setNum(m_presetList->at(index.row()).bankNumber()));
+            return QVariant::fromValue(QString().setNum(m_presetList->at(index.row())->bankNumber()));
         }
 
         case ListRoles::PresetNumberRole:
         {
-            return QVariant::fromValue(QString().setNum(m_presetList->at(index.row()).presetNumber()));
+            return QVariant::fromValue(QString().setNum(m_presetList->at(index.row())->presetNumber()));
         }
-
-        // case ListRoles::PresetDeviceIndexRole:
-        // {
-        //     return QVariant::fromValue(QString().setNum(m_presetList->at(index.row()).getPresetFlatIndex()));
-        // }
 
         case ListRoles::PresetMapIndexRole:
         {
-            return QVariant::fromValue(m_presetList->at(index.row()).getPresetFlatNumber());
+            return QVariant::fromValue(m_presetList->at(index.row())->getPresetFlatNumber());
         }
 
         case ListRoles::ImpulseNameRole:
         {
-            QString impulseName = m_presetList->at(index.row()).impulseName();
+            QString impulseName = m_presetList->at(index.row())->irName();
             return QVariant::fromValue(impulseName);
         }
 
         case ListRoles::isImpulseEmptyRole:
         {
-            return QVariant::fromValue(m_presetList->at(index.row()).impulseName() == "");
+            return QVariant::fromValue(m_presetList->at(index.row())->irName() == "");
         }
 
         case ListRoles::ImpulseEnabledRole:
         {
-            return QVariant::fromValue(m_presetList->at(index.row()).isIrEnabled());
+            return QVariant::fromValue(m_presetList->at(index.row())->isIrEnabled());
         }
 
         default:
@@ -88,7 +95,7 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
     }
 }
 
-void PresetListModel::refreshModel(QList<Preset>* presetList)
+void PresetListModel::refreshModel(QList<PresetAbstract*> *presetList)
 {
     beginResetModel();
 
@@ -97,9 +104,9 @@ void PresetListModel::refreshModel(QList<Preset>* presetList)
     endResetModel();
 }
 
-void PresetListModel::updatePreset(const Preset& newPreset)
+void PresetListModel::updatePreset(PresetAbstract* newPreset)
 {
-    quint8 index = newPreset.getPresetFlatNumber();
+    quint8 index = newPreset->getPresetFlatNumber();
 
     if(m_presetList->size() <= index)
     {
@@ -107,7 +114,10 @@ void PresetListModel::updatePreset(const Preset& newPreset)
     }
 
     // qDebug() << "Updating preset, b:" << newPreset.bankNumber() << "p: " << newPreset.presetNumber() << "impulse name:" << newPreset.impulseName();
-    m_presetList->replace(index, newPreset);
+    // m_presetList->replace(index, newPreset);
+
+    PresetAbstract** listData = m_presetList->data();
+    *listData[index] = *newPreset;
 
     emit dataChanged(createIndex(0, 0), createIndex(m_presetList->size(), 0));
 }

@@ -6,7 +6,7 @@
 
 #include "controlvalue.h"
 
-#include "preset.h"
+#include "presetlegacy.h"
 
 class HiPassFilter : public AbstractModule
 {

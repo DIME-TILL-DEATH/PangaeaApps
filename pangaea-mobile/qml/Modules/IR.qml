@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Window 2.0
 //import QtQuick.Dialogs 1.3
 
+import CustomOverlays 1.0
 import StyleSettings 1.0
 import Elements 1.0
 import Tutorials

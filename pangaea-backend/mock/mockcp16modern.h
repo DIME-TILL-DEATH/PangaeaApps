@@ -5,7 +5,7 @@
 #include "abstractmockdevice.h"
 
 #include "hardwarepreset.h"
-#include "preset.h"
+#include "presetlegacy.h"
 
 class MockCP16Modern : public AbstractMockDevice
 {
@@ -29,29 +29,32 @@ private:
     bool loadPresetData(quint8 prBank, quint8 prPreset, save_data_t *presetSavedData);
     bool savePresetData(quint8 prBank, quint8 prPreset, const save_data_t *presetSaveData);
 
-    void amtDevCommHandler(const QString &command, const QByteArray& arguments);
-    void amtVerCommHandler(const QString &command, const QByteArray& arguments);
-    void bankPresetCommHandler(const QString &command, const QByteArray& arguments);
-    void outputModeCommHandler(const QString &command, const QByteArray& arguments);
-    void pnameCommHandler(const QString &command, const QByteArray& arguments);
-    void stateCommHandler(const QString &command, const QByteArray& arguments);
-    void getImpulseNameCommHandler(const QString &command, const QByteArray& arguments);
-    void getPresetListCommHandler(const QString &command, const QByteArray& arguments);
+    void getIrInfo();
+    void irDownload(const QString& pathToIr);
+    void startIrUpload(const QString& fileName);
+    void recieveIrChunk(const QByteArray& dataChunk);
 
-    void savePresetCommHandler(const QString &command, const QByteArray& arguments);
-    void presetChangeCommHandler(const QString &command, const QByteArray& arguments);
+    void amtDevCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void amtVerCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void bankPresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void outputModeCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void pnameCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void stateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void irCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void getPresetListCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
-    void formatMemoryCommHandler(const QString &command, const QByteArray& arguments);
+    void savePresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void presetChangeCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
-    void ccCommHandler(const QString &command, const QByteArray& arguments);
+    void formatMemoryCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
-    void escAckCommHandler(const QString &command, const QByteArray& arguments);
+    void escAckCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     // Parameters comm handlers
     QMap<QString, quint8*> paramsMap;
     void setParamsHandler(QString commStr, quint8* commPtr);
-    void parametersCommHandler(const QString &command, const QByteArray& arguments);
-    void eqParametersCommHandler(const QString &command, const QByteArray& arguments);
+    void parametersCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void eqParametersCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
 
     // fw update simulation
@@ -59,7 +62,7 @@ private:
     QByteArray fwPart;
     QFile fwFile;
     int fwChunkSize;
-    void startFwUpdateCommHandler(const QString &command, const QByteArray& arguments);
+    void startFwUpdateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 };
 
 #endif // MOCKCP16MODERN_H

@@ -8,7 +8,7 @@
 // #include "deviceparameter.h"
 
 #include "eqband.h"
-#include "preset.h"
+#include "presetlegacy.h"
 
 class EqParametric : public AbstractModule
 {

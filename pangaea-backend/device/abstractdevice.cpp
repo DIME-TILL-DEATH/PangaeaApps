@@ -19,6 +19,10 @@ AbstractDevice::~AbstractDevice()
     if(m_actualFirmware) delete(m_actualFirmware);
     if(m_minimalFirmware) delete(m_minimalFirmware);
 
+    // qDeleteAll(m_presetsList.begin(), m_presetsList.end());
+    // m_presetsList.clear();
+    // qDebug() << "Preset list deleted";
+
     qDeleteAll(m_moduleList.begin(), m_moduleList.end());
     m_moduleList.clear();
     qDebug() << "Modules list deleted";

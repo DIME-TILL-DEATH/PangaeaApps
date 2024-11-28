@@ -65,7 +65,7 @@ CPLegacy::CPLegacy(Core *parent)
 
 CPLegacy::~CPLegacy()
 {
-    qDeleteAll(m_presetsList);
+
 }
 
 void CPLegacy::initDevice(DeviceType deviceType)

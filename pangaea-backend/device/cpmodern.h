@@ -8,7 +8,7 @@
 
 #include "irworker.h"
 
-#include "preset.h"
+#include "presetmodern.h"
 
 #include "presetvolume.h"
 #include "compressor.h"
@@ -28,6 +28,7 @@ class CPModern : public AbstractDevice
     Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
 public:
     CPModern(Core *parent);
+    ~CPModern();
 
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
@@ -79,41 +80,46 @@ private:
     IRWorker irWorker;
     QSettings* appSettings;
 
+    QList<PresetAbstract*> m_presetsList;
+    PresetModern actualPreset{this};
+    PresetModern savedPreset{this}; // TODO используется из листа
+    PresetModern copiedPreset{this};
+
     void setDeviceType(DeviceType newDeviceType);
 
     void pushReadPresetCommands();
 
-    void setPresetData(const Preset &preset);
-    void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
+    void recieveIrInfo(const QByteArray &data);
+    void irDownloaded(const QString& irPath, const QByteArray &data);
+
+    void setPresetData(const PresetModern &preset);
+    void uploadImpulseData(QString &irName, const QByteArray& irData);
+    void previewIr(const QByteArray& irData);
 
     void uploadFirmware(const QByteArray& fwData);
 
-    void amtVerCommHandler(const QString &command, const QByteArray &arguments);
-    void getIrNameCommHandler(const QString &command, const QByteArray &arguments);
-    void irCommHandler(const QString &command, const QByteArray &arguments);
-    void getPresetListCommHandler(const QString &command, const QByteArray &arguments);
+    void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
-    void getBankPresetCommHandler(const QString &command, const QByteArray &arguments);
-    void getOutputModeCommHandler(const QString &command, const QByteArray &arguments);
-    void pnameCommHandler(const QString &command, const QByteArray &arguments);
-    void stateCommHandler(const QString &command, const QByteArray &arguments);
+    void getBankPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void getOutputModeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
-    void ackEscCommHandler(const QString &command, const QByteArray &arguments);
-    void ackSaveChanges(const QString &command, const QByteArray &arguments);
-    void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments);
+    void ackEscCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void ackSaveChanges(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
-    void getCCCommHandler(const QList<QByteArray> &arguments);
-    void getCCNameSizeCommHandler(const QList<QByteArray> &arguments);
     void ackCCCommHandler(const QList<QByteArray> &arguments);
     void endCCCommHandler(const QList<QByteArray> &arguments);
-
-    void errorCCCommHandler(const QString &command, const QByteArray &arguments);
+    void errorCCCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     QByteArray m_rawFirmwareData;
     const uint32_t fwUploadBlockSize = 100;
-    void requestNextChunkCommHandler(const QString &command, const QByteArray &arguments);
-    void fwuFinishedCommHandler(const QString &command, const QByteArray &arguments);
-    void formatFinishedCommHandler(const QString &command, const QByteArray &arguments);
+    void requestNextChunkCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void fwuFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void formatFinishedCommHandler(const QString &command, const QByteArray &argument, const QByteArray &data);
 };
 
 #endif // CPMODERN_H

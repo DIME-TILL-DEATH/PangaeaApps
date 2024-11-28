@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "preset.h"
+#include "presetlegacy.h"
 
 #include "abstractmodule.h"
 #include "controlvalue.h"

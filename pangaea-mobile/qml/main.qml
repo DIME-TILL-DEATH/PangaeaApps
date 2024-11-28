@@ -4,6 +4,7 @@ import QtQuick.Controls.Material
 //import QtQuick.Controls 2.12
 
 import Modules 1.0
+import CustomOverlays 1.0
 import Elements 1.0
 import Pages 1.0
 

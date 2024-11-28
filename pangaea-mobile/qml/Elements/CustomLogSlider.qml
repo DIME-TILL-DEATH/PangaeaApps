@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.0
 import Qt5Compat.GraphicalEffects
 
+import CustomOverlays 1.0
 import StyleSettings 1.0
 
 import CppObjects

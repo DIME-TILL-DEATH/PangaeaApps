@@ -4,24 +4,25 @@
 #include <QObject>
 #include <QAbstractListModel>
 
-#include "preset.h"
+#include "presetabstract.h"
 
 class PresetListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
     explicit PresetListModel(QObject *parent = nullptr);
+    ~PresetListModel();;
 
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    void refreshModel(QList<Preset>* presetList);
+    void refreshModel(QList<PresetAbstract*>* presetList);
 
-    void updatePreset(const Preset &newPreset);
+    void updatePreset(PresetAbstract *newPreset);
 
 private:
-    QList<Preset>* m_presetList;
+    QList<PresetAbstract*>* m_presetList;
 
     enum ListRoles{
         PresetNameRole = Qt::UserRole + 1,

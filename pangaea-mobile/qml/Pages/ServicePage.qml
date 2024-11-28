@@ -4,6 +4,7 @@ import QtQuick.Controls.Material
 
 import QtQuick.Layouts 1.3
 
+import CustomOverlays 1.0
 import ControlGroups 1.0
 import Elements 1.0
 import StyleSettings 1.0

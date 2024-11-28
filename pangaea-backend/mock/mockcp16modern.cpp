@@ -1,5 +1,7 @@
 #include "mockcp16modern.h"
 
+#include "presetmodern.h"
+
 #include <QStandardPaths>
 #include <QDir>
 
@@ -11,28 +13,26 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
     initFolders();
 
     using namespace std::placeholders;
-    m_parser.addCommandHandler("amtdev", std::bind(&MockCP16Modern::amtDevCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("amtver", std::bind(&MockCP16Modern::amtVerCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("gb", std::bind(&MockCP16Modern::bankPresetCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("gm", std::bind(&MockCP16Modern::outputModeCommHandler, this,  _1, _2));
-    m_parser.addCommandHandler("state", std::bind(&MockCP16Modern::stateCommHandler, this,  _1, _2));
-    m_parser.addCommandHandler("pname", std::bind(&MockCP16Modern::pnameCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("rn", std::bind(&MockCP16Modern::getImpulseNameCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("amtdev", std::bind(&MockCP16Modern::amtDevCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("amtver", std::bind(&MockCP16Modern::amtVerCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("gb", std::bind(&MockCP16Modern::bankPresetCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("gm", std::bind(&MockCP16Modern::outputModeCommHandler, this,  _1, _2, _3));
+    m_parser.addCommandHandler("state", std::bind(&MockCP16Modern::stateCommHandler, this,  _1, _2, _3));
+    m_parser.addCommandHandler("pname", std::bind(&MockCP16Modern::pnameCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("ir", std::bind(&MockCP16Modern::irCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("plist", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("plist", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("sp", std::bind(&MockCP16Modern::savePresetCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("pc", std::bind(&MockCP16Modern::presetChangeCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("sp", std::bind(&MockCP16Modern::savePresetCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("pc", std::bind(&MockCP16Modern::presetChangeCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("cc", std::bind(&MockCP16Modern::ccCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("esc", std::bind(&MockCP16Modern::escAckCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("esc", std::bind(&MockCP16Modern::escAckCommHandler, this, _1, _2));
-
-    m_parser.addCommandHandler("fsf", std::bind(&MockCP16Modern::formatMemoryCommHandler, this, _1, _2));
-    m_parser.addCommandHandler("fwu", std::bind(&MockCP16Modern::startFwUpdateCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("fsf", std::bind(&MockCP16Modern::formatMemoryCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("fwu", std::bind(&MockCP16Modern::startFwUpdateCommHandler, this, _1, _2, _3));
 
     //--------------------------params handler----------------------
-    m_parser.addCommandHandler("eq0", std::bind(&MockCP16Modern::eqParametersCommHandler, this, _1, _2));
+    m_parser.addCommandHandler("eq0", std::bind(&MockCP16Modern::eqParametersCommHandler, this, _1, _2, _3));
 
     setParamsHandler("mv", &currentPresetData.volume);   // Type::MASTER_VOLUME: fullString += "mv";
 
@@ -266,17 +266,17 @@ bool MockCP16Modern::savePresetData(quint8 prBank, quint8 prPreset, const save_d
 //  base comm handlers
 //===========================================================================================
 
-void MockCP16Modern::amtDevCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::amtDevCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     emit answerReady(QString("amtdev\r16\nEND\n").toUtf8());
 }
 
-void MockCP16Modern::amtVerCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     emit answerReady(QString("amtver\r2.01.00\nEND\n").toUtf8());
 }
 
-void MockCP16Modern::bankPresetCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::bankPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QString answer = QString("gb\r")
     + QString("0%1").arg(m_bank)
@@ -284,7 +284,7 @@ void MockCP16Modern::bankPresetCommHandler(const QString &command, const QByteAr
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Modern::outputModeCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::outputModeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     if(arguments.size()>0)
     {
@@ -295,40 +295,87 @@ void MockCP16Modern::outputModeCommHandler(const QString &command, const QByteAr
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Modern::pnameCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(arguments.size()>0)
+    if(data.size()>0)
     {
-        currentPresetName = arguments;
+        currentPresetName = data;
     }
     QString answer = "pname\r" + currentPresetName + "\n";
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Modern::stateCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(arguments.size() == 0)
+    QByteArray baData = QString("state\r").toUtf8();
+    baData.append(PresetModern::presetDatatoChars(currentPresetData));
+    baData.append("\n");
+
+    if(data.size() != 0)
     {
-        QByteArray baData = QString("state\r").toUtf8();
-        baData.append(Preset::presetDatatoChars(currentPresetData));
-        baData.append("\n");
-        emit answerReady(baData);
+        qDebug() << "Mock device, set state data:" << data;
+      //  currentPresetData = Preset::charsToPresetData(data);
     }
-    else
+    emit answerReady(baData);
+}
+
+void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    if(arguments == "info")
     {
-        QList<QByteArray> argsList = arguments.split('\r');
-        if(argsList.size()>1)
+        getIrInfo();
+    }
+
+    if(arguments == "download")
+    {
+        irDownload(data);
+    }
+
+    if(arguments == "preview")
+    {
+        emit answerReady("ir preview\rOK\n");
+    }
+
+    if(arguments == "upload")
+    {
+        QByteArray answer;
+
+        QList<QByteArray> dataList = data.split('\r');
+        qDebug() << "DataList size" << dataList.size();
+        if(dataList.size() == 3)
         {
-            qDebug() << "Mock device, set state arguments:" << argsList.at(1);
-            currentPresetData = Preset::charsToPresetData(argsList.at(1));
+            QString fileName = dataList.at(0);
+            QString destPath = dataList.at(1);
+            QByteArray fileData = dataList.at(2);
+
+            QFile irFile(basePath + destPath + fileName);
+            if(irFile.open(QIODevice::WriteOnly))
+            {
+                QByteArray convertedFileData;
+
+                for(int i=0; i<fileData.size(); i+=2)
+                {
+                    QString chStr(QString(fileData.at(i)) + QString(fileData.at(i+1)));
+                    convertedFileData.append(chStr.toInt(nullptr, 16));
+                }
+                irFile.write(convertedFileData);
+                irFile.close();
+            }
+
+            answer += "ir saved\r" + QString(destPath + fileName).toUtf8() + "\n";
+            emit answerReady(answer);
         }
-        emit answerReady("state wr\r\n");
+        else
+        {
+            emit answerReady("ir error\rCOMMAND_INCORRECT\n");
+        }
     }
 }
 
-void MockCP16Modern::getImpulseNameCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::getIrInfo()
 {
     QString impulseName = "";
+    qint64 irSize = -1;
 
     QDir presetDir(basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset));
     presetDir.setNameFilters({"*.wav"});
@@ -337,20 +384,64 @@ void MockCP16Modern::getImpulseNameCommHandler(const QString &command, const QBy
     if(!filesInDir.empty())
     {
         impulseName = filesInDir.first().fileName();
+        irSize = filesInDir.first().size();
     }
 
-    QByteArray baData = QString("rn\r").toUtf8() + impulseName.toUtf8() + QString("\n").toUtf8();
+    QByteArray baData = QString("ir info\r").toUtf8() + impulseName.toUtf8() + QString("\r").toUtf8() +
+                        QString().setNum(irSize).toUtf8() + QString("\n").toUtf8();
     emit answerReady(baData);
 }
 
-void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::irDownload(const QString& pathToIr)
 {
-    QString answer("plist\r");
+    QString filePath = basePath + "/" + pathToIr;
+    qDebug() << " Mock device ir download, path to file:" << filePath;
+
+    QByteArray answer("ir download\r" + pathToIr.toUtf8() + "\r");
+
+    QByteArray fileData;
+    QFile irFile(filePath);
+    if(irFile.open(QIODevice::ReadOnly))
+    {
+        fileData = irFile.readAll();
+        irFile.close();
+        QByteArray convertedBa;
+        for(quint16 i=0; i<fileData.size(); i++)
+        {
+            QString sTmp;
+            quint8  chr;
+
+            chr = fileData.at(i);
+            sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
+
+            convertedBa.append(sTmp.toUtf8());
+        }
+        answer += convertedBa;
+    }
+    answer += "\n";
+    emit answerReady(answer);
+}
+
+void MockCP16Modern::startIrUpload(const QString &fileName)
+{
+
+}
+
+void MockCP16Modern::recieveIrChunk(const QByteArray &dataChunk)
+{
+
+}
+
+void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QString answer("plist");
 
     for(int b = 0; b <4; b++)
     {
         for(int p=0; p<4; p++)
         {
+            answer += "\r";
+
             QString irName;// = "*";
             QString dirPath = basePath + "/bank_" + QString().setNum(b) + "/preset_" + QString().setNum(p);
             QDir presetDir(dirPath);
@@ -375,14 +466,14 @@ void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByt
             }
 
             answer += enabled + "|";
-            answer += presetName + "\r";
+            answer += presetName;
         }
     }
     answer += "\n";
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Modern::savePresetCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::savePresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     save_data_t saveData;
     QByteArray bytesName = currentPresetName.toUtf8();
@@ -394,7 +485,7 @@ void MockCP16Modern::savePresetCommHandler(const QString &command, const QByteAr
     emit answerReady("sp\r\n");
 }
 
-void MockCP16Modern::presetChangeCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::presetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     m_bank = QString(arguments.at(0)).toInt(nullptr, 16);
     m_preset = QString(arguments.at(1)).toInt(nullptr, 16);
@@ -408,7 +499,7 @@ void MockCP16Modern::presetChangeCommHandler(const QString &command, const QByte
     emit answerReady(answer.toUtf8());
 }
 
-void MockCP16Modern::formatMemoryCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::formatMemoryCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QDir homeDir(basePath);
     homeDir.removeRecursively();
@@ -417,7 +508,7 @@ void MockCP16Modern::formatMemoryCommHandler(const QString &command, const QByte
     emit answerReady("fsf\rFR_OK\n");
 }
 
-void MockCP16Modern::escAckCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::escAckCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     emit answerReady("esc\r\n");
 }
@@ -426,11 +517,11 @@ void MockCP16Modern::setParamsHandler(QString commStr, quint8 *commPtr)
 {
     paramsMap.insert(commStr, commPtr);
     using namespace std::placeholders;
-    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Modern::parametersCommHandler, this, _1, _2));
+    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Modern::parametersCommHandler, this, _1, _2, _3));
 
 }
 
-void MockCP16Modern::parametersCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::parametersCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     quint8* paramPtr = paramsMap.value(command);
 
@@ -445,7 +536,7 @@ void MockCP16Modern::parametersCommHandler(const QString &command, const QByteAr
 
 }
 
-void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     quint8* paramPtr = nullptr;
 
@@ -527,7 +618,7 @@ void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByte
     }
 }
 
-void MockCP16Modern::startFwUpdateCommHandler(const QString &command, const QByteArray &arguments)
+void MockCP16Modern::startFwUpdateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     fwUpdateMode = true;
     fwChunkSize = QString(arguments).toInt();
@@ -546,113 +637,4 @@ void MockCP16Modern::startFwUpdateCommHandler(const QString &command, const QByt
 
     emit answerReady("fwu\rCHUNK_MAX_SIZE_4096\n");
     emit answerReady("REQUEST_CHUNK_SIZE\n");
-}
-
-//------------------------------------------------------------------
-// ************************Legacy support************************
-//------------------------------------------------------------------
-void MockCP16Modern::ccCommHandler(const QString &command, const QByteArray &arguments)
-{
-    QString dirPath = basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/";
-    if(arguments.size() == 0)
-    {
-        qDebug() << " Mock device: " << "cc, no arguments";
-        // file request
-        QByteArray answer("cc\r");
-        QDir presetDir(dirPath);
-        presetDir.setNameFilters({"*.wav"});
-
-        QFileInfoList filesInDir = presetDir.entryInfoList();
-        if(!filesInDir.empty())
-        {
-            QString irName = filesInDir.first().fileName();
-            int irSize = filesInDir.first().size();
-
-            qDebug() << "Files in dir:" << filesInDir;
-            qDebug() << " Mock device: " << "cc, file name, size" << irName << irSize;
-            answer += irName.toUtf8() + " " + QString().setNum(irSize).toUtf8() + "\n";
-
-            QByteArray fileData;
-            QFile irFile(dirPath + irName);
-            if(irFile.open(QIODevice::ReadOnly))
-            {
-                fileData = irFile.readAll();
-                irFile.close();
-                QByteArray convertedBa;
-                for(quint16 i=0; i<fileData.size(); i++)
-                {
-                    QString sTmp;
-                    quint8  chr;
-
-                    chr = fileData.at(i);
-                    sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
-
-                    convertedBa.append(sTmp.toUtf8());
-                }
-
-                answer += convertedBa;
-            }
-            answer += "\nEND\n";
-        }
-        else
-        {
-            answer += "\nFILE_NOT_FIND\n";
-        }
-
-        emit answerReady(answer);
-    }
-    else
-    {
-        // file upload(preview and save)
-        QByteArray answer("CC ");
-
-        QList<QByteArray> splitBa = arguments.split('\r');
-        if(splitBa.size() > 1)
-        {
-            QByteArray commArgs = splitBa.at(0);
-            QByteArray fileData = splitBa.at(1);
-
-            QList<QByteArray> argsArr = commArgs.split(' ');
-            if(argsArr.size() > 1)
-            {
-                QString fileName = argsArr.at(0);
-                qint8 mode = QString(argsArr.at(1)).toInt();
-                qDebug() << fileName << mode;
-                if(mode == 0)
-                {
-                    QDir presetDir(dirPath);
-                    presetDir.setNameFilters({"*.wav"});
-
-                    QFileInfoList wavsInDir = presetDir.entryInfoList();
-                    if(!wavsInDir.empty())
-                    {
-                        foreach(QFileInfo curFileInfo, wavsInDir)
-                        {
-                            QFile wavFile(curFileInfo.absoluteFilePath());
-                            wavFile.remove();
-                            qDebug() << curFileInfo.absoluteFilePath() << "removed";
-                        }
-                    }
-
-                    QFile irFile(dirPath + fileName);
-                    if(irFile.open(QIODevice::WriteOnly))
-                    {
-                        QByteArray convertedFileData;
-
-                        for(int i=0; i<fileData.size(); i+=2)
-                        {
-                            QString chStr(QString(fileData.at(i)) + QString(fileData.at(i+1)));
-                            convertedFileData.append(chStr.toInt(nullptr, 16));
-                        }
-
-                        irFile.write(convertedFileData);
-                        irFile.close();
-                    }
-                }
-                answer += fileName.toUtf8() + " " + QString().setNum(mode).toUtf8();
-            }
-        }
-        answer += "\rccEND\n";
-        emit answerReady(answer);
-    }
 }

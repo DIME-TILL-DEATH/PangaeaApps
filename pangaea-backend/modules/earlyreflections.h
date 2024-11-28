@@ -6,7 +6,7 @@
 #include <QObject>
 #include "controlvalue.h"
 
-#include "preset.h"
+#include "presetlegacy.h"
 
 class EarlyReflections : public AbstractModule
 {
