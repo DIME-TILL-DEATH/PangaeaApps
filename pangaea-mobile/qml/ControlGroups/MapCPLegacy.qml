@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import StyleSettings 1.0
 
+import CustomOverlays 1.0
 import ControlGroups 1.0
 import Modules 1.0
 import Elements 1.0

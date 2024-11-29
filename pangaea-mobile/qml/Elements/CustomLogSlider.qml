@@ -156,7 +156,15 @@ Row{
         {
             target: UiCore.currentDevice
 
-            function onDeviceUpdatingValues()
+            // function onDeviceUpdatingValues()
+            // {
+            //     ctrlValInstance.isModified = false;
+            // }
+            function onPresetSwitched()
+            {
+                ctrlValInstance.isModified = false;
+            }
+            function onPresetSaved()
             {
                 ctrlValInstance.isModified = false;
             }

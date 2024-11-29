@@ -12,6 +12,25 @@ PresetLegacy::PresetLegacy(AbstractDevice *owner)
     m_rawData.append(sizeof(preset_data_legacy_t) * 2, '0');
 }
 
+PresetAbstract& PresetLegacy::operator=(const PresetAbstract& preset)
+{
+    // *this = preset;
+    if(&preset != this)
+    {
+        const PresetLegacy* legacyPreset = dynamic_cast<const PresetLegacy*>(&preset);
+        if(legacyPreset)
+        {
+            m_bankNumber = legacyPreset->m_bankNumber;
+            m_presetNumber = legacyPreset->m_presetNumber;
+            m_ownerDevice = legacyPreset->m_ownerDevice;
+            m_pathToExport = legacyPreset->m_pathToExport;
+            m_rawData = legacyPreset->m_rawData;
+            m_waveData = legacyPreset->m_waveData;
+        }
+    }
+    return *this;
+}
+
 bool PresetLegacy::importData(QString filePath)
 {
     QFile presetFile(filePath);

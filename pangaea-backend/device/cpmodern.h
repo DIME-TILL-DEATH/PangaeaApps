@@ -8,6 +8,7 @@
 
 #include "irworker.h"
 
+#include "irfile.h"
 #include "presetmodern.h"
 
 #include "presetvolume.h"
@@ -26,6 +27,10 @@ class CPModern : public AbstractDevice
 
     Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
     Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
+
+    Q_PROPERTY(IrFile currentIrFile READ currentIrFile WRITE setCurrentIrFile NOTIFY currentIrFileChanged FINAL)
+    Q_PROPERTY(QList<IrFile> irsInLibrary READ irsInLibrary NOTIFY irsListChanged FINAL)
+    Q_PROPERTY(QList<IrFile> irsInFolder READ irsInFolder NOTIFY irsListChanged FINAL)
 public:
     CPModern(Core *parent);
     ~CPModern();
@@ -50,7 +55,7 @@ public:
 
     PresetVolume* getMV() {return MV;};
 
-    QString currentPresetName() const {return actualPreset.presetName();};
+    QString currentPresetName() const;;
     void setCurrentPresetName(const QString &newCurrentPresetName);
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
@@ -68,6 +73,14 @@ public:
     EqParametric* EQ;
     EarlyReflections* ER;
 
+    void slIrEnabledChanged();
+
+
+    QList<IrFile> irsInLibrary() const {return m_irsInLibrary;};
+    QList<IrFile> irsInFolder() const {return m_irsInFolder;};
+
+    IrFile currentIrFile() const {return actualPreset.irFile;};
+    void setCurrentIrFile(const IrFile &newCurrentIrFile);
 
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
@@ -75,6 +88,10 @@ public slots:
 signals:
 
     void currentPresetNameChanged();
+
+    void irsListChanged();
+
+    void currentIrFileChanged();
 
 private:
     IRWorker irWorker;
@@ -84,6 +101,9 @@ private:
     PresetModern actualPreset{this};
     PresetModern savedPreset{this}; // TODO используется из листа
     PresetModern copiedPreset{this};
+
+    QList<IrFile> m_irsInLibrary;
+    QList<IrFile> m_irsInFolder;
 
     void setDeviceType(DeviceType newDeviceType);
 
@@ -101,15 +121,15 @@ private:
     void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void listCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void getBankPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getOutputModeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
-    void ackEscCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
-    void ackSaveChanges(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void ackPresetSavedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void ackCCCommHandler(const QList<QByteArray> &arguments);
     void endCCCommHandler(const QList<QByteArray> &arguments);

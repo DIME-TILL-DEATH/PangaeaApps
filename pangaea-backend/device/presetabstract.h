@@ -13,14 +13,16 @@ public:
     PresetAbstract();
     virtual ~PresetAbstract() {};
 
+    virtual PresetAbstract& operator=(const PresetAbstract& preset);
+
     static quint8 calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, quint8 presetNumber);
 
     quint8 bankNumber() const {return m_bankNumber;};
     quint8 presetNumber() const { return m_presetNumber;};
     void setBankPreset(quint8 newBankNumber, quint8 newPresetNumber);
 
-    const QString &irName() const {return m_irName;};
-    void setIrName(const QString &newIrName) {m_irName = newIrName;};
+    virtual QString irName() const = 0;
+    virtual void setIrName(const QString &newIrName) = 0;
 
     virtual quint8 getPresetFlatNumber() const = 0;
 
@@ -36,7 +38,15 @@ protected:
 
     quint8 presetVersion{1};
 
-    QString m_irName;
+    struct
+    {
+        QString header{"PANGAEA_PRESET"};
+        QString versionId{"VERSION"};
+
+        QString dataId{"DATA"};
+        QString irNameId{"IR_NAME"};
+        QString irDataId{"IR_DATA"};
+    } presetHeaderId;
 };
 
 #endif // PRESETABSTRACT_H

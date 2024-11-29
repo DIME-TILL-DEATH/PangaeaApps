@@ -13,6 +13,7 @@ public:
         Unknown=0,
         Idle,
         Pasting,
+        SetCompare,
         Compare, // вызван оригинальный пресет
         Copying,
         Exporting,

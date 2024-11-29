@@ -15,12 +15,20 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
     using namespace std::placeholders;
     m_parser.addCommandHandler("amtdev", std::bind(&MockCP16Modern::amtDevCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("amtver", std::bind(&MockCP16Modern::amtVerCommHandler, this, _1, _2, _3));
+
     m_parser.addCommandHandler("gb", std::bind(&MockCP16Modern::bankPresetCommHandler, this, _1, _2, _3));
+
     m_parser.addCommandHandler("gm", std::bind(&MockCP16Modern::outputModeCommHandler, this,  _1, _2, _3));
+    m_parser.addCommandHandler("outmode", std::bind(&MockCP16Modern::outputModeCommHandler, this,  _1, _2, _3));
+
     m_parser.addCommandHandler("state", std::bind(&MockCP16Modern::stateCommHandler, this,  _1, _2, _3));
     m_parser.addCommandHandler("pname", std::bind(&MockCP16Modern::pnameCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("ir", std::bind(&MockCP16Modern::irCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("ls", std::bind(&MockCP16Modern::listCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("list", std::bind(&MockCP16Modern::listCommHandler, this, _1, _2, _3));
+
+    m_parser.addCommandHandler("pls", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("plist", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("sp", std::bind(&MockCP16Modern::savePresetCommHandler, this, _1, _2, _3));
@@ -33,6 +41,7 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
 
     //--------------------------params handler----------------------
     m_parser.addCommandHandler("eq0", std::bind(&MockCP16Modern::eqParametersCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("eq1", std::bind(&MockCP16Modern::eqParametersCommHandler, this, _1, _2, _3));
 
     setParamsHandler("mv", &currentPresetData.volume);   // Type::MASTER_VOLUME: fullString += "mv";
 
@@ -86,10 +95,12 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
         systemFile.close();
     }
 
-    save_data_t saveData{0};
-    loadPresetData(m_bank, m_preset, &saveData);
-    currentPresetName = QString(saveData.name);
-    memcpy(&currentPresetData, &saveData.parametersData, sizeof(preset_data_t));
+    // save_data_t saveData{0};
+    // loadPresetData(m_bank, m_preset, &saveData);
+    // currentPresetName = QString(saveData.name);
+    // memcpy(&currentPresetData, &saveData.parametersData, sizeof(preset_data_t));
+
+    changePreset(0, 0);
 }
 
 void MockCP16Modern::writeToDevice(const QByteArray &data)
@@ -139,7 +150,12 @@ void MockCP16Modern::initFolders()
 
     basePath += "virtual_CP16Modern";
 
+    QDir::setCurrent(basePath);
+
     if(!QDir(basePath).exists()) QDir().mkpath(basePath);
+
+    QString libPath = basePath + "/ir_library/";
+    if(!QDir().exists(libPath)) QDir().mkpath(libPath);
 
     QFile systemFile(basePath + "/system.pan");
     if(!systemFile.exists())
@@ -150,7 +166,7 @@ void MockCP16Modern::initFolders()
 
     for(int b = 0; b <4; b++)
     {
-        QString bankPath = basePath + "/bank_" + QString().setNum(b);
+        QString bankPath = "bank_" + QString().setNum(b);
         if(!QDir().exists(bankPath)) QDir().mkpath(bankPath);
 
         for(int p=0; p<4; p++)
@@ -216,7 +232,7 @@ bool MockCP16Modern::saveSysParameters()
 
 bool MockCP16Modern::loadPresetData(quint8 prBank, quint8 prPreset, save_data_t *presetSavedData)
 {
-    QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
+    QString dirPath = "bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
     QFile presetFile(dirPath + "/preset.pa2");
     if(presetFile.open(QIODevice::ReadOnly))
     {
@@ -248,22 +264,34 @@ bool MockCP16Modern::loadPresetData(quint8 prBank, quint8 prPreset, save_data_t 
 
 bool MockCP16Modern::savePresetData(quint8 prBank, quint8 prPreset, const save_data_t* presetSaveData)
 {
-    QString dirPath = basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
+    QString dirPath = "bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
     QFile presetFile(dirPath + "/preset.pa2");
+    QFile linkFile(dirPath + "/ir.lnk");
     if(presetFile.open(QIODevice::WriteOnly))
     {
         char rawData[sizeof(save_data_t)];
         memcpy(rawData, presetSaveData, sizeof(save_data_t));
-
         presetFile.write(rawData, sizeof(save_data_t));
         presetFile.close();
-        return true;
+
     }
     else return false;
+
+    if(linkedIr.isLinked())
+    {
+        if(linkFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            linkFile.write(linkedIr.irName().toUtf8());
+            linkFile.write("\n");
+            linkFile.write(linkedIr.irLinkPath().toUtf8());
+            linkFile.close();
+        }
+    }
+    return true;
 }
 
 //===========================================================================================
-//  base comm handlers
+//  comm handlers
 //===========================================================================================
 
 void MockCP16Modern::amtDevCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -297,7 +325,7 @@ void MockCP16Modern::outputModeCommHandler(const QString &command, const QByteAr
 
 void MockCP16Modern::pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(data.size()>0)
+    if(arguments == "set")
     {
         currentPresetName = data;
     }
@@ -307,16 +335,20 @@ void MockCP16Modern::pnameCommHandler(const QString &command, const QByteArray &
 
 void MockCP16Modern::stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    QByteArray baData = QString("state\r").toUtf8();
-    baData.append(PresetModern::presetDatatoChars(currentPresetData));
-    baData.append("\n");
+    QByteArray answer = QString("state").toUtf8();
 
     if(data.size() != 0)
     {
-        qDebug() << "Mock device, set state data:" << data;
-      //  currentPresetData = Preset::charsToPresetData(data);
+        currentPresetData = PresetModern::charsToPresetData(data);
+        answer += " set\r\n";
     }
-    emit answerReady(baData);
+    else
+    {
+        answer.append("\r");
+        answer.append(PresetModern::presetDatatoChars(currentPresetData));
+        answer.append("\n");
+    }
+    emit answerReady(answer);
 }
 
 void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -370,24 +402,54 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
             emit answerReady("ir error\rCOMMAND_INCORRECT\n");
         }
     }
+
+    if(arguments == "link")
+    {
+        if(data.size()>0)
+        {
+            QList<QByteArray> dataList = data.split('\r');
+
+            linkedIr.setIrName(dataList.at(0));
+            linkedIr.setIrLinkPath(dataList.at(1));
+        }
+
+        QByteArray answer("ir link\r");
+        answer += linkedIr.irName().toUtf8();
+        answer += "\r";
+        answer += linkedIr.irLinkPath().toUtf8();
+        answer += "\n";
+        emit answerReady(answer);
+    }
 }
 
 void MockCP16Modern::getIrInfo()
 {
-    QString impulseName = "";
+    QString irLinkPath;
+    QString irName = "";
     qint64 irSize = -1;
 
-    QDir presetDir(basePath + "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset));
-    presetDir.setNameFilters({"*.wav"});
+    QString pathToDir = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset);
 
-    QFileInfoList filesInDir = presetDir.entryInfoList();
-    if(!filesInDir.empty())
+    if(linkedIr.isLinked())
     {
-        impulseName = filesInDir.first().fileName();
-        irSize = filesInDir.first().size();
+        irName = linkedIr.irName();
+                 irLinkPath = linkedIr.irLinkPath();
+        irSize = QFileInfo(irLinkPath + "/" + irName).size();
+    }
+    else
+    {
+        QDir presetDir(pathToDir);
+        presetDir.setNameFilters({"*.wav"});
+        QFileInfoList filesInDir = presetDir.entryInfoList();
+        if(!filesInDir.empty())
+        {
+            irName = filesInDir.first().fileName();
+            irSize = filesInDir.first().size();
+        }
     }
 
-    QByteArray baData = QString("ir info\r").toUtf8() + impulseName.toUtf8() + QString("\r").toUtf8() +
+    QByteArray baData = QString("ir info\r").toUtf8() + irLinkPath.toUtf8() + QString("\r").toUtf8() +
+                        irName.toUtf8() + QString("\r").toUtf8() +
                         QString().setNum(irSize).toUtf8() + QString("\n").toUtf8();
     emit answerReady(baData);
 }
@@ -432,6 +494,32 @@ void MockCP16Modern::recieveIrChunk(const QByteArray &dataChunk)
 
 }
 
+
+
+void MockCP16Modern::listCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QByteArray answer(command.toUtf8() + " " + data);
+
+    QDir lsDir(data);
+    lsDir.setNameFilters({"*.wav"});
+
+    QFileInfoList filesInDir = lsDir.entryInfoList();
+
+    if(filesInDir.isEmpty())
+    {
+        answer += "\r";
+    }
+    else
+    {
+        foreach(QFileInfo wavFile, filesInDir)
+        {
+            answer += "\r" + wavFile.fileName().toUtf8();
+        }
+    }
+    answer += "\n";
+    emit answerReady(answer);
+}
+
 void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QString answer("plist");
@@ -443,14 +531,33 @@ void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByt
             answer += "\r";
 
             QString irName;// = "*";
-            QString dirPath = basePath + "/bank_" + QString().setNum(b) + "/preset_" + QString().setNum(p);
-            QDir presetDir(dirPath);
-            presetDir.setNameFilters({"*.wav"});
+            QString dirPath = "bank_" + QString().setNum(b) + "/preset_" + QString().setNum(p);
 
-            QFileInfoList filesInDir = presetDir.entryInfoList();
-            if(!filesInDir.empty())
+            QFile linkFile(dirPath + "/ir.lnk");
+            if(linkFile.open(QIODevice::ReadOnly | QIODevice::Text))
             {
-                irName = filesInDir.first().fileName();
+                QString fileData = linkFile.readAll();
+                QStringList dataList = fileData.split("\n");
+                if(dataList.size()>1)
+                {
+                    irName = dataList.at(0);
+                }
+                else
+                {
+                    qWarning() << "lnk file corrupted";
+                }
+                linkFile.close();
+            }
+            else
+            {
+                QDir presetDir(dirPath);
+                presetDir.setNameFilters({"*.wav"});
+
+                QFileInfoList filesInDir = presetDir.entryInfoList();
+                if(!filesInDir.empty())
+                {
+                    irName = filesInDir.first().fileName();
+                }
             }
             answer += irName + "|";
 
@@ -487,16 +594,50 @@ void MockCP16Modern::savePresetCommHandler(const QString &command, const QByteAr
 
 void MockCP16Modern::presetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    m_bank = QString(arguments.at(0)).toInt(nullptr, 16);
-    m_preset = QString(arguments.at(1)).toInt(nullptr, 16);
+    quint8 bank = QString(arguments.at(0)).toInt(nullptr, 16);
+    quint8 preset = QString(arguments.at(1)).toInt(nullptr, 16);
+
+    changePreset(bank, preset);
+
+    QString answer = QString("pc %1%2\rEND\n").arg(QString().setNum(m_bank, 16)).arg(QString().setNum(m_preset, 16));
+    emit answerReady(answer.toUtf8());
+}
+
+void MockCP16Modern::changePreset(quint8 bank, quint8 preset)
+{
+    m_bank = bank;
+    m_preset = preset;
+
+    QString pathToDir = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset);
+    QFile linkFile(pathToDir + "/ir.lnk");
+    if(linkFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QString irFilename, irLinkPath;
+        QString fileData = linkFile.readAll();
+        QStringList dataList = fileData.split("\n");
+        if(dataList.size()>1)
+        {
+            irFilename = dataList.at(0);
+            irLinkPath = dataList.at(1);
+        }
+        else
+        {
+            qWarning() << "lnk file corrupted";
+        }
+        linkFile.close();
+
+        linkedIr.setIrName(irFilename);
+        linkedIr.setIrLinkPath(irLinkPath);
+    }
+    else
+    {
+        linkedIr.clear();
+    }
 
     save_data_t saveData{0};
     loadPresetData(m_bank, m_preset, &saveData);
     currentPresetName = QString(saveData.name);
     memcpy(&currentPresetData, &saveData.parametersData, sizeof(preset_data_t));
-
-    QString answer = QString("pc %1%2\rEND\n").arg(QString().setNum(m_bank, 16)).arg(QString().setNum(m_preset, 16));
-    emit answerReady(answer.toUtf8());
 }
 
 void MockCP16Modern::formatMemoryCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

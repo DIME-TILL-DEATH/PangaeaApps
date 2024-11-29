@@ -113,11 +113,8 @@ void PresetListModel::updatePreset(PresetAbstract* newPreset)
         return;
     }
 
-    // qDebug() << "Updating preset, b:" << newPreset.bankNumber() << "p: " << newPreset.presetNumber() << "impulse name:" << newPreset.impulseName();
-    // m_presetList->replace(index, newPreset);
-
     PresetAbstract** listData = m_presetList->data();
-    *listData[index] = *newPreset;
+    (*listData[index]) = *newPreset;
 
     emit dataChanged(createIndex(0, 0), createIndex(m_presetList->size(), 0));
 }

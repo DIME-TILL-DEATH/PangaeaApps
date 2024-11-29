@@ -28,6 +28,7 @@ qt_add_library(pangaea-backend STATIC
     device/presetlegacy.cpp device/presetlegacy.h
     device/presetmodern.h device/presetmodern.cpp
     device/presetabstract.h device/presetabstract.cpp
+    device/irfile.h device/irfile.cpp
     device/deviceparameter.h device/deviceparameter.cpp
     device/abstractdevice.h device/abstractdevice.cpp
     device/cplegacy.h device/cplegacy.cpp

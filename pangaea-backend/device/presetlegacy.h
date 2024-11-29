@@ -15,6 +15,8 @@ class PresetLegacy : public PresetAbstract
 public:
     PresetLegacy(AbstractDevice* owner);
 
+    PresetAbstract& operator=(const PresetAbstract& preset) override;
+
     bool importData(QString filePath);
     bool exportData();
 
@@ -24,6 +26,9 @@ public:
     static quint8 calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, quint8 presetNumber);
     // quint8 getPresetFlatIndex() const;
     quint8 getPresetFlatNumber() const override;
+
+    QString irName() const override {return m_irName;};
+    void setIrName(const QString &newIrName) override {m_irName = newIrName;};
 
     bool isIrEnabled() const override;
     void setIsIrEnabled(bool newIsIrEnabled) override;
@@ -44,6 +49,7 @@ public:
 private:
     AbstractDevice* m_ownerDevice;
 
+    QString m_irName;
     QString m_pathToExport;
 
     QByteArray m_rawData;
@@ -51,16 +57,6 @@ private:
 
     void writePresetChunk(QByteArray& fileData, QString& chunkName, const QByteArray &chunkData);
     QByteArray readPresetChunck(const QByteArray& fileData, QString& chunkName);
-
-    struct
-    {
-        QString header{"PANGAEA_PRESET"};
-        QString versionId{"VERSION"};
-
-        QString dataId{"DATA"};
-        QString irNameId{"IR_NAME"};
-        QString irDataId{"IR_DATA"};
-    } presetHeaderId;
 };
 
 #endif // PRESETLEGACY_H

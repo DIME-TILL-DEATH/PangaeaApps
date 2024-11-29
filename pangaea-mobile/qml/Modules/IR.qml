@@ -43,7 +43,25 @@ BaseModule
                 anchors.fill: parent
                 onClicked:
                 {
-                    UiCore.setImpuls("");
+                    switch(UiCore.currentDevice.deviceClass)
+                    {
+                        case DeviceClass.ABSTRACT:
+                        {
+                            console.log("Abstract device")
+                            break;
+                        }
+                        case DeviceClass.CP_LEGACY:
+                        {
+                            UiCore.setImpuls("");
+                            break;
+                        }
+                        case DeviceClass.CP_MODERN:
+                        {
+                            _irManagement.open();
+                            break;
+                        }
+                    }
+
                 }
             }
         }
@@ -62,6 +80,10 @@ BaseModule
         {
             UiCore.convertAndUploadImpulse("");
         }
+    }
+
+    IrManagementWindow{
+        id: _irManagement
     }
 
     Connections

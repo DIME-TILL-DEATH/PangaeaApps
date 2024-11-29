@@ -7,6 +7,8 @@
 #include "hardwarepreset.h"
 #include "presetlegacy.h"
 
+#include "irfile.h"
+
 class MockCP16Modern : public AbstractMockDevice
 {
     Q_OBJECT
@@ -17,13 +19,14 @@ public:
 
     static QString mockName() {return "offline CP16(MODERN)";};
 
+    // public for testing purposes
+    IrFile linkedIr;
+    QString currentPresetName;
+    preset_data_t currentPresetData;
 private:
     QString basePath;
 
     void initFolders();
-
-    QString currentPresetName;
-    preset_data_t currentPresetData;
 
     bool saveSysParameters();
     bool loadPresetData(quint8 prBank, quint8 prPreset, save_data_t *presetSavedData);
@@ -34,6 +37,8 @@ private:
     void startIrUpload(const QString& fileName);
     void recieveIrChunk(const QByteArray& dataChunk);
 
+    void changePreset(quint8 bank, quint8 preset);
+
     void amtDevCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void amtVerCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void bankPresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
@@ -41,6 +46,7 @@ private:
     void pnameCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void stateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void irCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void listCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void getPresetListCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     void savePresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);

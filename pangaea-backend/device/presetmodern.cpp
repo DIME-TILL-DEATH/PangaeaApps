@@ -11,6 +11,25 @@ PresetModern::PresetModern(AbstractDevice *owner)
     presetVersion = 2;
 }
 
+PresetAbstract& PresetModern::operator=(const PresetAbstract& preset)
+{
+    // *this = preset;
+    if(&preset != this)
+    {
+        const PresetModern* modernPreset = dynamic_cast<const PresetModern*>(&preset);
+        if(modernPreset)
+        {
+            m_bankNumber = modernPreset->m_bankNumber;
+            m_presetNumber = modernPreset->m_presetNumber;
+            presetData = modernPreset->presetData;
+            irFile = modernPreset->irFile;
+            m_ownerDevice = modernPreset->m_ownerDevice;
+            m_presetName = modernPreset->m_presetName;
+        }
+    }
+    return *this;
+}
+
 preset_data_t PresetModern::charsToPresetData(const QByteArray &ba)
 {
     preset_data_t presetData;

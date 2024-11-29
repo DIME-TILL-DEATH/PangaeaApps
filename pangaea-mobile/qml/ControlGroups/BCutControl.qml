@@ -29,7 +29,7 @@ Column
 
         anchors.horizontalCenter: parent.horizontalCenter
 
-        textButton: "CUT ON"
+        textButton: qsTr("CUT ON")
         textColor: eqBand.enabled ? Style.colorText : Style.currentTheme.colorTextDisabled
 
         highlighted: eqBand.enabled

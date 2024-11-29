@@ -980,6 +980,7 @@ void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &argum
 void CPLegacy::ackSaveChanges(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     actualPreset.clearWavData();
+    emit presetSaved();
 }
 
 void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
