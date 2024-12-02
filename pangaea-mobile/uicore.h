@@ -29,8 +29,8 @@ public:
 
     Q_INVOKABLE void setupApplication();
 
-    Q_INVOKABLE void setImpuls(QString fullFilePath);
-    Q_INVOKABLE void convertAndUploadImpulse(QString filePath);
+    Q_INVOKABLE void uploadIr(QString fullFilePath, QString dstFilePath = "");
+    Q_INVOKABLE void convertAndUploadIr(QString srcFilePath, QString dstFilePath = "");
 
     Q_INVOKABLE void exportPreset(QString fileName);
     Q_INVOKABLE void importPreset(QString filePath);
@@ -74,7 +74,6 @@ signals:
 
     void sgDoOnlineFirmwareUpdate();
 
-
     void sgTranslatorChanged(QString langauageCode);
     void currentDeviceChanged();
 
@@ -110,7 +109,8 @@ private:
             {"de", ":/translations/pangaea-mobile_de.qm"}
         };
 
-    QString m_pickedImpulsePath;
+    QString m_pickedIrPath;
+    QString m_dstIrPath;
 
     AbstractDevice dummyDevice{nullptr};
 

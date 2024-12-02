@@ -21,6 +21,8 @@ BaseModule
 
     showDescription: false
 
+    signal openIrManagementWindow();
+
     contentItem:Item{
         MText{
             id: _impulseName
@@ -52,12 +54,14 @@ BaseModule
                         }
                         case DeviceClass.CP_LEGACY:
                         {
-                            UiCore.setImpuls("");
+                            UiCore.uploadIr("");
                             break;
                         }
                         case DeviceClass.CP_MODERN:
                         {
-                            _irManagement.open();
+                            // _irManagement.open();
+                            openIrManagementWindow();
+                            // _irManagement.visible = true;
                             break;
                         }
                     }
@@ -78,13 +82,20 @@ BaseModule
 
         onAccepted:
         {
-            UiCore.convertAndUploadImpulse("");
+            UiCore.convertAndUploadIr("", _irManagement.dstIrPath);
         }
     }
 
-    IrManagementWindow{
-        id: _irManagement
+    CustomMessageDialog{
+        id: _msgDialog
+
+        closeOnDisconnect: true
+
+        headerText: qsTr("IR file exists")
+
+        buttons: Dialog.Ok
     }
+
 
     Connections
     {
@@ -92,12 +103,23 @@ BaseModule
 
         function onSgDeviceError(type, description, params)
         {
-            if(type === DeviceErrorType.IrFormatNotSupported)
+            switch(type)
+            {
+            case DeviceErrorType.IrFormatNotSupported:
             {
                 _msgNotSupportedIrFormat.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
                                      description + "\n" +
                                      qsTr("Do you want to convert it before upload?")
                 _msgNotSupportedIrFormat.open();
+                break;
+            }
+
+            case DeviceErrorType.FileExists:
+            {
+                _msgDialog.text = qsTr("File ") + params + qsTr(" already on device.")
+                _msgDialog.open();
+                break;
+            }
             }
         }
     }

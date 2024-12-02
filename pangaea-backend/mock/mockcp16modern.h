@@ -52,6 +52,8 @@ private:
     void savePresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void presetChangeCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
+    void copyCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+
     void formatMemoryCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     void escAckCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);

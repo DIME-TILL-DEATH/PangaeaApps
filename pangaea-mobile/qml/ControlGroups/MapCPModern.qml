@@ -25,6 +25,12 @@ Item{
         topHeaderSize: masterControlsHeight
     }
 
+    IrManagementWindow{
+        id: _irManagement
+
+        visible: false
+    }
+
     Column
     {
         id: _moduleColumn
@@ -172,6 +178,7 @@ Item{
                     {
                         _delegateLoader.source = "../Modules/IR.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
+                        _delegateLoader.item.openIrManagementWindow.connect(_mapContent.showIrManagementWindow);
                         break;
                     }
 
@@ -199,6 +206,11 @@ Item{
                 }
             }
         }
+    }
+
+    function showIrManagementWindow()
+    {
+        _irManagement.visible = true;
     }
 
     function centerViewAt(index)

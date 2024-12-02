@@ -394,10 +394,10 @@ void CPLegacy::restoreValue(QString name)
     }
 }
 
-void CPLegacy::setImpulse(QString filePath)
+void CPLegacy::startIrUpload(QString srcFilePath, QString dstFilePath)
 {
     QString fileName;
-    QFileInfo fileInfo(filePath);
+    QFileInfo fileInfo(srcFilePath);
 
     if(fileInfo.isFile())
     {
@@ -406,7 +406,7 @@ void CPLegacy::setImpulse(QString filePath)
     }
     else return;
 
-    stWavHeader wavHead = IRWorker::getFormatWav(filePath);
+    stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
 
     if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
     {
@@ -417,7 +417,7 @@ void CPLegacy::setImpulse(QString filePath)
     }
     else
     {
-        irWorker.decodeWav(filePath);
+        irWorker.decodeWav(srcFilePath);
 
         QByteArray fileData = irWorker.formFileData();
         actualPreset.setWaveData(fileData);

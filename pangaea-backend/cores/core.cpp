@@ -184,8 +184,8 @@ void Core::processCommands()
 
         default:
         {
-            chunckSize=2048;
-            sleepTime=10;
+            chunckSize=512;
+            sleepTime=100;
         }
         }
 

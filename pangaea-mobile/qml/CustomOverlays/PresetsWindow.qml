@@ -27,6 +27,13 @@ CustomMessageDialog {
     x: parent.width/2-width/2
     y: parent.height-height
 
+    BusyScreen{
+        width: Screen.width
+        height: Screen.height
+
+        z: parent.z+5
+    }
+
     background: Rectangle {
        id: _backRect
 

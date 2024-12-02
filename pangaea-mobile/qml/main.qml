@@ -316,6 +316,14 @@ ApplicationWindow
                     _msgVersionError.visible = true;
                     break;
                 }
+
+                case DeviceErrorType.CopyFileError:
+                {
+                    _msgCommon.headerText = qsTr("Error");
+                    _msgCommon.text = qsTr("IR file copying error.")
+                    _msgCommon.visible = true;
+                    break;
+                }
             }
         }
 

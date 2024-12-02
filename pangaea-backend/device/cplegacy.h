@@ -49,7 +49,7 @@ public:
 
     Q_INVOKABLE void restoreValue(QString name) override;
 
-    void setImpulse(QString filePath) override;
+    void startIrUpload(QString srcFilePath, QString dstFilePath = "") override;
     Q_INVOKABLE void escImpulse(); // TODO где используется? В мобильном не нашёл вызовов из QML
 
 

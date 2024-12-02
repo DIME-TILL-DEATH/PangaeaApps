@@ -11,13 +11,6 @@ PresetListModel::PresetListModel(QObject *parent)
 
 PresetListModel::~PresetListModel()
 {
-    // beginResetModel();
-    // qDebug() << "Begin elete PresetListModel";
-    // qDeleteAll(m_presetList->begin(), m_presetList->end());
-    // qDebug() << "qDeleteAll";
-    // m_presetList->clear();
-    // qDebug() << "Delete PresetListModel";
-    // endResetModel();
 }
 
 QHash<int, QByteArray> PresetListModel::roleNames() const

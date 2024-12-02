@@ -12,24 +12,39 @@ import Elements 1.0
 
 import CppObjects
 
-CustomMessageDialog {
+Item{
     id: _root
 
-    closeOnDisconnect: true
+    width: parent.width
+    height: parent.height
 
-    width: Screen.width * 0.9
-    height: Screen.height * 0.85
+    z: parent.z+10
 
-    parentHeight: height
+    property string dstIrPath: (_bar.currentIndex === 0) ? "ir_library/"
+                                                         : "bank_" + UiCore.currentDevice.bank + "/preset_" + UiCore.currentDevice.preset+ "/"
 
-    x: Screen.width/2-width/2
-    y: Screen.height-height
 
-    background: Rectangle {
-       id: _backRect
+    MouseArea{
+        z: _irListView.z-5
+        anchors.fill: parent
+    }
 
-        width: _root.width
-        height: _root.height
+    Rectangle{
+        id: _back
+
+        anchors.fill: parent
+        color: "white"
+        opacity: 0.6
+    }
+
+    Rectangle{
+
+        width: parent.width * 0.9
+        height: parent.height * 0.9
+
+        anchors.centerIn: parent
+
+        z: parent.z+5
 
         gradient: Gradient{
             GradientStop{position: 0.0; color: Style.colorModul}
@@ -39,124 +54,132 @@ CustomMessageDialog {
         radius: Style.baseRadius
         border.color: Style.currentTheme.colorBorderOn
         border.width: 1
-    }
 
-    headerText: qsTr("IR management")
-
-    footer: Rectangle {
-        id: _dialogButtonBox
-
-        width: _root.width
-        height: _root.height*0.1
-        color: "transparent"
-        radius: Style.baseRadius
-        border.color: Style.currentTheme.colorBorderOn
-        border.width: 1
-
-        Button{
-            text: qsTr("HIDE")
-
-            width: parent.width*0.8
-            height: parent.height*0.6
-
-            anchors.centerIn: parent
-
-            onClicked: {
-                _root.close()
-            }
-        }
-    }
-
-    Column{
-        width: _root.width*0.95
-        height: _root.height - _dialogButtonBox.height
-
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        spacing: parent.height * 0.01
-
-        MButton{
-            width: parent.width * 0.7
-            height: parent.height * 0.08
+        Column{
+            width: parent.width*0.95
+            height: parent.height// - _dialogButtonBox.height
 
             anchors.horizontalCenter: parent.horizontalCenter
 
-            textButton: qsTr("Upload IR")
-        }
+            spacing: parent.height * 0.01
 
-        ListView{
-            id: _irListView
-
-            width: parent.width * 0.9
-            height: parent.height * 0.75
-
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxPresetCount + UiCore.currentDevice.preset
-
-            model: (_bar.currentIndex === 0) ? UiCore.currentDevice.irsInLibrary
-                                             : UiCore.currentDevice.irsInFolder
-
-            boundsBehavior: Flickable.StopAtBounds
-            clip: true
-
-            ScrollBar.vertical: ScrollBar{
-                active: true
-                visible: true
-            }
-
-            spacing: 4
-
-            snapMode: ListView.SnapToItem
-
-            delegate: Item{
-                width: _irListView.width
-                height: _irListView.height/30
-
+            Item{
+                width: parent.width
+                height: parent.height * 0.05
                 MText{
-                    text: modelData.irName
-
-                    anchors.fill: parent
-
-                    color: isCurrentIr() ? Style.currentTheme.colorModulOn: Style.colorText
-
-
-                    elide: Text.ElideMiddle
-
-                    horizontalAlignment: Qt.AlignHCenter
-                    verticalAlignment: Qt.AlignVCenter
+                    text: qsTr("IR management")
+                    color: "white"
+                    anchors.centerIn: parent
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
                 }
 
-                MouseArea{
-                    anchors.fill: parent
+            }
 
-                    onClicked: {
-                        console.log(UiCore.currentDevice.currentIrFile.irName, UiCore.currentDevice.currentIrFile.irLinkPath,
-                                    modelData.irName, modelData.irLinkPath)
+            Rectangle {
+                id: _sepTop
 
-                        UiCore.currentDevice.currentIrFile = modelData
-                    }
+                width: parent.width
+                height: 2
+                color: Style.currentTheme.colorBorderOn
+            }
+
+            // MButton{
+            //     width: parent.width
+            //     height: parent.height * 0.07
+
+            //     anchors.horizontalCenter: parent.horizontalCenter
+
+            //     textButton: qsTr("Upload IR")
+
+            //     onMbPressed: {
+            //         UiCore.uploadIr("", dstIrPath);
+            //     }
+            // }
+
+            Button{
+                width: parent.width * 0.9
+                height: parent.height * 0.07
+
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                text: qsTr("UPLOAD IR")
+
+                onClicked: {
+                    UiCore.uploadIr("", dstIrPath);
+                }
+            }
+
+            ListView{
+                id: _irListView
+
+                width: parent.width * 0.9
+                height: parent.height * 0.65
+
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxPresetCount + UiCore.currentDevice.preset
+
+                model: (_bar.currentIndex === 0) ? UiCore.currentDevice.irsInLibrary
+                                                 : UiCore.currentDevice.irsInFolder
+
+                boundsBehavior: Flickable.StopAtBounds
+                clip: true
+
+                ScrollBar.vertical: ScrollBar{
+                    active: true
+                    visible: true
                 }
 
-                function isCurrentIr()
-                {
-                    if((_bar.currentIndex === 1) & UiCore.currentDevice.currentIrFile.irLinkPath === "")
-                    {
-                        return UiCore.currentDevice.currentIrFile.irName === modelData.irName
+                spacing: 4
+
+                snapMode: ListView.SnapToItem
+
+                delegate: Item{
+                    width: _irListView.width
+                    height: _irListView.height/30
+
+                    MText{
+                        text: modelData.irName
+
+                        anchors.fill: parent
+
+                        color: isCurrentIr() ? Style.currentTheme.colorModulOn: Style.colorText
+
+
+                        elide: Text.ElideMiddle
+
+                        horizontalAlignment: Qt.AlignHCenter
+                        verticalAlignment: Qt.AlignVCenter
                     }
-                    else
+
+                    MouseArea{
+                        anchors.fill: parent
+
+                        onClicked: {
+                            UiCore.currentDevice.currentIrFile = modelData
+                        }
+                    }
+
+                    function isCurrentIr()
                     {
-                        return (UiCore.currentDevice.currentIrFile.irName === modelData.irName) & (UiCore.currentDevice.currentIrFile.irLinkPath === modelData.irLinkPath)
+                        if((_bar.currentIndex === 1) & UiCore.currentDevice.currentIrFile.irLinkPath === "")
+                        {
+                            return UiCore.currentDevice.currentIrFile.irName === modelData.irName
+                        }
+                        else
+                        {
+                            return (UiCore.currentDevice.currentIrFile.irName === modelData.irName) & (UiCore.currentDevice.currentIrFile.irLinkPath === modelData.irLinkPath)
+                        }
                     }
                 }
             }
-        }
 
-        TabBar{
+            TabBar{
                 id: _bar
 
                 width: parent.width
-                height: parent.height * 0.08
+                height: parent.height * 0.07
 
                 currentIndex: 0
 
@@ -171,13 +194,19 @@ CustomMessageDialog {
                      text: qsTr("Folder")
                  }
             }
-    }
 
-    onOpened: {
-        // _presetListView.positionViewAtIndex(_presetListView.currentIndex, ListView.Center)
-    }
+            Button{
+                text: qsTr("HIDE")
 
-    onAccepted: {
-        _root.close()
+                width: parent.width * 0.9
+                height: parent.height * 0.07
+
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                onClicked: {
+                    _root.visible = false
+                }
+            }
+        }
     }
 }

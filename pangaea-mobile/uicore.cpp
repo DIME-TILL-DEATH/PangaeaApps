@@ -56,22 +56,23 @@ void UiCore::setupApplication()
     appSettings->setValue("first_run", false);
 }
 
-void UiCore::setImpuls(QString fullFilePath)
+void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 {
+    m_dstIrPath = dstFilePath;
 #ifdef Q_OS_ANDROID
-    Q_UNUSED(fullFilePath)  
+    Q_UNUSED(srcFilePath)
     pickFile(ActivityType::PICK_IR, "audio/*");
 #else
-    QFileInfo fileInfo(fullFilePath);
+    m_pickedIrPath = srcFilePath;
+    QFileInfo fileInfo(m_pickedIrPath);
     QString impulseName = fileInfo.fileName();
-    emit sgSetImpuls(fullFilePath, impulseName);
+    m_currentDevice->startIrUpload(m_pickedIrPath, m_dstIrPath);
 #endif
 }
 
-void UiCore::convertAndUploadImpulse(QString filePath)
+void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)
 {
-    Q_UNUSED(filePath);
-    QFileInfo irFileInfo(m_pickedImpulsePath);
+    QFileInfo irFileInfo(m_pickedIrPath);
 
     QString irOutFileName = irFileInfo.fileName();
     QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/convertedIR/";
@@ -84,14 +85,14 @@ void UiCore::convertAndUploadImpulse(QString filePath)
     QString outpuFilePath = outFolder + irOutFileName;
 
     QFile tmpFile;
-    tmpFile.setFileName(m_pickedImpulsePath);
+    tmpFile.setFileName(m_pickedIrPath);
     tmpFile.copy(tmpFilePath);
 
     Resampler().convertFile(tmpFilePath, outpuFilePath);
 
     tmpFile.remove(tmpFilePath);
 
-    m_currentDevice->setImpulse(outpuFilePath);
+    m_currentDevice->startIrUpload(outpuFilePath, m_dstIrPath);
 }
 
 void UiCore::pickFile(ActivityType fileType, QString filter)
@@ -116,6 +117,14 @@ void UiCore::pickFile(ActivityType fileType, QString filter)
 #endif
 }
 
+void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
+{
+    qDebug() << "Impulse picked" << fileName;
+
+    m_pickedIrPath = filePath;
+    m_currentDevice->startIrUpload(filePath, m_dstIrPath);
+}
+
 void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
 {
     emit sgSetUIText("firmware_local_path", updateFirmware->path());
@@ -129,12 +138,6 @@ void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware 
     emit sgSetUIText("firmware_local_path", minimalFirmware->path());
 }
 
-void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
-{
-    qDebug() << "Impulse picked";
-    m_pickedImpulsePath = filePath;
-    m_currentDevice->setImpulse(filePath);
-}
 
 void UiCore::pickFirmwareFile()
 {

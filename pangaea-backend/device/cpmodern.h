@@ -49,9 +49,11 @@ public:
 
     Q_INVOKABLE void restoreValue(QString name) override;
 
-    void setImpulse(QString filePath) override;
+    void startIrUpload(QString srcFilePath, QString dstFilePath = "") override;
     Q_INVOKABLE void escImpulse(); // TODO где используется? В мобильном не нашёл вызовов из QML
 
+    Q_INVOKABLE bool isFileInLibrary(const QString& fileName);
+    Q_INVOKABLE bool isFileInFolder(const QString& fileName);
 
     PresetVolume* getMV() {return MV;};
 
@@ -113,7 +115,7 @@ private:
     void irDownloaded(const QString& irPath, const QByteArray &data);
 
     void setPresetData(const PresetModern &preset);
-    void uploadImpulseData(QString &irName, const QByteArray& irData);
+    void uploadIrData(const QString &irName, const QString &dstPath, const QByteArray& irData);
     void previewIr(const QByteArray& irData);
 
     void uploadFirmware(const QByteArray& fwData);
@@ -130,10 +132,7 @@ private:
 
     void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void ackPresetSavedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
-
-    void ackCCCommHandler(const QList<QByteArray> &arguments);
-    void endCCCommHandler(const QList<QByteArray> &arguments);
-    void errorCCCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void copyCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     QByteArray m_rawFirmwareData;
     const uint32_t fwUploadBlockSize = 100;

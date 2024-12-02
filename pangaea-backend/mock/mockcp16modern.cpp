@@ -36,6 +36,7 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
 
     m_parser.addCommandHandler("esc", std::bind(&MockCP16Modern::escAckCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("copy", std::bind(&MockCP16Modern::copyCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("fsf", std::bind(&MockCP16Modern::formatMemoryCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("fwu", std::bind(&MockCP16Modern::startFwUpdateCommHandler, this, _1, _2, _3));
 
@@ -380,7 +381,8 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
             QString destPath = dataList.at(1);
             QByteArray fileData = dataList.at(2);
 
-            QFile irFile(basePath + destPath + fileName);
+            QFile irFile(destPath + fileName);
+            qDebug() << "MOCK device: saving file to: " << destPath + fileName;
             if(irFile.open(QIODevice::WriteOnly))
             {
                 QByteArray convertedFileData;
@@ -392,9 +394,12 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
                 }
                 irFile.write(convertedFileData);
                 irFile.close();
+                answer = "ir saved\r" + QString(destPath + fileName).toUtf8() + "\n";
             }
-
-            answer += "ir saved\r" + QString(destPath + fileName).toUtf8() + "\n";
+            else
+            {
+                answer = "ir error\rDST_PATH_INCORRECT\n";
+            }
             emit answerReady(answer);
         }
         else
@@ -530,7 +535,7 @@ void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByt
         {
             answer += "\r";
 
-            QString irName;// = "*";
+            QString irLinkName, irFolderName;
             QString dirPath = "bank_" + QString().setNum(b) + "/preset_" + QString().setNum(p);
 
             QFile linkFile(dirPath + "/ir.lnk");
@@ -540,7 +545,8 @@ void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByt
                 QStringList dataList = fileData.split("\n");
                 if(dataList.size()>1)
                 {
-                    irName = dataList.at(0);
+                    QFile checkIrFile(dataList.at(1) + "/" + dataList.at(0));
+                    if(checkIrFile.exists()) irLinkName = dataList.at(0);
                 }
                 else
                 {
@@ -548,18 +554,17 @@ void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByt
                 }
                 linkFile.close();
             }
-            else
-            {
-                QDir presetDir(dirPath);
-                presetDir.setNameFilters({"*.wav"});
 
-                QFileInfoList filesInDir = presetDir.entryInfoList();
-                if(!filesInDir.empty())
-                {
-                    irName = filesInDir.first().fileName();
-                }
-            }
-            answer += irName + "|";
+            QDir presetDir(dirPath);
+            presetDir.setNameFilters({"*.wav"});
+
+            QFileInfoList filesInDir = presetDir.entryInfoList();
+            if(!filesInDir.empty()) irFolderName = filesInDir.first().fileName();
+
+
+            if(irLinkName.isEmpty()) answer += irFolderName + "|";
+            else answer += irLinkName + "|";
+
 
             QString enabled = "00";
             QString presetName;
@@ -603,6 +608,31 @@ void MockCP16Modern::presetChangeCommHandler(const QString &command, const QByte
     emit answerReady(answer.toUtf8());
 }
 
+void MockCP16Modern::copyCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QList<QByteArray> dataList = data.split('\r');
+    if(dataList.size() == 2)
+    {
+        QString srcPath = dataList.at(0);
+        QString dstPath = dataList.at(1);
+
+        QFile srcFile(srcPath);
+        if(srcFile.copy(dstPath))
+        {
+            emit answerReady("copy complete\r\n");
+        }
+        else
+        {
+            emit answerReady("copy error\r\n");
+        }
+    }
+    else
+    {
+        qWarning() << "MOCK device: copy command format incorrect";
+        emit answerReady("copy error\r\n");
+    }
+}
+
 void MockCP16Modern::changePreset(quint8 bank, quint8 preset)
 {
     m_bank = bank;
@@ -619,15 +649,27 @@ void MockCP16Modern::changePreset(quint8 bank, quint8 preset)
         {
             irFilename = dataList.at(0);
             irLinkPath = dataList.at(1);
+            QFile checkIrFile(irLinkPath + "/" + irFilename);
+            if(checkIrFile.exists())
+            {
+                linkedIr.setIrName(irFilename);
+                linkedIr.setIrLinkPath(irLinkPath);
+                linkFile.close();
+            }
+            else
+            {
+                qWarning() << "MOCK: IR file in link not found." << irFilename;
+                linkedIr.clear();
+                linkFile.close();
+                linkFile.remove();
+            }
         }
         else
         {
             qWarning() << "lnk file corrupted";
+            linkedIr.clear();
+            linkFile.close();
         }
-        linkFile.close();
-
-        linkedIr.setIrName(irFilename);
-        linkedIr.setIrLinkPath(irLinkPath);
     }
     else
     {

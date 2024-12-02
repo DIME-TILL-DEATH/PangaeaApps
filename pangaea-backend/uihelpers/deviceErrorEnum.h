@@ -15,10 +15,13 @@ public:
         UndefinedCommand,
         IrFormatNotSupported,
         IrSaveError,
+        FileNotFound,
         PresetImportUnsuccesfull,
         FimrmwareVersionInsufficient,
         FirmwareFileError,
-        FormatMemoryError
+        FormatMemoryError,
+        CopyFileError,
+        FileExists
     };
     Q_ENUM(Value)
 };

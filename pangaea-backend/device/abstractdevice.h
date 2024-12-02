@@ -69,7 +69,7 @@ public:
     Q_INVOKABLE virtual void importPreset(QString filePath, QString fileName) {};
     Q_INVOKABLE virtual void exportPreset(QString filePath, QString fileName) {};
 
-    virtual void setImpulse(QString filePath) {};
+    virtual void startIrUpload(QString srcFilePath, QString dstFilePath = "") {};
     virtual void setFirmware(QString fullFilePath) {};
     virtual void formatMemory() {};
 
