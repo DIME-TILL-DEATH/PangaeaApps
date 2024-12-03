@@ -36,6 +36,7 @@ public:
     void prevState();
     InterfaceState state() const;
 
+    DeviceDescription connectedDevice() const;
     DeviceConnectionType connectionType() const;
 
 signals:

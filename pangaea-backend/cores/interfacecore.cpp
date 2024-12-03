@@ -76,6 +76,7 @@ void InterfaceCore::disconnectFromDevice()
 {
     if(m_exchangeInterface != nullptr)
     {
+        DeviceDescription disconnectedDevice = m_exchangeInterface->connectedDevice();
         m_exchangeInterface->disconnectFromDevice();
         QObject::disconnect(m_exchangeInterface, nullptr, this, nullptr);
         m_exchangeInterface = nullptr;
@@ -85,6 +86,7 @@ void InterfaceCore::disconnectFromDevice()
         QList<DeviceDescription> emptyList;
         emit sgDeviceListUpdated(DeviceConnectionType::BLE, emptyList);
         emit sgDeviceListUpdated(DeviceConnectionType::USB, emptyList);
+        emit sgInterfaceDisconnected(disconnectedDevice);
     }
 }
 

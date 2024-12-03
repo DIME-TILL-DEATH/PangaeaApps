@@ -32,6 +32,11 @@ AbstractInterface::InterfaceState AbstractInterface::state() const
     return m_state;
 }
 
+DeviceDescription AbstractInterface::connectedDevice() const
+{
+    return m_connectedDevice;
+}
+
 DeviceConnectionType AbstractInterface::connectionType() const
 {
     return m_connectionType;
