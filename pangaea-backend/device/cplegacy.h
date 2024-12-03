@@ -35,6 +35,8 @@ public:
     explicit CPLegacy(Core *parent);
     ~CPLegacy();
 
+    void updateOutputModeNames() override;
+
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
 

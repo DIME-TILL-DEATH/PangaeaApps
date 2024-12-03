@@ -2,6 +2,32 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US">
 <context>
+    <name>AbstractDevice</name>
+    <message>
+        <source>Phones</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Balanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>L: Processed/R: Monitor</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>BCutControl</name>
+    <message>
+        <source>CUT ON</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BankSpin</name>
     <message>
         <source>MAP</source>
@@ -357,6 +383,18 @@ TYPE: There are 3 types of the effect to choose from:
         <source>Impulse Response or IR is a sonic fingerprint of a certain speaker, cabinet, mic, mic preamp and room where the profile was captured.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>IR file exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> already on device.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Ir</name>
@@ -377,6 +415,29 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
     <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation type="vanished">The Pangaea doesn&apos;t support this wav format:</translation>
+    </message>
+</context>
+<context>
+    <name>IrManagementWindow</name>
+    <message>
+        <source>IR management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UPLOAD IR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HIDE</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -542,22 +603,6 @@ VOLUME: Output signal level.</source>
     <message>
         <source>empty</source>
         <translation type="vanished">empty</translation>
-    </message>
-    <message>
-        <source>Phones</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Balanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>L: Processed/R: Monitor</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -869,6 +914,10 @@ Minimum required version is </source>
     </message>
     <message>
         <source>Device parse error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IR file copying error.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

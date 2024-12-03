@@ -2,6 +2,32 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>AbstractDevice</name>
+    <message>
+        <source>Phones</source>
+        <translation>Наушники</translation>
+    </message>
+    <message>
+        <source>Line</source>
+        <translation>Линейный</translation>
+    </message>
+    <message>
+        <source>Balanced</source>
+        <translation>Балансный</translation>
+    </message>
+    <message>
+        <source>L: Processed/R: Monitor</source>
+        <translation>Л: Обраб./П: Мониторн.</translation>
+    </message>
+</context>
+<context>
+    <name>BCutControl</name>
+    <message>
+        <source>CUT ON</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BankSpin</name>
     <message>
         <source>MAP</source>
@@ -382,6 +408,18 @@ TYPE: There are 3 types of the effect to choose from:
         <source>Impulse Response or IR is a sonic fingerprint of a certain speaker, cabinet, mic, mic preamp and room where the profile was captured.</source>
         <translation></translation>
     </message>
+    <message>
+        <source>IR file exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> already on device.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Ir</name>
@@ -410,6 +448,29 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <message>
         <source>empty</source>
         <translation type="vanished">пусто</translation>
+    </message>
+</context>
+<context>
+    <name>IrManagementWindow</name>
+    <message>
+        <source>IR management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UPLOAD IR</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HIDE</source>
+        <translation type="unfinished">ЗАКРЫТЬ</translation>
     </message>
 </context>
 <context>
@@ -674,19 +735,19 @@ VOLUME: Output signal level.</source>
     </message>
     <message>
         <source>Phones</source>
-        <translation>Наушники</translation>
+        <translation type="vanished">Наушники</translation>
     </message>
     <message>
         <source>Line</source>
-        <translation>Линейный</translation>
+        <translation type="vanished">Линейный</translation>
     </message>
     <message>
         <source>Balanced</source>
-        <translation>Балансный</translation>
+        <translation type="vanished">Балансный</translation>
     </message>
     <message>
         <source>L: Processed/R: Monitor</source>
-        <translation>Л: Обраб./П: Мониторн.</translation>
+        <translation type="vanished">Л: Обраб./П: Мониторн.</translation>
     </message>
 </context>
 <context>
@@ -1031,6 +1092,10 @@ WARNING!!! Updating firmware may take several minutes!</source>
     </message>
     <message>
         <source>Device parse error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IR file copying error.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

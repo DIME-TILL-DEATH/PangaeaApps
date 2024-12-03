@@ -41,7 +41,7 @@ Rectangle {
         Connections{
             target: UiCore.currentDevice
 
-            function onDeviceUpdatingValues()
+            function onOutputModeChanged()
             {
                 _comboBox.deviceUpdatingValues = true;
                 _comboBox.currentIndex = UiCore.currentDevice.outputMode;

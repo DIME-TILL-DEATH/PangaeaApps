@@ -253,6 +253,10 @@ void UiCore::loadTranslator(QString languageCode)
         QCoreApplication::installTranslator(&m_translator);
 
         emit sgTranslatorChanged(languageCode);
+        if(m_currentDevice)
+        {
+            m_currentDevice->updateOutputModeNames();
+        }
     }
     else qDebug() << "Translator not found. Using english";
 }

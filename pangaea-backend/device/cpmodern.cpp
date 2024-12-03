@@ -12,10 +12,7 @@ CPModern::CPModern(Core *parent)
 {
     m_deviceClass = DeviceClass::CP_MODERN;
 
-    m_avaliableOutputModes.append(QObject::tr("Phones"));
-    m_avaliableOutputModes.append(QObject::tr("Line"));
-    m_avaliableOutputModes.append(QObject::tr("Balanced"));
-    m_avaliableOutputModes.append(QObject::tr("L: Processed/R: Monitor"));
+    CPModern::updateOutputModeNames();
 
     using namespace std::placeholders;
     m_parser.addCommandHandler("amtver", std::bind(&CPModern::amtVerCommHandler, this, _1, _2, _3));
@@ -50,6 +47,18 @@ CPModern::CPModern(Core *parent)
 CPModern::~CPModern()
 {
     qDeleteAll(m_presetsList);
+}
+
+void CPModern::updateOutputModeNames()
+{
+    m_avaliableOutputModes.clear();
+    m_avaliableOutputModes.append(AbstractDevice::tr("Phones"));
+    m_avaliableOutputModes.append(AbstractDevice::tr("Line"));
+    m_avaliableOutputModes.append(AbstractDevice::tr("Balanced"));
+    m_avaliableOutputModes.append(AbstractDevice::tr("L: Processed/R: Monitor"));
+
+    emit avaliableOutputModesChanged();
+    emit outputModeChanged();
 }
 
 void CPModern::initDevice(DeviceType deviceType)
@@ -626,7 +635,7 @@ void CPModern::getBankPresetCommHandler(const QString &command, const QByteArray
 
 void CPModern::getOutputModeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    quint8 mode = arguments.toUInt();
+    quint8 mode = data.toUInt();
     m_outputMode = mode;
     emit outputModeChanged();
 }

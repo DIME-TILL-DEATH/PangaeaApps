@@ -35,6 +35,8 @@ public:
     CPModern(Core *parent);
     ~CPModern();
 
+    void updateOutputModeNames() override;
+
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
 

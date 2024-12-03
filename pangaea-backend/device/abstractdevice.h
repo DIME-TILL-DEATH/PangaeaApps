@@ -33,7 +33,7 @@ class AbstractDevice : public QObject
     Q_PROPERTY(quint8 maxBankCount READ maxBankCount CONSTANT)
     Q_PROPERTY(quint8 maxPresetCount READ maxPresetCount CONSTANT)
 
-    Q_PROPERTY(QStringList avaliableOutputModes READ avaliableOutputModes CONSTANT)
+    Q_PROPERTY(QStringList avaliableOutputModes READ avaliableOutputModes NOTIFY avaliableOutputModesChanged FINAL)
     Q_PROPERTY(quint8 outputMode READ outputMode WRITE setOutputMode NOTIFY outputModeChanged FINAL)
 
     Q_PROPERTY(PresetManager* presetManager READ presetManager CONSTANT)
@@ -69,6 +69,8 @@ public:
     Q_INVOKABLE virtual void importPreset(QString filePath, QString fileName) {};
     Q_INVOKABLE virtual void exportPreset(QString filePath, QString fileName) {};
 
+    virtual void updateOutputModeNames() {};
+
     virtual void startIrUpload(QString srcFilePath, QString dstFilePath = "") {};
     virtual void setFirmware(QString fullFilePath) {};
     virtual void formatMemory() {};
@@ -99,6 +101,8 @@ signals:
 
     void modulesListModelChanged();
     void presetListModelChanged();
+
+    void avaliableOutputModesChanged();
 
     void sgDeviceError(DeviceErrorType errorType, QString description = "", QVariantList params = {});
     void sgDeviceMessage(DeviceMessageType msgType, QString description = "", QVariantList params = {});

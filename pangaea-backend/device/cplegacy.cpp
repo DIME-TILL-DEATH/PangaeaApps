@@ -12,10 +12,7 @@ CPLegacy::CPLegacy(Core *parent)
 {
     m_deviceClass = DeviceClass::CP_LEGACY;
 
-    m_avaliableOutputModes.append(QObject::tr("Phones"));
-    m_avaliableOutputModes.append(QObject::tr("Line"));
-    m_avaliableOutputModes.append(QObject::tr("Balanced"));
-    // m_avaliableOutputModes.append(QObject::tr("L: Processed/R: Monitor"));
+    CPLegacy::updateOutputModeNames();
 
     using namespace std::placeholders;
     m_parser.addCommandHandler("amtver", std::bind(&CPLegacy::amtVerCommHandler, this, _1, _2, _3));
@@ -66,6 +63,17 @@ CPLegacy::CPLegacy(Core *parent)
 CPLegacy::~CPLegacy()
 {
     qDeleteAll(m_presetsList);
+}
+
+void CPLegacy::updateOutputModeNames()
+{
+    m_avaliableOutputModes.clear();
+    m_avaliableOutputModes.append(AbstractDevice::tr("Phones"));
+    m_avaliableOutputModes.append(AbstractDevice::tr("Line"));
+    m_avaliableOutputModes.append(AbstractDevice::tr("Balanced"));
+
+    emit avaliableOutputModesChanged();
+    emit outputModeChanged();
 }
 
 void CPLegacy::initDevice(DeviceType deviceType)
