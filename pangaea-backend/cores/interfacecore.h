@@ -39,6 +39,8 @@ signals:
     void sgNewData(QByteArray data);
     void sgModuleNameUpdated(QString name);
 
+    void sgCoreDisconnect();
+
 
     void sgRssiReaded(qint16 rssi);
 private:

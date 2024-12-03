@@ -32,6 +32,7 @@ void Core::disconnectFromDevice()
     // {
     //     delete(currentDevice);
         currentDevice = nullptr;
+
     // }
     emit sgReadyToDisconnect();
 }

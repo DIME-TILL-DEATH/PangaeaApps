@@ -90,7 +90,8 @@ typedef struct
     uint8_t slave;
     uint8_t presence_on;
     uint8_t presence_vol;
-    uint8_t reserved[2];
+    uint8_t depth;
+    uint8_t reserved[1];
 }pa_data_t;
 
 typedef struct
@@ -106,6 +107,7 @@ typedef struct
     uint16_t freq[EQ_BANDS_COUNT];
     int8_t Q[EQ_BANDS_COUNT];
     uint8_t band_type[EQ_BANDS_COUNT];
+    uint8_t band_on[EQ_BANDS_COUNT];
 
     uint8_t reserved[2];
 }eq_t;
@@ -133,7 +135,7 @@ typedef struct
     eq_t eq2;
 
     // Tremolo, phaser, flanger, chorus, WAH
-    uint8_t reserved[32];
+    uint8_t reserved[22];
 
     reverb_data_t reverb;
 }preset_data_t;
