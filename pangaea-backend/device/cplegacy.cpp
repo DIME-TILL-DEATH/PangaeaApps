@@ -546,6 +546,8 @@ void CPLegacy::uploadFirmware(const QByteArray& firmware)
         qint64 symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / fwUploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
         qint64 symbolsToRecieve = 0;// 18 * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
 
+        qDebug() << Q_FUNC_INFO << symbolsToSend;
+
         emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateStarted);
         emit sgDisableTimeoutTimer();
 
@@ -963,7 +965,7 @@ void CPLegacy::requestNextChunkCommHandler(const QString &command, const QByteAr
     else
     {
         // нулевой блок это знак что файл загружен
-        emit sgSendWithoutConfirmation("0\n", false);
+        emit sgSendWithoutConfirmation("0\n");
     }
     emit sgProcessCommands();
 }

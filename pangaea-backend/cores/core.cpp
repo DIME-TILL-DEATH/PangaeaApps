@@ -135,6 +135,7 @@ void Core::pushCommandToQueue(QByteArray command, bool finalize)
 void Core::sendWithoutConfirmation(QByteArray data, qint64 dataSizeToSend, qint64 dataSizeToRecieve)
 {
     if(dataSizeToSend > -1) symbolsToSend = dataSizeToSend;
+
     if(dataSizeToRecieve > -1) symbolsToRecieve = dataSizeToRecieve;
 
     commandsSended.clear();
@@ -229,7 +230,10 @@ void Core::updateProgressBar()
 {
     if(currentDevice) symbolsToRecieve = currentDevice->bytesToRecieve();
 
+
     float fVal = (double)(symbolsSended+symbolsRecieved) / (double)(symbolsToSend+symbolsToRecieve);
+
+    // qDebug() << Q_FUNC_INFO << "send:" << symbolsSended << symbolsToSend << "recieved:" << symbolsRecieved << symbolsToRecieve << "fval:" << fVal;
     emit sgSetProgress(fVal, "");
 }
 
