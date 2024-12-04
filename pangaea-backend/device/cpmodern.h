@@ -65,6 +65,8 @@ public:
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
     Q_INVOKABLE void formatMemory() override;
 
+    quint64 maxIrSize() override {return 984 * 3 + 44;};
+
     // avaliable modules
     // вынести создание наружу? DependencyContainer
     // public для тестов

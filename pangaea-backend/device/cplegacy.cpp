@@ -88,6 +88,7 @@ void CPLegacy::initDevice(DeviceType deviceType)
     PR = new Preamp(this);
     PA = new PowerAmp(this);
     IR = new CabSim(this);
+    connect(IR, &CabSim::dataChanged, this, &CPLegacy::slIrEnabledChanged);
     HPF = new HiPassFilter(this);
     EQ = new EqParametric(this);
     LPF = new LowPassFilter(this);
@@ -594,6 +595,12 @@ void CPLegacy::formatMemory()
     emit sgProcessCommands();
 }
 
+void CPLegacy::slIrEnabledChanged()
+{
+    actualPreset.setIsIrEnabled(IR->moduleEnabled());
+    m_presetListModel.updatePreset(&actualPreset);
+}
+
 void CPLegacy::setIsPreEq(bool newIsPreEq)
 {
     if (m_isPreEq == newIsPreEq)
@@ -709,6 +716,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         eqData.freq[i] = legacyData.eq_freq[i];
         eqData.Q[i] = legacyData.eq_Q[i];
     }
+    eqData.parametric_on = legacyData.eq_on;
     eqData.hp_freq = legacyData.hp_freq;
     eqData.hp_on = legacyData.hp_on;
     eqData.lp_freq = legacyData.lp_freq;

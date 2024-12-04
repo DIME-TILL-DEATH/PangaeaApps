@@ -2,6 +2,10 @@
 
 #include <QDebug>
 
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+
 ControlValue::ControlValue(AbstractModule *owner, QString commandName,
                            QString name, QString units,
                            qint16 minControlValue, qint16 maxControlValue,
@@ -42,16 +46,21 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     double k1 = m_minDisplayValue-(m_minControlValue*k2);
 
     QString fullCommand;
+    QString strValue;
     if(m_maxControlValue>0xFF)
     {
         quint16 controlValue = (m_displayValue - k1)/k2;
-        fullCommand = m_commandString + QString(" %1\r\n").arg(controlValue, 0, 16);
+        strValue.setNum(controlValue, 16);
+        if(strValue.size() > 4) strValue = strValue.right(4);
+        fullCommand = m_commandString + " " + strValue + "\r\n";
     }
     else
     {
         quint8 controlValue = (m_displayValue - k1)/k2;
-        fullCommand = m_commandString + QString(" %1\r\n").arg(controlValue, 0, 16);
+        strValue.setNum(controlValue, 16);
+        if(strValue.size() > 2) strValue = strValue.right(2);
     }
+    fullCommand = m_commandString + " " + strValue + "\r\n";
 
     if(buffer.isEmpty())
     {
@@ -96,6 +105,8 @@ bool ControlValue::enabled() const
 
 void ControlValue::setControlValue(qint32 value)
 {
+    if(value > m_maxControlValue) value = m_maxControlValue;
+
     double k2 = (m_minDisplayValue-m_maxDisplayValue)/(m_minControlValue-m_maxControlValue);
     double k1 = m_minDisplayValue-(m_minControlValue*k2);
     double resultValue = k1 + value*k2;

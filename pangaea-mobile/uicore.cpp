@@ -122,6 +122,8 @@ void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
     qDebug() << "Impulse picked" << fileName;
 
     m_pickedIrPath = filePath;
+    QFileInfo fileInfo(filePath);
+
     m_currentDevice->startIrUpload(filePath, m_dstIrPath);
 }
 

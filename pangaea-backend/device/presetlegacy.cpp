@@ -20,6 +20,7 @@ PresetAbstract& PresetLegacy::operator=(const PresetAbstract& preset)
         const PresetLegacy* legacyPreset = dynamic_cast<const PresetLegacy*>(&preset);
         if(legacyPreset)
         {
+            m_irName = legacyPreset->irName();
             m_bankNumber = legacyPreset->m_bankNumber;
             m_presetNumber = legacyPreset->m_presetNumber;
             m_ownerDevice = legacyPreset->m_ownerDevice;

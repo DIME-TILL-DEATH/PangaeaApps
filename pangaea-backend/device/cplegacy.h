@@ -54,6 +54,7 @@ public:
     void startIrUpload(QString srcFilePath, QString dstFilePath = "") override;
     Q_INVOKABLE void escImpulse(); // TODO где используется? В мобильном не нашёл вызовов из QML
 
+    quint64 maxIrSize() override {return 984 * 3 + 44;};
 
     PresetVolume* getMV() {return MV;};
 
@@ -79,6 +80,8 @@ public:
     EarlyReflections* ER;
 public slots:
      QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+
+    void slIrEnabledChanged();
 
 signals:
 

@@ -276,7 +276,7 @@ void MockCP16Legacy::outputModeCommHandler(const QString &command, const QByteAr
 
 void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)
 {
-    if(arguments.size() == 0)
+    if(data.size() == 0)
     {
         quint8 rawData[sizeof(preset_data_legacy_t)];
         memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
@@ -296,14 +296,14 @@ void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArra
     }
     else
     {
-        QList<QByteArray> argsList = arguments.split('\r');
-        if(argsList.size()>1)
+        QList<QByteArray> dataList = data.split('\r');
+        if(dataList.size()>0)
         {
-            qDebug() << "Mock device, set state arguments:" << argsList.at(1);
+            qDebug() << "Mock device, set state arguments:" << dataList.at(1);
             quint8 rawArr[sizeof(preset_data_legacy_t)];
-            for(int i = 0; i < argsList.at(1).size(); i += 2)
+            for(int i = 0; i < dataList.at(0).size(); i += 2)
             {
-                QString chByte = QString(argsList.at(1).at(i)) + QString(argsList.at(1).at(i+1));
+                QString chByte = QString(dataList.at(0).at(i)) + QString(dataList.at(0).at(i+1));
                 rawArr[i/2] = chByte.toInt(nullptr, 16);
             }
             memcpy(&currentPresetData, rawArr, sizeof(preset_data_legacy_t));

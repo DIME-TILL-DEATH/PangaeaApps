@@ -20,7 +20,11 @@ void ControlQLegacy::setDisplayValue(double newDisplayValue)
 
     quint8 controlValue = 100 - powf((m_displayValue-0.225) * powf(200, 3)/5, 1.0/3.0);
 
-    QString fullCommand = m_commandString + QString(" %1\r\n").arg(controlValue, 0, 16); //\r
+    QString strValue;
+    strValue.setNum(controlValue, 16);
+    if(strValue.size() > 2) strValue = strValue.right(2);
+
+    QString fullCommand = m_commandString + " " + strValue + "\r\n"; //\r
 
     if(buffer.isEmpty())
     {

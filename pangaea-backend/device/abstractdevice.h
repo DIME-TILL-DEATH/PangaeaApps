@@ -75,6 +75,8 @@ public:
     virtual void setFirmware(QString fullFilePath) {};
     virtual void formatMemory() {};
 
+    virtual quint64 maxIrSize() {return 0;};
+
     quint8 bank() const {return m_bank;};
     quint8 preset() const {return m_preset;};
     quint8 maxBankCount() const {return m_maxBankCount;};
