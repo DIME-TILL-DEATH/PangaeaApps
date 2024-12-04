@@ -403,7 +403,7 @@ void CPLegacy::restoreValue(QString name)
     }
 }
 
-void CPLegacy::startIrUpload(QString srcFilePath, QString dstFilePath)
+void CPLegacy::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
 {
     QString fileName;
     QFileInfo fileInfo(srcFilePath);
@@ -429,6 +429,10 @@ void CPLegacy::startIrUpload(QString srcFilePath, QString dstFilePath)
         irWorker.decodeWav(srcFilePath);
 
         QByteArray fileData = irWorker.formFileData();
+        if(trimFile)
+        {
+            if(fileData.size() > maxIrSize()) fileData = fileData.left(maxIrSize());
+        }
         actualPreset.setWaveData(fileData);
         uploadImpulseData(fileData, true, fileName);
     }

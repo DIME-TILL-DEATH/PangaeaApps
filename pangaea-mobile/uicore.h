@@ -12,10 +12,11 @@
 
 #include "activityresultmanager.h"
 
-#include "deviceparameter.h"
 #include "firmware.h"
 
 #include "abstractdevice.h"
+
+#include "uimessagetype.h"
 
 
 class UiCore : public QObject
@@ -57,6 +58,9 @@ signals:
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value);
+
+    void sgUiMessage(UiMessageType messageType, QString message = "", QVariantList params = {});
+
     void sgUpdateAppSetting(QString settingName, QVariant settingValue);
 
     void sgSetProgress(float val, QString extText);
@@ -64,7 +68,6 @@ signals:
     //-----------------------------------------
     void sgLocalBluetoothNotReady(QString reason);
     //-----------------------------------------------
-    void sgReadAllParameters();
 
     void sgSetFirmware (QString fullFilePath);
 
@@ -89,9 +92,6 @@ public slots:
     void slExportPreset(QString fullFilePath, QString fileName);
     void slImportPreset(QString fullFilePath, QString fileName);
 
-    // void slDeviceDisconnected();
-
-private slots:
     void slImpulseFilePicked(QString filePath, QString fileName);
 
 private:

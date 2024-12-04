@@ -51,15 +51,16 @@ public:
 
     Q_INVOKABLE void restoreValue(QString name) override;
 
-    void startIrUpload(QString srcFilePath, QString dstFilePath = "") override;
+    Q_INVOKABLE void startIrUpload(QString srcFilePath, QString dstFilePath = "", bool trimFile = false) override;
     Q_INVOKABLE void escImpulse(); // TODO где используется? В мобильном не нашёл вызовов из QML
+
+    Q_INVOKABLE void setFirmware(QString fullFilePath) override;
+    Q_INVOKABLE void formatMemory() override;
 
     quint64 maxIrSize() override {return 984 * 3 + 44;};
 
     PresetVolume* getMV() {return MV;};
 
-    Q_INVOKABLE void setFirmware(QString fullFilePath) override;
-    Q_INVOKABLE void formatMemory() override;
 
     bool isPaFw() const {return m_isPaFw;};
     bool isPreEq() const {return m_isPreEq;};

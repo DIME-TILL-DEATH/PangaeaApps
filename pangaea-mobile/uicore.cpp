@@ -134,12 +134,22 @@ void UiCore::pickFile(ActivityType fileType, QString filter)
 
 void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
 {
-    qDebug() << "Impulse picked" << fileName;
 
     m_pickedIrPath = filePath;
     QFileInfo fileInfo(filePath);
+    qDebug() << "Impulse picked" << fileName
+             << "size:" << fileInfo.size() << "ir effective:" << m_currentDevice->maxIrSize();
 
-    m_currentDevice->startIrUpload(filePath, m_dstIrPath);
+    if(m_currentDevice->deviceClass() > DeviceClass::CP_LEGACY)
+    {
+        if(fileInfo.size() > m_currentDevice->maxIrSize())
+        {
+            emit sgUiMessage(UiMessageType::PROPOSE_IR_TRIM, "File is bigger than processing IR", {fileName, m_pickedIrPath, m_dstIrPath});
+            return;
+        }
+    }
+
+    m_currentDevice->startIrUpload(filePath, m_dstIrPath, false);
 }
 
 void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)

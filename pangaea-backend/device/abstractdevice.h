@@ -69,11 +69,11 @@ public:
     Q_INVOKABLE virtual void importPreset(QString filePath, QString fileName) {};
     Q_INVOKABLE virtual void exportPreset(QString filePath, QString fileName) {};
 
-    virtual void updateOutputModeNames() {};
+    Q_INVOKABLE virtual void startIrUpload(QString srcFilePath, QString dstFilePath = "", bool trimFile = false) {};
+    Q_INVOKABLE virtual void setFirmware(QString fullFilePath) {};
+    Q_INVOKABLE virtual void formatMemory() {};
 
-    virtual void startIrUpload(QString srcFilePath, QString dstFilePath = "") {};
-    virtual void setFirmware(QString fullFilePath) {};
-    virtual void formatMemory() {};
+    virtual void updateOutputModeNames() {};
 
     virtual quint64 maxIrSize() {return 0;};
 

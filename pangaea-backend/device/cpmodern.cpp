@@ -320,7 +320,7 @@ void CPModern::restoreValue(QString name)
     }
 }
 
-void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath)
+void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
 {
     QString fileName;
     QFileInfo fileInfo(srcFilePath);
@@ -332,6 +332,7 @@ void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath)
     }
     else
     {
+        qWarning() << "Can't open file";
         emit sgDeviceError(DeviceErrorType::FileNotFound, "", {fileName});
         return;
     }
@@ -369,6 +370,10 @@ void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath)
         // fileName.replace(QString(" "), QString("_"), Qt::CaseInsensitive);
 
         QByteArray fileData = irWorker.formFileData();
+        if(trimFile)
+        {
+            if(fileData.size() > maxIrSize()) fileData = fileData.left(maxIrSize());
+        }
         uploadIrData(fileName, dstFilePath, fileData);
     }
 }

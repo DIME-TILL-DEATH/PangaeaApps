@@ -22,6 +22,7 @@
 #include "deviceerrorenum.h"
 #include "devicemessageenum.h"
 #include "deviceclassenum.h"
+#include "uimessagetype.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
@@ -114,6 +115,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<PresetStateEnum>("CppEnums", 1, 0, "PresetState", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceErrorEnum>("CppEnums", 1, 0, "DeviceErrorType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceMessageEnum>("CppEnums", 1, 0, "DeviceMessageType", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<UiMessageTypeEnum>("CppEnums", 1, 0, "UiMessageType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<ModuleTypeEnum>("CppEnums", 1, 0, "ModuleType", "Not creatable as it is an enum type");
 
     AbstractModule::registerTypestoQml();

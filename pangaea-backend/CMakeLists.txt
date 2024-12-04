@@ -70,6 +70,7 @@ qt_add_library(pangaea-backend STATIC
     uihelpers/filtertypeenum.h
     uihelpers/moduletypeenum.h
     uihelpers/presetstateenum.h
+    uihelpers/uimessagetype.h
 
     mock/abstractmockdevice.h mock/abstractmockdevice.cpp
     mock/mockcp16legacy.h mock/mockcp16legacy.cpp
