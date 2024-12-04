@@ -123,8 +123,6 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    QObject::connect(&uiCore, &UiCore::sgDisconnectFromDevice, core, &Core::disconnectFromDevice);
-    QObject::connect(interfaceManager, &InterfaceCore::sgCoreDisconnect, core, &Core::disconnectFromDevice);
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter);
     QObject::connect(core, &Core::sgCurrentDeviceChanged, &uiCore, &UiCore::slCurrentDeviceChanged);
@@ -140,18 +138,19 @@ int main(int argc, char *argv[])
 
     Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData);
     Core::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, core, &Core::slInterfaceConnected);
-    Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
-    Core::connect(core, &Core::sgExchangeError, interfaceManager, &InterfaceCore::disconnectFromDevice);
-    Core::connect(core, &Core::sgReadyToDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
-    Core::connect(core, &Core::sgReadyToDisconnect, &uiCore, &UiCore::slDeviceDisconnected);
 
+    // disconnect
+    QObject::connect(&uiCore, &UiCore::sgDisconnectFromDevice, core, &Core::disconnectFromDevice);
+    Core::connect(core, &Core::sgReadyToDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice);
+
+    QObject::connect(interfaceManager, &InterfaceCore::sgErrorDisconnect, &uiCore, &UiCore::disconnectFromDevice);
     Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError);
+
+    Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceCore::writeToDevice);
 
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::startScanning, interfaceManager, &InterfaceCore::startScanning);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::connectToDevice, interfaceManager, &InterfaceCore::connectToDevice);
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::disconnectFromDevice, interfaceManager, &InterfaceCore::disconnectFromDevice);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgRssiMeasuring, interfaceManager, &InterfaceCore::rssiMeasuring);
-//    Core::connect(core, &Core::sgImmediatelyDisconnect, interfaceManager, &InterfaceCore::disconnectFromDevice, Qt::QueuedConnection);
 
     QObject::connect(&uiCore, &UiCore::sgModuleNameChanged, interfaceManager, &InterfaceCore::setModuleName);
     QObject::connect(interfaceManager, &InterfaceCore::sgModuleNameUpdated, &uiCore, &UiCore::setModuleName);

@@ -29,6 +29,8 @@ public:
 
     Q_INVOKABLE void setupApplication();
 
+    Q_INVOKABLE void disconnectFromDevice();
+
     Q_INVOKABLE void uploadIr(QString fullFilePath, QString dstFilePath = "");
     Q_INVOKABLE void convertAndUploadIr(QString srcFilePath, QString dstFilePath = "");
 
@@ -87,7 +89,7 @@ public slots:
     void slExportPreset(QString fullFilePath, QString fileName);
     void slImportPreset(QString fullFilePath, QString fileName);
 
-    void slDeviceDisconnected();
+    // void slDeviceDisconnected();
 
 private slots:
     void slImpulseFilePicked(QString filePath, QString fileName);

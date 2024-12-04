@@ -152,7 +152,7 @@ void InterfaceCore::rssiMeasuring(bool isEnabled)
 
 void InterfaceCore::slInterfaceError(QString errorDescription)
 {
-    emit sgCoreDisconnect(); // Core cleanup first
+    emit sgErrorDisconnect();
     emit sgInterfaceError(errorDescription);
 }
 

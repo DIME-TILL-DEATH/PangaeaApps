@@ -16,24 +16,22 @@ Core::Core(QObject *parent) : QObject(parent)
 {
     timeoutTimer = new QTimer(this);
     connect(timeoutTimer, &QTimer::timeout, this, &Core::recieveTimeout);
-
-
 }
 
 void Core::disconnectFromDevice()
 {
-    qDebug() << __FUNCTION__ << "disconnected";
+    qDebug() << Q_FUNC_INFO << "disconnected";
 
     timeoutTimer->stop();
 
     commandsPending.clear();
+    commandsSended.clear();
 
-    // if(currentDevice)
-    // {
-    //     delete(currentDevice);
+    if(currentDevice)
+    {
+        currentDevice->deleteLater();
         currentDevice = nullptr;
-
-    // }
+    }
     emit sgReadyToDisconnect();
 }
 

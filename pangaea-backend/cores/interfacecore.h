@@ -39,7 +39,7 @@ signals:
     void sgNewData(QByteArray data);
     void sgModuleNameUpdated(QString name);
 
-    void sgCoreDisconnect();
+    void sgErrorDisconnect();
 
 
     void sgRssiReaded(qint16 rssi);

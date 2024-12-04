@@ -144,7 +144,7 @@ ApplicationWindow
         headerText: qsTr("Exchange error")
         onAccepted: {
             openConnectPage();
-            InterfaceManager.disconnectFromDevice();
+            UiCore.disconnectFromDevice();
         }
     }
 

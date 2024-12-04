@@ -39,7 +39,7 @@ signals:
     void startScanning(DeviceConnectionType);
 
     void connectToDevice(DeviceDescription device);
-    void disconnectFromDevice();
+    // void disconnectFromDevice();
     void sgInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
     void sgDeviceUnavaliable(DeviceConnectionType senderType, QString reason);
     void sgExchangeError();
