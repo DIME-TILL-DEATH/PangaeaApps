@@ -1,4 +1,5 @@
 #desktop_bundle_output/release/*
+build/*
 shared_libs/*
 deploy_android/*
 deploy_linux/debian_deploy/*
