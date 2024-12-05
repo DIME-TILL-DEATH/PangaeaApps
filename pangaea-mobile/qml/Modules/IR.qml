@@ -80,9 +80,11 @@ BaseModule
 
         buttons: Dialog.Yes | Dialog.No
 
+        property string dstPath: (_irManagement === undefined) ? "" : _irManagement.dstIrPath
+
         onAccepted:
         {
-            UiCore.convertAndUploadIr("", _irManagement.dstIrPath);
+            UiCore.convertAndUploadIr("", dstPath);
         }
     }
 
@@ -100,14 +102,12 @@ BaseModule
 
         onAccepted:
         {
-            console.log(srcPath, dstPath)
             UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
         }
 
         onRejected:
         {
-            console.log(srcPath, dstPath)
-            UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
+            UiCore.currentDevice.startIrUpload(srcPath, dstPath, false);
         }
     }
 

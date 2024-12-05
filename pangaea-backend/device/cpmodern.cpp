@@ -383,56 +383,20 @@ void CPModern::uploadIrData(const QString& irName, const QString& dstPath, const
     m_presetManager.setCurrentState(PresetState::UploadingIr);
     emit m_presetManager.currentStateChanged();
 
-    QByteArray baSend;
-    quint16 bytesToUpload;
-
-    baSend.append(QString("ir upload\r").toUtf8() + irName.toUtf8() + "\r" + dstPath.toUtf8() + "\r");
-    bytesToUpload = irData.size();
-
-    for(quint16 i=0; i<bytesToUpload; i++)
+    m_rawIrData.clear();
+    for(quint16 i=0; i<irData.size(); i++)
     {
-        QString sTmp;
-        quint8  chr;
-        if(i>=irData.length())
-            sTmp = QString("00");
-        else
-        {
-            chr = irData.at(i);
-            sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
-        }
-        baSend.append(sTmp.toUtf8());
+        quint8 chr = irData.at(i);
+        QString sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
+
+        m_rawIrData.append(sTmp.toUtf8());
     }
-    emit sgPushCommandToQueue(baSend + "\n", false);
-    emit sgProcessCommands();
+    QByteArray command = QString("ir start_upload\r").toUtf8() + irName.toUtf8() + "\r" + dstPath.toUtf8() + "\n";
 
-}
+    qint64 symbolsToSend = command.size() + m_rawIrData.size() + 16 * m_rawFirmwareData.size() / uploadBlockSize; // header: ir part_upload\r*\n = 16
+    qint64 symbolsToRecieve = 0;
 
-// Для десктоп версии и просмотра из диалога выбора
-void CPModern::previewIr(const QByteArray &irData)
-{
-    m_presetManager.setCurrentState(PresetState::UploadingIr);
-
-    QByteArray baSend, trimIrData;
-    quint16 bytesToUpload;
-
-    baSend.append(QString("ir preview\r").toUtf8());
-    bytesToUpload = 984*3;
-    trimIrData = irData.mid(44); //cut wav header
-
-    for(quint16 i=0; i<bytesToUpload; i++)
-    {
-        QString sTmp;
-        quint8  chr;
-        if(i>=trimIrData.length())
-            sTmp = QString("00");
-        else
-        {
-            chr = trimIrData.at(i);
-            sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
-        }
-        baSend.append(sTmp.toUtf8());
-    }
-    emit sgPushCommandToQueue(baSend + "\n", false);
+    emit sgSendWithoutConfirmation(command, symbolsToSend, symbolsToRecieve);
     emit sgProcessCommands();
 }
 
@@ -518,7 +482,7 @@ void CPModern::uploadFirmware(const QByteArray &firmware)
     {
         m_rawFirmwareData = firmware;
 
-        qint64 symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / fwUploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
+        qint64 symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / uploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
         qint64 symbolsToRecieve = 0; //QString("REQUEST_NEXT_CHUNK\n").size() * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
 
         qDebug() << Q_FUNC_INFO << symbolsToSend;
@@ -531,7 +495,7 @@ void CPModern::uploadFirmware(const QByteArray &firmware)
         QByteArray baTmp, baSend;
         baSend.append("fwu\r");
 
-        baTmp = m_rawFirmwareData.left(fwUploadBlockSize);
+        baTmp = m_rawFirmwareData.left(uploadBlockSize);
         m_rawFirmwareData.remove(0, baTmp.length());
 
         baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());
@@ -802,9 +766,30 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
         }
     }
 
-    if(arguments == "saved") // заменить на upload_finished
+    if(arguments == "request_part")
     {
-        emit sgEnableTimeoutTimer();
+        QByteArray answer;
+        if(m_rawIrData.length() > 0)
+        {
+            QByteArray baTmp = m_rawIrData.left(uploadBlockSize);
+            m_rawIrData.remove(0, baTmp.length());
+
+            answer += "ir part_upload\r";
+            answer += baTmp;
+            answer += "\n";
+        }
+        else
+        {
+            answer = "ir end_upload\r\n";
+            // Возможно эта посылка не нужна, сюда сразу поместить действия из раздела "saved'
+            // В MOCK это действие точно не нужно. нужно ли в устройстве?
+        }
+        emit sgSendWithoutConfirmation(answer);
+        emit sgProcessCommands();
+    }
+
+    if(arguments == "saved")
+    {
         m_presetManager.returnToPreviousState();
         emit impulseUploaded();
         emit sgPushCommandToQueue("ls\rir_library\n", false);
@@ -974,7 +959,7 @@ void CPModern::requestNextChunkCommHandler(const QString &command, const QByteAr
     if(m_rawFirmwareData.length() > 0)
     {
         QByteArray baSend, baTmp;
-        baTmp = m_rawFirmwareData.left(fwUploadBlockSize);
+        baTmp = m_rawFirmwareData.left(uploadBlockSize);
         m_rawFirmwareData.remove(0, baTmp.length());
 
         baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());

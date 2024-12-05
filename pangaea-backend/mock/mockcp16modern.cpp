@@ -369,32 +369,34 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
         emit answerReady("ir preview\rOK\n");
     }
 
-    if(arguments == "upload")
+    if(arguments == "start_upload")
     {
         QByteArray answer;
 
         QList<QByteArray> dataList = data.split('\r');
         qDebug() << "DataList size" << dataList.size();
-        if(dataList.size() == 3)
+        if(dataList.size() == 2)
         {
             QString fileName = dataList.at(0);
             QString destPath = dataList.at(1);
-            QByteArray fileData = dataList.at(2);
+            // QByteArray fileData = dataList.at(2);
 
-            QFile irFile(destPath + fileName);
-            qDebug() << "MOCK device: saving file to: " << destPath + fileName;
-            if(irFile.open(QIODevice::WriteOnly))
+            // QFile irFile(destPath + fileName);
+            uploadingIrFile.setFileName(destPath + fileName);
+            qDebug() << "MOCK device: start uploading to: " << destPath + fileName;
+            if(uploadingIrFile.open(QIODevice::WriteOnly))
             {
-                QByteArray convertedFileData;
+                // QByteArray convertedFileData;
 
-                for(int i=0; i<fileData.size(); i+=2)
-                {
-                    QString chStr(QString(fileData.at(i)) + QString(fileData.at(i+1)));
-                    convertedFileData.append(chStr.toInt(nullptr, 16));
-                }
-                irFile.write(convertedFileData);
-                irFile.close();
-                answer = "ir saved\r" + QString(destPath + fileName).toUtf8() + "\n";
+                // for(int i=0; i<fileData.size(); i+=2)
+                // {
+                //     QString chStr(QString(fileData.at(i)) + QString(fileData.at(i+1)));
+                //     convertedFileData.append(chStr.toInt(nullptr, 16));
+                // }
+                // uploadingIrFile.write(convertedFileData);
+                uploadingIrFile.close();
+                answer = "ir request_part\r\n";
+                // answer = "ir saved\r" + QString(destPath + fileName).toUtf8() + "\n";
             }
             else
             {
@@ -406,6 +408,28 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
         {
             emit answerReady("ir error\rCOMMAND_INCORRECT\n");
         }
+    }
+
+    if(arguments == "part_upload")
+    {
+        if(uploadingIrFile.open(QIODevice::Append))
+        {
+            QByteArray convertedFileData;
+
+            for(int i=0; i<data.size(); i+=2)
+            {
+                QString chStr(QString(data.at(i)) + QString(data.at(i+1)));
+                convertedFileData.append(chStr.toInt(nullptr, 16));
+            }
+            uploadingIrFile.write(convertedFileData);
+            uploadingIrFile.close();
+            emit answerReady("ir request_part\r\n");
+        }
+    }
+
+    if(arguments == "end_upload")
+    {
+        emit answerReady("ir saved\r\n");
     }
 
     if(arguments == "link")

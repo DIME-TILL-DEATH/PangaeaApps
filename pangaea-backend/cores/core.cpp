@@ -214,7 +214,8 @@ void Core::processCommands()
     }
     else
     {
-        emit sgSetUIParameter("wait", false);
+        if(symbolsSended >= symbolsToSend)
+            emit sgSetUIParameter("wait", false);
     }
 }
 

@@ -120,7 +120,6 @@ private:
 
     void setPresetData(const PresetModern &preset);
     void uploadIrData(const QString &irName, const QString &dstPath, const QByteArray& irData);
-    void previewIr(const QByteArray& irData);
 
     void uploadFirmware(const QByteArray& fwData);
 
@@ -139,7 +138,8 @@ private:
     void copyCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     QByteArray m_rawFirmwareData;
-    const uint32_t fwUploadBlockSize = 100;
+    QByteArray m_rawIrData;
+    const uint32_t uploadBlockSize = 100;
     void requestNextChunkCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void fwuFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void formatFinishedCommHandler(const QString &command, const QByteArray &argument, const QByteArray &data);

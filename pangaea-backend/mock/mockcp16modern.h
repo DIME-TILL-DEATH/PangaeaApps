@@ -26,6 +26,8 @@ public:
 private:
     QString basePath;
 
+    QFile uploadingIrFile;
+
     void initFolders();
 
     bool saveSysParameters();
