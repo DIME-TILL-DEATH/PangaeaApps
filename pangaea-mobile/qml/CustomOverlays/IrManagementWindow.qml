@@ -84,19 +84,6 @@ Item{
                 color: Style.currentTheme.colorBorderOn
             }
 
-            // MButton{
-            //     width: parent.width
-            //     height: parent.height * 0.07
-
-            //     anchors.horizontalCenter: parent.horizontalCenter
-
-            //     textButton: qsTr("Upload IR")
-
-            //     onMbPressed: {
-            //         UiCore.uploadIr("", dstIrPath);
-            //     }
-            // }
-
             Button{
                 width: parent.width * 0.9
                 height: parent.height * 0.07

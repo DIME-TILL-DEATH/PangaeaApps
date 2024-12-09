@@ -36,8 +36,6 @@ private:
 
     void getIrInfo();
     void irDownload(const QString& pathToIr);
-    void startIrUpload(const QString& fileName);
-    void recieveIrChunk(const QByteArray& dataChunk);
 
     void changePreset(quint8 bank, quint8 preset);
 

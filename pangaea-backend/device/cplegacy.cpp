@@ -893,14 +893,14 @@ void CPLegacy::getIrNameSizeCommHandler(const QList<QByteArray> &arguments)
         {
             copiedPreset.setIrName(wavName);
 
-            m_bytesToRecieve = wavSize;
+            m_symbolsToRecieve = wavSize;
             qDebug() << "Recieve Ir. Name:" << wavName << ", size:" << wavSize;
             break;
         }
 
         case PresetState::Exporting:
         {
-            m_bytesToRecieve = wavSize;
+            m_symbolsToRecieve = wavSize;
             actualPreset.setIrName(wavName);
             break;
         }
@@ -946,7 +946,7 @@ void CPLegacy::getIrCommHandler(const QList<QByteArray> &arguments)
     default:{}
     }
 
-    m_bytesToRecieve=0;
+    m_symbolsToRecieve=0;
 
     emit sgEnableTimeoutTimer();
 }

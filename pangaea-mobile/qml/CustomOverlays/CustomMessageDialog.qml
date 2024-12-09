@@ -28,8 +28,8 @@ Dialog
             +_title.height+_dialogButtonBox.height
 
     property int parentHeight: parent.height*0.34
-    property int headerHeight: parentHeight*0.2
-    property int footerHeight: parentHeight*0.25
+    property int headerHeight: _title.height
+    property int footerHeight: _dialogButtonBox.height
 
     property bool closeOnDisconnect: false
 
@@ -77,7 +77,7 @@ Dialog
            id: _textLabel
 
            width: _root.width
-           height: _root.height-headerHeight-footerHeight
+           height: _root.height-_root.headerHeight-_root.footerHeight
 
            MText{
                id: _text
@@ -98,7 +98,7 @@ Dialog
         id: _dialogButtonBox
 
         width: _root.width
-        height: _title.height*1.5 //footerHeight
+        height: _title.height*2 //footerHeight
 
         alignment: Qt.AlignHCenter
 

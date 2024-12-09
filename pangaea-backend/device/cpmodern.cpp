@@ -128,7 +128,7 @@ void CPModern::readFullState()
 
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("plist");
-    emit sgPushCommandToQueue("ls\rir_library\n", false);
+    emit sgPushCommandToQueue("ls ir_library\r\n", false);
     emit sgPushCommandToQueue("gm");
     pushReadPresetCommands();
 
@@ -141,6 +141,8 @@ void CPModern::pushReadPresetCommands()
     emit sgPushCommandToQueue("ir info");
     emit sgPushCommandToQueue("pname get");
     emit sgPushCommandToQueue("state get");
+
+    m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_t) * 2;
 }
 
 QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
@@ -435,7 +437,7 @@ void CPModern::setPresetData(const PresetModern &preset)
 {
     QByteArray ba;
 
-    ba.append("state\r");
+    ba.append("state set\r");
     ba.append(PresetModern::presetDatatoChars(preset.presetData));
 
     emit sgPushCommandToQueue(ba + "\n", false);
@@ -600,7 +602,7 @@ void CPModern::getBankPresetCommHandler(const QString &command, const QByteArray
 
     // TODO when opens IR manager
     QString presetPath = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset);
-    emit sgPushCommandToQueue("ls\r" + presetPath.toUtf8() + "\n", false);
+    emit sgPushCommandToQueue("ls " + presetPath.toUtf8() + "\r\n", false);
     emit sgProcessCommands();
 }
 
@@ -684,6 +686,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
 
     case PresetState::Changing:
     {
+        m_symbolsToRecieve = 0;
         m_deviceParamsModified = false;
         emit deviceParamsModifiedChanged();
 
@@ -742,7 +745,7 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
                 irDownloaded(dataList.at(0), dataList.at(1));
             }
         }
-        m_bytesToRecieve=0;
+        m_symbolsToRecieve=0;
         emit sgEnableTimeoutTimer();
     }
 
@@ -792,9 +795,9 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
     {
         m_presetManager.returnToPreviousState();
         emit impulseUploaded();
-        emit sgPushCommandToQueue("ls\rir_library\n", false);
+        emit sgPushCommandToQueue("ls ir_library\r\n", false);
         QString presetPath = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset);
-        emit sgPushCommandToQueue("ls\r" + presetPath.toUtf8() + "\n", false);
+        emit sgPushCommandToQueue("ls " + presetPath.toUtf8() + "\r\n", false);
         emit sgProcessCommands();
 
     }
@@ -817,7 +820,7 @@ void CPModern::recieveIrInfo(const QByteArray &data)
 
     QString irLinkPath = dataList.at(0);
     QString wavName = dataList.at(1);
-    qint64 wavSize = m_bytesToRecieve = QString(dataList.at(2)).toInt();
+    qint64 wavSize = m_symbolsToRecieve = QString(dataList.at(2)).toInt();
     qDebug() << "IR name:" << wavName << ", size:" << wavSize;
     switch(m_presetManager.currentState())
     {
@@ -842,7 +845,7 @@ void CPModern::recieveIrInfo(const QByteArray &data)
             emit m_presetManager.currentStateChanged(); // Для того чтобы экран BUSY правильно отобразил стадию этапа
             emit sgDisableTimeoutTimer();
 
-            m_bytesToRecieve = wavSize;
+            m_symbolsToRecieve = wavSize;
             actualPreset.setIrName(wavName);
             break;
         }
@@ -932,6 +935,18 @@ void CPModern::getPresetListCommHandler(const QString &command, const QByteArray
 
 void CPModern::listCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
+    if(arguments.indexOf("INCORRECT_ARGUMENTS") != -1)
+    {
+        qWarning() << "Incorrect ls request";
+        return;
+    }
+
+    if(arguments.indexOf("OPEN_DIR_FAILED") != -1)
+    {
+        qWarning() << "Device can't open requested directory";
+        return;
+    }
+
     QList<QByteArray> dataList = data.split('\r');
     if(arguments.indexOf("ir_library") != -1)
     {
@@ -993,7 +1008,7 @@ void CPModern::copyCommHandler(const QString &command, const QByteArray &argumen
 {
     if(arguments == "complete")
     {
-        emit sgPushCommandToQueue("ls\rir_library\n", false);
+        emit sgPushCommandToQueue("ls ir_library\r\n", false);
         pushReadPresetCommands();
     }
     else

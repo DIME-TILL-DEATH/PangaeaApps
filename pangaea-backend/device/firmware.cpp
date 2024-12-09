@@ -70,7 +70,7 @@ bool Firmware::compareVersion(strVersion requestedVesrion, strVersion devVersion
     if(requestedVesrion.minor > devVersion.minor) return false;
     if(requestedVesrion.minor < devVersion.minor) return true;
 
-    return false;
+    return true;
 }
 
 QString Firmware::firmwareVersion() const

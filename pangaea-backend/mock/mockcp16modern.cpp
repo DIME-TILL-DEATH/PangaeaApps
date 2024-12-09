@@ -338,7 +338,7 @@ void MockCP16Modern::stateCommHandler(const QString &command, const QByteArray &
 {
     QByteArray answer = QString("state").toUtf8();
 
-    if(data.size() != 0)
+    if(arguments == "set")
     {
         currentPresetData = PresetModern::charsToPresetData(data);
         answer += " set\r\n";
@@ -379,24 +379,13 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
         {
             QString fileName = dataList.at(0);
             QString destPath = dataList.at(1);
-            // QByteArray fileData = dataList.at(2);
 
-            // QFile irFile(destPath + fileName);
             uploadingIrFile.setFileName(destPath + fileName);
             qDebug() << "MOCK device: start uploading to: " << destPath + fileName;
             if(uploadingIrFile.open(QIODevice::WriteOnly))
             {
-                // QByteArray convertedFileData;
-
-                // for(int i=0; i<fileData.size(); i+=2)
-                // {
-                //     QString chStr(QString(fileData.at(i)) + QString(fileData.at(i+1)));
-                //     convertedFileData.append(chStr.toInt(nullptr, 16));
-                // }
-                // uploadingIrFile.write(convertedFileData);
                 uploadingIrFile.close();
                 answer = "ir request_part\r\n";
-                // answer = "ir saved\r" + QString(destPath + fileName).toUtf8() + "\n";
             }
             else
             {
@@ -513,23 +502,11 @@ void MockCP16Modern::irDownload(const QString& pathToIr)
     emit answerReady(answer);
 }
 
-void MockCP16Modern::startIrUpload(const QString &fileName)
-{
-
-}
-
-void MockCP16Modern::recieveIrChunk(const QByteArray &dataChunk)
-{
-
-}
-
-
-
 void MockCP16Modern::listCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    QByteArray answer(command.toUtf8() + " " + data);
+    QByteArray answer(command.toUtf8() + " " + arguments);
 
-    QDir lsDir(data);
+    QDir lsDir(arguments);
     lsDir.setNameFilters({"*.wav"});
 
     QFileInfoList filesInDir = lsDir.entryInfoList();

@@ -229,7 +229,7 @@ void Core::sendCommand(QByteArray val)
 
 void Core::updateProgressBar()
 {
-    if(currentDevice) symbolsToRecieve = currentDevice->bytesToRecieve();
+    if(currentDevice) symbolsToRecieve = currentDevice->symbolsToRecieve();
 
 
     float fVal = (double)(symbolsSended+symbolsRecieved) / (double)(symbolsToSend+symbolsToRecieve);

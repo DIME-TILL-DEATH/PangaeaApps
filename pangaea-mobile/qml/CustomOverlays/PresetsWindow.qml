@@ -1,6 +1,6 @@
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+// import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
 
 import StyleSettings 1.0
@@ -80,7 +80,7 @@ CustomMessageDialog {
         id: _presetListView
 
         width: _root.width*0.95
-        height: _root.height-headerHeight-footerHeight
+        height: _root.height-_root.headerHeight*2-_root.footerHeight
 
         currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxPresetCount + UiCore.currentDevice.preset
             /*DeviceProperties.isLa3Mode? DeviceProperties.bank * 4 + DeviceProperties.preset
@@ -89,7 +89,7 @@ CustomMessageDialog {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
-        model: UiCore.currentDevice.presetListModel
+       // model: UiCore.currentDevice.avaliableOutputModes//presetListModel
 
         boundsBehavior: Flickable.StopAtBounds
         clip: true
@@ -105,6 +105,7 @@ CustomMessageDialog {
 
         delegate: PresetsListDelegate{
             width: _presetListView.width*0.95
+            height: _presetListView.height/8
         }
 
 
@@ -125,6 +126,16 @@ CustomMessageDialog {
                 MText {
                     text: "Bank " + _sectionHeaderContent.section//DeviceProperties.banksList[_sectionHeaderContent.section]
                 }
+            }
+        }
+
+        Connections{
+            target:  UiCore.currentDevice.presetListModel
+
+            function onModelReset(){
+                console.log("QML model reseted", UiCore.currentDevice.presetListModel.rowCount())
+
+                _presetListView.model = UiCore.currentDevice.presetListModel
             }
         }
     }

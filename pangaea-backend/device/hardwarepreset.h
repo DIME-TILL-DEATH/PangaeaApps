@@ -109,7 +109,7 @@ typedef struct
     uint8_t band_type[EQ_BANDS_COUNT];
     uint8_t band_on[EQ_BANDS_COUNT];
 
-    uint8_t reserved[2];
+    uint8_t reserved[5];
 }eq_t;
 
 typedef struct

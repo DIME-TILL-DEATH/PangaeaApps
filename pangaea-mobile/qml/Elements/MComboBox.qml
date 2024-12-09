@@ -1,4 +1,4 @@
-import QtQuick
+import QtQuick 2.15
 import QtQuick.Controls
 
 import QtQuick.Templates as T
@@ -16,10 +16,10 @@ ComboBox
     topInset: 2
     bottomInset: 2
 
-    indicator: ColorImage {
+    indicator: Image{ //ColorImage {
         x: control.width - width - control.padding
         y: control.topPadding + (control.availableHeight - height) / 2
-        color: control.on ? Style.colorText : Style.currentTheme.colorTextDisabled
+        // color: control.on ? Style.colorText : Style.currentTheme.colorTextDisabled
         source: "qrc:/qt-project.org/imports/QtQuick/Controls/Material/images/drop-indicator.png"
     }
 

@@ -88,7 +88,7 @@ public:
     PresetListModel* presetListModel() {return &m_presetListModel;};
     PresetManager* presetManager() {return &m_presetManager;};
 
-    qint64 bytesToRecieve() {return m_bytesToRecieve;};
+    qint64 symbolsToRecieve() {return m_symbolsToRecieve;};
 
     bool isUpdatingFirmware() {return fwUpdate;};
     bool isMemoryFormatting() {return isFormatting;};
@@ -165,7 +165,7 @@ protected:
     bool isFormatting{false};
 
     bool m_deviceParamsModified{false};
-    qint64 m_bytesToRecieve{0};
+    qint64 m_symbolsToRecieve{0};
 
     MaskedParser undefCommParser{"undefind command x\n", "11111111111111111X1"};
 
