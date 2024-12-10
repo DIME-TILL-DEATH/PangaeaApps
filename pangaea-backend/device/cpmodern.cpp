@@ -446,7 +446,7 @@ void CPModern::setPresetData(const PresetModern &preset)
 
     emit sgPushCommandToQueue("ir link\r" + preset.irFile.irName().toUtf8() + "\r" +
                                   preset.irFile.irLinkPath().toUtf8() + "\n", false);
-    emit sgWriteToInterface("pname set\r" + preset.presetName().toUtf8() + "\n");
+    emit sgPushCommandToQueue("pname set\r" + preset.presetName().toUtf8() + "\n");
     emit sgProcessCommands();
 }
 
@@ -679,7 +679,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     {
         copiedPreset = actualPreset;
         copiedPreset.presetData = PresetModern::charsToPresetData(baPresetData);
-        copiedPreset.irFile.setIrLinkPath("ir_ibrary/"); // Скопированные пресеты могут ссылаться только на библиотеку
+        copiedPreset.irFile.setIrLinkPath("ir_library"); // Скопированные пресеты могут ссылаться только на библиотеку
         m_presetManager.returnToPreviousState();
         emit presetCopied();
         break;
@@ -992,6 +992,7 @@ void CPModern::requestNextChunkCommHandler(const QString &command, const QByteAr
 void CPModern::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     // actualPreset.clearWavData();
+    m_presetManager.returnToPreviousState(); // for correct hardware changing
     m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();

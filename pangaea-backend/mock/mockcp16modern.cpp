@@ -73,10 +73,10 @@ MockCP16Modern::MockCP16Modern(QObject *parent)
     setParamsHandler("cv", &currentPresetData.compressor.volume);   // Type::COMPRESSOR_VOLUME: fullString += "cv";
 
     // обратная совместимость
-    setParamsHandler("lv", &currentPresetData.eq1.lp_freq);     // Type::LPF_VOLUME: fullString += "lv";
-    setParamsHandler("hv", &currentPresetData.eq1.hp_freq);     // Type::HPF_VOLUME: fullString += "hv";
-    setParamsHandler("ho", &currentPresetData.eq1.hp_on);       // Type::HPF_ON: fullString += "ho";
-    setParamsHandler("lo", &currentPresetData.eq1.lp_on);       // Type::LPF_ON: fullString += "lo";
+    // setParamsHandler("lv", &currentPresetData.eq1.lp_freq);     // Type::LPF_VOLUME: fullString += "lv";
+    // setParamsHandler("hv", &currentPresetData.eq1.hp_freq);     // Type::HPF_VOLUME: fullString += "hv";
+    // setParamsHandler("ho", &currentPresetData.eq1.hp_on);       // Type::HPF_ON: fullString += "ho";
+    // setParamsHandler("lo", &currentPresetData.eq1.lp_on);       // Type::LPF_ON: fullString += "lo";
 
     // setParamsHandler("eqo", &currentPresetData.eq1.parametric_on);          // Type::EQ_ON: fullString += "eqo";
     // setEqHandler("eqv", currentPresetData.eq1.band_vol);     // Type::EQ_VOLUME1: fullString += "eqv 0";

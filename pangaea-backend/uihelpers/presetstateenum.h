@@ -12,7 +12,7 @@ public:
     {
         Unknown=0,
         Idle,
-        Pasting,
+        // Pasting,
         SetCompare,
         Compare, // вызван оригинальный пресет
         Copying,

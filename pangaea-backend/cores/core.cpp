@@ -197,6 +197,7 @@ void Core::processCommands()
                 {
                     for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
                     {
+                        emit sgSetUIParameter("wait", true);
                         timeoutTimer->stop();
                         sendCommand(commandToSend.mid(sendPosition, chunckSize));
                         QThread::msleep(sleepTime);
