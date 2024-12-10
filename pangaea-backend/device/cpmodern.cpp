@@ -385,14 +385,15 @@ void CPModern::uploadIrData(const QString& irName, const QString& dstPath, const
     m_presetManager.setCurrentState(PresetState::UploadingIr);
     emit m_presetManager.currentStateChanged();
 
-    m_rawIrData.clear();
-    for(quint16 i=0; i<irData.size(); i++)
-    {
-        quint8 chr = irData.at(i);
-        QString sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
+    // m_rawIrData.clear();
+    // for(quint16 i=0; i<irData.size(); i++)
+    // {
+    //     quint8 chr = irData.at(i);
+    //     QString sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
 
-        m_rawIrData.append(sTmp.toUtf8());
-    }
+    //     m_rawIrData.append(sTmp.toUtf8());
+    // }
+    m_rawIrData = irData;
     QByteArray command = QString("ir start_upload\r").toUtf8() + irName.toUtf8() + "\r" + dstPath.toUtf8() + "\n";
 
     qint64 symbolsToSend = command.size() + m_rawIrData.size() + 16 * m_rawFirmwareData.size() / uploadBlockSize; // header: ir part_upload\r*\n = 16
@@ -777,29 +778,20 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
             QByteArray baTmp = m_rawIrData.left(uploadBlockSize);
             m_rawIrData.remove(0, baTmp.length());
 
-            answer += "ir part_upload\r";
+            answer = "ir part_upload " + QString().setNum(baTmp.length()).toUtf8() + "\r";
             answer += baTmp;
             answer += "\n";
+            emit sgSendWithoutConfirmation(answer);
         }
         else
         {
-            answer = "ir end_upload\r\n";
-            // Возможно эта посылка не нужна, сюда сразу поместить действия из раздела "saved'
-            // В MOCK это действие точно не нужно. нужно ли в устройстве?
+            m_presetManager.returnToPreviousState();
+            emit impulseUploaded();
+            emit sgPushCommandToQueue("ls ir_library\r\n", false);
+            QString presetPath = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset);
+            emit sgPushCommandToQueue("ls " + presetPath.toUtf8() + "\r\n", false);
         }
-        emit sgSendWithoutConfirmation(answer);
         emit sgProcessCommands();
-    }
-
-    if(arguments == "saved")
-    {
-        m_presetManager.returnToPreviousState();
-        emit impulseUploaded();
-        emit sgPushCommandToQueue("ls ir_library\r\n", false);
-        QString presetPath = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset);
-        emit sgPushCommandToQueue("ls " + presetPath.toUtf8() + "\r\n", false);
-        emit sgProcessCommands();
-
     }
 
     if(arguments == "error")
@@ -817,6 +809,12 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
 void CPModern::recieveIrInfo(const QByteArray &data)
 {
     QList<QByteArray> dataList = data.split('\r');
+
+    if(dataList.size()<3)
+    {
+        qWarning() << "ir info comm answer has incorrect count of arguments: " << dataList.size();
+        return;
+    }
 
     QString irLinkPath = dataList.at(0);
     QString wavName = dataList.at(1);

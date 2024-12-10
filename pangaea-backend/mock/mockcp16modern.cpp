@@ -183,7 +183,7 @@ void MockCP16Modern::initFolders()
                 preset_data_legacy_t defaultData;
                 memset(&defaultData, 0, sizeof(preset_data_legacy_t));
 
-                defaultData.preset_volume = 31;
+                defaultData.preset_volume = 20;
 
                 defaultData.eq_band_vol[0] = 15;
                 defaultData.eq_band_vol[1] = 15;
@@ -401,6 +401,7 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
 
     if(arguments == "part_upload")
     {
+        // TODO получение файла в raw binary
         if(uploadingIrFile.open(QIODevice::Append))
         {
             QByteArray convertedFileData;
@@ -416,10 +417,10 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
         }
     }
 
-    if(arguments == "end_upload")
-    {
-        emit answerReady("ir saved\r\n");
-    }
+    // if(arguments == "end_upload")
+    // {
+    //     emit answerReady("ir saved\r\n");
+    // }
 
     if(arguments == "link")
     {

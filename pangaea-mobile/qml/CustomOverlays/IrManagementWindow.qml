@@ -152,7 +152,7 @@ Item{
                     {
                         if((_bar.currentIndex === 1) & UiCore.currentDevice.currentIrFile.irLinkPath === "")
                         {
-                            return UiCore.currentDevice.currentIrFile.irName === modelData.irName
+                            return (UiCore.currentDevice.currentIrFile.irName.indexOf(modelData.irName) !== -1)
                         }
                         else
                         {
