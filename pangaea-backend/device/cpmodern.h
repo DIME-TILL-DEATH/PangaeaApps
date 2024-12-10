@@ -143,6 +143,8 @@ private:
     void requestNextChunkCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void fwuFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void formatFinishedCommHandler(const QString &command, const QByteArray &argument, const QByteArray &data);
+
+    int part{0};
 };
 
 #endif // CPMODERN_H
