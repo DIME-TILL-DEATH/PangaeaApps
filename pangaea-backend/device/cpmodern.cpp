@@ -389,7 +389,6 @@ void CPModern::uploadIrData(const QString& irName, const QString& dstPath, const
     QByteArray command = QString("ir start_upload\r").toUtf8() + irName.toUtf8() + "\r" + dstPath.toUtf8() + "\n";
 
     qint64 symbolsToSend = command.size() + m_rawIrData.size() + 20 * (m_rawIrData.size() / uploadBlockSize + 1); // header: ir part_upload\r*\n = 16
-    qDebug() << "Patrs: " << m_rawIrData.size() / uploadBlockSize + 1 << "Full size: " << symbolsToSend;
     qint64 symbolsToRecieve = 0;
 
     emit sgSendWithoutConfirmation(command, symbolsToSend, symbolsToRecieve);
@@ -765,8 +764,6 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
 
     if(arguments == "request_part")
     {
-        part++;
-        qDebug() << "Send part: " << part;
         QByteArray answer;
         if(m_rawIrData.length() > 0)
         {
@@ -780,7 +777,6 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
         }
         else
         {
-            part=0;
             m_presetManager.returnToPreviousState();
             emit impulseUploaded();
             emit sgPushCommandToQueue("ls ir_library\r\n", false);
