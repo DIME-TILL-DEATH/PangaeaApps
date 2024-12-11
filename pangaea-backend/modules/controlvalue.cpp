@@ -23,7 +23,7 @@ ControlValue::ControlValue(AbstractModule *owner, QString commandName,
     if(owner) connect(this, &ControlValue::userModifiedValue, owner, &AbstractModule::userModifiedModuleParameters);
 
     connect(&frameTimer, &QTimer::timeout, this, &ControlValue::sendFrame);
-    frameTimer.start(250);
+    frameTimer.start(25);
 }
 
 ControlValue::~ControlValue()
