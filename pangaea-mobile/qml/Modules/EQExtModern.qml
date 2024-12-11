@@ -366,7 +366,7 @@ Item
 
                 onClicked:
                 {
-                    hide();
+                    main.hide();
                 }
             }
         }

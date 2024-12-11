@@ -100,7 +100,7 @@ void EqParametric::lpfEnabledChanged()
     else
     {
         emit m_owner->sgWriteToInterface(
-            QString("eq" + QString().setNum(m_eqNumber) + " lp o " + QString("%1").arg(m_hpf->enabled()) + "\r\n").toUtf8());
+            QString("eq" + QString().setNum(m_eqNumber) + " lp o " + QString("%1").arg(m_lpf->enabled()) + "\r\n").toUtf8());
     }
 }
 

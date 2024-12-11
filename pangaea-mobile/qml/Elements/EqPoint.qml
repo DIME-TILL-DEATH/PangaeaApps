@@ -74,9 +74,16 @@ Rectangle{
 
         drag.smoothed: false
 
+        // drag.threshold
+
         onPressed: {
             pointSelected(index);
         }
+
+        // Component.onCompleted:{
+        //     console.log("Drag threshold: ", ma.drag.threshold)
+        //     console.log("Drag minimum-maximum X ", ma.drag.minimumX, ma.drag.maximumX)
+        // }
     }
 
     Component.onCompleted: {
