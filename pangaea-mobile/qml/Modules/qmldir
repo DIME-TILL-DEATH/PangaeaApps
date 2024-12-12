@@ -1,6 +1,7 @@
 module Modules
 
 BaseModule 1.0 BaseModule.qml
+ClipIndicator 1.0 ClipIndicator.qml
 OutputMode  1.0 OutputMode.qml
 CM	1.0 CM.qml
 EQExtLegacy  1.0 EQExtLegacy.qml

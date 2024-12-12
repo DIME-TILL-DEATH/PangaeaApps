@@ -120,7 +120,7 @@ Item{
         {
             id: listViewModules
             width: parent.width
-            height: parent.height - masterControlsHeight - _presetNameContainer.height //- _moduleColumn.spacing
+            height: parent.height - masterControlsHeight - _presetNameContainer.height - _clipIndContainer.height //- _moduleColumn.spacing
             spacing: 2
 
             model: UiCore.currentDevice.modulesListModel;
@@ -206,7 +206,15 @@ Item{
                 }
             }
         }
+
+        ClipIndicator {
+            id: _clipIndContainer
+
+            width: parent.width
+            height: _main.height/countElements
+        }
     }
+
 
     function showIrManagementWindow()
     {

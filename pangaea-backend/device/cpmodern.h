@@ -99,6 +99,8 @@ signals:
 
     void currentIrFileChanged();
 
+    void sigClipped(quint16 irFrameClips, quint16 outFrameClips);
+
 private:
     IRWorker irWorker;
     QSettings* appSettings;
@@ -136,6 +138,7 @@ private:
     void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void ackPresetSavedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void copyCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void clipCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     QByteArray m_rawFirmwareData;
     QByteArray m_rawIrData;

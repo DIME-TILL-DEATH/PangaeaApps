@@ -71,5 +71,6 @@
         <file>qml/CustomOverlays/qmldir</file>
         <file>qml/CustomOverlays/PresetsWindow.qml</file>
         <file>qml/CustomOverlays/IrManagementWindow.qml</file>
+        <file>qml/Modules/ClipIndicator.qml</file>
     </qresource>
 </RCC>

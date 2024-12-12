@@ -35,6 +35,7 @@ CPModern::CPModern(Core *parent)
     m_parser.addCommandHandler("FR_OK", std::bind(&CPModern::fwuFinishedCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("fsf", std::bind(&CPModern::formatFinishedCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("copy", std::bind(&CPModern::copyCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("clip", std::bind(&CPModern::clipCommHandler, this, _1, _2, _3));
 
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
@@ -1006,6 +1007,15 @@ void CPModern::copyCommHandler(const QString &command, const QByteArray &argumen
     {
         qWarning() << "Copy error"; //TODO сообщение пользователю
         emit sgDeviceError(DeviceErrorType::CopyFileError);
+    }
+}
+
+void CPModern::clipCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QStringList separatedList = QString(data).split("\r");
+    if(separatedList.size() > 1)
+    {
+        emit sigClipped(separatedList.at(0).toInt(), separatedList.at(1).toInt());
     }
 }
 
