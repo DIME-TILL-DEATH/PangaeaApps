@@ -17,9 +17,6 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 3, 20, 12000));
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 4, 20, 12000));
 
-        // m_hpf = new EqBand(this, FilterType::LOW_CUT, 20, 1000, 5, 0, 255);
-        // m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 195, 0);
-
         m_hpf = new EqBand(this, FilterType::LOW_CUT, 20, 1000, 5, 20, 1000);
         m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 1000, 20000);
 
@@ -46,6 +43,10 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
         connect(m_lpf, &EqBand::enabledChanged, this, &EqParametric::lpfEnabledChanged);
     }
     calcEqResponse();
+
+    EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(0));
+    m_minFreq = eqBand->bandPoints().at(0).x();
+    m_maxFreq = eqBand->bandPoints().at(pointsNum).x();
 
     for(int i=0; i<m_EqBands.count();i++)
     {

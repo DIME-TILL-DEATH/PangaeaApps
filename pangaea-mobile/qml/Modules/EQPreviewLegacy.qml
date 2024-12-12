@@ -64,10 +64,11 @@ BaseModule{
                         property int yGridSize: 5
 
                         // z: canvasBackground.z+1
+                        property real xmin: module.minFreq;
+                        property real xmax: module.maxFreq;
 
                         onPaint: {
-                            var xmin = module.points[0].x;
-                            var xmax = module.points[module.points.length-1].x
+                            var points = module.points;
 
                             var ctx = getContext("2d");
 

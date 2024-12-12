@@ -65,11 +65,14 @@ BaseModule{
 
                         // z: canvasBackground.z+1
 
+                        property real xmin: module.minFreq;
+                        property real xmax: module.maxFreq;
+
                         onPaint: {
-                            var xmin = module.points[0].x;
-                            var xmax = module.points[module.points.length-1].x
 
                             var ctx = getContext("2d");
+
+                            var points = module.points;
 
                             ctx.reset();
 
@@ -120,9 +123,9 @@ BaseModule{
 
                             for(i=0; i<module.points.length; i++)
                             {
-                                x = _canvas.width*((Math.log10(module.points[i].x)-Math.log10(xmin))
+                                x = _canvas.width*((Math.log10(points[i].x)-Math.log10(xmin))
                                                    /(Math.log10(xmax)-Math.log10(xmin)));
-                                y = module.points[i].y*coefY
+                                y = points[i].y*coefY
 
                                 ctx.lineTo(x, -y);
                             }

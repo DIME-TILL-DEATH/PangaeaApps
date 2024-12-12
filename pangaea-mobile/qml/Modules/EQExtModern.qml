@@ -87,9 +87,12 @@ Item
                     property int yGridSize: 5
                     property real coefY : height / gainRange
 
+                    property real xmin: eqModule.minFreq;
+                    property real xmax: eqModule.maxFreq;
+
                     onPaint: {
-                        var xmin = eqModule.points[0].x;
-                        var xmax = eqModule.points[eqModule.points.length-1].x
+
+                        var points = eqModule.points; // One access more efficient
 
                         var ctx = getContext("2d");
 
@@ -146,17 +149,15 @@ Item
 
                         for(i=0; i<eqModule.points.length; i++)
                         {
-                            x = _canvas.width*((Math.log10(eqModule.points[i].x)-Math.log10(xmin))
+                            x = _canvas.width*((Math.log10(points[i].x)-Math.log10(xmin))
                                                /(Math.log10(xmax)-Math.log10(xmin)));
-                            y = eqModule.points[i].y*coefY
+                            y = points[i].y*coefY
 
                             ctx.lineTo(x, -y);
                         }
                         ctx.stroke()
 
                         // band draw
-                        xmin = eqModule.EqBands[currentBandIndex].bandPoints[0].x;
-                        xmax = eqModule.EqBands[currentBandIndex].bandPoints[eqModule.EqBands[currentBandIndex].bandPoints.length-1].x
                         ctx.lineWidth = 1;
                         ctx.strokeStyle = "salmon"
                         ctx.fillStyle = "salmon";
@@ -165,11 +166,13 @@ Item
                         ctx.beginPath();
                         ctx.moveTo(xmax,0)
                         ctx.lineTo(0,0)
-                        for(i=0; i<eqModule.EqBands[currentBandIndex].bandPoints.length; i++)
+
+                        var bandPoints = eqModule.EqBands[currentBandIndex].bandPoints
+                        for(i=0; i<bandPoints.length; i++)
                         {
-                            x = _canvas.width*((Math.log10(eqModule.EqBands[currentBandIndex].bandPoints[i].x)-Math.log10(xmin))
+                            x = _canvas.width*((Math.log10(bandPoints[i].x)-Math.log10(xmin))
                                                /(Math.log10(xmax)-Math.log10(xmin)));
-                            y = eqModule.EqBands[currentBandIndex].bandPoints[i].y*coefY
+                            y = bandPoints[i].y*coefY
 
                             ctx.lineTo(x, -y);
                         }
@@ -199,10 +202,11 @@ Item
 
                     anchors.fill: parent
 
+                    property var xmin: eqModule.minFreq;
+                    property var xmax: eqModule.maxFreq;
 
                     onPositionChanged: function(drag){
-                        var xmin = eqModule.points[0].x;
-                        var xmax = eqModule.points[eqModule.points.length-1].x;
+
                         var pointRadius = repeater.itemAt(currentBandIndex).height/2;
 
                         var freq = Math.pow(10, (drag.source.x+pointRadius)/_canvas.width * (Math.log10(xmax)-Math.log10(xmin)) + Math.log10(xmin))
@@ -213,6 +217,8 @@ Item
 
                         eqModule.EqBands[currentBandIndex].gain.displayValue = Math.round(gain);
                         eqModule.EqBands[currentBandIndex].Fc.displayValue = Math.round(freq);
+
+                        // console.log("Drag update: ", freq, gain)
                     }
                 }
 
@@ -236,9 +242,6 @@ Item
                     }
 
                     onPinchUpdated: function(pinch){
-                        var delta1 = pinch.point1.x - pinch.startPoint1.x
-                        var delta2 = pinch.point2.x - pinch.startPoint2.x
-
                         var resultQ = startPinchQ / pinch.scale;
                         if(resultQ > eqModule.EqBands[currentBandIndex].Q.maxDisplayValue) resultQ = eqModule.EqBands[currentBandIndex].Q.maxDisplayValue;
                         if(resultQ < eqModule.EqBands[currentBandIndex].Q.minDisplayValue) resultQ = eqModule.EqBands[currentBandIndex].Q.minDisplayValue;

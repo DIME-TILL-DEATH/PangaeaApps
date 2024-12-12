@@ -85,11 +85,13 @@ Item
                     property int yGridSize: 5
                     property real coefY : height / gainRange
 
-                    onPaint: {
-                        var xmin = eqModule.points[0].x;
-                        var xmax = eqModule.points[eqModule.points.length-1].x
+                    property real xmin: eqModule.minFreq;
+                    property real xmax: eqModule.maxFreq;
 
+                    onPaint: {
                         var ctx = getContext("2d");
+
+                        var points = eqModule.points; // One access more efficient
 
                         ctx.reset();
 
@@ -144,17 +146,15 @@ Item
 
                         for(i=0; i<eqModule.points.length; i++)
                         {
-                            x = _canvas.width*((Math.log10(eqModule.points[i].x)-Math.log10(xmin))
+                            x = _canvas.width*((Math.log10(points[i].x)-Math.log10(xmin))
                                                /(Math.log10(xmax)-Math.log10(xmin)));
-                            y = eqModule.points[i].y*coefY
+                            y = points[i].y*coefY
 
                             ctx.lineTo(x, -y);
                         }
                         ctx.stroke()
 
                         // band draw
-                        xmin = eqModule.EqBands[currentBandIndex].bandPoints[0].x;
-                        xmax = eqModule.EqBands[currentBandIndex].bandPoints[eqModule.EqBands[currentBandIndex].bandPoints.length-1].x
                         ctx.lineWidth = 1;
                         ctx.strokeStyle = "salmon"
                         ctx.fillStyle = "salmon";
@@ -163,11 +163,13 @@ Item
                         ctx.beginPath();
                         ctx.moveTo(xmax,0)
                         ctx.lineTo(0,0)
+
+                        var bandPoints = eqModule.EqBands[currentBandIndex].bandPoints
                         for(i=0; i<eqModule.EqBands[currentBandIndex].bandPoints.length; i++)
                         {
-                            x = _canvas.width*((Math.log10(eqModule.EqBands[currentBandIndex].bandPoints[i].x)-Math.log10(xmin))
+                            x = _canvas.width*((Math.log10(bandPoints[i].x)-Math.log10(xmin))
                                                /(Math.log10(xmax)-Math.log10(xmin)));
-                            y = eqModule.EqBands[currentBandIndex].bandPoints[i].y*coefY
+                            y = bandPoints[i].y*coefY
 
                             ctx.lineTo(x, -y);
                         }
