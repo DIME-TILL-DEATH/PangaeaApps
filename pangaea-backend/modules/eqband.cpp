@@ -170,6 +170,15 @@ void EqBand::calcFilterCoefs()
         m_coefs.a2 = 1 - a;
         break;
     }
+    case FilterTypeEnum::BYPASS:
+        m_coefs.b0 = 1;
+        m_coefs.b1 = 1;
+        m_coefs.b2 = 1;
+
+        m_coefs.a0 = 1;
+        m_coefs.a1 = 1;
+        m_coefs.a2 = 1;
+        break;
     }
 
     emit bandParametersChanged();
@@ -240,7 +249,6 @@ void EqBand::setBandPoints(const QList<QPointF> &newBandPoints)
 void EqBand::setRawBandParams(FilterType bandType, qint16 gain, qint16 Fc, qint16 Q, bool enabled)
 {
     m_filterType = bandType;
-    // emit filterTypeChanged(m_bandNum);
 
     m_gain->setControlValue(gain);
     m_Fc->setControlValue(Fc);

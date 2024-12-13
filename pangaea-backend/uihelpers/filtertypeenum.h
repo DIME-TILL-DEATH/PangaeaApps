@@ -15,7 +15,8 @@ public:
         LOW_SHELF,
         HIGH_SHELF,
         HIGH_CUT,
-        LOW_CUT
+        LOW_CUT,
+        BYPASS
     };
     Q_ENUM(Value)
 };

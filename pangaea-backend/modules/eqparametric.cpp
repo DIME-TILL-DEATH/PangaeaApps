@@ -135,7 +135,14 @@ void EqParametric::calcEqResponse()
     }
 
     QFuture<void> future = QtConcurrent::map(vectorBands, [](EqBand*& eqBand) {
-        QList<QPointF> calcResult = EqBand::calcBandResponse(250, eqBand->filterCoefs());
+        EqBand::FilterCoefs coefs{0};
+        if(eqBand->enabled()) coefs = eqBand->filterCoefs();
+        else{
+            coefs.a0 = 1;
+            coefs.b0 = 1;
+        }
+
+        QList<QPointF> calcResult = EqBand::calcBandResponse(250, coefs);
         eqBand->setBandPoints(calcResult);
     });
     future.waitForFinished();
@@ -147,7 +154,6 @@ void EqParametric::calcEqResponse()
         for(int j=0; j<m_EqBands.count(); j++)
         {
             EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(j));
-
             currFreq = eqBand->bandPoints().at(i).x();
             eqPointResponse += eqBand->bandPoints().at(i).y();
         }
