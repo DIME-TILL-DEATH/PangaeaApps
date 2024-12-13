@@ -64,9 +64,9 @@ preset_data_t HardwarePreset::convertLegacyToModern(const preset_data_legacy_t& 
         modernData.eq1.Q[i] = legacyData.eq_Q[i];
     }
     modernData.eq1.hp_on = legacyData.hp_on;
-    modernData.eq1.hp_freq = legacyData.hp_freq;
+    modernData.eq1.hp_freq = legacyData.hp_freq * (980.0f / 255.0f) + 20.0f;
     modernData.eq1.lp_on = legacyData.lp_on;
-    modernData.eq1.lp_freq = legacyData.lp_freq;
+    modernData.eq1.lp_freq = powf(195 - legacyData.lp_freq, 2.0f) * (19000.0f / powf(195.0f, 2.0f)) + 1000.0f;
 
     modernData.cab_sim_on = legacyData.cab_on;
 

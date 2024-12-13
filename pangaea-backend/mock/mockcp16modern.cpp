@@ -4,10 +4,13 @@
 
 #include <QStandardPaths>
 #include <QDir>
+#include <QThread>
 
 MockCP16Modern::MockCP16Modern(QObject *parent)
     : AbstractMockDevice{parent}
 {
+    qDebug() << "MOCK modern thread" << QThread::currentThread();
+
     m_mockDeviceType = MockDeviceType::Mock_CPModern;
 
     initFolders();
