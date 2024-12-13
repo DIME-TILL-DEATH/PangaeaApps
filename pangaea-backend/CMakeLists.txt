@@ -89,13 +89,14 @@ target_include_directories(pangaea-backend PUBLIC
     utils
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning SerialPort)
+find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning SerialPort Concurrent)
 target_link_libraries(pangaea-backend PUBLIC
     Qt6::Core
     Qt6::Bluetooth
     Qt6::Network
     Qt6::Positioning
     Qt6::SerialPort
+    Qt6::Concurrent
 )
 
 if(ANDROID)

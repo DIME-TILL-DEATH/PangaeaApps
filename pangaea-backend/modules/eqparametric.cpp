@@ -1,3 +1,6 @@
+#include <QtConcurrent/QtConcurrentMap>
+#include <QtConcurrent/QtConcurrentRun>
+
 #include "abstractdevice.h"
 
 #include "eqband.h"
@@ -124,11 +127,18 @@ void EqParametric::calcEqResponse()
 {
     m_points.clear();
 
+    QVector<EqBand*> vectorBands;
     for(int i=0; i<m_EqBands.count(); i++)
     {
         EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
-        eqBand->calcBandResponse(pointsNum);
+        vectorBands << eqBand;
     }
+
+    QFuture<void> future = QtConcurrent::map(vectorBands, [](EqBand*& eqBand) {
+        QList<QPointF> calcResult = EqBand::calcBandResponse(250, eqBand->filterCoefs());
+        eqBand->setBandPoints(calcResult);
+    });
+    future.waitForFinished();
 
     for(int i=0; i<pointsNum+1; i++)
     {
@@ -144,7 +154,7 @@ void EqParametric::calcEqResponse()
 
         m_points.append(QPointF(currFreq, eqPointResponse));
     }
-   emit pointsChanged();
+    emit pointsChanged();
 }
 
 void EqParametric::setEqData(eq_t eqData)

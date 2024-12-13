@@ -67,6 +67,7 @@ private:
 
     QList<QPointF> m_points;
     QObjectList m_EqBands;
+    // QList<EqBand*> m_EqBands;
     EqBand* m_lpf;
     EqBand* m_hpf;
 

@@ -133,8 +133,6 @@ CustomMessageDialog {
             target:  UiCore.currentDevice.presetListModel
 
             function onModelReset(){
-                console.log("QML model reseted", UiCore.currentDevice.presetListModel.rowCount())
-
                 _presetListView.model = UiCore.currentDevice.presetListModel
             }
         }

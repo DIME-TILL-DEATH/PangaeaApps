@@ -35,15 +35,31 @@ public:
     ControlValue* getGain() const {return m_gain;};
     ControlValue* getQ() const {return m_Q;};
 
+    typedef struct
+    {
+        double a0;
+        double a1;
+        double a2;
+        double b0;
+        double b1;
+        double b2;
+    }FilterCoefs;
+
+    FilterCoefs filterCoefs() const {return m_coefs;};
+
     void setRawBandParams(FilterType bandType, qint16 gain, qint16 Fc, qint16 Q, bool enabled=true);
 
     double fStart() {return m_fStart;};
     double fStop() {return m_fStop;};
 
     double getFilterResponse(double f);
+    static double getFilterResponse(double f, FilterCoefs coefs); // for threaded calculations
+
     void calcBandResponse(quint16 pointsNum);
+    static QList<QPointF> calcBandResponse(quint16 pointsNum, FilterCoefs coefs);
 
     QList<QPointF> bandPoints() {return m_bandPoints;};
+    void setBandPoints(const QList<QPointF>& newBandPoints);
 
     bool enabled() const {return m_enabled;};
     void setEnabled(bool newEnabled);
@@ -73,15 +89,7 @@ private:
 
     int m_bandNum{0};
 
-    struct FilterCoefs
-    {
-        double a0;
-        double a1;
-        double a2;
-        double b0;
-        double b1;
-        double b2;
-    }m_coefs;
+    FilterCoefs m_coefs{0};
 
     void calcFilterCoefs();
     QList<QPointF> m_bandPoints;

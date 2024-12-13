@@ -1,6 +1,9 @@
 #include <cmath>
 #include <complex>
 
+#include <QDebug>
+#include <qthread.h>
+
 #include "eqparametric.h"
 #include "eqband.h"
 
@@ -187,6 +190,14 @@ double EqBand::getFilterResponse(double f)
     }
 }
 
+double EqBand::getFilterResponse(double f, EqBand::FilterCoefs coefs)
+{
+        std::complex<double> z = std::polar(1.0, 2*M_PI*f/Fs);
+        std::complex<double> z2 = z*z;
+        std::complex<double> h = (coefs.b0*z2 + coefs.b1*z + coefs.b2) / (coefs.a0*z2 + coefs.a1*z + coefs.a2);
+        return 20*log10(abs(h));
+}
+
 void EqBand::calcBandResponse(quint16 pointsNum)
 {
     m_bandPoints.clear();
@@ -201,7 +212,29 @@ void EqBand::calcBandResponse(quint16 pointsNum)
         currFreq = pow(10, power);
     }
     emit bandPointsChanged();
+}
 
+QList<QPointF> EqBand::calcBandResponse(quint16 pointsNum, EqBand::FilterCoefs coefs)
+{
+    // qDebug() << "calc thread" << QThread::currentThread();
+    QList<QPointF> bandPoints;
+
+    double currFreq = 10;
+    double power = log10(currFreq);
+    double powerStep = (log10(EqBand::Fs/2)-power)/pointsNum;
+    for(int i=0; i<pointsNum+1; i++)
+    {
+        bandPoints.append(QPointF(currFreq, EqBand::getFilterResponse(currFreq, coefs)));
+        power += powerStep;
+        currFreq = pow(10, power);
+    }
+    return bandPoints;
+}
+
+void EqBand::setBandPoints(const QList<QPointF> &newBandPoints)
+{
+    m_bandPoints = newBandPoints;
+    emit bandPointsChanged();
 }
 
 void EqBand::setRawBandParams(FilterType bandType, qint16 gain, qint16 Fc, qint16 Q, bool enabled)
