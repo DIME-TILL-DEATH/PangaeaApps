@@ -6,8 +6,8 @@
 #include <QDir>
 #include <QThread>
 
-MockCP16Modern::MockCP16Modern(QObject *parent)
-    : AbstractMockDevice{parent}
+MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
+    : AbstractMockDevice{mutex, uartBuffer, parent}
 {
     qDebug() << "MOCK modern thread" << QThread::currentThread();
 
@@ -140,6 +140,44 @@ void MockCP16Modern::writeToDevice(const QByteArray &data)
     {
         m_parser.parseNewData(data);
     }
+}
+
+void MockCP16Modern::newDataRecieved()
+{
+    if(fwUpdateMode) // TODO change to threaded loading
+    {
+        fwPart.append(*m_uartBuffer);
+        if(fwPart.indexOf('\n') != -1)
+        {
+            qint64 separatorPos = fwPart.indexOf('\n');
+            fwChunkSize = QString(fwPart.left(separatorPos)).toInt();
+            fwPart.remove(0, separatorPos + 1);
+        }
+
+        if(fwChunkSize == 0)
+        {
+            fwFile.close();
+            fwUpdateMode = false;
+            emit answerReady("FR_OK\n");
+        }
+        else
+        {
+            if(fwPart.size() >= fwChunkSize)
+            {
+                qint64 written = fwFile.write(fwPart);
+                qDebug() << "Bytes written: " << written << "file size" << fwFile.size();
+                fwPart.clear();
+                emit answerReady("REQUEST_CHUNK_SIZE\n");
+            }
+        }
+    }
+    else
+    {
+        m_parser.parseNewData(*m_uartBuffer);
+    }
+
+    QMutexLocker locker(m_mutex);
+    m_uartBuffer->clear();
 }
 
 void MockCP16Modern::initFolders()
@@ -402,28 +440,37 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
         }
     }
 
-    if(arguments == "part_upload")
+    QStringList argsList = QString(arguments).split(" ");
+    if(argsList.size() > 1)
     {
-        // TODO получение файла в raw binary
-        if(uploadingIrFile.open(QIODevice::Append))
-        {
-            QByteArray convertedFileData;
+        quint16 partSize = argsList.at(1).toInt();
 
-            for(int i=0; i<data.size(); i+=2)
+        if(argsList.at(0) == "part_upload")
+        {
+            QStringList argsList = QString(arguments).split(" ");
+
+            quint16 partSize;
+            if(argsList.size() > 1)
+                partSize = argsList.at(1).toInt();
+
+            while (m_uartBuffer->size() < partSize)
             {
-                QString chStr(QString(data.at(i)) + QString(data.at(i+1)));
-                convertedFileData.append(chStr.toInt(nullptr, 16));
+                QThread::sleep(100);
             }
-            uploadingIrFile.write(convertedFileData);
-            uploadingIrFile.close();
-            emit answerReady("ir request_part\r\n");
+            QMutexLocker locker(m_mutex);
+
+            QByteArray recievedPart = m_uartBuffer->right(partSize+1);
+            recievedPart.chop(1); // remove \n
+            m_uartBuffer->clear();
+
+            if(uploadingIrFile.open(QIODevice::Append))
+            {
+                uploadingIrFile.write(recievedPart);
+                uploadingIrFile.close();
+                emit answerReady("ir request_part\r\n");
+            }
         }
     }
-
-    // if(arguments == "end_upload")
-    // {
-    //     emit answerReady("ir saved\r\n");
-    // }
 
     if(arguments == "link")
     {
@@ -825,4 +872,14 @@ void MockCP16Modern::startFwUpdateCommHandler(const QString &command, const QByt
 
     emit answerReady("fwu\rCHUNK_MAX_SIZE_4096\n");
     emit answerReady("REQUEST_CHUNK_SIZE\n");
+
+    // while (m_uartBuffer->size() < fwChunkSize)
+    // {
+    //     QThread::sleep(100);
+    // }
+    // QMutexLocker locker(m_mutex);
+
+    // QByteArray recievedPart = m_uartBuffer->right(partSize+1);
+    // recievedPart.chop(1); // remove \n
+    // m_uartBuffer->clear();
 }

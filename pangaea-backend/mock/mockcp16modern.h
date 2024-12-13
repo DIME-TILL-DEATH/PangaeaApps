@@ -13,9 +13,10 @@ class MockCP16Modern : public AbstractMockDevice
 {
     Q_OBJECT
 public:
-    explicit MockCP16Modern(QObject *parent = nullptr);
+    explicit MockCP16Modern(QMutex* mutex, QByteArray* uartBuffer, QObject *parent = nullptr);
 
     void writeToDevice(const QByteArray& data) override;
+    void newDataRecieved() override;
 
     static QString mockName() {return "offline CP16(MODERN)";};
 

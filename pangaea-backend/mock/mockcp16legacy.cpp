@@ -3,8 +3,8 @@
 #include <QStandardPaths>
 #include <QDir>
 
-MockCP16Legacy::MockCP16Legacy(QObject *parent)
-    : AbstractMockDevice{parent}
+MockCP16Legacy::MockCP16Legacy(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
+    : AbstractMockDevice{mutex, uartBuffer, parent}
 {
     m_mockDeviceType = MockDeviceType::Mock_CPLegacy;
 
@@ -90,8 +90,6 @@ MockCP16Legacy::MockCP16Legacy(QObject *parent)
 
 void MockCP16Legacy::writeToDevice(const QByteArray &data)
 {
-    // qDebug() << "Mock recieved data:" << data;
-
     if(fwUpdateMode)
     {
         fwPart.append(data);
@@ -123,6 +121,44 @@ void MockCP16Legacy::writeToDevice(const QByteArray &data)
     {
         m_parser.parseNewData(data);
     }
+}
+
+void MockCP16Legacy::newDataRecieved()
+{
+    if(fwUpdateMode)
+    {
+        fwPart.append(*m_uartBuffer);
+        if(fwPart.indexOf('\n') != -1)
+        {
+            qint64 separatorPos = fwPart.indexOf('\n');
+            fwChunkSize = QString(fwPart.left(separatorPos)).toInt();
+            fwPart.remove(0, separatorPos + 1);
+        }
+
+        if(fwChunkSize == 0)
+        {
+            fwFile.close();
+            fwUpdateMode = false;
+            emit answerReady("FR_OK\n");
+        }
+        else
+        {
+            if(fwPart.size() >= fwChunkSize)
+            {
+                qint64 written = fwFile.write(fwPart);
+                qDebug() << "Bytes written: " << written << "file size" << fwFile.size();
+                fwPart.clear();
+                emit answerReady("REQUEST_CHUNK_SIZE\n");
+            }
+        }
+    }
+    else
+    {
+        m_parser.parseNewData(*m_uartBuffer);
+    }
+
+    QMutexLocker locker(m_mutex);
+    m_uartBuffer->clear();
 }
 
 void MockCP16Legacy::initFolders()

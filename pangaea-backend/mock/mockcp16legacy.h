@@ -10,9 +10,10 @@
 class MockCP16Legacy : public AbstractMockDevice
 {
 public:
-    explicit MockCP16Legacy(QObject *parent = nullptr);
+    explicit MockCP16Legacy(QMutex* mutex, QByteArray* uartBuffer, QObject *parent = nullptr);
 
     void writeToDevice(const QByteArray& data) override;
+    void newDataRecieved() override;
 
     static QString mockName() {return "offline CP16(LEGACY)";};
 

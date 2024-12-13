@@ -2,6 +2,7 @@
 #define ABSTRACTMOCKDEVICE_H
 
 #include <QObject>
+#include <QMutex>
 
 #include "parser.h"
 
@@ -30,7 +31,7 @@ class AbstractMockDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractMockDevice(QObject *parent = nullptr);
+    explicit AbstractMockDevice(QMutex* mutex, QByteArray* uartBuffer, QObject *parent = nullptr);
 
     MockDeviceType mockDeviceType() {return m_mockDeviceType;};
     QString basePath() {return m_basePath;};
@@ -41,9 +42,13 @@ signals:
     void impulseUploaded();
 public slots:
     virtual void writeToDevice(const QByteArray& data);
+    virtual void newDataRecieved();
 
 protected:
     Parser m_parser{"Mock device recieve"};
+
+    QMutex* m_mutex;
+    QByteArray* m_uartBuffer;
 
     QString m_basePath;
 

@@ -8,7 +8,10 @@
 OfflineInterface::OfflineInterface(QObject *parent)
     : AbstractInterface{parent}
 {
+    m_mockThread = new QThread();
 
+    m_mockThread->setObjectName("Mock thread");
+    m_mockThread->start();
 }
 
 void OfflineInterface::startScan()
@@ -31,20 +34,25 @@ bool OfflineInterface::connect(DeviceDescription device)
 {
     if(device.name() == MockCP16Legacy::mockName())
     {
-        m_mockDevice = new MockCP16Legacy(this);
+        m_mockDevice = new MockCP16Legacy(&mutex, &m_uartBuffer);
     }
     else if(device.name() == MockCP16Modern::mockName())
     {
-        m_mockDevice = new MockCP16Modern(this);
+        m_mockDevice = new MockCP16Modern(&mutex, &m_uartBuffer);
     }
     else
     {
-        m_mockDevice = new AbstractMockDevice(this);
+        m_mockDevice = new AbstractMockDevice(&mutex, &m_uartBuffer);
     }
+    m_mockDevice->moveToThread(m_mockThread);
 
     if(m_mockDevice)
     {
         QObject::connect(m_mockDevice, &AbstractMockDevice::answerReady, this, &AbstractInterface::sgNewData);
+        QObject::connect(this, &OfflineInterface::sgUartBufferUpdated, m_mockDevice, &AbstractMockDevice::newDataRecieved);
+
+        m_uartBuffer.clear();
+
         qInfo() << "Virtual device connected" << m_mockDevice->mockDeviceType();
         setState(InterfaceState::Connected);
         emit sgInterfaceConnected(device);
@@ -56,7 +64,8 @@ bool OfflineInterface::connect(DeviceDescription device)
 void OfflineInterface::disconnectFromDevice()
 {
     disconnect(m_mockDevice);
-    delete(m_mockDevice);
+
+    m_mockDevice->deleteLater();
     m_mockDevice = nullptr;
 
     emit sgInterfaceDisconnected(m_connectedDevice);
@@ -64,6 +73,11 @@ void OfflineInterface::disconnectFromDevice()
 }
 
 void OfflineInterface::write(const QByteArray &data)
-{
-    if(m_mockDevice) m_mockDevice->writeToDevice(data);
+{  
+    if(m_mockDevice)
+    {
+        QMutexLocker locker(&mutex);
+        m_uartBuffer.append(data);
+        emit sgUartBufferUpdated();
+    }
 }
