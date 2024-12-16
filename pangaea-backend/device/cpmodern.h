@@ -113,6 +113,8 @@ private:
     QList<IrFile> m_irsInLibrary;
     QList<IrFile> m_irsInFolder;
 
+    QString m_pathToExport;
+
     void setDeviceType(DeviceType newDeviceType);
 
     void pushReadPresetCommands();

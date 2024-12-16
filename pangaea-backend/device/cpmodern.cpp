@@ -259,56 +259,44 @@ void CPModern::pastePreset()
 
 void CPModern::importPreset(QString filePath, QString fileName)
 {
-    // Q_UNUSED(fileName)
+    Q_UNUSED(fileName)
 
-    // PresetModern importedPreset{this};
+    QByteArray importedWavData;
+    if(!actualPreset.importData(filePath, importedWavData))
+    {
+        emit sgDeviceError(DeviceErrorType::PresetImportUnsuccesfull);
+        return;
+    }
 
-    // if(!importedPreset.importData(filePath))
-    // {
-    //     emit sgDeviceError(DeviceErrorType::PresetImportUnsuccesfull);
-    //     return;
-    // }
+    if(!importedWavData.isEmpty())
+    {
+        uploadIrData(actualPreset.irName(), "ir_library", importedWavData);
+    }
 
-    // setPresetData(importedPreset);
+    setPresetData(actualPreset);
+    emit sgPushCommandToQueue("state get\r\n");
 
-    // if(importedPreset.waveData().isEmpty())
-    // {
-    //     if(actualPreset.irName() != "")
-    //     {
-    //         importedPreset.setWaveData(IRWorker::flatIr());
-    //         importedPreset.setIrName("");
-    //     }
-    // }
-    // uploadImpulseData(importedPreset.waveData(), true, importedPreset.irName());
-    // actualPreset = importedPreset;
-
-    // m_deviceParamsModified = true;
-    // emit deviceParamsModifiedChanged();
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
 }
 
 void CPModern::exportPreset(QString filePath, QString fileName)
 {
     if(m_presetManager.currentState() != PresetState::Exporting)
     {
-        // QString folderPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/presets/";
+        qInfo() << __FUNCTION__ << "Preset path: " << filePath;
+        qInfo() << __FUNCTION__ << "Preset name: " << fileName;
 
-        // qInfo() << __FUNCTION__ << "Preset name: " << fileName;
+        m_presetManager.setCurrentState(PresetState::Exporting);
 
-        // m_presetManager.setCurrentState(PresetState::Exporting);
+        m_pathToExport = filePath;
 
-        // if(!QDir(folderPath).exists())
-        // {
-        //     QDir().mkpath(folderPath);
-        // }
+        emit sgPushCommandToQueue("state");
 
-        // emit sgPushCommandToQueue("pname");
-        // emit sgPushCommandToQueue("state");
-        // actualPreset.setPathToExport(filePath);
-
-        // emit sgPushCommandToQueue("ir info");
-        // QString pathToIr = "/bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/" + actualPreset.irName();
-        // emit sgPushCommandToQueue("ir download\r" + pathToIr.toUtf8() + "\n", false);
-        // emit sgProcessCommands();
+        emit sgPushCommandToQueue("ir info");
+        QString pathToIr = actualPreset.irFile.irLinkPath() + "/" + actualPreset.irFile.irName();
+        emit sgPushCommandToQueue("ir download\r" + pathToIr.toUtf8() + "\n", false);
+        emit sgProcessCommands();
     }
 }
 
@@ -792,11 +780,6 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
         emit sgEnableTimeoutTimer();
         m_presetManager.returnToPreviousState();
     }
-
-    if(arguments == "request_chunk")
-    {
-
-    }
 }
 
 void CPModern::recieveIrInfo(const QByteArray &data)
@@ -859,12 +842,9 @@ void CPModern::irDownloaded(const QString &irPath, const QByteArray &data)
     {
         case PresetState::Exporting:
         {
-            // actualPreset.setWaveData(impulseData);
-            // actualPreset.exportData();
-
-            // emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, actualPreset.pathToExport());
-
-            // m_presetManager.returnToPreviousState();
+            actualPreset.exportData(m_pathToExport, data);
+            emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, m_pathToExport);
+            m_presetManager.returnToPreviousState();
             break;
         }
 

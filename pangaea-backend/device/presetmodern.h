@@ -23,12 +23,8 @@ public:
     static preset_data_t charsToPresetData(const QByteArray& ba);
     static QByteArray presetDatatoChars(const preset_data_t& presetData);
 
-    // TODO to static (Preset, waveData)
-    bool importData(QString filePath);
-    bool exportData();
-
-    // const QString &pathToExport() const {return m_pathToExport;};
-    // void setPathToExport(const QString &newPathToExport) {m_pathToExport = newPathToExport;};
+    bool importData(const QString &filePath, QByteArray& loadedWavData);
+    bool exportData(const QString &pathtoExport, const QByteArray& wavData);
 
     quint8 getPresetFlatNumber() const override;
 

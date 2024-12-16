@@ -374,16 +374,16 @@ void CPLegacy::exportPreset(QString filePath, QString fileName)
 {
     if(m_presetManager.currentState() != PresetState::Exporting)
     {
-        QString folderPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/presets/";
+        // QString folderPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/presets/";
 
         qInfo() << __FUNCTION__ << "Preset name: " << fileName;
 
         m_presetManager.setCurrentState(PresetState::Exporting);
 
-        if(!QDir(folderPath).exists())
-        {
-            QDir().mkpath(folderPath);
-        }
+        // if(!QDir(folderPath).exists())
+        // {
+        //     QDir().mkpath(folderPath);
+        // }
 
         emit sgPushCommandToQueue("gs");
         actualPreset.setPathToExport(filePath);

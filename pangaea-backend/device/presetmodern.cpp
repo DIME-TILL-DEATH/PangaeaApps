@@ -59,37 +59,112 @@ QByteArray PresetModern::presetDatatoChars(const preset_data_t &presetData)
     return baData;
 }
 
-bool PresetModern::importData(QString filePath)
+bool PresetModern::exportData(const QString& pathToExport, const QByteArray& wavData)
 {
-    // QFile presetFile(filePath);
+    QFile presetFile(pathToExport);
+    qInfo() << "Choosen path:" << pathToExport;
 
-    // if(presetFile.open(QIODevice::ReadOnly))
-    // {
-    //     qDebug() << "Importing preset from:" << presetFile.fileName();
+    if(presetFile.open(QIODevice::WriteOnly))
+    {
+        QByteArray fileData;
 
-    //     QByteArray fileData = presetFile.readAll();
-    //     presetFile.close();
+        fileData.append(presetHeaderId.header.toUtf8());
+        fileData.append(presetHeaderId.versionId.toUtf8());
+        fileData.append(presetVersion);
 
-    //     qint32 pos;
-    //     pos = fileData.indexOf(QString("PANGAEA_PRESET").toUtf8());
+        save_data_t saveData{0};
+        QByteArray baPresetName = m_presetName.left(32).toUtf8();
+        memcpy(&saveData.name, baPresetName.data(), baPresetName.size());
+        memcpy(&saveData.parametersData, &presetData, sizeof(preset_data_t));
 
-    //     if(pos == -1)
-    //     {
-    //         qDebug() << "This is not pangaea preset file";
-    //         return false;
-    //     }
+        QByteArray rawData;
+        char buffer[sizeof(save_data_t)];
+        memcpy(buffer, &saveData, sizeof(save_data_t));
+        rawData.append(buffer, sizeof(save_data_t));
 
-    //     m_rawData = readPresetChunck(fileData, presetHeaderId.dataId);
-    //     m_impulseName = readPresetChunck(fileData, presetHeaderId.irNameId);
-    //     m_waveData = readPresetChunck(fileData, presetHeaderId.irDataId);
-    //     return true;
-    // }
-    // else
-    // {
-    //     qDebug() << "Can' open file: " << presetFile.fileName();
-    //     return false;
-    // }
+        writePresetChunk(fileData, presetHeaderId.dataId, rawData);
+        writePresetChunk(fileData, presetHeaderId.irNameId, irFile.irName().toUtf8());
+        writePresetChunk(fileData, presetHeaderId.irDataId, wavData);
+
+        presetFile.write(fileData);
+        presetFile.close();
+        return true;
+    }
+    else
+    {
+        qDebug() << "Can' open file: " << presetFile.fileName();
+        return false;
+    }
     return false;
+}
+
+bool PresetModern::importData(const QString& filePath, QByteArray& loadedWavData)
+{
+    QFile presetFile(filePath);
+
+    if(presetFile.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Importing preset from:" << presetFile.fileName();
+
+        QByteArray fileData = presetFile.readAll();
+        presetFile.close();
+
+        qint32 pos;
+        pos = fileData.indexOf(QString("PANGAEA_PRESET").toUtf8());
+
+        if(pos == -1)
+        {
+            qDebug() << "This is not pangaea preset file";
+            return false;
+        }
+
+        pos = fileData.indexOf(presetHeaderId.versionId.toUtf8());
+        quint8 importedPresetVersion = fileData.at(pos+presetHeaderId.versionId.size());
+        qDebug() << "pos " << pos << "imported preset version" << importedPresetVersion;
+        QByteArray rawData = readPresetChunck(fileData, presetHeaderId.dataId);
+        if(importedPresetVersion == presetVersion)
+        {
+            qDebug() << "Modern preset";
+            save_data_t imporetedSaveData;
+            memcpy(&imporetedSaveData, rawData.data(), sizeof(save_data_t));
+            m_presetName = imporetedSaveData.name;
+            memcpy(&presetData, &imporetedSaveData.parametersData, sizeof(preset_data_t));
+        }
+        else
+        {
+            m_presetName.clear();
+            preset_data_legacy_t imporetedPresetData;
+            memcpy(&imporetedPresetData, rawData.data(), sizeof(preset_data_legacy_t));
+            presetData = HardwarePreset::convertLegacyToModern(imporetedPresetData);
+
+        }
+        irFile.setIrName(readPresetChunck(fileData, presetHeaderId.irNameId));
+        irFile.setIrLinkPath("ir_library/");
+        loadedWavData = readPresetChunck(fileData, presetHeaderId.irDataId);
+        return true;
+    }
+    else
+    {
+        qDebug() << "Can' open file: " << presetFile.fileName();
+        return false;
+    }
+    return false;
+}
+
+void PresetModern::writePresetChunk(QByteArray &fileData, QString &chunkName, const QByteArray &chunkData)
+{
+    QByteArray baChunkIdSize = QString(chunkName + "_SIZE").toUtf8();
+    QByteArray baChunkId = QString(chunkName + "_CHUNK").toUtf8();
+
+    fileData.append(baChunkIdSize);
+
+    quint32 chunkSize = chunkData.size();
+    QByteArray baChunkSize(reinterpret_cast<const char*>(&chunkSize), sizeof(quint32));
+    std::reverse(baChunkSize.begin(), baChunkSize.end());
+    fileData.append(baChunkSize);
+
+    fileData.append(baChunkId);
+    fileData.append(chunkData);
 }
 
 QByteArray PresetModern::readPresetChunck(const QByteArray &fileData, QString &chunkName)
@@ -117,55 +192,6 @@ QByteArray PresetModern::readPresetChunck(const QByteArray &fileData, QString &c
     }
     pos += baChunkId.size();
     return fileData.mid(pos, chunkSize);
-}
-
-bool PresetModern::exportData()
-{
-    // QFile presetFile(m_pathToExport);
-    // qDebug() << "Choosen path:" << m_pathToExport;
-
-    // if(presetFile.open(QIODevice::WriteOnly))
-    // {
-    //     qDebug() << "Exporting preset to:" << presetFile.fileName();
-
-    //     QByteArray fileData;
-
-    //     fileData.clear();
-    //     fileData.append(presetHeaderId.header.toUtf8());
-    //     fileData.append(presetHeaderId.versionId.toUtf8());
-    //     fileData.append(presetVersion);
-
-    //     writePresetChunk(fileData, presetHeaderId.dataId, m_rawData);
-    //     QByteArray baIrName = m_impulseName.toUtf8();
-    //     writePresetChunk(fileData, presetHeaderId.irNameId, baIrName);
-    //     writePresetChunk(fileData, presetHeaderId.irDataId, m_waveData);
-
-    //     presetFile.write(fileData);
-    //     presetFile.close();
-    //     return true;
-    // }
-    // else
-    // {
-    //     qDebug() << "Can' open file: " << presetFile.fileName();
-    //     return false;
-    // }
-    return false;
-}
-
-void PresetModern::writePresetChunk(QByteArray &fileData, QString &chunkName, const QByteArray &chunkData)
-{
-    QByteArray baChunkIdSize = QString(chunkName + "_SIZE").toUtf8();
-    QByteArray baChunkId = QString(chunkName + "_CHUNK").toUtf8();
-
-    fileData.append(baChunkIdSize);
-
-    quint32 chunkSize = chunkData.size();
-    QByteArray baChunkSize(reinterpret_cast<const char*>(&chunkSize), sizeof(quint32));
-    std::reverse(baChunkSize.begin(), baChunkSize.end());
-    fileData.append(baChunkSize);
-
-    fileData.append(baChunkId);
-    fileData.append(chunkData);
 }
 
 quint8 PresetModern::getPresetFlatNumber() const
