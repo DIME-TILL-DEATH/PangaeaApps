@@ -77,7 +77,7 @@ Rectangle
                 text: modelData
                 opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: Style.colorText
-                font.pixelSize: _tumbler.height*0.6//DeviceProperties.isLa3Mode ? _tumbler.height*0.6 : _tumbler.height*0.75
+                font.pixelSize: _tumbler.height*0.75//DeviceProperties.isLa3Mode ? _tumbler.height*0.6 : _tumbler.height*0.75
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 font.bold: true
