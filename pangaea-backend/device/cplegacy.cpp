@@ -87,6 +87,7 @@ void CPLegacy::initDevice(DeviceType deviceType)
     CM = new Compressor(this);
     PR = new Preamp(this);
     PA = new PowerAmp(this);
+    PS = new Presence(this);
     IR = new CabSim(this);
     connect(IR, &CabSim::dataChanged, this, &CPLegacy::slIrEnabledChanged);
     HPF = new HiPassFilter(this);
@@ -104,7 +105,7 @@ void CPLegacy::initDevice(DeviceType deviceType)
     }
     else
     {
-
+        m_moduleList.append(PS);
     }
     m_moduleList.append(IR);
     m_moduleList.append(HPF);
@@ -717,6 +718,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     CM->setValues(legacyData.compressor_on, legacyData.compressor_sustain, legacyData.compressor_volume);
     PR->setValues(legacyData.preamp_on, legacyData.preamp_volume, legacyData.preamp_low, legacyData.preamp_mid, legacyData.preamp_high);
     PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
+    PS->setValues(legacyData.presence_on, legacyData.presence_vol);
 
     eq_t eqData;
     for(int i=0; i<5; i++)

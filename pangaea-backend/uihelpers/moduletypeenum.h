@@ -19,7 +19,7 @@ public:
         EQ,
         LP,
         NG,
-
+        PS,
         //=====================
         // Stereo moduls
         ER = 64,

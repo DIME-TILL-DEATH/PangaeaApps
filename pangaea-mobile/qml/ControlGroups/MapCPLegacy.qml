@@ -112,6 +112,13 @@ Item{
                         break;
                     }
 
+                    case ModuleType.PS:
+                    {
+                        _delegateLoader.source = "../Modules/PS.qml";
+                        _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
+                        break;
+                    }
+
                     case ModuleType.IR:
                     {
                         _delegateLoader.source = "../Modules/IR.qml";

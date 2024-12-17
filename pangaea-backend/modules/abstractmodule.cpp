@@ -17,6 +17,7 @@
 #include "hipassfilter.h"
 #include "eqparametric.h"
 #include "lowpassfilter.h"
+#include "presence.h"
 #include "earlyreflections.h"
 
 AbstractModule::AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff)
@@ -38,6 +39,7 @@ void AbstractModule::registerTypestoQml()
     qmlRegisterUncreatableType<Compressor>("CppObjects", 1, 0, "Compressor", "Cannot create Compressor in QML");
     qmlRegisterUncreatableType<Preamp>("CppObjects", 1, 0, "Preamp", "Cannot create Preamp in QML");
     qmlRegisterUncreatableType<PowerAmp>("CppObjects", 1, 0, "PowerAmp", "Cannot create PowerAmp in QML");
+    qmlRegisterUncreatableType<Presence>("CppObjects", 1, 0, "Presence", "Cannot create Presence in QML");
     qmlRegisterUncreatableType<CabSim>("CppObjects", 1, 0, "CabSim", "Cannot create CabSim in QML");
     qmlRegisterUncreatableType<HiPassFilter>("CppObjects", 1, 0, "HiPassFilter", "Cannot create HP in QML");
     qmlRegisterUncreatableType<EqParametric>("CppObjects", 1, 0, "EqParametric", "Cannot create EQ in QML");

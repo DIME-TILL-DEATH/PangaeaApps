@@ -43,19 +43,20 @@ qt_add_library(pangaea-backend STATIC
     models/moduleslistmodel.h models/moduleslistmodel.cpp
 
     modules/controlvalue.cpp modules/controlvalue.h
+    modules/controlqlegacy.h modules/controlqlegacy.cpp
     modules/abstractmodule.cpp modules/abstractmodule.h
     modules/presetvolume.h modules/presetvolume.cpp
     modules/noisegate.h modules/noisegate.cpp
     modules/compressor.h modules/compressor.cpp
     modules/preamp.h modules/preamp.cpp
     modules/poweramp.cpp modules/poweramp.h
-    modules/cabsim.h modules/cabsim.cpp
+    modules/presence.h modules/presence.cpp
     modules/hipassfilter.h modules/hipassfilter.cpp
     modules/eqband.cpp modules/eqband.h
     modules/eqparametric.cpp modules/eqparametric.h
     modules/lowpassfilter.h modules/lowpassfilter.cpp
+    modules/cabsim.h modules/cabsim.cpp
     modules/earlyreflections.h modules/earlyreflections.cpp
-    modules/controlqlegacy.h modules/controlqlegacy.cpp
 
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h

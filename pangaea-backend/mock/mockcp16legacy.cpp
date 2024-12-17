@@ -283,7 +283,7 @@ bool MockCP16Legacy::savePresetData(quint8 prBank, quint8 prPreset, const preset
 //===========================================================================================
 void MockCP16Legacy::amtDevCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)
 {
-    emit answerReady(QString("amtdev\r2\nEND\n").toUtf8());
+    emit answerReady(QString("amtdev\r3\nEND\n").toUtf8());
 }
 
 void MockCP16Legacy::amtVerCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data)

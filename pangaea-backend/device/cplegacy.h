@@ -14,6 +14,7 @@
 #include "noisegate.h"
 #include "preamp.h"
 #include "poweramp.h"
+#include "presence.h"
 #include "cabsim.h"
 #include "hipassfilter.h"
 #include "eqparametric.h"
@@ -78,6 +79,7 @@ public:
     HiPassFilter* HPF;
     EqParametric* EQ;
     LowPassFilter* LPF;
+    Presence* PS;
     EarlyReflections* ER;
 public slots:
      QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
