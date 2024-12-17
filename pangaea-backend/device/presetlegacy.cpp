@@ -48,18 +48,28 @@ bool PresetLegacy::importData(QString filePath)
 
         if(pos == -1)
         {
-            qDebug() << "This is not pangaea preset file";
+            qWarning() << "This is not pangaea preset file";
             return false;
         }
 
-        m_rawData = readPresetChunck(fileData, presetHeaderId.dataId);
-        m_irName = readPresetChunck(fileData, presetHeaderId.irNameId);
-        m_waveData = readPresetChunck(fileData, presetHeaderId.irDataId);
-        return true;
+        pos = fileData.indexOf(presetHeaderId.versionId.toUtf8());
+        quint8 importedPresetVersion = fileData.at(pos+presetHeaderId.versionId.size());
+        if(importedPresetVersion == presetVersion)
+        {
+            m_rawData = readPresetChunck(fileData, presetHeaderId.dataId);
+            m_irName = readPresetChunck(fileData, presetHeaderId.irNameId);
+            m_waveData = readPresetChunck(fileData, presetHeaderId.irDataId);
+            return true;
+        }
+        else
+        {
+            qWarning() << "Pangaea preset version is too high";
+            return false;
+        }
     }
     else
     {
-        qDebug() << "Can' open file: " << presetFile.fileName();
+        qWarning() << "Can' open file: " << presetFile.fileName();
         return false;
     }
 }

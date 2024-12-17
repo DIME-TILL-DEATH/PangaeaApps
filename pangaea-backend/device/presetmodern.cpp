@@ -43,7 +43,7 @@ preset_data_t PresetModern::charsToPresetData(const QByteArray &ba)
     return presetData;
 }
 
-QByteArray PresetModern::presetDatatoChars(const preset_data_t &presetData)
+QByteArray PresetModern::presetDataToChars(const preset_data_t &presetData)
 {
     quint8 buffer[sizeof(preset_data_t)];
     memcpy(buffer, &presetData, sizeof(preset_data_t));
@@ -120,11 +120,9 @@ bool PresetModern::importData(const QString& filePath, QByteArray& loadedWavData
 
         pos = fileData.indexOf(presetHeaderId.versionId.toUtf8());
         quint8 importedPresetVersion = fileData.at(pos+presetHeaderId.versionId.size());
-        qDebug() << "pos " << pos << "imported preset version" << importedPresetVersion;
         QByteArray rawData = readPresetChunck(fileData, presetHeaderId.dataId);
         if(importedPresetVersion == presetVersion)
         {
-            qDebug() << "Modern preset";
             save_data_t imporetedSaveData;
             memcpy(&imporetedSaveData, rawData.data(), sizeof(save_data_t));
             m_presetName = imporetedSaveData.name;
@@ -133,8 +131,15 @@ bool PresetModern::importData(const QString& filePath, QByteArray& loadedWavData
         else
         {
             m_presetName.clear();
+
+            quint8 rawArr[sizeof(preset_data_legacy_t)];
+            for(int i = 0; i < rawData.size(); i += 2)
+            {
+                QString chByte = QString(rawData.at(i)) + QString(rawData.at(i+1));
+                rawArr[i/2] = chByte.toInt(nullptr, 16);
+            }
             preset_data_legacy_t imporetedPresetData;
-            memcpy(&imporetedPresetData, rawData.data(), sizeof(preset_data_legacy_t));
+            memcpy(&imporetedPresetData, rawArr, sizeof(preset_data_legacy_t));
             presetData = HardwarePreset::convertLegacyToModern(imporetedPresetData);
 
         }

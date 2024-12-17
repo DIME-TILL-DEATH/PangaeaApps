@@ -21,7 +21,7 @@ public:
     preset_data_t presetData;
 
     static preset_data_t charsToPresetData(const QByteArray& ba);
-    static QByteArray presetDatatoChars(const preset_data_t& presetData);
+    static QByteArray presetDataToChars(const preset_data_t& presetData);
 
     bool importData(const QString &filePath, QByteArray& loadedWavData);
     bool exportData(const QString &pathtoExport, const QByteArray& wavData);

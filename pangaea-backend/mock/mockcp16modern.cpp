@@ -387,7 +387,7 @@ void MockCP16Modern::stateCommHandler(const QString &command, const QByteArray &
     else
     {
         answer.append("\r");
-        answer.append(PresetModern::presetDatatoChars(currentPresetData));
+        answer.append(PresetModern::presetDataToChars(currentPresetData));
         answer.append("\n");
     }
     emit answerReady(answer);

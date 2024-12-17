@@ -102,6 +102,10 @@ void CPLegacy::initDevice(DeviceType deviceType)
         m_moduleList.append(PA);
         connect(this, &CPLegacy::isPreEqChanged, this, &CPLegacy::arrangePrePost);
     }
+    else
+    {
+
+    }
     m_moduleList.append(IR);
     m_moduleList.append(HPF);
     m_moduleList.append(EQ);

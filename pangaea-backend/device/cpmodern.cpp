@@ -268,13 +268,16 @@ void CPModern::importPreset(QString filePath, QString fileName)
         return;
     }
 
+    m_presetManager.setCurrentState(PresetState::Importing);
     if(!importedWavData.isEmpty())
     {
-        uploadIrData(actualPreset.irName(), "ir_library", importedWavData);
+        uploadIrData(actualPreset.irName(), "ir_library/", importedWavData);
     }
-
-    setPresetData(actualPreset);
-    emit sgPushCommandToQueue("state get\r\n");
+    else
+    {
+        setPresetData(actualPreset);
+        emit sgPushCommandToQueue("state get\r\n");
+    }
 
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
@@ -366,12 +369,12 @@ void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath, bool trim
             if(fileData.size() > maxIrSize()) fileData = fileData.left(maxIrSize());
         }
         uploadIrData(fileName, dstFilePath, fileData);
+        m_presetManager.setCurrentState(PresetState::UploadingIr);
     }
 }
 
 void CPModern::uploadIrData(const QString& irName, const QString& dstPath, const QByteArray& irData)
 {
-    m_presetManager.setCurrentState(PresetState::UploadingIr);
     emit m_presetManager.currentStateChanged();
 
     m_rawIrData = irData;
@@ -417,17 +420,15 @@ QString CPModern::currentPresetName() const
 
 void CPModern::setPresetData(const PresetModern &preset)
 {
-    QByteArray ba;
-
-    ba.append("state set\r");
-    ba.append(PresetModern::presetDatatoChars(preset.presetData));
-
-    emit sgPushCommandToQueue(ba + "\n", false);
     IR->setImpulseName(preset.irFile.irName());
-
     emit sgPushCommandToQueue("ir link\r" + preset.irFile.irName().toUtf8() + "\r" +
                                   preset.irFile.irLinkPath().toUtf8() + "\n", false);
     emit sgPushCommandToQueue("pname set\r" + preset.presetName().toUtf8() + "\n");
+
+    QByteArray ba;
+    ba.append("state set\r");
+    ba.append(PresetModern::presetDataToChars(preset.presetData));
+    emit sgPushCommandToQueue(ba + "\n", false);
     emit sgProcessCommands();
 }
 
@@ -693,6 +694,12 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
         break;
     }
 
+    case PresetState::Importing:
+    {
+        m_presetManager.returnToPreviousState();
+        break;
+    }
+
     case PresetState::Compare:
     {
         m_presetListModel.updatePreset(&savedPreset);
@@ -724,7 +731,7 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
             QList<QByteArray> dataList = data.split('\r');
             if(dataList.length()==2)
             {
-                irDownloaded(dataList.at(0), dataList.at(1));
+                irDownloaded(dataList.at(0), QByteArray::fromHex(dataList.at(1)));
             }
         }
         m_symbolsToRecieve=0;
@@ -766,8 +773,21 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
         }
         else
         {
-            m_presetManager.returnToPreviousState();
             emit impulseUploaded();
+            switch(m_presetManager.currentState())
+            {
+            case PresetState::Importing:
+            {
+                setPresetData(actualPreset);
+                emit sgPushCommandToQueue("state get\r\n");
+                break;
+            }
+            default:
+            {
+                m_presetManager.returnToPreviousState();
+            }
+            }
+
             emit sgPushCommandToQueue("ls ir_library\r\n", false);
             QString presetPath = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset);
             emit sgPushCommandToQueue("ls " + presetPath.toUtf8() + "\r\n", false);
@@ -836,7 +856,7 @@ void CPModern::recieveIrInfo(const QByteArray &data)
 
 void CPModern::irDownloaded(const QString &irPath, const QByteArray &data)
 {
-    QByteArray impulseData = QByteArray::fromHex(data);
+    // QByteArray impulseData = QByteArray::fromHex(data);
 
     switch(m_presetManager.currentState())
     {

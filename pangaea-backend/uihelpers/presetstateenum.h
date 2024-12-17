@@ -16,6 +16,7 @@ public:
         SetCompare,
         Compare, // вызван оригинальный пресет
         Copying,
+        Importing,
         Exporting,
         UploadingIr,
         SavingIr,
