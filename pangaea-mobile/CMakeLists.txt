@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21.1)
-project(Pangaea-mobile VERSION 0.11.10 LANGUAGES CXX)
-set(VERSION_CODE 27)
+project(Pangaea-mobile VERSION 0.12.0 LANGUAGES CXX)
+set(VERSION_CODE 28)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
 
