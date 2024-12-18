@@ -2,9 +2,6 @@
 
 #include <QDebug>
 
-#include <iomanip>
-#include <iostream>
-#include <sstream>
 
 ControlValue::ControlValue(AbstractModule *owner, QString commandName,
                            QString name, QString units,
@@ -23,7 +20,7 @@ ControlValue::ControlValue(AbstractModule *owner, QString commandName,
     if(owner) connect(this, &ControlValue::userModifiedValue, owner, &AbstractModule::userModifiedModuleParameters);
 
     connect(&frameTimer, &QTimer::timeout, this, &ControlValue::sendFrame);
-    frameTimer.start(25);
+    frameTimer.start(100);
 }
 
 ControlValue::~ControlValue()
@@ -69,7 +66,10 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     else
     {
         // drop same values
-        if(buffer.last() != fullCommand.toUtf8()) buffer.append(fullCommand.toUtf8());
+        if(buffer.last().indexOf(fullCommand.toUtf8()) == -1)
+        {
+            buffer.append(fullCommand.toUtf8());
+        }
     }
     // if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
 
