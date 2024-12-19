@@ -14,6 +14,8 @@ CPModern::CPModern(Core *parent)
 
     CPModern::updateOutputModeNames();
 
+    m_processingBudget = 290;
+
     using namespace std::placeholders;
     m_parser.addCommandHandler("amtver", std::bind(&CPModern::amtVerCommHandler, this, _1, _2, _3));
 
@@ -63,6 +65,17 @@ void CPModern::updateOutputModeNames()
     emit outputModeChanged();
 }
 
+quint16 CPModern::processingUsed()
+{
+    quint16 result = 0;
+
+    foreach (AbstractModule* module, m_moduleList) {
+        result += module->processingTime();
+    }
+    result += ER->processingTime();
+    return result;
+}
+
 void CPModern::initDevice(DeviceType deviceType)
 {
     m_deviceType = deviceType;
@@ -86,16 +99,6 @@ void CPModern::initDevice(DeviceType deviceType)
     typeToModuleMap.insert(ModuleType::IR, IR);
     typeToModuleMap.insert(ModuleType::EQ, EQ);
     typeToModuleMap.insert(ModuleType::ER, ER);
-
-    // m_moduleList.append(NG);
-    // m_moduleList.append(CM);
-    // m_moduleList.append(PR);
-    // m_moduleList.append(PA);
-    // m_moduleList.append(IR);
-    // m_moduleList.append(EQ);
-    // m_moduleList.append(ER);
-
-    // m_modulesListModel.refreshModel(&m_moduleList);
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
@@ -634,8 +637,9 @@ void CPModern::mconfigCommHandler(const QString &command, const QByteArray &argu
         nomByte++;
     }
 
-    m_moduleList.append(ER);
+    // m_moduleList.append(ER);
     m_modulesListModel.refreshModel(&m_moduleList);
+    emit modulesListModelChanged();
 }
 
 void CPModern::pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

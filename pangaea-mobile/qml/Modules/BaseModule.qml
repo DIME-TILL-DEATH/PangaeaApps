@@ -94,56 +94,6 @@ Rectangle {
                 rows: 3
                 columns: 2
 
-
-                // Text {
-                //     id: _description
-
-                //     Layout.preferredWidth: _headerRect.width * 0.9
-                //     Layout.preferredHeight: _headerRect.height/4
-                //     Layout.maximumHeight: _headerRect.height/4
-                //     Layout.fillWidth: true
-                //     Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                //     Layout.row: 0
-                //     Layout.columnSpan: 2
-
-                //     font.pixelSize: _headerRect.width * 0.12
-
-                //     text: _main.moduleDescription
-                //     color: _main.on ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
-
-                //     horizontalAlignment: Text.AlignHCenter
-                //     verticalAlignment: Text.AlignVCenter
-
-                //     elide: Text.ElideMiddle
-                //     wrapMode: Text.WordWrap
-                //     maximumLineCount: 3
-
-                //     visible: showDescription
-                // }
-
-                // Item{
-                //     Layout.row: 1
-                //     Layout.column: 0
-                //     Layout.preferredWidth: _headerRect.width * 0.5
-                //     Layout.preferredHeight: _headerRect.height/2
-                //     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                //     Layout.fillWidth: true
-
-                //     Rectangle{
-                //         width: _text.font.pixelSize*0.9
-                //         height: width
-                //         radius: width/2
-                //         border.width: 1
-
-                //         anchors.right: parent.right
-                //         anchors.verticalCenter: parent.verticalCenter
-
-                //         color: (_main.on) ? Style.currentTheme.colorLedOn : Style.currentTheme.colorLedOff
-
-                //         Behavior on color{ColorAnimation{duration:200}}
-                //     }
-                // }
-
                Item{
                     Layout.row: 1
                     Layout.column: 1

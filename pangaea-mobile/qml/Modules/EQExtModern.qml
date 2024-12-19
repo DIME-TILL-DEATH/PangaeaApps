@@ -1,4 +1,4 @@
-pragma ComponentBehavior: Bound
+// pragma ComponentBehavior: Bound
 
 import QtQuick 2.15
 import QtQuick.Controls 2.12
@@ -188,7 +188,7 @@ Item
 
                    anchors.fill: parent
                    delegate: EqPoint{
-                       eqBand: main.eqModule.EqBands[index]
+                       eqBand: eqModule.EqBands[index]
                        gainRange: main.gainRange
                        selectedBandIndex: main.currentBandIndex
 
@@ -197,7 +197,7 @@ Item
                        }
                    }
 
-                   model: main.eqModule.EqBands
+                   model: eqModule.EqBands
                 }
 
                 DropArea{

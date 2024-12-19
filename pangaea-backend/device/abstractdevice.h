@@ -28,6 +28,9 @@ class AbstractDevice : public QObject
     Q_PROPERTY(DeviceClass deviceClass READ deviceClass CONSTANT)
     Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)
 
+    Q_PROPERTY(quint16 processingBudget READ processingBudget CONSTANT)
+    Q_PROPERTY(quint16 processingUsed READ processingUsed NOTIFY modulesListModelChanged)
+
     Q_PROPERTY(quint8 bank READ bank NOTIFY bankPresetChanged FINAL)
     Q_PROPERTY(quint8 preset READ preset NOTIFY bankPresetChanged FINAL)
     Q_PROPERTY(quint8 maxBankCount READ maxBankCount CONSTANT)
@@ -47,6 +50,9 @@ public:
 
     DeviceClass deviceClass() {return m_deviceClass;}
     QString firmwareName() {return m_firmwareName;};
+
+    quint16 processingBudget() {return m_processingBudget;};
+    virtual quint16 processingUsed() {return 0;};
 
     QStringList avaliableOutputModes() {return m_avaliableOutputModes;};
 
@@ -141,6 +147,8 @@ protected:
 
     DeviceClass m_deviceClass;    
     DeviceType m_deviceType{DeviceType::UnknownDev};
+
+    quint16 m_processingBudget{0};
 
     Firmware* m_actualFirmware{nullptr};
     Firmware* m_minimalFirmware{nullptr}; 

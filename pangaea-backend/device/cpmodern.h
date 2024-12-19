@@ -26,6 +26,7 @@ class CPModern : public AbstractDevice
     Q_OBJECT
 
     Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
+    Q_PROPERTY(EarlyReflections* ER  READ getER CONSTANT)
     Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
 
     Q_PROPERTY(IrFile currentIrFile READ currentIrFile WRITE setCurrentIrFile NOTIFY currentIrFileChanged FINAL)
@@ -36,6 +37,8 @@ public:
     ~CPModern();
 
     void updateOutputModeNames() override;
+
+    quint16 processingUsed() override;
 
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
@@ -58,6 +61,7 @@ public:
     Q_INVOKABLE bool isFileInFolder(const QString& fileName);
 
     PresetVolume* getMV() {return MV;};
+    EarlyReflections* getER() {return ER;};
 
     QString currentPresetName() const;;
     void setCurrentPresetName(const QString &newCurrentPresetName);

@@ -120,7 +120,8 @@ Item{
         {
             id: listViewModules
             width: parent.width
-            height: parent.height - masterControlsHeight - _presetNameContainer.height - _clipIndContainer.height //- _moduleColumn.spacing
+            height: parent.height - masterControlsHeight
+                    - _presetNameContainer.height - _er.height - _clipIndContainer.height //- _moduleColumn.spacing
             spacing: 2
 
             // model: UiCore.currentDevice.modulesListModel;
@@ -194,17 +195,24 @@ Item{
                         break;
                     }
 
-                    case ModuleType.ER:
-                    {
-                        _delegateLoader.source = "/Modules/qml/Modules/ER.qml";
-                        _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
-                        break;
-                    }
+                    // case ModuleType.ER:
+                    // {
+                    //     _delegateLoader.source = "/Modules/qml/Modules/ER.qml";
+                    //     _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
+                    //     break;
+                    // }
                     }
 
                     _delegateLoader.item.module = moduleInstance;
                 }
             }
+        }
+
+        ER{
+            id: _er
+            module: UiCore.currentDevice.ER
+            width: parent.width
+            height: _main.height*2/countElements - _moduleColumn.spacing;
         }
 
         ClipIndicator {
@@ -219,8 +227,6 @@ Item{
         target: UiCore.currentDevice.modulesListModel
 
         function onModelReset(){
-            console.log("model", UiCore.currentDevice.modulesListModel, UiCore.currentDevice.modulesListModel.rowCount())
-
             listViewModules.model = UiCore.currentDevice.modulesListModel
         }
     }
