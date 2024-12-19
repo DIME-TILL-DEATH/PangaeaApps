@@ -73,13 +73,13 @@ Item
                 case DeviceClass.CP_LEGACY:
                 {
                     // _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
-                    _mapContentLoader.source = "../ControlGroups/MapCPLegacy.qml";
+                    _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
                     break;
                 }
                 case DeviceClass.CP_MODERN:
                 {
                     // _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
-                    _mapContentLoader.source = "../ControlGroups/MapCPModern.qml";
+                    _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
                     break;
                 }
             }

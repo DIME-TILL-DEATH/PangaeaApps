@@ -1,76 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>images/cp_16m.svg</file>
-        <file>qml/StyleSettings/Style.qml</file>
-        <file>qml/StyleSettings/qmldir</file>
-        <file>qml/Elements/ApplicationHeader.qml</file>
-        <file>qml/Elements/MButton.qml</file>
-        <file>qml/Elements/MText.qml</file>
-        <file>qml/Elements/PresetSpin.qml</file>
-        <file>qml/Elements/qmldir</file>
-        <file>qml/main.qml</file>
-        <file>qml/Modules/CM.qml</file>
-        <file>qml/Modules/EQExtLegacy.qml</file>
-        <file>qml/Modules/ER.qml</file>
-        <file>qml/Modules/HP.qml</file>
-        <file>qml/Modules/IR.qml</file>
-        <file>qml/Modules/LP.qml</file>
-        <file>qml/Modules/NG.qml</file>
-        <file>qml/Modules/PA.qml</file>
-        <file>qml/Modules/PR.qml</file>
-        <file>qml/Modules/qmldir</file>
-        <file>qml/Modules/VL.qml</file>
-        <file>qml/Modules/BaseModule.qml</file>
-        <file>qml/Elements/CustomComboBox.qml</file>
-        <file>qml/Pages/ConnectPage.qml</file>
-        <file>qml/Pages/MapPage.qml</file>
-        <file>qml/Pages/qmldir</file>
-        <file>qml/Pages/ServicePage.qml</file>
-        <file>qml/ControlGroups/qmldir</file>
         <file>images/AMT.svg</file>
         <file>images/AMT (Fixed by Ivan).svg</file>
-        <file>qml/StyleSettings/Theme.qml</file>
-        <file>qml/Pages/SettingsPage.qml</file>
-        <file>qml/Elements/MRadioButton.qml</file>
-        <file>qml/Modules/PS.qml</file>
         <file>images/Arrow Gear new.svg</file>
         <file>images/(V).svg</file>
         <file>images/Connected.svg</file>
-        <file>qml/Elements/BleListDelegate.qml</file>
-        <file>qml/Elements/BleListHighlight.qml</file>
-        <file>qml/Elements/PresetsListDelegate.qml</file>
-        <file>qml/Elements/CustomProgressBar.qml</file>
-        <file>qml/ControlGroups/DocumentationWindow.qml</file>
-        <file>qml/Elements/MComboBox.qml</file>
-        <file>qml/Modules/EQPreviewLegacy.qml</file>
-        <file>qml/Elements/EqPoint.qml</file>
-        <file>qml/Elements/CustomSlider.qml</file>
-        <file>qml/Elements/BankSpin.qml</file>
-        <file>qml/Elements/ModeSpin_LA.qml</file>
-        <file>qml/ControlGroups/ControlButtonsGroup.qml</file>
-        <file>qml/ControlGroups/MasterControls_LA.qml</file>
-        <file>qml/ControlGroups/MasterControls_CP.qml</file>
-        <file>qml/Elements/PresetSpin_LA.qml</file>
-        <file>qml/Modules/OutputMode.qml</file>
-        <file>qml/Tutorials/TutorialVirtualDevice.qml</file>
-        <file>qml/Tutorials/qmldir</file>
-        <file>qml/Tutorials/SimpleTutorialMessage.qml</file>
-        <file>qml/ControlGroups/MapCPLegacy.qml</file>
-        <file>qml/ControlGroups/MapCPModern.qml</file>
-        <file>qml/Modules/EQExtModern.qml</file>
-        <file>qml/ControlGroups/BPeakingControl.qml</file>
-        <file>qml/ControlGroups/BPeakingShelfControl.qml</file>
-        <file>qml/ControlGroups/BCutControl.qml</file>
-        <file>qml/Modules/EQPreviewModern.qml</file>
-        <file>qml/Elements/CustomLogSlider.qml</file>
-        <file>qml/CustomOverlays/BusyScreen.qml</file>
-        <file>qml/CustomOverlays/CustomMessageDialog.qml</file>
-        <file>qml/CustomOverlays/EditTextDialog.qml</file>
-        <file>qml/CustomOverlays/EditValueDialog.qml</file>
-        <file>qml/CustomOverlays/FirmwareLoadingWindow.qml</file>
-        <file>qml/CustomOverlays/qmldir</file>
-        <file>qml/CustomOverlays/PresetsWindow.qml</file>
-        <file>qml/CustomOverlays/IrManagementWindow.qml</file>
-        <file>qml/Modules/ClipIndicator.qml</file>
+        <file>qml/main.qml</file>
     </qresource>
 </RCC>

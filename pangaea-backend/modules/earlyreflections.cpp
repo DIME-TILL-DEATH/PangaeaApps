@@ -5,6 +5,8 @@
 EarlyReflections::EarlyReflections(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::ER, "ER", "eo"}
 {
+    m_processingTime = 75; //mono 45
+
     m_reflectionsVolume = new ControlValue(this, "ev", "Volume");
     m_reflectionsType = new ControlValue(this, "et", "ER Type");
 }

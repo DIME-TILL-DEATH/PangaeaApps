@@ -12,6 +12,8 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
     m_eqMode{eqMode},
     m_eqNumber{eqNumber}
 {
+    m_processingTime = 25;
+
     if(m_eqMode == EqMode::Modern)
     {
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 0, 20, 12000));

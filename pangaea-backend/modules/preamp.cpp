@@ -3,6 +3,8 @@
 Preamp::Preamp(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::PR, "PR", "pro"}
 {
+    m_processingTime = 20;
+
     m_volume = new ControlValue(this, "prv", "Volume");
 
     m_low = new ControlValue(this, "prl", "Low", "", -64, 63, 0, 127);

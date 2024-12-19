@@ -7,6 +7,8 @@ import Elements 1.0
 import CppObjects
 
 Item {
+
+     id: _root
     signal closeSettingsWindow()
 
     Rectangle
@@ -209,7 +211,7 @@ Item {
 
             onMbPressed:
             {
-                closeSettingsWindow()
+                _root.closeSettingsWindow()
             }
         }
     }

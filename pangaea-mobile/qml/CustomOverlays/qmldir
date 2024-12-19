@@ -1,9 +1,0 @@
-module CustomOverlays
-
-BusyScreen      1.0 BusyScreen.qml
-CustomMessageDialog 1.0 CustomMessageDialog.qml
-EditValueDialog      1.0 EditValueDialog.qml
-EditTextDialog      1.0 EditTextDialog.qml
-FirmwareLoadingWindow   1.0 FirmwareLoadingWindow.qml
-IrManagementWindow 1.0 IrManagementWindow.qml
-PresetsWindow 1.0 PresetsWindow.qml

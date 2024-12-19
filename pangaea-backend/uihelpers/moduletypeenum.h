@@ -2,10 +2,12 @@
 #define MODULETYPEENUM_H
 
 #include <QObject>
+#include <QtQmlIntegration/qqmlintegration.h>
 
 class ModuleTypeEnum
 {
     Q_GADGET
+    QML_ELEMENT
 public:
     explicit ModuleTypeEnum(){};
     enum Value

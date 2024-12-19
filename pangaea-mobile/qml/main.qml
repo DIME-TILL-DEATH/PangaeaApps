@@ -1,9 +1,6 @@
 import QtQuick
-
 import QtQuick.Controls.Material
-//import QtQuick.Controls 2.12
 
-import Modules 1.0
 import CustomOverlays 1.0
 import Elements 1.0
 import Pages 1.0
@@ -18,10 +15,6 @@ ApplicationWindow
     id: _main
 
     visible: true
-    //height: 600
-    //width:  300
-
-//    visibility: Window.FullScreen
 
     color: "#EBECEC"
 
@@ -73,6 +66,11 @@ ApplicationWindow
             id: _mapPage
         }
 
+        ConfigPage
+        {
+            id: _configPage
+        }
+
         ServicePage
         {
             id: _servicePage
@@ -98,7 +96,7 @@ ApplicationWindow
             anchors.top: parent.top
             text: qsTr("Connect")
             onClicked: {
-                openConnectPage();
+                _main.openConnectPage();
             }
          }
          TabButton {
@@ -112,9 +110,17 @@ ApplicationWindow
          TabButton {
              height: parent.height
              anchors.top: parent.top
-             text: qsTr("Service")
+             text: qsTr("Config")
              onClicked: {
                  _swipeView.currentIndex=2
+             }
+         }
+         TabButton {
+             height: parent.height
+             anchors.top: parent.top
+             text: qsTr("Service")
+             onClicked: {
+                 _swipeView.currentIndex=3
              }
          }
     }
@@ -143,7 +149,7 @@ ApplicationWindow
 
         headerText: qsTr("Exchange error")
         onAccepted: {
-            openConnectPage();
+            _main.openConnectPage();
             UiCore.disconnectFromDevice();
         }
     }
@@ -178,7 +184,7 @@ ApplicationWindow
         buttons: Dialog.Ok|Dialog.No
 
         onAccepted: {
-            _swipeView.currentIndex=2;
+            _swipeView.currentIndex=3;
             UiCore.doOnlineFirmwareUpdate();
         }
 
@@ -213,12 +219,12 @@ ApplicationWindow
 
         function onOpenSettingsWindow()
         {
-            _swipeView.currentIndex=3
+            _swipeView.currentIndex=4
         }
 
         function onOpenConnectPage()
         {
-            openConnectPage();
+            _main.openConnectPage();
         }
     }
 
@@ -227,7 +233,7 @@ ApplicationWindow
 
         function onCloseSettingsWindow()
         {
-            _swipeView.currentIndex=2
+            _swipeView.currentIndex=3
         }
     }
 
@@ -402,7 +408,7 @@ ApplicationWindow
         function onSgInterfaceError(errorDescription)
         {
             _main.connected = false;
-            openConnectPage();
+            _main.openConnectPage();
             _msgBluetoothNotReady.text = qsTr("Device disconnected\n") + errorDescription
             _msgBluetoothNotReady.open();
 

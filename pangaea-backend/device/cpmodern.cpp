@@ -18,6 +18,7 @@ CPModern::CPModern(Core *parent)
     m_parser.addCommandHandler("amtver", std::bind(&CPModern::amtVerCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("plist", std::bind(&CPModern::getPresetListCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("mconfig", std::bind(&CPModern::mconfigCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("state", std::bind(&CPModern::stateCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("ir", std::bind(&CPModern::irCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pname", std::bind(&CPModern::pnameCommHandler, this, _1, _2, _3));
@@ -78,15 +79,23 @@ void CPModern::initDevice(DeviceType deviceType)
     EQ = new EqParametric(this, EqParametric::EqMode::Modern, 0);
     ER = new EarlyReflections(this);
 
-    m_moduleList.append(NG);
-    m_moduleList.append(CM);
-    m_moduleList.append(PR);
-    m_moduleList.append(PA);
-    m_moduleList.append(IR);
-    m_moduleList.append(EQ);
-    m_moduleList.append(ER);
+    typeToModuleMap.insert(ModuleType::NG, NG);
+    typeToModuleMap.insert(ModuleType::CM, CM);
+    typeToModuleMap.insert(ModuleType::PR, PR);
+    typeToModuleMap.insert(ModuleType::PA, PA);
+    typeToModuleMap.insert(ModuleType::IR, IR);
+    typeToModuleMap.insert(ModuleType::EQ, EQ);
+    typeToModuleMap.insert(ModuleType::ER, ER);
 
-    m_modulesListModel.refreshModel(&m_moduleList);
+    // m_moduleList.append(NG);
+    // m_moduleList.append(CM);
+    // m_moduleList.append(PR);
+    // m_moduleList.append(PA);
+    // m_moduleList.append(IR);
+    // m_moduleList.append(EQ);
+    // m_moduleList.append(ER);
+
+    // m_modulesListModel.refreshModel(&m_moduleList);
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
@@ -141,6 +150,7 @@ void CPModern::pushReadPresetCommands()
     emit sgPushCommandToQueue("gb");
     emit sgPushCommandToQueue("ir info");
     emit sgPushCommandToQueue("pname get");
+    emit sgPushCommandToQueue("mconfig get");
     emit sgPushCommandToQueue("state get");
 
     m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_t) * 2;
@@ -594,6 +604,38 @@ void CPModern::getOutputModeCommHandler(const QString &command, const QByteArray
     quint8 mode = data.toUInt();
     m_outputMode = mode;
     emit outputModeChanged();
+}
+
+void CPModern::mconfigCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QByteArray baPresetData = data;
+
+    quint8 count=0;
+    quint8 nomByte=0;
+    QString curByte;
+
+    m_moduleList.clear();
+
+    foreach(QChar val, baPresetData) //quint8
+    {
+        if((nomByte&1)==0)
+        {
+            curByte.clear();
+            curByte.append(val);
+        }
+        else
+        {
+            curByte.append(val);
+            AbstractModule* modulePtr = typeToModuleMap.value(static_cast<ModuleType>(curByte.toInt(nullptr, 16)));
+            if(modulePtr)
+                m_moduleList.append(modulePtr);
+            count++;
+        }
+        nomByte++;
+    }
+
+    m_moduleList.append(ER);
+    m_modulesListModel.refreshModel(&m_moduleList);
 }
 
 void CPModern::pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

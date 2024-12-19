@@ -3,6 +3,8 @@
 PowerAmp::PowerAmp(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::PA, "PA", "ao"}
 {
+    m_processingTime = 90;
+
     m_volume = new ControlValue(this, "av", "Master"); //VOLUME
     m_presence = new ControlValue(this, "pv", "Presence");
     m_slave = new ControlValue(this, "as", "Level"); //SLAVE

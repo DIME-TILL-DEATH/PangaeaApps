@@ -1,6 +1,0 @@
-module Pages
-
-ConnectPage      1.0 ConnectPage.qml
-MapPage     1.0 MapPage.qml
-ServicePage 1.0 ServicePage.qml
-SettingsPage 1.0 SettingsPage.qml

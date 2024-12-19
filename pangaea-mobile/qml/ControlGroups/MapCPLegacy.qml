@@ -86,58 +86,58 @@ Item{
                     {
                     case ModuleType.NG:
                     {
-                        _delegateLoader.source = "../Modules/NG.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/NG.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.CM:
                     {
-                        _delegateLoader.source = "../Modules/CM.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/CM.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PR:
                     {
-                        _delegateLoader.source = "../Modules/PR.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/PR.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PA:
                     {
-                        _delegateLoader.source = "../Modules/PA.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/PA.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PS:
                     {
-                        _delegateLoader.source = "../Modules/PS.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/PS.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.IR:
                     {
-                        _delegateLoader.source = "../Modules/IR.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/IR.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.HP:
                     {
-                        _delegateLoader.source = "../Modules/HP.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/HP.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
                     case ModuleType.EQ:
                     {
-                        _delegateLoader.source = "../Modules/EQPreviewLegacy.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/EQPreviewLegacy.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
 
-                        _eqExtLoader.source = "../Modules/EQExtLegacy.qml";
+                        _eqExtLoader.source = "/Modules/qml/Modules/EQExtLegacy.qml";
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
                         _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
                         _eqExtLoader.item.eqModule = moduleInstance;
@@ -145,14 +145,14 @@ Item{
                     }
                     case ModuleType.LP:
                     {
-                        _delegateLoader.source = "../Modules/LP.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/LP.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.ER:
                     {
-                        _delegateLoader.source = "../Modules/ER.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/ER.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }

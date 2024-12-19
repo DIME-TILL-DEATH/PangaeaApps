@@ -61,9 +61,9 @@ target_link_libraries(Pangaea-mobile PUBLIC
     converter-lib
 )
 
-qt_policy(
-    SET QTP0002 OLD
-)
+# qt_policy(SET QTP0001 OLD)
+qt_policy(SET QTP0002 OLD)
+qt_policy(SET QTP0004 NEW)
 
 if(ANDROID)
     target_link_libraries(Pangaea-mobile PUBLIC
@@ -73,6 +73,111 @@ if(ANDROID)
         QT_ANDROID_VERSION_NAME ${PROJECT_VERSION}
         QT_ANDROID_VERSION_CODE ${VERSION_CODE}
         QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
+    )
+
+    set(QT_QML_GENERATE_QMLLS_INI ON)
+    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/qml)
+
+    qt_add_qml_module(qml_elements
+        URI "Elements"
+        VERSION 1.0
+        QML_FILES
+           qml/Elements/ApplicationHeader.qml
+           qml/Elements/BankSpin.qml
+           qml/Elements/BleListDelegate.qml
+           qml/Elements/BleListHighlight.qml
+           qml/Elements/CustomComboBox.qml
+           qml/Elements/CustomProgressBar.qml
+           qml/Elements/CustomSlider.qml
+           qml/Elements/CustomLogSlider.qml
+           qml/Elements/EqPoint.qml
+           qml/Elements/ModeSpin_LA.qml
+           qml/Elements/MButton.qml
+           qml/Elements/MComboBox.qml
+           qml/Elements/MRadioButton.qml
+           qml/Elements/MText.qml
+           qml/Elements/PresetSpin.qml
+           qml/Elements/PresetSpin_LA.qml
+           qml/Elements/PresetsListDelegate.qml
+    )
+
+    qt_add_qml_module(qml_control_groups
+        URI "ControlGroups"
+        VERSION 1.0
+        QML_FILES
+            qml/ControlGroups/BCutControl.qml
+            qml/ControlGroups/BPeakingControl.qml
+            qml/ControlGroups/BPeakingShelfControl.qml
+            qml/ControlGroups/ControlButtonsGroup.qml
+            qml/ControlGroups/DocumentationWindow.qml
+            qml/ControlGroups/MapCPLegacy.qml
+            qml/ControlGroups/MapCPModern.qml
+            qml/ControlGroups/MasterControls_CP.qml
+            qml/ControlGroups/MasterControls_LA.qml
+    )
+
+    qt_add_qml_module(qml_custom_overlays
+        URI "CustomOverlays"
+        VERSION 1.0
+        QML_FILES
+            qml/CustomOverlays/BusyScreen.qml
+            qml/CustomOverlays/CustomMessageDialog.qml
+            qml/CustomOverlays/EditTextDialog.qml
+            qml/CustomOverlays/EditValueDialog.qml
+            qml/CustomOverlays/FirmwareLoadingWindow.qml
+            qml/CustomOverlays/IrManagementWindow.qml
+            qml/CustomOverlays/PresetsWindow.qml
+    )
+
+    qt_add_qml_module(qml_modules
+        URI "Modules"
+        VERSION 1.0
+        QML_FILES
+            qml/Modules/BaseModule.qml
+            qml/Modules/ClipIndicator.qml
+            qml/Modules/CM.qml
+            qml/Modules/EQExtLegacy.qml
+            qml/Modules/EQExtModern.qml
+            qml/Modules/EQPreviewLegacy.qml
+            qml/Modules/EQPreviewModern.qml
+            qml/Modules/ER.qml
+            qml/Modules/HP.qml
+            qml/Modules/IR.qml
+            qml/Modules/LP.qml
+            qml/Modules/NG.qml
+            qml/Modules/OutputMode.qml
+            qml/Modules/PA.qml
+            qml/Modules/PR.qml
+            qml/Modules/PS.qml
+            qml/Modules/VL.qml
+    )
+
+    qt_add_qml_module(qml_tutorials
+        URI "Tutorials"
+        VERSION 1.0
+        QML_FILES
+            qml/Tutorials/SimpleTutorialMessage.qml
+            qml/Tutorials/TutorialVirtualDevice.qml
+    )
+
+    qt_add_qml_module(qml_pages
+        URI "Pages"
+        VERSION 1.0
+        QML_FILES
+           qml/Pages/ConfigPage.qml
+           qml/Pages/ConnectPage.qml
+           qml/Pages/MapPage.qml
+           qml/Pages/ServicePage.qml
+           qml/Pages/SettingsPage.qml
+    )
+
+    set_source_files_properties(qml/StyleSettings/Style.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+    qt_add_qml_module(qml_style
+        URI "StyleSettings"
+        VERSION 1.0
+        QML_FILES
+            qml/StyleSettings/Style.qml
+            qml/StyleSettings/Theme.qml
     )
 endif()
 

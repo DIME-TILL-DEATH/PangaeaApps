@@ -1,9 +1,12 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick 2.15
 import QtQuick.Controls 2.12
 
 import QtQuick.Layouts
 
 import StyleSettings 1.0
+
 import Elements 1.0
 
 import CppObjects
@@ -85,14 +88,14 @@ Item
                     renderStrategy: Canvas.Threaded
 
                     property int yGridSize: 5
-                    property real coefY : height / gainRange
+                    property real coefY : height / main.gainRange
 
-                    property real xmin: eqModule.minFreq;
-                    property real xmax: eqModule.maxFreq;
+                    property real xmin: main.eqModule.minFreq;
+                    property real xmax: main.eqModule.maxFreq;
 
                     onPaint: {
 
-                        var points = eqModule.points; // One access more efficient
+                        var points = main.eqModule.points; // One access more efficient
 
                         var ctx = getContext("2d");
 
@@ -185,7 +188,7 @@ Item
 
                    anchors.fill: parent
                    delegate: EqPoint{
-                       eqBand: eqModule.EqBands[index]
+                       eqBand: main.eqModule.EqBands[index]
                        gainRange: main.gainRange
                        selectedBandIndex: main.currentBandIndex
 
@@ -194,7 +197,7 @@ Item
                        }
                    }
 
-                   model: eqModule.EqBands
+                   model: main.eqModule.EqBands
                 }
 
                 DropArea{
@@ -202,12 +205,12 @@ Item
 
                     anchors.fill: parent
 
-                    property var xmin: eqModule.minFreq;
-                    property var xmax: eqModule.maxFreq;
+                    property var xmin: main.eqModule.minFreq;
+                    property var xmax: main.eqModule.maxFreq;
 
                     onPositionChanged: function(drag){
 
-                        var pointRadius = repeater.itemAt(currentBandIndex).height/2;
+                        var pointRadius = repeater.itemAt(main.currentBandIndex).height/2;
 
                         var freq = Math.pow(10, (drag.source.x+pointRadius)/_canvas.width * (Math.log10(xmax)-Math.log10(xmin)) + Math.log10(xmin))
                         var gain = (-drag.source.y + _canvas.height/2 - pointRadius) * main.gainRange/_canvas.height;
@@ -234,11 +237,11 @@ Item
 
                     property var startPinchQ
 
-                    enabled: (eqModule.EqBands[currentBandIndex].filterType !== FilterType.HIGH_CUT) &
+                    enabled: (main.eqModule.EqBands[currentBandIndex].filterType !== FilterType.HIGH_CUT) &
                              (eqModule.EqBands[currentBandIndex].filterType !== FilterType.LOW_CUT)
 
                     onPinchStarted: {
-                        startPinchQ = eqModule.EqBands[currentBandIndex].Q.displayValue;
+                        startPinchQ = main.eqModule.EqBands[currentBandIndex].Q.displayValue;
                     }
 
                     onPinchUpdated: function(pinch){
@@ -263,7 +266,7 @@ Item
 
                 MButton{
                     textButton: "HP"
-                    textColor: eqModule.EqBands[5].enabled ? Style.colorText : Style.currentTheme.colorTextDisabled
+                    textColor: main.eqModule.EqBands[5].enabled ? Style.colorText : Style.currentTheme.colorTextDisabled
 
                     highlightColor: "blue"
 
@@ -271,8 +274,8 @@ Item
                     Layout.preferredHeight: parent.height/2.1
                     Layout.columnSpan: 2
 
-                    highlighted: currentBandIndex === 5
-                    onMbPressed: bandSelected(5)
+                    highlighted: main.currentBandIndex === 5
+                    onMbPressed: main.bandSelected(5)
                 }
 
                 Item{
@@ -290,8 +293,8 @@ Item
                     Layout.preferredHeight: parent.height/2.1
                     Layout.columnSpan: 2
 
-                    highlighted: currentBandIndex === 6
-                    onMbPressed:bandSelected(6)
+                    highlighted: main.currentBandIndex === 6
+                    onMbPressed: main.bandSelected(6)
                 }
 
                 MButton{
@@ -302,8 +305,8 @@ Item
                     Layout.preferredHeight: parent.height/2.1
                     textButton: "B1"
 
-                    highlighted: currentBandIndex === 0
-                    onMbPressed: bandSelected(0)
+                    highlighted: main.currentBandIndex === 0
+                    onMbPressed: main.bandSelected(0)
                 }
                 MButton{
                     textColor: main.on ? Style.colorText : Style.currentTheme.colorTextDisabled
@@ -313,8 +316,8 @@ Item
                     Layout.preferredHeight: parent.height/2.1
                     textButton: "B2"
 
-                    highlighted: currentBandIndex === 1
-                    onMbPressed: bandSelected(1)
+                    highlighted: main.currentBandIndex === 1
+                    onMbPressed: main.bandSelected(1)
                 }
                 MButton{
                     textColor: main.on ? Style.colorText : Style.currentTheme.colorTextDisabled
@@ -324,8 +327,8 @@ Item
                     Layout.preferredHeight: parent.height/2.1
                     textButton: "B3"
 
-                    highlighted: currentBandIndex === 2
-                    onMbPressed: bandSelected(2)
+                    highlighted: main.currentBandIndex === 2
+                    onMbPressed: main.bandSelected(2)
                 }
                 MButton{
                     textColor: main.on ? Style.colorText : Style.currentTheme.colorTextDisabled
@@ -335,8 +338,8 @@ Item
                     Layout.preferredHeight: parent.height/2.1
                     textButton: "B4"
 
-                    highlighted: currentBandIndex === 3
-                    onMbPressed: bandSelected(3)
+                    highlighted: main.currentBandIndex === 3
+                    onMbPressed: main.bandSelected(3)
                 }
                 MButton{
                     textColor: main.on ? Style.colorText : Style.currentTheme.colorTextDisabled
@@ -346,8 +349,8 @@ Item
                     Layout.preferredHeight: parent.height/2.1
                     textButton: "B5"
 
-                    highlighted: currentBandIndex === 4
-                    onMbPressed: bandSelected(4)
+                    highlighted: main.currentBandIndex === 4
+                    onMbPressed: main.bandSelected(4)
                 }
             }
 
@@ -381,21 +384,21 @@ Item
         switch(currentBandIndex)
         {
         case 0:
-            loaderBandControl.source = "../ControlGroups/BPeakingShelfControl.qml";
+            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BPeakingShelfControl.qml";
             loaderBandControl.item.shelfType = FilterType.LOW_SHELF
             break;
         case 4:
-            loaderBandControl.source = "../ControlGroups/BPeakingShelfControl.qml";
+            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BPeakingShelfControl.qml";
             loaderBandControl.item.shelfType = FilterType.HIGH_SHELF
             break;
         case 5:
-            loaderBandControl.source = "../ControlGroups/BCutControl.qml";
+            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BCutControl.qml";
             break;
         case 6:
-            loaderBandControl.source = "../ControlGroups/BCutControl.qml";
+            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BCutControl.qml";
             break;
         default:
-            loaderBandControl.source = "../ControlGroups/BPeakingControl.qml";
+            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BPeakingControl.qml";
         }
         loaderBandControl.item.eqBand = eqModule.EqBands[currentBandIndex];
 
@@ -415,7 +418,7 @@ Item
     }
 
     Connections{
-        target: eqModule
+        target: main.eqModule
 
         function onPointsChanged()
         {

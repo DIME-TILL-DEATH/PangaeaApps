@@ -3,6 +3,8 @@
 HiPassFilter::HiPassFilter(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::HP, "HP", "ho"}
 {
+    m_processingTime = 5;
+
     m_hpf = new ControlValue(this, "hv", "Hi-pass", "Hz",
                                 0, 255, 20, 1000);
 }

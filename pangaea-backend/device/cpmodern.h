@@ -115,6 +115,8 @@ private:
 
     QString m_pathToExport;
 
+    QMap<ModuleType, AbstractModule*> typeToModuleMap;
+
     void setDeviceType(DeviceType newDeviceType);
 
     void pushReadPresetCommands();
@@ -131,6 +133,7 @@ private:
     void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void listCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void mconfigCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void getBankPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getOutputModeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);

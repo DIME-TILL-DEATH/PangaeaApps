@@ -123,9 +123,9 @@ Item{
             height: parent.height - masterControlsHeight - _presetNameContainer.height - _clipIndContainer.height //- _moduleColumn.spacing
             spacing: 2
 
-            model: UiCore.currentDevice.modulesListModel;
+            // model: UiCore.currentDevice.modulesListModel;
 
-            interactive: false
+            // interactive: false
             orientation: ListView.Vertical
 
             clip: true
@@ -148,35 +148,35 @@ Item{
                     {
                     case ModuleType.NG:
                     {
-                        _delegateLoader.source = "../Modules/NG.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/NG.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.CM:
                     {
-                        _delegateLoader.source = "../Modules/CM.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/CM.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PR:
                     {
-                        _delegateLoader.source = "../Modules/PR.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/PR.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PA:
                     {
-                        _delegateLoader.source = "../Modules/PA.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/PA.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.IR:
                     {
-                        _delegateLoader.source = "../Modules/IR.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/IR.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.openIrManagementWindow.connect(_mapContent.showIrManagementWindow);
                         break;
@@ -184,10 +184,10 @@ Item{
 
                     case ModuleType.EQ:
                     {
-                        _delegateLoader.source = "../Modules/EQPreviewModern.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
 
-                        _eqExtLoader.source = "../Modules/EQExtModern.qml";
+                        _eqExtLoader.source = "/Modules/qml/Modules/EQExtModern.qml";
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
                         _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
                         _eqExtLoader.item.eqModule = moduleInstance;
@@ -196,7 +196,7 @@ Item{
 
                     case ModuleType.ER:
                     {
-                        _delegateLoader.source = "../Modules/ER.qml";
+                        _delegateLoader.source = "/Modules/qml/Modules/ER.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
@@ -212,6 +212,16 @@ Item{
 
             width: parent.width
             height: _main.height/countElements
+        }
+    }
+
+    Connections{
+        target: UiCore.currentDevice.modulesListModel
+
+        function onModelReset(){
+            console.log("model", UiCore.currentDevice.modulesListModel, UiCore.currentDevice.modulesListModel.rowCount())
+
+            listViewModules.model = UiCore.currentDevice.modulesListModel
         }
     }
 
