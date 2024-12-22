@@ -14,16 +14,69 @@ Item
 {
     id: _main
 
+    function setMapContent(){
+        switch(UiCore.currentDevice.deviceClass)
+        {
+            case DeviceClass.CP_LEGACY:
+            {
+                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
+                break;
+            }
+            case DeviceClass.CP_MODERN:
+            {
+                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
+                break;
+            }
+        }
+    }
+
+    function setConfigContent(){
+        switch(UiCore.currentDevice.deviceClass)
+        {
+            case DeviceClass.CP_LEGACY:
+            {
+                _mapContentLoader.source = "";
+                break;
+            }
+            case DeviceClass.CP_MODERN:
+            {
+                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/ConfigCP.qml";
+                break;
+            }
+        }
+    }
+
     Rectangle
     {
         anchors.fill: parent
         color: Style.colorFon
     }
 
-    Loader{
-        id: _mapContentLoader
+    PresetsWindow
+    {
+        id: _presetsList
 
+        // topHeaderSize: _mapContentLoader.height
+    }
+
+    Column{
         anchors.fill: parent
+        spacing: 2
+
+        Loader{
+            id: _masterControlsLoader
+
+            width:  parent.width
+            height: parent.height * 1/5
+        }
+
+
+        Loader{
+            id: _mapContentLoader
+
+            width: parent.width
+            height: parent.height - _masterControlsLoader.height
+        }
     }
 
     CustomMessageDialog
@@ -72,14 +125,16 @@ Item
                 }
                 case DeviceClass.CP_LEGACY:
                 {
-                    // _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
+                    _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
                     _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
+                    _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
                     break;
                 }
                 case DeviceClass.CP_MODERN:
                 {
-                    // _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
+                    _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
                     _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
+                    _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
                     break;
                 }
             }

@@ -48,6 +48,7 @@ private:
     void stateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void irCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void listCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void mconfigCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void getPresetListCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     void savePresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);

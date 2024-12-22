@@ -33,6 +33,7 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
 
     m_parser.addCommandHandler("pls", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("plist", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("mconfig", std::bind(&MockCP16Modern::mconfigCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("sp", std::bind(&MockCP16Modern::savePresetCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pc", std::bind(&MockCP16Modern::presetChangeCommHandler, this, _1, _2, _3));
@@ -575,6 +576,30 @@ void MockCP16Modern::listCommHandler(const QString &command, const QByteArray &a
     }
     answer += "\n";
     emit answerReady(answer);
+}
+
+void MockCP16Modern::mconfigCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QList<QByteArray> argsList = arguments.split('\r');
+    if(argsList.size()>0)
+    {
+        if(argsList.first() == "set")
+        {
+            QByteArray listData = QByteArray::fromHex(data);
+            memcpy(currentPresetData.modules_order, listData.data(), MAX_PROCESSING_STAGES);
+        }
+    }
+
+    QByteArray baOrder;
+    for(int i=0; i < MAX_PROCESSING_STAGES;  i++)
+    {
+        QByteArray tempBa = QString().setNum(currentPresetData.modules_order[i], 16).toUtf8();
+
+        if(tempBa.size() == 1) tempBa.push_front("0");
+        baOrder.append(tempBa);
+    }
+
+    emit answerReady("mconfig\r" + baOrder + "\n");
 }
 
 void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

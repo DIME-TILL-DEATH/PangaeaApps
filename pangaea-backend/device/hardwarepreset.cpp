@@ -7,6 +7,8 @@ preset_data_t HardwarePreset::convertLegacyToModern(const preset_data_legacy_t& 
     qint16 defaultFrequencies[] = {120, 360, 800, 2000, 6000};
     preset_data_t modernData{0};
 
+    memset(modernData.modules_order, 0, MAX_PROCESSING_STAGES);
+
     // secondary eq default
     for(int i=0; i<5; i++)
     {

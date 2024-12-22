@@ -16,15 +16,6 @@ Item{
     property int countElements: 25
     property int masterControlsHeight: height*5/countElements
 
-    property alias modulesModel: listViewModules.model
-
-    PresetsWindow
-    {
-        id: _presetsList
-
-        topHeaderSize: masterControlsHeight
-    }
-
     Column
     {
         id: _moduleColumn
@@ -37,28 +28,11 @@ Item{
 
         enabled: !_eqExtLoader.visible
 
-        MasterControls_CP{
-            id: _masterControlsLoader
-
-            width:  parent.width
-            height: masterControlsHeight
-        }
-
-        Connections{
-            target: _masterControlsLoader //.item
-
-            function onOpenPresetsList() {
-                console.log("Open presets list");
-                _presetsList.open();
-            }
-        }
-
-
         ListView
         {
             id: listViewModules
             width: parent.width
-            height: parent.height - masterControlsHeight - _moduleColumn.spacing
+            height: parent.height - _moduleColumn.spacing //- masterControlsHeight
             spacing: 2
 
             model: UiCore.currentDevice.modulesListModel;
@@ -184,7 +158,7 @@ Item{
 
         visible: false
 
-        height: parent.height/1.2
+        height: parent.height
         width:  parent.width*0.95
         z: parent.z+1
     }

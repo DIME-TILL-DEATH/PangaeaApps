@@ -20,7 +20,6 @@ CPModern::CPModern(Core *parent)
     m_parser.addCommandHandler("amtver", std::bind(&CPModern::amtVerCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("plist", std::bind(&CPModern::getPresetListCommHandler, this, _1, _2, _3));
-    m_parser.addCommandHandler("mconfig", std::bind(&CPModern::mconfigCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("state", std::bind(&CPModern::stateCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("ir", std::bind(&CPModern::irCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pname", std::bind(&CPModern::pnameCommHandler, this, _1, _2, _3));
@@ -46,6 +45,8 @@ CPModern::CPModern(Core *parent)
 #else
     appSettings = new QSettings();
 #endif
+
+    connect(&m_modulesListModel, &ModulesListModel::sgModulesReconfigured, this, &CPModern::setModules);
 }
 
 CPModern::~CPModern()
@@ -153,7 +154,7 @@ void CPModern::pushReadPresetCommands()
     emit sgPushCommandToQueue("gb");
     emit sgPushCommandToQueue("ir info");
     emit sgPushCommandToQueue("pname get");
-    emit sgPushCommandToQueue("mconfig get");
+    // emit sgPushCommandToQueue("mconfig get");
     emit sgPushCommandToQueue("state get");
 
     m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_t) * 2;
@@ -609,37 +610,37 @@ void CPModern::getOutputModeCommHandler(const QString &command, const QByteArray
     emit outputModeChanged();
 }
 
-void CPModern::mconfigCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+void CPModern::configModules()
 {
-    QByteArray baPresetData = data;
-
-    quint8 count=0;
-    quint8 nomByte=0;
-    QString curByte;
-
     m_moduleList.clear();
-
-    foreach(QChar val, baPresetData) //quint8
+    for(int i=0; i<MAX_PROCESSING_STAGES; i++)
     {
-        if((nomByte&1)==0)
+        AbstractModule* modulePtr = typeToModuleMap.value(static_cast<ModuleType>(actualPreset.presetData.modules_order[i]));
+        if(modulePtr)
         {
-            curByte.clear();
-            curByte.append(val);
+            m_moduleList.append(modulePtr);
         }
-        else
-        {
-            curByte.append(val);
-            AbstractModule* modulePtr = typeToModuleMap.value(static_cast<ModuleType>(curByte.toInt(nullptr, 16)));
-            if(modulePtr)
-                m_moduleList.append(modulePtr);
-            count++;
-        }
-        nomByte++;
     }
 
-    // m_moduleList.append(ER);
     m_modulesListModel.refreshModel(&m_moduleList);
     emit modulesListModelChanged();
+}
+
+void CPModern::setModules()
+{
+    QByteArray baOrder;
+
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
+    foreach (AbstractModule* module, m_moduleList) {
+        QByteArray tempBa = QString().setNum(module->moduleType(), 16).toUtf8();
+        if(tempBa.size() == 1) tempBa.push_front("0");
+        baOrder.append(tempBa);
+    }
+
+    sgPushCommandToQueue("mconfig set\r" + baOrder + "\n");
+    sgProcessCommands();
 }
 
 void CPModern::pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -760,6 +761,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     }
     }
     m_presetListModel.updatePreset(&actualPreset);
+    configModules();
 }
 
 

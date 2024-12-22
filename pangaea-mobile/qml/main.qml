@@ -48,7 +48,7 @@ ApplicationWindow
         id: _swipeView
 
         width: parent.width
-        height: parent.height*0.98
+        height: parent.height//*0.98
 
         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -64,11 +64,6 @@ ApplicationWindow
         MapPage
         {
             id: _mapPage
-        }
-
-        ConfigPage
-        {
-            id: _configPage
         }
 
         ServicePage
@@ -89,7 +84,7 @@ ApplicationWindow
         enabled: _connectPage.isConnected
 
         height: _main.height/20
-        currentIndex: _swipeView.currentIndex
+        // currentIndex: _swipeView.currentIndex
 
         TabButton {
             height: parent.height
@@ -104,6 +99,7 @@ ApplicationWindow
              anchors.top: parent.top
              text: qsTr("Controls")
              onClicked: {
+                 _mapPage.setMapContent()
                  _swipeView.currentIndex=1
              }
          }
@@ -112,7 +108,9 @@ ApplicationWindow
              anchors.top: parent.top
              text: qsTr("Config")
              onClicked: {
-                 _swipeView.currentIndex=2
+                 _mapPage.setConfigContent()
+                 _swipeView.currentIndex=1
+
              }
          }
          TabButton {
@@ -120,7 +118,7 @@ ApplicationWindow
              anchors.top: parent.top
              text: qsTr("Service")
              onClicked: {
-                 _swipeView.currentIndex=3
+                 _swipeView.currentIndex=2
              }
          }
     }
@@ -165,7 +163,8 @@ ApplicationWindow
         buttons: Dialog.Ok|Dialog.No
 
         onAccepted: {
-            _swipeView.currentIndex=2;
+            // _swipeView.currentIndex=2;
+            // _bar.currentIndex = 3
             UiCore.setFirmware(firmwareLocalPath);
             _msgVersionError.close();
         }
@@ -184,7 +183,8 @@ ApplicationWindow
         buttons: Dialog.Ok|Dialog.No
 
         onAccepted: {
-            _swipeView.currentIndex=3;
+            _swipeView.currentIndex=2;
+            _bar.currentIndex=3
             UiCore.doOnlineFirmwareUpdate();
         }
 
@@ -219,7 +219,8 @@ ApplicationWindow
 
         function onOpenSettingsWindow()
         {
-            _swipeView.currentIndex=4
+            _swipeView.currentIndex=3
+            _bar.currentIndex=3
         }
 
         function onOpenConnectPage()
@@ -233,7 +234,8 @@ ApplicationWindow
 
         function onCloseSettingsWindow()
         {
-            _swipeView.currentIndex=3
+            _swipeView.currentIndex=2
+            _bar.currentIndex=3
         }
     }
 
@@ -354,6 +356,7 @@ ApplicationWindow
         function onSgInterfaceConnected(deviceDescription)
         {
             _swipeView.setCurrentIndex(1);
+            _bar.currentIndex = 1;
             _main.connected = true;
         }
 

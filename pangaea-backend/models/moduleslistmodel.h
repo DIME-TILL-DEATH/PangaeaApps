@@ -16,10 +16,13 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    void insertModule(AbstractModule* newModule, int position);
-    void moveModule(int from, int to);
+    Q_INVOKABLE void insertModule(AbstractModule* newModule, int position);
+    Q_INVOKABLE void moveModule(int from, int to);
 
     void refreshModel(QList<AbstractModule *> *newModulesList);
+signals:
+    void sgModulesReconfigured();
+
 private:
     QList<AbstractModule*>* m_moduleList;
 

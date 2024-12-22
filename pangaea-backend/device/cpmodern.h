@@ -43,6 +43,9 @@ public:
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
 
+    void configModules();
+    void setModules();
+
     Q_INVOKABLE void saveChanges() override;
     Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) override;
 
@@ -137,7 +140,6 @@ private:
     void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void listCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
-    void mconfigCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void getBankPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getOutputModeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);

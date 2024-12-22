@@ -7,5 +7,6 @@
         <file>images/(V).svg</file>
         <file>images/Connected.svg</file>
         <file>qml/main.qml</file>
+        <file>images/bin.svg</file>
     </qresource>
 </RCC>

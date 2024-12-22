@@ -24,6 +24,7 @@ void ModulesListModel::insertModule(AbstractModule *newModule, int position)
     beginInsertRows(QModelIndex(), position, position);
     m_moduleList->insert(position, 1, newModule);
     endInsertRows();
+    emit sgModulesReconfigured();
 }
 
 void ModulesListModel::moveModule(int from, int to)
@@ -33,6 +34,7 @@ void ModulesListModel::moveModule(int from, int to)
     beginMoveRows(QModelIndex(), from, from, QModelIndex(), indexToInModel);
     m_moduleList->move(from, to);
     endMoveRows();
+    emit sgModulesReconfigured();
 }
 
 int ModulesListModel::rowCount(const QModelIndex &parent) const

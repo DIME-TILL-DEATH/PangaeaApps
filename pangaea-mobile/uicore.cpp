@@ -356,6 +356,7 @@ void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
 {
     m_currentDevice = newDevice;
     emit currentDeviceChanged();
+    qDebug() << "CPP current device changed";
 }
 
 AbstractDevice *UiCore::currentDevice() const

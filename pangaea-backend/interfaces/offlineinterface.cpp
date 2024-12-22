@@ -48,8 +48,8 @@ bool OfflineInterface::connect(DeviceDescription device)
 
     if(m_mockDevice)
     {
-        QObject::connect(m_mockDevice, &AbstractMockDevice::answerReady, this, &AbstractInterface::sgNewData);
-        QObject::connect(this, &OfflineInterface::sgUartBufferUpdated, m_mockDevice, &AbstractMockDevice::newDataRecieved);
+        QObject::connect(m_mockDevice, &AbstractMockDevice::answerReady, this, &AbstractInterface::sgNewData, Qt::QueuedConnection);
+        QObject::connect(this, &OfflineInterface::sgUartBufferUpdated, m_mockDevice, &AbstractMockDevice::newDataRecieved, Qt::QueuedConnection);
 
         m_uartBuffer.clear();
 

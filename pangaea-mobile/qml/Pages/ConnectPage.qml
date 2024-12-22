@@ -20,10 +20,10 @@ Item
     property bool findBT: true
     property bool isConnected: false
 
-
-
     Column
     {
+        id: _column
+
         width: parent.width*0.98
         height: parent.height
         anchors.horizontalCenter: parent.horizontalCenter
@@ -209,7 +209,7 @@ Item
             id: _boxAuto
 
             width: parent.width
-            height: parent.height*1/10
+            height: parent.height*1/10 - _column.spacing
 
             border.color: Style.currentTheme.colorBorderOn
             border.width: 1
@@ -253,7 +253,7 @@ Item
             id: _boxOffline
 
             width: parent.width
-            height: parent.height*1/10
+            height: parent.height*1/10 - _column.spacing
 
             border.color: Style.currentTheme.colorBorderOn
             border.width: 1

@@ -16,15 +16,6 @@ Item{
     property int countElements: 25
     property int masterControlsHeight: height*5/countElements
 
-    property alias modulesModel: listViewModules.model
-
-    PresetsWindow
-    {
-        id: _presetsList
-
-        topHeaderSize: masterControlsHeight
-    }
-
     IrManagementWindow{
         id: _irManagement
 
@@ -43,27 +34,12 @@ Item{
 
         enabled: !_eqExtLoader.visible
 
-        MasterControls_CP{
-            id: _masterControlsLoader
-
-            width:  parent.width
-            height: masterControlsHeight
-        }
-
-        Connections{
-            target: _masterControlsLoader //.item
-
-            function onOpenPresetsList() {
-                console.log("Open presets list");
-                _presetsList.open();
-            }
-        }
 
         Rectangle {
             id: _presetNameContainer
 
             width: parent.width
-            height: _main.height/countElements
+            height: _main.height/countElements - _moduleColumn.spacing
             color: Style.colorModul
 
             clip: true
@@ -115,16 +91,15 @@ Item{
             }
         }
 
-
         ListView
         {
             id: listViewModules
             width: parent.width
-            height: parent.height - masterControlsHeight
-                    - _presetNameContainer.height - _er.height - _clipIndContainer.height //- _moduleColumn.spacing
+            // height: parent.height - _presetNameContainer.height - _er.height - _clipIndContainer.height //- _moduleColumn.spacing
+            height: parent.height/_mapContent.countElements * 20 - _moduleColumn.spacing * 5
             spacing: 2
 
-            // model: UiCore.currentDevice.modulesListModel;
+            model: UiCore.currentDevice.modulesListModel;
 
             // interactive: false
             orientation: ListView.Vertical
@@ -188,19 +163,13 @@ Item{
                         _delegateLoader.source = "/Modules/qml/Modules/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
 
+                        // TODO fixed item
                         _eqExtLoader.source = "/Modules/qml/Modules/EQExtModern.qml";
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
                         _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
                         _eqExtLoader.item.eqModule = moduleInstance;
                         break;
                     }
-
-                    // case ModuleType.ER:
-                    // {
-                    //     _delegateLoader.source = "/Modules/qml/Modules/ER.qml";
-                    //     _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
-                    //     break;
-                    // }
                     }
 
                     _delegateLoader.item.module = moduleInstance;
@@ -219,7 +188,7 @@ Item{
             id: _clipIndContainer
 
             width: parent.width
-            height: _main.height/countElements
+            height: _main.height/countElements  - _moduleColumn.spacing
         }
     }
 
@@ -227,6 +196,7 @@ Item{
         target: UiCore.currentDevice.modulesListModel
 
         function onModelReset(){
+            listViewModules.model = undefined // без этого пропускает первое обновление
             listViewModules.model = UiCore.currentDevice.modulesListModel
         }
     }
@@ -257,7 +227,7 @@ Item{
 
         visible: false
 
-        height: parent.height/1.1
+        height: parent.height ///1.1
         width:  parent.width*0.95
         z: parent.z+1
     }

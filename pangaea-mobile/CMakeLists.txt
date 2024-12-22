@@ -109,6 +109,7 @@ if(ANDROID)
             qml/ControlGroups/BPeakingControl.qml
             qml/ControlGroups/BPeakingShelfControl.qml
             qml/ControlGroups/ControlButtonsGroup.qml
+            qml/ControlGroups/ConfigCP.qml
             qml/ControlGroups/DocumentationWindow.qml
             qml/ControlGroups/MapCPLegacy.qml
             qml/ControlGroups/MapCPModern.qml
@@ -164,7 +165,6 @@ if(ANDROID)
         URI "Pages"
         VERSION 1.0
         QML_FILES
-           qml/Pages/ConfigPage.qml
            qml/Pages/ConnectPage.qml
            qml/Pages/MapPage.qml
            qml/Pages/ServicePage.qml

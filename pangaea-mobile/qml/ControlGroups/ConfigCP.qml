@@ -1,6 +1,7 @@
 // pragma ComponentBehavior: Bound
 
 import QtQuick 2.15
+import QtQuick.Effects
 import QtQuick.Controls
 
 import Elements
@@ -23,10 +24,18 @@ Item {
             id: _listConfig
 
             width: parent.width
-            height: parent.height * 3/4
+            height: parent.height * 6/8
+
+            z: _rectConf.z + 5
+
+            interactive: false
+
+            // clip: true
 
             model: DelegateModel{
                 id: _visualModel
+
+                model: UiCore.currentDevice.modulesListModel
 
                 delegate: DropArea{
                     id: _delegateRoot
@@ -35,7 +44,7 @@ Item {
                     property int visualIndex: DelegateModel.itemsIndex
 
                     width: _listConfig.width
-                    height: _listConfig.height/10
+                    height: _listConfig.height/8
 
                     onEntered: function (drag) {
                         var from = drag.source.visualIndex;
@@ -46,14 +55,17 @@ Item {
                     onDropped: function (drag) {
                         var from = modelIndex;
                         var to = (drag.source as Item).visualIndex;
-                        // PlaylistModel.move(from, to);
+                        UiCore.currentDevice.modulesListModel.moveModule(from, to);
                     }
 
                     MouseArea {
                         id: _mouseAreaDrag
                         anchors.fill: parent
+
                         drag.target: _thing
-                        drag.axis: Drag.YAxis
+                        drag.axis: Drag.YAxis //Drag.XAndYAxis
+                        drag.minimumY: _listConfig.y
+                        drag.maximumY: _listConfig.y + _listConfig.height + _rectDelete.height
 
                         onPressed: _delegateRoot.modelIndex = visualIndex
 
@@ -77,8 +89,8 @@ Item {
 
                         }
 
-                        border.color: Style.currentTheme.colorBorderOn
                         radius: Style.baseRadius
+                        border.color: Style.currentTheme.colorBorderOn
                         border.width: 1
 
                         Drag.active: _mouseAreaDrag.drag.active
@@ -142,6 +154,40 @@ Item {
 
         }
 
+        Rectangle{
+            id: _rectDelete
+
+            width: parent.width
+            height: parent.height * 1/8
+
+            radius: Style.baseRadius
+            border.width: 1
+            border.color: Style.currentTheme.colorBorderOn
+
+            color: _dropDelete.containsDrag ? "#60FFFFFF" : "transparent"
+
+            Image
+            {
+                id: _scanImg
+                source: "qrc:/images/bin.svg"
+
+                anchors.centerIn: parent
+
+                height: parent.height * 0.5
+
+                fillMode: Image.PreserveAspectFit
+            }
+
+            DropArea{
+                id: _dropDelete
+
+                anchors.fill: parent
+
+                onDropped:{
+                    console.log("droped index", drag.source.dragParent.modelIndex)
+                }
+            }
+        }
 
         Rectangle{
             id: _rectConf
@@ -151,6 +197,8 @@ Item {
 
             property bool confAcceplatble: UiCore.currentDevice.processingUsed < UiCore.currentDevice.processingBudget
             radius: Style.baseRadius
+            border.width: 1
+            border.color: Style.currentTheme.colorBorderOn
 
             color: confAcceplatble ? "green" : "red"
 
@@ -163,31 +211,15 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
             }
+
         }
 
-        Button
-        {
-            id: btn
+        Connections{
+            target: UiCore.currentDevice.modulesListModel
 
-            enabled: _rectConf.confAcceplatble
-
-            width: parent.width
-            height: parent.height * 1/8
-
-            text: qsTr("Accept configuration")
-
-            onClicked:
-            {
-
+            function onModelReset(){
+                _visualModel.model = UiCore.currentDevice.modulesListModel
             }
-        }
-    }
-
-    Connections{
-        target: UiCore.currentDevice.modulesListModel
-
-        function onModelReset(){
-            _visualModel.model = UiCore.currentDevice.modulesListModel
         }
     }
 }

@@ -119,9 +119,11 @@ typedef struct
     uint8_t reserved[5];
 }reverb_data_t;
 
+#define MAX_PROCESSING_STAGES 10
 typedef struct
 {
-    uint8_t modules_order[14];
+    uint8_t modules_order[MAX_PROCESSING_STAGES];
+    uint8_t head_reserved[14-MAX_PROCESSING_STAGES];
     uint8_t volume;
     uint8_t cab_sim_on;
 
@@ -148,8 +150,6 @@ typedef struct
 namespace HardwarePreset
 {
 preset_data_t convertLegacyToModern(const preset_data_legacy_t& legacyData);
-
 }
-
 
 #endif // HARDWAREPRESET_H
