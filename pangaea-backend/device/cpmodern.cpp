@@ -1016,6 +1016,8 @@ void CPModern::listCommHandler(const QString &command, const QByteArray &argumen
         {
             m_irsInLibrary.append({ba, arguments});
         }
+        std::sort(m_irsInLibrary.begin(), m_irsInLibrary.end(),
+              [](const IrFile& a, const IrFile& b) -> bool {return a.irName() < b.irName();});
     }
     else
     {
@@ -1024,6 +1026,8 @@ void CPModern::listCommHandler(const QString &command, const QByteArray &argumen
         {
             m_irsInFolder.append({ba, arguments});
         }
+        std::sort(m_irsInLibrary.begin(), m_irsInLibrary.end(),
+                  [](const IrFile& a, const IrFile& b) -> bool {return a.irName() < b.irName();});
     }
     emit irsListChanged();
 }

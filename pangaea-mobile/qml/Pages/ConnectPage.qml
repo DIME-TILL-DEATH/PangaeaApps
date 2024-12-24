@@ -203,6 +203,19 @@ Item
                     NumberAnimation { properties: "x"; to: _list.width; duration: 250 }
                 }
             }
+
+            MouseArea{
+                anchors.fill: parent
+
+                visible: isConnected
+
+                onClicked: {
+                    if(isConnected)
+                    {
+                        messageAcceptDisconnect.open()
+                    }
+                }
+            }
         }
 
         Rectangle{

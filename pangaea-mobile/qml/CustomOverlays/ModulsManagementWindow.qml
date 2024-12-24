@@ -187,7 +187,6 @@ Item{
 
                             width: parent.width * 3/16
                             height: parent.height
-                            z: _delegateMa.z + 5
 
                             enabled: !modelData.used & _delegateRow.isResourcesEnough
 

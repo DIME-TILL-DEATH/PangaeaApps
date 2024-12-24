@@ -63,7 +63,7 @@ target_link_libraries(Pangaea-mobile PUBLIC
 
 # qt_policy(SET QTP0001 OLD)
 qt_policy(SET QTP0002 OLD)
-qt_policy(SET QTP0004 NEW)
+# qt_policy(SET QTP0004 NEW)
 
 if(ANDROID)
     target_link_libraries(Pangaea-mobile PUBLIC
