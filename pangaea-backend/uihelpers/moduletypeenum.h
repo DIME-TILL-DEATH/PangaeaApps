@@ -18,10 +18,13 @@ public:
         PA,
         IR,
         HP,
-        EQ,
+        EQ1,
         LP,
         NG,
         PS,
+        //=====================
+        // New moduls
+        EQ2,
         //=====================
         // Stereo moduls
         ER = 64,

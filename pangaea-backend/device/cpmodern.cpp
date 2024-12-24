@@ -47,6 +47,7 @@ CPModern::CPModern(Core *parent)
 #endif
 
     connect(&m_modulesListModel, &ModulesListModel::sgModulesReconfigured, this, &CPModern::setModules);
+    connect(&m_modulesListModel, &ModulesListModel::sgModulesReconfigured, this, &AbstractDevice::processingUsedChanged);
 }
 
 CPModern::~CPModern()
@@ -90,7 +91,8 @@ void CPModern::initDevice(DeviceType deviceType)
     PA = new PowerAmp(this);
     IR = new CabSim(this);
     connect(IR, &CabSim::dataChanged, this, &CPModern::slIrEnabledChanged);
-    EQ = new EqParametric(this, EqParametric::EqMode::Modern, 0);
+    EQ1 = new EqParametric(this, EqParametric::EqMode::Modern, 0);
+    EQ2 = new EqParametric(this, EqParametric::EqMode::Modern, 1);
     ER = new EarlyReflections(this);
 
     typeToModuleMap.insert(ModuleType::NG, NG);
@@ -98,8 +100,17 @@ void CPModern::initDevice(DeviceType deviceType)
     typeToModuleMap.insert(ModuleType::PR, PR);
     typeToModuleMap.insert(ModuleType::PA, PA);
     typeToModuleMap.insert(ModuleType::IR, IR);
-    typeToModuleMap.insert(ModuleType::EQ, EQ);
+    typeToModuleMap.insert(ModuleType::EQ1, EQ1);
+    typeToModuleMap.insert(ModuleType::EQ2, EQ2);
     typeToModuleMap.insert(ModuleType::ER, ER);
+
+    m_avaliableModulesList.append(NG);
+    m_avaliableModulesList.append(CM);
+    m_avaliableModulesList.append(PR);
+    m_avaliableModulesList.append(PA);
+    m_avaliableModulesList.append(IR);
+    m_avaliableModulesList.append(EQ1);
+    // m_avaliableModulesList.append(EQ2);
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
@@ -444,6 +455,8 @@ void CPModern::setPresetData(const PresetModern &preset)
     ba.append(PresetModern::presetDataToChars(preset.presetData));
     emit sgPushCommandToQueue(ba + "\n", false);
     emit sgProcessCommands();
+
+    configModules(preset);
 }
 
 void CPModern::setFirmware(QString fullFilePath)
@@ -610,14 +623,21 @@ void CPModern::getOutputModeCommHandler(const QString &command, const QByteArray
     emit outputModeChanged();
 }
 
-void CPModern::configModules()
+void CPModern::configModules(const PresetModern &preset)
 {
+    foreach(AbstractModule* module, m_moduleList){
+        module->setUsed(false);
+    }
     m_moduleList.clear();
+
     for(int i=0; i<MAX_PROCESSING_STAGES; i++)
     {
-        AbstractModule* modulePtr = typeToModuleMap.value(static_cast<ModuleType>(actualPreset.presetData.modules_order[i]));
+        ModuleType moduleType = static_cast<ModuleType>(preset.presetData.modules_order[i]);
+
+        AbstractModule* modulePtr = typeToModuleMap.value(moduleType);
         if(modulePtr)
         {
+            modulePtr->setUsed(true);
             m_moduleList.append(modulePtr);
         }
     }
@@ -638,8 +658,7 @@ void CPModern::setModules()
         if(tempBa.size() == 1) tempBa.push_front("0");
         baOrder.append(tempBa);
     }
-
-    sgPushCommandToQueue("mconfig set\r" + baOrder + "\n");
+    sgPushCommandToQueue("mconfig set\r" + baOrder + "\n", false);
     sgProcessCommands();
 }
 
@@ -697,7 +716,8 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     CM->setValues(presetData.compressor);
     PR->setValues(presetData.preamp);
     PA->setValues(presetData.power_amp);
-    EQ->setEqData(presetData.eq1);
+    EQ1->setEqData(presetData.eq1);
+    EQ2->setEqData(presetData.eq2);
     IR->setEnabled(presetData.cab_sim_on);
     ER->setValues(presetData.reverb);
     emit deviceUpdatingValues();
@@ -724,6 +744,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
         savedPreset = actualPreset;
         m_presetListModel.updatePreset(&savedPreset);
         m_presetManager.returnToPreviousState();
+        configModules(actualPreset);
         emit presetSwitched();
         break;
     }
@@ -749,6 +770,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
 
     case PresetState::Compare:
     {
+        // configModules(savedPreset);
         m_presetListModel.updatePreset(&savedPreset);
         // Необходимая заглушка. Не удалять
         break;
@@ -761,7 +783,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     }
     }
     m_presetListModel.updatePreset(&actualPreset);
-    configModules();
+    // configModules(actualPreset);
 }
 
 

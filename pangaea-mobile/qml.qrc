@@ -8,5 +8,13 @@
         <file>images/Connected.svg</file>
         <file>qml/main.qml</file>
         <file>images/bin.svg</file>
+        <file>qml/CustomOverlays/ModulsManagementWindow.qml</file>
+        <file>qml/Tutorials/TutorialNG.qml</file>
+        <file>qml/Tutorials/TutorialCM.qml</file>
+        <file>qml/Tutorials/TutorialPR.qml</file>
+        <file>qml/Tutorials/TutorialPA.qml</file>
+        <file>qml/Tutorials/TutorialEQ.qml</file>
+        <file>qml/Tutorials/TutorialER.qml</file>
+        <file>qml/Tutorials/TutorialIR.qml</file>
     </qresource>
 </RCC>

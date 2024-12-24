@@ -48,6 +48,14 @@ void AbstractModule::registerTypestoQml()
     qmlRegisterUncreatableType<EarlyReflections>("CppObjects", 1, 0, "EarlyReflections", "Cannot create LP in QML");
 }
 
+void AbstractModule::setUsed(bool newValue)
+{
+    if(m_used == newValue) return;
+
+    m_used=newValue;
+    emit usedChanged();
+}
+
 void AbstractModule::setModuleEnabled(bool newEnabled)
 {
     if (m_moduleEnabled == newEnabled)

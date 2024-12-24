@@ -582,14 +582,14 @@ void CPLegacy::arrangePrePost()
     int postPosition = 6;
     if(m_isPreEq)
     {
-        if(m_moduleList.at(prePosition)->moduleType() != ModuleType::EQ)
+        if(m_moduleList.at(prePosition)->moduleType() != ModuleType::EQ1)
         {
             m_modulesListModel.moveModule(postPosition, prePosition);
         }
     }
     else
     {
-        if(m_moduleList.at(postPosition)->moduleType() != ModuleType::EQ)
+        if(m_moduleList.at(postPosition)->moduleType() != ModuleType::EQ1)
         {
             m_modulesListModel.moveModule(prePosition, postPosition);
         }

@@ -29,7 +29,7 @@ class AbstractDevice : public QObject
     Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)
 
     Q_PROPERTY(quint16 processingBudget READ processingBudget CONSTANT)
-    Q_PROPERTY(quint16 processingUsed READ processingUsed NOTIFY modulesListModelChanged)
+    Q_PROPERTY(quint16 processingUsed READ processingUsed NOTIFY processingUsedChanged)
 
     Q_PROPERTY(quint8 bank READ bank NOTIFY bankPresetChanged FINAL)
     Q_PROPERTY(quint8 preset READ preset NOTIFY bankPresetChanged FINAL)
@@ -42,6 +42,8 @@ class AbstractDevice : public QObject
     Q_PROPERTY(PresetManager* presetManager READ presetManager CONSTANT)
 
     Q_PROPERTY(bool deviceParamsModified READ deviceParamsModified NOTIFY deviceParamsModifiedChanged FINAL)
+
+    Q_PROPERTY(QList<QObject*> avaliableModulesList READ avaliableModulesList CONSTANT)
     Q_PROPERTY(ModulesListModel* modulesListModel READ modulesListModel NOTIFY modulesListModelChanged FINAL)
     Q_PROPERTY(PresetListModel* presetListModel READ presetListModel NOTIFY presetListModelChanged FINAL)
 public:
@@ -90,6 +92,7 @@ public:
 
     bool deviceParamsModified() const;
 
+    QList<QObject*> avaliableModulesList() {return m_avaliableModulesList;};
     ModulesListModel* modulesListModel() {return &m_modulesListModel;};
     PresetListModel* presetListModel() {return &m_presetListModel;};
     PresetManager* presetManager() {return &m_presetManager;};
@@ -106,6 +109,8 @@ public slots:
 
 signals:
     void sgDeviceInstanciated();
+
+    void processingUsedChanged();
 
     void modulesListModelChanged();
     void presetListModelChanged();
@@ -167,6 +172,7 @@ protected:
     PresetListModel m_presetListModel{this};
 
     QList<AbstractModule*> m_moduleList;
+    QList<QObject*> m_avaliableModulesList;
     ModulesListModel m_modulesListModel{this};
 
     bool fwUpdate{false};

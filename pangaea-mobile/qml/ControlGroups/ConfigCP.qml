@@ -1,15 +1,20 @@
 // pragma ComponentBehavior: Bound
 
 import QtQuick 2.15
-import QtQuick.Effects
+// import QtQuick.Effects
 import QtQuick.Controls
 
 import Elements
 import StyleSettings
+import CustomOverlays
+
 import CppObjects
+import CppEnums
 
 Item {
     id: _main
+
+    enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
 
     Rectangle
     {
@@ -17,14 +22,70 @@ Item {
         color: Style.colorFon
     }
 
+    Rectangle{
+        id: _maskCompare
+
+        anchors.fill: parent
+
+        opacity: 0.25
+        visible: !_main.enabled
+        z: _modulesManagementWindow.z + 5
+
+        SequentialAnimation on color{
+            running: true
+            loops: Animation.Infinite
+            ColorAnimation {from: "white"; to: "lightcoral"; duration: 1000}
+            ColorAnimation {from: "lightcoral"; to: "white"; duration: 1000}
+        }
+    }
+
     Column{
         anchors.fill: parent
+
+        spacing: 4
+
+        Button{
+            text: qsTr("Add module")
+
+            width: parent.width/2
+            height: parent.height/15
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            onClicked:{
+                 _modulesManagementWindow.visible = true
+            }
+        }
+
+        Rectangle{
+            id: _rectConf
+
+            width: parent.width
+            height: parent.height * 1/15
+
+            property bool confAcceplatble: UiCore.currentDevice.processingUsed < UiCore.currentDevice.processingBudget
+            radius: Style.baseRadius
+            border.width: 1
+            border.color: Style.currentTheme.colorBorderOn
+
+            color: confAcceplatble ? "green" : "red"
+
+            MText{
+                text: "Used " + UiCore.currentDevice.processingUsed
+                      + qsTr(" of ") + UiCore.currentDevice.processingBudget
+
+                color: "white"
+
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
 
         ListView{
             id: _listConfig
 
             width: parent.width
-            height: parent.height * 6/8
+            height: parent.height * 11/16
 
             z: _rectConf.z + 5
 
@@ -64,7 +125,7 @@ Item {
 
                         drag.target: _thing
                         drag.axis: Drag.YAxis //Drag.XAndYAxis
-                        drag.minimumY: _listConfig.y
+                        drag.minimumY: 2
                         drag.maximumY: _listConfig.y + _listConfig.height + _rectDelete.height
 
                         onPressed: _delegateRoot.modelIndex = visualIndex
@@ -91,7 +152,7 @@ Item {
 
                         radius: Style.baseRadius
                         border.color: Style.currentTheme.colorBorderOn
-                        border.width: 1
+                        border.width: Drag.active? 5 : 1
 
                         Drag.active: _mouseAreaDrag.drag.active
                         Drag.source: _thing
@@ -152,13 +213,23 @@ Item {
                 }
             }
 
+            DropArea{
+                anchors.fill: parent
+                z: -10
+                onDropped: function (drag) {
+                    var from = drag.source.dragParent.modelIndex;
+                    var to = (drag.source as Item).visualIndex;
+                    UiCore.currentDevice.modulesListModel.moveModule(from, to);
+                }
+            }
+
         }
 
         Rectangle{
             id: _rectDelete
 
             width: parent.width
-            height: parent.height * 1/8
+            height: _listConfig.height * 1/8
 
             radius: Style.baseRadius
             border.width: 1
@@ -184,34 +255,9 @@ Item {
                 anchors.fill: parent
 
                 onDropped:{
-                    console.log("droped index", drag.source.dragParent.modelIndex)
+                    UiCore.currentDevice.modulesListModel.removeModule(drag.source.dragParent.modelIndex);
                 }
             }
-        }
-
-        Rectangle{
-            id: _rectConf
-
-            width: parent.width
-            height: parent.height * 1/8
-
-            property bool confAcceplatble: UiCore.currentDevice.processingUsed < UiCore.currentDevice.processingBudget
-            radius: Style.baseRadius
-            border.width: 1
-            border.color: Style.currentTheme.colorBorderOn
-
-            color: confAcceplatble ? "green" : "red"
-
-            MText{
-                text: "Used " + UiCore.currentDevice.processingUsed
-                      + qsTr(" of ") + UiCore.currentDevice.processingBudget
-
-                color: "white"
-
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-
         }
 
         Connections{
@@ -221,6 +267,12 @@ Item {
                 _visualModel.model = UiCore.currentDevice.modulesListModel
             }
         }
+    }
+
+    ModulsManagementWindow{
+        id: _modulesManagementWindow
+
+        visible: false
     }
 }
 

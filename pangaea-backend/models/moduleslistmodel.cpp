@@ -19,16 +19,41 @@ QHash<int, QByteArray> ModulesListModel::roleNames() const
     return roles;
 }
 
+void ModulesListModel::appendModule(AbstractModule *newModule)
+{
+    insertModule(newModule, m_moduleList->size()-1);
+}
+
 void ModulesListModel::insertModule(AbstractModule *newModule, int position)
 {
+    if(newModule == nullptr) return;
+
     beginInsertRows(QModelIndex(), position, position);
+    newModule->setUsed(true);
     m_moduleList->insert(position, 1, newModule);
     endInsertRows();
     emit sgModulesReconfigured();
 }
 
+void ModulesListModel::removeModule(int position)
+{
+    if(position >= m_moduleList->size())
+    {
+        qWarning() << Q_FUNC_INFO << "Position is more than size";
+        return;
+    }
+
+    beginRemoveRows(QModelIndex(), position, position);
+    m_moduleList->at(position)->setUsed(false);
+    m_moduleList->remove(position, 1);
+    endRemoveRows();
+    emit sgModulesReconfigured();
+}
+
 void ModulesListModel::moveModule(int from, int to)
 {
+    if(from == to) return;
+
     qint32 indexToInModel = to;
     if(to > from) indexToInModel++;
     beginMoveRows(QModelIndex(), from, from, QModelIndex(), indexToInModel);

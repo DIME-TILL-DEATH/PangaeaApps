@@ -96,7 +96,7 @@ Item{
             id: listViewModules
             width: parent.width
             // height: parent.height - _presetNameContainer.height - _er.height - _clipIndContainer.height //- _moduleColumn.spacing
-            height: parent.height/_mapContent.countElements * 20 - _moduleColumn.spacing * 5
+            height: (parent.height/_mapContent.countElements) * 20 - _moduleColumn.spacing * 4
             spacing: 2
 
             model: UiCore.currentDevice.modulesListModel;
@@ -158,12 +158,14 @@ Item{
                         break;
                     }
 
-                    case ModuleType.EQ:
+                    case ModuleType.EQ2:
+                    case ModuleType.EQ1:
                     {
                         _delegateLoader.source = "/Modules/qml/Modules/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
+                        _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
 
-                        // TODO fixed item
+                        // // TODO fixed item
                         _eqExtLoader.source = "/Modules/qml/Modules/EQExtModern.qml";
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
                         _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
@@ -212,7 +214,7 @@ Item{
         listViewModules.positionViewAtIndex(index, ListView.Center)
     }
 
-    function showFullEq(){
+    function showFullEq(){ 
         _eqExtLoader.visible = true;
     }
 
@@ -230,5 +232,9 @@ Item{
         height: parent.height ///1.1
         width:  parent.width*0.95
         z: parent.z+1
+
+        onLoaded:{
+
+        }
     }
 }

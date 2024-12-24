@@ -127,6 +127,7 @@ if(ANDROID)
             qml/CustomOverlays/EditValueDialog.qml
             qml/CustomOverlays/FirmwareLoadingWindow.qml
             qml/CustomOverlays/IrManagementWindow.qml
+            qml/CustomOverlays/ModulsManagementWindow.qml
             qml/CustomOverlays/PresetsWindow.qml
     )
 
@@ -159,6 +160,14 @@ if(ANDROID)
         QML_FILES
             qml/Tutorials/SimpleTutorialMessage.qml
             qml/Tutorials/TutorialVirtualDevice.qml
+
+            qml/Tutorials/TutorialNG.qml
+            qml/Tutorials/TutorialCM.qml
+            qml/Tutorials/TutorialPR.qml
+            qml/Tutorials/TutorialPA.qml
+            qml/Tutorials/TutorialEQ.qml
+            qml/Tutorials/TutorialIR.qml
+            qml/Tutorials/TutorialER.qml
     )
 
     qt_add_qml_module(qml_pages

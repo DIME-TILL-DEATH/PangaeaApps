@@ -585,8 +585,9 @@ void MockCP16Modern::mconfigCommHandler(const QString &command, const QByteArray
     {
         if(argsList.first() == "set")
         {
+            memset(currentPresetData.modules_order, 0, MAX_PROCESSING_STAGES);
             QByteArray listData = QByteArray::fromHex(data);
-            memcpy(currentPresetData.modules_order, listData.data(), MAX_PROCESSING_STAGES);
+            memcpy(currentPresetData.modules_order, listData.data(), listData.size());
         }
     }
 

@@ -14,8 +14,9 @@ class AbstractModule : public QObject
     Q_OBJECT
     Q_PROPERTY(bool moduleEnabled READ moduleEnabled WRITE setModuleEnabled NOTIFY dataChanged FINAL)
     Q_PROPERTY(QString moduleName READ moduleName CONSTANT)
+    Q_PROPERTY(ModuleType moduleType READ moduleType CONSTANT)
 
-    Q_PROPERTY(bool assignable READ assignable CONSTANT)
+    Q_PROPERTY(bool used READ used WRITE setUsed NOTIFY usedChanged)
     Q_PROPERTY(quint16 processingTime READ processingTime CONSTANT)
 public:
 
@@ -23,7 +24,9 @@ public:
 
     static void registerTypestoQml();
 
-    bool assignable() const {return m_assignable;};
+    bool used() const {return m_used;};
+    void setUsed(bool newValue);
+
     quint16 processingTime() const {return m_processingTime;};
 
     bool moduleEnabled() const {return m_moduleEnabled;};
@@ -37,13 +40,14 @@ public:
 signals:
     void dataChanged();
 
+    void usedChanged();
     void userModifiedModuleParameters();
 
 protected:
     AbstractDevice* m_owner;
     ModuleType m_moduleType;
 
-    bool m_assignable{true};
+    bool m_used{false};
     quint16 m_processingTime{0};
 
     bool m_moduleEnabled;

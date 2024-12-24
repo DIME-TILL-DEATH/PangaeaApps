@@ -35,7 +35,7 @@ Item{
             height: parent.height - _moduleColumn.spacing //- masterControlsHeight
             spacing: 2
 
-            model: UiCore.currentDevice.modulesListModel;
+            // model: UiCore.currentDevice.modulesListModel;
 
             interactive: false
             orientation: ListView.Vertical
@@ -106,7 +106,7 @@ Item{
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
-                    case ModuleType.EQ:
+                    case ModuleType.EQ1:
                     {
                         _delegateLoader.source = "/Modules/qml/Modules/EQPreviewLegacy.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
@@ -135,6 +135,15 @@ Item{
                     _delegateLoader.item.module = moduleInstance;
                 }
             }
+        }
+    }
+
+    Connections{
+        target: UiCore.currentDevice.modulesListModel
+
+        function onModelReset(){
+            listViewModules.model = undefined // без этого пропускает первое обновление
+            listViewModules.model = UiCore.currentDevice.modulesListModel
         }
     }
 

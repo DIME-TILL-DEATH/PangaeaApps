@@ -7,7 +7,7 @@ preset_data_t HardwarePreset::convertLegacyToModern(const preset_data_legacy_t& 
     qint16 defaultFrequencies[] = {120, 360, 800, 2000, 6000};
     preset_data_t modernData{0};
 
-    memset(modernData.modules_order, 0, MAX_PROCESSING_STAGES);
+    memset(&modernData, 0, sizeof(preset_data_t));
 
     // secondary eq default
     for(int i=0; i<5; i++)
@@ -19,7 +19,7 @@ preset_data_t HardwarePreset::convertLegacyToModern(const preset_data_legacy_t& 
     if(legacyData.eq_pre)
     {
         modernData.modules_order[0] = ModuleType::CM;
-        modernData.modules_order[1] = ModuleType::EQ;
+        modernData.modules_order[1] = ModuleType::EQ1;
         modernData.modules_order[2] = ModuleType::PR;
         modernData.modules_order[3] = ModuleType::PA;
         modernData.modules_order[4] = ModuleType::IR;
@@ -31,7 +31,7 @@ preset_data_t HardwarePreset::convertLegacyToModern(const preset_data_legacy_t& 
         modernData.modules_order[1] = ModuleType::PR;
         modernData.modules_order[2] = ModuleType::PA;
         modernData.modules_order[3] = ModuleType::IR;
-        modernData.modules_order[4] = ModuleType::EQ;
+        modernData.modules_order[4] = ModuleType::EQ1;
         modernData.modules_order[5] = ModuleType::NG;
     }
 

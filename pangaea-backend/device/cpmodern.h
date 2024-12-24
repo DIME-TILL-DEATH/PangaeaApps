@@ -43,7 +43,7 @@ public:
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
 
-    void configModules();
+    void configModules(const PresetModern& preset);
     void setModules();
 
     Q_INVOKABLE void saveChanges() override;
@@ -83,7 +83,8 @@ public:
     Preamp* PR;
     PowerAmp* PA;
     CabSim* IR;
-    EqParametric* EQ;
+    EqParametric* EQ1;
+    EqParametric* EQ2;
     EarlyReflections* ER;
 
     void slIrEnabledChanged();

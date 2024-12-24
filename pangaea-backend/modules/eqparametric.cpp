@@ -8,7 +8,7 @@
 
 
 EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber)
-    : AbstractModule{owner, ModuleType::EQ, "EQ", "eqo"},
+    : AbstractModule{owner, ModuleType::EQ1, "EQ", "eqo"},
     m_eqMode{eqMode},
     m_eqNumber{eqNumber}
 {
@@ -26,6 +26,9 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
         m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 1000, 20000);
 
         m_commandOnOff = "eq" + QString().setNum(eqNumber) + " par o";
+
+        m_moduleType = (m_eqNumber == 0) ? ModuleType::EQ1 : ModuleType::EQ2;
+        m_moduleName = (m_eqNumber == 0) ? "EQ1" : "EQ2";
     }
     else
     {
