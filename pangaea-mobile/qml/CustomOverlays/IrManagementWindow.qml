@@ -101,7 +101,7 @@ Item{
                 id: _irListView
 
                 width: parent.width * 0.9
-                height: parent.height * 0.65
+                height: parent.height * 0.6
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -111,7 +111,7 @@ Item{
                                                  : UiCore.currentDevice.irsInFolder
 
                 boundsBehavior: Flickable.StopAtBounds
-                clip: true
+                // clip: true
 
                 ScrollBar.vertical: ScrollBar{
                     active: true
@@ -123,16 +123,21 @@ Item{
                 snapMode: ListView.SnapToItem
 
                 delegate: Item{
+                    id: _item
+
                     width: _irListView.width
-                    height: _irListView.height/30
+                    height: _irListView.height/20
+
+                    property var irFile: modelData
 
                     MText{
                         text: modelData.irName
 
                         anchors.fill: parent
 
-                        color: isCurrentIr() ? Style.currentTheme.colorModulOn: Style.colorText
+                        font.pixelSize: _item.height
 
+                        color: isCurrentIr() ? Style.currentTheme.colorModulOn: Style.colorText
 
                         elide: Text.ElideMiddle
 
@@ -141,12 +146,40 @@ Item{
                     }
 
                     MouseArea{
+                        id: _mouseAreaDrag
+
                         anchors.fill: parent
+
+                        drag.target: _item
+                        drag.axis: Drag.XAndYAxis
+                        // drag.minimumY: 2
+                        // drag.maximumY: _listConfig.y + _listConfig.height + _rectDelete.height
 
                         onClicked: {
                             UiCore.currentDevice.currentIrFile = modelData
                         }
+
+                        onReleased: _item.Drag.drop()
                     }
+
+                    Drag.active: _mouseAreaDrag.drag.active
+                    Drag.source: _item
+                    Drag.hotSpot.x: width / 2
+                    Drag.hotSpot.y: height / 2
+
+                    states: State {
+                            when: _mouseAreaDrag.drag.active
+                            ParentChange {
+                                target: _item
+                                parent: _irListView
+                            }
+
+                            AnchorChanges {
+                                target: _item
+                                anchors.horizontalCenter: undefined
+                                anchors.verticalCenter: undefined
+                            }
+                        }
 
                     function isCurrentIr()
                     {
@@ -158,6 +191,39 @@ Item{
                         {
                             return (UiCore.currentDevice.currentIrFile.irName === modelData.irName) & (UiCore.currentDevice.currentIrFile.irLinkPath === modelData.irLinkPath)
                         }
+                    }
+                }
+            }
+
+            Rectangle{
+                width: parent.width
+                height: _root.height * 0.07
+
+                radius: Style.baseRadius
+                border.width: 1
+                border.color: Style.currentTheme.colorBorderOn
+
+                color: _dropDelete.containsDrag ? "#60FFFFFF" : "transparent"
+
+                Image
+                {
+                    id: _scanImg
+                    source: "qrc:/images/bin.svg"
+
+                    anchors.centerIn: parent
+
+                    height: parent.height * 0.5
+
+                    fillMode: Image.PreserveAspectFit
+                }
+
+                DropArea{
+                    id: _dropDelete
+
+                    anchors.fill: parent
+
+                    onDropped: function (drag){
+                        UiCore.currentDevice.deleteIrFile((drag.source as Item).irFile);
                     }
                 }
             }

@@ -76,6 +76,19 @@ Item
 
             width: parent.width
             height: parent.height - _masterControlsLoader.height
+
+            onLoaded:{
+                _mapContentLoader.item.modulesModel = UiCore.currentDevice.modulesListModel
+            }
+        }
+    }
+
+    Connections{
+        target: UiCore.currentDevice.modulesListModel
+
+        function onModelReset(){
+            _mapContentLoader.item.modulesModel = undefined // без этого пропускает первое обновление
+            _mapContentLoader.item.modulesModel = UiCore.currentDevice.modulesListModel
         }
     }
 
@@ -126,15 +139,17 @@ Item
                 case DeviceClass.CP_LEGACY:
                 {
                     _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
-                    _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
                     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
+                    // _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
+                    setMapContent();
                     break;
                 }
                 case DeviceClass.CP_MODERN:
                 {
                     _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
-                    _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
                     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
+                    // _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
+                    _main.setMapContent();
                     break;
                 }
             }

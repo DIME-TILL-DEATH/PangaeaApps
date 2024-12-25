@@ -153,7 +153,7 @@ void CPModern::readFullState()
 
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("plist");
-    emit sgPushCommandToQueue("ls ir_library\r\n", false);
+    emit sgPushCommandToQueue("ls ir_library");
     emit sgPushCommandToQueue("gm");
     pushReadPresetCommands();
 
@@ -396,6 +396,14 @@ void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath, bool trim
         uploadIrData(fileName, dstFilePath, fileData);
         m_presetManager.setCurrentState(PresetState::UploadingIr);
     }
+}
+
+void CPModern::deleteIrFile(const IrFile &irFile)
+{
+    emit sgPushCommandToQueue("ir delete\r" + irFile.irLinkPath().toUtf8() + "/" + irFile.irName().toUtf8() + "\n", false);
+    emit sgPushCommandToQueue("ls " + irFile.irLinkPath().toUtf8() );
+    // emit sgPushCommandToQueue("ir info");
+    emit sgProcessCommands();
 }
 
 void CPModern::uploadIrData(const QString& irName, const QString& dstPath, const QByteArray& irData)

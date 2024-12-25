@@ -1,20 +1,12 @@
 <RCC>
     <qresource prefix="/">
+        <file>qml/main.qml</file>
         <file>images/cp_16m.svg</file>
         <file>images/AMT.svg</file>
         <file>images/AMT (Fixed by Ivan).svg</file>
         <file>images/Arrow Gear new.svg</file>
         <file>images/(V).svg</file>
         <file>images/Connected.svg</file>
-        <file>qml/main.qml</file>
         <file>images/bin.svg</file>
-        <file>qml/CustomOverlays/ModulsManagementWindow.qml</file>
-        <file>qml/Tutorials/TutorialNG.qml</file>
-        <file>qml/Tutorials/TutorialCM.qml</file>
-        <file>qml/Tutorials/TutorialPR.qml</file>
-        <file>qml/Tutorials/TutorialPA.qml</file>
-        <file>qml/Tutorials/TutorialEQ.qml</file>
-        <file>qml/Tutorials/TutorialER.qml</file>
-        <file>qml/Tutorials/TutorialIR.qml</file>
     </qresource>
 </RCC>

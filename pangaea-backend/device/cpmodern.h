@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE void restoreValue(QString name) override;
 
     Q_INVOKABLE void startIrUpload(QString srcFilePath, QString dstFilePath = "", bool trimFile = false) override;
+    Q_INVOKABLE void deleteIrFile(const IrFile& irFile);
     Q_INVOKABLE void escImpulse(); // TODO где используется? В мобильном не нашёл вызовов из QML
 
     Q_INVOKABLE bool isFileInLibrary(const QString& fileName);

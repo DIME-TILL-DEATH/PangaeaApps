@@ -490,6 +490,22 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
         answer += "\n";
         emit answerReady(answer);
     }
+
+    if(arguments == "delete")
+    {
+        QByteArray answer("ir delete\r");
+
+        QFile file(data);
+        if(file.remove())
+        {
+            answer += "OK\n";
+        }
+        else
+        {
+            answer += "ERROR\n";
+        }
+        emit answerReady(answer);
+    }
 }
 
 void MockCP16Modern::getIrInfo()
