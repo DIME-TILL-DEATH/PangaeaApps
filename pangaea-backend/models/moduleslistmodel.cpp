@@ -3,6 +3,8 @@
 ModulesListModel::ModulesListModel(QObject *parent)
     : QAbstractListModel{parent}
 {
+    // TODO small memory leak
+    m_moduleList = new QList<AbstractModule*>; // dummy
 }
 
 ModulesListModel::~ModulesListModel()
@@ -86,7 +88,8 @@ QVariant ModulesListModel::data(const QModelIndex &index, int role) const
     case ListRoles::ModuleInstanceRole:
     {
         AbstractModule* module = m_moduleList->at(index.row());
-        return QVariant::fromValue(module);
+        if(module) return QVariant::fromValue(module);
+        else return{};
     }
 
     default:

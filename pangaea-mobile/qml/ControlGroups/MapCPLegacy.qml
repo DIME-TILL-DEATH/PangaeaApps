@@ -16,6 +16,8 @@ Item{
     property int countElements: 25
     property int masterControlsHeight: height*5/countElements
 
+    property alias modulesModel: listViewModules.model
+
     Column
     {
         id: _moduleColumn
@@ -135,15 +137,6 @@ Item{
                     _delegateLoader.item.module = moduleInstance;
                 }
             }
-        }
-    }
-
-    Connections{
-        target: UiCore.currentDevice.modulesListModel
-
-        function onModelReset(){
-            listViewModules.model = undefined // без этого пропускает первое обновление
-            listViewModules.model = UiCore.currentDevice.modulesListModel
         }
     }
 

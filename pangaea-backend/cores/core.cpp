@@ -106,8 +106,8 @@ void Core::parseInputData(QByteArray ba)
 
 void Core::slDeviceInstanciated()
 {
+
     currentDevice->moveToThread(QGuiApplication::instance()->thread());
-    emit sgCurrentDeviceChanged(currentDevice);
 
     connect(currentDevice, &AbstractDevice::sgWriteToInterface, this, &Core::sgWriteToInterface, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgPushCommandToQueue, this, &Core::pushCommandToQueue, Qt::QueuedConnection);
@@ -119,9 +119,11 @@ void Core::slDeviceInstanciated()
     {
         // Подождать пока прогрузится интерфейс, тк MOCK устройства отвечают слишком быстро в том же потоке
         // TODO возможно нужны сигналы подтверждения от loader
-        QThread::msleep(500);
+        QThread::msleep(100);
     }
     currentDevice->readFullState();
+
+    emit sgCurrentDeviceChanged(currentDevice);
 }
 
 void Core::pushCommandToQueue(QByteArray command, bool finalize)

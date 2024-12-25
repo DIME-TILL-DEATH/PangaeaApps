@@ -16,6 +16,8 @@ Item{
     property int countElements: 25
     property int masterControlsHeight: height*5/countElements
 
+    property alias modulesModel: listViewModules.model
+
     IrManagementWindow{
         id: _irManagement
 
@@ -95,11 +97,8 @@ Item{
         {
             id: listViewModules
             width: parent.width
-            // height: parent.height - _presetNameContainer.height - _er.height - _clipIndContainer.height //- _moduleColumn.spacing
             height: (parent.height/_mapContent.countElements) * 20 - _moduleColumn.spacing * 4
             spacing: 2
-
-            model: UiCore.currentDevice.modulesListModel;
 
             // interactive: false
             orientation: ListView.Vertical
@@ -193,16 +192,6 @@ Item{
             height: _main.height/countElements  - _moduleColumn.spacing
         }
     }
-
-    Connections{
-        target: UiCore.currentDevice.modulesListModel
-
-        function onModelReset(){
-            listViewModules.model = undefined // без этого пропускает первое обновление
-            listViewModules.model = UiCore.currentDevice.modulesListModel
-        }
-    }
-
 
     function showIrManagementWindow()
     {

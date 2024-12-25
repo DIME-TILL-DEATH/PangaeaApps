@@ -16,6 +16,8 @@ Item {
 
     enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
 
+    property alias modulesModel: _visualModel.model
+
     Rectangle
     {
         anchors.fill: parent
@@ -95,8 +97,6 @@ Item {
 
             model: DelegateModel{
                 id: _visualModel
-
-                model: UiCore.currentDevice.modulesListModel
 
                 delegate: DropArea{
                     id: _delegateRoot
@@ -257,14 +257,6 @@ Item {
                 onDropped:{
                     UiCore.currentDevice.modulesListModel.removeModule(drag.source.dragParent.modelIndex);
                 }
-            }
-        }
-
-        Connections{
-            target: UiCore.currentDevice.modulesListModel
-
-            function onModelReset(){
-                _visualModel.model = UiCore.currentDevice.modulesListModel
             }
         }
     }
