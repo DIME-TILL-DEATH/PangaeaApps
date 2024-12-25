@@ -35,7 +35,7 @@ Item
         {
             case DeviceClass.CP_LEGACY:
             {
-                _mapContentLoader.source = "";
+                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/ConfigUnavaliable.qml";
                 break;
             }
             case DeviceClass.CP_MODERN:

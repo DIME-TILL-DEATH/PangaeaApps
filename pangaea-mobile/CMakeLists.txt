@@ -115,6 +115,7 @@ if(ANDROID)
             qml/ControlGroups/MapCPModern.qml
             qml/ControlGroups/MasterControls_CP.qml
             qml/ControlGroups/MasterControls_LA.qml
+            qml/ControlGroups/ConfigUnavaliable.qml
     )
 
     qt_add_qml_module(qml_custom_overlays
