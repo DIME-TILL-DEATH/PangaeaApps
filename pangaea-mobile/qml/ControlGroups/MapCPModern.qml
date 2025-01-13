@@ -149,6 +149,13 @@ Item{
                         break;
                     }
 
+                    case ModuleType.TR:
+                    {
+                        _delegateLoader.source = "/Modules/qml/Modules/TR.qml";
+                        _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
+                        break;
+                    }
+
                     case ModuleType.IR:
                     {
                         _delegateLoader.source = "/Modules/qml/Modules/IR.qml";

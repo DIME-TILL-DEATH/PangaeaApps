@@ -93,6 +93,9 @@ void CPModern::initDevice(DeviceType deviceType)
     connect(IR, &CabSim::dataChanged, this, &CPModern::slIrEnabledChanged);
     EQ1 = new EqParametric(this, EqParametric::EqMode::Modern, 0);
     EQ2 = new EqParametric(this, EqParametric::EqMode::Modern, 1);
+
+    TR = new Tremolo(this);
+
     ER = new EarlyReflections(this);
 
     typeToModuleMap.insert(ModuleType::NG, NG);
@@ -102,6 +105,7 @@ void CPModern::initDevice(DeviceType deviceType)
     typeToModuleMap.insert(ModuleType::IR, IR);
     typeToModuleMap.insert(ModuleType::EQ1, EQ1);
     typeToModuleMap.insert(ModuleType::EQ2, EQ2);
+    typeToModuleMap.insert(ModuleType::TR, TR);
     typeToModuleMap.insert(ModuleType::ER, ER);
 
     m_avaliableModulesList.append(NG);
@@ -111,6 +115,7 @@ void CPModern::initDevice(DeviceType deviceType)
     m_avaliableModulesList.append(IR);
     m_avaliableModulesList.append(EQ1);
     // m_avaliableModulesList.append(EQ2);
+    m_avaliableModulesList.append(TR);
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
@@ -727,6 +732,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     EQ1->setEqData(presetData.eq1);
     EQ2->setEqData(presetData.eq2);
     IR->setEnabled(presetData.cab_sim_on);
+    TR->setValues(presetData.tremolo);
     ER->setValues(presetData.reverb);
     emit deviceUpdatingValues();
 

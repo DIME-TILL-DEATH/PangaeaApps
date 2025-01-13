@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21.1)
-project(Pangaea-mobile VERSION 0.12.1 LANGUAGES CXX)
-set(VERSION_CODE 29)
+project(Pangaea-mobile VERSION 0.12.2 LANGUAGES CXX)
+set(VERSION_CODE 30)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
 
@@ -152,6 +152,7 @@ if(ANDROID)
             qml/Modules/PA.qml
             qml/Modules/PR.qml
             qml/Modules/PS.qml
+            qml/Modules/TR.qml
             qml/Modules/VL.qml
     )
 
@@ -167,6 +168,7 @@ if(ANDROID)
             qml/Tutorials/TutorialPR.qml
             qml/Tutorials/TutorialPA.qml
             qml/Tutorials/TutorialEQ.qml
+            qml/Tutorials/TutorialTR.qml
             qml/Tutorials/TutorialIR.qml
             qml/Tutorials/TutorialER.qml
     )

@@ -77,6 +77,7 @@ qt_add_library(pangaea-backend STATIC
     mock/abstractmockdevice.h mock/abstractmockdevice.cpp
     mock/mockcp16legacy.h mock/mockcp16legacy.cpp
     mock/mockcp16modern.h mock/mockcp16modern.cpp
+    modules/tremolo.h modules/tremolo.cpp
 
 )
 

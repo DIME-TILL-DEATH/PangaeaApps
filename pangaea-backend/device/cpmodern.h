@@ -18,6 +18,7 @@
 #include "poweramp.h"
 #include "cabsim.h"
 #include "eqparametric.h"
+#include "tremolo.h"
 #include "earlyreflections.h"
 
 
@@ -86,6 +87,7 @@ public:
     CabSim* IR;
     EqParametric* EQ1;
     EqParametric* EQ2;
+    Tremolo* TR;
     EarlyReflections* ER;
 
     void slIrEnabledChanged();

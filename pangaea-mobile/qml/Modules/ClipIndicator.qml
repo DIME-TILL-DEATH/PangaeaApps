@@ -12,7 +12,7 @@ import CppEnums
 Rectangle {
     id: _root
 
-    property int maxClips: 16000/2
+    property int maxClips: 16000/16
 
     color: Style.colorModul
 

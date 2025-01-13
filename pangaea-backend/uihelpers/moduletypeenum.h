@@ -24,6 +24,7 @@ public:
         PS,
         //=====================
         // New moduls
+        TR,
         EQ2,
         //=====================
         // Stereo moduls
