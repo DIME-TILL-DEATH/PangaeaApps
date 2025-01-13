@@ -10,5 +10,6 @@
         <file>images/bin.svg</file>
         <file>qml/Modules/TR.qml</file>
         <file>qml/Tutorials/TutorialTR.qml</file>
+        <file>qml/Modules/CH.qml</file>
     </qresource>
 </RCC>

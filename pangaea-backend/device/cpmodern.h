@@ -6,6 +6,7 @@
 
 #include <QSettings>
 
+#include "chorus.h"
 #include "irworker.h"
 
 #include "irfile.h"
@@ -19,6 +20,7 @@
 #include "cabsim.h"
 #include "eqparametric.h"
 #include "tremolo.h"
+#include "chorus.h"
 #include "earlyreflections.h"
 
 
@@ -88,6 +90,7 @@ public:
     EqParametric* EQ1;
     EqParametric* EQ2;
     Tremolo* TR;
+    Chorus* CH;
     EarlyReflections* ER;
 
     void slIrEnabledChanged();

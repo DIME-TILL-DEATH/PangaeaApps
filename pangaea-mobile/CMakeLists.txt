@@ -153,6 +153,7 @@ if(ANDROID)
             qml/Modules/PR.qml
             qml/Modules/PS.qml
             qml/Modules/TR.qml
+            qml/Modules/CH.qml
             qml/Modules/VL.qml
     )
 

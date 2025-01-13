@@ -95,6 +95,7 @@ void CPModern::initDevice(DeviceType deviceType)
     EQ2 = new EqParametric(this, EqParametric::EqMode::Modern, 1);
 
     TR = new Tremolo(this);
+    CH = new Chorus(this);
 
     ER = new EarlyReflections(this);
 
@@ -106,6 +107,7 @@ void CPModern::initDevice(DeviceType deviceType)
     typeToModuleMap.insert(ModuleType::EQ1, EQ1);
     typeToModuleMap.insert(ModuleType::EQ2, EQ2);
     typeToModuleMap.insert(ModuleType::TR, TR);
+    typeToModuleMap.insert(ModuleType::CH, CH);
     typeToModuleMap.insert(ModuleType::ER, ER);
 
     m_avaliableModulesList.append(NG);
@@ -116,6 +118,7 @@ void CPModern::initDevice(DeviceType deviceType)
     m_avaliableModulesList.append(EQ1);
     // m_avaliableModulesList.append(EQ2);
     m_avaliableModulesList.append(TR);
+    m_avaliableModulesList.append(CH);
 
     emit modulesListModelChanged();
     emit presetListModelChanged();
@@ -733,6 +736,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     EQ2->setEqData(presetData.eq2);
     IR->setEnabled(presetData.cab_sim_on);
     TR->setValues(presetData.tremolo);
+    CH->setValues(presetData.chorus);
     ER->setValues(presetData.reverb);
     emit deviceUpdatingValues();
 

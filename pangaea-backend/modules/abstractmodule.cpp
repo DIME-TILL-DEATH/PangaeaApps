@@ -19,6 +19,7 @@
 #include "lowpassfilter.h"
 #include "presence.h"
 #include "tremolo.h"
+#include "chorus.h"
 #include "earlyreflections.h"
 
 AbstractModule::AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff)
@@ -47,6 +48,7 @@ void AbstractModule::registerTypestoQml()
     qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
     qmlRegisterUncreatableType<LowPassFilter>("CppObjects", 1, 0, "LowPassFilter", "Cannot create LP in QML");
     qmlRegisterUncreatableType<Tremolo>("CppObjects", 1, 0, "Tremolo", "Cannot create TR in QML");
+    qmlRegisterUncreatableType<Chorus>("CppObjects", 1, 0, "Chorus", "Cannot create CH in QML");
     qmlRegisterUncreatableType<EarlyReflections>("CppObjects", 1, 0, "EarlyReflections", "Cannot create LP in QML");
 }
 
