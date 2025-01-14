@@ -58,6 +58,9 @@ qt_add_library(pangaea-backend STATIC
     modules/lowpassfilter.h modules/lowpassfilter.cpp
     modules/cabsim.h modules/cabsim.cpp
     modules/earlyreflections.h modules/earlyreflections.cpp
+    modules/tremolo.h modules/tremolo.cpp
+    modules/chorus.h modules/chorus.cpp
+    modules/phaser.h modules/phaser.cpp
 
     utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h
@@ -77,8 +80,6 @@ qt_add_library(pangaea-backend STATIC
     mock/abstractmockdevice.h mock/abstractmockdevice.cpp
     mock/mockcp16legacy.h mock/mockcp16legacy.cpp
     mock/mockcp16modern.h mock/mockcp16modern.cpp
-    modules/tremolo.h modules/tremolo.cpp
-    modules/chorus.h modules/chorus.cpp
 
 )
 

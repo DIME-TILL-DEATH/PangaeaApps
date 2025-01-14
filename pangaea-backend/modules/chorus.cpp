@@ -3,7 +3,7 @@
 Chorus::Chorus(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::CH, "CH", "ch_on"}
 {
-    m_processingTime = 100;
+    m_processingTime = 40;
 
     m_mix = new ControlValue(this, "ch_mx", "Mix", "", 0, 63, 0, 63);
     m_rate = new ControlValue(this, "ch_rt", "Rate", "",  0, 63, 0, 63);

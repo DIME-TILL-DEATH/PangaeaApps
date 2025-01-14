@@ -154,6 +154,7 @@ if(ANDROID)
             qml/Modules/PS.qml
             qml/Modules/TR.qml
             qml/Modules/CH.qml
+            qml/Modules/PH.qml
             qml/Modules/VL.qml
     )
 
@@ -170,6 +171,8 @@ if(ANDROID)
             qml/Tutorials/TutorialPA.qml
             qml/Tutorials/TutorialEQ.qml
             qml/Tutorials/TutorialTR.qml
+            qml/Tutorials/TutorialCH.qml
+            qml/Tutorials/TutorialPH.qml
             qml/Tutorials/TutorialIR.qml
             qml/Tutorials/TutorialER.qml
     )

@@ -21,6 +21,7 @@
 #include "eqparametric.h"
 #include "tremolo.h"
 #include "chorus.h"
+#include "phaser.h"
 #include "earlyreflections.h"
 
 
@@ -91,6 +92,7 @@ public:
     EqParametric* EQ2;
     Tremolo* TR;
     Chorus* CH;
+    Phaser* PH;
     EarlyReflections* ER;
 
     void slIrEnabledChanged();

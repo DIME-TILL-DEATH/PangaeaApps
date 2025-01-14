@@ -61,5 +61,5 @@ BaseModule
         }
     }
 
-    tutorialItem: TutorialPR{}
+    tutorialItem: TutorialCH{}
 }

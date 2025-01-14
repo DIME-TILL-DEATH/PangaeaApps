@@ -212,6 +212,9 @@ Item{
                         case ModuleType.PR: _tutorialItem.source = "/Tutorials/qml/Tutorials/TutorialPR.qml"; break;
                         case ModuleType.PA: _tutorialItem.source = "/Tutorials/qml/Tutorials/TutorialPA.qml"; break;
                         case ModuleType.IR: _tutorialItem.source = "/Tutorials/qml/Tutorials/TutorialIR.qml"; break;
+                        case ModuleType.TR: _tutorialItem.source = "/Tutorials/qml/Tutorials/TutorialTR.qml"; break;
+                        case ModuleType.CH: _tutorialItem.source = "/Tutorials/qml/Tutorials/TutorialCH.qml"; break;
+                        case ModuleType.PH: _tutorialItem.source = "/Tutorials/qml/Tutorials/TutorialPH.qml"; break;
                         case ModuleType.EQ1:
                         case ModuleType.EQ2: _tutorialItem.source = "/Tutorials/qml/Tutorials/TutorialEQ.qml"; break;
                         }
