@@ -672,13 +672,16 @@ void CPModern::setModules()
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
 
-    foreach (AbstractModule* module, m_moduleList) {
+    foreach (AbstractModule* module, m_moduleList)
+    {
         QByteArray tempBa = QString().setNum(module->moduleType(), 16).toUtf8();
         if(tempBa.size() == 1) tempBa.push_front("0");
         baOrder.append(tempBa);
     }
-    sgPushCommandToQueue("mconfig set\r" + baOrder + "\n", false);
-    sgProcessCommands();
+    while(baOrder.size() < 20) baOrder.append("0");
+
+    emit sgPushCommandToQueue("mconfig set\r" + baOrder + "\n", false);
+    emit sgProcessCommands();
 }
 
 void CPModern::pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

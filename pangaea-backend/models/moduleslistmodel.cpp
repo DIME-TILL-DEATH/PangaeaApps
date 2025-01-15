@@ -23,7 +23,10 @@ QHash<int, QByteArray> ModulesListModel::roleNames() const
 
 void ModulesListModel::appendModule(AbstractModule *newModule)
 {
-    insertModule(newModule, m_moduleList->size()-1);
+    int pos = 0;
+    if(!m_moduleList->isEmpty()) pos = m_moduleList->size()-1;
+
+    insertModule(newModule, pos);
 }
 
 void ModulesListModel::insertModule(AbstractModule *newModule, int position)
@@ -32,7 +35,10 @@ void ModulesListModel::insertModule(AbstractModule *newModule, int position)
 
     beginInsertRows(QModelIndex(), position, position);
     newModule->setUsed(true);
-    m_moduleList->insert(position, 1, newModule);
+
+    if(m_moduleList->isEmpty()) m_moduleList->append(newModule);
+    else m_moduleList->insert(position, 1, newModule);
+
     endInsertRows();
     emit sgModulesReconfigured();
 }
@@ -41,13 +47,15 @@ void ModulesListModel::removeModule(int position)
 {
     if(position >= m_moduleList->size())
     {
-        qWarning() << Q_FUNC_INFO << "Position is more than size";
+        qWarning() << Q_FUNC_INFO << "Position is more than size:" << position << m_moduleList->size();
         return;
     }
 
     beginRemoveRows(QModelIndex(), position, position);
+    qInfo() << position << m_moduleList->size();
     m_moduleList->at(position)->setUsed(false);
-    m_moduleList->remove(position, 1);
+    m_moduleList->removeAt(position);
+    qInfo() << m_moduleList->size();
     endRemoveRows();
     emit sgModulesReconfigured();
 }
