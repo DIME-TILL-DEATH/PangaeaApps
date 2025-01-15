@@ -76,16 +76,25 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     setParamsHandler("cs", &currentPresetData.compressor.sustain);  // Type::COMPRESSOR_SUSTAIN: fullString += "cs";
     setParamsHandler("cv", &currentPresetData.compressor.volume);   // Type::COMPRESSOR_VOLUME: fullString += "cv";
 
-    // обратная совместимость
-    // setParamsHandler("lv", &currentPresetData.eq1.lp_freq);     // Type::LPF_VOLUME: fullString += "lv";
-    // setParamsHandler("hv", &currentPresetData.eq1.hp_freq);     // Type::HPF_VOLUME: fullString += "hv";
-    // setParamsHandler("ho", &currentPresetData.eq1.hp_on);       // Type::HPF_ON: fullString += "ho";
-    // setParamsHandler("lo", &currentPresetData.eq1.lp_on);       // Type::LPF_ON: fullString += "lo";
+    //---------------------New modules----------------------------
+    setParamsHandler("tr_on", &currentPresetData.tremolo.on);
+    setParamsHandler("tr_dp", &currentPresetData.tremolo.depth);
+    setParamsHandler("tr_rt", &currentPresetData.tremolo.rate);
+    setParamsHandler("tr_fm", &currentPresetData.tremolo.type);
 
-    // setParamsHandler("eqo", &currentPresetData.eq1.parametric_on);          // Type::EQ_ON: fullString += "eqo";
-    // setEqHandler("eqv", currentPresetData.eq1.band_vol);     // Type::EQ_VOLUME1: fullString += "eqv 0";
-    // // setEqHandler("eqf", currentPresetData.eq1.freq);         // Type::EQ_FREQ1: fullString += "eqf 0";
-    // setEqHandler("eqq", currentPresetData.eq1.Q);            // Type::EQ_Q1: fullString += "eqq 0";
+    setParamsHandler("ch_on", &currentPresetData.chorus.on);
+    setParamsHandler("ch_mx", &currentPresetData.chorus.mix);
+    setParamsHandler("ch_rt", &currentPresetData.chorus.rate);
+    setParamsHandler("ch_wd", &currentPresetData.chorus.width);
+    setParamsHandler("ch_hp", &currentPresetData.chorus.hpf);
+
+    setParamsHandler("ph_on", &currentPresetData.phaser.on);
+    setParamsHandler("ph_rt", &currentPresetData.phaser.rate);
+    setParamsHandler("ph_wd", &currentPresetData.phaser.width);
+    setParamsHandler("ph_cn", &currentPresetData.phaser.center);
+    setParamsHandler("ph_fb", &currentPresetData.phaser.feedback);
+    setParamsHandler("ph_st", &currentPresetData.phaser.stages);
+    setParamsHandler("ph_hp", &currentPresetData.phaser.hpf);
 
     //--------------------------------------------------------------
 
