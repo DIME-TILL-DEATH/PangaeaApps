@@ -14,7 +14,7 @@ CPModern::CPModern(Core *parent)
 
     CPModern::updateOutputModeNames();
 
-    m_processingBudget = 290;
+    m_processingBudget = 280;
 
     using namespace std::placeholders;
     m_parser.addCommandHandler("amtver", std::bind(&CPModern::amtVerCommHandler, this, _1, _2, _3));
@@ -71,10 +71,11 @@ quint16 CPModern::processingUsed()
 {
     quint16 result = 0;
 
-    foreach (AbstractModule* module, m_moduleList) {
+    foreach (AbstractModule* module, m_moduleList)
         result += module->processingTime();
-    }
+
     result += ER->processingTime();
+    result += DL->used() ? DL->processingTime() : 0;
     return result;
 }
 
@@ -99,6 +100,7 @@ void CPModern::initDevice(DeviceType deviceType)
     PH = new Phaser(this);
 
     ER = new EarlyReflections(this);
+    DL = new Delay(this);
 
     typeToModuleMap.insert(ModuleType::NG, NG);
     typeToModuleMap.insert(ModuleType::CM, CM);
@@ -110,7 +112,9 @@ void CPModern::initDevice(DeviceType deviceType)
     typeToModuleMap.insert(ModuleType::TR, TR);
     typeToModuleMap.insert(ModuleType::CH, CH);
     typeToModuleMap.insert(ModuleType::PH, PH);
-    typeToModuleMap.insert(ModuleType::ER, ER);
+    typeToModuleMap.insert(ModuleType::ER_MONO, ER);
+    typeToModuleMap.insert(ModuleType::ER_STEREO, ER);
+    typeToModuleMap.insert(ModuleType::DELAY, DL);
 
     m_avaliableModulesList.append(NG);
     m_avaliableModulesList.append(CM);
@@ -644,7 +648,8 @@ void CPModern::getOutputModeCommHandler(const QString &command, const QByteArray
 
 void CPModern::configModules(const PresetModern &preset)
 {
-    foreach(AbstractModule* module, m_moduleList){
+    foreach(AbstractModule* module, m_moduleList)
+    {
         module->setUsed(false);
     }
     m_moduleList.clear();
@@ -660,6 +665,9 @@ void CPModern::configModules(const PresetModern &preset)
             m_moduleList.append(modulePtr);
         }
     }
+
+    DL->setUsed(preset.presetData.reverb_config[0] == ModuleType::DELAY);
+    ER->setReverbType(static_cast<ModuleType>(preset.presetData.reverb_config[1]));
 
     m_modulesListModel.refreshModel(&m_moduleList);
     emit modulesListModelChanged();
@@ -681,6 +689,18 @@ void CPModern::setModules()
     while(baOrder.size() < 20) baOrder.append("0");
 
     emit sgPushCommandToQueue("mconfig set\r" + baOrder + "\n", false);
+
+    baOrder.clear();
+    QByteArray tempBa =  QString().setNum(DL->used() ? ModuleType::DELAY : ModuleType::BYPASS, 16).toUtf8();
+    if(tempBa.size() == 1) tempBa.push_front("0");
+    baOrder.append(tempBa);
+
+    tempBa =  QString().setNum(ER->reverbType(), 16).toUtf8();
+    if(tempBa.size() == 1) tempBa.push_front("0");
+    baOrder.append(tempBa);
+
+    emit sgPushCommandToQueue("rvconfig set\r" + baOrder + "\n", false);
+
     emit sgProcessCommands();
 }
 
@@ -745,6 +765,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     CH->setValues(presetData.chorus);
     PH->setValues(presetData.phaser);
     ER->setValues(presetData.reverb);
+    DL->setValues(presetData.delay);
     emit deviceUpdatingValues();
 
     switch(m_presetManager.currentState())

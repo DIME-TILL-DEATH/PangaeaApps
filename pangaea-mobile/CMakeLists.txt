@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21.1)
-project(Pangaea-mobile VERSION 0.12.4 LANGUAGES CXX)
-set(VERSION_CODE 32)
+project(Pangaea-mobile VERSION 0.12.5 LANGUAGES CXX)
+set(VERSION_CODE 33)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
 
@@ -143,7 +143,6 @@ if(ANDROID)
             qml/Modules/EQExtModern.qml
             qml/Modules/EQPreviewLegacy.qml
             qml/Modules/EQPreviewModern.qml
-            qml/Modules/ER.qml
             qml/Modules/HP.qml
             qml/Modules/IR.qml
             qml/Modules/LP.qml
@@ -152,6 +151,8 @@ if(ANDROID)
             qml/Modules/PA.qml
             qml/Modules/PR.qml
             qml/Modules/PS.qml
+            qml/Modules/ER.qml
+            qml/Modules/DL.qml
             qml/Modules/TR.qml
             qml/Modules/CH.qml
             qml/Modules/PH.qml
@@ -175,6 +176,7 @@ if(ANDROID)
             qml/Tutorials/TutorialPH.qml
             qml/Tutorials/TutorialIR.qml
             qml/Tutorials/TutorialER.qml
+            qml/Tutorials/TutorialDL.qml
     )
 
     qt_add_qml_module(qml_pages

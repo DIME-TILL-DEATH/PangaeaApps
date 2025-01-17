@@ -22,6 +22,7 @@
 #include "chorus.h"
 #include "phaser.h"
 #include "earlyreflections.h"
+#include "delay.h"
 
 AbstractModule::AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff)
     : QObject{owner},
@@ -36,6 +37,7 @@ AbstractModule::AbstractModule(AbstractDevice* owner, ModuleType moduleType, QSt
 void AbstractModule::registerTypestoQml()
 {
     qmlRegisterType<ControlValue>("CppObjects", 1, 0, "ControlValue");
+
     qmlRegisterUncreatableType<AbstractModule>("CppObjects", 1, 0, "Module", "Cannot create Module in QML");
     qmlRegisterUncreatableType<PresetVolume>("CppObjects", 1, 0, "PresetVolume", "Cannot create MasterVolume in QML");
     qmlRegisterUncreatableType<NoiseGate>("CppObjects", 1, 0, "NoiseGate", "Cannot create NoiseGate in QML");
@@ -51,7 +53,8 @@ void AbstractModule::registerTypestoQml()
     qmlRegisterUncreatableType<Tremolo>("CppObjects", 1, 0, "Tremolo", "Cannot create TR in QML");
     qmlRegisterUncreatableType<Chorus>("CppObjects", 1, 0, "Chorus", "Cannot create CH in QML");
     qmlRegisterUncreatableType<Phaser>("CppObjects", 1, 0, "Phaser", "Cannot create PH in QML");
-    qmlRegisterUncreatableType<EarlyReflections>("CppObjects", 1, 0, "EarlyReflections", "Cannot create LP in QML");
+    qmlRegisterUncreatableType<EarlyReflections>("CppObjects", 1, 0, "EarlyReflections", "Cannot create ER in QML");
+    qmlRegisterUncreatableType<Delay>("CppObjects", 1, 0, "Delay", "Cannot create DL in QML");
 }
 
 void AbstractModule::setUsed(bool newValue)

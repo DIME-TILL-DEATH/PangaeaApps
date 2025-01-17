@@ -3,9 +3,9 @@
 #include "abstractdevice.h"
 
 EarlyReflections::EarlyReflections(AbstractDevice *owner)
-    : AbstractModule{owner, ModuleType::ER, "ER", "eo"}
+    : AbstractModule{owner, ModuleType::ER_MONO, "ER", "eo"}
 {
-    m_processingTime = 75; //mono 45
+    m_processingTime = 80; //mono 50
 
     m_reflectionsVolume = new ControlValue(this, "ev", "Volume");
     m_reflectionsType = new ControlValue(this, "et", "ER Type");
@@ -27,4 +27,31 @@ void EarlyReflections::setValues(const reverb_data_t &rvData)
     m_reflectionsType->setControlValue(rvData.type);
 
     emit dataChanged();
+}
+
+quint16 EarlyReflections::processingTime() const
+{
+    switch(m_reverbType)
+    {
+    case ModuleType::ER_MONO: return m_processingTimeMono;
+    case ModuleType::ER_STEREO: return m_processingTimeStereo;
+    default: return 0;
+    }
+}
+
+ModuleType EarlyReflections::reverbType() const
+{
+    return m_reverbType;
+}
+
+void EarlyReflections::setReverbType(const ModuleType &newReverbType)
+{
+    if (m_reverbType == newReverbType)
+        return;
+
+    m_used = (newReverbType == ModuleType::ER_MONO) ||  (newReverbType == ModuleType::ER_STEREO);
+    emit usedChanged();
+
+    m_reverbType = newReverbType;
+    emit reverbTypeChanged();
 }

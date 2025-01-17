@@ -19,6 +19,8 @@ void Chorus::setValues(const chorus_t &chData)
     m_rate->setControlValue(chData.rate);
     m_width->setControlValue(chData.width);
     m_hpf->setControlValue(chData.hpf);
+
+    emit dataChanged();
 }
 
 ControlValue *Chorus::mix() const

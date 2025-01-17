@@ -58,6 +58,7 @@ qt_add_library(pangaea-backend STATIC
     modules/lowpassfilter.h modules/lowpassfilter.cpp
     modules/cabsim.h modules/cabsim.cpp
     modules/earlyreflections.h modules/earlyreflections.cpp
+    modules/delay.h modules/delay.cpp
     modules/tremolo.h modules/tremolo.cpp
     modules/chorus.h modules/chorus.cpp
     modules/phaser.h modules/phaser.cpp

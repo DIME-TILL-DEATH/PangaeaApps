@@ -42,11 +42,15 @@ Item {
     }
 
     Column{
+        id: _column
+
         anchors.fill: parent
 
         spacing: 4
 
         Button{
+            id: _btnAddModule
+
             text: qsTr("Add module")
 
             width: parent.width/2
@@ -87,7 +91,9 @@ Item {
             id: _listConfig
 
             width: parent.width
-            height: parent.height * 11/16
+            height: parent.height * 9/16
+
+            spacing: 1
 
             z: _rectConf.z + 5
 
@@ -105,7 +111,7 @@ Item {
                     property int visualIndex: DelegateModel.itemsIndex
 
                     width: _listConfig.width
-                    height: _listConfig.height/8
+                    height: _listConfig.height * 1/8
 
                     onEntered: function (drag) {
                         var from = drag.source.visualIndex;
@@ -259,6 +265,111 @@ Item {
                 }
             }
         }
+
+        Rectangle {
+            id: _spatialConf
+
+            property bool deviceUpdatingValues: false
+
+            color: Style.colorModul
+
+            radius: Style.baseRadius
+            border.width: 1
+            border.color: Style.currentTheme.colorBorderOn
+
+            width: _listConfig.width
+            height: _listConfig.height * 6/16 * 0.95
+            Column{
+                anchors.fill: parent
+                Item{
+                    width: _listConfig.width
+                    height: _listConfig.height * 1/16
+
+                    MText{
+                        anchors.centerIn: parent
+                        text: "Delay/Reverb config"
+                        color: Style.colorText
+                    }
+                }
+
+                MComboBox{
+                    id: _delayCombo
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: _listConfig.width * 0.7
+                    height: _listConfig.height * 1/8 * 0.9
+
+                    model: ["Delay disabled",
+                            "Delay enabled(cost " + UiCore.currentDevice.DL.processingTime + ")"]
+
+                    currentIndex: UiCore.currentDevice.DL.used
+
+                    onActivated:
+                    {
+                        if(!_spatialConf.deviceUpdatingValues)
+                        {
+                            UiCore.currentDevice.DL.used = _delayCombo.currentIndex;
+                            // UiCore.currentDevice.setModules();
+                            UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
+                        }
+                    }
+                }
+
+                MComboBox{
+                    id: _earlyCombo
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: _listConfig.width * 0.7
+                    height: _listConfig.height * 1/8 * 0.9
+
+                    model: ["Early reflections disabled",
+                        "Early reflections mono(cost " + UiCore.currentDevice.ER.processingTimeMono + ")",
+                        "Early reflections stereo(cost) " + UiCore.currentDevice.ER.processingTimeStereo + ")"]
+
+                    onActivated:
+                    {
+                        if(!_spatialConf.deviceUpdatingValues)
+                        {
+                            var revType;
+                            switch(_earlyCombo.currentIndex)
+                            {
+                            case 0: revType = ModuleType.BYPASS; break;
+                            case 1: revType = ModuleType.ER_MONO; break;
+                            case 2: revType = ModuleType.ER_STEREO; break;
+                            }
+
+                            UiCore.currentDevice.ER.reverbType = revType;
+                            // UiCore.currentDevice.setModules();
+                            UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
+                        }
+                    }
+
+                    function revTypeToIndex()
+                    {
+                        switch(UiCore.currentDevice.ER.reverbType)
+                        {
+                        case ModuleType.ER_MONO: _earlyCombo.currentIndex = 1; break;
+                        case ModuleType.ER_STEREO: _earlyCombo.currentIndex = 2; break;
+                        default: _earlyCombo.currentIndex = 0;
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        revTypeToIndex();
+                    }
+                }
+            }
+
+            Connections{
+                target: UiCore.currentDevice
+
+                function onDeviceUpdatingValues()
+                {
+                    _spatialConf.deviceUpdatingValues = true;
+                    _delayCombo.currentIndex = UiCore.currentDevice.DL.used;
+                    _earlyCombo.revTypeToIndex();
+                    _spatialConf.deviceUpdatingValues = false;
+                }
+            }
+        }
     }
 
     ModulsManagementWindow{
@@ -267,51 +378,3 @@ Item {
         visible: false
     }
 }
-
-// SwipeDelegate {
-//     id: swipeDelegate
-
-//     signal showLargePreview(var dataPoints)
-//     signal hideLargePreview()
-
-//     contentItem: DelegateItem{
-//         width: swipeDelegate.width
-//         height: swipeDelegate.height
-
-//         Component.onCompleted: {
-//             showLargePreview.connect(swipeDelegate.showLargePreview)
-//             hideLargePreview.connect(swipeDelegate.hideLargePreview)
-//         }
-//     }
-
-
-//     swipe.right: Label {
-//         id: deleteLabel
-//         text: qsTr("Delete")
-//         color: "black"
-//         verticalAlignment: Label.AlignVCenter
-//         padding: 12
-//         height: parent.height
-//         anchors.right: parent.right
-
-//         SwipeDelegate.onClicked: PlaylistModel.remove(index)
-
-//         background: Rectangle {
-//             color: deleteLabel.SwipeDelegate.pressed ? Qt.darker("tomato", 1.1) : "tomato"
-//         }
-//     }
-
-//     background: Rectangle{
-//         id: _mainRec
-
-//         color:model.playlistElement.isCurrentPrintingElement ? "lightgray" : "transparent"
-//     }
-
-//     onClicked: {
-//         _listView.currentIndex = model.index
-//     }
-
-//     onDoubleClicked: {
-//         PlaylistModel.changePrint(model.index);
-//     }
-// }

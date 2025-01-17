@@ -29,8 +29,6 @@ public:
     ControlValue *stages() const;
     ControlValue *hpf() const;
 
-signals:
-    void dataChanged();
 private:
     ControlValue *m_mix = nullptr;
     ControlValue *m_rate = nullptr;

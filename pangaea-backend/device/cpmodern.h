@@ -23,6 +23,7 @@
 #include "chorus.h"
 #include "phaser.h"
 #include "earlyreflections.h"
+#include "delay.h"
 
 
 class CPModern : public AbstractDevice
@@ -31,6 +32,7 @@ class CPModern : public AbstractDevice
 
     Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
     Q_PROPERTY(EarlyReflections* ER  READ getER CONSTANT)
+    Q_PROPERTY(Delay* DL  READ getDL CONSTANT)
     Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
 
     Q_PROPERTY(IrFile currentIrFile READ currentIrFile WRITE setCurrentIrFile NOTIFY currentIrFileChanged FINAL)
@@ -48,7 +50,7 @@ public:
     void readFullState() override;
 
     void configModules(const PresetModern& preset);
-    void setModules();
+    Q_INVOKABLE void setModules();
 
     Q_INVOKABLE void saveChanges() override;
     Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) override;
@@ -70,6 +72,7 @@ public:
 
     PresetVolume* getMV() {return MV;};
     EarlyReflections* getER() {return ER;};
+    Delay *getDL() {return DL;};
 
     QString currentPresetName() const;;
     void setCurrentPresetName(const QString &newCurrentPresetName);
@@ -94,6 +97,7 @@ public:
     Chorus* CH;
     Phaser* PH;
     EarlyReflections* ER;
+    Delay* DL;
 
     void slIrEnabledChanged();
 
@@ -103,6 +107,7 @@ public:
 
     IrFile currentIrFile() const {return actualPreset.irFile;};
     void setCurrentIrFile(const IrFile &newCurrentIrFile);
+
 
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;

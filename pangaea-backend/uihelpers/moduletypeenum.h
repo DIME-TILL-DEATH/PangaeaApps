@@ -28,9 +28,13 @@ public:
         CH,
         PH,
         EQ2,
+        //---------
+        NUM_MONO_MODULE_TYPES,
         //=====================
         // Stereo moduls
-        ER = 64,
+        ER_MONO = 64,
+        ER_STEREO,
+        DELAY,
         //====================
         MASTER=128
     };

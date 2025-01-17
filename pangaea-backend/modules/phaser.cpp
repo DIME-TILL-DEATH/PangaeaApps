@@ -25,6 +25,7 @@ void Phaser::setValues(const phaser_t &phData)
     m_feedback->setControlValue(phData.feedback);
     m_stages->setControlValue(phData.stages);
     m_hpf->setControlValue(phData.hpf);
+    emit dataChanged();
 }
 
 ControlValue *Phaser::mix() const

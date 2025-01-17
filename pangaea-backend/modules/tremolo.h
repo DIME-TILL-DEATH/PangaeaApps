@@ -20,8 +20,6 @@ public:
     ControlValue *form() const;
 
     void setValues(const tremolo_t& trData);
-signals:
-    void dataChanged();
 
 private:
     ControlValue *m_depth = nullptr;

@@ -14,5 +14,7 @@
         <file>qml/Modules/PH.qml</file>
         <file>qml/Tutorials/TutorialCH.qml</file>
         <file>qml/Tutorials/TutorialPH.qml</file>
+        <file>qml/Modules/DL.qml</file>
+        <file>qml/Tutorials/TutorialDL.qml</file>
     </qresource>
 </RCC>

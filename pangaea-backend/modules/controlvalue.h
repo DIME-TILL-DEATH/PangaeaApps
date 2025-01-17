@@ -9,6 +9,7 @@
 class ControlValue : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged FINAL)
 

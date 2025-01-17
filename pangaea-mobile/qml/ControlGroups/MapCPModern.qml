@@ -1,5 +1,6 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtCore
+
 import StyleSettings 1.0
 
 import CustomOverlays 1.0
@@ -97,7 +98,9 @@ Item{
         {
             id: listViewModules
             width: parent.width
-            height: (parent.height/_mapContent.countElements) * 20 - _moduleColumn.spacing * 4
+            // height: (parent.height/_mapContent.countElements) * 20 - _moduleColumn.spacing * 4
+            height: _mapContent.height - _presetNameContainer.height
+                    - _reverbSectionConatiner.height - _clipIndContainer.height - _moduleColumn.spacing * 4
             spacing: 2
 
             // interactive: false
@@ -199,11 +202,85 @@ Item{
             }
         }
 
-        ER{
-            id: _er
-            module: UiCore.currentDevice.ER
+        Column{
+            id: _reverbSectionConatiner
+
             width: parent.width
-            height: _main.height*2/countElements - _moduleColumn.spacing;
+            // height: _dlRvContainer.enabled ?  _main.height*8/countElements : _main.height*1/countElements
+            height: _dlRvContainer.enabled ?  _hdrSpatial.height + spacing + _dlRvContainer.height
+                                           : _main.height*1/countElements
+
+            spacing: 2
+
+            Rectangle {
+                id: _hdrSpatial
+
+                color: Style.colorModul
+
+                clip: true
+
+                radius: Style.baseRadius
+                border.width: 1
+                border.color: Style.currentTheme.colorBorderOn
+
+                width: parent.width
+                height: _main.height*1/countElements
+
+                MText{
+                    anchors.centerIn: parent
+                    text: (_dlRvContainer.enabled ? "(-)" : "(+)") + "Delay/Reverb"
+                    color: Style.colorText
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        _dlRvContainer.enabled = !_dlRvContainer.enabled
+                    }
+
+                    Settings{
+
+                    }
+                }
+            }
+
+            Column{
+                id: _dlRvContainer
+
+                spacing: 2
+
+                enabled: false
+
+                width: parent.width
+                height: _dl.height + _er.height + spacing
+
+
+                DL{
+                    id: _dl
+                    module: UiCore.currentDevice.DL
+                    width: parent.width
+                    height: UiCore.currentDevice.DL.used ? _main.height*5/countElements - _moduleColumn.spacing : 0
+
+                    visible: UiCore.currentDevice.DL.used
+                }
+
+                ER{
+                    id: _er
+                    module: UiCore.currentDevice.ER
+                    width: parent.width
+                    height: UiCore.currentDevice.ER.used ? _main.height*2/countElements - _moduleColumn.spacing : 0
+                    visible: UiCore.currentDevice.ER.used
+                }
+
+                Settings{
+                    property alias spatialSettingsView: _dlRvContainer.enabled
+                }
+            }
+
+            Behavior on height{
+                NumberAnimation { duration: 200 }
+            }
         }
 
         ClipIndicator {

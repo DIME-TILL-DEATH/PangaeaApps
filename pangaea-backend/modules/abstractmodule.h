@@ -27,7 +27,7 @@ public:
     bool used() const {return m_used;};
     void setUsed(bool newValue);
 
-    quint16 processingTime() const {return m_processingTime;};
+    virtual quint16 processingTime() const {return m_processingTime;};
 
     bool moduleEnabled() const {return m_moduleEnabled;};
     virtual void setModuleEnabled(bool newEnabled);
