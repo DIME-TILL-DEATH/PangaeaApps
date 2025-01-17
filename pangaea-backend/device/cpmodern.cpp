@@ -122,7 +122,7 @@ void CPModern::initDevice(DeviceType deviceType)
     m_avaliableModulesList.append(PA);
     m_avaliableModulesList.append(IR);
     m_avaliableModulesList.append(EQ1);
-    // m_avaliableModulesList.append(EQ2);
+    m_avaliableModulesList.append(EQ2);
     m_avaliableModulesList.append(TR);
     m_avaliableModulesList.append(CH);
     m_avaliableModulesList.append(PH);

@@ -181,18 +181,27 @@ Item{
                         break;
                     }
 
-                    case ModuleType.EQ2:
                     case ModuleType.EQ1:
                     {
                         _delegateLoader.source = "/Modules/qml/Modules/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
-                        _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
+                        _delegateLoader.item.extVisible.connect(_mapContent.showFullEq1);
+                        // _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
 
-                        // // TODO fixed item
-                        _eqExtLoader.source = "/Modules/qml/Modules/EQExtModern.qml";
-                        _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
-                        _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
-                        _eqExtLoader.item.eqModule = moduleInstance;
+                        // _eqExtLoader.eq1Instance = moduleInstace
+                        // _eqExtLoader.source = "/Modules/qml/Modules/EQExtModern.qml";
+                        _eqExtLoader.eq1Instance = moduleInstance;
+                        break;
+                    }
+
+                    case ModuleType.EQ2:
+                    {
+                        _delegateLoader.source = "/Modules/qml/Modules/EQPreviewModern.qml";
+                        _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
+                        _delegateLoader.item.extVisible.connect(_mapContent.showFullEq2);
+                        // _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
+
+                        _eqExtLoader.eq2Instance = moduleInstance;
                         break;
                     }
                     }
@@ -301,19 +310,38 @@ Item{
         listViewModules.positionViewAtIndex(index, ListView.Center)
     }
 
-    function showFullEq(){ 
+    function showFullEq1(){
+        _eqExtLoader.eqModule = _eqExtLoader.eq1Instance;
+        _eqExtLoader.active = true;
+        // _eqExtLoader.item.update();
+        _eqExtLoader.visible = true;
+    }
+
+    function showFullEq2(){
+        _eqExtLoader.eqModule = _eqExtLoader.eq2Instance;
+        _eqExtLoader.active = true;
+        // _eqExtLoader.item.update();
         _eqExtLoader.visible = true;
     }
 
     function hideFullEq(){
         _eqExtLoader.visible = false;
+        _eqExtLoader.active =  false;
     }
 
     Loader{
         id: _eqExtLoader
 
+        property EqParametric eq1Instance
+        property EqParametric eq2Instance
+
+        property EqParametric eqModule
+
+        source: "/Modules/qml/Modules/EQExtModern.qml";
+
         anchors.centerIn: parent
 
+        active: false
         visible: false
 
         height: parent.height ///1.1
@@ -322,6 +350,15 @@ Item{
 
         onLoaded:{
 
+        }
+
+        Connections{
+            target: _eqExtLoader.item
+
+            function onHide()
+            {
+                _mapContent.hideFullEq();
+            }
         }
     }
 }

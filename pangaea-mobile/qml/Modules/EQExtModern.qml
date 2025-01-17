@@ -18,7 +18,8 @@ Item
 
     // anchors.centerIn: parent
 
-    property EqParametric eqModule
+    // on top level, in loader
+    property EqParametric eqModule: parent.eqModule
 
     property bool on: eqModule.moduleEnabled
 
