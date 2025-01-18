@@ -49,6 +49,7 @@ private:
     void irCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void listCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void mconfigCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void rvconfigCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void getPresetListCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     void savePresetCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
@@ -61,9 +62,12 @@ private:
     void escAckCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     // Parameters comm handlers
-    QMap<QString, quint8*> paramsMap;
+    QMap<QString, quint8*> paramsByteMap;
+    QMap<QString, quint16*> paramsWordMap;
     void setParamsHandler(QString commStr, quint8* commPtr);
-    void parametersCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void setParamsHandler(QString commStr, quint16* commPtr);
+    void parametersByteCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void parametersWordCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void eqParametersCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
 

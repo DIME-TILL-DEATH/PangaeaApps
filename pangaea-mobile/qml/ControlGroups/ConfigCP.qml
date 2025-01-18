@@ -307,8 +307,12 @@ Item {
                     {
                         if(!_spatialConf.deviceUpdatingValues)
                         {
+                            if(UiCore.currentDevice.processingUsed + UiCore.currentDevice.DL.processing > UiCore.currentDevice.processingBudget)
+                            {
+                                _delayCombo.currentIndex = 0;
+                                _msgBudegetError.open();
+                            }
                             UiCore.currentDevice.DL.used = _delayCombo.currentIndex;
-                            // UiCore.currentDevice.setModules();
                             UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
                         }
                     }
@@ -332,12 +336,31 @@ Item {
                             switch(_earlyCombo.currentIndex)
                             {
                             case 0: revType = ModuleType.BYPASS; break;
-                            case 1: revType = ModuleType.ER_MONO; break;
-                            case 2: revType = ModuleType.ER_STEREO; break;
+                            case 1:
+                            {
+                                revType = ModuleType.ER_MONO;
+                                if(UiCore.currentDevice.processingUsed + UiCore.currentDevice.ER.processingTimeMono > UiCore.currentDevice.processingBudget)
+                                {
+                                    _earlyCombo.currentIndex = 0;
+                                    revType = ModuleType.BYPASS;
+                                    _msgBudegetError.open();
+                                }
+                                break;
+                            }
+                            case 2:
+                            {
+                                revType = ModuleType.ER_STEREO;
+                                if(UiCore.currentDevice.processingUsed + UiCore.currentDevice.ER.processingTimeStereo > UiCore.currentDevice.processingBudget)
+                                {
+                                    _earlyCombo.currentIndex = 0;
+                                    revType = ModuleType.BYPASS;
+                                    _msgBudegetError.open();
+                                }
+                                break;
+                            }
                             }
 
                             UiCore.currentDevice.ER.reverbType = revType;
-                            // UiCore.currentDevice.setModules();
                             UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
                         }
                     }
@@ -376,5 +399,16 @@ Item {
         id: _modulesManagementWindow
 
         visible: false
+    }
+
+    CustomMessageDialog
+    {
+        id: _msgBudegetError
+
+        buttons: Dialog.Ok
+
+        text: qsTr("Device doesn't have enough processing budget to use selected configuration");
+
+        headerText: qsTr("Processing budget error")
     }
 }

@@ -34,6 +34,7 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     m_parser.addCommandHandler("pls", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("plist", std::bind(&MockCP16Modern::getPresetListCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("mconfig", std::bind(&MockCP16Modern::mconfigCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("rvconfig", std::bind(&MockCP16Modern::rvconfigCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("sp", std::bind(&MockCP16Modern::savePresetCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pc", std::bind(&MockCP16Modern::presetChangeCommHandler, this, _1, _2, _3));
@@ -95,6 +96,13 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     setParamsHandler("ph_fb", &currentPresetData.phaser.feedback);
     setParamsHandler("ph_st", &currentPresetData.phaser.stages);
     setParamsHandler("ph_hp", &currentPresetData.phaser.hpf);
+
+    setParamsHandler("ch_on", &currentPresetData.delay.on);
+    setParamsHandler("ch_mx", &currentPresetData.delay.mix);
+    setParamsHandler("ch_rt", &currentPresetData.delay.time);
+    setParamsHandler("ch_wd", &currentPresetData.delay.feedback);
+    setParamsHandler("ch_hp", &currentPresetData.delay.hpf);
+    setParamsHandler("ch_hp", &currentPresetData.delay.lpf);
 
     //--------------------------------------------------------------
 
@@ -628,6 +636,31 @@ void MockCP16Modern::mconfigCommHandler(const QString &command, const QByteArray
     emit answerReady("mconfig\r" + baOrder + "\n");
 }
 
+void MockCP16Modern::rvconfigCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QList<QByteArray> argsList = arguments.split('\r');
+    if(argsList.size()>0)
+    {
+        if(argsList.first() == "set")
+        {
+            memset(currentPresetData.reverb_config, 0, 2);
+            QByteArray listData = QByteArray::fromHex(data);
+            memcpy(currentPresetData.reverb_config, listData.data(), listData.size());
+        }
+    }
+
+    QByteArray baOrder;
+    for(int i=0; i < 2;  i++)
+    {
+        QByteArray tempBa = QString().setNum(currentPresetData.reverb_config[i], 16).toUtf8();
+
+        if(tempBa.size() == 1) tempBa.push_front("0");
+        baOrder.append(tempBa);
+    }
+
+    emit answerReady("rvconfig\r" + baOrder + "\n");
+}
+
 void MockCP16Modern::getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QString answer("plist");
@@ -801,15 +834,21 @@ void MockCP16Modern::escAckCommHandler(const QString &command, const QByteArray 
 
 void MockCP16Modern::setParamsHandler(QString commStr, quint8 *commPtr)
 {
-    paramsMap.insert(commStr, commPtr);
+    paramsByteMap.insert(commStr, commPtr);
     using namespace std::placeholders;
-    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Modern::parametersCommHandler, this, _1, _2, _3));
-
+    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Modern::parametersByteCommHandler, this, _1, _2, _3));
 }
 
-void MockCP16Modern::parametersCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+void MockCP16Modern::setParamsHandler(QString commStr, quint16 *commPtr)
 {
-    quint8* paramPtr = paramsMap.value(command);
+    paramsWordMap.insert(commStr, commPtr);
+    using namespace std::placeholders;
+    m_parser.addCommandHandler(commStr, std::bind(&MockCP16Modern::parametersWordCommHandler, this, _1, _2, _3));
+}
+
+void MockCP16Modern::parametersByteCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    quint8* paramPtr = paramsByteMap.value(command);
 
     QString strEdit(arguments);
     strEdit.remove('\r');
@@ -819,7 +858,20 @@ void MockCP16Modern::parametersCommHandler(const QString &command, const QByteAr
         *paramPtr = correctedArgs.toInt(nullptr, 16);
     }
     emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
+}
 
+void MockCP16Modern::parametersWordCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    quint16* paramPtr = paramsWordMap.value(command);
+
+    QString strEdit(arguments);
+    strEdit.remove('\r');
+    QByteArray correctedArgs = strEdit.toUtf8();
+    if(!correctedArgs.isEmpty())
+    {
+        *paramPtr = correctedArgs.toInt(nullptr, 16);
+    }
+    emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
 }
 
 void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -847,6 +899,8 @@ void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByte
         qint8 val = argsList.at(2).toInt(nullptr, 16);
         qint16 freqBand = argsList.at(2).toInt(nullptr, 16);
 
+        qDebug() << val << freqBand;
+
         if(command == "eq0")
         {
             if(band != -1)
@@ -861,12 +915,12 @@ void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByte
                 if(argsList.at(0) == "hp")
                 {
                     if(argsList.at(1) == "o") currentPresetData.eq1.hp_on = val;
-                    if(argsList.at(1) == "f") currentPresetData.eq1.hp_freq = val;
+                    if(argsList.at(1) == "f") currentPresetData.eq1.hp_freq = freqBand;
                 }
                 if(argsList.at(0) == "lp")
                 {
                     if(argsList.at(1) == "o") currentPresetData.eq1.lp_on = val;
-                    if(argsList.at(1) == "f") currentPresetData.eq1.lp_freq = val;
+                    if(argsList.at(1) == "f") currentPresetData.eq1.lp_freq = freqBand;
                 }
                 if(argsList.at(0) == "par")
                 {
@@ -888,12 +942,12 @@ void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByte
                 if(argsList.at(0) == "hp")
                 {
                     if(argsList.at(1) == "o") currentPresetData.eq2.hp_on = val;
-                    if(argsList.at(1) == "f") currentPresetData.eq2.hp_freq = val;
+                    if(argsList.at(1) == "f") currentPresetData.eq2.hp_freq = freqBand;
                 }
                 if(argsList.at(0) == "lp")
                 {
                     if(argsList.at(1) == "o") currentPresetData.eq2.lp_on = val;
-                    if(argsList.at(1) == "f") currentPresetData.eq2.lp_freq = val;
+                    if(argsList.at(1) == "f") currentPresetData.eq2.lp_freq = freqBand;
                 }
                 if(argsList.at(0) == "par")
                 {

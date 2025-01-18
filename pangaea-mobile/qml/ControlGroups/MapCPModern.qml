@@ -313,14 +313,12 @@ Item{
     function showFullEq1(){
         _eqExtLoader.eqModule = _eqExtLoader.eq1Instance;
         _eqExtLoader.active = true;
-        // _eqExtLoader.item.update();
         _eqExtLoader.visible = true;
     }
 
     function showFullEq2(){
         _eqExtLoader.eqModule = _eqExtLoader.eq2Instance;
         _eqExtLoader.active = true;
-        // _eqExtLoader.item.update();
         _eqExtLoader.visible = true;
     }
 

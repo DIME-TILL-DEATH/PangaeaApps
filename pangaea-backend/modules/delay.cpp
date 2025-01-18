@@ -9,7 +9,7 @@ Delay::Delay(AbstractDevice *owner)
 
     m_mix = new ControlValue(this, "dl_mx", "Mix", "", 0, 63, 0, 63);
     m_time = new ControlValue(this, "dl_tm", "Time", "ms",  50, 500, 50, 500);
-    m_feedback = new ControlValue(this, "dl_fb", "Feedback", "",  0, 63, 0, 127);
+    m_feedback = new ControlValue(this, "dl_fb", "Feedback", "",  0, 63, 0, 63);
     m_hpf = new ControlValue(this, "dl_hp", "HPF", "Hz",  0, 127, 20, 1000);
     m_lpf = new ControlValue(this, "dl_lp", "LPF", "Hz",  0, 127, 1000, 10000);
 }
