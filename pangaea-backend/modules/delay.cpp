@@ -5,7 +5,7 @@
 Delay::Delay(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::DELAY, "DL", "dl_on"}
 {
-    m_processingTime = 45;
+    m_processingTime = 50;
 
     m_mix = new ControlValue(this, "dl_mx", "Mix", "", 0, 63, 0, 63);
     m_time = new ControlValue(this, "dl_tm", "Time", "ms",  50, 500, 50, 500);

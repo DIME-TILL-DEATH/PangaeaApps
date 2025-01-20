@@ -51,10 +51,10 @@ Item {
         Button{
             id: _btnAddModule
 
-            text: qsTr("Add module")
+            text: qsTr("Add/Remove module")
 
             width: parent.width/2
-            height: parent.height/15
+            height: parent.height/12
 
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -278,7 +278,7 @@ Item {
             border.color: Style.currentTheme.colorBorderOn
 
             width: _listConfig.width
-            height: _listConfig.height * 6/16 * 0.95
+            height: _listConfig.height * 6/16 * 0.8
             Column{
                 anchors.fill: parent
                 Item{

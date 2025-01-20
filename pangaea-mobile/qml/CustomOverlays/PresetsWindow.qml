@@ -79,7 +79,7 @@ CustomMessageDialog {
     ListView{
         id: _presetListView
 
-        width: _root.width*0.95
+        width: _root.width *0.95
         height: _root.height-_root.headerHeight*2-_root.footerHeight
 
         currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxPresetCount + UiCore.currentDevice.preset
@@ -97,11 +97,20 @@ CustomMessageDialog {
         ScrollBar.vertical: ScrollBar{
             active: true
             visible: true
+
+            policy: ScrollBar.AlwaysOn
+
+            contentItem: Rectangle {
+                     width: _presetListView.width*0.025
+                     implicitHeight: _presetListView.height/4
+                     radius: width / 2
+                     color: Style.currentTheme.colorBorderOn
+                 }
         }
 
         spacing: 4
 
-        snapMode: ListView.SnapToItem
+        // snapMode: ListView.SnapToItem
 
         delegate: PresetsListDelegate{
             width: _presetListView.width*0.95

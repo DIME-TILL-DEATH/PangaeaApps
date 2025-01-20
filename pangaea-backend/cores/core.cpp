@@ -179,7 +179,7 @@ void Core::processCommands()
         }
         case DeviceConnectionType::BLE:
         {
-            chunckSize=120;
+            chunckSize= 120;
             sleepTime=150;
             break;
         }

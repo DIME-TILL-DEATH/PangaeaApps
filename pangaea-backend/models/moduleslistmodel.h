@@ -19,6 +19,7 @@ public:
     Q_INVOKABLE void appendModule(AbstractModule* newModule);
     Q_INVOKABLE void insertModule(AbstractModule* newModule, int position);
     Q_INVOKABLE void removeModule(int position);
+    Q_INVOKABLE void removeModuleByType(ModuleType moduleType);
     Q_INVOKABLE void moveModule(int from, int to);
 
     void refreshModel(QList<AbstractModule *> *newModulesList);

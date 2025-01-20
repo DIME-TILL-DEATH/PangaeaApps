@@ -65,7 +65,7 @@ Item{
                 width: parent.width
                 height: parent.height * 0.05
                 MText{
-                    text: qsTr("Add module")
+                    text: qsTr("Add/Remove module")
                     color: "white"
                     anchors.centerIn: parent
                     horizontalAlignment: Text.AlignHCenter
@@ -100,7 +100,7 @@ Item{
                     visible: true
                 }
 
-                spacing: 4
+                spacing: 3
 
                 snapMode: ListView.SnapToItem
 
@@ -108,7 +108,7 @@ Item{
                     id: _rectDelegate
 
                     width: _moduleListView.width
-                    height: _moduleListView.height/12
+                    height: _moduleListView.height/11
 
                     gradient: Gradient{
                         GradientStop{
@@ -143,7 +143,7 @@ Item{
                                 text: modelData.moduleName
 
 
-                                color: Style.colorText
+                                color:  modelData.used ? Style.colorBtnDisabled : Style.colorText
 
                                 anchors.fill: parent
 
@@ -161,7 +161,8 @@ Item{
                                 text: qsTr("cost: ") + modelData.processingTime
 
                                 anchors.centerIn: parent
-                                color: _delegateRow.isResourcesEnough ? Style.colorText : "red"
+                                color: modelData.used ? (Style.colorBtnDisabled) :
+                                                        (_delegateRow.isResourcesEnough ? Style.colorText : "red")
 
 
                                 elide: Text.ElideMiddle
@@ -183,15 +184,19 @@ Item{
                         }
 
                         MButton{
-                            textButton: modelData.used ? qsTr("Used") : "+"
+                            // textButton: modelData.used ? qsTr("Used") : "+"
+                            textButton: modelData.used ? "-" : "+"
 
                             width: parent.width * 3/16
                             height: parent.height
 
-                            enabled: !modelData.used & _delegateRow.isResourcesEnough
+                            enabled: modelData.used ? "true" : _delegateRow.isResourcesEnough
 
                             onMbPressed:{
-                                UiCore.currentDevice.modulesListModel.appendModule(modelData)
+                                if(!modelData.used )
+                                    UiCore.currentDevice.modulesListModel.appendModule(modelData)
+                                else
+                                    UiCore.currentDevice.modulesListModel.removeModuleByType(modelData.moduleType)
                             }
                         }
                     }

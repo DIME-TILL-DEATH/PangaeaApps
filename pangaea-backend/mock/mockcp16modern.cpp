@@ -899,8 +899,6 @@ void MockCP16Modern::eqParametersCommHandler(const QString &command, const QByte
         qint8 val = argsList.at(2).toInt(nullptr, 16);
         qint16 freqBand = argsList.at(2).toInt(nullptr, 16);
 
-        qDebug() << val << freqBand;
-
         if(command == "eq0")
         {
             if(band != -1)

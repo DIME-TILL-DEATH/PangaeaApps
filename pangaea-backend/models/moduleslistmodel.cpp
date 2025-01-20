@@ -60,6 +60,18 @@ void ModulesListModel::removeModule(int position)
     emit sgModulesReconfigured();
 }
 
+void ModulesListModel::removeModuleByType(ModuleType moduleType)
+{
+    for(int i = 0; i < m_moduleList->count(); i++)
+    {
+        if(m_moduleList->at(i)->moduleType() == moduleType)
+        {
+            removeModule(i);
+            break;
+        }
+    }
+}
+
 void ModulesListModel::moveModule(int from, int to)
 {
     if(from == to) return;
