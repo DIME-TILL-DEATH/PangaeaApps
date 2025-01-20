@@ -293,7 +293,7 @@ bool BleInterface::connect(DeviceDescription device)
         setState(InterfaceState::Connecting);
 
         slStartConnect(device.address());
-        emit sgConnectionStarted();
+        // emit sgConnectionStarted();
 
         return true;
 }
@@ -312,6 +312,8 @@ void BleInterface::slStartConnect(QString address)
         startScan();
         return;
     }
+
+    emit sgConnectionStarted();
 
 #ifdef Q_OS_MAC
     m_currentDeviceAddress = deviceToConnect->deviceUuid().toString();
