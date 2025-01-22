@@ -13,6 +13,7 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
     m_eqNumber{eqNumber}
 {
     m_processingTime = 25;
+    m_fullModuleName = AbstractModule::tr("Parametric EQ");
 
     if(m_eqMode == EqMode::Modern)
     {

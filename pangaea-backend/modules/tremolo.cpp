@@ -4,6 +4,7 @@ Tremolo::Tremolo(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::TR, "TR", "tr_on"}
 {
     m_processingTime = 20;
+    m_fullModuleName = AbstractModule::tr("Tremolo");
 
     m_depth = new ControlValue(this, "tr_dp", "Depth", "", 0, 127, 0, 127);
     m_rate = new ControlValue(this, "tr_rt", "Rate", "",  0, 127, 0, 127);

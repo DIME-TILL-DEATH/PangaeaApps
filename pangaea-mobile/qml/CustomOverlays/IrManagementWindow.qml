@@ -16,7 +16,7 @@ Item{
     id: _root
 
     width: parent.width
-    height: parent.height
+    height: parent.height * 0.95
 
     z: parent.z+10
 

@@ -38,7 +38,7 @@ Item{
     Rectangle{
 
         width: parent.width * 0.9
-        height: parent.height * 0.9
+        height: parent.height * 0.95
 
         anchors.centerIn: parent
 
@@ -232,7 +232,7 @@ Item{
                 text: qsTr("HIDE")
 
                 width: parent.width * 0.9
-                height: parent.height * 0.07
+                height: parent.height * 0.1
 
                 anchors.horizontalCenter: parent.horizontalCenter
 

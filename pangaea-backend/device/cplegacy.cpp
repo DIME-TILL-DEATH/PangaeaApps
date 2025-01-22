@@ -1,6 +1,7 @@
 #include "cplegacy.h"
 
 #include <QDir>
+#include <QUrl>
 #include <QStandardPaths>
 
 #include "core.h"
@@ -520,8 +521,9 @@ void CPLegacy::setPresetData(const PresetLegacy &preset)
 void CPLegacy::setFirmware(QString fullFilePath)
 {
     qDebug()<< __FUNCTION__ << "fullFilePath" << fullFilePath;
+    QUrl url(fullFilePath);
 
-    emit sgDeviceMessage(DeviceMessageType::FirmwareFilePath, fullFilePath);
+    emit sgDeviceMessage(DeviceMessageType::FirmwareFilePath, url.path());
 
     if(!Firmware::isFirmwareFile(fullFilePath))
     {
@@ -943,7 +945,9 @@ void CPLegacy::getIrCommHandler(const QList<QByteArray> &arguments)
         actualPreset.setWaveData(impulseData);
         actualPreset.exportData();
 
-        emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, actualPreset.pathToExport());
+        QUrl url(actualPreset.pathToExport());
+
+        emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, url.path());
 
         m_presetManager.returnToPreviousState();
         break;

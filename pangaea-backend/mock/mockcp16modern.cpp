@@ -90,6 +90,7 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     setParamsHandler("ch_hp", &currentPresetData.chorus.hpf);
 
     setParamsHandler("ph_on", &currentPresetData.phaser.on);
+    setParamsHandler("ph_mx", &currentPresetData.phaser.mix);
     setParamsHandler("ph_rt", &currentPresetData.phaser.rate);
     setParamsHandler("ph_wd", &currentPresetData.phaser.width);
     setParamsHandler("ph_cn", &currentPresetData.phaser.center);

@@ -4,6 +4,7 @@ Preamp::Preamp(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::PR, "PR", "pro"}
 {
     m_processingTime = 20;
+    m_fullModuleName = AbstractModule::tr("Preamp");
 
     m_volume = new ControlValue(this, "prv", "Volume");
 

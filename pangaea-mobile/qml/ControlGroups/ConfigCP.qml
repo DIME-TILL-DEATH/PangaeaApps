@@ -167,7 +167,9 @@ Item {
 
 
                         MText{
-                            text: moduleInstance.moduleName + qsTr(", cost: ") + moduleInstance.processingTime
+                            text: moduleInstance.fullModuleName + "("
+                                  + moduleInstance.moduleName + ")"
+                                  + qsTr(", cost: ") + moduleInstance.processingTime
 
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter

@@ -14,6 +14,7 @@ class AbstractModule : public QObject
     Q_OBJECT
     Q_PROPERTY(bool moduleEnabled READ moduleEnabled WRITE setModuleEnabled NOTIFY dataChanged FINAL)
     Q_PROPERTY(QString moduleName READ moduleName CONSTANT)
+    Q_PROPERTY(QString fullModuleName READ fullModuleName CONSTANT)
     Q_PROPERTY(ModuleType moduleType READ moduleType CONSTANT)
 
     Q_PROPERTY(bool used READ used WRITE setUsed NOTIFY usedChanged)
@@ -33,9 +34,12 @@ public:
     virtual void setModuleEnabled(bool newEnabled);
 
     QString moduleName() const {return m_moduleName;};
+    QString fullModuleName() const {return m_fullModuleName;};
+
     ModuleType moduleType() const {return m_moduleType;};
 
     virtual void sendDataToDevice(const QByteArray& data);
+
 
 signals:
     void dataChanged();
@@ -52,9 +56,9 @@ protected:
 
     bool m_moduleEnabled;
     QString m_moduleName;
+    QString m_fullModuleName;
 
     QString m_commandOnOff;
-
 };
 
 #endif // ABSTRACTMODULE_H

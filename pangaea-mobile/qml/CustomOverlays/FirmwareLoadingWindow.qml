@@ -158,7 +158,8 @@ CustomMessageDialog {
                 case DeviceMessageType.FirmwareFilePath:
                 {
                     console.log("firmware path:" + value)
-                    _root.firmwareFile = decodeURIComponent(value.replace(/^(file:\/{2})|(qrc:\/{2})|(content:\/{2})|(http:\/{2})|(:)/,""));
+                    _root.firmwareFile = value
+                    //decodeURIComponent(value.replace(/^(file:\/{2})|(qrc:\/{2})|(content:\/{2})|(http:\/{2})|(:)/,""));
                 }
             }
         }

@@ -4,6 +4,7 @@ Compressor::Compressor(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::CM, "CM", "co"}
 {
     m_processingTime = 70;
+    m_fullModuleName = AbstractModule::tr("Compressor");
 
     m_sustain = new ControlValue(this, "cs", "Sustain");
     m_volume = new ControlValue(this, "cv", "Volume");

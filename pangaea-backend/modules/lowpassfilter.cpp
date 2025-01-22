@@ -4,6 +4,7 @@ LowPassFilter::LowPassFilter(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::LP, "LP", "lo"}
 {
     m_processingTime = 5;
+    m_fullModuleName = AbstractModule::tr("Low pass filter");
 
     m_lpf = new ControlValue(this, "lv", "Low-pass", "Hz",
                 // 195, 0, 20000, 1000);

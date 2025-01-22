@@ -4,6 +4,7 @@ PowerAmp::PowerAmp(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::PA, "PA", "ao"}
 {
     m_processingTime = 90;
+    m_fullModuleName = AbstractModule::tr("Power amp");
 
     m_volume = new ControlValue(this, "av", "Master"); //VOLUME
     m_presence = new ControlValue(this, "pv", "Presence");

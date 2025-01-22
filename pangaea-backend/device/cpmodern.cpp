@@ -1,6 +1,7 @@
 #include "cpmodern.h"
 
 #include <QDir>
+#include <QUrl>
 #include <QStandardPaths>
 
 #include "core.h"
@@ -486,7 +487,8 @@ void CPModern::setFirmware(QString fullFilePath)
 {
     qDebug()<< __FUNCTION__ << "fullFilePath" << fullFilePath;
 
-    emit sgDeviceMessage(DeviceMessageType::FirmwareFilePath, fullFilePath);
+    QUrl url(fullFilePath);
+    emit sgDeviceMessage(DeviceMessageType::FirmwareFilePath, url.path());
 
     if(!Firmware::isFirmwareFile(fullFilePath))
     {
@@ -978,8 +980,9 @@ void CPModern::irDownloaded(const QString &irPath, const QByteArray &data)
     {
         case PresetState::Exporting:
         {
+            QUrl url(m_pathToExport);
             actualPreset.exportData(m_pathToExport, data);
-            emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, m_pathToExport);
+            emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, url.path());
             m_presetManager.returnToPreviousState();
             break;
         }

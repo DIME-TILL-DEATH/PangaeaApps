@@ -4,6 +4,7 @@ NoiseGate::NoiseGate(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::NG, "NG", "go"}
 {
     m_processingTime = 5;
+    m_fullModuleName = AbstractModule::tr("Noise gate");
 
     m_threshold = new ControlValue(this, "gt", "Threshold");
     m_decay = new ControlValue(this, "gd", "Decay");

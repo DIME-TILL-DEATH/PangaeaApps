@@ -3,8 +3,7 @@
 CabSim::CabSim(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::IR, "IR", "ce"}
 {
-
-
+    m_fullModuleName = AbstractModule::tr("Cabinet simulator");
 }
 
 QString CabSim::impulseName() const

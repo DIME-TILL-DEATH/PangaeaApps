@@ -114,7 +114,7 @@ CustomMessageDialog {
 
         delegate: PresetsListDelegate{
             width: _presetListView.width*0.95
-            height: _presetListView.height/8
+            height: _presetListView.height/10
         }
 
 

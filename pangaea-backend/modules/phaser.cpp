@@ -4,6 +4,7 @@ Phaser::Phaser(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::PH, "PH", "ph_on"}
 {
     m_processingTime = 50;
+    m_fullModuleName = AbstractModule::tr("Phaser");
 
     m_mix = new ControlValue(this, "ph_mx", "Mix", "", 0, 63, 0, 63);
     m_rate = new ControlValue(this, "ph_rt", "Rate", "",  0, 127, 0, 127);
