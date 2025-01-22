@@ -24,7 +24,7 @@
     <name>BCutControl</name>
     <message>
         <source>CUT ON</source>
-        <translation type="unfinished"></translation>
+        <translation>СРЕЗ ВКЛ.</translation>
     </message>
 </context>
 <context>
@@ -62,19 +62,76 @@
     </message>
 </context>
 <context>
-    <name>CM</name>
+    <name>ClipIndicator</name>
     <message>
-        <source>Compressor</source>
-        <translation type="unfinished"></translation>
+        <source>IR</source>
+        <translation>ИМП.</translation>
     </message>
     <message>
-        <source>Compressor reduces the volume of loud sounds and amplifies quiet sounds smoothening the dynamics. At the same time, it can be used as a sustainer making your single notes sound longer.
-It’s a great tool to letting some parts stand out. It is as easy to find settings that work against you. Too much compression may bring up some hum and noise when used together with overdrive or distortion.
-
-SUSTAIN: Combination of threshold and release parameters. the higher the value, the longer the notes will decay.
-
-VOLUME: Sets the output volume. It can be used to compensate for signal attenuation caused by compression.</source>
-        <translation type="unfinished"></translation>
+        <source>CLIPPING</source>
+        <translation>ОГРАНИЧЕНИЕ</translation>
+    </message>
+    <message>
+        <source>OUT</source>
+        <translation>ВЫХ.</translation>
+    </message>
+</context>
+<context>
+    <name>ConfigCP</name>
+    <message>
+        <source>Add/Remove module</source>
+        <translation>Добавить/Убрать модуль</translation>
+    </message>
+    <message>
+        <source> of </source>
+        <translation> из </translation>
+    </message>
+    <message>
+        <source>, cost: </source>
+        <translation>, ед: </translation>
+    </message>
+    <message>
+        <source>Device doesn&apos;t have enough processing budget to use selected configuration</source>
+        <translation>Устройству не хватает едениц обработки для выбранной конфигурации</translation>
+    </message>
+    <message>
+        <source>Processing budget error</source>
+        <translation>Ошибка бюджета обработки</translation>
+    </message>
+    <message>
+        <source>Processing points used </source>
+        <translation>Использовано едениц обработки: </translation>
+    </message>
+    <message>
+        <source>Delay/Reverb config</source>
+        <translation>Конфигурация Дилея/Реверберации</translation>
+    </message>
+    <message>
+        <source>Delay(DL) disabled</source>
+        <translation>Дилей(DL) отключён</translation>
+    </message>
+    <message>
+        <source>Delay(DL) enabled(cost </source>
+        <translation>Дилей(DL) включен(ед </translation>
+    </message>
+    <message>
+        <source>Early reflections(ER) disabled</source>
+        <translation>Ранние отр.(ER) отключены</translation>
+    </message>
+    <message>
+        <source>Early reflections(ER) mono(cost </source>
+        <translation>Ранние отр.(ER) моно (ед </translation>
+    </message>
+    <message>
+        <source>Early reflections(ER) stereo(cost) </source>
+        <translation>Ранние отр.(ER) стерео(ед. </translation>
+    </message>
+</context>
+<context>
+    <name>ConfigUnavaliable</name>
+    <message>
+        <source>The configuration of processing modules is not available in this firmware. Please update your device&apos;s firmware to the latest version.</source>
+        <translation>Конфигурация модулей недоступна в данной версии прошивки.</translation>
     </message>
 </context>
 <context>
@@ -199,18 +256,18 @@ VOLUME: Sets the output volume. It can be used to compensate for signal attenuat
     <name>EQExtLegacy</name>
     <message>
         <source>HIDE</source>
-        <translation type="unfinished">ЗАКРЫТЬ</translation>
+        <translation>ЗАКРЫТЬ</translation>
     </message>
     <message>
         <source>RESET</source>
-        <translation type="unfinished"></translation>
+        <translation>СБРОС</translation>
     </message>
 </context>
 <context>
     <name>EQExtModern</name>
     <message>
         <source>RESET</source>
-        <translation type="unfinished"></translation>
+        <translation>СБРОС</translation>
     </message>
     <message>
         <source>HIDE</source>
@@ -220,73 +277,12 @@ VOLUME: Sets the output volume. It can be used to compensate for signal attenuat
 <context>
     <name>EQPreviewLegacy</name>
     <message>
-        <source>Equalizer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>PRE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>POST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Parametric EQ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This effect block provides 5-band parametric equalizer for fine-tuning your tone.
-
-Parameters for each band:
-
-FREQUENCY: Central frequency of the band.
-
-GAIN: Amplification/attenuation factor of the band.
-
-Q(quality): Bandwidth - the area around the set frequency that the EQ will amplify or attenuate.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>EQPreviewModern</name>
-    <message>
-        <source>Equalizer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Parametric EQ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This effect block provides 5-band parametric equalizer for fine-tuning your tone.
-
-Parameters for each band:
-
-FREQUENCY: Central frequency of the band.
-
-GAIN: Amplification/attenuation factor of the band.
-
-Q(quality): Bandwidth - the area around the set frequency that the EQ will amplify or attenuate.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ER</name>
-    <message>
-        <source>Early reflections</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This effect block emulates room acoustics. Unlike Reverb, Early Reflections are sounds that you hear right after the direct sound before full reverberation takes over. It’s more like a series of discrete delays rather than a smooth tail associated with Reverb.
-
-VOLUME: Amount of reflections mixed to the direct signal.
-
-TYPE: There are 3 types of the effect to choose from:
-1. Short: Small room
-2. Medium: Meduim size room
-3. Long: Large room</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -366,23 +362,19 @@ TYPE: There are 3 types of the effect to choose from:
 <context>
     <name>HP</name>
     <message>
-        <source>High-pass filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>High pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>High-pass filter passes through frequencies above the cutoff frequency and attenuates everything below that point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтр высоких частот. Пропускает все составляющие выше частоты среза и подавляет остальные.</translation>
     </message>
 </context>
 <context>
     <name>IR</name>
     <message>
         <source>Impulse response</source>
-        <translation>Импульс</translation>
+        <translation type="vanished">Импульс</translation>
     </message>
     <message>
         <source>empty</source>
@@ -401,24 +393,24 @@ TYPE: There are 3 types of the effect to choose from:
         <translation>Конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <source>Impulse responce(cabinet simulator)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Impulse Response or IR is a sonic fingerprint of a certain speaker, cabinet, mic, mic preamp and room where the profile was captured.</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>IR file exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Импульс уже загружен</translation>
     </message>
     <message>
         <source>File </source>
-        <translation type="unfinished"></translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <source> already on device.</source>
-        <translation type="unfinished"></translation>
+        <translation>уже загружен на устройство.</translation>
+    </message>
+    <message>
+        <source>Trim IR file</source>
+        <translation>Редактирование импульса</translation>
+    </message>
+    <message>
+        <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
+        <translation>Длительность выбранного файла больше чем длительность используемая при обработке. Желаете ли вы обрезать файл для ускорения загрузки и экномии памяти в устройстве?</translation>
     </message>
 </context>
 <context>
@@ -454,38 +446,38 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>IrManagementWindow</name>
     <message>
         <source>IR management</source>
-        <translation type="unfinished"></translation>
+        <translation>Менеджмент файлов импульсов</translation>
     </message>
     <message>
         <source>UPLOAD IR</source>
-        <translation type="unfinished"></translation>
+        <translation>ЗАГРУЗИТЬ ИМПУЛЬС</translation>
     </message>
     <message>
         <source>Library</source>
-        <translation type="unfinished"></translation>
+        <translation>Библиотека</translation>
     </message>
     <message>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Папка</translation>
     </message>
     <message>
         <source>HIDE</source>
-        <translation type="unfinished">ЗАКРЫТЬ</translation>
+        <translation>ЗАКРЫТЬ</translation>
+    </message>
+    <message>
+        <source>Preset folder</source>
+        <translation>Папка пресета</translation>
     </message>
 </context>
 <context>
     <name>LP</name>
     <message>
-        <source>Low-pass filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Low pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Low-pass filter passes through frequencies below the cutoff frequency and attenuates everything above that point</source>
-        <translation type="unfinished"></translation>
+        <translation>ФИльтр низких частот. Пропускает все составляющие ниже частоты среза и подавляет остальные</translation>
     </message>
 </context>
 <context>
@@ -508,6 +500,10 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <message>
         <source>Set name for current preset:</source>
         <translation>Укажите имя для пресета:</translation>
+    </message>
+    <message>
+        <source>Delay/Reverb</source>
+        <translation>Модули Дилея/Реверберации</translation>
     </message>
 </context>
 <context>
@@ -597,65 +593,43 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     </message>
 </context>
 <context>
-    <name>NG</name>
+    <name>ModulsManagementWindow</name>
     <message>
-        <source>Noise gate</source>
-        <translation type="unfinished"></translation>
+        <source>Add/Remove module</source>
+        <translation>Добавить/Убрать модуль</translation>
     </message>
     <message>
-        <source>Noise Gate is used to attenuate the signal in pauses when you don’t play guitar, helping you to hide some hiss, hum and other noise present in any guitar setup.
-
-THRESHOLD: The Noise Gate allows the signal to pass through only when it is above the threshold.
-When the input signal is below the threshold, the gate is ‘closed’ and no signal is allowed to pass.
-Set it a little higher than the noise level in your system to achieve noise dampening. If the threshold is set too high, it may cut out yoursoft notes.
-
-DECAY: Determines how fast the gate closes. Low values won’t let any noise to pass but may cut your notes short.</source>
-        <translation type="unfinished"></translation>
+        <source>cost: </source>
+        <translation>ед.:</translation>
+    </message>
+    <message>
+        <source>HIDE</source>
+        <translation>ЗАКРЫТЬ</translation>
     </message>
 </context>
 <context>
     <name>PA</name>
     <message>
         <source>Power amp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Module reproduce the compression, saturation and playing feel of a cranked up tube power amp. Alse represents frequency characteristic.
-
-MASTER: Think of it as a Master volume of an amp. As you turn it up, you’ll notice how the sound gets more and more saturated and compressed. Just like with a real power amp, you can get some overdrive when Volume is set to maximum.
-
-PRESENCE: Just like a real power amp this effect block has a Presence control. Use it to add some extra brightness to the tone.
-
-LEVEL: When you crank up the Volume, use this parameter to attenuate the level to avoid clipping. If Volume is low, turn LEVRL up to boost the output.
-
-TYPE: Model of output section</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
-    <name>PR</name>
+    <name>PH</name>
     <message>
-        <source>Preamp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Represents EQ response of guitar preamp.
-
-LOW, MID, HIGH: Corresponding frequency bands.
-
-VOLUME: Output signal level.</source>
-        <translation type="unfinished"></translation>
+        <source>Phaser</source>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>PS</name>
     <message>
-        <source>PS</source>
-        <translation type="unfinished"></translation>
+        <source>Presence</source>
+        <translation></translation>
     </message>
     <message>
-        <source>Presence</source>
-        <translation type="unfinished"></translation>
+        <source>Just like a real power amp this effect block has a Presence control. Use it to add some extra brightness to the tone.</source>
+        <translation>Каки в реальном усилителе данная настройка позволяет добавить дополнительной яркости вашему тону.</translation>
     </message>
 </context>
 <context>
@@ -946,6 +920,259 @@ website: https://amtelectronics.com</source>
     </message>
 </context>
 <context>
+    <name>TR</name>
+    <message>
+        <source>Tremolo</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>TutorialCH</name>
+    <message>
+        <source>Chorus</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Chorus is a type of guitar effect that belongs to the Modulation family of effects. It emulates the sound of multiple instruments playing together at the same time which can cause micro shifts in pitch and timing. Chorus works by duplicating your guitar signal and slightly detuning one side of it.
+
+RATE: rate controls the speed of the LFO that modulates the chorus delay time. Remember: the processed signal in a chorus is constantly shifting in time (and pitch) thanks to this undulating LFO. With a lower rate, the change happens slowly, creating a gentle swaying feel. Faster rates create a more noticeable warbling effect.
+
+WIDTH: in mono processing &apos;width&apos; is using to alterate type of chorus processing.
+
+HPF: high pass filter for processed signal.
+
+MIX: proportion of dry and wet signal.</source>
+        <translation>Хорус имитирует эффект будто несколько одинаковых инструментов играют вместе.
+
+RATE: контролирует скорость с которой низкочастотный генератор модулирует задержку эффекта.
+
+WIDTH: в моно варианте позволяет получить разные окраски эффекта.
+
+HPF: фильтр высоких частот для сигнала который отправляется в обработку. Только составляющие выше частоты среза будут использованы для создания эффекта.
+
+MIX: определяет какое количество обработанного сигнала будет подмешано к основному.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialCM</name>
+    <message>
+        <source>Compressor</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Compressor reduces the volume of loud sounds and amplifies quiet sounds smoothening the dynamics. At the same time, it can be used as a sustainer making your single notes sound longer.
+It’s a great tool to letting some parts stand out. It is as easy to find settings that work against you. Too much compression may bring up some hum and noise when used together with overdrive or distortion.
+
+SUSTAIN: Combination of threshold and release parameters. the higher the value, the longer the notes will decay.
+
+VOLUME: Sets the output volume. It can be used to compensate for signal attenuation caused by compression.</source>
+        <translation>Компрессор делает громкие сигналы тише. Также он может быть использован для того чтобы сделать тихие звуки громче. Тем самым смягчается динамика исполнения. Слишком много компрессии добавят много шума в ваш сигнал, особенно при использовании эффектов overdrive и distortion.
+
+SUSTAIN: комбинация таких классических параметров компрессора как attack и release. Чем больше это значение, тем дольше ноты будут затухать.
+
+VOLUME: громкость выходного сигнала. Может быть использована для компенсации ослабления громкости ввиду подавления нот большой амплитуды.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialDL</name>
+    <message>
+        <source>Delay records a portion of the audio signal coming from your instrument and plays it back multiple times after a predetermined time. This creates an echo-like effect, with the delayed sound typically being quieter than the original signal and decaying and fading out over time.
+
+MIX: volume of resulting delayed signal.
+
+TIME: controls the amount of time it takes for the delayed sound to kick in after you play a note.
+
+FEEDBACK controls the number of times the delayed sound will repeat.  Lower settings result in fewer repeats.
+
+HPF, LPF: lets you adjust the frequency range and shape the tone of the delayed sound.
+</source>
+        <translation>Создаёт эффект эхо. Заисанный сигнал воспроизводится несколько раз в установленное время, каждое следующее повторение звучит тише предыдущегго.
+
+MIX: определяет какое количество обработанного сигнала будет подмешано к основному.
+
+TIME: время через которое будут слышны повторы сигнала.
+
+FEEDBACK: определяет как долго будут слышны повторения сигнала. Меньшие значение отвечают за меньшее число повторений.
+
+HPF, LPF: Фильтры высоких и низких частота для сигнала который будет отправлен в обработку. Позволяет задать частотный диапазон отражений.</translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>TutorialEQ</name>
+    <message>
+        <source>Parametric EQ</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>This effect block provides 5-band parametric equalizer for fine-tuning your tone.
+
+Parameters for each band:
+
+FREQUENCY: Central frequency of the band.
+
+GAIN: Amplification/attenuation factor of the band.
+
+Q(quality): Bandwidth - the area around the set frequency that the EQ will amplify or attenuate.</source>
+        <translation>5ти полосный параметрический эквалайзер.
+
+FREQUENCY: центральная частота полосы
+
+GAIN: усиление/ослабление выбранной полосы
+
+Q(добротность): определяет ширину полосы. ЧЕм больше значение, тем уже полоса.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialER</name>
+    <message>
+        <source>Early reflections</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>This effect block emulates room acoustics. Unlike Reverb, Early Reflections are sounds that you hear right after the direct sound before full reverberation takes over. It’s more like a series of discrete delays rather than a smooth tail associated with Reverb.
+
+VOLUME: Amount of reflections mixed to the direct signal.
+
+TYPE: There are 3 types of the effect to choose from:
+1. Short: Small room
+2. Medium: Meduim size room
+3. Long: Large room</source>
+        <translation>Этот эффект имитирует аккустику комнаты. Ранние отражения это звуки которые воспринимаются сразу после прямого сигнала, до того как вся реверберация помещения будет слышна.
+
+VOLUME: количество ранних отражений подмешанных к прямому сигналу.
+
+TYPE: Определяет размер комнаты.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialIR</name>
+    <message>
+        <source>Impulse responce(cabinet simulator)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Impulse Response or IR is a sonic fingerprint of a certain speaker, cabinet, mic, mic preamp and room where the profile was captured.</source>
+        <translation>Impulse responce(IR или частотный отклик) это слепок конкретного гитарного динамика или кабинета снятого опрделённым микрофоном в определённой комнате.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialNG</name>
+    <message>
+        <source>Noise gate</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Noise Gate is used to attenuate the signal in pauses when you don’t play guitar, helping you to hide some hiss, hum and other noise present in any guitar setup.
+
+THRESHOLD: The Noise Gate allows the signal to pass through only when it is above the threshold.
+When the input signal is below the threshold, the gate is ‘closed’ and no signal is allowed to pass.
+Set it a little higher than the noise level in your system to achieve noise dampening. If the threshold is set too high, it may cut out your soft notes.
+
+DECAY: Determines how fast the gate closes. Low values won’t let any noise to pass but may cut your notes short.</source>
+        <translation>Подавитель шума. Помогает избавиться от шума и шипения в паузах между исполнением.
+
+THRESHOLD: чувствительность. Весь сигнал ниже выбранной границы будет подавлен. Если значение будет выбрано слишком высоким, то это может срезать хвосты тихих нот.
+
+DECAY: определяет насколько быстро закрывается шумодав.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialPA</name>
+    <message>
+        <source>Power amp</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Module reproduce the compression, saturation and playing feel of a cranked up tube power amp. Alse represents frequency characteristic.
+
+MASTER: Think of it as a Master volume of an amp. As you turn it up, you’ll notice how the sound gets more and more saturated and compressed. Just like with a real power amp, you can get some overdrive when Volume is set to maximum.
+
+PRESENCE: Just like a real power amp this effect block has a Presence control. Use it to add some extra brightness to the tone.
+
+LEVEL: When you crank up the Volume, use this parameter to attenuate the level to avoid clipping. If Volume is low, turn LEVRL up to boost the output.
+
+TYPE: Model of output section</source>
+        <translation>Модуль вопроизводит компрессию, сатурацию и ощущение от игры через разогнанный до большой громкости ламповый оконечный усилитель. Также воспроизводится частотная характеристика популярных моделей.
+
+MASTER: работает как ручка &quot;Master&quot; реального усилителя. Чем больше значение, тем сильнее перегруз и громкость усилителя.
+
+LEVEL: данный регулятор отвечает за цифровую громкость модуля. Позволяет компенсировать излишней усиление чтобы не вызывать цифровой клиппинг последующих модулей.
+
+TYPE: тип эмулируемого оконечного усилителя.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialPH</name>
+    <message>
+        <source>Phaser</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Phasers generate a sound that’s full of movement and intensity. Generally, phase shifters often evoke a feeling of the signal being sent to space, orbiting around some imaginary planet trapped inside the device and returning to the listener at a customizable BPM.
+
+RATE: rate controls the speed of the LFO that modulates the chorus delay time. Remember: the processed signal in a chorus is constantly shifting in time (and pitch) thanks to this undulating LFO. With a lower rate, the change happens slowly, creating a gentle swaying feel. Faster rates create a more noticeable warbling effect.
+
+WIDTH, CENTER: in mono processing &apos;width&apos; and &apos;center&apos; is using to alterate type of phaser processing.
+
+FEEDBACK: will control the amount of processed signal that is added back into the Dimension module.
+
+STAGES: how many &apos;notches&apos; is used to process signal.
+
+MIX: proportion of dry and wet signal.</source>
+        <translation>Фазер позволяет создать звук полный движения и изменчивости.
+
+RATE: контролирует скорость с которой низкочастотный генератор модулирует задержку эффекта.
+
+WIDTH, CENTER: в моно варианте позволяет получить разные окраски эффекта.
+
+STAGES: количество стадий обработки, чем больше значение, тем более разнообразный сигнал получается на выходе.
+
+MIX: определяет какое количество обработанного сигнала будет подмешано к основному.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialPR</name>
+    <message>
+        <source>Preamp</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Represents EQ response of guitar preamp.
+
+LOW, MID, HIGH: Corresponding frequency bands.
+
+VOLUME: Output signal level.</source>
+        <translation>Воспроизводит частотную характеристику гитарного предусилителя.
+
+LOW, MID, HIGH: соответствующие частотные полосы.
+
+VOLUME: уровень выходного сигнала.</translation>
+    </message>
+</context>
+<context>
+    <name>TutorialTR</name>
+    <message>
+        <source>Tremolo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Tremolo is a modulation effect that rhythmically changes the volume of your signal.
+
+RATE: period of modulation.
+
+DEPTH: how strong volume attenuates on each period.</source>
+        <translation>Эффект тремоло динамически меняет громкость сигнала.
+
+RATE: период изменения громкости
+
+DEPTH: насколько сильно меняется громкость сигнала в каждом периоде.</translation>
+    </message>
+</context>
+<context>
     <name>TutorialVirtualDevice</name>
     <message>
         <source>This option appends virtual(offline) devices to the list. These devices completely simulate the interaction of the application with a real Pangea device.
@@ -955,29 +1182,29 @@ On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created i
     </message>
     <message>
         <source>Virtual device</source>
-        <translation type="unfinished"></translation>
+        <translation>Виртуальное устройство</translation>
     </message>
 </context>
 <context>
     <name>VL</name>
     <message>
         <source>VL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Preset volume</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>main</name>
     <message>
         <source>Connect</source>
-        <translation>Соединение</translation>
+        <translation>Соед.</translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation>Управление</translation>
+        <translation>Управл.</translation>
     </message>
     <message>
         <source>Service</source>
@@ -1092,11 +1319,15 @@ WARNING!!! Updating firmware may take several minutes!</source>
     </message>
     <message>
         <source>Device parse error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка разбора команды</translation>
     </message>
     <message>
         <source>IR file copying error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка копирования файла импульса.</translation>
+    </message>
+    <message>
+        <source>Config</source>
+        <translation>Конф.</translation>
     </message>
 </context>
 </TS>

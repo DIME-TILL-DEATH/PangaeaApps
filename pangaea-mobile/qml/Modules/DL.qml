@@ -12,11 +12,8 @@ BaseModule
 
     property Delay module
 
-    moduleDescription: qsTr("Delay")
-
     width: parent.width
     height: parent.height
-
 
     contentItem: Column
     {
@@ -58,6 +55,8 @@ BaseModule
 
         CustomSlider
         {
+            fontSize: 8 * Style.dip
+
             height: parent.sliderHeight
             width: parent.sliderWidth
 

@@ -13,8 +13,6 @@ BaseModule
 
     property Phaser module
 
-    moduleDescription: qsTr("Phaser")
-
     contentItem: Column
     {
         height: parent.height
@@ -59,41 +57,18 @@ BaseModule
             moduleOn: main.on
         }
 
-        MComboBox
-        {
-            id: _comboBox
-
-            property bool deviceUpdatingValues: false
-
-            on: main.on
-
-            height: parent.height/6
+        CustomComboBox{
             width: parent.width
+            height: parent.height/6
+
+            ctrlValInstance: module.stages
+
+            moduleOn: main.on
 
             model: ["Stages 3",
                     "Stages 5",
                     "Stages 7"]
-
-            currentIndex: module.stages.displayValue
-
-            onActivated:
-            {
-                if(!deviceUpdatingValues)
-                    module.stages.displayValue = currentIndex;
-            }
-
-            Connections{
-                target: UiCore.currentDevice
-
-                function onDeviceUpdatingValues()
-                {
-                    _comboBox.deviceUpdatingValues = true;
-                    _comboBox.currentIndex = module.stages.displayValue;
-                    _comboBox.deviceUpdatingValues = false;
-                }
-            }
         }
-
 
         CustomSlider
         {

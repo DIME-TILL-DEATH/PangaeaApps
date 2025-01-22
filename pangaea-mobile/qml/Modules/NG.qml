@@ -13,9 +13,6 @@ BaseModule
 
     property NoiseGate module
 
-
-    moduleDescription: qsTr("Noise gate")
-
     contentItem: Column
     {
         height: parent.height

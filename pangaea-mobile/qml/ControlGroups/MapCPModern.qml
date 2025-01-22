@@ -215,14 +215,16 @@ Item{
             id: _reverbSectionConatiner
 
             width: parent.width
-            // height: _dlRvContainer.enabled ?  _main.height*8/countElements : _main.height*1/countElements
-            height: _dlRvContainer.enabled ?  _hdrSpatial.height + spacing + _dlRvContainer.height
+            height: !_hdrSpatial.visible ? 0 :
+                        _dlRvContainer.enabled ?  _hdrSpatial.height + spacing + _dlRvContainer.height
                                            : _main.height*1/countElements
 
             spacing: 2
 
             Rectangle {
                 id: _hdrSpatial
+
+                visible: UiCore.currentDevice.DL.used | UiCore.currentDevice.ER.used
 
                 color: Style.colorModul
 
@@ -237,7 +239,7 @@ Item{
 
                 MText{
                     anchors.centerIn: parent
-                    text: (_dlRvContainer.enabled ? "(-)" : "(+)") + "Delay/Reverb"
+                    text: (_dlRvContainer.enabled ? "(-)" : "(+)") + qsTr("Delay/Reverb")
                     color: Style.colorText
                 }
 

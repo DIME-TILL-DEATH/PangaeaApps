@@ -5,7 +5,7 @@ import Tutorials
 SimpleTutorialMessage{
         buttons: Dialog.Ok
 
-        headerText: qsTr("Tutorial")
+        headerText: qsTr("Delay")
 
         text: qsTr("Delay records a portion of the audio signal coming from your instrument and plays it back multiple times after a predetermined time. This creates an echo-like effect, with the delayed sound typically being quieter than the original signal and decaying and fading out over time.
 

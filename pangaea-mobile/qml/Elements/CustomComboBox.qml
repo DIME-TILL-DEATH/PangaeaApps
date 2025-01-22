@@ -1,113 +1,84 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.15
 
 import StyleSettings 1.0
+import Elements 1.0
 
-ComboBox {
-    id: _root
+import CppObjects
 
-    model: ["PHONES", "LINE", "BALANCED"]
+Item{
+    height: 50
+    width: 200
 
-//    font.bold: true
-//    font.pixelSize: _root.width*0.125
+    property bool moduleOn
+    required property ControlValue ctrlValInstance
+    property alias model: _comboBox.model
 
-    property int delegateHeight: font.pixelSize*4
+    Row{
+        anchors.fill: parent
 
-    delegate: ItemDelegate {
-        id: _delegate
+        MComboBox
+        {
+            id: _comboBox
 
-        width: _root.width
-        height: delegateHeight
+            property bool deviceUpdatingValues: false
 
-        contentItem: MText {
-            text: modelData
-            color: Style.currentTheme.colorTextEnabled
-//            font: _root.font
-            elide: Text.ElideRight
-            verticalAlignment: Text.AlignVCenter
-        }
-        highlighted: _root.highlightedIndex === index
+            on: moduleOn
 
-        background: Rectangle {
-                 implicitWidth: 100
-                 implicitHeight: 20
-                 radius: _root.width/20
+            height: parent.height
+            width: parent.width - _editValueItem.width
 
-                 opacity: enabled ? 1 : 0.3
-                 color: (highlighted) ? Style.colorTextHighLight : Style.colorModul
-        }
-    }
+            currentIndex: ctrlValInstance.displayValue
 
-    indicator: Canvas {
-        id: canvas
-        x: _root.width - width - _root.rightPadding
-        y: _root.topPadding + (_root.availableHeight - height) / 2
-        width: _root.width/10
-        height: _root.height/3
-        contextType: "2d"
+            onActivated:
+            {
+                if(!deviceUpdatingValues)
+                    ctrlValInstance.displayValue = currentIndex;
+            }
 
-        Connections {
-            target: _root
-            function onPressedChanged() { canvas.requestPaint(); }
+
+            Connections{
+                target: UiCore.currentDevice
+
+                function onDeviceUpdatingValues()
+                {
+                    _comboBox.deviceUpdatingValues = true;
+                    _comboBox.currentIndex = ctrlValInstance.displayValue;
+                    _comboBox.deviceUpdatingValues = false;
+                }
+            }
         }
 
-        onPaint: {
-            context.reset();
-            context.moveTo(0, 0);
-            context.lineTo(width, 0);
-            context.lineTo(width / 2, height);
-            context.closePath();
-            context.fillStyle = _root.pressed ? Style.colorText : Style.currentTheme.colorTextEnabled;
-            context.fill();
-        }
-    }
+        Rectangle{
+            id: _separator
 
-    contentItem: MText {
-        leftPadding: _root.width/10
-        rightPadding: _root.indicator.width + _root.spacing
+            width: Style.mainSpacing
+            height: parent.height
 
-        text: _root.displayText
-//        font: _root.font
-
-        color: _root.pressed ? Style.colorText : Style.currentTheme.colorTextEnabled
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
-    }
-
-    background: Rectangle {
-        width: _root.width
-        height: _root.height
-
-        radius: _root.width/10
-
-        color: Style.colorModul
-
-        border.color: _root.pressed ? Style.colorText : Style.currentTheme.colorTextEnabled
-        border.width: _root.visualFocus ? 2 : 1
-    }
-
-    popup: Popup {
-        y: _root.height
-        width: _root.width
-
-        height: delegateHeight * 3 + 2 //border * 2
-
-        implicitHeight: contentItem.implicitHeight
-        padding: 1
-
-        contentItem: ListView {
-            clip: true
-            implicitHeight: contentHeight
-            model: _root.popup.visible ? _root.delegateModel : null
-            currentIndex: _root.highlightedIndex
-
-            ScrollIndicator.vertical: ScrollIndicator { }
+            color: moduleOn ? Style.currentTheme.colorBorderOn
+                             : Style.currentTheme.colorTextDisabled
         }
 
-        background: Rectangle {
-            color: Style.colorModul
-            border.color: Style.currentTheme.colorBorderOn
-            radius: _root.width/20
+        Item{
+            id: _editValueItem
+
+
+            height: parent.height
+            width: parent.width * 1/5 - _separator.width
+
+            Text{
+                id: textValue
+                anchors.fill: parent
+
+                text: _comboBox.currentIndex + 1 + " " + ctrlValInstance.units + " "
+                font.pixelSize: 10 * Style.dip
+                font.bold: true
+
+                horizontalAlignment: TextInput.AlignHCenter
+                verticalAlignment: TextInput.AlignVCenter
+                color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
+                z:1
+            }
         }
     }
 }

@@ -17,8 +17,6 @@ BaseModule
 
     property CabSim module
 
-    moduleDescription: qsTr("Impulse response")
-
     showDescription: false
 
     signal openIrManagementWindow();

@@ -15,8 +15,6 @@ BaseModule
 
     property int type
 
-    moduleDescription: qsTr("Tremolo")
-
     contentItem: Column{
 
         height: parent.height

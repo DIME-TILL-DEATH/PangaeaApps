@@ -12,8 +12,6 @@ BaseModule{
 
     property Compressor module
 
-    moduleDescription: qsTr("Compressor")
-
     contentItem: Column
     {
         height: parent.height

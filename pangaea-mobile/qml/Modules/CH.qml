@@ -13,8 +13,6 @@ BaseModule
 
     property Chorus module
 
-    moduleDescription: qsTr("Chorus")
-
     contentItem: Column
     {
         height: parent.height
@@ -41,6 +39,8 @@ BaseModule
 
         CustomSlider
         {
+            fontSize: 8 * Style.dip
+
             height: parent.height/4
             width: parent.width
 

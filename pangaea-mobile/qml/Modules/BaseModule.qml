@@ -17,7 +17,6 @@ Rectangle {
     property bool disabled: UiCore.currentDevice.presetManager.currentState === PresetState.Compare
 
     property string moduleName: module.moduleName
-    property string moduleDescription: "Description"
 
     property bool showDescription : true
 

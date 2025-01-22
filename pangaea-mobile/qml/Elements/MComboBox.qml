@@ -44,12 +44,12 @@ ComboBox
             elevation: control.Material.elevation
         }
 
-        Rectangle {
-            y: parent.y + control.baselineOffset
-            width: parent.width
-            height: control.activeFocus ? 2 : 1
-            color: control.activeFocus ? control.Material.accentColor : control.Material.hintTextColor
-        }
+        // Rectangle {
+        //     y: parent.y + control.baselineOffset
+        //     width: parent.width
+        //     height: control.activeFocus ? 2 : 1
+        //     color: control.activeFocus ? control.Material.accentColor : control.Material.hintTextColor
+        // }
 
         Ripple {
             clip: control.flat

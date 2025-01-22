@@ -15,11 +15,7 @@ BaseModule
 
     property int ampType
 
-    moduleDescription: qsTr("Power amp")
-
     contentItem: Column{
-
-        property alias curInd: _comboBox.currentIndex
 
         height: parent.height
         width: parent.width
@@ -53,51 +49,29 @@ BaseModule
             moduleOn: main.on
         }
 
-        MComboBox
-        {
-            id: _comboBox
-
-            property bool deviceUpdatingValues: false
-
-            on: main.on
-
+        CustomComboBox{
             height: parent.height/4
             width: parent.width
 
-            model: ["01.Push-pull 6L6",
-                    "02.Push-pull EL34",
-                    "03.Single-ended 6L6",
-                    "04.Single-ended EL34",
-                    "05.AMT Tube cake",
-                    "06.California",
-                    "07.British M",
-                    "08.British L",
-                    "09.Flat",
-                    "10.Califonia modern",
-                    "11.California vintage",
-                    "12.PVH Presence 01",
-                    "13.PVH Presence 02",
-                    "14.PVH Presence 03",
-                    "15.PVH Presence 04"]
+            ctrlValInstance: module.ampType
 
-            currentIndex: module.ampType.displayValue
+            moduleOn: main.on
 
-            onActivated:
-            {
-                if(!deviceUpdatingValues)
-                    module.ampType.displayValue = currentIndex;
-            }
-
-            Connections{
-                target: UiCore.currentDevice
-
-                function onDeviceUpdatingValues()
-                {
-                    _comboBox.deviceUpdatingValues = true;
-                    _comboBox.currentIndex = module.ampType.displayValue;
-                    _comboBox.deviceUpdatingValues = false;
-                }
-            }
+            model: ["Push-pull 6L6",
+                    "Push-pull EL34",
+                    "Single-ended 6L6",
+                    "Single-ended EL34",
+                    "AMT Tube cake",
+                    "California",
+                    "British M",
+                    "British L",
+                    "Flat",
+                    "Califonia modern",
+                    "California vintage",
+                    "PVH Presence 01",
+                    "PVH Presence 02",
+                    "PVH Presence 03",
+                    "PVH Presence 04"]
         }
     }
 

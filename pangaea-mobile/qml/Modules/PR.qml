@@ -13,8 +13,6 @@ BaseModule
 
     property Preamp module
 
-    moduleDescription: qsTr("Preamp")
-
     contentItem: Column
     {
         height: parent.height

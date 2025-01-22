@@ -13,8 +13,6 @@ BaseModule
 
     property HiPassFilter module
 
-    moduleDescription: qsTr("High-pass filter")
-
     showDescription: false
 
     contentItem: Column{

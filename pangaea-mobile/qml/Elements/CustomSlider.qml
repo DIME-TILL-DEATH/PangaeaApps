@@ -206,7 +206,7 @@ Row{
         opacity: _editMa.containsPress ? 0.5 : 1
 
         height: parent.height
-        width: parent.width * 1/5 - _separator.width //- Style.mainSpacing * 2
+        width: parent.width * 1/5 - _separator.width
 
         TextInput{
             id: textValue
@@ -220,38 +220,6 @@ Row{
             verticalAlignment: TextInput.AlignVCenter
             color: moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled
             z:1
-
-            // inputMethodHints: Qt.ImhFormattedNumbersOnly
-
-            // color: acceptableInput ? (moduleOn ? Style.colorText : Style.currentTheme.colorTextDisabled)
-            //                        : "red"
-
-            // validator: DoubleValidator{
-            //     bottom: ctrlValInstance.minDisplayValue
-            //     top: ctrlValInstance.maxDisplayValue
-            //     decimals: _root.precision
-
-            //     locale: "en"
-            // }
-
-            // на яндекс клавиатуре не выдаёт сигнал
-            // onAccepted: {
-            // }
-            // onEditingFinished:{
-            //     if(parseFloat(text) > _root.ctrlValInstance.maxDisplayValue) contentText = _root.ctrlValInstance.maxDisplayValue
-            //     if(parseFloat(text) < _root.ctrlValInstance.minDisplayValue) contentText = _root.ctrlValInstance.minDisplayValue
-
-            //     _root.ctrlValInstance.displayValue = text;
-            //     _root.ctrlValInstance.isModified = true;
-            // }
-
-            // onActiveFocusChanged: function(focusState){
-            //     if(parseFloat(text) > _root.ctrlValInstance.maxDisplayValue) text = _root.ctrlValInstance.maxDisplayValue
-            //     if(parseFloat(text) < _root.ctrlValInstance.minDisplayValue) text = _root.ctrlValInstance.minDisplayValue
-
-            //     _root.ctrlValInstance.displayValue = text;
-            //     _root.ctrlValInstance.isModified = true;
-            // }
         }
     }
 }

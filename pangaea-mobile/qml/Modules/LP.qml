@@ -13,8 +13,6 @@ BaseModule
 
     property LowPassFilter module
 
-    moduleDescription: qsTr("Low-pass filter")
-
     showDescription: false
 
     contentItem: Row

@@ -238,7 +238,7 @@ Item
         headerText: qsTr("About...")
         text: qsTr("AMT Pangaea CP-16/CP-100\nAndroid application\nVersion: ")
               + Qt.application.version + "\n"
-              + qsTr("(c) 2024\nwebsite: https://amtelectronics.com")
+              + "(c) 2025\nwebsite: https://amtelectronics.com"
 
         closeOnDisconnect: true
 

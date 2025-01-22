@@ -244,7 +244,7 @@ Item{
                  TabButton {
                      height: parent.height
                      anchors.top: parent.top
-                     text: qsTr("Folder")
+                     text: qsTr("Preset folder")
                  }
             }
 

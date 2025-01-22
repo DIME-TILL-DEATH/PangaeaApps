@@ -15,9 +15,7 @@ BaseModule
 
     property int currentType
 
-    moduleDescription: qsTr("Early reflections")
-
-    width: parent.width
+    width: (parent.width + Style.mainSpacing) * 4/5
     height: parent.height
 
     contentItem: Column
@@ -38,37 +36,15 @@ BaseModule
 
         }
 
-        MComboBox
-        {
-            id: _comboBox
-
-            property bool deviceUpdatingValues
-
-            height: parent.height/2
+        CustomComboBox{
             width: parent.width
+            height: parent.height/2
 
-            on: main.on
+            ctrlValInstance: module.reflectionsType
 
-            currentIndex: module.reflectionsType.displayValue
+            moduleOn: main.on
 
             model: ["SHORT","MEDIUM","LONG"]
-
-            onActivated:
-            {
-                if(!deviceUpdatingValues)
-                    module.reflectionsType.displayValue = currentIndex;
-            }
-
-            Connections{
-                target: UiCore.currentDevice
-
-                function onDeviceUpdatingValues()
-                {
-                    _comboBox.deviceUpdatingValues = true;
-                    _comboBox.currentIndex = module.reflectionsType.displayValue;
-                    _comboBox.deviceUpdatingValues = false;
-                }
-            }
         }
     }
 

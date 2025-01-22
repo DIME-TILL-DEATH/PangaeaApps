@@ -53,7 +53,7 @@ Item {
 
             text: qsTr("Add/Remove module")
 
-            width: parent.width/2
+            width: parent.width*0.75
             height: parent.height/12
 
             anchors.horizontalCenter: parent.horizontalCenter
@@ -77,7 +77,7 @@ Item {
             color: confAcceplatble ? "green" : "red"
 
             MText{
-                text: "Used " + UiCore.currentDevice.processingUsed
+                text: qsTr("Processing points used ") + UiCore.currentDevice.processingUsed
                       + qsTr(" of ") + UiCore.currentDevice.processingBudget
 
                 color: "white"
@@ -287,7 +287,7 @@ Item {
 
                     MText{
                         anchors.centerIn: parent
-                        text: "Delay/Reverb config"
+                        text: qsTr("Delay/Reverb config")
                         color: Style.colorText
                     }
                 }
@@ -298,8 +298,8 @@ Item {
                     width: _listConfig.width * 0.7
                     height: _listConfig.height * 1/8 * 0.9
 
-                    model: ["Delay disabled",
-                            "Delay enabled(cost " + UiCore.currentDevice.DL.processingTime + ")"]
+                    model: [qsTr("Delay(DL) disabled"),
+                            qsTr("Delay(DL) enabled(cost ") + UiCore.currentDevice.DL.processingTime + ")"]
 
                     currentIndex: UiCore.currentDevice.DL.used
 
@@ -324,9 +324,9 @@ Item {
                     width: _listConfig.width * 0.7
                     height: _listConfig.height * 1/8 * 0.9
 
-                    model: ["Early reflections disabled",
-                        "Early reflections mono(cost " + UiCore.currentDevice.ER.processingTimeMono + ")",
-                        "Early reflections stereo(cost) " + UiCore.currentDevice.ER.processingTimeStereo + ")"]
+                    model: [qsTr("Early reflections(ER) disabled"),
+                        qsTr("Early reflections(ER) mono(cost ") + UiCore.currentDevice.ER.processingTimeMono + ")",
+                        qsTr("Early reflections(ER) stereo(cost) ") + UiCore.currentDevice.ER.processingTimeStereo + ")"]
 
                     onActivated:
                     {

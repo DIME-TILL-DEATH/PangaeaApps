@@ -19,8 +19,6 @@ BaseModule{
 
     property EqParametric module
 
-    moduleDescription: qsTr("Equalizer")
-
     contentItem: Row
     {
         id: _content
