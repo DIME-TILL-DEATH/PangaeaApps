@@ -126,7 +126,8 @@ Item{
                         break;
                     }
 
-                    case ModuleType.ER:
+                    case ModuleType.ER_MONO:
+                    case ModuleType.ER_STEREO:
                     {
                         _delegateLoader.source = "/Modules/qml/Modules/ER.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
