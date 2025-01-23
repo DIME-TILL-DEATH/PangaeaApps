@@ -76,12 +76,12 @@ Rectangle
             property int opacityBlink: 1.0
 
             function setTumblerColor(){
-                if(currentIndex === UiCore.currentDevice.clnPresetMap & UiCore.currentDevice.la3Channel === 0)
+                if((currentIndex === UiCore.currentDevice.clnPresetMap) & (UiCore.currentDevice.la3Channel === 0))
                 {
                     currentTextColor = "lightgreen";
                     opacityBlink = 1.0
                 }
-                else if(currentIndex === UiCore.currentDevice.drvPresetMap & UiCore.currentDevice.la3Channel === 1)
+                else if((currentIndex === UiCore.currentDevice.drvPresetMap) & (UiCore.currentDevice.la3Channel === 1))
                 {
                     currentTextColor = "red";
                     opacityBlink = 1.0
@@ -91,6 +91,8 @@ Rectangle
                     currentTextColor = Style.colorText;
                     opacityBlink = 0.5
                 }
+
+                console.log("setTumblerColor", currentIndex, UiCore.currentDevice.clnPresetMap, UiCore.currentDevice.drvPresetMap, UiCore.currentDevice.la3Channel)
             }
 
             delegate: MText
@@ -115,9 +117,10 @@ Rectangle
 
             onCurrentIndexChanged:
             {
-                timer.restart();
-
-                setTumblerColor();
+                if(!main.deviceUpdatingValues)
+                {
+                    timer.restart();
+                }
             }
         }
 
@@ -154,13 +157,9 @@ Rectangle
 
         function onBankPresetChanged()
         {
-            console.log("onBankPresetChanged")
             main.deviceUpdatingValues = true;
             _tumbler.currentIndex = UiCore.currentDevice.preset
             main.deviceUpdatingValues = false;
-        }
-
-        function onLa3ChannelChanged(){
             _tumbler.setTumblerColor();
         }
     }

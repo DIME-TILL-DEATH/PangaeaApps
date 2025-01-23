@@ -6,8 +6,8 @@
 class LAPreamp : public CPModern
 {
     Q_OBJECT
-    Q_PROPERTY(quint8 clnPresetMap READ clnPresetMap WRITE setClnPresetMap NOTIFY clnPresetMapChanged FINAL)
-    Q_PROPERTY(quint8 drvPresetMap READ drvPresetMap WRITE setDrvPresetMap NOTIFY drvPresetMapChanged FINAL)
+    Q_PROPERTY(quint8 clnPresetMap READ clnPresetMap WRITE setClnPresetMap NOTIFY presetMapChanged FINAL)
+    Q_PROPERTY(quint8 drvPresetMap READ drvPresetMap WRITE setDrvPresetMap NOTIFY presetMapChanged FINAL)
     Q_PROPERTY(quint8 la3Channel READ la3Channel WRITE setLa3Channel NOTIFY la3ChannelChanged FINAL)
 public:
     LAPreamp(Core *parent);
@@ -16,6 +16,8 @@ public:
     void readFullState() override;
 
     Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) override;
+    Q_INVOKABLE void setLa3Mappings(quint8 newClnPresetMap, quint8 newDrvPresetmap);
+
     quint8 clnPresetMap() const {return m_clnPresetMap;};
     void setClnPresetMap(quint8 newClnPresetMap);
 
@@ -26,15 +28,16 @@ public:
     void setLa3Channel(quint8 newLa3Channel);
 
 signals:
-    void clnPresetMapChanged();
-    void drvPresetMapChanged();
+    void presetMapChanged();
     void la3ChannelChanged();
 
 private:
-    void getBankPresetLa3CommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
-    quint8 m_clnPresetMap{0};
-    quint8 m_drvPresetMap{8};
+    quint8 m_clnPresetMap;
+    quint8 m_drvPresetMap;
     quint8 m_la3Channel{0};
+
+    void getBankPresetLa3CommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void la3MapCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 };
 
 #endif // LAPREAMP_H

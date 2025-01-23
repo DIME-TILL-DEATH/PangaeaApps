@@ -58,7 +58,7 @@ Rectangle
                 anchors.fill: parent
                 onClicked: {
                     main.isModified = false;
-                    DeviceProperties.setLa3Mappings(_tumblerCln.currentIndex, _tumblerDst.currentIndex);
+                    UiCore.currentDevice.setLa3Mappings(_tumblerCln.currentIndex, _tumblerDst.currentIndex);
                 }
             }
         }
@@ -87,7 +87,6 @@ Rectangle
 
                 model: UiCore.currentDevice.maxPresetCount
                 currentIndex: UiCore.currentDevice.clnPresetMap
-                //currentIndex: DeviceProperties.la3CleanPreset
 
                 visibleItemCount: 1
 
@@ -163,14 +162,9 @@ Rectangle
     Connections{
         target: UiCore.currentDevice
 
-        function onClnPresetMapChanged()
+        function onPresetMapChanged()
         {
             _tumblerCln.currentIndex = UiCore.currentDevice.clnPresetMap
-            main.isModified = false;
-        }
-
-        function onDrvPresetMapChanged()
-        {
             _tumblerDst.currentIndex = UiCore.currentDevice.drvPresetMap
             main.isModified = false;
         }

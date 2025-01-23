@@ -26,6 +26,7 @@ public:
     preset_data_t currentPresetData;
 protected:
     QString basePath;
+    QString m_mockName{"virtual_CP16Modern"};
 
     QFile uploadingIrFile;
 

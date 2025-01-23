@@ -207,9 +207,10 @@ void MockCP16Modern::initFolders()
 #endif
     if(!QDir(basePath).exists()) QDir().mkpath(basePath);
 
-    basePath += "virtual_CP16Modern";
+    basePath += m_mockName;
 
     QDir::setCurrent(basePath);
+    qInfo() << "Current mock directory:" << QDir::current();
 
     if(!QDir(basePath).exists()) QDir().mkpath(basePath);
 
@@ -219,8 +220,19 @@ void MockCP16Modern::initFolders()
     QFile systemFile(basePath + "/system.pan");
     if(!systemFile.exists())
     {
-        m_outputMode = 0;
+        m_systemParameters.output_mode = 0;
+        m_systemParameters.la3_cln_preset = 0x00;
+        m_systemParameters.la3_drv_preset = 0x20;
         saveSysParameters();
+    }
+    else
+    {
+        if(systemFile.open(QIODevice::ReadOnly))
+        {
+            QByteArray baFileData = systemFile.readAll();
+            memcpy(&m_systemParameters, baFileData.data(), sizeof(system_parameters_t));
+            systemFile.close();
+        }
     }
 
     for(int b = 0; b <4; b++)
@@ -271,8 +283,6 @@ bool MockCP16Modern::saveSysParameters()
 {
     QFile systemFile(basePath + "/system.pan");
 
-    memset(&m_systemParameters, 0, sizeof(system_parameters_t));
-    m_systemParameters.output_mode = m_outputMode;
     QString ver("2.01.00");
     memcpy(m_systemParameters.firmware_version, ver.data(), ver.size());
 
