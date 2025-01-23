@@ -151,7 +151,7 @@ void PresetLegacy::writePresetChunk(QByteArray &fileData, QString &chunkName, co
 
 quint8 PresetLegacy::calcPresetFlatIndex(DeviceType deviceType, quint8 bankNumber, quint8 presetNumber)
 {
-    if(deviceType==DeviceType::legacyCP100 || (deviceType==DeviceType::legacyCP100PA))
+    if(deviceType==DeviceType::LEGACY_CP100 || (deviceType==DeviceType::LEGACY_CP100PA))
         return bankNumber*10 + presetNumber;
     else
         return (bankNumber<<4) + presetNumber;

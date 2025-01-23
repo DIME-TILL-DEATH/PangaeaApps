@@ -117,18 +117,7 @@ Rectangle
         repeat: false
         onTriggered:
         {
-
-                // change preset
-
-                // if(DeviceProperties.isLa3Mode)
-                // {
-                //     // DeviceProperties.changePreset(Math.floor(_tumbler.currentIndex/4), _tumbler.currentIndex%4);
-                // }
-                // else
-                // {
-                //     // DeviceProperties.preset = _tumbler.currentIndex;
-                // }
-                UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, _tumbler.currentIndex);
+            UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, _tumbler.currentIndex);
         }
     }
 

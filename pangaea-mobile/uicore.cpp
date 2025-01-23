@@ -140,7 +140,7 @@ void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
     qDebug() << "Impulse picked" << fileName
              << "size:" << fileInfo.size() << "ir effective:" << m_currentDevice->maxIrSize();
 
-    if(m_currentDevice->deviceClass() > DeviceClass::CP_LEGACY)
+    if(m_currentDevice->deviceType() > DeviceType::LEGACY_DEVICES)
     {
         if(fileInfo.size() > m_currentDevice->maxIrSize())
         {

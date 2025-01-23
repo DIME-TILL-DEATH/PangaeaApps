@@ -11,8 +11,6 @@
 CPLegacy::CPLegacy(Core *parent)
     : AbstractDevice{parent}
 {
-    m_deviceClass = DeviceClass::CP_LEGACY;
-
     CPLegacy::updateOutputModeNames();
 
     using namespace std::placeholders;
@@ -99,7 +97,7 @@ void CPLegacy::initDevice(DeviceType deviceType)
     m_moduleList.append(NG);
     m_moduleList.append(CM);
     m_moduleList.append(PR);
-    if(m_deviceType == DeviceType::legacyCP16PA || m_deviceType == DeviceType::legacyCP100PA)
+    if(m_deviceType == DeviceType::LEGACY_CP16PA || m_deviceType == DeviceType::LEGACY_CP100PA)
     {
         m_moduleList.append(PA);
         connect(this, &CPLegacy::isPreEqChanged, this, &CPLegacy::arrangePrePost);
@@ -133,28 +131,28 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
 
     switch(m_deviceType)
     {
-    case DeviceType::legacyCP16:
+    case DeviceType::LEGACY_CP16:
         m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP-16M Blue";
         m_isPaFw = false;
         break;
-    case DeviceType::legacyCP16PA:
+    case DeviceType::LEGACY_CP16PA:
         m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP-16M-PA Green";
         m_isPaFw = true;
         break;
-    case DeviceType::legacyCP100:
+    case DeviceType::LEGACY_CP100:
         m_minimalFirmware = new Firmware("2.08.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
         m_maxBankCount = 10;
         m_maxPresetCount = 10;
         m_firmwareName = "CP-100";
         m_isPaFw = false;
         break;
-    case DeviceType::legacyCP100PA:
+    case DeviceType::LEGACY_CP100PA:
         m_minimalFirmware = new Firmware("6.08.04", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
         m_maxBankCount = 10;
         m_maxPresetCount = 10;
@@ -255,7 +253,7 @@ void CPLegacy::saveChanges()
     // impulse data uploading after answer
     if(actualPreset.waveData() == IRWorker::flatIr())
     {
-        if(m_deviceType==DeviceType::legacyCP16 || m_deviceType==DeviceType::legacyCP16PA)
+        if(m_deviceType==DeviceType::LEGACY_CP16 || m_deviceType==DeviceType::LEGACY_CP16PA)
             emit sgPushCommandToQueue("pwsd");
         else
             emit sgPushCommandToQueue("dcc");

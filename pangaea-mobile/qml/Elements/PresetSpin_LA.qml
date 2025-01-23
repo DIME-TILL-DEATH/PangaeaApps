@@ -13,6 +13,7 @@ Rectangle
     height: parent.height
 
     property string text
+    property bool deviceUpdatingValues: true //disable timer on startup
 
     signal openPresetsList()
 
@@ -63,7 +64,7 @@ Rectangle
             width:  parent.width
             height: parent.height*6/10
 
-            model: DeviceProperties.presetsList
+            model: UiCore.currentDevice.maxPresetCount
             // currentIndex: DeviceProperties.bank*4 + DeviceProperties.preset
 
 
@@ -75,12 +76,12 @@ Rectangle
             property int opacityBlink: 1.0
 
             function setTumblerColor(){
-                if(currentIndex === DeviceProperties.la3CleanPreset & DeviceProperties.la3Channel === 0)
+                if(currentIndex === UiCore.currentDevice.clnPresetMap & UiCore.currentDevice.la3Channel === 0)
                 {
                     currentTextColor = "lightgreen";
                     opacityBlink = 1.0
                 }
-                else if(currentIndex === DeviceProperties.la3DrivePreset & DeviceProperties.la3Channel === 1)
+                else if(currentIndex === UiCore.currentDevice.drvPresetMap & UiCore.currentDevice.la3Channel === 1)
                 {
                     currentTextColor = "red";
                     opacityBlink = 1.0
@@ -97,7 +98,7 @@ Rectangle
                 text: modelData
                 opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: _tumbler.currentTextColor
-                font.pixelSize: DeviceProperties.isLa3Mode ? _tumbler.height*0.6 : _tumbler.height*0.75
+                font.pixelSize: _tumbler.height*0.6
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 font.bold: true
@@ -144,32 +145,20 @@ Rectangle
         repeat: false
         onTriggered:
         {
-            if(!CurrentDevice.deviceUpdatingValues)
-            {
-                if(DeviceProperties.isLa3Mode)
-                {
-                    DeviceProperties.changePreset(Math.floor(_tumbler.currentIndex/4), _tumbler.currentIndex%4);
-                }
-                else
-                {
-                    DeviceProperties.preset = _tumbler.currentIndex;
-                }
-            }
+            UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, _tumbler.currentIndex);
         }
     }
 
     Connections{
-        target: CurrentDevice
+        target: UiCore.currentDevice
 
         function onBankPresetChanged()
         {
-            // _tumbler.currentIndex = CurrentDevice.preset
-            // DeviceProperties.bank*4 + DeviceProperties.preset
+            console.log("onBankPresetChanged")
+            main.deviceUpdatingValues = true;
+            _tumbler.currentIndex = UiCore.currentDevice.preset
+            main.deviceUpdatingValues = false;
         }
-    }
-
-    Connections{
-        target: DeviceProperties
 
         function onLa3ChannelChanged(){
             _tumbler.setTumblerColor();

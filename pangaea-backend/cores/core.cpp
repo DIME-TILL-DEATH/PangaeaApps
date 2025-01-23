@@ -11,6 +11,7 @@
 
 #include "cplegacy.h"
 #include "cpmodern.h"
+#include "lapreamp.h"
 
 Core::Core(QObject *parent) : QObject(parent)
 {
@@ -73,15 +74,14 @@ void Core::parseInputData(QByteArray ba)
         }
 
         DeviceType deviceType = static_cast<DeviceType>(parseResult.at(0).toUInt());
-        if(deviceType < DeviceType::LEGACY_DEVICES)
-        {
-            currentDevice = new CPLegacy(this);
 
-        }
-        else
+        switch(deviceType)
         {
-            currentDevice = new CPModern(this);
+        case DeviceType::MODERN_CP: currentDevice = new CPModern(this); break;
+        case DeviceType::LA3: currentDevice = new LAPreamp(this); break;
+        default: currentDevice = new CPLegacy(this);
         }
+
         connect(currentDevice, &AbstractDevice::sgDeviceInstanciated, this, &Core::slDeviceInstanciated);
         currentDevice->initDevice(deviceType);
         timeoutTimer->setInterval(10000);

@@ -122,7 +122,7 @@ signals:
 
     void sigClipped(quint16 irFrameClips, quint16 outFrameClips);
 
-private:
+protected:
     IRWorker irWorker;
     QSettings* appSettings;
 
@@ -138,7 +138,7 @@ private:
 
     QMap<ModuleType, AbstractModule*> typeToModuleMap;
 
-    void setDeviceType(DeviceType newDeviceType);
+    virtual void setDeviceType(DeviceType newDeviceType);
 
     void pushReadPresetCommands();
 

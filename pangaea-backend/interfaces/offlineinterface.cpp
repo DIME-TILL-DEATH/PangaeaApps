@@ -4,6 +4,7 @@
 
 #include "mockcp16legacy.h"
 #include "mockcp16modern.h"
+#include "mockla3.h"
 
 OfflineInterface::OfflineInterface(QObject *parent)
     : AbstractInterface{parent}
@@ -18,6 +19,7 @@ void OfflineInterface::startScan()
 {
     m_discoveredDevicesList.append({DeviceDescription(MockCP16Legacy::mockName(), "virtual", DeviceConnectionType::Offline)});
     m_discoveredDevicesList.append({DeviceDescription(MockCP16Modern::mockName(), "virtual", DeviceConnectionType::Offline)});
+    m_discoveredDevicesList.append({DeviceDescription(MockLa3::mockName(), "virtual", DeviceConnectionType::Offline)});
     emit sgDeviceListUpdated(DeviceConnectionType::Offline, m_discoveredDevicesList);
 }
 
@@ -39,6 +41,10 @@ bool OfflineInterface::connect(DeviceDescription device)
     else if(device.name() == MockCP16Modern::mockName())
     {
         m_mockDevice = new MockCP16Modern(&mutex, &m_uartBuffer);
+    }
+    else if(device.name() == MockLa3::mockName())
+    {
+        m_mockDevice = new MockLa3(&mutex, &m_uartBuffer);
     }
     else
     {

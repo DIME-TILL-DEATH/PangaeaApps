@@ -3,7 +3,6 @@
 #include "core.h"
 
 AbstractDevice::AbstractDevice(Core *owner)
-   : m_deviceClass{DeviceClass::ABSTRACT}
 {
     if(owner)
     {

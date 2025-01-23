@@ -21,7 +21,6 @@
 #include "filtertypeenum.h"
 #include "deviceerrorenum.h"
 #include "devicemessageenum.h"
-#include "deviceclassenum.h"
 #include "uimessagetype.h"
 
 #ifdef Q_OS_ANDROID
@@ -109,7 +108,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
 
     qmlRegisterUncreatableType<FilterTypeEnum>("CppEnums", 1, 0, "FilterType", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<DeviceClassEnum>("CppEnums", 1, 0, "DeviceClass", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DeviceConnectionTypeEnum>("CppEnums", 1, 0, "DeviceConnectionType", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<PresetStateEnum>("CppEnums", 1, 0, "PresetState", "Not creatable as it is an enum type");

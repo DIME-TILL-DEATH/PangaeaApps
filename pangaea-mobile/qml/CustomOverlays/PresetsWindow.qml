@@ -82,14 +82,10 @@ CustomMessageDialog {
         width: _root.width *0.95
         height: _root.height-_root.headerHeight*2-_root.footerHeight
 
-        currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxPresetCount + UiCore.currentDevice.preset
-            /*DeviceProperties.isLa3Mode? DeviceProperties.bank * 4 + DeviceProperties.preset
-                                                : DeviceProperties.bank * DeviceProperties.banksList.length + DeviceProperties.preset*/
+        currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxBankCount + UiCore.currentDevice.preset
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-
-       // model: UiCore.currentDevice.avaliableOutputModes//presetListModel
 
         boundsBehavior: Flickable.StopAtBounds
         clip: true
@@ -118,7 +114,7 @@ CustomMessageDialog {
         }
 
 
-        section.property: "bankNumber"//DeviceProperties.isLa3Mode? "" : "bankNumber"
+        section.property: UiCore.currentDevice.maxBankCount>0 ? "bankNumber" : ""
         section.criteria: ViewSection.FullString
         section.delegate: Item{
             id: _sectionHeaderContent

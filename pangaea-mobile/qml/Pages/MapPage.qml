@@ -15,32 +15,37 @@ Item
     id: _main
 
     function setMapContent(){
-        switch(UiCore.currentDevice.deviceClass)
+        console.log("Device type: ", UiCore.currentDevice.deviceType)
+        switch(UiCore.currentDevice.deviceType)
         {
-            case DeviceClass.CP_LEGACY:
+            case DeviceType.LA3:
+            case DeviceType.MODERN_CP:
             {
-                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
+                console.log("modern")
+                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
                 break;
             }
-            case DeviceClass.CP_MODERN:
+            default:
             {
-                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
+                console.log("default")
+                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
                 break;
             }
         }
     }
 
     function setConfigContent(){
-        switch(UiCore.currentDevice.deviceClass)
+        switch(UiCore.currentDevice.deviceType)
         {
-            case DeviceClass.CP_LEGACY:
-            {
-                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/ConfigUnavaliable.qml";
-                break;
-            }
-            case DeviceClass.CP_MODERN:
+            case DeviceType.LA3:
+            case DeviceType.MODERN_CP:
             {
                 _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/ConfigCP.qml";
+                break;
+            }
+            default:
+            {
+                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/ConfigUnavaliable.qml";
                 break;
             }
         }
@@ -129,27 +134,20 @@ Item
 
         function onCurrentDeviceChanged()
         {
-            switch(UiCore.currentDevice.deviceClass)
+            switch(UiCore.currentDevice.deviceType)
             {
-                case DeviceClass.ABSTRACT:
+                case DeviceType.LA3:
                 {
-                    _mapContentLoader.sourceComponent = undefined
-                    break;
-                }
-                case DeviceClass.CP_LEGACY:
-                {
-                    _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
+                    _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_LA.qml";
                     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
-                    // _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
                     setMapContent();
                     break;
                 }
-                case DeviceClass.CP_MODERN:
+                default:
                 {
                     _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
                     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
-                    // _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
-                    _main.setMapContent();
+                    setMapContent();
                     break;
                 }
             }

@@ -85,7 +85,8 @@ Rectangle
                 width:  parent.width*3/4
                 height: parent.height
 
-                model: DeviceProperties.presetsList
+                model: UiCore.currentDevice.maxPresetCount
+                currentIndex: UiCore.currentDevice.clnPresetMap
                 //currentIndex: DeviceProperties.la3CleanPreset
 
                 visibleItemCount: 1
@@ -132,8 +133,8 @@ Rectangle
                 width:  parent.width*3/4
                 height: parent.height
 
-                model: DeviceProperties.presetsList
-                //currentIndex: DeviceProperties.la3DrivePreset
+                model: UiCore.currentDevice.maxPresetCount
+                currentIndex: UiCore.currentDevice.drvPresetMap
 
                 visibleItemCount: 1
 
@@ -160,17 +161,17 @@ Rectangle
     }
 
     Connections{
-        target: DeviceProperties
+        target: UiCore.currentDevice
 
-        function onLa3CleanPresetChanged()
+        function onClnPresetMapChanged()
         {
-            _tumblerCln.currentIndex = DeviceProperties.la3CleanPreset
+            _tumblerCln.currentIndex = UiCore.currentDevice.clnPresetMap
             main.isModified = false;
         }
 
-        function onLa3DrivePresetChanged()
+        function onDrvPresetMapChanged()
         {
-            _tumblerDst.currentIndex = DeviceProperties.la3DrivePreset
+            _tumblerDst.currentIndex = UiCore.currentDevice.drvPresetMap
             main.isModified = false;
         }
     }

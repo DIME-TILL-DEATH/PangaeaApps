@@ -69,7 +69,7 @@ qt_add_library(pangaea-backend STATIC
     utils/maskedparser.cpp utils/maskedparser.h
     utils/parser.h utils/parser.cpp
 
-    uihelpers/deviceclassenum.h
+
     uihelpers/devicetypeenum.h
     uihelpers/deviceerrorenum.h
     uihelpers/devicemessageenum.h
@@ -81,6 +81,7 @@ qt_add_library(pangaea-backend STATIC
     mock/abstractmockdevice.h mock/abstractmockdevice.cpp
     mock/mockcp16legacy.h mock/mockcp16legacy.cpp
     mock/mockcp16modern.h mock/mockcp16modern.cpp
+    mock/mockla3.h mock/mockla3.cpp
 
 )
 

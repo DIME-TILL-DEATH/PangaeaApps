@@ -24,10 +24,12 @@ public:
     IrFile linkedIr;
     QString currentPresetName;
     preset_data_t currentPresetData;
-private:
+protected:
     QString basePath;
 
     QFile uploadingIrFile;
+
+    system_parameters_t m_systemParameters{0};
 
     void initFolders();
 

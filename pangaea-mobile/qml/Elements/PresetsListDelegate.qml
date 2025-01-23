@@ -9,6 +9,7 @@ import Modules 1.0
 import Elements 1.0
 
 import CppObjects
+import CppEnums
 
 Rectangle{
     id: _root
@@ -49,9 +50,7 @@ Rectangle{
 
                 leftPadding: (_impulseOnIndicatorContainer.width-_impulseOnIndicator.width)/2
 
-                property int la3Preset: (Number(bankNumber)*4 + Number(presetNumber));
-
-                text: "Preset " + presetNumber + ": " + presetName//(DeviceProperties.isLa3Mode ? la3Preset : presetNumber)
+                text: "Preset " + presetNumber + ": " + presetName
                 font.pixelSize: 8 * Style.dip
                 color: Style.colorText
 
@@ -119,15 +118,18 @@ Rectangle{
     }
 
     // Connections{
-    //     target: DeviceProperties
+    //     target: UiCore.currentDevice
 
     //     function onLa3ChannelChanged(){
-    //         if(DeviceProperties.isLa3Mode){
-    //             if(index === DeviceProperties.la3CleanPreset)
+    //         // console.log("LA3 changed")
+
+    //         if(UiCore.currentDevice.deviceType === DeviceType.LA3){
+    //             // console.log("Device is LA3")
+    //             if(index === UiCore.currentDevice.clnPresetMap)
     //             {
     //                 _root.fonColor = "lightgreen";
     //             }
-    //             else if(index === DeviceProperties.la3DrivePreset)
+    //             else if(index === UiCore.currentDevice.drvPresetMap)
     //             {
     //                 _root.fonColor = "red";
     //             }

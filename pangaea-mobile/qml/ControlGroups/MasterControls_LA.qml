@@ -43,8 +43,6 @@ Item
         {
             width:  parent.width*1/6 - _row.spacing
             height: parent.height
-
-            visible: DeviceProperties.isLa3Mode
         }
 
         PresetSpin_LA

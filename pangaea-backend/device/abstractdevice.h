@@ -17,7 +17,6 @@
 #include "presetlistmodel.h"
 
 #include "presetmanager.h"
-#include "deviceclassenum.h"
 
 class Core;
 
@@ -25,7 +24,7 @@ class AbstractDevice : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(DeviceClass deviceClass READ deviceClass CONSTANT)
+    Q_PROPERTY(DeviceType deviceType READ deviceType CONSTANT)
     Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)
 
     Q_PROPERTY(quint16 processingBudget READ processingBudget CONSTANT)
@@ -50,7 +49,6 @@ public:
     explicit AbstractDevice(Core *owner);
     ~AbstractDevice();
 
-    DeviceClass deviceClass() {return m_deviceClass;}
     QString firmwareName() {return m_firmwareName;};
 
     quint16 processingBudget() {return m_processingBudget;};
@@ -60,6 +58,8 @@ public:
 
     virtual void initDevice(DeviceType deviceType) {};
     virtual void readFullState() {};
+
+    DeviceType deviceType() const {return m_deviceType;};
 
     quint8 outputMode() const {return m_outputMode;};
     void setOutputMode(quint8 newOutputMode);
@@ -150,7 +150,6 @@ signals:
 protected:
     Parser m_parser;
 
-    DeviceClass m_deviceClass;    
     DeviceType m_deviceType{DeviceType::UnknownDev};
 
     quint16 m_processingBudget{0};

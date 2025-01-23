@@ -11,8 +11,6 @@
 CPModern::CPModern(Core *parent)
     :AbstractDevice{parent}
 {
-    m_deviceClass = DeviceClass::CP_MODERN;
-
     CPModern::updateOutputModeNames();
 
     m_processingBudget = 280;
@@ -145,7 +143,7 @@ void CPModern::setDeviceType(DeviceType newDeviceType)
 
     switch(m_deviceType)
     {
-    case DeviceType::modernCP:
+    case DeviceType::MODERN_CP:
         m_minimalFirmware = new Firmware("2.00.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16Modern.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;

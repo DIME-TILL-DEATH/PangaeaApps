@@ -10,7 +10,8 @@ enum MockDeviceType
 {
     Mock_Abstract = 0,
     Mock_CPLegacy,
-    Mock_CPModern
+    Mock_CPModern,
+    Mock_LA3
 };
 
 #define FIRMWARE_STRING_SIZE 20
