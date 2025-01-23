@@ -12,7 +12,7 @@ MockLa3::MockLa3(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
 
     quint8 startBank = (m_systemParameters.la3_cln_preset&0xF0)>>4;
     quint8 startPreset = m_systemParameters.la3_cln_preset&0x0F;
-    changePreset(startBank, 0);
+    changePreset(startBank, startPreset);
 
     using namespace std::placeholders;
     m_parser.addCommandHandler("amtdev", std::bind(&MockLa3::amtDevLa3CommHandler, this, _1, _2, _3));
@@ -52,7 +52,7 @@ void MockLa3::la3MapCommHandler(const QString &command, const QByteArray &argume
     }
     if(arguments == "use")
     {
-        emit answerReady("la3map use " + data + "\r\n");
+        emit answerReady("la3map use 0\r\n");
         return;
     }
     emit answerReady("la3map\rINCORRECT_ARGUMENT\n");
