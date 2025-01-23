@@ -314,8 +314,11 @@ Item {
                                 _delayCombo.currentIndex = 0;
                                 _msgBudegetError.open();
                             }
-                            UiCore.currentDevice.DL.used = _delayCombo.currentIndex;
-                            UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
+                            else
+                            {
+                                UiCore.currentDevice.DL.used = _delayCombo.currentIndex;
+                                UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
+                            }
                         }
                     }
                 }
