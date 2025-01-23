@@ -10,7 +10,7 @@ public:
     explicit DeviceTypeEnum(){};
     enum Value
     {
-        UnknownDev=0,
+        UNKNOWN_DEVICE=0,
         LEGACY_CP100,
         LEGACY_CP16,
         LEGACY_CP16PA,

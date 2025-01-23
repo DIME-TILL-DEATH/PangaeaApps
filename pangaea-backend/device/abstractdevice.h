@@ -150,7 +150,7 @@ signals:
 protected:
     Parser m_parser;
 
-    DeviceType m_deviceType{DeviceType::UnknownDev};
+    DeviceType m_deviceType{DeviceType::UNKNOWN_DEVICE};
 
     quint16 m_processingBudget{0};
 

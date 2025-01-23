@@ -43,23 +43,19 @@ BaseModule
                 anchors.fill: parent
                 onClicked:
                 {
-                    switch(UiCore.currentDevice.deviceClass)
+                    switch(UiCore.currentDevice.deviceType)
                     {
-                        case DeviceClass.ABSTRACT:
-                        {
-                            console.log("Abstract device")
-                            break;
-                        }
-                        case DeviceClass.CP_LEGACY:
-                        {
-                            UiCore.uploadIr("");
-                            break;
-                        }
-                        case DeviceClass.CP_MODERN:
+                        case DeviceType.LA3:
+                        case DeviceType.MODERN_CP:
                         {
                             // _irManagement.open();
                             openIrManagementWindow();
                             // _irManagement.visible = true;
+                            break;
+                        }
+                        default:
+                        {
+                            UiCore.uploadIr("");
                             break;
                         }
                     }
