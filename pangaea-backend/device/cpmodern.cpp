@@ -518,7 +518,7 @@ void CPModern::uploadFirmware(const QByteArray &firmware)
         m_rawFirmwareData = firmware;
 
         qint64 symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / uploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
-        qint64 symbolsToRecieve = 0; //QString("REQUEST_NEXT_CHUNK\n").size() * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
+        // qint64 symbolsToRecieve = 0; //QString("REQUEST_NEXT_CHUNK\n").size() * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
 
         qDebug() << Q_FUNC_INFO << symbolsToSend;
 
@@ -536,7 +536,7 @@ void CPModern::uploadFirmware(const QByteArray &firmware)
         baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());
         baSend.append(baTmp);
 
-        emit sgSendWithoutConfirmation(baSend, symbolsToSend, symbolsToRecieve);
+        emit sgSendWithoutConfirmation(baSend, symbolsToSend, 0);
         emit sgProcessCommands();
     }
 }

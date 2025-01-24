@@ -138,7 +138,7 @@ void Core::sendWithoutConfirmation(QByteArray data, qint64 dataSizeToSend, qint6
 {
     if(dataSizeToSend > -1) symbolsToSend = dataSizeToSend;
 
-    if(dataSizeToRecieve > -1) symbolsToRecieve = dataSizeToRecieve;
+    if(dataSizeToRecieve != -1) symbolsToRecieve = dataSizeToRecieve;
 
     commandsSended.clear();
     commandsPending.append(data);
