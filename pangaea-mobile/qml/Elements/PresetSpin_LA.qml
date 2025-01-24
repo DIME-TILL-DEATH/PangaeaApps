@@ -91,8 +91,6 @@ Rectangle
                     currentTextColor = Style.colorText;
                     opacityBlink = 0.5
                 }
-
-                console.log("setTumblerColor", currentIndex, UiCore.currentDevice.clnPresetMap, UiCore.currentDevice.drvPresetMap, UiCore.currentDevice.la3Channel)
             }
 
             delegate: MText

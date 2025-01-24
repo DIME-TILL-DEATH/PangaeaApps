@@ -942,7 +942,7 @@ WIDTH: in mono processing &apos;width&apos; is using to alterate type of chorus 
 HPF: high pass filter for processed signal.
 
 MIX: proportion of dry and wet signal.</source>
-        <translation>Хорус имитирует эффект будто несколько одинаковых инструментов играют вместе.
+        <translation>Хорус имитирует эффект совместной игры нескольких одинаковых инструментов
 
 RATE: контролирует скорость с которой низкочастотный генератор модулирует задержку эффекта.
 
@@ -1017,13 +1017,13 @@ FREQUENCY: Central frequency of the band.
 GAIN: Amplification/attenuation factor of the band.
 
 Q(quality): Bandwidth - the area around the set frequency that the EQ will amplify or attenuate.</source>
-        <translation>5ти полосный параметрический эквалайзер.
+        <translation>5-полосный параметрический эквалайзер.
 
 FREQUENCY: центральная частота полосы
 
 GAIN: усиление/ослабление выбранной полосы
 
-Q(добротность): определяет ширину полосы. ЧЕм больше значение, тем уже полоса.</translation>
+Q (добротность): определяет ширину полосы. Чем больше значение, тем уже полоса.</translation>
     </message>
 </context>
 <context>
@@ -1041,11 +1041,11 @@ TYPE: There are 3 types of the effect to choose from:
 1. Short: Small room
 2. Medium: Meduim size room
 3. Long: Large room</source>
-        <translation>Этот эффект имитирует аккустику комнаты. Ранние отражения это звуки которые воспринимаются сразу после прямого сигнала, до того как вся реверберация помещения будет слышна.
+        <translation>Этот эффект имитирует акустику комнаты. Ранние отражения это звуки, которые воспринимаются сразу после прямого сигнала, до того как вся реверберация помещения будет слышна.
 
 VOLUME: количество ранних отражений подмешанных к прямому сигналу.
 
-TYPE: Определяет размер комнаты.</translation>
+TYPE:  SHORT, MEDIUM, LONG (малая, средняя, большая) - три размера комнаты на выбор</translation>
     </message>
 </context>
 <context>
