@@ -7,7 +7,9 @@
 InterfaceCore::InterfaceCore(QObject *parent)
                 : QObject{parent}
 {
+#ifndef Q_OS_IOS
     m_usbInterface = new UsbInterface(this);
+#endif
     m_bleInterface = new BleInterface(this);
     m_offlineInterface = new OfflineInterface(this);
 
@@ -43,8 +45,10 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
         }
         case DeviceConnectionType::USB:
         {
+            #ifndef Q_OS_IOS
             qDebug() << "Settling USB interface";
             m_exchangeInterface = m_usbInterface;
+            #endif
             break;
         }
         case DeviceConnectionType::Offline:
@@ -114,8 +118,10 @@ void InterfaceCore::startScanning(DeviceConnectionType connectionType)
     }
     case DeviceConnectionType::USB:
     {
+        #ifndef Q_OS_IOS
         QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
         m_usbInterface->startScan();
+        #endif
         break;
     }
     case DeviceConnectionType::Offline:
@@ -130,11 +136,13 @@ void InterfaceCore::startScanning(DeviceConnectionType connectionType)
 
 void InterfaceCore::stopScanning()
 {
+#ifndef Q_OS_IOS
     QObject::disconnect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
+    m_usbInterface->stopScan();
+#endif
     QObject::disconnect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
     QObject::disconnect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
 
-    m_usbInterface->stopScan();
     m_bleInterface->stopScan();
 }
 

@@ -7,7 +7,9 @@
 #include "devicedescription.h"
 #include "abstractinterface.h"
 #include "bleinterface.h"
+#ifndef Q_OS_IOS
 #include "usbinterface.h"
+#endif
 #include "offlineinterface.h"
 
 class InterfaceCore : public QObject
@@ -46,7 +48,9 @@ signals:
 private:
     AbstractInterface* m_exchangeInterface{nullptr};
     BleInterface* m_bleInterface{nullptr};
+#ifndef Q_OS_IOS
     UsbInterface* m_usbInterface{nullptr};
+#endif
     OfflineInterface* m_offlineInterface{nullptr};
 
     QSettings* appSettings;

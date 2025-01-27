@@ -10,6 +10,12 @@ set(QT_QML_GENERATE_QMLLS_INI ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
+if(NOT IOS)
+    set(USB_INTERFACE_SOURCES
+        interfaces/usbinterface.cpp interfaces/usbinterface.h
+    )
+endif()
+
 qt_add_library(pangaea-backend STATIC
     cores/core.cpp cores/core.h
     cores/netcore.cpp cores/netcore.h
@@ -17,10 +23,9 @@ qt_add_library(pangaea-backend STATIC
 
     interfaces/abstractinterface.cpp interfaces/abstractinterface.h
     interfaces/bleinterface.cpp interfaces/bleinterface.h
-    interfaces/usbinterface.cpp interfaces/usbinterface.h
+    # interfaces/usbinterface.cpp interfaces/usbinterface.h
     interfaces/devicedescription.cpp interfaces/devicedescription.h
     interfaces/offlineinterface.h interfaces/offlineinterface.cpp
-
 
     device/defines.h
 
@@ -83,7 +88,9 @@ qt_add_library(pangaea-backend STATIC
     mock/mockcp16modern.h mock/mockcp16modern.cpp
     mock/mockla3.h mock/mockla3.cpp
 
+    ${USB_INTERFACE_SOURCES}
 )
+
 
 target_include_directories(pangaea-backend PUBLIC
     cores
@@ -96,15 +103,27 @@ target_include_directories(pangaea-backend PUBLIC
     utils
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning SerialPort Concurrent)
-target_link_libraries(pangaea-backend PUBLIC
-    Qt6::Core
-    Qt6::Bluetooth
-    Qt6::Network
-    Qt6::Positioning
-    Qt6::SerialPort
-    Qt6::Concurrent
-)
+
+if(NOT IOS)
+    find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning SerialPort Concurrent)
+    target_link_libraries(pangaea-backend PUBLIC
+        Qt6::Core
+        Qt6::Bluetooth
+        Qt6::Network
+        Qt6::Positioning
+        Qt6::SerialPort
+        Qt6::Concurrent
+    )
+else()
+    find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning Concurrent)
+    target_link_libraries(pangaea-backend PUBLIC
+        Qt6::Core
+        Qt6::Bluetooth
+        Qt6::Network
+        Qt6::Positioning
+        Qt6::Concurrent
+    )
+endif()
 
 if(ANDROID)
     target_link_libraries(pangaea-backend PUBLIC Qt::CorePrivate)
