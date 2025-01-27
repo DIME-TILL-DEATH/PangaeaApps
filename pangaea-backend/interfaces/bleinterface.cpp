@@ -3,9 +3,9 @@
 #include <QPermission>
 
 #include <QCoreApplication>
+#include <QGeoPositionInfoSource>
 
 #ifdef Q_OS_ANDROID
-#include <QGeoPositionInfoSource>
 #include <QtCore/private/qandroidextras_p.h>
 #include "androidutils.h"
 #endif

@@ -7,23 +7,20 @@
 #include <QObject>
 #include <QTimer>
 #include <QSettings>
-
 #include <QTranslator>
 
+#ifdef __ANDROID__
 #include "activityresultmanager.h"
+#endif
 
 #include "firmware.h"
-
 #include "abstractdevice.h"
-
 #include "uimessagetype.h"
-
 
 class UiCore : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged FINAL)
-
     Q_PROPERTY(AbstractDevice* currentDevice READ currentDevice NOTIFY currentDeviceChanged FINAL)
 public:
     explicit UiCore(QObject *parent = nullptr);
@@ -32,25 +29,28 @@ public:
 
     Q_INVOKABLE void disconnectFromDevice();
 
-    Q_INVOKABLE void uploadIr(QString fullFilePath, QString dstFilePath = "");
+    Q_INVOKABLE void uploadIr(QString srcFilePath, QString dstFilePath = "");
     Q_INVOKABLE void convertAndUploadIr(QString srcFilePath, QString dstFilePath = "");
 
-    Q_INVOKABLE void exportPreset(QString fileName);
+    Q_INVOKABLE void exportPreset(QString fileName, QString dstPath = "");
     Q_INVOKABLE void importPreset(QString filePath);
 
+#ifdef Q_OS_ANDROID
     Q_INVOKABLE void pickFirmwareFile();
-    Q_INVOKABLE void setFirmware (QString fullFilePath);
+#endif
+    Q_INVOKABLE void setFirmware(QString fullFilePath);
     Q_INVOKABLE void doOnlineFirmwareUpdate();
 
     Q_INVOKABLE void setLanguage(QString languageCode);
     Q_INVOKABLE void saveSetting(QString settingName, QVariant settingValue);
 
     Q_INVOKABLE void openManualExternally(QString fileName);
+    Q_INVOKABLE void runIrConvertor();
 
     const QString &moduleName() const {return m_moduleName;};
     void setModuleName(const QString &newModuleName);
 
-    AbstractDevice *currentDevice() const;
+    AbstractDevice *currentDevice() const {return m_currentDevice;};
 
 signals:
 
@@ -84,15 +84,18 @@ signals:
 
 public slots:
     void slFirmwareFilePicked(QString filePath, QString fileName);
+
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
+    void slNewAppVersionAvaliable(QString appVersion) {}
 
     void slCurrentDeviceChanged(AbstractDevice* newDevice);
 
     void slExportPreset(QString fullFilePath, QString fileName);
     void slImportPreset(QString fullFilePath, QString fileName);
-
+#ifdef Q_OS_ANDROID
     void slImpulseFilePicked(QString filePath, QString fileName);
+#endif
 
 private:
     QQmlApplicationEngine* m_qmlEngine;
@@ -119,7 +122,9 @@ private:
     void loadTranslator(QString languageCode);
     void loadDefaultTranslator();
 
+#ifdef Q_OS_ANDROID
     void pickFile(ActivityType fileType, QString filter);
+#endif
 
     AbstractDevice *m_currentDevice = nullptr;
 };

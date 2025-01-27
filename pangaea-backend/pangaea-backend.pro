@@ -2,9 +2,10 @@ QT -= gui
 QT += core
 QT += serialport
 QT += bluetooth
+QT += positioning
+QT += concurrent
 
 android{
-    QT += positioning
     QT += core-private
 }
 
@@ -23,65 +24,122 @@ DEFINES += CP100PA_FIRMWARE_VERSION=\\\"PA.6.09.04\\\"
 
 SOURCES += \
     cores/core.cpp \
-    cores/interfacecore.cpp \
     cores/netcore.cpp \
-    device/answerworker.cpp \
-    device/device.cpp \
-    device/deviceanswer.cpp \
-    device/deviceparameter.cpp \
-    device/firmware.cpp \
-    device/preset.cpp \
+    cores/interfacecore.cpp \
     interfaces/abstractinterface.cpp \
-    interfaces/devicedescription.cpp \
     interfaces/bleinterface.cpp \
     interfaces/usbinterface.cpp \
-    models/deviceslistmodel.cpp \
+    interfaces/devicedescription.cpp \
+    interfaces/offlineinterface.cpp \
+    device/deviceanswer.cpp \
+    device/firmware.cpp \
+    device/presetlegacy.cpp \
+    device/presetmodern.cpp \
+    device/presetabstract.cpp \
+    device/irfile.cpp \
+    device/deviceparameter.cpp \
+    device/abstractdevice.cpp \
+    device/cplegacy.cpp \
+    device/cpmodern.cpp \
+    device/lapreamp.cpp \
+    device/hardwarepreset.cpp \
     models/presetlistmodel.cpp \
-    moduls/abstractmodule.cpp \
-    moduls/eqband.cpp \
-    moduls/eqresponse.cpp \
-    moduls/poweramp.cpp \
-    uihelpers/controlvalue.cpp \
-    uihelpers/appproperties.cpp \
-    uihelpers/deviceproperties.cpp \
+    models/deviceslistmodel.cpp \
+    models/moduleslistmodel.cpp \
+    modules/controlvalue.cpp \
+    modules/controlqlegacy.cpp \
+    modules/abstractmodule.cpp \
+    modules/presetvolume.cpp \
+    modules/noisegate.cpp \
+    modules/compressor.cpp \
+    modules/preamp.cpp \
+    modules/poweramp.cpp \
+    modules/presence.cpp \
+    modules/hipassfilter.cpp \
+    modules/eqband.cpp \
+    modules/eqparametric.cpp \
+    modules/lowpassfilter.cpp \
+    modules/cabsim.cpp \
+    modules/earlyreflections.cpp \
+    modules/delay.cpp \
+    modules/tremolo.cpp \
+    modules/chorus.cpp \
+    modules/phaser.cpp \
     utils/irworker.cpp \
+    utils/presetmanager.cpp \
+    utils/maskedparser.cpp \
     utils/parser.cpp \
-    utils/presetmanager.cpp
+    mock/abstractmockdevice.cpp \
+    mock/mockcp16legacy.cpp \
+    mock/mockcp16modern.cpp \
+    mock/mockla3.cpp
 
 HEADERS += \
     cores/core.h \
-    cores/interfacecore.h \
     cores/netcore.h \
-    device/answerworker.h \
-    device/defines.h \
-    device/device.h \
-    device/deviceanswer.h \
-    device/deviceparameter.h \
-    device/firmware.h \
-    device/preset.h \
+    cores/interfacecore.h \
     interfaces/abstractinterface.h \
-    interfaces/devicedescription.h \
     interfaces/bleinterface.h \
     interfaces/usbinterface.h \
-    models/deviceslistmodel.h \
+    interfaces/devicedescription.h \
+    interfaces/offlineinterface.h \
+    device/defines.h \
+    device/deviceanswer.h \
+    device/firmware.h \
+    device/presetlegacy.h \
+    device/presetmodern.h \
+    device/presetabstract.h \
+    device/irfile.h \
+    device/deviceparameter.h \
+    device/abstractdevice.h \
+    device/cplegacy.h \
+    device/cpmodern.h \
+    device/lapreamp.h \
+    device/hardwarepreset.h \
     models/presetlistmodel.h \
-    moduls/abstractmodule.h \
-    moduls/eqband.h \
-    moduls/eqresponse.h \
-    moduls/poweramp.h \
-    uihelpers/appproperties.h \
-    uihelpers/controlvalue.h \
-    uihelpers/deviceproperties.h \
-    uihelpers/devicetypeenum.h \
+    models/deviceslistmodel.h \
+    models/moduleslistmodel.h \
+    modules/controlvalue.h \
+    modules/controlqlegacy.h \
+    modules/abstractmodule.h \
+    modules/presetvolume.h \
+    modules/noisegate.h \
+    modules/compressor.h \
+    modules/preamp.h \
+    modules/poweramp.h \
+    modules/presence.h \
+    modules/hipassfilter.h \
+    modules/eqband.h \
+    modules/eqparametric.h \
+    modules/lowpassfilter.h \
+    modules/cabsim.h \
+    modules/earlyreflections.h \
+    modules/delay.h \
+    modules/tremolo.h \
+    modules/chorus.h \
+    modules/phaser.h \
     utils/irworker.h \
+    utils/presetmanager.h \
+    utils/maskedparser.h \
     utils/parser.h \
-    utils/presetmanager.h
+    uihelpers/devicetypeenum.h \
+    uihelpers/deviceerrorenum.h \
+    uihelpers/devicemessageenum.h \
+    uihelpers/filtertypeenum.h \
+    uihelpers/moduletypeenum.h \
+    uihelpers/presetstateenum.h \
+    uihelpers/uimessagetype.h \
+    mock/abstractmockdevice.h \
+    mock/mockcp16legacy.h \
+    mock/mockcp16modern.h \
+    mock/mockla3.h
 
 INCLUDEPATH += cores
 INCLUDEPATH += device
 INCLUDEPATH += interfaces
+INCLUDEPATH += mock
+INCLUDEPATH += modules
 INCLUDEPATH += models
-INCLUDEPATH += moduls
 INCLUDEPATH += uihelpers
 INCLUDEPATH += utils
 

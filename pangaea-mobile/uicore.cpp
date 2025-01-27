@@ -1,13 +1,18 @@
 #include <QDebug>
 #include <QFileInfo>
+#include <QDir>
 #include <QStandardPaths>
 #include <QDesktopServices>
 
+#include <QProcess>
 #include <QCoreApplication>
+#include <QUrl>
 
-#include "uicore.h"
+#include <QSettings>
+
 #include "resampler.h"
 
+#include "uicore.h"
 
 #ifdef __ANDROID__
 #include <jni.h>
@@ -59,15 +64,8 @@ void UiCore::setupApplication()
 void UiCore::disconnectFromDevice()
 {
     disconnect(m_currentDevice);
-    // AbstractDevice* oldPtr = m_currentDevice;
     m_currentDevice = &dummyDevice;
     emit currentDeviceChanged();
-
-    // if(oldPtr)
-    // {
-    //     oldPtr->deleteLater();
-    // }
-
     emit sgDisconnectFromDevice();
 }
 
@@ -88,16 +86,20 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)
 {
     QFileInfo irFileInfo(m_pickedIrPath);
-
-    QString irOutFileName = irFileInfo.fileName();
-    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/convertedIR/";
+#ifdef Q_OS_ANDROID
+    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0) +
+                        "/AMT/pangaea_mobile/convertedIR/";
+#else
+    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) +
+                        "/AMT/pangaeaCPPA/convertedIR/";
+#endif
     QString tmpFilePath = outFolder+"tmp.wav";
 
     if(!QDir(outFolder).exists())
     {
         QDir().mkpath(outFolder);
     }
-    QString outpuFilePath = outFolder + irOutFileName;
+    QString outpuFilePath = outFolder + irFileInfo.fileName();;
 
     QFile tmpFile;
     tmpFile.setFileName(m_pickedIrPath);
@@ -110,84 +112,7 @@ void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)
     m_currentDevice->startIrUpload(outpuFilePath, m_dstIrPath);
 }
 
-void UiCore::pickFile(ActivityType fileType, QString filter)
-{
-#ifdef Q_OS_ANDROID
-    QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "ACTION_OPEN_DOCUMENT");
-
-    jint FLAG_READ_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
-    jint FLAG_PERSISTABLE_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
-
-    QJniObject intent("android/content/Intent");
-    if (ACTION_OPEN_DOCUMENT.isValid() && intent.isValid())
-    {
-        intent.callObjectMethod("setAction", "(Ljava/lang/String;)Landroid/content/Intent;", ACTION_OPEN_DOCUMENT.object<jstring>());
-        intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString(filter).object<jstring>());
-
-        intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_READ_PERMISSION);
-        intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_PERSISTABLE_PERMISSION);
-
-        QtAndroidPrivate::startActivity(intent, fileType, &activityResultHandler);
-    }
-#endif
-}
-
-void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
-{
-
-    m_pickedIrPath = filePath;
-    QFileInfo fileInfo(filePath);
-    qDebug() << "Impulse picked" << fileName
-             << "size:" << fileInfo.size() << "ir effective:" << m_currentDevice->maxIrSize();
-
-    if(m_currentDevice->deviceType() > DeviceType::LEGACY_DEVICES)
-    {
-        if(fileInfo.size() > m_currentDevice->maxIrSize())
-        {
-            emit sgUiMessage(UiMessageType::PROPOSE_IR_TRIM, "File is bigger than processing IR", {fileName, m_pickedIrPath, m_dstIrPath});
-            return;
-        }
-    }
-
-    m_currentDevice->startIrUpload(filePath, m_dstIrPath, false);
-}
-
-void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
-{
-    emit sgSetUIText("firmware_local_path", updateFirmware->path());
-    emit sgSetUIText("new_firmware_avaliable", oldFirmware->firmwareVersion() + ',' + updateFirmware->firmwareVersion());
-}
-
-void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware)
-{
-    emit sgSetUIText("firmware_version_error",
-                     actualFirmware->firmwareVersion()+","+minimalFirmware->firmwareVersion());
-    emit sgSetUIText("firmware_local_path", minimalFirmware->path());
-}
-
-
-void UiCore::pickFirmwareFile()
-{
-    pickFile(ActivityType::PICK_FIRMWARE, "*/*");
-}
-
-void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
-{
-    emit sgSetUIText("firmware_file_picked", filePath + ',' + fileName);
-}
-
-void UiCore::setFirmware(QString fullFilePath)
-{
-    emit sgSetFirmware(fullFilePath);
-    //m_currentDevice->setFirmware(fullFilePath);
-}
-
-void UiCore::doOnlineFirmwareUpdate()
-{
-    emit sgDoOnlineFirmwareUpdate();
-}
-
-void UiCore::exportPreset(QString fileName)
+void UiCore::exportPreset(QString fileName, QString dstPath)
 {
 #ifdef Q_OS_ANDROID
     Q_UNUSED(fileName)
@@ -208,8 +133,8 @@ void UiCore::exportPreset(QString fileName)
 
 
         intent.callObjectMethod("putExtra", "(Ljava/lang/String;[Ljava/lang/String;)Landroid/content/Intent;",
-                                                EXTRA_TITLE.object<jstring>(),
-                                                QJniObject::fromString("Pangaea_preset.pst").object<jstring>());
+                                EXTRA_TITLE.object<jstring>(),
+                                QJniObject::fromString("Pangaea_preset.pst").object<jstring>());
 
         intent.callObjectMethod("addCategory", "(Ljava/lang/String;)Landroid/content/Intent;", CATEGORY_OPENABLE.object<jstring>());
 
@@ -219,6 +144,8 @@ void UiCore::exportPreset(QString fileName)
 
         QtAndroidPrivate::startActivity(intent, ActivityType::CREATE_PRESET, &activityResultHandler);
     }
+#else
+    m_currentDevice->exportPreset(dstPath, fileName);
 #endif
 }
 
@@ -243,18 +170,43 @@ void UiCore::slImportPreset(QString fullFilePath, QString fileName)
     m_currentDevice->importPreset(fullFilePath, fileName);
 }
 
-// void UiCore::slDeviceDisconnected()
-// {
-//     disconnect(m_currentDevice);
-//     AbstractDevice* oldPtr = m_currentDevice;
-//     m_currentDevice = &dummyDevice;
-//     emit currentDeviceChanged();
+void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
+{
+    emit sgSetUIText("firmware_file_picked", filePath + ',' + fileName);
+}
 
-//     if(oldPtr)
-//     {
-//         oldPtr->deleteLater();
-//     }
-// }
+void UiCore::setFirmware(QString fullFilePath)
+{
+    emit sgSetFirmware(fullFilePath);
+    //m_currentDevice->setFirmware(fullFilePath);
+}
+
+void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
+{
+    emit sgSetUIText("firmware_local_path", updateFirmware->path());
+    emit sgSetUIText("new_firmware_avaliable", oldFirmware->firmwareVersion() + ',' + updateFirmware->firmwareVersion());
+}
+
+void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware)
+{
+    emit sgSetUIText("firmware_version_error",
+                     actualFirmware->firmwareVersion()+","+minimalFirmware->firmwareVersion());
+    emit sgSetUIText("firmware_local_path", minimalFirmware->path());
+}
+
+// TODO прямой запуск сигнала из QML
+void UiCore::doOnlineFirmwareUpdate()
+{
+    emit sgDoOnlineFirmwareUpdate();
+}
+
+void UiCore::saveSetting(QString settingName, QVariant settingValue)
+{
+    appSettings->setValue(settingName, settingValue);
+    appSettings->sync();
+
+    qInfo() << __FUNCTION__ << "Setting name: " << settingName << "Setting value:" << settingValue;
+}
 
 void UiCore::setLanguage(QString languageCode)
 {
@@ -290,22 +242,13 @@ void UiCore::loadTranslator(QString languageCode)
 
 void UiCore::loadDefaultTranslator()
 {
-    if (m_translator.load(QLocale(), QLatin1String("pangaea-mobile"),
-                        QLatin1String("_"), ":/translations/"))
+    if (m_translator.load(QLocale(), QLatin1String("pangaea-mobile"), QLatin1String("_"), ":/translations/"))
     {
         qDebug() << "Default translator loaded. Locale: " << QLocale();
         QCoreApplication::installTranslator(&m_translator);
 
         emit sgTranslatorChanged(QLocale().nativeLanguageName());
     }
-}
-
-void UiCore::saveSetting(QString settingName, QVariant settingValue)
-{
-    appSettings->setValue(settingName, settingValue);
-    appSettings->sync();
-
-    qDebug() << __FUNCTION__ << "Setting name: " << settingName << "Setting value:" << settingValue;
 }
 
 void UiCore::openManualExternally(QString fileName)
@@ -318,6 +261,19 @@ void UiCore::openManualExternally(QString fileName)
     }
 
     QString fullFileName =  fileName + "_" + appLanguage + ".pdf";
+
+#ifdef Q_OS_LINUX
+    QString filePath = QCoreApplication::applicationDirPath() + "/../docs/" + fullFileName;
+
+    QProcess proc;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.remove("LD_LIBRARY_PATH"); // force evince use system librarys
+
+    proc.setProcessEnvironment(env);
+    proc.setProgram("evince");
+    proc.setArguments(QStringList(filePath));
+    proc.startDetached();
+#elif Q_OS_ANDROID
     QString filePath = ":/docs/" + fullFileName;
     QFile pdfFile(filePath);
 
@@ -328,20 +284,20 @@ void UiCore::openManualExternally(QString fileName)
         pdfFile.setFileName(filePath);
     }
 
-    #ifdef Q_OS_ANDROID
-        QString temporallyPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation)+"/" + fullFileName;
-        pdfFile.copy(temporallyPath);
+    QString temporallyPath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation)+"/" + fullFileName;
+    pdfFile.copy(temporallyPath);
 
-        qDebug() << "Final manual path: " << temporallyPath;
+    qDebug() << "Final manual path: " << temporallyPath;
 
-        QJniObject::callStaticMethod<void>(
-                "com.amtelectronics.utils/JavaFile", "openFileExternally",
-                "(Ljava/lang/String;Landroid/content/Context;)V",
-                QJniObject::fromString(fullFileName).object<jstring>(),
-                QNativeInterface::QAndroidApplication::context());
-    #else
-        QDesktopServices::openUrl(filePath);
-    #endif
+    QJniObject::callStaticMethod<void>(
+        "com.amtelectronics.utils/JavaFile", "openFileExternally",
+        "(Ljava/lang/String;Landroid/content/Context;)V",
+        QJniObject::fromString(fullFileName).object<jstring>(),
+        QNativeInterface::QAndroidApplication::context());
+#else
+    QString filePath =  QCoreApplication::applicationDirPath() + "/docs/" + fullFileName;
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+#endif
 }
 
 void UiCore::setModuleName(const QString &newModuleName)
@@ -358,7 +314,68 @@ void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
     emit currentDeviceChanged();
 }
 
-AbstractDevice *UiCore::currentDevice() const
+#ifdef Q_OS_ANDROID
+void UiCore::pickFirmwareFile()
 {
-    return m_currentDevice;
+    pickFile(ActivityType::PICK_FIRMWARE, "*/*");
+}
+
+void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
+{
+    m_pickedIrPath = filePath;
+    QFileInfo fileInfo(filePath);
+    qDebug() << "Impulse picked" << fileName
+             << "size:" << fileInfo.size() << "ir effective:" << m_currentDevice->maxIrSize();
+
+    if(m_currentDevice->deviceType() > DeviceType::LEGACY_DEVICES)
+    {
+        if(fileInfo.size() > m_currentDevice->maxIrSize())
+        {
+            emit sgUiMessage(UiMessageType::PROPOSE_IR_TRIM, "File is bigger than processing IR", {fileName, m_pickedIrPath, m_dstIrPath});
+            return;
+        }
+    }
+
+    m_currentDevice->startIrUpload(filePath, m_dstIrPath, false);
+}
+
+void UiCore::pickFile(ActivityType fileType, QString filter)
+{
+    QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "ACTION_OPEN_DOCUMENT");
+
+    jint FLAG_READ_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
+    jint FLAG_PERSISTABLE_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
+
+    QJniObject intent("android/content/Intent");
+    if (ACTION_OPEN_DOCUMENT.isValid() && intent.isValid())
+    {
+        intent.callObjectMethod("setAction", "(Ljava/lang/String;)Landroid/content/Intent;", ACTION_OPEN_DOCUMENT.object<jstring>());
+        intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString(filter).object<jstring>());
+
+        intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_READ_PERMISSION);
+        intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_PERSISTABLE_PERMISSION);
+
+        QtAndroidPrivate::startActivity(intent, fileType, &activityResultHandler);
+    }
+}
+#endif
+
+void UiCore::runIrConvertor()
+{
+    QProcess irConvertorProcess;
+
+#ifdef Q_OS_WIN
+    irConvertorProcess.setWorkingDirectory(QCoreApplication::applicationDirPath());
+    irConvertorProcess.setProgram("IrConverter.exe");
+    irConvertorProcess.startDetached();
+#endif
+
+#ifdef Q_OS_MACOS
+    qDebug() << "Run converter" << irConvertorProcess.startDetached(QCoreApplication::applicationDirPath() + "/IrConverter");
+#endif
+
+#ifdef Q_OS_LINUX
+    QString path = QCoreApplication::applicationDirPath() + "/IrConverter";
+    qDebug() << "Run converter, paht" << path << "result:" << irConvertorProcess.startDetached(path);
+#endif
 }

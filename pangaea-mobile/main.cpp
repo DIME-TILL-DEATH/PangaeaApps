@@ -9,7 +9,6 @@
 #include <QDebug>
 
 #include "core.h"
-#include "uicore.h"
 #include "uiinterfacemanager.h"
 #include "netcore.h"
 
@@ -22,6 +21,8 @@
 #include "deviceerrorenum.h"
 #include "devicemessageenum.h"
 #include "uimessagetype.h"
+
+#include "uicore.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
@@ -67,6 +68,11 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("amtelectronics.com");
     app.setApplicationName("pangaea mobile");
 
+#ifdef Q_OS_LINUX
+    QApplication::setWindowIcon(QIcon(":/qml/Images/AMT.svg"));
+    app.setApplicationVersion(VERSION_STRING);
+#endif
+
     Logger log;
     log.setAsMessageHandlerForApp();
     appLogger_ptr = &log;
@@ -88,7 +94,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(threadController.backendThread(), &QThread::finished, core, &QObject::deleteLater);
     QObject::connect(threadController.backendThread(), &QThread::finished, netCore, &QObject::deleteLater);
-    QObject::connect(threadController.backendThread(), &QThread::finished, interfaceManager, &QObject::deleteLater);
+    // QObject::connect(threadController.backendThread(), &QThread::finished, interfaceManager, &QObject::deleteLater);
 
     //-----------------------------------------------------------------
     // UI creation
@@ -101,6 +107,9 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/firmwares");
     engine.addImportPath(":/translations");
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
+#ifdef Q_OS_MACOS
+    QQuickStyle::setStyle("Basic");
+#endif
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
@@ -121,19 +130,17 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     // connections
     //-------------------------------------------------------------------------------
+    // QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
+    // QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
     UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
-
 
     QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgCurrentDeviceChanged, &uiCore, &UiCore::slCurrentDeviceChanged, Qt::QueuedConnection);
-
     QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiCore::sgSetProgress, Qt::QueuedConnection);
 
-    // QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
     QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
     QObject::connect(&uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
-    // QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
     QObject::connect(netCore, &NetCore::sgDownloadProgress, &uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);
 
     Core::connect(interfaceManager, &InterfaceCore::sgNewData, core, &Core::parseInputData, Qt::QueuedConnection);
@@ -155,6 +162,7 @@ int main(int argc, char *argv[])
     QObject::connect(&uiCore, &UiCore::sgModuleNameChanged, interfaceManager, &InterfaceCore::setModuleName);
     QObject::connect(interfaceManager, &InterfaceCore::sgModuleNameUpdated, &uiCore, &UiCore::setModuleName);
 
+    // TODO InterfaceCore теперь в UI thread. Нужен ли отдельный объект?
     QObject::connect(interfaceManager, &InterfaceCore::sgDeviceListUpdated, &uiInterfaceManager, &UiInterfaceManager::updateDevicesList);
     QObject::connect(interfaceManager, &InterfaceCore::sgConnectionStarted, &uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted);
     QObject::connect(interfaceManager, &InterfaceCore::sgInterfaceConnected, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceConnected);

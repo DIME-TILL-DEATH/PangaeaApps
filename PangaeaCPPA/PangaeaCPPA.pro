@@ -1,23 +1,27 @@
 TARGET   = PangaeaCPPA
 TEMPLATE = app
 
+QT += core
+# QT += concurrent
+QT += gui
+QT += bluetooth
+QT += serialport
 QT += quick
 QT += quickcontrols2
-QT += qml
 QT += svg
-QT += serialport
-QT += bluetooth
+QT += qml
+QT += positioning
 QT += widgets
 
 win32 {
-    VERSION = 1.0.1801.1
+    VERSION = 1.0.2000.1
 
     QMAKE_TARGET_COMPANY = AMT electronics
     QMAKE_TARGET_COPYRIGHT = AMT electronics
 
     RC_ICONS = icons/pangaea_amt.ico
 }
-else: VERSION = 1.0.1801
+else: VERSION = 1.0.2000
 
 macx {
     QMAKE_INFO_PLIST = $$PWD/MacOS/Info.plist
@@ -83,21 +87,21 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     uidesktopcore.cpp \
-    uisettings.cpp \
-    $${PWD}/../pangaea-backend/moduls/eqresponse.cpp\
-    $${PWD}/../pangaea-backend/moduls/eqband.cpp\
     $${PWD}/../pangaea-backend/threadcontroller.cpp \
     $${PWD}/../pangaea-backend/uihelpers/uiinterfacemanager.cpp \
     $${PWD}/../pangaea-backend/utils/logger.cpp \
+    # uisettings.cpp \
+    # $${PWD}/../pangaea-backend/moduls/eqresponse.cpp\
+    # $${PWD}/../pangaea-backend/moduls/eqband.cpp\
 
 HEADERS += \
     uidesktopcore.h \
-    uisettings.h \
-    $${PWD}/../pangaea-backend/moduls/eqband.h\
-    $${PWD}/../pangaea-backend/moduls/eqresponse.h\
     $${PWD}/../pangaea-backend/threadcontroller.h \
     $${PWD}/../pangaea-backend/uihelpers/uiinterfacemanager.h \
     $${PWD}/../pangaea-backend/utils/logger.h \
+    # uisettings.h \
+    # $${PWD}/../pangaea-backend/moduls/eqband.h\
+    # $${PWD}/../pangaea-backend/moduls/eqresponse.h\
 
 
 INCLUDEPATH += $${PWD}/../pangaea-backend/
@@ -105,8 +109,9 @@ INCLUDEPATH += $${PWD}/../pangaea-backend/cores
 INCLUDEPATH += $${PWD}/../pangaea-backend/device
 INCLUDEPATH += $${PWD}/../pangaea-backend/interfaces
 INCLUDEPATH += $${PWD}/../pangaea-backend/cores
+INCLUDEPATH += $${PWD}/../pangaea-backend/mock
 INCLUDEPATH += $${PWD}/../pangaea-backend/models
-INCLUDEPATH += $${PWD}/../pangaea-backend/moduls
+INCLUDEPATH += $${PWD}/../pangaea-backend/modules
 INCLUDEPATH += $${PWD}/../pangaea-backend/utils
 INCLUDEPATH += $${PWD}/../pangaea-backend/uihelpers
 
