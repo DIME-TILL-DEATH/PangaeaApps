@@ -57,6 +57,8 @@ private:
 
     DeviceDescription m_connectedDeviceDescription;
 
+    void slNewDataArrived(QByteArray data);
+
 private slots:
 //    void slNewData(QByteArray data);
     void slInterfaceError(QString errorDescription);

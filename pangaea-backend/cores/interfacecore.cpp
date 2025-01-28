@@ -13,6 +13,7 @@ InterfaceCore::InterfaceCore(QObject *parent)
     m_bleInterface = new BleInterface(this);
     m_offlineInterface = new OfflineInterface(this);
 
+    connect(this, &InterfaceCore::sgNewData, this, &InterfaceCore::slNewDataArrived);
     connect(m_bleInterface, &BleInterface::rssiReaded, this, &InterfaceCore::sgRssiReaded);
 
 #ifdef Q_OS_ANDROID
@@ -156,6 +157,11 @@ void InterfaceCore::rssiMeasuring(bool isEnabled)
 {
     if(m_bleInterface)
         m_bleInterface->rssiMeasuring(isEnabled);
+}
+
+void InterfaceCore::slNewDataArrived(QByteArray data)
+{
+    qInfo() << "->" << __FUNCTION__ << ":" << data;
 }
 
 void InterfaceCore::slInterfaceError(QString errorDescription)

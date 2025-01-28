@@ -48,7 +48,7 @@ void Core::slInterfaceConnected(DeviceDescription interfaceDescription)
 
 void Core::parseInputData(QByteArray ba)
 {
-    qInfo() << "->" << __FUNCTION__ << ":" << ba;
+    // qInfo() << "->" << __FUNCTION__ << ":" << ba;
 
     if(symbolsToRecieve > 0)
     {
