@@ -2,7 +2,9 @@ import QtQuick
 
 import Elements
 import StyleSettings
+
 import CppObjects 1.0
+import CppEnums
 
 Item
 {
@@ -22,9 +24,9 @@ Item
                 width:  parent.width
                 height: parent.height/2
                 text: "COPY"
-                enabled: !AppProperties.compareState
+                enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
                 onClicked: {
-                    AppProperties.copyPreset();
+                    UiCore.currentDevice.copyPreset();
                     copyFirst=true;
                 }
             }
@@ -35,8 +37,8 @@ Item
                 height: parent.height/2
                 text: "PASTE"
                 scaleText: 0.88
-                enabled: copyFirst & !AppProperties.compareState
-                onClicked: AppProperties.pastePreset();
+                enabled: copyFirst & (UiCore.currentDevice.presetManager.currentState !== PresetState.Compare)
+                onClicked: UiCore.currentDevice.pastePreset();
             }
         }
     }

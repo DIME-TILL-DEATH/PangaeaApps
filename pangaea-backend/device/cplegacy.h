@@ -29,7 +29,6 @@ class CPLegacy : public AbstractDevice
 {
     Q_OBJECT
 
-    Q_PROPERTY(PresetVolume* MV READ getMV NOTIFY MVChanged FINAL)
     Q_PROPERTY(bool isPaFw READ isPaFw CONSTANT)
     Q_PROPERTY(bool isPreEq READ isPreEq WRITE setIsPreEq NOTIFY isPreEqChanged FINAL)
 public:
@@ -53,7 +52,7 @@ public:
     Q_INVOKABLE void restoreValue(QString name) override;
 
     Q_INVOKABLE void startIrUpload(QString srcFilePath, QString dstFilePath = "", bool trimFile = false) override;
-    Q_INVOKABLE void escImpulse(); // TODO где используется? В мобильном не нашёл вызовов из QML
+    Q_INVOKABLE void escImpulse();
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
     Q_INVOKABLE void formatMemory() override;
@@ -70,7 +69,6 @@ public:
     // avaliable modules
     // вынести создание наружу?
     // public для тестов
-    PresetVolume* MV;
     Compressor* CM;
     NoiseGate* NG;
     Preamp* PR;
@@ -82,7 +80,7 @@ public:
     Presence* PS;
     EarlyReflections* ER;
 public slots:
-     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
 
     void slIrEnabledChanged();
 

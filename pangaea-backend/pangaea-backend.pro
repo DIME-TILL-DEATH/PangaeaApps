@@ -4,6 +4,7 @@ QT += serialport
 QT += bluetooth
 QT += positioning
 QT += concurrent
+QT += widgets
 
 android{
     QT += core-private

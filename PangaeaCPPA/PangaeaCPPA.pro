@@ -2,7 +2,7 @@ TARGET   = PangaeaCPPA
 TEMPLATE = app
 
 QT += core
-# QT += concurrent
+QT += concurrent
 QT += gui
 QT += bluetooth
 QT += serialport
@@ -87,19 +87,19 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     uidesktopcore.cpp \
+    uisettings.cpp \
     $${PWD}/../pangaea-backend/threadcontroller.cpp \
     $${PWD}/../pangaea-backend/uihelpers/uiinterfacemanager.cpp \
     $${PWD}/../pangaea-backend/utils/logger.cpp \
-    # uisettings.cpp \
     # $${PWD}/../pangaea-backend/moduls/eqresponse.cpp\
     # $${PWD}/../pangaea-backend/moduls/eqband.cpp\
 
 HEADERS += \
     uidesktopcore.h \
+    uisettings.h \
     $${PWD}/../pangaea-backend/threadcontroller.h \
     $${PWD}/../pangaea-backend/uihelpers/uiinterfacemanager.h \
     $${PWD}/../pangaea-backend/utils/logger.h \
-    # uisettings.h \
     # $${PWD}/../pangaea-backend/moduls/eqband.h\
     # $${PWD}/../pangaea-backend/moduls/eqresponse.h\
 

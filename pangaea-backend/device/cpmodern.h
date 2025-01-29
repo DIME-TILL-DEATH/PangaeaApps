@@ -30,7 +30,7 @@ class CPModern : public AbstractDevice
 {
     Q_OBJECT
 
-    Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
+    // Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
     Q_PROPERTY(EarlyReflections* ER  READ getER CONSTANT)
     Q_PROPERTY(Delay* DL  READ getDL CONSTANT)
     Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
@@ -70,7 +70,7 @@ public:
     Q_INVOKABLE bool isFileInLibrary(const QString& fileName);
     Q_INVOKABLE bool isFileInFolder(const QString& fileName);
 
-    PresetVolume* getMV() {return MV;};
+    // PresetVolume* getMV() {return MV;};
     EarlyReflections* getER() {return ER;};
     Delay *getDL() {return DL;};
 
@@ -85,7 +85,7 @@ public:
     // avaliable modules
     // вынести создание наружу? DependencyContainer
     // public для тестов
-    PresetVolume* MV;
+    // PresetVolume* MV;
     Compressor* CM;
     NoiseGate* NG;
     Preamp* PR;

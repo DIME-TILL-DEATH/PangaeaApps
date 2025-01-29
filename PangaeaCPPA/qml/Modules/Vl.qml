@@ -3,53 +3,42 @@ import QtQuick 2.15
 import Elements 1.0
 import CppObjects
 
-Item
-{
-    id: main
 
-    property string name: "VL"
+BaseModule{
+    id: _baseModule
 
-    property bool on: true
+    property PresetVolume module: UiCore.currentDevice.MV
 
-    BaseModule{
-        id: _baseModule
+    moduleName: "VL"
 
-        moduleName: main.name
+    on: true
 
-        on: true
-
-        contentItem: Column
+    contentItem: Column
+    {
+        id: _column
+        anchors.fill: parent
+        Item
         {
-            id: _column
-            anchors.fill: parent
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*150
-            }
+            width:  parent.width
+            height: parent.height/1000*150
+        }
 
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*165*4
-            }
+        Item
+        {
+            width:  parent.width
+            height: parent.height/1000*165*4
+        }
 
-            Dial
-            {
-                width:  parent.width
-                height: parent.height/1000*165
+        ParameterDial{
+            id: vlControl
 
-                enabled: main.on
-                name: "VOLUME"
-                paramType: DeviceParameter.MASTER_VOLUME
-                checkable: false
-            }
+            controlValue: UiCore.currentDevice.MV.presetVolume
+        }
 
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*25
-            }
+        Item
+        {
+            width:  parent.width
+            height: parent.height/1000*25
         }
     }
 }

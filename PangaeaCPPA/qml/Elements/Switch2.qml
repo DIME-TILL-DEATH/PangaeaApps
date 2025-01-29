@@ -6,7 +6,7 @@ Item
 {
     id: main
 
-    property int   value: 0
+    property int value: 0
     signal chValue(int value)
 
     Rectangle
@@ -41,7 +41,7 @@ Item
                 onClicked: {
                      main.chValue(0);
                 }
-                onWheel:   wheelChange(wheel.angleDelta.y);
+                // onWheel:   wheelChange(wheel.angleDelta.y);
             }
             MouseArea
             {
@@ -52,16 +52,16 @@ Item
                 onClicked: {
                     main.chValue(1);
                 }
-                onWheel:   wheelChange(wheel.angleDelta.y);
+                // onWheel:   wheelChange(wheel.angleDelta.y);
             }
         }
     }
-    function wheelChange(angleDelta)
-    {
-        if((angleDelta>0)&&(main.value<1))
-            main.value++;
-        if((angleDelta<0)&&(main.value>0))
-            main.value--;
-        main.chValue(main.value)
-    }
+    // function wheelChange(angleDelta)
+    // {
+    //     if((angleDelta>0)&&(main.value<1))
+    //         main.value++;
+    //     if((angleDelta<0)&&(main.value>0))
+    //         main.value--;
+    //     main.chValue(main.value)
+    // }
 }

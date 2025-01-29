@@ -9,29 +9,43 @@ import StyleSettings 1.0
 import CppObjects
 import CppEnums
 
-Item
+Row
 {
-    id: main
+    id: _mainRow
+
+    spacing: 2
 
     property bool isPaFirmware: true
-
     property int modulesCount: 15
-
     property bool moduleVisible: false
+    property int widthWithoutSpase: width - spacing * 11
+
+    signal emitIrModule(CabSim moduleInstance);
+
+    In
+    {
+        id: inp
+
+        height: _mainRow.height
+        width:  _mainRow.widthWithoutSpase/modulesCount/2
+        // visible: moduleVisible
+    }
 
     ListView
     {
         id: listViewModules
-        anchors.fill: parent
-        spacing: 2
-        property int widthWithoutSpase: width-spacing*10
+
+        width: _mainRow.width - inp.width - outp.width - vl.width - spacing * 3
+        height: _mainRow.height
+
+        spacing: _mainRow.spacing
 
         interactive: false
         orientation: ListView.Horizontal
 
         layoutDirection:  UiSettings.isModulesRightAligned ? Qt.RightToLeft : Qt.LeftToRight
 
-        model: modulesList
+        model: UiCore.currentDevice.modulesListModel;
 
         add: Transition{
             NumberAnimation { properties: "x"; duration: 500 }
@@ -44,219 +58,218 @@ Item
         displaced: Transition {
              NumberAnimation { properties: "x"; duration: 250 }
          }
+
+        delegate: Loader{
+            id: _delegateLoader
+
+            width: listViewModules.width
+
+            Component.onCompleted: function(){
+                switch(moduleType)
+                {
+                case ModuleType.NG:
+                {
+                    _delegateLoader.source = "/qml/Modules/Ng.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+
+                case ModuleType.CM:
+                {
+                    _delegateLoader.source = "/qml/Modules/Cm.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+
+                case ModuleType.PR:
+                {
+                    _delegateLoader.source = "/qml/Modules/Pr.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+
+                case ModuleType.PA:
+                {
+                    _delegateLoader.source = "/qml/Modules/Pa.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+
+                case ModuleType.PS:
+                {
+                    _delegateLoader.source = "/qml/Modules/Ps.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+
+                case ModuleType.IR:
+                {
+                    _delegateLoader.source = "/qml/Modules/Ir.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+
+                    emitIrModule(moduleInstance);
+                    break;
+                }
+
+                case ModuleType.HP:
+                {
+                    _delegateLoader.source = "/qml/Modules/Hp.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+                case ModuleType.EQ1:
+                {
+                    _delegateLoader.source = "/qml/Modules/EqParametric.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount * 5
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+                case ModuleType.LP:
+                {
+                    _delegateLoader.source = "/qml/Modules/Lp.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+
+                case ModuleType.ER_MONO:
+                case ModuleType.ER_STEREO:
+                {
+                    _delegateLoader.source = "/qml/Modules/Er.qml";
+                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
+                    _delegateLoader.height = _mainRow.height
+                    break;
+                }
+                }
+
+                _delegateLoader.item.module = moduleInstance;
+            }
+        }
     }
 
-    In
+    Vl
     {
-        id: inp
-
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount/2
-        visible: moduleVisible
+        id: vl
+        height: _mainRow.height
+        width:  _mainRow.widthWithoutSpase/modulesCount
     }
 
     Out
     {
         id: outp
 
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount/2
-        visible: moduleVisible
-    }
-
-    Vl
-    {
-        id: vl
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible
-    }
-
-    Er
-    {
-        id: er
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible
-    }
-
-    Ps
-    {
-        id: ps
-
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible & (!isPaFirmware)
-
-        //onChPresence: pa.setPresence(value)
-    }
-
-    Lp
-    {
-        id: lp
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible
-    }
-
-    EqsMap
-    {
-        id: eqsMap
-
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount*5
-        visible: moduleVisible
-
-        property int prePositionIndex: 3
-        property int postPositionIndex: 7
-
-        property bool isPrePosition: (ObjectModel.index === prePositionIndex)
-
-    }
-
-    Hp
-    {
-        id: hp
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible
-    }
-
-    Ir
-    {
-        id: ir
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible
-    }
-
-    Pa
-    {
-        id: pa
-        height: listViewModules.height
-        width: listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible & isPaFirmware
-
-        //onChPresence: ps.setPresence(value)
-    }
-
-    Pr
-    {
-        id: pr
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible
-    }
-
-    Cm
-    {
-        id: cm
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible
-    }
-
-    Ng
-    {
-        id: ng
-        height: listViewModules.height
-        width:  listViewModules.widthWithoutSpase/modulesCount
-        visible: moduleVisible
-    }
-
-    ObjectModel
-    {
-        id: modulesList
+        height: _mainRow.height
+        width:  _mainRow.widthWithoutSpase/modulesCount/2
     }
 
 
-    function arrangePrePost(isEqPre)
-    {
-        if(isPaFirmware)
-        {
-            if(isEqPre)
-            {
-                if(!eqsMap.isPrePosition) modulesList.move(eqsMap.postPositionIndex, eqsMap.prePositionIndex, 1);
-            }
-            else
-            {
-                if(eqsMap.isPrePosition) modulesList.move(eqsMap.prePositionIndex, eqsMap.postPositionIndex, 1);
-            }
-        }
-    }
+    // Ps
+    // {
+    //     id: ps
 
-    function placeAllModuls()
-    {
-        modulesList.clear();
+    //     height: listViewModules.height
+    //     width:  listViewModules.widthWithoutSpase/modulesCount
+    //     visible: moduleVisible & (!isPaFirmware)
 
-        modulesList.append(inp);
-        modulesList.append(ng);
-        modulesList.append(cm);
-        modulesList.append(pr);
-        if(isPaFirmware) modulesList.append(pa);
-        modulesList.append(ir);
-        modulesList.append(hp);
-        modulesList.append(eqsMap)
-        modulesList.append(lp);
-        if(!isPaFirmware) modulesList.append(ps);
-        modulesList.append(er);
-        modulesList.append(vl);
-        modulesList.append(outp);
+    //     //onChPresence: pa.setPresence(value)
+    // }
 
-        moduleVisible = true
-        listViewModules.forceLayout();
-    }
+    // Lp
+    // {
+    //     id: lp
+    //     height: listViewModules.height
+    //     width:  listViewModules.widthWithoutSpase/modulesCount
+    //     visible: moduleVisible
+    // }
 
-    Connections
-    {
-        target: DeviceProperties
+    // EqsMap
+    // {
+    //     id: eqsMap
 
-        function onDeviceTypeChanged()
-        {
-            isPaFirmware = ((DeviceProperties.deviceType===DeviceType.CP16PA)||(DeviceProperties.deviceType===DeviceType.CP100PA));
-            placeAllModuls();
-        }
-    }
+    //     height: listViewModules.height
+    //     width:  listViewModules.widthWithoutSpase/modulesCount*5
+    //     visible: moduleVisible
+
+    //     property int prePositionIndex: 3
+    //     property int postPositionIndex: 7
+
+    //     property bool isPrePosition: (ObjectModel.index === prePositionIndex)
+
+    // }
+
+    // Hp
+    // {
+    //     id: hp
+    //     height: listViewModules.height
+    //     width:  listViewModules.widthWithoutSpase/modulesCount
+    //     visible: moduleVisible
+    // }
+
+    // Ir
+    // {
+    //     id: ir
+    //     height: listViewModules.height
+    //     width:  listViewModules.widthWithoutSpase/modulesCount
+    //     visible: moduleVisible
+    // }
+
+    // Pa
+    // {
+    //     id: pa
+    //     height: listViewModules.height
+    //     width: listViewModules.widthWithoutSpase/modulesCount
+    //     visible: moduleVisible & isPaFirmware
+
+    //     //onChPresence: ps.setPresence(value)
+    // }
+
+    // Pr
+    // {
+    //     id: pr
+    //     height: listViewModules.height
+    //     width:  listViewModules.widthWithoutSpase/modulesCount
+    //     visible: moduleVisible
+    // }
 
     Connections
     {
         target: UiCore
 
-        function onSgSetUiDeviceParameter(paramType, value)
+        function onCurrentDeviceChanged()
         {
-            switch(paramType)
+            switch(UiCore.currentDevice.deviceType)
             {
-            case DeviceParameter.EQ_PRE:
-            {
-                arrangePrePost(value);
-                break;
-            }
-            }
-        }
-
-        // not set ui
-        function onSgSetDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.EQ_PRE)
-            {
-                arrangePrePost(value);
+                // case DeviceType.LA3:
+                // {
+                //     _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_LA.qml";
+                //     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
+                //     setMapContent();
+                //     break;
+                // }
+                // default:
+                // {
+                //     _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
+                //     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
+                //     setMapContent();
+                //     break;
+                // }
             }
         }
     }
+    // Connections{
+    //     target: UiCore.currentDevice.modulesListModel
 
-    Connections{
-        target: InterfaceManager
+    //     function onModelReset(){
+    //         listViewModules.item.modulesModel = undefined // без этого пропускает первое обновление
+    //         listViewModules.item.modulesModel = UiCore.currentDevice.modulesListModel
+    //     }
+    // }
 
-        function onSgInterfaceError(errorDescription)
-        {
-            modulesList.clear();
-            listViewModules.forceLayout();
-        }
-
-        function onSgInterfaceDisconnected()
-        {
-            modulesList.clear();
-            listViewModules.forceLayout();
-        }
-    }
 }

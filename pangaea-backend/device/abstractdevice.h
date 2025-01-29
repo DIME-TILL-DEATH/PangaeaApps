@@ -18,6 +18,8 @@
 
 #include "presetmanager.h"
 
+#include "presetvolume.h"
+
 class Core;
 
 class AbstractDevice : public QObject
@@ -45,6 +47,8 @@ class AbstractDevice : public QObject
     Q_PROPERTY(QList<QObject*> avaliableModulesList READ avaliableModulesList CONSTANT)
     Q_PROPERTY(ModulesListModel* modulesListModel READ modulesListModel NOTIFY modulesListModelChanged FINAL)
     Q_PROPERTY(PresetListModel* presetListModel READ presetListModel NOTIFY presetListModelChanged FINAL)
+
+    Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
 public:
     explicit AbstractDevice(Core *owner);
     ~AbstractDevice();
@@ -90,6 +94,9 @@ public:
     quint8 maxBankCount() const {return m_maxBankCount;};
     quint8 maxPresetCount() const {return m_maxPresetCount;};
 
+    PresetVolume* MV;
+    PresetVolume* getMV() {return MV;};
+
     bool deviceParamsModified() const;
 
     QList<QObject*> avaliableModulesList() {return m_avaliableModulesList;};
@@ -132,6 +139,7 @@ signals:
     void sgDisableTimeoutTimer();
 
     void deviceUpdatingValues();
+    void deviceRestoreValues();
 
     void firmwareNameChanged();
     void bankPresetChanged();
@@ -141,6 +149,7 @@ signals:
     void sgDisconnect();
 
 // пока чтобы контролировать тестирование, но в будущем, возможно для работы(в modern)
+
     void presetSwitched();
     void presetCopied();
     void presetPasted();

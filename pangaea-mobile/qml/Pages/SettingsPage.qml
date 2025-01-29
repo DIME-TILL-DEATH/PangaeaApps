@@ -237,6 +237,8 @@ Item {
                 if(inText === "dark_blue") _darkBlue.checked = true
             }
 
+
+            // TODO UiSettings???? Сделать также как в Desktop
             if(nameParam === "application_language")
             {
                 if(inText === "autoselect") _autoselect.checked = true;

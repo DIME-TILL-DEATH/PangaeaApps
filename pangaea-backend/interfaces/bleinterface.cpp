@@ -375,8 +375,10 @@ void BleInterface::deviceConnected()
     m_control->requestConnectionUpdate(connectionParams);
     QObject::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
 
+#ifndef Q_OS_WINDOWS
     m_control->readRssi();
     QObject::connect(m_control, &QLowEnergyController::rssiRead, this, &BleInterface::rssiReaded);
+#endif
 
 
     // mtu = m_control->mtu();
@@ -600,6 +602,8 @@ void BleInterface::rssiMeasuring(bool isEnabled)
 
 void BleInterface::requestRssi()
 {
+#ifndef Q_OS_WINDOWS
     if(m_control)
         m_control->readRssi();
+#endif
 }

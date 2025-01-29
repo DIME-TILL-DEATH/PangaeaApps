@@ -1,4 +1,5 @@
 #include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
@@ -23,6 +24,8 @@
 #include "uimessagetype.h"
 
 #include "uidesktopcore.h"
+#include "uisettings.h"
+
 
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
@@ -59,10 +62,14 @@ Logger* appLogger_ptr;
 int main(int argc, char *argv[])
 {
     signal(SIGSEGV, manageSegFailure);
-//    signal(SIGFPE, manageSegFailure);
-//    signal(SIGILL, manageSegFailure);
+    signal(SIGFPE, manageSegFailure);
+    signal(SIGILL, manageSegFailure);
 
+#ifdef Q_OS_WINDOWS
+    QApplication  app(argc, argv);
+#else
     QGuiApplication app(argc, argv);
+#endif
 
     app.setOrganizationName("AMT");
     app.setOrganizationDomain("amtelectronics.com");
@@ -100,6 +107,7 @@ int main(int argc, char *argv[])
     // UI creation
     //----------------------------------------------------------------
     UiDesktopCore uiCore;
+    UiSettings uiSettings;
     UiInterfaceManager uiInterfaceManager; // TODO: move to backend, либо common(Общий для всех)
 
     QQmlApplicationEngine engine;
@@ -112,6 +120,7 @@ int main(int argc, char *argv[])
 #endif
 
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
+    qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
 
     qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");

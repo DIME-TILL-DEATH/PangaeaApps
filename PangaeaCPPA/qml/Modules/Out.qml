@@ -26,41 +26,6 @@ Rectangle {
 
             spacing: width/25
             anchors.horizontalCenter: parent.horizontalCenter
-
-            SignalBar
-            {
-                id: _bar_left
-
-                width: parent.width * 0.4
-                height: parent.height
-
-
-            }
-            SignalBar
-            {
-                id: _bar_right
-
-                width: parent.width * 0.4
-                height: parent.height
-            }
-
-            Connections{
-                target: UiCore
-
-                function onSgSetUiDeviceParameter(paramType, value)
-                {
-                    switch(paramType)
-                    {
-                    case DeviceParameter.SIGNAL_OUT:
-                    {
-
-                        _bar_left.value = value;
-                        _bar_right.value = value;
-                        break;
-                    }
-                    }
-                }
-            }
         }
 
         Image

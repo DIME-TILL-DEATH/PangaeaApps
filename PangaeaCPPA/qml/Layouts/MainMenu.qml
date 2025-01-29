@@ -6,7 +6,7 @@ import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 import Qt.labs.platform 1.1 as Labs
-import Qt.labs.settings 1.0
+import QtCore
 
 import CppObjects 1.0
 import CppEnums
@@ -14,7 +14,7 @@ import CppEnums
 MenuBar{
     id: mainMenu
 
-    property bool presetEdited: DeviceProperties.presetModified
+    property bool presetEdited: UiCore.currentDevice.deviceParamsModified
 
     Menu{
         title: qsTr("File")
@@ -100,31 +100,31 @@ MenuBar{
 //            }
         }
 
-        Menu{
-            title: qsTr("Modules direction")
-            MenuItem{
-                text: qsTr("Left to right")
-                checkable: true
-                checked: !UiSettings.isModulesRightAligned
-                onTriggered: UiSettings.saveSetting("modules_right_aligned", false);
-            }
-            MenuItem{
-                text: qsTr("Right to left")
-                checkable: true
-                checked: UiSettings.isModulesRightAligned
-                onTriggered: UiSettings.saveSetting("modules_right_aligned", true);
-            }
-        }
+        // Menu{
+        //     title: qsTr("Modules direction")
+        //     MenuItem{
+        //         text: qsTr("Left to right")
+        //         checkable: true
+        //         checked: !UiSettings.isModulesRightAligned
+        //         onTriggered: UiSettings.saveSetting("modules_right_aligned", false);
+        //     }
+        //     MenuItem{
+        //         text: qsTr("Right to left")
+        //         checkable: true
+        //         checked: UiSettings.isModulesRightAligned
+        //         onTriggered: UiSettings.saveSetting("modules_right_aligned", true);
+        //     }
+        // }
 
-        MenuItem{
-            id: menuEqClassicView
+        // MenuItem{
+        //     id: menuEqClassicView
 
-            text: qsTr("Classic EQ view")
-            checkable: true
-            checked: UiSettings.eqClassicView
+        //     text: qsTr("Classic EQ view")
+        //     checkable: true
+        //     checked: UiSettings.eqClassicView
 
-            onTriggered: UiSettings.saveSetting("eq_classic_view", checked);
-        }
+        //     onTriggered: UiSettings.saveSetting("eq_classic_view", checked);
+        // }
 
         MenuItem{
             id: menuAutoconnect
@@ -287,7 +287,7 @@ MenuBar{
         onButtonClicked: function (button, role) {
             switch(button){
             case MessageDialog.Yes:
-                InterfaceManager.disconnectFromDevice();
+                UiCore.disconnectFromDevice();
                 break;
             }
         }
@@ -300,16 +300,16 @@ MenuBar{
         text: qsTr("AMT Pangaea CP-16/CP-100")
         informativeText: qsTr("Desktop application") + "\n" +
               qsTr("Version: ") + Qt.application.version + "\n"
-              + qsTr("(c) 2023")
+              + qsTr("(c) 2025")
 
     }
 
     Connections{
-        target: DeviceProperties
+        target: UiCore
 
-        function onDeviceTypeChanged()
+        function onCurrentDeviceChanged()
         {
-            switch (DeviceProperties.deviceType)
+            switch (UiCore.currentDevice.deviceType)
             {
                 case DeviceType.UnknownDev:
                     menuDeviceManual.strManualBaseName = "";
@@ -331,11 +331,7 @@ MenuBar{
                     menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
                     menuUpdateFirmware.enabled = false;
                     break;
-                case DeviceType.LA3RV:
-                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
-                    menuUpdateFirmware.enabled = true;
-                    break;
-                case DeviceType.LA3PA:
+                case DeviceType.LA3:
                     menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
                     menuUpdateFirmware.enabled = true;
                     break;

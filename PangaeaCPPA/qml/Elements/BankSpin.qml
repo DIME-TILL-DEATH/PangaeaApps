@@ -10,18 +10,22 @@ Item
 {
     id: main
 
+    property bool deviceUpdatingValues: true
+
     function up()
     {
-        if(DeviceProperties.bank < (DeviceProperties.banksList.length-1))
+        if(UiCore.currentDevice.bank < (UiCore.currentDevice.maxBankCount-1))
         {
-            DeviceProperties.bank++;
+            tumb.currentIndex++;
+            UiCore.sgQmlRequestChangePreset(tumb.currentIndex, UiCore.currentDevice.preset);
         }
     }
     function down()
     {
-        if(DeviceProperties.bank > 0)
+        if(UiCore.currentDevice.bank > 0)
         {
-            DeviceProperties.bank--;
+            tumb.currentIndex--;
+            UiCore.sgQmlRequestChangePreset(tumb.currentIndex, UiCore.currentDevice.preset);
         }
     }
 
@@ -40,16 +44,17 @@ Item
 
                 height: parent.height
                 width: parent.width
-                model: DeviceProperties.banksList
 
-                currentIndex: DeviceProperties.bank
+                model: UiCore.currentDevice.maxBankCount
+                currentIndex: UiCore.currentDevice.bank
                 visibleItemCount: 1
 
                 delegate: Text
                 {
                     text: modelData
-                    color: DeviceProperties.isLa3Mode? (tumb.currentIndex<2 ? "green" : "red") : "Red"
-                    font.pixelSize: DeviceProperties.isLa3Mode ? parent.height*0.6 : parent.height*0.9
+
+                    color: "Red"
+                    font.pixelSize: parent.height*0.9
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment:   Text.AlignVCenter
                     font.bold: true
@@ -62,11 +67,25 @@ Item
                 anchors.fill: parent
                 hoverEnabled: true
 
-                onWheel: function wheelHandler(wheel)
-                {
-                    if(wheel.angleDelta.y>0) main.up();
-                    else main.down();
+                onWheel: function wheelHandler(wheel){
+                    if(wheel.angleDelta.y>0)
+                    {
+                        if(UiCore.currentDevice.bank < (UiCore.currentDevice.maxBankCount-1))
+                        {
+                            tumb.currentIndex++;
+                            timer.restart();
+                        }
+                    }
+                    else
+                    {
+                        if(UiCore.currentDevice.bank > 0)
+                        {
+                            tumb.currentIndex--;
+                            timer.restart();
+                        }
+                    }
                 }
+
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
 
                 onClicked: (mouse)=>
@@ -93,6 +112,28 @@ Item
                 visible: false
                 timeout: 2000
             }
+
+            Timer
+            {
+                id: timer
+                interval: 1000
+                repeat: false
+                onTriggered:
+                {
+                    UiCore.sgQmlRequestChangePreset(tumb.currentIndex, UiCore.currentDevice.preset);
+                }
+            }
+
+            Connections{
+                target: UiCore.currentDevice
+
+                function onBankPresetChanged()
+                {
+                    main.deviceUpdatingValues = true;
+                    tumb.currentIndex = UiCore.currentDevice.bank
+                    main.deviceUpdatingValues = false;
+                }
+            }
         }
 
         Item
@@ -107,6 +148,16 @@ Item
                 font.pixelSize: parent.height/1.1
                 text: qsTr("BANK")
             }
+        }
+    }
+
+    Connections{
+        target: UiCore.currentDevice
+
+        function onDeviceRestoreValues(){
+            main.deviceUpdatingValues = true;
+            tumb.currentIndex = UiCore.currentDevice.bank
+            main.deviceUpdatingValues = false;
         }
     }
 }

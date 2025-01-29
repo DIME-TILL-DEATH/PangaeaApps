@@ -3,66 +3,60 @@ import QtQuick
 import Elements 1.0
 import CppObjects 1.0
 
-Item
-{
+
+BaseModule{
     id: main
 
-
-    BaseModule{
-        id: _baseModule
-
-        // moduleName: main.name
+    property PowerAmp module
 
 
-        // on: main.on
-
-        module: PowerAmp
-
-        contentItem: Column
+    contentItem: Column
+    {
+        id: _column
+        anchors.fill: parent
+        Item
         {
-            id: _column
-            anchors.fill: parent
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*70
-            }
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000//*90
-            }
+            width:  parent.width
+            height: parent.height/1000*70
+        }
+        Item
+        {
+            width:  parent.width
+            height: parent.height/1000//*90
+        }
 
-            TypePA
-            {
-                width:  parent.width
-                height: parent.height/1000*(265+90+55)
-                // enabled: main.on
-            }
+        TypePA
+        {
+            width:  parent.width
+            height: parent.height/1000*(265+90+55)
+            // enabled: main.on
 
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000//*55
-            }
+            controlValue: module.ampType
+        }
 
-            ParameterDial{
-                controlValue: PowerAmp.volume
-            }
+        Item
+        {
+            width:  parent.width
+            height: parent.height/1000//*55
+        }
 
-            ParameterDial{
-                controlValue: PowerAmp.presence
-            }
+        ParameterDial{
+            controlValue: module.volume
+        }
 
-            ParameterDial{
-                controlValue: PowerAmp.slave
-            }
+        ParameterDial{
+            controlValue: module.presence
+        }
 
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*25
-            }
+        ParameterDial{
+            controlValue: module.slave
+        }
+
+        Item
+        {
+            width:  parent.width
+            height: parent.height/1000*25
         }
     }
 }
+

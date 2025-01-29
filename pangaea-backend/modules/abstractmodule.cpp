@@ -83,7 +83,7 @@ void AbstractModule::setModuleEnabled(bool newEnabled)
     emit userModifiedModuleParameters();
 }
 
-void AbstractModule::sendDataToDevice(const QByteArray &data)
+void AbstractModule::sendDataToDevice(QByteArray data)
 {
     if(m_owner) emit m_owner->sgWriteToInterface(data, true);
 }

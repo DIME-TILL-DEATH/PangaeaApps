@@ -11,7 +11,9 @@ Item{
     width:  parent.width
     height: parent.height/1000*165
 
+
     required property ControlValue controlValue
+    opacity: module.moduleEnabled ? 1:0.5
 
     property alias step: control.stepSize
 
@@ -26,18 +28,20 @@ Item{
         Dial {
             id: control
 
-            from: controlValue.minValue
-            to: controlValue.maxValue
-            value: controlValue.value
-
-            stepSize: 1
-
-            snapMode: Dial.SnapAlways
-
             height: parent.height * 0.7
             width: height
 
             anchors.horizontalCenter: parent.horizontalCenter
+
+            from: controlValue.minDisplayValue
+            to: controlValue.maxDisplayValue
+            value: controlValue.displayValue
+
+            wheelEnabled: true
+
+            stepSize: 1
+
+            snapMode: Dial.SnapAlways
 
             MText
             {
@@ -86,8 +90,12 @@ Item{
             }
 
             onMoved: {
-                controlValue.value = control.value
+                controlValue.displayValue = control.value
             }
+
+            // onValueChanged: {
+            //     controlValue.displayValue = control.value
+            // }
         }
 
         Item{

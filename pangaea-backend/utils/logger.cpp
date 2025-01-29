@@ -84,75 +84,73 @@ void Logger::setAsMessageHandlerForApp()
 
 void Logger::messageOutputHandlerImplementation(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
+    QByteArray localMsg = msg.toLocal8Bit();
+    const char *file = context.file ? context.file : "";
+    const char *function = context.function ? context.function : "";
+
+    switch (type)
     {
-        QByteArray localMsg = msg.toLocal8Bit();
-        const char *file = context.file ? context.file : "";
-        const char *function = context.function ? context.function : "";
+        case QtDebugMsg:
+        #ifdef ANDROID
+            __android_log_print(ANDROID_LOG_DEBUG, "pangaea_mobile debug", "%s", qPrintable(localMsg.constData()));
+        #endif
+            std::cout << localMsg.constData() << std::endl << std::flush;
 
-        switch (type)
-        {
-            case QtDebugMsg:
-            #ifdef ANDROID
-                __android_log_print(ANDROID_LOG_DEBUG, "pangaea_mobile debug", "%s", qPrintable(localMsg.constData()));
-            #endif
-                std::cout << localMsg.constData() << std::endl << std::flush;
+            outLog << QTime::currentTime().toString() << " debug: "
+                   << localMsg.constData() << "\n("
+                   << file << ":" << context.line << "," << function << ")\n\n";
+            outLog.flush();
+            break;
 
-                outLog << QTime::currentTime().toString() << " debug: "
-                       << localMsg.constData() << "\n("
-                       << file << ":" << context.line << "," << function << ")\n\n";
-                outLog.flush();
-                break;
+        case QtInfoMsg:
+        #ifdef ANDROID
+            __android_log_print(ANDROID_LOG_INFO, "pangaea_mobile info", "%s", qPrintable(localMsg.constData()));
+        #endif
+            std::cout << localMsg.constData() << std::flush;
 
-            case QtInfoMsg:
-            #ifdef ANDROID
-                __android_log_print(ANDROID_LOG_INFO, "pangaea_mobile info", "%s", qPrintable(localMsg.constData()));
-            #endif
-                std::cout << localMsg.constData() << std::flush;
+            outLog << QTime::currentTime().toString() << " info: "
+                   << localMsg.constData() << "\n("
+                   << file << ":" << context.line << "," << function << ")\n\n";
+            outLog.flush();
+            break;
 
-                outLog << QTime::currentTime().toString() << " info: "
-                       << localMsg.constData() << "\n("
-                       << file << ":" << context.line << "," << function << ")\n\n";
-                outLog.flush();
-                break;
+        case QtWarningMsg:
+        #ifdef ANDROID
+            __android_log_print(ANDROID_LOG_WARN, "pangaea_mobile warning", "%s", qPrintable(localMsg.constData()));
+        #endif
+            std::cout << "Error: " << localMsg.constData() << std::endl << std::flush;
+            outLog << QTime::currentTime().toString() << " warning: "
+                   << localMsg.constData() << "\n("
+                   << file << ":" << context.line << "," << function << ")\n\n";
+            outLog.flush();
+            break;
 
-            case QtWarningMsg:
-            #ifdef ANDROID
-                __android_log_print(ANDROID_LOG_WARN, "pangaea_mobile warning", "%s", qPrintable(localMsg.constData()));
-            #endif
-                std::cout << "Error: " << localMsg.constData() << std::endl << std::flush;
-                outLog << QTime::currentTime().toString() << " warning: "
-                       << localMsg.constData() << "\n("
-                       << file << ":" << context.line << "," << function << ")\n\n";
-                outLog.flush();
-                break;
+        case QtCriticalMsg:
+        #ifdef ANDROID
+            __android_log_print(ANDROID_LOG_ERROR, "pangaea_mobile error", "%s", qPrintable(localMsg.constData()));
+        #endif
+            fprintf(stdout, "Critical: %s \n(%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            std::cout << std::endl << std::flush;
 
-            case QtCriticalMsg:
-            #ifdef ANDROID
-                __android_log_print(ANDROID_LOG_ERROR, "pangaea_mobile error", "%s", qPrintable(localMsg.constData()));
-            #endif
-                fprintf(stdout, "Critical: %s \n(%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
-                std::cout << std::endl << std::flush;
+            outLog << QTime::currentTime().toString() << " critical: "
+                   << localMsg.constData() << "\n("
+                   << file << ":" << context.line << "," << function << ")\n\n";
+            outLog.flush();
+            break;
 
-                outLog << QTime::currentTime().toString() << " critical: "
-                       << localMsg.constData() << "\n("
-                       << file << ":" << context.line << "," << function << ")\n\n";
-                outLog.flush();
-                break;
+        case QtFatalMsg:
+        #ifdef ANDROID
+            __android_log_print(ANDROID_LOG_FATAL, "pangaea_mobile fatal", "%s", qPrintable(localMsg.constData()));
+        #endif
+            fprintf(stdout, "Fatal: %s \n(%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
+            std::cout << std::endl << std::flush;
 
-            case QtFatalMsg:
-            #ifdef ANDROID
-                __android_log_print(ANDROID_LOG_FATAL, "pangaea_mobile fatal", "%s", qPrintable(localMsg.constData()));
-            #endif
-                fprintf(stdout, "Fatal: %s \n(%s:%u, %s)\n", localMsg.constData(), file, context.line, function);
-                std::cout << std::endl << std::flush;
+            outLog << QTime::currentTime().toString() << " fatal: "
+                   << localMsg.constData() << "\n("
+                   << file << ":" << context.line << "," << function << ")\n\n";
+            outLog.flush();
 
-                outLog << QTime::currentTime().toString() << " fatal: "
-                       << localMsg.constData() << "\n("
-                       << file << ":" << context.line << "," << function << ")\n\n";
-                outLog.flush();
-
-                logFile.close();
-                break;
-        }
+            logFile.close();
+            break;
     }
 }

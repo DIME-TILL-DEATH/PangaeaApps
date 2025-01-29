@@ -7,7 +7,7 @@ Item
 
     id: main
 
-    property int   value: 0
+    property int value: 0
     signal chValue(int value)
 
 
@@ -41,8 +41,9 @@ Item
                 width: parent.width/3
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                onClicked: {main.value=0; main.chValue(main.value)}
-                onWheel:   wheelChange(wheel.angleDelta.y);
+
+                onClicked: main.chValue(0)
+                // onWheel:   wheelChange(wheel.angleDelta.y);
             }
             MouseArea
             {
@@ -50,8 +51,9 @@ Item
                 width: parent.width/3
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                onClicked: {main.value=1; main.chValue(main.value)}
-                onWheel:   wheelChange(wheel.angleDelta.y);
+
+                onClicked: main.chValue(1)
+                // onWheel:   wheelChange(wheel.angleDelta.y);
             }
             MouseArea
             {
@@ -59,18 +61,19 @@ Item
                 width: parent.width/3
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                onClicked: {main.value=2; main.chValue(main.value)}
-                onWheel:   wheelChange(wheel.angleDelta.y);
+
+                onClicked: main.chValue(2)
+                // onWheel:   wheelChange(wheel.angleDelta.y);
             }
         }
     }
 
-    function wheelChange(angleDelta)
-    {
-        if((angleDelta>0)&&(main.value<2))
-            main.value++;
-        if((angleDelta<0)&&(main.value>0))
-            main.value--;
-        main.chValue(main.value)
-    }
+    // function wheelChange(angleDelta)
+    // {
+    //     if((angleDelta>0)&&(main.value<2))
+    //         main.value++;
+    //     if((angleDelta<0)&&(main.value>0))
+    //         main.value--;
+    //     main.chValue(main.value)
+    // }
 }

@@ -40,12 +40,12 @@ Item
                     anchors.fill: parent
                 }
 
-                EqParametric
-                {
-                    visible: (!switchEnMap.map) & (!UiSettings.eqClassicView)
-                    anchors.fill: parent
-                    z: _baseModule.z+5
-                }
+                // EqParametric
+                // {
+                //     visible: (!switchEnMap.map) & (!UiSettings.eqClassicView)
+                //     anchors.fill: parent
+                //     z: _baseModule.z+5
+                // }
 
                 Map
                 {

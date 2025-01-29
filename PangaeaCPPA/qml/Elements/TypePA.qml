@@ -8,8 +8,9 @@ Item
 {
     id: main
 
-    property int paramType: DeviceParameter.AMP_TYPE
-    property int value: 0
+    property ControlValue controlValue
+    enabled: module.moduleEnabled
+
     Column
     {
         anchors.fill: parent
@@ -21,8 +22,8 @@ Item
             {
                 leftText: true
                 text:  "  01.PP 6L6"
-                check: (value==0)
-                onClicked: {value=0; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 0
+                onClicked: controlValue.displayValue = 0
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -35,8 +36,8 @@ Item
             {
                 leftText: true
                 text:  "  02.PP EL34"
-                check: (value==1)
-                onClicked: {main.value=1; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 1
+                onClicked: controlValue.displayValue = 1
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -49,8 +50,8 @@ Item
             {
                 leftText: true
                 text:  "  03.SE 6L6"
-                check: (value==2)
-                onClicked: {main.value=2; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 2
+                onClicked: controlValue.displayValue = 2
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -63,8 +64,8 @@ Item
             {
                 leftText: true
                 text:  "  04.SE EL34"
-                check: (value==3)
-                onClicked: {main.value=3; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 3
+                onClicked: controlValue.displayValue = 3
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -77,8 +78,8 @@ Item
             {
                 leftText: true
                 text:  "  05.AMT TC-3"
-                check: (value==4)
-                onClicked: {main.value=4; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 4
+                onClicked: controlValue.displayValue = 4
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -91,8 +92,8 @@ Item
             {
                 leftText: true
                 text:  "  06.CALIF"
-                check: (value==5)
-                onClicked: {main.value=5; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 5
+                onClicked: controlValue.displayValue = 5
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -105,8 +106,8 @@ Item
             {
                 leftText: true
                 text:  "  07.BRIT M"
-                check: (value==6)
-                onClicked: {main.value=6; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 6
+                onClicked: controlValue.displayValue = 6
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -119,8 +120,8 @@ Item
             {
                 leftText: true
                 text:  "  08.BRIT L"
-                check: (value==7)
-                onClicked: {main.value=7; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 7
+                onClicked: controlValue.displayValue = 7
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -132,8 +133,8 @@ Item
             {
                 leftText: true
                 text:  "  09.DEFAULT"
-                check: (value==8)
-                onClicked: {main.value=8; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 8
+                onClicked: controlValue.displayValue = 8
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -145,8 +146,8 @@ Item
             {
                 leftText: true
                 text:  "  10.CALIF MOD"
-                check: (value==9)
-                onClicked: {main.value=9; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 9
+                onClicked: controlValue.displayValue = 9
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -158,8 +159,8 @@ Item
             {
                 leftText: true
                 text:  "  11.CALIF VINT"
-                check: (value==10)
-                onClicked: {main.value=10; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 10
+                onClicked: controlValue.displayValue = 10
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -171,8 +172,8 @@ Item
             {
                 leftText: true
                 text:  "  12.PVH 01"
-                check: (value==11)
-                onClicked: {main.value=11; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 11
+                onClicked: controlValue.displayValue = 11
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -184,8 +185,8 @@ Item
             {
                 leftText: true
                 text:  "  13.PVH 02"
-                check: (value==12)
-                onClicked: {main.value=12; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 12
+                onClicked: controlValue.displayValue = 12
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -197,8 +198,8 @@ Item
             {
                 leftText: true
                 text:  "  14.PVH 03"
-                check: (value==13)
-                onClicked: {main.value=13; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 13
+                onClicked: controlValue.displayValue = 13
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -210,8 +211,8 @@ Item
             {
                 leftText: true
                 text:  "  15.PVH 04"
-                check: (value==14)
-                onClicked: {main.value=14; UiCore.setDeviceParameter(main.paramType, main.value)}
+                check: controlValue.displayValue == 14
+                onClicked: controlValue.displayValue =14
                 onWheel: wheelChange(angleDelta);
             }
         }
@@ -221,22 +222,8 @@ Item
     function wheelChange(angleDelta)
     {
         if((angleDelta>0)&&(main.value<8))
-            main.value++;
+            controlValue.displayValue++;
         if((angleDelta<0)&&(main.value>0))
-            main.value--;
-        UiCore.setDeviceParameter(main.paramType, main.value)
-    }
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-                main.value=value;
-            }
-        }
+            controlValue.displayValue--;
     }
 }

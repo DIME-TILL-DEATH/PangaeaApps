@@ -38,7 +38,7 @@ public:
 
     ModuleType moduleType() const {return m_moduleType;};
 
-    virtual void sendDataToDevice(const QByteArray& data);
+    virtual void sendDataToDevice(QByteArray data);
 
 
 signals:

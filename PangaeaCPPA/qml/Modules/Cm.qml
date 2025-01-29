@@ -4,89 +4,39 @@ import Elements 1.0
 
 import CppObjects 1.0
 
-Item
-{
-    id: main
+BaseModule{
+    id: _baseModule
 
-    property string name:     "CM"
-    property int paramType: DeviceParameter.COMPRESSOR_ON
+    property Compressor module
 
-    property bool on: true
-
-    BaseModule{
-        id: _baseModule
-
-        moduleName: main.name
-        // paramType: main.paramType
-
-        on: main.on
-
-        contentItem: Column
-        {
-            id: _column
-            anchors.fill: parent
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*150
-            }
-
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*165*3
-            }
-
-            Dial
-            {
-                width:  parent.width
-                height: parent.height/1000*165
-
-                enabled: main.on
-                name: "SUSTAIN"
-                checkable: false
-                paramType: DeviceParameter.COMPRESSOR_SUSTAIN
-            }
-
-            Dial
-            {
-                width:  parent.width
-                height: parent.height/1000*165
-
-                enabled: main.on
-                name: "VOLUME"
-                checkable: false
-                paramType: DeviceParameter.COMPRESSOR_VOLUME
-            }
-
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*25
-            }
-        }
-    }
-
-    Connections
+    contentItem: Column
     {
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
+        id: _column
+        anchors.fill: parent
+        Item
         {
-            if(paramType === main.paramType)
-            {
-                main.on = value;
-            }
+            width:  parent.width
+            height: parent.height/1000*150
         }
-    }
 
-
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
+        Item
         {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on);
+            width:  parent.width
+            height: parent.height/1000*165*3
+        }
+
+        ParameterDial{
+            controlValue: module.sustain
+        }
+
+        ParameterDial{
+            controlValue: module.volume
+        }
+
+        Item
+        {
+            width:  parent.width
+            height: parent.height/1000*25
         }
     }
 }

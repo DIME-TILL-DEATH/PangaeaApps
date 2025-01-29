@@ -5,17 +5,15 @@ import Elements 1.0
 import StyleSettings 1.0
 
 import CppObjects 1.0
+import CppEnums
 
 Rectangle {
     id: root
-    anchors.fill: parent
 
-    enabled: !AppProperties.compareState
+    enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
 
-    property var module
-
-    property string moduleName: module !== undefined ? module.moduleName : ""
-    property bool on: (module !== undefined) ? module.moduleEnabled : false
+    property string moduleName: module.moduleName
+    property bool on: module.moduleEnabled
 
     property bool isHeaderVisible: true
 
@@ -23,10 +21,8 @@ Rectangle {
 
     property alias contentProperties: _loader.item
 
-    signal sgModuleOnOf()
-
     clip: true
-    color: on ? Style.mainEnabledColor : Style.mainDisabledColor
+    color: root.on ? Style.mainEnabledColor : Style.mainDisabledColor
 
     Material
     {
@@ -88,15 +84,7 @@ Rectangle {
         onClicked:
         {
             material.start(mouseX, mouseY)
-
-            if(module !== undefined)
-            {
-                module.moduleEnabled = !module.moduleEnabled
-            }
-            else
-            {
-                sgModuleOnOf();
-            }
+            module.moduleEnabled = !module.moduleEnabled
         }
     }
 

@@ -6,8 +6,9 @@ Item
 {
     id: main
 
-    property int  value: mSwitch.value
-    property int paramType: DeviceParameter.EARLY_TYPE
+    property ControlValue controlValue
+
+    enabled: controlValue.enabled
 
     Column
     {
@@ -19,7 +20,12 @@ Item
             width: parent.width
             height: parent.height/100*50
             opacity: main.enabled?1:0.5
-            onChValue: UiCore.setDeviceParameter(main.paramType, mSwitch.value)
+
+            value: controlValue.displayValue
+
+            onChValue: function changeValue(value){
+                controlValue.displayValue = value
+            }
         }
 
         Column
@@ -33,9 +39,10 @@ Item
                 height: parent.height/3
                 text: "SHORT"
                 check: mSwitch.value==0
-                onClicked: {mSwitch.value = 0; UiCore.setDeviceParameter(main.paramType, mSwitch.value)}
                 font.pixelSize: height/1.4
                 horizontalAlignment: Text.AlignLeft
+
+                onClicked: controlValue.displayValue = 0
             }
 
             CheckText
@@ -44,8 +51,9 @@ Item
                 height: parent.height/3
                 text: "MEDIUM"
                 check: mSwitch.value==1
-                onClicked: {mSwitch.value = 1; UiCore.setDeviceParameter(main.paramType, mSwitch.value)}
                 font.pixelSize: height/1.4
+
+                onClicked: controlValue.displayValue = 1
             }
 
             CheckText
@@ -54,22 +62,10 @@ Item
                 height: parent.height/3
                 text: "LONG"
                 check: mSwitch.value==2
-                onClicked: {mSwitch.value = 2; UiCore.setDeviceParameter(main.paramType, mSwitch.value)}
                 font.pixelSize: height/1.4
                 horizontalAlignment: Text.AlignRight
-            }
-        }
-    }
 
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-                mSwitch.value=value
+                onClicked: controlValue.displayValue = 2
             }
         }
     }

@@ -13,9 +13,6 @@ Rectangle{
     property EqBand eqBand
     property int gainRange: 40
 
-    // property int xmin: eqModule.points[0].x
-    // property int xmax: eqModule.points[eqModule.points.length-1].x
-
     property real xmin: eqModule.minFreq
     property real xmax: eqModule.maxFreq
 

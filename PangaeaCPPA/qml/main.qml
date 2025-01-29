@@ -1,7 +1,7 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick.Controls.Fusion
 import QtQuick.Dialogs
-import Qt.labs.settings 1.0
+import QtCore
 
 import Qt.labs.platform 1.1 as Labs
 
@@ -26,10 +26,12 @@ ApplicationWindow
     maximumWidth: width*1.25
     maximumHeight: height*1.25
 
-    color: Style.backgroundColor
+    // palette.highlight: "orange"
 
-    property string markEdit: DeviceProperties.presetModified ? " * ":" "
-    property string devName: DeviceProperties.firmwareName
+    // color: Style.backgroundColor
+
+    property string markEdit: UiCore.currentDevice.deviceParamsModified ? " * ":" "
+    property string devName: UiCore.currentDevice.firmwareName
     property string devVersion: ""
 
     property string interfaceDescription: ""
@@ -90,6 +92,10 @@ ApplicationWindow
             height: parent.height/1000*850
 
             enabled: !main.wait
+
+            onEmitIrModule: moduleInstance => {
+                head.irModule = moduleInstance
+            }
         }
     }
 
@@ -146,30 +152,28 @@ ApplicationWindow
             {
                 case MessageDialog.Save:
                 {
-                    DeviceProperties.saveChanges();
-                    if(!main.appClosing) DeviceProperties.changePreset(newBank, newPreset, true);
+                    UiCore.currentDevice.saveChanges();
+                    if(!main.appClosing) UiCore.currentDevice.changePreset(newBank, newPreset, true);
                     break;
                 }
                 case MessageDialog.No:
                 {
                     if(!main.appClosing)
                     {
-                        DeviceProperties.changePreset(newBank, newPreset, true);
+                        UiCore.currentDevice.changePreset(newBank, newPreset, true);
 
-                        UiCore.restoreParameter("impulse");
+                        UiCore.currentDevice.escImpulse();
                     }
                     else
                     {
-                        AppProperties.comparePreset(); // restore preset TODO: честный restore
+                        UiCore.currentDevice.comparePreset(); // restore preset TODO: честный restore
                     }
                     break;
                 }
                 case MessageDialog.Cancel:
                 {
-                    // saveParam = 0
                     appClosing = false;
-                    UiCore.restoreParameter("preset")
-                    UiCore.restoreParameter("bank")
+                    UiCore.currentDevice.deviceRestoreValues();
                     break;
                 }
             }
@@ -307,6 +311,18 @@ ApplicationWindow
                         qsTr(") avaliable on the server")
                 _msgVersionInform.visible = true;
             }
+
+            if(nameParam === "preset_not_saved")
+            {
+                msgError.text = qsTr("You must save preset before export");
+                msgError.open();
+            }
+
+            if(nameParam === "impulse_save_error")
+            {
+                msgError.text = qsTr("Error while saving IR. Please, try to reload impulse.");
+                msgError.open();
+            }
         }
 
         function onSgSetUIParameter(nameParam, value)
@@ -334,30 +350,21 @@ ApplicationWindow
     Connections{
         target: UiCore
 
-        function onSgSetUIText(nameParam, value)
+        function onSgQmlRequestChangePreset(bank, preset)
         {
-            if(nameParam === "preset_not_saved")
+            if(UiCore.currentDevice.bank !== bank || UiCore.currentDevice.preset !== preset)
             {
-                msgError.text = qsTr("You must save preset before export");
-                msgError.open();
+                if(UiCore.currentDevice.deviceParamsModified)
+                {
+                    msgPresetChangeSave.newBank = bank;
+                    msgPresetChangeSave.newPreset = preset;
+                    msgPresetChangeSave.open();
+                }
+                else
+                {
+                    UiCore.currentDevice.changePreset(bank, preset);
+                }
             }
-
-            if(nameParam === "impulse_save_error")
-            {
-                msgError.text = qsTr("Error while saving IR. Please, try to reload impulse.");
-                msgError.open();
-            }
-        }
-    }
-
-    Connections{
-        target: DeviceProperties
-
-        function onPresetNotSaved(bank, preset)
-        {
-            msgPresetChangeSave.newBank = bank;
-            msgPresetChangeSave.newPreset = preset;
-            msgPresetChangeSave.visible = true;
         }
     }
 
@@ -391,7 +398,8 @@ ApplicationWindow
             msgError.text = qsTr("Device disconnected\n" + errorDescription)
             msgError.open();
 
-            InterfaceManager.startScanning();
+            InterfaceManager.startScanning(DeviceConnectionType.BLE);
+            InterfaceManager.startScanning(DeviceConnectionType.USB);
         }        
 
         function onSgInterfaceDisconnected()
@@ -399,13 +407,16 @@ ApplicationWindow
             connected = false;
             mainUi.visible = false;
 
-            InterfaceManager.startScanning();
+            InterfaceManager.startScanning(DeviceConnectionType.BLE);
+            InterfaceManager.startScanning(DeviceConnectionType.USB);
         }
     }
 
     Component.onCompleted: {
+        UiCore.setupApplication();
         UiSettings.setupApplication();
-        InterfaceManager.startScanning();
+        InterfaceManager.startScanning(DeviceConnectionType.BLE);
+        InterfaceManager.startScanning(DeviceConnectionType.USB);
 
         if(UiSettings.windowWidth!==0 && UiSettings.windowHeight!==0)
         {
@@ -421,8 +432,6 @@ ApplicationWindow
     {
         UiSettings.saveSetting("window_width", main.width);
         UiSettings.saveSetting("window_height", main.height);
-
-        UiCore.sw4Enable();
 
         if(main.edit && main.connected)
         {

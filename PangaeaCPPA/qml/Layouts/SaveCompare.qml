@@ -2,13 +2,13 @@ import QtQuick
 
 import Elements
 import StyleSettings
-import CppObjects 1.0
+
+import CppObjects
+import CppEnums
 
 Item
 {
     id: main
-
-    property bool edit: true
 
     Rectangle
     {
@@ -22,8 +22,8 @@ Item
                 width:  parent.width
                 height: parent.height/2
                 text: "SAVE"
-                enabled: main.edit & !AppProperties.compareState
-                onClicked: DeviceProperties.saveChanges();
+                enabled: UiCore.currentDevice.deviceParamsModified & (UiCore.currentDevice.presetManager.currentState !== PresetState.Compare)
+                onClicked: UiCore.currentDevice.saveChanges();
             }
 
             MButton
@@ -33,10 +33,10 @@ Item
                 height: parent.height/2
                 text: "COMP"
 
-                enabled:  main.edit
-                highlighted: AppProperties.compareState
+                enabled:  UiCore.currentDevice.deviceParamsModified
+                highlighted: UiCore.currentDevice.presetManager.currentState === PresetState.Compare
 
-                onClicked: AppProperties.comparePreset();
+                onClicked: UiCore.currentDevice.comparePreset();
             }
         }
     }

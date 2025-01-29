@@ -7,9 +7,6 @@ Item
 {
     id: main
 
-    property int value: mSwitch.value
-    property int paramType: DeviceParameter.OUTPUT_MODE
-    
     Rectangle
     {
         anchors.fill:  parent
@@ -31,7 +28,12 @@ Item
             id:    mSwitch
             width: parent.width
             height: parent.height/100*40
-            onChValue: send()
+
+            value: UiCore.currentDevice.outputMode
+
+            onChValue: val => {
+                UiCore.currentDevice.outputMode = val;
+            }
         }
 
         Row
@@ -45,7 +47,7 @@ Item
                 height: parent.height
                 text: "PH"
                 check: mSwitch.value==0
-                onClicked: {mSwitch.value = 0; send();}
+                onClicked: UiCore.currentDevice.outputMode = 0
             }
 
             // CheckText - Просто текст. Ему Item нужен. Возможно надо внутри модуля добавить
@@ -58,7 +60,7 @@ Item
                     anchors.fill: parent
                     text: "BAL"
                     check: mSwitch.value==2
-                    onClicked: {mSwitch.value = 2; send();}
+                    onClicked: UiCore.currentDevice.outputMode = 2
                 }
             }
         }
@@ -72,7 +74,7 @@ Item
                 anchors.fill: parent
                 text: "LINE"
                 check: mSwitch.value==1
-                onClicked: {mSwitch.value = 1; send();}
+                onClicked:  UiCore.currentDevice.outputMode = 1
             }
         }
 
@@ -81,25 +83,6 @@ Item
         {
             width: parent.width
             height: parent.height/100*15
-        }
-    }
-
-    function send()
-    {
-        UiCore.setDeviceParameter(main.paramType, mSwitch.value)
-    }
-
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === main.paramType)
-            {
-                mSwitch.value=value;
-            }
         }
     }
 }

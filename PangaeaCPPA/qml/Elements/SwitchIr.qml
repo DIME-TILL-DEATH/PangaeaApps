@@ -6,24 +6,24 @@ Item
 {
     id: main
 
-    property int   value: 1
-
-    signal chValue(int value)
-
     Column
     {
         anchors.fill:  parent
 
         Switch2
         {
-            id:    mSwitch
+            id: mSwitch
 
             width: parent.width
             height: parent.height/100*80
 
-            value: main.value
-            opacity: main.enabled?1:0.5
-            onChValue: value => {main.chValue(value)}
+            value: module.moduleEnabled
+
+            opacity: module.moduleEnabled ? 1 : 0.5
+
+            onChValue: val => {
+                           module.moduleEnabled = val
+                       }
         }
 
         Row
@@ -35,45 +35,21 @@ Item
             {
                 width: parent.width/2
                 height: parent.height
-                text: "On"
+                text: "Off"
                 check: mSwitch.value==0
-                onClicked: {mSwitch.value = 0; main.chValue(value);}
+                onClicked: module.moduleEnabled = 0
             }
 
             CheckText
             {
                 width: parent.width/2
                 height: parent.height
-                text: "Off"
+                text: "On"
                 check: mSwitch.value==1
-                onClicked: {mSwitch.value =1; main.chValue(value)}
+                onClicked: module.moduleEnabled = 1
             }
+
         }
 
-    }
-    function setValue(value)
-    {
-        mSwitch.value = value;
-    }
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.CABINET_ENABLE)
-            {
-                main.value = !value;
-            }
-        }
-
-        function onSgSetDeviceParameter(paramType, nameValue)
-        {
-            if(paramType === DeviceParameter.CABINET_ENABLE)
-            {
-                main.value = !value;
-            }
-        }
     }
 }

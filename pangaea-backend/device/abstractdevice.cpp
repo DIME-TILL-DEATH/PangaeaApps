@@ -4,6 +4,7 @@
 
 AbstractDevice::AbstractDevice(Core *owner)
 {
+    MV = new PresetVolume(this);
     if(owner)
     {
         connect(this, &AbstractDevice::sgEnableTimeoutTimer, owner->timeoutTimer, qOverload<>(&QTimer::start));

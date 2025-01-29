@@ -10,18 +10,22 @@ Item
 {
     id: main
 
+    property bool deviceUpdatingValues: true
+
     function up()
     {
-        if(DeviceProperties.preset < (DeviceProperties.presetsList.length-1))
+        if(UiCore.currentDevice.preset < (UiCore.currentDevice.maxPresetCount-1))
         {
-            DeviceProperties.preset++;
+            tumb.currentIndex++;
+            UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, tumb.currentIndex);
         }
     }
     function down()
     {
-        if(DeviceProperties.preset > 0)
+        if(UiCore.currentDevice.preset > 0)
         {
-            DeviceProperties.preset--;
+            tumb.currentIndex--;
+            UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, tumb.currentIndex);
         }
     }
 
@@ -40,8 +44,8 @@ Item
                 width: parent.width
                 anchors.centerIn: parent.Center
 
-                model: DeviceProperties.presetsList
-                currentIndex: DeviceProperties.preset
+                model: UiCore.currentDevice.maxPresetCount
+                currentIndex: UiCore.currentDevice.preset
 
                 visibleItemCount: 1
                 delegate: Text
@@ -61,11 +65,10 @@ Item
                 anchors.fill: parent
                 hoverEnabled: true
 
-                onWheel:
-                {
+                onWheel: function wheelHandler(wheel){
                     if(wheel.angleDelta.y>0)
                     {
-                        if(value < (maxMapRow-1))
+                        if(UiCore.currentDevice.preset < (UiCore.currentDevice.maxPresetCount-1))
                         {
                             tumb.currentIndex++;
                             timer.restart();
@@ -73,13 +76,14 @@ Item
                     }
                     else
                     {
-                        if(value>0)
+                        if(UiCore.currentDevice.preset > 0)
                         {
                             tumb.currentIndex--;
                             timer.restart();
                         }
                     }
                 }
+
                 acceptedButtons: Qt.LeftButton | Qt.RightButton
 
                 onClicked: (mouse)=>
@@ -106,6 +110,28 @@ Item
                 visible: false
                 timeout: 2000
             }
+
+            Timer
+            {
+                id: timer
+                interval: 1000
+                repeat: false
+                onTriggered:
+                {
+                    UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, tumb.currentIndex);
+                }
+            }
+
+            Connections{
+                target: UiCore.currentDevice
+
+                function onBankPresetChanged()
+                {
+                    main.deviceUpdatingValues = true;
+                    tumb.currentIndex = UiCore.currentDevice.preset
+                    main.deviceUpdatingValues = false;
+                }
+            }
         }
 
         Item
@@ -120,6 +146,16 @@ Item
                 font.pixelSize: parent.height/1.1
                 text: qsTr("PRESET")
             }
+        }
+    }
+
+    Connections{
+        target: UiCore.currentDevice
+
+        function onDeviceRestoreValues(){
+            main.deviceUpdatingValues = true;
+            tumb.currentIndex = UiCore.currentDevice.preset
+            main.deviceUpdatingValues = false;
         }
     }
 }

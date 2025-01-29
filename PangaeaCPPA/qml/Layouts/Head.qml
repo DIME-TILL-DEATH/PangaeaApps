@@ -9,7 +9,7 @@ Item
 {
     id: main
 
-    property bool irOn: true
+    property CabSim irModule
 
     signal setImpuls()
 
@@ -44,8 +44,6 @@ Item
         {
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-
-            edit: DeviceProperties.presetModified
         }
 
         Rectangle
@@ -57,7 +55,7 @@ Item
 
             color: Style.headColor
 
-            opacity: main.irOn ? 1:0.3
+            opacity: main.irModule.moduleEnabled ? 1:0.3
             Behavior on opacity{
                 NumberAnimation{duration: 500}
             }
@@ -66,7 +64,7 @@ Item
             {
                 anchors.fill: parent
                 id: impulsTxt
-                text: "empty"
+                text: irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
 
@@ -79,6 +77,8 @@ Item
             {
                 anchors.fill: parent
                 onClicked: main.setImpuls()
+
+                cursorShape: Qt.PointingHandCursor
             }
         }
 
@@ -95,11 +95,10 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            isAvaliable: (DeviceProperties.deviceType === DeviceType.CP16PA) |
-                         (DeviceProperties.deviceType === DeviceType.CP100PA) |
-                         (DeviceProperties.deviceType === DeviceType.LA3PA)
+            isAvaliable: (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16PA) |
+                         (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA)
 
-            enabled: !AppProperties.compareState
+            enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
         }
 
         PresetSpin
@@ -114,38 +113,6 @@ Item
         {
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIText(nameParam, value)
-        {
-            if (nameParam==="impulse_name")
-            {
-                impulsTxt.text = (value==="") ? qsTr("empty") : value;
-            }
-        }
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            switch(paramType)
-            {
-            case DeviceParameter.CABINET_ENABLE:
-            {
-                main.irOn = value;
-                break;
-            }
-            }
-        }
-
-        function onSgSetDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.CABINET_ENABLE)
-            {
-                main.irOn = value;
-            }
         }
     }
 }

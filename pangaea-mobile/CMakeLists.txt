@@ -20,6 +20,7 @@ qt6_add_resources(SOURCES
 qt_add_executable(Pangaea-mobile WIN32 MACOSX_BUNDLE
     main.cpp
     uicore.cpp uicore.h
+    uisettings.cpp uisettings.h
 
     android/src/activityresultmanager.cpp android/src/activityresultmanager.h
     android/src/androidutils.cpp android/src/androidutils.h
