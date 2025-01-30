@@ -1,12 +1,15 @@
 #ifndef CABSIM_H
 #define CABSIM_H
 
-#include <QObject>
 #include "abstractmodule.h"
 
+#include <QObject>
+#include <QtQml/qqmlregistration.h>
 class CabSim : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
     Q_PROPERTY(QString impulseName READ impulseName NOTIFY dataChanged FINAL)
 public:
     CabSim(AbstractDevice *owner);

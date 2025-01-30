@@ -9,6 +9,8 @@ import Modules 1.0
 
 import CppObjects
 
+import PangaeaBackend
+
 Item
 {
     id: _root

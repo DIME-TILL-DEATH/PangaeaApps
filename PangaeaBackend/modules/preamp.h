@@ -8,9 +8,13 @@
 #include "abstractmodule.h"
 #include "controlvalue.h"
 
+#include <QtQml/qqmlregistration.h>
+
 class Preamp : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(ControlValue* volume READ volume NOTIFY dataChanged FINAL)
 

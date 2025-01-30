@@ -4,6 +4,7 @@ import QtQuick.Controls 2.15
 import StyleSettings 1.0
 
 import CppObjects
+import PangaeaBackend
 
 Rectangle
 {

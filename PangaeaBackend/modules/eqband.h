@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QPointF>
+#include <QtQml/qqmlregistration.h>
 
 #include "controlvalue.h"
 #include "controlqlegacy.h"
@@ -13,6 +14,8 @@ class EqParametric;
 class EqBand : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY bandParametersChanged FINAL)
     Q_PROPERTY(FilterType filterType READ filterType WRITE setFilterType NOTIFY bandParametersChanged FINAL)

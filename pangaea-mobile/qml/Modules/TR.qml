@@ -7,6 +7,8 @@ import Tutorials
 
 import CppObjects
 
+import PangaeaBackend
+
 BaseModule
 {
     id: main

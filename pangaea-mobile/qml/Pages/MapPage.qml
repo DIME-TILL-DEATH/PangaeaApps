@@ -16,7 +16,6 @@ Item
     id: _main
 
     function setMapContent(){
-        console.log("Device type: ", UiCore.currentDevice.deviceType)
         switch(UiCore.currentDevice.deviceType)
         {
             case DeviceType.LA3:

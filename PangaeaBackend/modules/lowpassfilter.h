@@ -2,6 +2,7 @@
 #define LOWPASSFILTER_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 #include "abstractmodule.h"
 
 #include "controlvalue.h"
@@ -11,6 +12,8 @@
 class LowPassFilter : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(ControlValue* lpf READ lpf NOTIFY dataChanged FINAL)
 public:

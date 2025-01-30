@@ -6,6 +6,8 @@ import Elements 1.0
 
 import CppObjects
 
+import PangaeaBackend
+
 Item
 {
     id: main

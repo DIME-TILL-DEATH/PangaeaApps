@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QtQml/qqmlregistration.h>
 
 #include "abstractmodule.h"
 
@@ -10,6 +11,7 @@ class ControlValue : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged FINAL)
 

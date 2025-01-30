@@ -7,6 +7,8 @@ import StyleSettings 1.0
 import CppObjects
 import Tutorials
 
+import PangaeaBackend
+
 BaseModule
 {
     id: main

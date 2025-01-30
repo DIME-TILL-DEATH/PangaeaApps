@@ -36,25 +36,7 @@ AbstractModule::AbstractModule(AbstractDevice* owner, ModuleType moduleType, QSt
 
 void AbstractModule::registerTypestoQml()
 {
-    qmlRegisterType<ControlValue>("CppObjects", 1, 0, "ControlValue");
 
-    qmlRegisterUncreatableType<AbstractModule>("CppObjects", 1, 0, "Module", "Cannot create Module in QML");
-    qmlRegisterUncreatableType<PresetVolume>("CppObjects", 1, 0, "PresetVolume", "Cannot create MasterVolume in QML");
-    qmlRegisterUncreatableType<NoiseGate>("CppObjects", 1, 0, "NoiseGate", "Cannot create NoiseGate in QML");
-    qmlRegisterUncreatableType<Compressor>("CppObjects", 1, 0, "Compressor", "Cannot create Compressor in QML");
-    qmlRegisterUncreatableType<Preamp>("CppObjects", 1, 0, "Preamp", "Cannot create Preamp in QML");
-    qmlRegisterUncreatableType<PowerAmp>("CppObjects", 1, 0, "PowerAmp", "Cannot create PowerAmp in QML");
-    qmlRegisterUncreatableType<Presence>("CppObjects", 1, 0, "Presence", "Cannot create Presence in QML");
-    qmlRegisterUncreatableType<CabSim>("CppObjects", 1, 0, "CabSim", "Cannot create CabSim in QML");
-    qmlRegisterUncreatableType<HiPassFilter>("CppObjects", 1, 0, "HiPassFilter", "Cannot create HP in QML");
-    qmlRegisterUncreatableType<EqParametric>("CppObjects", 1, 0, "EqParametric", "Cannot create EQ in QML");
-    qmlRegisterUncreatableType<EqBand>("CppObjects", 1, 0, "EqBand", "Cannot create EqBand in QML");
-    qmlRegisterUncreatableType<LowPassFilter>("CppObjects", 1, 0, "LowPassFilter", "Cannot create LP in QML");
-    qmlRegisterUncreatableType<Tremolo>("CppObjects", 1, 0, "Tremolo", "Cannot create TR in QML");
-    qmlRegisterUncreatableType<Chorus>("CppObjects", 1, 0, "Chorus", "Cannot create CH in QML");
-    qmlRegisterUncreatableType<Phaser>("CppObjects", 1, 0, "Phaser", "Cannot create PH in QML");
-    qmlRegisterUncreatableType<EarlyReflections>("CppObjects", 1, 0, "EarlyReflections", "Cannot create ER in QML");
-    qmlRegisterUncreatableType<Delay>("CppObjects", 1, 0, "Delay", "Cannot create DL in QML");
 }
 
 void AbstractModule::setUsed(bool newValue)

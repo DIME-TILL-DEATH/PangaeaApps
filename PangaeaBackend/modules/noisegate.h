@@ -3,12 +3,16 @@
 
 #include "abstractmodule.h"
 
+#include <QtQml/qqmlregistration.h>
+
 #include "controlvalue.h"
 #include "presetlegacy.h"
 
 class NoiseGate : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(ControlValue* threshold READ threshold NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* decay READ decay NOTIFY dataChanged FINAL)

@@ -1,5 +1,4 @@
 import QtQuick 2.15
-//import QtQuick.Controls 2.15
 import QtQuick.Controls.Material
 
 import QtQuick.Layouts 1.3
@@ -10,6 +9,8 @@ import Elements 1.0
 import StyleSettings 1.0
 
 import CppObjects
+import PangaeaBackend
+
 Item
 {
     id: _main

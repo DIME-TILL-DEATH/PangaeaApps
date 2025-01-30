@@ -9,6 +9,7 @@ import Modules 1.0
 import Elements 1.0
 
 import CppObjects
+import PangaeaBackend
 
 Rectangle{
     id: _root

@@ -4,6 +4,8 @@
 #include "abstractmodule.h"
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
+
 #include "controlvalue.h"
 
 #include "presetlegacy.h"
@@ -13,6 +15,8 @@
 class EarlyReflections : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(ControlValue* reflectionsVolume READ reflectionsVolume NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* reflectionsType READ reflectionsType NOTIFY dataChanged FINAL)

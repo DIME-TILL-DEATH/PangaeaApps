@@ -6,12 +6,16 @@
 #include "moduletypeenum.h"
 #include "hardwarepreset.h"
 
+#include <QtQml/qqmlregistration.h>
 
 class AbstractDevice;
 
 class AbstractModule : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     Q_PROPERTY(bool moduleEnabled READ moduleEnabled WRITE setModuleEnabled NOTIFY dataChanged FINAL)
     Q_PROPERTY(QString moduleName READ moduleName CONSTANT)
     Q_PROPERTY(QString fullModuleName READ fullModuleName CONSTANT)

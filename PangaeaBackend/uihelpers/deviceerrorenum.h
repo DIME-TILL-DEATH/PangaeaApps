@@ -5,9 +5,9 @@
 
 #include <QtQml/qqmlregistration.h>
 
-class DeviceErrorEnum
+class DeviceErrorEnum : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
     QML_NAMED_ELEMENT(DeviceErrorEnum)
     QML_UNCREATABLE("")
 public:

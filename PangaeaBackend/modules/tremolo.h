@@ -2,12 +2,16 @@
 #define TREMOLO_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
+
 #include "abstractmodule.h"
 #include "controlvalue.h"
 
 class Tremolo : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(ControlValue* depth READ depth NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* rate READ rate NOTIFY dataChanged FINAL)

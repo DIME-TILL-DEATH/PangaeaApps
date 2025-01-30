@@ -2,6 +2,8 @@
 #define PRESENCE_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
+
 #include "abstractmodule.h"
 
 #include "controlvalue.h"
@@ -11,6 +13,8 @@
 class Presence : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(ControlValue* presenceVolume READ presenceVolume NOTIFY dataChanged FINAL)
 public:

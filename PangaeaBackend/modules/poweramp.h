@@ -2,6 +2,7 @@
 #define POWERAMP_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 #include "presetlegacy.h"
 
@@ -11,6 +12,8 @@
 class PowerAmp : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(ControlValue* volume READ volume NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* presence READ presence NOTIFY dataChanged FINAL)

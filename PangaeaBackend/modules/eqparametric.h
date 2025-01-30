@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QPointF>
+#include <QtQml/qqmlregistration.h>
 
 #include "abstractmodule.h"
 // #include "deviceparameter.h"
@@ -13,6 +14,9 @@
 class EqParametric : public AbstractModule
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     Q_PROPERTY(QList<QPointF> points READ points NOTIFY pointsChanged)
     Q_PROPERTY(QObjectList EqBands READ EqBands NOTIFY eqBandsChanged)
 

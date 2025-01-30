@@ -9,6 +9,7 @@ import Elements 1.0
 import Tutorials
 
 import CppObjects
+import PangaeaBackend
 
 BaseModule
 {
