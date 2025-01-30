@@ -2,10 +2,13 @@
 #define FILTERTYPEENUM_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class FilterTypeEnum
 {
     Q_GADGET
+    QML_NAMED_ELEMENT(FilterType)
+    QML_UNCREATABLE("")
 public:
     explicit FilterTypeEnum(){};
 

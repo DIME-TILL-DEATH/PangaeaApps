@@ -7,7 +7,8 @@
 class ModuleTypeEnum
 {
     Q_GADGET
-    QML_ELEMENT
+    QML_NAMED_ELEMENT(ModuleType)
+    QML_UNCREATABLE("")
 public:
     explicit ModuleTypeEnum(){};
     enum Value

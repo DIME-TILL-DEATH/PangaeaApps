@@ -7,7 +7,7 @@ import Elements 1.0
 import Modules 1.0
 
 import CppObjects
-import CppEnums
+import PangaeaBackend
 
 Rectangle {
     id: _root

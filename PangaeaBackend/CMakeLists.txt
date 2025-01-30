@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(pangaea-backend VERSION 1.0.0 LANGUAGES CXX)
+project(PangaeaBackend VERSION 1.0.0 LANGUAGES CXX)
 
 message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
 
@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(QT_QML_GENERATE_QMLLS_INI ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick)
 
 if(NOT IOS)
     set(USB_INTERFACE_SOURCES
@@ -16,7 +16,7 @@ if(NOT IOS)
     )
 endif()
 
-qt_add_library(pangaea-backend STATIC
+qt_add_library(PangaeaBackend STATIC
     cores/core.cpp cores/core.h
     cores/netcore.cpp cores/netcore.h
     cores/interfacecore.cpp cores/interfacecore.h
@@ -24,7 +24,6 @@ qt_add_library(pangaea-backend STATIC
     interfaces/abstractinterface.cpp interfaces/abstractinterface.h
     interfaces/bleinterface.cpp interfaces/bleinterface.h
     # interfaces/usbinterface.cpp interfaces/usbinterface.h
-    interfaces/devicedescription.cpp interfaces/devicedescription.h
     interfaces/offlineinterface.h interfaces/offlineinterface.cpp
 
     device/defines.h
@@ -75,13 +74,13 @@ qt_add_library(pangaea-backend STATIC
     utils/parser.h utils/parser.cpp
 
 
-    uihelpers/devicetypeenum.h
-    uihelpers/deviceerrorenum.h
-    uihelpers/devicemessageenum.h
-    uihelpers/filtertypeenum.h
-    uihelpers/moduletypeenum.h
-    uihelpers/presetstateenum.h
-    uihelpers/uimessagetype.h
+    # uihelpers/devicetypeenum.h
+    # uihelpers/deviceerrorenum.h
+    # uihelpers/devicemessageenum.h
+    # uihelpers/filtertypeenum.h
+    # uihelpers/moduletypeenum.h
+    # uihelpers/presetstateenum.h
+    # uihelpers/uimessagetype.h
 
     mock/abstractmockdevice.h mock/abstractmockdevice.cpp
     mock/mockcp16legacy.h mock/mockcp16legacy.cpp
@@ -91,8 +90,25 @@ qt_add_library(pangaea-backend STATIC
     ${USB_INTERFACE_SOURCES}
 )
 
+qt_add_qml_module(PangaeaBackend
+    URI PangaeaBackend
+    VERSION 1.0
+    RESOURCE_PREFIX /
 
-target_include_directories(pangaea-backend PUBLIC
+    SOURCES
+        uihelpers/devicetypeenum.h
+        uihelpers/deviceerrorenum.h
+        uihelpers/devicemessageenum.h
+        uihelpers/filtertypeenum.h
+        uihelpers/moduletypeenum.h
+        uihelpers/presetstateenum.h
+        uihelpers/uimessagetype.h
+
+        interfaces/devicedescription.cpp interfaces/devicedescription.h
+)
+
+
+target_include_directories(PangaeaBackend PUBLIC
     cores
     device
     interfaces
@@ -106,25 +122,27 @@ target_include_directories(pangaea-backend PUBLIC
 
 if(NOT IOS)
     find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning SerialPort Concurrent)
-    target_link_libraries(pangaea-backend PUBLIC
+    target_link_libraries(PangaeaBackend PUBLIC
         Qt6::Core
         Qt6::Bluetooth
         Qt6::Network
         Qt6::Positioning
         Qt6::SerialPort
         Qt6::Concurrent
+        Qt6::Quick
     )
 else()
     find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning Concurrent)
-    target_link_libraries(pangaea-backend PUBLIC
+    target_link_libraries(PangaeaBackend PUBLIC
         Qt6::Core
         Qt6::Bluetooth
         Qt6::Network
         Qt6::Positioning
         Qt6::Concurrent
+        Qt6::Quick
     )
 endif()
 
 if(ANDROID)
-    target_link_libraries(pangaea-backend PUBLIC Qt::CorePrivate)
+    target_link_libraries(PangaeaBackend PUBLIC Qt::CorePrivate)
 endif()

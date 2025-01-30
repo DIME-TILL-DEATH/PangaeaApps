@@ -2,10 +2,13 @@
 #define DEVICEMESSAGEENUM_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class DeviceMessageEnum
 {
     Q_GADGET
+    QML_NAMED_ELEMENT(DeviceMessage)
+    QML_UNCREATABLE("")
 public:
     explicit DeviceMessageEnum(){};
 

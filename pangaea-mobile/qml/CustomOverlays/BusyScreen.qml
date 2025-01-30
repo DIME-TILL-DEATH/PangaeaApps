@@ -4,7 +4,7 @@ import QtQuick.Controls
 import StyleSettings
 
 import CppObjects
-import CppEnums
+import PangaeaBackend
 
 Item
 {

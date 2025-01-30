@@ -25,9 +25,9 @@ qt_add_executable(Pangaea-mobile WIN32 MACOSX_BUNDLE
     android/src/activityresultmanager.cpp android/src/activityresultmanager.h
     android/src/androidutils.cpp android/src/androidutils.h
 
-    ../pangaea-backend/threadcontroller.cpp ../pangaea-backend/threadcontroller.h
-    ../pangaea-backend/uihelpers/uiinterfacemanager.cpp ../pangaea-backend/uihelpers/uiinterfacemanager.h
-    ../pangaea-backend/utils/logger.cpp ../pangaea-backend/utils/logger.h
+    ../PangaeaBackend/threadcontroller.cpp ../PangaeaBackend/threadcontroller.h
+    ../PangaeaBackend/uihelpers/uiinterfacemanager.cpp ../PangaeaBackend/uihelpers/uiinterfacemanager.h
+    ../PangaeaBackend/utils/logger.cpp ../PangaeaBackend/utils/logger.h
 
     ${SOURCES}
 )
@@ -35,14 +35,14 @@ qt_add_executable(Pangaea-mobile WIN32 MACOSX_BUNDLE
 target_include_directories(Pangaea-mobile PUBLIC
     android/src/
 
-    ../pangaea-backend/
-    ../pangaea-backend/cores
-    ../pangaea-backend/device
-    ../pangaea-backend/interfaces/
-    ../pangaea-backend/utils
-    ../pangaea-backend/qmlEnums
-    ../pangaea-backend/models/
-    ../pangaea-backend/uihelpers/
+    ../PangaeaBackend/
+    ../PangaeaBackend/cores
+    ../PangaeaBackend/device
+    ../PangaeaBackend/interfaces/
+    ../PangaeaBackend/utils
+    ../PangaeaBackend/qmlEnums
+    ../PangaeaBackend/models/
+    ../PangaeaBackend/uihelpers/
 
     ../WavConverterLib/
 )
@@ -58,7 +58,8 @@ target_link_libraries(Pangaea-mobile PUBLIC
     Qt6::Svg
     Qt6::Positioning
 
-    pangaea-backend
+    PangaeaBackend
+    PangaeaBackendplugin
     converter-lib
 )
 

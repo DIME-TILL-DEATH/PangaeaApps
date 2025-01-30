@@ -5,10 +5,13 @@
 #include <QObject>
 
 #include <QtCore/QtGlobal>
+#include <QtQml/qqmlregistration.h>
 
-class DeviceConnectionTypeEnum
+class DeviceConnectionTypeEnum: public QObject
 {
-    Q_GADGET
+    Q_OBJECT
+    QML_NAMED_ELEMENT(DeviceConnectionType)
+    QML_UNCREATABLE("")
 public:
     explicit DeviceConnectionTypeEnum() {};
 
@@ -27,6 +30,8 @@ Q_DECLARE_METATYPE(DeviceConnectionType)
 class DeviceDescription
 {
     Q_GADGET
+    QML_ELEMENT
+
     Q_PROPERTY(QString name READ name)
     Q_PROPERTY(QString address READ address)
     Q_PROPERTY(DeviceConnectionType connectionType READ connectionType)

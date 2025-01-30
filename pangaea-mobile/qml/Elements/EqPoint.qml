@@ -3,7 +3,7 @@ import QtQuick
 import StyleSettings
 
 import CppObjects
-import CppEnums
+import PangaeaBackend
 
 Rectangle{
     id: root

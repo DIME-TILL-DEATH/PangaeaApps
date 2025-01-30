@@ -3,9 +3,13 @@
 
 #include <QObject>
 
+#include <QtQml/qqmlregistration.h>
+
 class DeviceErrorEnum
 {
     Q_GADGET
+    QML_NAMED_ELEMENT(DeviceErrorEnum)
+    QML_UNCREATABLE("")
 public:
     explicit DeviceErrorEnum(){};
 

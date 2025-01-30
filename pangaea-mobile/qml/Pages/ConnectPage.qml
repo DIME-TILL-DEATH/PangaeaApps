@@ -1,18 +1,16 @@
-import QtQuick 2.15//12
-import QtQuick.Controls 2.15//2.5
-import QtQuick.Layouts 1.15
-//import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Controls
+// import QtQuick.Layouts
 
-//import QtGraphicalEffects 1.15
 import Qt5Compat.GraphicalEffects
 
-import StyleSettings 1.0
-import Elements 1.0
+import StyleSettings
+import Elements
 import Tutorials
 
-import CustomOverlays 1.0
+import CustomOverlays
 import CppObjects
-import CppEnums
+import PangaeaBackend
 
 Item
 {

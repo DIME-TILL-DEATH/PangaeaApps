@@ -2,10 +2,13 @@
 #define PRESETSTATEENUM_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class PresetStateEnum
 {
     Q_GADGET
+    QML_NAMED_ELEMENT(PresetState)
+    QML_UNCREATABLE("")
 public:
     explicit PresetStateEnum(){};
     enum Value

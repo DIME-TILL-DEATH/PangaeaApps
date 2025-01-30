@@ -9,7 +9,7 @@ import Modules 1.0
 import Elements 1.0
 
 import CppObjects
-import CppEnums
+import PangaeaBackend
 
 Item{
     id: _mapContent

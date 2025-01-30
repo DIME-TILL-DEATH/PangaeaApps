@@ -11,7 +11,8 @@ import Pages 1.0
 import StyleSettings 1.0
 
 import CppObjects
-import CppEnums
+
+import PangaeaBackend
 
 Item {
     id: _root

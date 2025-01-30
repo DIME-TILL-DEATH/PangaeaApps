@@ -8,7 +8,6 @@ import Elements 1.0
 import Modules 1.0
 
 import CppObjects
-import CppEnums
 
 Rectangle {
     id: _outputModeModule

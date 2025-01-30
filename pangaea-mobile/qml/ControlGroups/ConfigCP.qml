@@ -9,7 +9,7 @@ import StyleSettings
 import CustomOverlays
 
 import CppObjects
-import CppEnums
+import PangaeaBackend
 
 Item {
     id: _main

@@ -1,5 +1,4 @@
 #include <QGuiApplication>
-#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
@@ -25,6 +24,7 @@
 
 #include "uicore.h"
 #include "uisettings.h"
+
 
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
@@ -74,10 +74,10 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("amtelectronics.com");
     app.setApplicationName("pangaea mobile");
 
-#ifdef Q_OS_LINUX
-    QApplication::setWindowIcon(QIcon(":/qml/Images/AMT.svg"));
-    app.setApplicationVersion(VERSION_STRING);
-#endif
+// #ifdef Q_OS_LINUX
+//     QApplication::setWindowIcon(QIcon(":/qml/Images/AMT.svg"));
+//     app.setApplicationVersion(VERSION_STRING);
+// #endif
 
     Logger log;
     log.setAsMessageHandlerForApp();
@@ -122,16 +122,16 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
 
-    qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
+    // qmlRegisterType<DeviceDescription>("CppObjects", 1, 0, "DeviceDescription");
 
-    qmlRegisterUncreatableType<FilterTypeEnum>("CppEnums", 1, 0, "FilterType", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<DeviceConnectionTypeEnum>("CppEnums", 1, 0, "DeviceConnectionType", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<PresetStateEnum>("CppEnums", 1, 0, "PresetState", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<DeviceErrorEnum>("CppEnums", 1, 0, "DeviceErrorType", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<DeviceMessageEnum>("CppEnums", 1, 0, "DeviceMessageType", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<UiMessageTypeEnum>("CppEnums", 1, 0, "UiMessageType", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<ModuleTypeEnum>("CppEnums", 1, 0, "ModuleType", "Not creatable as it is an enum type");
+    // qmlRegisterUncreatableType<FilterTypeEnum>("CppEnums", 1, 0, "FilterType", "Not creatable as it is an enum type");
+    // qmlRegisterUncreatableType<DeviceTypeEnum>("CppEnums", 1, 0, "DeviceType", "Not creatable as it is an enum type");
+    // qmlRegisterUncreatableType<DeviceConnectionTypeEnum>("CppEnums", 1, 0, "DeviceConnectionType", "Not creatable as it is an enum type");
+    // qmlRegisterUncreatableType<PresetStateEnum>("CppEnums", 1, 0, "PresetState", "Not creatable as it is an enum type");
+    // qmlRegisterUncreatableType<DeviceErrorEnum>("CppEnums", 1, 0, "DeviceErrorType", "Not creatable as it is an enum type");
+    // qmlRegisterUncreatableType<DeviceMessageEnum>("CppEnums", 1, 0, "DeviceMessageType", "Not creatable as it is an enum type");
+    // qmlRegisterUncreatableType<UiMessageTypeEnum>("CppEnums", 1, 0, "UiMessageType", "Not creatable as it is an enum type");
+    // qmlRegisterUncreatableType<ModuleTypeEnum>("CppEnums", 1, 0, "ModuleType", "Not creatable as it is an enum type");
 
     AbstractModule::registerTypestoQml();
 

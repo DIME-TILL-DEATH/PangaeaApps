@@ -2,10 +2,13 @@
 #define DEVICETYPEENUM_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class DeviceTypeEnum
 {
-        Q_GADGET
+    Q_GADGET
+    QML_NAMED_ELEMENT(DeviceType)
+    QML_UNCREATABLE("")
 public:
     explicit DeviceTypeEnum(){};
     enum Value

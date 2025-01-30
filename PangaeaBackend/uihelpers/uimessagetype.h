@@ -2,10 +2,13 @@
 #define UIMESSAGETYPE_H
 
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 
 class UiMessageTypeEnum
 {
     Q_GADGET
+    QML_NAMED_ELEMENT(UiMessageType)
+    QML_UNCREATABLE("")
 public:
     explicit UiMessageTypeEnum(){};
 
