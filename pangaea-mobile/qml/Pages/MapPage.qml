@@ -136,6 +136,13 @@ Item
         {
             switch(UiCore.currentDevice.deviceType)
             {
+                case DeviceType.UNKNOWN_DEVICE:
+                {
+                    console.log("MapPage: abstract device")
+                    _masterControlsLoader.source = "";
+                    _mapContentLoader.source = "";
+                    break;
+                }
                 case DeviceType.LA3:
                 {
                     _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_LA.qml";

@@ -11,6 +11,7 @@ import Modules 1.0
 import Elements 1.0
 
 import CppObjects
+import PangaeaBackend
 
 CustomMessageDialog {
     id: _root
@@ -139,6 +140,23 @@ CustomMessageDialog {
 
             function onModelReset(){
                 _presetListView.model = UiCore.currentDevice.presetListModel
+            }
+        }
+
+        Connections
+        {
+            target: UiCore
+
+            function onCurrentDeviceChanged()
+            {
+                switch(UiCore.currentDevice.deviceType)
+                {
+                    case DeviceType.UNKNOWN_DEVICE:
+                    {
+                        _presetListView.model = undefined
+                        break;
+                    }
+                }
             }
         }
     }
