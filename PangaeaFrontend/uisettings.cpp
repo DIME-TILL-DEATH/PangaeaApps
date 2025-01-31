@@ -95,7 +95,7 @@ bool UiSettings::checkUpdatesEnabled()
 
 bool UiSettings::isModulesRightAligned()
 {
-    return appSettings->value("modules_right_aligned", true).toBool();
+    return appSettings->value("modules_right_aligned", false).toBool();
 }
 
 bool UiSettings::eqClassicView()

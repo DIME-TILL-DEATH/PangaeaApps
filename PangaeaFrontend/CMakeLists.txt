@@ -88,12 +88,5 @@ set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt
 if(ANDROID OR IOS)
     add_subdirectory(Mobile)
 else()
-    add_subdirectory(qml/ControlGroups/)
-    add_subdirectory(qml/CustomOverlays/)
-    add_subdirectory(qml/Elements/)
-    add_subdirectory(qml/Modules/)
-    add_subdirectory(qml/Pages/)
-    add_subdirectory(qml/StyleSettings/)
-    add_subdirectory(qml/Tutorials/)
+    add_subdirectory(Desktop)
 endif()
-
