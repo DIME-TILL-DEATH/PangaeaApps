@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QtQmlIntegration/qqmlintegration.h>
 
-class ModuleTypeEnum
+class ModuleTypeEnum : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
     QML_NAMED_ELEMENT(ModuleType)
     QML_UNCREATABLE("")
 public:

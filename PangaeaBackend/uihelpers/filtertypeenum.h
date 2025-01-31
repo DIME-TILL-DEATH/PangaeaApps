@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
-class FilterTypeEnum
+class FilterTypeEnum : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
     QML_NAMED_ELEMENT(FilterType)
     QML_UNCREATABLE("")
 public:

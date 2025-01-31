@@ -22,13 +22,13 @@ Item
             case DeviceType.MODERN_CP:
             {
                 console.log("modern")
-                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPModern.qml";
+                _mapContentLoader.source = "../ControlGroups/MapCPModern.qml";
                 break;
             }
             default:
             {
                 console.log("default")
-                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/MapCPLegacy.qml";
+                _mapContentLoader.source = "../ControlGroups/MapCPLegacy.qml";
                 break;
             }
         }
@@ -40,12 +40,12 @@ Item
             case DeviceType.LA3:
             case DeviceType.MODERN_CP:
             {
-                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/ConfigCP.qml";
+                _mapContentLoader.source = "../ControlGroups/ConfigCP.qml";
                 break;
             }
             default:
             {
-                _mapContentLoader.source = "/ControlGroups/qml/ControlGroups/ConfigUnavaliable.qml";
+                _mapContentLoader.source = "../ControlGroups/ConfigUnavaliable.qml";
                 break;
             }
         }
@@ -145,14 +145,14 @@ Item
                 }
                 case DeviceType.LA3:
                 {
-                    _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_LA.qml";
+                    _masterControlsLoader.source = "../ControlGroups/MasterControls_LA.qml";
                     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
                     setMapContent();
                     break;
                 }
                 default:
                 {
-                    _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
+                    _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
                     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
                     setMapContent();
                     break;

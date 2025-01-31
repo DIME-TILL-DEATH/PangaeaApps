@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
-class DeviceTypeEnum
+class DeviceTypeEnum : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
     QML_NAMED_ELEMENT(DeviceType)
     QML_UNCREATABLE("")
 public:

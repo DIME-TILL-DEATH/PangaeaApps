@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
-class PresetStateEnum
+class PresetStateEnum : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
     QML_NAMED_ELEMENT(PresetState)
     QML_UNCREATABLE("")
 public:

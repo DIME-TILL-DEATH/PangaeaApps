@@ -126,56 +126,56 @@ Item{
                     {
                     case ModuleType.NG:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/NG.qml";
+                        _delegateLoader.source = "../Modules/NG.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.CM:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/CM.qml";
+                        _delegateLoader.source = "../Modules/CM.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PR:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/PR.qml";
+                        _delegateLoader.source = "../Modules/PR.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PA:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/PA.qml";
+                        _delegateLoader.source = "../Modules/PA.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.TR:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/TR.qml";
+                        _delegateLoader.source = "../Modules/TR.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.CH:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/CH.qml";
+                        _delegateLoader.source = "../Modules/CH.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PH:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/PH.qml";
+                        _delegateLoader.source = "../Modules/PH.qml";
                         _delegateLoader.height = _main.height*7/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.IR:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/IR.qml";
+                        _delegateLoader.source = "../Modules/IR.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.openIrManagementWindow.connect(_mapContent.showIrManagementWindow);
                         break;
@@ -183,20 +183,20 @@ Item{
 
                     case ModuleType.EQ1:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/EQPreviewModern.qml";
+                        _delegateLoader.source = "../Modules/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq1);
                         // _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
 
                         // _eqExtLoader.eq1Instance = moduleInstace
-                        // _eqExtLoader.source = "/Modules/qml/Modules/EQExtModern.qml";
+                        // _eqExtLoader.source = "../Modules/EQExtModern.qml";
                         _eqExtLoader.eq1Instance = moduleInstance;
                         break;
                     }
 
                     case ModuleType.EQ2:
                     {
-                        _delegateLoader.source = "/Modules/qml/Modules/EQPreviewModern.qml";
+                        _delegateLoader.source = "../Modules/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq2);
                         // _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
@@ -337,7 +337,7 @@ Item{
 
         property EqParametric eqModule
 
-        source: "/Modules/qml/Modules/EQExtModern.qml";
+        source: "../Modules/EQExtModern.qml";
 
         anchors.centerIn: parent
 

@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 
-class UiMessageTypeEnum
+class UiMessageTypeEnum : public QObject
 {
-    Q_GADGET
+    Q_OBJECT
     QML_NAMED_ELEMENT(UiMessageType)
     QML_UNCREATABLE("")
 public:
