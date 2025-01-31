@@ -45,11 +45,6 @@ ApplicationWindow
                 + markConnect + devName + " (firmware v." + devVersion +") " + markEdit
                 : "AMT PangaeaCPPA " + " v." + Qt.application.version + " " + markConnect
 
-    Settings
-    {
-        category: "Current_folder"
-        property alias curFolder: irFileDialog.currentFolder
-    }
 
     header: MainMenu{
         visible: main.connected
@@ -59,84 +54,12 @@ ApplicationWindow
     StartLayout
     {
         id: startUi
-
-        visible: !mainUi.visible
     }
 
-    Column
-    {
-        id: mainUi
+    Loader{
+        id: controlLayoutLoader
+
         anchors.fill: parent
-        focus: true
-        spacing: 2
-
-        visible: false
-
-        Head
-        {
-            id: head
-
-            width:  parent.width
-            height: parent.height/1000*150
-
-            onSetImpuls: {
-                irFileDialog.open();
-            }
-        }
-
-        ModulesList
-        {
-            id: modules
-
-            width:  parent.width
-            height: parent.height/1000*850
-
-            enabled: !main.wait
-
-            onEmitIrModule: moduleInstance => {
-                head.irModule = moduleInstance
-            }
-        }
-    }
-
-    FileDialog
-    {
-        id: irFileDialog
-
-        title: qsTr("Select IR")
-        nameFilters: [ "Wav files (*.wav)" ]
-
-        onAccepted:
-        {
-            var cleanPath = irFileDialog.currentFile.toString();
-            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16PA)
-                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16))
-            {
-                UiCore.uploadIr(cleanPath);
-            }
-        }
-
-        onRejected:
-        {
-            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
-                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
-            {
-                UiCore.escImpuls()
-            }
-        }
-
-        onSelectedFileChanged:
-        {
-            var cleanPath = irFileDialog.currentFile.toString();
-            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
-            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
-                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
-            {
-                UiCore.uploadIr(cleanPath);
-            }
-        }
     }
 
     MessageDialog
@@ -369,6 +292,28 @@ ApplicationWindow
                 }
             }
         }
+
+        function onCurrentDeviceChanged(){
+
+            console.log("Current device chabged", UiCore.currentDevice.deviceType)
+
+            switch(UiCore.currentDevice.deviceType){
+            case DeviceType.UNKNOWN_DEVICE:{
+                controlLayoutLoader.source = "";
+                break;
+            }
+
+            case DeviceType.MODERN_CP:{
+                break;
+            }
+
+            default:{
+                startUi.visible = false;
+                controlLayoutLoader.source = "/Layouts/ControlLayoutLegacy.qml";
+            }
+            }
+
+        }
     }
 
     Connections{
@@ -390,14 +335,13 @@ ApplicationWindow
         {
             connected = true;
             interfaceDescription = interfaceDescription.address
-            mainUi.visible = true;
             msgError.close();
         }
 
         function onSgInterfaceError(errorDescription)
         {
             connected = false;
-            mainUi.visible = false;
+            startUi.visible = true;;
             msgError.text = qsTr("Device disconnected\n" + errorDescription)
             msgError.open();
 
@@ -408,7 +352,7 @@ ApplicationWindow
         function onSgInterfaceDisconnected()
         {
             connected = false;
-            mainUi.visible = false;
+            startUi.visible = true;
 
             InterfaceManager.startScanning(DeviceConnectionType.BLE);
             InterfaceManager.startScanning(DeviceConnectionType.USB);

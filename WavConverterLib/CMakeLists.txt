@@ -23,6 +23,8 @@ endif()
 if(WIN32)
     add_compile_definitions(WAVCONVERTERLIB_LIBRARY)
 
+    set_target_properties(converter-lib PROPERTIES OUTPUT_NAME WavConverterLib)
+
     target_link_libraries(converter-lib PUBLIC
         Qt6::Core
 

@@ -30,6 +30,7 @@ if(ANDROID)
     )
 endif()
 
+add_subdirectory(qml)
 add_subdirectory(qml/ControlGroups/)
 add_subdirectory(qml/CustomOverlays/)
 add_subdirectory(qml/Elements/)

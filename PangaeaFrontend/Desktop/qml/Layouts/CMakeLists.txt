@@ -12,4 +12,5 @@ qt_add_qml_module(qml_layouts
         ModulesList.qml
         SaveCompare.qml
         StartLayout.qml
+        ControlLayoutLegacy.qml
 )
