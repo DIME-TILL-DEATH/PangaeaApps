@@ -8,15 +8,36 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 qt_add_library(converter-lib SHARED
-    resampler.cpp
-    wavutils.cpp
+    resampler.cpp resampler.h
+    wavutils.cpp wavutils.h
 )
 
-target_link_libraries(converter-lib PUBLIC
-    Qt6::Core
+if(ANDROID)
+    target_link_libraries(converter-lib PUBLIC
+        Qt6::Core
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.android/${CMAKE_ANDROID_ARCH_ABI}/libsox.so
-)
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.android/${CMAKE_ANDROID_ARCH_ABI}/libsox.so
+    )
+endif()
+
+if(WIN32)
+    target_link_libraries(converter-lib PUBLIC
+        Qt6::Core
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/libsox.lib
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/libgsm.lib
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/liblpc10.lib
+
+    )
+endif()
+
+if(APPLE)
+    target_link_libraries(converter-lib PUBLIC
+        Qt6::Core
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.mac/libsox.a
+    )
+endif()
 
 target_include_directories(converter-lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/include/
