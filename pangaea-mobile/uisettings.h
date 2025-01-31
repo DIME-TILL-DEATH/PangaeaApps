@@ -48,6 +48,7 @@ private:
 
     QTranslator m_translator;
 
+    // TODO only CPPA, not mobile!
     QMap<QString, QString> pathFromCode
     {
         {"en", ":/translations/PangaeaCPPA_en.qm"},

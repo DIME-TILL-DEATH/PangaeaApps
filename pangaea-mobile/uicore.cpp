@@ -262,18 +262,7 @@ void UiCore::openManualExternally(QString fileName)
 
     QString fullFileName =  fileName + "_" + appLanguage + ".pdf";
 
-#ifdef Q_OS_LINUX
-    QString filePath = QCoreApplication::applicationDirPath() + "/../docs/" + fullFileName;
-
-    QProcess proc;
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.remove("LD_LIBRARY_PATH"); // force evince use system librarys
-
-    proc.setProcessEnvironment(env);
-    proc.setProgram("evince");
-    proc.setArguments(QStringList(filePath));
-    proc.startDetached();
-#elif Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
     QString filePath = ":/docs/" + fullFileName;
     QFile pdfFile(filePath);
 
@@ -294,6 +283,17 @@ void UiCore::openManualExternally(QString fileName)
         "(Ljava/lang/String;Landroid/content/Context;)V",
         QJniObject::fromString(fullFileName).object<jstring>(),
         QNativeInterface::QAndroidApplication::context());
+#elif Q_OS_LINUX
+        QString filePath = QCoreApplication::applicationDirPath() + "/../docs/" + fullFileName;
+
+        QProcess proc;
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        env.remove("LD_LIBRARY_PATH"); // force evince use system librarys
+
+        proc.setProcessEnvironment(env);
+        proc.setProgram("evince");
+        proc.setArguments(QStringList(filePath));
+        proc.startDetached();
 #else
     QString filePath =  QCoreApplication::applicationDirPath() + "/docs/" + fullFileName;
     QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
