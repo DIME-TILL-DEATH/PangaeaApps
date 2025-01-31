@@ -110,15 +110,17 @@ ApplicationWindow
         {
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            if((devName == nameCP16) || (devName == nameCP16PA))
+            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16PA)
+                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16))
             {
-                UiCore.setImpuls(cleanPath);
+                UiCore.uploadIr(cleanPath);
             }
         }
 
         onRejected:
         {
-            if((UiCore.currentDevice.deviceType === DeviceType.CP100) || (UiCore.currentDevice.deviceType === DeviceType.CP100PA))
+            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
+                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
             {
                 UiCore.escImpuls()
             }
@@ -129,9 +131,10 @@ ApplicationWindow
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            if((DeviceProperties.deviceType === DeviceType.CP100) || (DeviceProperties.deviceType === DeviceType.CP100PA))
+            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
+                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
             {
-                UiCore.setImpuls(cleanPath);
+                UiCore.uploadIr(cleanPath);
             }
         }
     }

@@ -23,6 +23,10 @@ endif()
 if(WIN32)
     project(PangaeaCPPA VERSION 1.0.2000.1 LANGUAGES CXX)
 
+    set(PLATFORM_SPECIFIC_SOURCES
+        ${CMAKE_CURRENT_SOURCE_DIR}/Desktop/icons/icon.rc
+    )
+
     qt6_add_resources(RCC_FILES
         "Desktop/qml.qrc"
         "Desktop/translations.qrc"

@@ -7,6 +7,8 @@ import Elements
 import StyleSettings
 import CppObjects 1.0
 
+import PangaeaBackend
+
 Column{
     spacing: height/100
 
@@ -106,7 +108,7 @@ Column{
         color: Style.mainEnabledColor
 
         width: parent.width
-        height: parent.height*74/100
+        height: parent.height*60/100
 
         radius: root.radius
         border.width: 2
@@ -182,6 +184,36 @@ Column{
 
             onClicked: {
                 InterfaceManager.connectToDevice(listView.currentItem.data.deviceDescription,)
+            }
+        }
+    }
+
+    Rectangle{
+        id: offlineInterfacesButton
+
+        width: parent.width
+        height: parent.height*12/100
+
+        border.width: 2
+        radius: root.radius
+
+        opacity: mA.pressed ? 0.5 : 1
+
+        color: enabled ? Style.mainEnabledColor : "gray"
+
+        MText{
+            anchors.centerIn: parent
+            text: qsTr("Show virtual interfaces")
+        }
+
+        MouseArea{
+            id: mA2
+
+            anchors.fill: parent
+            enabled: parent.enabled
+
+            onClicked: {
+                InterfaceManager.startScanning(DeviceConnectionType.Offline);
             }
         }
     }

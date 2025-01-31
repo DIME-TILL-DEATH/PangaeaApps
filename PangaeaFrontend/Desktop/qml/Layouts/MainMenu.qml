@@ -316,22 +316,17 @@ MenuBar{
                     menuDeviceManual.strManualBaseName = "";
                     menuUpdateFirmware.enabled = false;
                     break;
-                case DeviceType.CP100:
+                case DeviceType.LEGACY_CP100:
+                case DeviceType.LEGACY_CP100PA:
                     menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
                     menuUpdateFirmware.enabled = false;
                     break;
-                case DeviceType.CP16:
+                case DeviceType.LEGACY_CP16:
+                case DeviceType.LEGACY_CP16PA:
                     menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
                     menuUpdateFirmware.enabled = true;
                     break;
-                case DeviceType.CP16PA:
-                    menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
-                    menuUpdateFirmware.enabled = true;
-                    break;
-                case DeviceType.CP100PA:
-                    menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
-                    menuUpdateFirmware.enabled = false;
-                    break;
+                case DeviceType.MODERN_CP:
                 case DeviceType.LA3:
                     menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
                     menuUpdateFirmware.enabled = true;

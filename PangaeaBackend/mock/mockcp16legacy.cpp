@@ -166,7 +166,7 @@ void MockCP16Legacy::initFolders()
 #ifdef Q_OS_ANDROID
     m_basePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
 #else
-    QString basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/AMT/pangaeaCPPA/";
+    m_basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/AMT/pangaeaCPPA/";
 
 #endif
     if(!QDir(m_basePath).exists()) QDir().mkpath(m_basePath);
