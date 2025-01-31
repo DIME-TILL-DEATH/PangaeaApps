@@ -8,7 +8,7 @@
 class DeviceErrorEnum : public QObject
 {
     Q_OBJECT
-    QML_NAMED_ELEMENT(DeviceErrorEnum)
+    QML_NAMED_ELEMENT(DeviceErrorType)
     QML_UNCREATABLE("")
 public:
     explicit DeviceErrorEnum(){};
