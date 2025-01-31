@@ -12,7 +12,7 @@ Item
     property string fonColor: "#EBECEC"
     property string devColor: "#5E5971"
 
-    property int curVal: DeviceProperties.bank
+    property int curVal: UiCore.currentDevice.bank
 
     Row
     {
@@ -46,27 +46,26 @@ Item
             Repeater
             {
                 anchors.fill: parent
-                model: DeviceProperties.banksList
+                model: UiCore.currentDevice.maxBankCount
                 Item
                 {
                     width:  parent.width
-                    height: parent.height/DeviceProperties.banksList.length
+                    height: parent.height/UiCore.currentDevice.maxBankCount
                     Rectangle
                     {
                         anchors.fill: parent
                         color: Style.mainEnabledColor
                     }
 
-                    property bool isLA3: (DeviceProperties.deviceType === DeviceType.LA3PA) | (DeviceProperties.deviceType === DeviceType.LA3RV)
                     MText
                     {
                         anchors.fill: parent
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment:   Qt.AlignVCenter
                         text: modelData
-                        color: index===curVal ? (isLA3 ? ((index<2) ? "lightgreen" : Style.highlightColor ) : Style.highlightColor)
+                        color: index===curVal ?  Style.highlightColor
                                                 : Style.backgroundColor
-                        font.pixelSize: isLA3 ? parent.width/2.2 : parent.width/1.5
+                        font.pixelSize: parent.width/1.5
                     }
                 }
             }

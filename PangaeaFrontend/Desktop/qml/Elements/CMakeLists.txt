@@ -7,7 +7,6 @@ qt_add_qml_module(qml_elements
         BankSpin.qml
         CheckText.qml
         Dial.qml
-        Eq.qml
         ParameterDial.qml
         EqPoint.qml
         ILDelegate.qml
@@ -20,7 +19,6 @@ qt_add_qml_module(qml_elements
         Material.qml
         MButton.qml
         MText.qml
-        Pot.qml
         PresetSpin.qml
         SignalBar.qml
         Switch2.qml

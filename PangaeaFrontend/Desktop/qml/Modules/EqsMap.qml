@@ -33,20 +33,6 @@ Item
                 height: parent.height/1000*928
                 width:  parent.width
 
-                Eqs
-                {
-                    on: EqResponse.moduleEnabled
-                    visible: (!switchEnMap.map) & (UiSettings.eqClassicView)
-                    anchors.fill: parent
-                }
-
-                // EqParametric
-                // {
-                //     visible: (!switchEnMap.map) & (!UiSettings.eqClassicView)
-                //     anchors.fill: parent
-                //     z: _baseModule.z+5
-                // }
-
                 Map
                 {
                     visible: switchEnMap.map

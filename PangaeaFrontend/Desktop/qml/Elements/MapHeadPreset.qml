@@ -9,7 +9,7 @@ Item
 {
     id: main
 
-    property int curVal: DeviceProperties.preset
+    property int curVal: UiCore.currentDevice.preset
 
     Column
     {
@@ -41,10 +41,10 @@ Item
             Repeater
             {
                 anchors.fill: parent
-                model: DeviceProperties.presetsList
+                model: UiCore.currentDevice.maxPresetCount
                 Item
                 {
-                    width:  parent.width/DeviceProperties.presetsList.length
+                    width:  parent.width/UiCore.currentDevice.maxPresetCount
                     height: parent.height
                     Rectangle
                     {

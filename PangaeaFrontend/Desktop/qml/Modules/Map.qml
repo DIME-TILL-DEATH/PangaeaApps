@@ -7,13 +7,14 @@ import StyleSettings
 import CppObjects
 import PangaeaBackend
 
-Item
+Window
 {
     id: main
 
-    anchors.fill: parent
+    width: 300
+    height: 300
 
-    property int maxMapRow: Math.max(DeviceProperties.banksList.length, DeviceProperties.presetsList.length)
+    property int maxMapRow: Math.max(UiCore.currentDevice.maxBankCount, UiCore.currentDevice.maxPresetCount)
 
     Rectangle
     {
@@ -69,7 +70,7 @@ Item
 
                     interactive: false
 
-                    currentIndex: DeviceProperties.bank*maxMapRow + DeviceProperties.preset
+                    currentIndex: UiCore.currentDevice.bank*maxMapRow + UiCore.currentDevice.preset
 
                     highlight: Rectangle{
                         color: "gray"
@@ -86,7 +87,7 @@ Item
 
                     }
 
-                    model: PresetListModel
+                    model: UiCore.currentDevice.presetListModel
 
                     delegate: MapDelegate{
                         id: _root

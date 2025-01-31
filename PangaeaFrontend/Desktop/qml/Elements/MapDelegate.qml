@@ -32,7 +32,7 @@ Item{
             cursorShape: Qt.PointingHandCursor
 
             onClicked: {
-                DeviceProperties.changePreset(bankNumber, presetNumber);
+                UiCore.currentDevice.changePreset(bankNumber, presetNumber);
             }
             onEntered: tp.visible = (tp.text.length>0)
             onExited:  tp.visible = false
@@ -44,28 +44,6 @@ Item{
             text: currentIndex === presetMapIndex ? currentImpulseName : impulseName
             visible: false
             timeout: 0
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-        function onSgSetUIText(nameParam, value)
-        {
-            if (nameParam==="impulse_name")
-                _root.currentImpulseName=value;
-        }
-
-        function onSgSetUiDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.CABINET_ENABLE)
-                _root.currentImpulseEnabled = value;
-        }
-
-        function onSgSetDeviceParameter(paramType, value)
-        {
-            if(paramType === DeviceParameter.CABINET_ENABLE)
-                _root.currentImpulseEnabled = value;
         }
     }
 }

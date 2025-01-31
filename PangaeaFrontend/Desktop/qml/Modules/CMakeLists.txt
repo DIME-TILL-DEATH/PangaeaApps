@@ -7,7 +7,7 @@ qt_add_qml_module(qml_modules
         BaseModule.qml
         Cm.qml
         EqParametric.qml
-        Eqs.qml
+
         EqsMap.qml
         Er.qml
         Ng.qml

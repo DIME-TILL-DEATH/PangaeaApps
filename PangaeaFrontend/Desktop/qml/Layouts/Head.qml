@@ -1,7 +1,9 @@
 import QtQuick
+import QtQuick.Controls
 
 import Elements
 import StyleSettings
+import Modules
 
 import CppObjects
 import PangaeaBackend
@@ -110,10 +112,21 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Item
+        Button
         {
             height: parent.height
             width:  row.widthWithoutSpase/15*1
+
+            text: qsTr("MAP")
+
+            onClicked: {
+                map.show()
+            }
         }
+    }
+
+    Map{
+        id: map
+
     }
 }

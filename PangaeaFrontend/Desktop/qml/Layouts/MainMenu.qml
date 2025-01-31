@@ -264,7 +264,7 @@ MenuBar{
         onButtonClicked: function (button, role) {
             switch(button){
             case MessageDialog.Yes:
-                UiCore.updateFirmware(pickFimwareFileDialog.cleanPath);
+                UiCore.currentDevice.setFirmware(pickFimwareFileDialog.cleanPath);
                 break;
             }
         }
