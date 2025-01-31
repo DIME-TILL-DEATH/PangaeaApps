@@ -11,13 +11,16 @@
 
 #include "abstractinterface.h"
 
-#if defined(PANGAEA_LIBRARY)
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
-#else
-#  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
-#endif
+// #if defined(PANGAEA_LIBRARY)
+// #  define PANGAEA_LIBRARY_EXPORT Q_DECL_EXPORT
+// #else
+// #  define PANGAEA_LIBRARY_EXPORT Q_DECL_IMPORT
+// #endif
 
-class PANGAEA_LIBRARY_EXPORT UsbInterface : public AbstractInterface
+// class PANGAEA_LIBRARY_EXPORT UsbInterface : public AbstractInterface
+// {
+
+class UsbInterface : public AbstractInterface
 {
     Q_OBJECT
 public:

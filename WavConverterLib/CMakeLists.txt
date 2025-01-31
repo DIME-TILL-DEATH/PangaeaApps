@@ -21,13 +21,14 @@ if(ANDROID)
 endif()
 
 if(WIN32)
+    add_compile_definitions(WAVCONVERTERLIB_LIBRARY)
+
     target_link_libraries(converter-lib PUBLIC
         Qt6::Core
 
         ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/libsox.lib
-        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/libgsm.lib
         ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/liblpc10.lib
-
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/libgsm.lib
     )
 endif()
 

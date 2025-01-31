@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(PangaeaBackend VERSION 1.0.0 LANGUAGES CXX)
 
-message(VERBOSE "Architecture: ${ANDROID_TARGET_ARCH}")
-
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,6 +11,12 @@ find_package(Qt6 REQUIRED COMPONENTS Core Quick)
 if(NOT IOS)
     set(USB_INTERFACE_SOURCES
         interfaces/usbinterface.cpp interfaces/usbinterface.h
+    )
+endif()
+
+if(ANDROID)
+    set(PLATFORM_SPECIFIC_SOURCES
+        utils/androidutils.cpp utils/androidutils.h
     )
 endif()
 
@@ -47,8 +51,6 @@ qt_add_library(PangaeaBackend STATIC
     models/deviceslistmodel.cpp models/deviceslistmodel.h
     models/moduleslistmodel.h models/moduleslistmodel.cpp
 
-
-    utils/androidutils.cpp utils/androidutils.h
     utils/irworker.cpp utils/irworker.h
     utils/presetmanager.cpp utils/presetmanager.h
     utils/maskedparser.cpp utils/maskedparser.h
@@ -60,6 +62,7 @@ qt_add_library(PangaeaBackend STATIC
     mock/mockla3.h mock/mockla3.cpp
 
     ${USB_INTERFACE_SOURCES}
+    ${PLATFORM_SPECIFIC_SOURCES}
 )
 
 qt_add_qml_module(PangaeaBackend

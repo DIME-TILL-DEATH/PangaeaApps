@@ -17,11 +17,6 @@
 
 #include "interfacecore.h"
 
-#include "filtertypeenum.h"
-#include "deviceerrorenum.h"
-#include "devicemessageenum.h"
-#include "uimessagetype.h"
-
 #include "uicore.h"
 #include "uisettings.h"
 
@@ -64,11 +59,7 @@ int main(int argc, char *argv[])
     signal(SIGFPE, manageSegFailure);
     signal(SIGILL, manageSegFailure);
 
-#ifdef Q_OS_WINDOWS
-    QApplication  app(argc, argv);
-#else
     QGuiApplication app(argc, argv);
-#endif
 
     app.setOrganizationName("AMT");
     app.setOrganizationDomain("amtelectronics.com");
@@ -92,15 +83,9 @@ int main(int argc, char *argv[])
     ThreadController threadController(QThread::currentThread());
     core->moveToThread(threadController.backendThread());
     netCore->moveToThread(threadController.backendThread());
-#if !defined(Q_OS_MACOS)
-    // Нам не нужен доп поток для обслуживания соединения нигде?
-    // и UIInterfaceManager тоже не нужен в итоге?
-    // interfaceManager->moveToThread(threadController.connectionsThread()); // On MAC BLE can work only on the main thread
-#endif
 
     QObject::connect(threadController.backendThread(), &QThread::finished, core, &QObject::deleteLater);
     QObject::connect(threadController.backendThread(), &QThread::finished, netCore, &QObject::deleteLater);
-    // QObject::connect(threadController.backendThread(), &QThread::finished, interfaceManager, &QObject::deleteLater);
 
     //-----------------------------------------------------------------
     // UI creation
@@ -111,6 +96,7 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     engine.addImportPath(":/qml");
+    engine.addImportPath("qml/");
     engine.addImportPath(":/firmwares");
     engine.addImportPath(":/translations");
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));

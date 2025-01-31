@@ -53,12 +53,13 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ../WavConverterLib/
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Bluetooth Gui Network Positioning Quick QuickControls2 LinguistTools Svg SerialPort)
+find_package(Qt6 REQUIRED COMPONENTS Bluetooth Gui Network Positioning Quick QuickControls2 LinguistTools Svg SerialPort Widgets)
 target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt6::Core
     Qt6::Bluetooth
     Qt6::SerialPort
     Qt6::Gui
+    Qt6::Widgets
     Qt6::Quick
     Qt6::QuickControls2
     Qt6::Svg
@@ -72,9 +73,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 qt_policy(SET QTP0002 OLD)
 
 set(QT_QML_GENERATE_QMLLS_INI ON)
-set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/qml)
+set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/pangaea-mobile/qml)
 set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
-
 
 
 #############################################--MOBILE--#####################################################
@@ -118,4 +118,13 @@ if(ANDROID OR IOS)
     add_subdirectory(qml/Pages/)
     add_subdirectory(qml/StyleSettings/)
     add_subdirectory(qml/Tutorials/)
+else()
+    add_subdirectory(qml/ControlGroups/)
+    add_subdirectory(qml/CustomOverlays/)
+    add_subdirectory(qml/Elements/)
+    add_subdirectory(qml/Modules/)
+    add_subdirectory(qml/Pages/)
+    add_subdirectory(qml/StyleSettings/)
+    add_subdirectory(qml/Tutorials/)
 endif()
+
