@@ -32,7 +32,7 @@ public:
     Q_INVOKABLE void uploadIr(QString srcFilePath, QString dstFilePath = "");
     Q_INVOKABLE void convertAndUploadIr(QString srcFilePath, QString dstFilePath = "");
 
-    Q_INVOKABLE void exportPreset(QString fileName, QString dstPath = "");
+    Q_INVOKABLE void exportPreset(QUrl dstPath = QUrl());
     Q_INVOKABLE void importPreset(QString filePath);
 
 #ifdef Q_OS_ANDROID

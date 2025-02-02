@@ -92,7 +92,7 @@ ApplicationWindow
                     }
                     else
                     {
-                        UiCore.currentDevice.comparePreset(); // restore preset TODO: честный restore
+                        UiCore.currentDevice.comparePreset();
                     }
                     break;
                 }
@@ -116,6 +116,7 @@ ApplicationWindow
         onButtonClicked: function (button, role) {
             switch(button){
             case MessageDialog.Yes:
+                // TODO: переделать cleanPath на QUrl
                 var cleanPath = irFileDialog.currentFile.toString();
                 cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
                 UiCore.convertAndUploadImpulse(cleanPath);
@@ -184,24 +185,24 @@ ApplicationWindow
 
         function onSgSetUIText(nameParam, inString)
         {
-            if(nameParam === "not_supported_ir")
-            {
-                msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
-                                     inString + "\n" +
-                                     qsTr("Do you want to convert it before upload?")
-                msgIncorretIR.open();
-            }
+            // if(nameParam === "not_supported_ir")
+            // {
+            //     msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
+            //                          inString + "\n" +
+            //                          qsTr("Do you want to convert it before upload?")
+            //     msgIncorretIR.open();
+            // }
 
-            if(nameParam === "preset_import_unsuccecfull")
-            {
-                msgError.text = qsTr("Not a Pangaea preset file!")
-                msgError.open();
-            }
+            // if(nameParam === "preset_import_unsuccecfull")
+            // {
+            //     msgError.text = qsTr("Not a Pangaea preset file!")
+            //     msgError.open();
+            // }
 
-            if(nameParam === "devVersion")
-            {
-                devVersion = inString;
-            }
+            // if(nameParam === "devVersion")
+            // {
+            //     devVersion = inString;
+            // }
 
             if(nameParam === "firmware_version_error")
             {
@@ -244,11 +245,11 @@ ApplicationWindow
                 msgError.open();
             }
 
-            if(nameParam === "impulse_save_error")
-            {
-                msgError.text = qsTr("Error while saving IR. Please, try to reload impulse.");
-                msgError.open();
-            }
+            // if(nameParam === "impulse_save_error")
+            // {
+            //     msgError.text = qsTr("Error while saving IR. Please, try to reload impulse.");
+            //     msgError.open();
+            // }
         }
 
         function onSgSetUIParameter(nameParam, value)

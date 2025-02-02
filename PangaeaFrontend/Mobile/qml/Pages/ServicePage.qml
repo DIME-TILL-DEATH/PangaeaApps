@@ -183,12 +183,12 @@ Item
         wrapMode: Text.WrapAnywhere
         standardButtons: Dialog.Ok  | Dialog.Cancel
 
-        property var cleanPath
+        property var filePath
 
         onAccepted:
         {
             messageAcceptFile.close()
-            UiCore.currentDevice.setFirmware(cleanPath);
+            UiCore.currentDevice.setFirmware(filePath);
         }
         onRejected:
         {
@@ -287,7 +287,7 @@ Item
                 var dataArray = value.split(',');
 
                 messageAcceptFile.text = qsTr("Do you want to load firmware file:\n") + dataArray[1];
-                messageAcceptFile.cleanPath = dataArray[0];
+                messageAcceptFile.filePath = dataArray[0];
                 // messageAcceptFile.open()
                 rssiNotificationDialog.open()
                 InterfaceManager.rssiMeasuring(true);

@@ -214,6 +214,7 @@ MenuBar{
         currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
 
         onAccepted: {
+            // TODO: переделать cleanPath на QUrl
             var cleanPath = currentFile.toString();//fileUrl.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
             UiCore.importPreset(cleanPath);
@@ -231,9 +232,7 @@ MenuBar{
         fileMode: FileDialog.SaveFile
 
         onAccepted: {
-            var cleanPath = currentFile.toString();//fileUrl.toString();
-            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            UiCore.exportPreset(cleanPath);
+            UiCore.exportPreset(currentFile);
         }
     }
 

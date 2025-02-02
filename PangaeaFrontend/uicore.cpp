@@ -112,11 +112,9 @@ void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)
     m_currentDevice->startIrUpload(outpuFilePath, m_dstIrPath);
 }
 
-void UiCore::exportPreset(QString fileName, QString dstPath)
+void UiCore::exportPreset(QUrl dstPath)
 {
 #ifdef Q_OS_ANDROID
-    Q_UNUSED(fileName)
-
     QJniObject ACTION_CREATE_DOCUMENT = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "ACTION_CREATE_DOCUMENT");
     QJniObject CATEGORY_OPENABLE = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "CATEGORY_OPENABLE");
     QJniObject EXTRA_TITLE = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "EXTRA_TITLE");
@@ -145,7 +143,11 @@ void UiCore::exportPreset(QString fileName, QString dstPath)
         QtAndroidPrivate::startActivity(intent, ActivityType::CREATE_PRESET, &activityResultHandler);
     }
 #else
-    m_currentDevice->exportPreset(dstPath, fileName);
+    QString filePath = dstPath.path();
+    #ifdef Q_OS_WIN
+    filePath.remove(0, 1);
+    #endif
+    m_currentDevice->exportPreset(filePath, dstPath.fileName());
 #endif
 }
 

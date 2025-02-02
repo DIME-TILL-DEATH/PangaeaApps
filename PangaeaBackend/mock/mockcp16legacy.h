@@ -41,6 +41,7 @@ private:
     void formatMemoryCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     void ccCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void lccCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 
     void escAckCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
 

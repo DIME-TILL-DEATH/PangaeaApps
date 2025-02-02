@@ -24,6 +24,7 @@ MockCP16Legacy::MockCP16Legacy(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     m_parser.addCommandHandler("pc", std::bind(&MockCP16Legacy::presetChangeCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("cc", std::bind(&MockCP16Legacy::ccCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("lcc", std::bind(&MockCP16Legacy::lccCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("esc", std::bind(&MockCP16Legacy::escAckCommHandler, this, _1, _2, _3));
 
@@ -517,6 +518,11 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
         answer += "\rccEND\n";
         emit answerReady(answer);
     }
+}
+
+void MockCP16Legacy::lccCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    emit answerReady("lcc\r\nEND\n");
 }
 
 void MockCP16Legacy::escAckCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
