@@ -7,7 +7,7 @@
 class DeviceMessageEnum : public QObject
 {
     Q_OBJECT
-    QML_NAMED_ELEMENT(DeviceMessage)
+    QML_NAMED_ELEMENT(DeviceMessageType)
     QML_UNCREATABLE("")
 public:
     explicit DeviceMessageEnum(){};

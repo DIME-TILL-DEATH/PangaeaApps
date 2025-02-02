@@ -123,7 +123,7 @@ Item
         }
         onRejected:
         {
-            // // TODO: more accurate way
+            // // TODO: more accurate way(deviceRestoreValues, как в Desktop)
             UiCore.currentDevice.restoreValue("bank-preset")
         }
     }

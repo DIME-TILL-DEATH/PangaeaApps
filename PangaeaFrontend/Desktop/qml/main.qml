@@ -3,8 +3,6 @@ import QtQuick.Controls.Fusion
 import QtQuick.Dialogs
 import QtCore
 
-import Qt.labs.platform 1.1 as Labs
-
 import QtQuick.Window 2.15
 
 import StyleSettings 1.0
@@ -32,7 +30,6 @@ ApplicationWindow
 
     property string markEdit: UiCore.currentDevice.deviceParamsModified ? " * ":" "
     property string devName: UiCore.currentDevice.firmwareName
-    property string devVersion: ""
 
     property string interfaceDescription: ""
     property string markConnect: connected ? qsTr("Connected to ") + interfaceDescription : qsTr("Disconnected")
@@ -42,7 +39,7 @@ ApplicationWindow
     property bool appClosing: false
 
     title: connected ? "AMT PangaeaCPPA " +  " v." + Qt.application.version + " "
-                + markConnect + devName + " (firmware v." + devVersion +") " + markEdit
+                + markConnect + devName + markEdit
                 : "AMT PangaeaCPPA " + " v." + Qt.application.version + " " + markConnect
 
 
@@ -125,20 +122,20 @@ ApplicationWindow
         }
     }
 
-    Labs.MessageDialog
+    MessageDialog
     {
-        id: msgError
+        id: msgInfo
 
         title: qsTr("Error")
         text: qsTr("Device is disconnected")
 
         modality: Qt.ApplicationModal
-        onOkClicked: {
+        onAccepted: {
             mBusy.visible = false;
         }
     }
 
-    Labs.MessageDialog
+    MessageDialog
     {
         id: msgExchangeError
 
@@ -146,7 +143,7 @@ ApplicationWindow
         text: qsTr("Device is disconnected")
 
         modality: Qt.ApplicationModal
-        onOkClicked: {
+        onAccepted: {
             InterfaceManager.disconnectFromDevice();
         }
     }
@@ -157,7 +154,7 @@ ApplicationWindow
     }
 
     // modality works only in Labs
-    Labs.MessageDialog
+    MessageDialog
     {
         id: operationCompleteDialog
 
@@ -167,7 +164,7 @@ ApplicationWindow
 
         modality: Qt.ApplicationModal
 
-        onOkClicked: {
+        onAccepted: {
             mBusy.visible = false;
             InterfaceManager.disconnectFromDevice();
         }
@@ -183,27 +180,9 @@ ApplicationWindow
     {
         target: UiCore
 
+        // TODO избавиться от onSgSetUIParameter и onSgSetUIText
         function onSgSetUIText(nameParam, inString)
         {
-            // if(nameParam === "not_supported_ir")
-            // {
-            //     msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
-            //                          inString + "\n" +
-            //                          qsTr("Do you want to convert it before upload?")
-            //     msgIncorretIR.open();
-            // }
-
-            // if(nameParam === "preset_import_unsuccecfull")
-            // {
-            //     msgError.text = qsTr("Not a Pangaea preset file!")
-            //     msgError.open();
-            // }
-
-            // if(nameParam === "devVersion")
-            // {
-            //     devVersion = inString;
-            // }
-
             if(nameParam === "firmware_version_error")
             {
                  var versionArray = inString.split(',');
@@ -241,15 +220,10 @@ ApplicationWindow
 
             if(nameParam === "preset_not_saved")
             {
-                msgError.text = qsTr("You must save preset before export");
-                msgError.open();
+                msgInfo.title = qsTr("Error")
+                msgInfo.text = qsTr("You must save preset before export");
+                msgInfo.open();
             }
-
-            // if(nameParam === "impulse_save_error")
-            // {
-            //     msgError.text = qsTr("Error while saving IR. Please, try to reload impulse.");
-            //     msgError.open();
-            // }
         }
 
         function onSgSetUIParameter(nameParam, value)
@@ -296,7 +270,7 @@ ApplicationWindow
 
         function onCurrentDeviceChanged(){
 
-            console.log("Current device chabged", UiCore.currentDevice.deviceType)
+            console.log("Current device changed", UiCore.currentDevice.deviceType)
 
             switch(UiCore.currentDevice.deviceType){
             case DeviceType.UNKNOWN_DEVICE:{
@@ -318,12 +292,87 @@ ApplicationWindow
     }
 
     Connections{
+        target: UiCore.currentDevice
+
+        function onSgDeviceError(type, description, params)
+        {
+            switch(type)
+            {
+                case DeviceErrorType.UndefinedCommand:
+                {
+                    msgInfo.title = qsTr("Device parse error");
+                    msgInfo.text = qsTr("Device can't recognize command:\n'" + params[1] + "'\nTry to update firmware");
+                    msgInfo.open();
+                    break;
+                }
+
+                case DeviceErrorType.IrSaveError:
+                {
+                    msgInfo.title = qsTr("Error");
+                    msgInfo.text = qsTr("Error while saving IR. Please, try to reload impulse.");
+                    msgInfo.open();
+                    break;
+                }
+
+                case DeviceErrorType.PresetImportUnsuccesfull:
+                {
+                    msgInfo.title = sqTr("Error")
+                    msgInfo.text = qsTr("Not a Pangaea preset file!")
+                    msgInfo.open();
+                    break;
+                }
+
+                case DeviceErrorType.FimrmwareVersionInsufficient:
+                {
+                    _msgVersionError.text = qsTr("Firmware version of your device is ") + params[0]
+                            + qsTr("\nMinimum required version is ")
+                            + params[1]
+                            + qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
+
+                    _msgVersionError.visible = true;
+                    break;
+                }
+
+                case DeviceErrorType.CopyFileError:
+                {
+                    msgInfo.title = qsTr("Error");
+                    msgInfo.text = qsTr("IR file copying error.")
+                    msgInfo.visible = true;
+                    break;
+                }
+
+                case DeviceErrorType.FileExists:
+                {
+                    msgInfo.title = qsTr("Error")
+                    msgInfo.text = qsTr("File ") + params + qsTr(" already on device.")
+                    msgInfo.open();
+                    break;
+                }
+            }
+        }
+
+        function onSgDeviceMessage(type, message, params)
+        {
+            switch(type)
+            {
+                case DeviceMessageType.PresetExportFinished:
+                {
+                    msgInfo.title = qsTr("Preset export finished");
+                    msgInfo.text = qsTr("Preset exported to:\n" + message);
+                    msgInfo.open();
+                    break;
+                }
+            }
+        }
+    }
+
+    Connections{
         target: InterfaceManager
 
         function onSgDeviceUnavaliable(senderType, reason)
         {
-            msgError.text = qsTr("Device is unavaliable")
-            msgError.open();
+            msgInfo.text = qsTr("Device is unavaliable")
+            msgInfo.open();
         }
 
         function onSgExchangeError()
@@ -336,15 +385,15 @@ ApplicationWindow
         {
             connected = true;
             interfaceDescription = interfaceDescription.address
-            msgError.close();
+            msgInfo.close();
         }
 
         function onSgInterfaceError(errorDescription)
         {
             connected = false;
             startUi.visible = true;;
-            msgError.text = qsTr("Device disconnected\n" + errorDescription)
-            msgError.open();
+            msgInfo.text = qsTr("Device disconnected\n" + errorDescription)
+            msgInfo.open();
 
             InterfaceManager.startScanning(DeviceConnectionType.BLE);
             InterfaceManager.startScanning(DeviceConnectionType.USB);
