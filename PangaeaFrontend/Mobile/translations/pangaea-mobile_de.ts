@@ -21,6 +21,65 @@
     </message>
 </context>
 <context>
+    <name>AbstractModule</name>
+    <message>
+        <source>Cabinet simulator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Chorus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Compressor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Early reflections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Parametric EQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High-pass filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low pass filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Noise gate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Phaser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Power amp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Presence</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tremolo</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BCutControl</name>
     <message>
         <source>CUT ON</source>
@@ -451,6 +510,134 @@
     </message>
 </context>
 <context>
+    <name>Main</name>
+    <message>
+        <source>Connect</source>
+        <translation type="unfinished">Verbinden</translation>
+    </message>
+    <message>
+        <source>Controls</source>
+        <translation type="unfinished">Steuerung</translation>
+    </message>
+    <message>
+        <source>Config</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service</source>
+        <translation type="unfinished">Service</translation>
+    </message>
+    <message>
+        <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exchange error</source>
+        <translation type="unfinished">Fehler beim Datenaustausch</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished">Warnung</translation>
+    </message>
+    <message>
+        <source>Firmware version error!</source>
+        <translation type="unfinished">Firmware-Versionsfehler!</translation>
+    </message>
+    <message>
+        <source>Update firmware</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Newest firmware avaliable on the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
+        <translation type="unfinished">Das Modul Bluetooth ist ausgeschaltet. Bitte schalten Sie das Modul Bluetooth auf Ihrem mobilen Gerät ein und drücken Sie OK</translation>
+    </message>
+    <message>
+        <source>Firmware version of your device is </source>
+        <translation type="unfinished">Aktuelle Firmware-Version Ihres Geräts </translation>
+    </message>
+    <message>
+        <source>
+Minimum required version is </source>
+        <translation type="unfinished">
+Die erforderliche Mindestversion </translation>
+    </message>
+    <message>
+        <source>
+Do you want to update firmware now?
+WARNING!!! Updating firmware may take several minutes!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New firmware avaliable on the server.
+Firmware version of your device is: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+New firmware version is: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+Do you want to download and update firmware now?
+WARNING!!! Updating firmware may take several minutes!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You must save preset before export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device parse error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Fehlermeldung</translation>
+    </message>
+    <message>
+        <source>Error while saving IR. Please, try to reload impulse.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset import error!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IR file copying error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preset export finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
+        <translation type="unfinished">Android erfordert eine Geolokalisierung, um Bluetooth LE-Geräte zu scannen. Bitte schalten Sie das Geolokalisierung-Modul ein und drücken Sie OK</translation>
+    </message>
+    <message>
+        <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
+        <translation type="unfinished">Diese App erfordert die Berechtigung zur Geolokalisierung auf Ihrem mobilen Gerät, um die Module BLE-1 zu scannen. Bitte erteilen Sie der Anwendung alle erforderlichen Genehmigungen und drücken Sie OK</translation>
+    </message>
+    <message>
+        <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device is unavaliable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device disconnected
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MapCPModern</name>
     <message>
         <source>Preset name: </source>
@@ -549,20 +736,6 @@
     </message>
     <message>
         <source>HIDE</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PA</name>
-    <message>
-        <source>Power amp</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PH</name>
-    <message>
-        <source>Phaser</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -745,11 +918,6 @@ Please, reconnect to device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>(c) 2024
-website: https://amtelectronics.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)
 </source>
         <translation type="unfinished"></translation>
@@ -792,13 +960,6 @@ website: https://amtelectronics.com</source>
     </message>
     <message>
         <source>Auto check updates</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TR</name>
-    <message>
-        <source>Tremolo</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
