@@ -123,15 +123,15 @@
 <context>
     <name>ClipIndicator</name>
     <message>
-        <source>IR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>CLIPPING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OUT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IN</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -417,10 +417,25 @@
     <name>IR</name>
     <message>
         <source>empty</source>
+        <translation type="obsolete">vuoto</translation>
+    </message>
+</context>
+<context>
+    <name>IRCPLegacy</name>
+    <message>
+        <source>empty</source>
         <translation type="unfinished">vuoto</translation>
     </message>
     <message>
         <source>Not supported format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trim IR file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IR file exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -432,10 +447,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>IR file exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>File </source>
         <translation type="unfinished"></translation>
     </message>
@@ -444,7 +455,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>IRCPModern</name>
+    <message>
+        <source>empty</source>
+        <translation type="unfinished">vuoto</translation>
+    </message>
+    <message>
+        <source>Not supported format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Trim IR file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IR file exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pangaea doesn&apos;t support this wav format:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to convert it before upload?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> already on device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1180,128 +1226,53 @@ On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created i
     <name>main</name>
     <message>
         <source>Connect</source>
-        <translation>Connetti</translation>
+        <translation type="vanished">Connetti</translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation>Controllo</translation>
+        <translation type="vanished">Controllo</translation>
     </message>
     <message>
         <source>Service</source>
-        <translation>Servizio</translation>
+        <translation type="vanished">Servizio</translation>
     </message>
     <message>
         <source>Exchange error</source>
-        <translation type="unfinished">Errore di scambio dati</translation>
+        <translation type="obsolete">Errore di scambio dati</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>Attenzione</translation>
+        <translation type="vanished">Attenzione</translation>
     </message>
     <message>
         <source>Firmware version error!</source>
-        <translation>Errore! Versione del Firmware non valida!</translation>
+        <translation type="vanished">Errore! Versione del Firmware non valida!</translation>
     </message>
     <message>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
-        <translation>Il modulo Bluetooth non è attivo! Accendi il modulo Bluetooth sul tuo dispositivo cliccando OK</translation>
+        <translation type="vanished">Il modulo Bluetooth non è attivo! Accendi il modulo Bluetooth sul tuo dispositivo cliccando OK</translation>
     </message>
     <message>
         <source>Firmware version of your device is </source>
-        <translation>Versione del Firmware sul tuo dispositivo </translation>
+        <translation type="vanished">Versione del Firmware sul tuo dispositivo </translation>
     </message>
     <message>
         <source>
 Minimum required version is </source>
-        <translation>
+        <translation type="vanished">
 Versione minima richiesta </translation>
     </message>
     <message>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
-        <translation>La Geolocalizzazione è richiesta da Android per scansionare tutti i dispositivi Bluetooth LE nei paraggi. Per procedere, accendi la Geolocalizzazione e clicca su OK</translation>
+        <translation type="vanished">La Geolocalizzazione è richiesta da Android per scansionare tutti i dispositivi Bluetooth LE nei paraggi. Per procedere, accendi la Geolocalizzazione e clicca su OK</translation>
     </message>
     <message>
         <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
-        <translation>L’ Applicazione necessita del permesso per la geolocalizzazione, questo servirà per scansionare i dispositivi Bluetooth LE nelle vicinanze. Per procedere, dai il tuo permesso all’ App. cliccando su OK</translation>
-    </message>
-    <message>
-        <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Update firmware</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Newest firmware avaliable on the server.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>
-Do you want to update firmware now?
-WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New firmware avaliable on the server.
-Firmware version of your device is: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>
-New firmware version is: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>
-Do you want to download and update firmware now?
-WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You must save preset before export</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Preset import error!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Preset export finished</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Device is unavaliable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Device disconnected
-</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">L’ Applicazione necessita del permesso per la geolocalizzazione, questo servirà per scansionare i dispositivi Bluetooth LE nelle vicinanze. Per procedere, dai il tuo permesso all’ App. cliccando su OK</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Errore</translation>
-    </message>
-    <message>
-        <source>Error while saving IR. Please, try to reload impulse.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Device parse error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IR file copying error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Config</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Errore</translation>
     </message>
 </context>
 </TS>

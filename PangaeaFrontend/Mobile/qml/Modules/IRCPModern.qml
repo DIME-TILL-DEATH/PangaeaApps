@@ -81,6 +81,8 @@ BaseModule
         ClipIndicator{
             id: _clipInd
 
+            on: main.on
+
             width: parent.width
             height: parent.height/3
 

@@ -123,15 +123,15 @@
 <context>
     <name>ClipIndicator</name>
     <message>
-        <source>IR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>CLIPPING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OUT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IN</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -408,6 +408,21 @@
     <name>IR</name>
     <message>
         <source>empty</source>
+        <translation type="obsolete">empty</translation>
+    </message>
+    <message>
+        <source>Not supported format</source>
+        <translation type="obsolete">There is not supported format</translation>
+    </message>
+    <message>
+        <source>Pangaea doesn&apos;t support this wav format:</source>
+        <translation type="obsolete">The Pangaea doesn&apos;t support this wav format:</translation>
+    </message>
+</context>
+<context>
+    <name>IRCPLegacy</name>
+    <message>
+        <source>empty</source>
         <translation type="unfinished">empty</translation>
     </message>
     <message>
@@ -415,15 +430,19 @@
         <translation type="unfinished">There is not supported format</translation>
     </message>
     <message>
+        <source>Trim IR file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IR file exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation type="unfinished">The Pangaea doesn&apos;t support this wav format:</translation>
     </message>
     <message>
         <source>Do you want to convert it before upload?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IR file exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -435,7 +454,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>IRCPModern</name>
+    <message>
+        <source>empty</source>
+        <translation type="unfinished">empty</translation>
+    </message>
+    <message>
+        <source>Not supported format</source>
+        <translation type="unfinished">There is not supported format</translation>
+    </message>
+    <message>
         <source>Trim IR file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IR file exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pangaea doesn&apos;t support this wav format:</source>
+        <translation type="unfinished">The Pangaea doesn&apos;t support this wav format:</translation>
+    </message>
+    <message>
+        <source>Do you want to convert it before upload?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> already on device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1125,134 +1179,85 @@ On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created i
     <name>main</name>
     <message>
         <source>Update firmware</source>
-        <translation>Update the firmware</translation>
+        <translation type="vanished">Update the firmware</translation>
     </message>
     <message>
         <source>Newest firmware avaliable on the server.</source>
-        <translation>The newest firmware is available on the server.</translation>
+        <translation type="vanished">The newest firmware is available on the server.</translation>
     </message>
     <message>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
-        <translation>Bluetooth module is off! Please turn on Bluetooth module on your mobile device and click OK</translation>
+        <translation type="vanished">Bluetooth module is off! Please turn on Bluetooth module on your mobile device and click OK</translation>
     </message>
     <message>
         <source>Firmware version of your device is </source>
-        <translation>The firmware version of your device is </translation>
+        <translation type="vanished">The firmware version of your device is </translation>
     </message>
     <message>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation>
+        <translation type="vanished">
 Do you want to update the firmware now?
 WARNING!!! Updating firmware may take several minutes!</translation>
     </message>
     <message>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
-        <translation>The new firmware is available on the server.
+        <translation type="vanished">The new firmware is available on the server.
 The firmware version of your device is: </translation>
     </message>
     <message>
         <source>
 New firmware version is: </source>
-        <translation>
+        <translation type="vanished">
 The new firmware version is: </translation>
     </message>
     <message>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation>
+        <translation type="vanished">
 Do you want to download and update the firmware now?
 WARNING!!! Updating the firmware may take several minutes!</translation>
     </message>
     <message>
         <source>You must save preset before export</source>
-        <translation>You must save this preset before export</translation>
+        <translation type="vanished">You must save this preset before export</translation>
     </message>
     <message>
         <source>Preset import error!</source>
-        <translation>Preset&apos;s import error!</translation>
+        <translation type="vanished">Preset&apos;s import error!</translation>
     </message>
     <message>
         <source>Preset export finished</source>
-        <translation>Preset&apos;s export is finished</translation>
+        <translation type="vanished">Preset&apos;s export is finished</translation>
     </message>
     <message>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
-        <translation>Geolocation is required by Android OS to scan Bluetooth LE devices. Please turn on geolocation module and click OK</translation>
+        <translation type="vanished">Geolocation is required by Android OS to scan Bluetooth LE devices. Please turn on geolocation module and click OK</translation>
     </message>
     <message>
         <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
-        <translation>Application needs Geolocation permission to scan Bluetooth LE devices. Please give all necessary app&apos;s permissions and click OK</translation>
+        <translation type="vanished">Application needs Geolocation permission to scan Bluetooth LE devices. Please give all necessary app&apos;s permissions and click OK</translation>
     </message>
     <message>
         <source>Device is unavaliable</source>
-        <translation>Device is unavailable</translation>
+        <translation type="vanished">Device is unavailable</translation>
     </message>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation>Unknown bluetooth error is occurred. Please check if bluetooth and geolocation modules are enabled and click ok.</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Controls</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Service</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Exchange error</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation></translation>
+        <translation type="vanished">Unknown bluetooth error is occurred. Please check if bluetooth and geolocation modules are enabled and click ok.</translation>
     </message>
     <message>
         <source>Firmware version error!</source>
-        <translation>The Firmware version error!</translation>
-    </message>
-    <message>
-        <source>
-Minimum required version is </source>
-        <translation></translation>
+        <translation type="vanished">The Firmware version error!</translation>
     </message>
     <message>
         <source>Device disconnected
 </source>
-        <translation>Device is disconnected
+        <translation type="vanished">Device is disconnected
 </translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error while saving IR. Please, try to reload impulse.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Device parse error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IR file copying error.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Config</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

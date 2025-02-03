@@ -24,59 +24,59 @@
     <name>AbstractModule</name>
     <message>
         <source>Cabinet simulator</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Chorus</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Compressor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Early reflections</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Parametric EQ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>High-pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Low pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Noise gate</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Phaser</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Power amp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Preamp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Presence</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -124,7 +124,7 @@
     <name>ClipIndicator</name>
     <message>
         <source>IR</source>
-        <translation>ИМП.</translation>
+        <translation type="vanished">ИМП.</translation>
     </message>
     <message>
         <source>CLIPPING</source>
@@ -133,6 +133,10 @@
     <message>
         <source>OUT</source>
         <translation>ВЫХ.</translation>
+    </message>
+    <message>
+        <source>IN</source>
+        <translation>ВХ.</translation>
     </message>
 </context>
 <context>
@@ -437,11 +441,58 @@
     </message>
     <message>
         <source>empty</source>
+        <translation type="vanished">пусто</translation>
+    </message>
+    <message>
+        <source>Not supported format</source>
+        <translation type="vanished">Неподдерживаемый формат</translation>
+    </message>
+    <message>
+        <source>Pangaea doesn&apos;t support this wav format:</source>
+        <translation type="vanished">Pangaea не поддерживает данный формат:</translation>
+    </message>
+    <message>
+        <source>Do you want to convert it before upload?</source>
+        <translation type="vanished">Конвертировать файл перед загрузкой?</translation>
+    </message>
+    <message>
+        <source>IR file exists</source>
+        <translation type="vanished">Импульс уже загружен</translation>
+    </message>
+    <message>
+        <source>File </source>
+        <translation type="vanished">Файл</translation>
+    </message>
+    <message>
+        <source> already on device.</source>
+        <translation type="vanished">уже загружен на устройство.</translation>
+    </message>
+    <message>
+        <source>Trim IR file</source>
+        <translation type="vanished">Редактирование импульса</translation>
+    </message>
+    <message>
+        <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
+        <translation type="vanished">Длительность выбранного файла больше чем длительность используемая при обработке. Желаете ли вы обрезать файл для ускорения загрузки и экномии памяти в устройстве?</translation>
+    </message>
+</context>
+<context>
+    <name>IRCPLegacy</name>
+    <message>
+        <source>empty</source>
         <translation>пусто</translation>
     </message>
     <message>
         <source>Not supported format</source>
         <translation>Неподдерживаемый формат</translation>
+    </message>
+    <message>
+        <source>Trim IR file</source>
+        <translation>Редактирование импульса</translation>
+    </message>
+    <message>
+        <source>IR file exists</source>
+        <translation>Импульс уже загружен</translation>
     </message>
     <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
@@ -452,10 +503,6 @@
         <translation>Конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <source>IR file exists</source>
-        <translation>Импульс уже загружен</translation>
-    </message>
-    <message>
         <source>File </source>
         <translation>Файл</translation>
     </message>
@@ -464,8 +511,43 @@
         <translation>уже загружен на устройство.</translation>
     </message>
     <message>
+        <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
+        <translation>Длительность выбранного файла больше чем длительность используемая при обработке. Желаете ли вы обрезать файл для ускорения загрузки и экномии памяти в устройстве?</translation>
+    </message>
+</context>
+<context>
+    <name>IRCPModern</name>
+    <message>
+        <source>empty</source>
+        <translation>пусто</translation>
+    </message>
+    <message>
+        <source>Not supported format</source>
+        <translation>Неподдерживаемый формат</translation>
+    </message>
+    <message>
         <source>Trim IR file</source>
         <translation>Редактирование импульса</translation>
+    </message>
+    <message>
+        <source>IR file exists</source>
+        <translation>Импульс уже загружен</translation>
+    </message>
+    <message>
+        <source>Pangaea doesn&apos;t support this wav format:</source>
+        <translation>Pangaea не поддерживает данный формат:</translation>
+    </message>
+    <message>
+        <source>Do you want to convert it before upload?</source>
+        <translation>Конвертировать файл перед загрузкой?</translation>
+    </message>
+    <message>
+        <source>File </source>
+        <translation>Файл</translation>
+    </message>
+    <message>
+        <source> already on device.</source>
+        <translation>уже загружен на устройство.</translation>
     </message>
     <message>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
@@ -550,134 +632,134 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>Main</name>
     <message>
         <source>Connect</source>
-        <translation type="unfinished">Соед.</translation>
+        <translation>Соед.</translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation type="unfinished">Управл.</translation>
+        <translation>Управл.</translation>
     </message>
     <message>
         <source>Config</source>
-        <translation type="unfinished">Конф.</translation>
+        <translation>Конф.</translation>
     </message>
     <message>
         <source>Service</source>
-        <translation type="unfinished">Сервис</translation>
+        <translation>Сервис</translation>
     </message>
     <message>
         <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation type="unfinished">Произошла ошибка обмена данными между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
+        <translation>Произошла ошибка обмена данными между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
     </message>
     <message>
         <source>Exchange error</source>
-        <translation type="unfinished">Ошибка связи</translation>
+        <translation>Ошибка связи</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished">ВНИМАНИЕ</translation>
+        <translation>ВНИМАНИЕ</translation>
     </message>
     <message>
         <source>Firmware version error!</source>
-        <translation type="unfinished">Ошибка версии прошивки!</translation>
+        <translation>Ошибка версии прошивки!</translation>
     </message>
     <message>
         <source>Update firmware</source>
-        <translation type="unfinished">Обновить прошивку</translation>
+        <translation>Обновить прошивку</translation>
     </message>
     <message>
         <source>Newest firmware avaliable on the server.</source>
-        <translation type="unfinished">Более свежая версия прошивки доступна на сервере.</translation>
+        <translation>Более свежая версия прошивки доступна на сервере.</translation>
     </message>
     <message>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
-        <translation type="unfinished">Модуль Bluetooth выключен! Пожалуйста, включите модуль Bluetooth на Вашем мобильном устройстве и нажмите ОК</translation>
+        <translation>Модуль Bluetooth выключен! Пожалуйста, включите модуль Bluetooth на Вашем мобильном устройстве и нажмите ОК</translation>
     </message>
     <message>
         <source>Firmware version of your device is </source>
-        <translation type="unfinished">Текущая версия прошивки Вашего устройства </translation>
+        <translation>Текущая версия прошивки Вашего устройства </translation>
     </message>
     <message>
         <source>
 Minimum required version is </source>
-        <translation type="unfinished">
+        <translation>
 Минимальная требуемая версия </translation>
     </message>
     <message>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished">
+        <translation>
 Вы хотите обновить прошивку сейчас?
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
-        <translation type="unfinished">Новая прошивка доступна на сервере.
+        <translation>Новая прошивка доступна на сервере.
 Текущая версия прошивки Вашего устройства: </translation>
     </message>
     <message>
         <source>
 New firmware version is: </source>
-        <translation type="unfinished">
+        <translation>
 Новая версия прошивки: </translation>
     </message>
     <message>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished">
+        <translation>
 Вы хотите скачать и обновить прошивку сейчас?
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
         <source>You must save preset before export</source>
-        <translation type="unfinished">Вы должны схранить пресет перед экспортом</translation>
+        <translation>Вы должны схранить пресет перед экспортом</translation>
     </message>
     <message>
         <source>Device parse error</source>
-        <translation type="unfinished">Ошибка разбора команды</translation>
+        <translation>Ошибка разбора команды</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <source>Error while saving IR. Please, try to reload impulse.</source>
-        <translation type="unfinished">Ошибка при сохранении импульса. Пожалуйста, попробуйте пересохранить импульс.</translation>
+        <translation>Ошибка при сохранении импульса. Пожалуйста, попробуйте пересохранить импульс.</translation>
     </message>
     <message>
         <source>Preset import error!</source>
-        <translation type="unfinished">Ошибка импорта пресета!</translation>
+        <translation>Ошибка импорта пресета!</translation>
     </message>
     <message>
         <source>IR file copying error.</source>
-        <translation type="unfinished">Ошибка копирования файла импульса.</translation>
+        <translation>Ошибка копирования файла импульса.</translation>
     </message>
     <message>
         <source>Preset export finished</source>
-        <translation type="unfinished">Экспорт пресета завершён</translation>
+        <translation>Экспорт пресета завершён</translation>
     </message>
     <message>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
-        <translation type="unfinished">ОС Android требуется Геолокация для возможности поиска устройств Bluetooth LE. Пожалуйста, включите модуль Геолокации на Вашем мобильном устройстве и нажмите кнопку ОК</translation>
+        <translation>ОС Android требуется Геолокация для возможности поиска устройств Bluetooth LE. Пожалуйста, включите модуль Геолокации на Вашем мобильном устройстве и нажмите кнопку ОК</translation>
     </message>
     <message>
         <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
-        <translation type="unfinished">Приложению требуется разрешение на использование геолокации для поиска устройств Bluetooth LE. Пожалуйста, предоставьте приложению требуемые разрешения и нажмите ОК</translation>
+        <translation>Приложению требуется разрешение на использование геолокации для поиска устройств Bluetooth LE. Пожалуйста, предоставьте приложению требуемые разрешения и нажмите ОК</translation>
     </message>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation type="unfinished">Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
+        <translation>Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
     </message>
     <message>
         <source>Device is unavaliable</source>
-        <translation type="unfinished">Устройство недоступно</translation>
+        <translation>Устройство недоступно</translation>
     </message>
     <message>
         <source>Device disconnected
 </source>
-        <translation type="unfinished">Устройство отключено</translation>
+        <translation>Устройство отключено</translation>
     </message>
 </context>
 <context>
@@ -1372,134 +1454,134 @@ On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created i
     <name>main</name>
     <message>
         <source>Connect</source>
-        <translation>Соед.</translation>
+        <translation type="vanished">Соед.</translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation>Управл.</translation>
+        <translation type="vanished">Управл.</translation>
     </message>
     <message>
         <source>Service</source>
-        <translation>Сервис</translation>
+        <translation type="vanished">Сервис</translation>
     </message>
     <message>
         <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation>Произошла ошибка обмена данными между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
+        <translation type="vanished">Произошла ошибка обмена данными между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
     </message>
     <message>
         <source>Exchange error</source>
-        <translation>Ошибка связи</translation>
+        <translation type="vanished">Ошибка связи</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>ВНИМАНИЕ</translation>
+        <translation type="vanished">ВНИМАНИЕ</translation>
     </message>
     <message>
         <source>Firmware version error!</source>
-        <translation>Ошибка версии прошивки!</translation>
+        <translation type="vanished">Ошибка версии прошивки!</translation>
     </message>
     <message>
         <source>Update firmware</source>
-        <translation>Обновить прошивку</translation>
+        <translation type="vanished">Обновить прошивку</translation>
     </message>
     <message>
         <source>Newest firmware avaliable on the server.</source>
-        <translation>Более свежая версия прошивки доступна на сервере.</translation>
+        <translation type="vanished">Более свежая версия прошивки доступна на сервере.</translation>
     </message>
     <message>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
-        <translation>Модуль Bluetooth выключен! Пожалуйста, включите модуль Bluetooth на Вашем мобильном устройстве и нажмите ОК</translation>
+        <translation type="vanished">Модуль Bluetooth выключен! Пожалуйста, включите модуль Bluetooth на Вашем мобильном устройстве и нажмите ОК</translation>
     </message>
     <message>
         <source>Firmware version of your device is </source>
-        <translation>Текущая версия прошивки Вашего устройства </translation>
+        <translation type="vanished">Текущая версия прошивки Вашего устройства </translation>
     </message>
     <message>
         <source>
 Minimum required version is </source>
-        <translation>
+        <translation type="vanished">
 Минимальная требуемая версия </translation>
     </message>
     <message>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation>
+        <translation type="vanished">
 Вы хотите обновить прошивку сейчас?
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
-        <translation>Новая прошивка доступна на сервере.
+        <translation type="vanished">Новая прошивка доступна на сервере.
 Текущая версия прошивки Вашего устройства: </translation>
     </message>
     <message>
         <source>
 New firmware version is: </source>
-        <translation>
+        <translation type="vanished">
 Новая версия прошивки: </translation>
     </message>
     <message>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation>
+        <translation type="vanished">
 Вы хотите скачать и обновить прошивку сейчас?
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
         <source>You must save preset before export</source>
-        <translation>Вы должны схранить пресет перед экспортом</translation>
+        <translation type="vanished">Вы должны схранить пресет перед экспортом</translation>
     </message>
     <message>
         <source>Preset import error!</source>
-        <translation>Ошибка импорта пресета!</translation>
+        <translation type="vanished">Ошибка импорта пресета!</translation>
     </message>
     <message>
         <source>Preset export finished</source>
-        <translation>Экспорт пресета завершён</translation>
+        <translation type="vanished">Экспорт пресета завершён</translation>
     </message>
     <message>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
-        <translation>ОС Android требуется Геолокация для возможности поиска устройств Bluetooth LE. Пожалуйста, включите модуль Геолокации на Вашем мобильном устройстве и нажмите кнопку ОК</translation>
+        <translation type="vanished">ОС Android требуется Геолокация для возможности поиска устройств Bluetooth LE. Пожалуйста, включите модуль Геолокации на Вашем мобильном устройстве и нажмите кнопку ОК</translation>
     </message>
     <message>
         <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
-        <translation>Приложению требуется разрешение на использование геолокации для поиска устройств Bluetooth LE. Пожалуйста, предоставьте приложению требуемые разрешения и нажмите ОК</translation>
+        <translation type="vanished">Приложению требуется разрешение на использование геолокации для поиска устройств Bluetooth LE. Пожалуйста, предоставьте приложению требуемые разрешения и нажмите ОК</translation>
     </message>
     <message>
         <source>Device is unavaliable</source>
-        <translation>Устройство недоступно</translation>
+        <translation type="vanished">Устройство недоступно</translation>
     </message>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation>Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
+        <translation type="vanished">Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
     </message>
     <message>
         <source>Device disconnected
 </source>
-        <translation>Устройство отключено</translation>
+        <translation type="vanished">Устройство отключено</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation type="vanished">Ошибка</translation>
     </message>
     <message>
         <source>Error while saving IR. Please, try to reload impulse.</source>
-        <translation>Ошибка при сохранении импульса. Пожалуйста, попробуйте пересохранить импульс.</translation>
+        <translation type="vanished">Ошибка при сохранении импульса. Пожалуйста, попробуйте пересохранить импульс.</translation>
     </message>
     <message>
         <source>Device parse error</source>
-        <translation>Ошибка разбора команды</translation>
+        <translation type="vanished">Ошибка разбора команды</translation>
     </message>
     <message>
         <source>IR file copying error.</source>
-        <translation>Ошибка копирования файла импульса.</translation>
+        <translation type="vanished">Ошибка копирования файла импульса.</translation>
     </message>
     <message>
         <source>Config</source>
-        <translation>Конф.</translation>
+        <translation type="vanished">Конф.</translation>
     </message>
 </context>
 </TS>

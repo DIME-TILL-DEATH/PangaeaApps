@@ -48,6 +48,7 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     m_parser.addCommandHandler("eq1", std::bind(&MockCP16Modern::eqParametersCommHandler, this, _1, _2, _3));
 
     setParamsHandler("mv", &currentPresetData.volume);   // Type::MASTER_VOLUME: fullString += "mv";
+    setParamsHandler("ir_sn", &currentPresetData.ir_send_level);
 
     setParamsHandler("eo", &currentPresetData.reverb.on);        // Type::EARLY_ON: fullString += "eo";
     setParamsHandler("ev", &currentPresetData.reverb.volume);    // Type::EARLY_VOLUME: fullString += "ev";

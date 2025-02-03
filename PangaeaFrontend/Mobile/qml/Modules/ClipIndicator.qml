@@ -9,6 +9,8 @@ import PangaeaBackend
 Item{
     property int maxClips: 16000/32
 
+    property bool on: true
+
     function setInIndicator(inClips){
         var inIntensity = Math.log10(10 * inClips / maxClips + 1);
         if(inIntensity > 1) inIntensity = 1;
@@ -47,7 +49,7 @@ Item{
             radius: width/2
 
             border.width: 1
-            border.color: Style.colorText
+            border.color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
 
             property color indicationColor: "red"
 
@@ -62,7 +64,7 @@ Item{
             MText{
                 anchors.fill: parent
                 text: qsTr("IN")
-                color: Style.colorText
+                color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
 
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignVCenter
@@ -75,7 +77,7 @@ Item{
             MText{
                 anchors.fill: parent
                 text: qsTr("CLIPPING")
-                color: Style.colorText
+                color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -88,7 +90,7 @@ Item{
             MText{
                 anchors.fill: parent
                 text: qsTr("OUT")
-                color: Style.colorText
+                color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
 
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignVCenter
@@ -107,7 +109,7 @@ Item{
             radius: width/2
 
             border.width: 1
-            border.color: Style.colorText
+            border.color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
 
             property color indicationColor: "red"
 

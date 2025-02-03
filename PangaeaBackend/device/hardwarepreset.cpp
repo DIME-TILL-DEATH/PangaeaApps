@@ -36,6 +36,7 @@ preset_data_t HardwarePreset::convertLegacyToModern(const preset_data_legacy_t& 
     }
 
     modernData.volume = legacyData.preset_volume;
+    modernData.ir_send_level = 32;
 
     modernData.gate.on = legacyData.gate_on;
     modernData.gate.threshold = legacyData.gate_threshold;
