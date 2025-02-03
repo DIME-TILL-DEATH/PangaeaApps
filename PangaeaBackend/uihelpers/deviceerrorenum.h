@@ -25,7 +25,8 @@ public:
         FirmwareFileError,
         FormatMemoryError,
         CopyFileError,
-        FileExists
+        FileExists,
+        PresetNotSaved
     };
     Q_ENUM(Value)
 };

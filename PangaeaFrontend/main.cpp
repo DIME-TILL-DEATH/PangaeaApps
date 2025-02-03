@@ -95,8 +95,9 @@ int main(int argc, char *argv[])
     UiInterfaceManager uiInterfaceManager;
 
     QQmlApplicationEngine engine;
-    // engine.addImportPath(":/qml");
+
     engine.addImportPath("qml/");
+
     engine.addImportPath(":/firmwares");
     engine.addImportPath(":/translations");
     // const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
@@ -162,7 +163,12 @@ int main(int argc, char *argv[])
         &app,
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
-    engine.loadFromModule("PanageaFrontend", "Main");
+
+#ifdef Q_OS_ANDROID
+    engine.loadFromModule("Pages", "Main"); // Баг или вроде него. Не видит новых модулей. Только созданные ранее
+#else
+    engine.loadFromModule("PangaeaFrontend", "Main");
+#endif
 
     //-----------------------------------------------------------------------
     // keep screen always on

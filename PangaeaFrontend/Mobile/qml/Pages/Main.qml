@@ -273,13 +273,6 @@ ApplicationWindow
 
                 _msgNetUpdateFirmware.visible = true;
             }
-
-            if(nameParam === "preset_not_saved")
-            {
-                _msgCommon.headerText = qsTr("Warning");
-                _msgCommon.text = qsTr("You must save preset before export");
-                _msgCommon.open();
-            }
         }
     }
 
@@ -310,6 +303,14 @@ ApplicationWindow
                 {
                     _msgCommon.headerText = qsTr("Warning");
                     _msgCommon.text = qsTr("Preset import error!");
+                    _msgCommon.open();
+                    break;
+                }
+
+                case DeviceErrorType.PresetNotSaved:
+                {
+                    _msgCommon.headerText = qsTr("Warning");
+                    _msgCommon.text = qsTr("You must save preset before export");
                     _msgCommon.open();
                     break;
                 }

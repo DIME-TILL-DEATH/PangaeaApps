@@ -183,19 +183,6 @@ ApplicationWindow
         // TODO избавиться от onSgSetUIParameter и onSgSetUIText
         function onSgSetUIText(nameParam, inString)
         {
-            if(nameParam === "firmware_version_error")
-            {
-                 var versionArray = inString.split(',');
-
-                _msgVersionInform.title = qsTr("Warning")
-                _msgVersionInform.text = qsTr("Version error!")
-
-                _msgVersionInform.informativeText = qsTr("Firmware version of your device is ") +
-                        versionArray[0] + "\n" +
-                        qsTr("Minimum requsted version is ") + versionArray[1]
-                _msgVersionInform.visible = true;
-            }
-
             if(nameParam === "new_firmware_avaliable")
             {
                 versionArray = inString.split(',');
@@ -216,13 +203,6 @@ ApplicationWindow
                         inString +
                         qsTr(") avaliable on the server")
                 _msgVersionInform.visible = true;
-            }
-
-            if(nameParam === "preset_not_saved")
-            {
-                msgInfo.title = qsTr("Error")
-                msgInfo.text = qsTr("You must save preset before export");
-                msgInfo.open();
             }
         }
 
@@ -322,14 +302,24 @@ ApplicationWindow
                     break;
                 }
 
+                case DeviceErrorType.PresetNotSaved:
+                {
+                    msgInfo.title = qsTr("Error")
+                    msgInfo.text = qsTr("You must save preset before export");
+                    msgInfo.open();
+                    break;
+                }
+
                 case DeviceErrorType.FimrmwareVersionInsufficient:
                 {
-                    _msgVersionError.text = qsTr("Firmware version of your device is ") + params[0]
+                    _msgVersionInform.title = qsTr("Warning")
+                    _msgVersionInform.text = qsTr("Version error!")
+                    _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0]
                             + qsTr("\nMinimum required version is ")
                             + params[1]
                             + qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
 
-                    _msgVersionError.visible = true;
+                    _msgVersionInform.visible = true;
                     break;
                 }
 

@@ -30,7 +30,7 @@ MenuBar{
             onTriggered:
             {
                 if(mainMenu.presetEdited)
-                    UiCore.sgSetUIText("preset_not_saved", "");
+                    UiCore.currentDevice.sgDeviceError(DeviceErrorType.PresetNotSaved);
                 else
                     exportPresetDialog.open();
             }

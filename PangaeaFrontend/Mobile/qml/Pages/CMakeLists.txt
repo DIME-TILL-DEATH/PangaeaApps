@@ -8,4 +8,5 @@ qt_add_qml_module(qml_pages
         MapPage.qml
         ServicePage.qml
         SettingsPage.qml
+        Main.qml
 )

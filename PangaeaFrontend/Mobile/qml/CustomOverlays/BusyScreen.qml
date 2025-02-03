@@ -139,13 +139,6 @@ Item
                 }
                 progressBar.visible = true
             }
-
-            // if(nameParam === ("ir_downloading"))
-            // {
-            //     rWait.visible = inValue;
-            //     txt.text = qsTr("Downloading impulse data from device");
-            //     progressBar.visible = true
-            // }
         }
     }
 

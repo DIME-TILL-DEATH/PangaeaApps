@@ -11,7 +11,7 @@ if(ANDROID)
         QT_ANDROID_VERSION_CODE ${VERSION_CODE}
         QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
     )
-    set_property(TARGET Pangaea-mobile PROPERTY QT_ANDROID_EXTRA_LIBS
+    set_property(TARGET ${PROJECT_NAME} PROPERTY QT_ANDROID_EXTRA_LIBS
        ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/${CMAKE_ANDROID_ARCH_ABI}/libcrypto_1_1.so
        ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/${CMAKE_ANDROID_ARCH_ABI}/libssl_1_1.so
        ${CMAKE_CURRENT_SOURCE_DIR}/android_openmp_libs/${CMAKE_ANDROID_ARCH_ABI}/libomp.so #needed for android sox lib
@@ -19,7 +19,7 @@ if(ANDROID)
        ${CMAKE_CURRENT_SOURCE_DIR}/../../sox_lib/lib.android/${CMAKE_ANDROID_ARCH_ABI}/libsox.so
     )
 
-    qt6_add_resources(Pangaea-mobile "AndroidResources"
+    qt6_add_resources(${PROJECT_NAME} "AndroidResources"
         PREFIX
             "/"
         FILES
@@ -30,7 +30,6 @@ if(ANDROID)
     )
 endif()
 
-add_subdirectory(qml)
 add_subdirectory(qml/ControlGroups/)
 add_subdirectory(qml/CustomOverlays/)
 add_subdirectory(qml/Elements/)

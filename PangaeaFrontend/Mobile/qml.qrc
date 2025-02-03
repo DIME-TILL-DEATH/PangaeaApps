@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/main.qml</file>
         <file>images/cp_16m.svg</file>
         <file>images/AMT.svg</file>
         <file>images/AMT (Fixed by Ivan).svg</file>

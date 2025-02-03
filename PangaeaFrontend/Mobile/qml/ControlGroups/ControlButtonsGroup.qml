@@ -136,7 +136,7 @@ GridLayout
 
             onMbPressed: {
                 if(_root.presetEdited)
-                    UiCore.sgSetUIText("preset_not_saved", "");
+                    UiCore.currentDevice.sgDeviceError(DeviceErrorType.PresetNotSaved);
                 else
                     UiCore.exportPreset("");
             }
