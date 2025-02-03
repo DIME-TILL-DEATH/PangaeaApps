@@ -12,7 +12,8 @@ qt_add_qml_module(qml_modules
         EQPreviewLegacy.qml
         EQPreviewModern.qml
         HP.qml
-        IR.qml
+        IRCPLegacy.qml
+        IRCPModern.qml
         LP.qml
         NG.qml
         OutputMode.qml

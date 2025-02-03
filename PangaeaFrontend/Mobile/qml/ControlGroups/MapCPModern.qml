@@ -175,7 +175,7 @@ Item{
 
                     case ModuleType.IR:
                     {
-                        _delegateLoader.source = "../Modules/IR.qml";
+                        _delegateLoader.source = "../Modules/IRCPModern.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.openIrManagementWindow.connect(_mapContent.showIrManagementWindow);
                         break;

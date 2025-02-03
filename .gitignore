@@ -1,7 +1,7 @@
 #desktop_bundle_output/release/*
 build/*
-PangaeaCPPA/build/*
-pangaea-mobile/build/*
+PangaeaBackend/build/*
+PangaeaFrontend/build/*
 shared_libs/*
 deploy_android/*
 deploy_linux/debian_deploy/*
@@ -20,7 +20,7 @@ WavConverterShell/output_bin/*
 *.a
 *.la
 *.lai
-*.so
+#*.so
 *.dll
 *.dylib
 

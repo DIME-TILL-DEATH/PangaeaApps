@@ -97,7 +97,7 @@ Item{
 
                     case ModuleType.IR:
                     {
-                        _delegateLoader.source = "../Modules/IR.qml";
+                        _delegateLoader.source = "../Modules/IRCPLegacy.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
