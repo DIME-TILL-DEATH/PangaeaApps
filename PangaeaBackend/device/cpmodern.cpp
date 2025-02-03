@@ -761,6 +761,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     EQ1->setEqData(presetData.eq1);
     EQ2->setEqData(presetData.eq2);
     IR->setEnabled(presetData.cab_sim_on);
+    IR->setSendLevel(presetData.ir_send_level);
     TR->setValues(presetData.tremolo);
     CH->setValues(presetData.chorus);
     PH->setValues(presetData.phaser);
@@ -1133,10 +1134,21 @@ void CPModern::copyCommHandler(const QString &command, const QByteArray &argumen
 
 void CPModern::clipCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    QStringList separatedList = QString(data).split("\r");
-    if(separatedList.size() > 1)
+    if(arguments.size() > 0)
     {
-        emit sigClipped(separatedList.at(0).toInt(), separatedList.at(1).toInt());
+        if(arguments == "io")
+        {
+            QStringList separatedList = QString(data).split("\r");
+            if(separatedList.size() > 1)
+                emit ioClipped(separatedList.at(0).toInt(), separatedList.at(1).toInt());
+        }
+
+        if(arguments == "ir")
+        {
+            QStringList separatedList = QString(data).split("\r");
+            if(separatedList.size() > 1)
+                emit irClipped(separatedList.at(0).toInt(), separatedList.at(1).toInt());
+        }
     }
 }
 

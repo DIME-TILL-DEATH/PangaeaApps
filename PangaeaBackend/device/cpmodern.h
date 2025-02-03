@@ -120,7 +120,8 @@ signals:
 
     void currentIrFileChanged();
 
-    void sigClipped(quint16 irFrameClips, quint16 outFrameClips);
+    void ioClipped(quint16 inFrameClips, quint16 outFrameClips);
+    void irClipped(quint16 inFrameClips, quint16 outFrameClips);
 
 protected:
     IRWorker irWorker;

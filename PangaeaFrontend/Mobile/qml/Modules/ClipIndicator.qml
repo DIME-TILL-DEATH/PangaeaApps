@@ -1,38 +1,43 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.12
 
 import StyleSettings 1.0
-
 import Elements 1.0
-import Modules 1.0
 
 import CppObjects
 import PangaeaBackend
 
-Rectangle {
-    id: _root
+Item{
+    property int maxClips: 16000/32
 
-    property int maxClips: 16000/16
+    function setInIndicator(inClips){
+        var inIntensity = Math.log10(10 * inClips / maxClips + 1);
+        if(inIntensity > 1) inIntensity = 1;
 
-    color: Style.colorModul
+        if(_indicatorIn.indicationColor.a < inIntensity)
+            _indicatorIn.indicationColor.a = inIntensity;
+    }
 
-    clip: true
+    function setOutIndicator(outClips){
+        var outIntensity = Math.log10(10 * outClips / maxClips + 1);
+        if(outIntensity > 1) outIntensity = 1;
 
-    radius: Style.baseRadius
-    border.width: 1
-    border.color: Style.currentTheme.colorBorderOn
-
-
+        if(_indicatorOut.indicationColor.a < outIntensity)
+            _indicatorOut.indicationColor.a = outIntensity;
+    }
     Row{
-        width: parent.width * 0.8 - spacing * 4
+        id: _indicatorsRow
+
+        width: parent.width * 0.8 //- spacing * 4
         height: parent.height * 0.95
+
 
         anchors.centerIn: parent
 
         spacing: 4
 
+
         Rectangle{
-            id: _indicatorIr
+            id: _indicatorIn
 
             width: parent.height * 0.8
             height: width
@@ -44,17 +49,19 @@ Rectangle {
             border.width: 1
             border.color: Style.colorText
 
-            property color irIndicationColor: "red"
+            property color indicationColor: "red"
 
-            color: irIndicationColor
+            color: indicationColor
         }
 
         Item{
-            width: (parent.width - _indicatorIr.width*2)/3
+            id: _txtIn
+
+            width: (parent.width - _indicatorIn.width*2)/6
             height: parent.height
             MText{
                 anchors.fill: parent
-                text: qsTr("IR")
+                text: qsTr("IN")
                 color: Style.colorText
 
                 horizontalAlignment: Text.AlignLeft
@@ -63,7 +70,7 @@ Rectangle {
         }
 
         Item{
-            width: (parent.width - _indicatorIr.width*2)/3
+            width: (parent.width - _indicatorIn.width*2 - _txtIn.width * 2 - _indicatorsRow.spacing * 4)
             height: parent.height
             MText{
                 anchors.fill: parent
@@ -76,7 +83,7 @@ Rectangle {
         }
 
         Item{
-            width: (parent.width - _indicatorIr.width*2)/3
+            width: (parent.width - _indicatorIn.width*2)/4
             height: parent.height
             MText{
                 anchors.fill: parent
@@ -85,8 +92,6 @@ Rectangle {
 
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignVCenter
-
-                leftPadding: 50
             }
         }
 
@@ -94,7 +99,7 @@ Rectangle {
         Rectangle{
             id: _indicatorOut
 
-            width: parent.height * 0.8
+            width: _indicatorIn.width
             height: width
 
             anchors.verticalCenter: parent.verticalCenter
@@ -104,50 +109,30 @@ Rectangle {
             border.width: 1
             border.color: Style.colorText
 
-            property color outIndicationColor: "red"
+            property color indicationColor: "red"
 
-            color: outIndicationColor
+            color: indicationColor
         }
-    }
 
+        Timer{
+            interval: 50
 
-    Timer{
-        interval: 125
+            repeat: true
+            running: true
 
-        repeat: true
-        running: true
+            onTriggered:{
+                if(_indicatorIn.indicationColor.a- 0.05 > 0)
+                    _indicatorIn.indicationColor.a =  _indicatorIn.indicationColor.a - 0.025;
 
-        onTriggered:{
-            if(_indicatorIr.irIndicationColor.a- 0.05 > 0)
-                _indicatorIr.irIndicationColor.a =  _indicatorIr.irIndicationColor.a - 0.025;
-
-            if(_indicatorOut.outIndicationColor.a- 0.05 > 0)
-                _indicatorOut.outIndicationColor.a =  _indicatorOut.outIndicationColor.a - 0.025;
+                if(_indicatorOut.indicationColor.a- 0.05 > 0)
+                    _indicatorOut.indicationColor.a =  _indicatorOut.indicationColor.a - 0.025;
+            }
         }
-    }
 
-    Component.onCompleted:
-    {
-        _indicatorIr.irIndicationColor.a = 0;
-        _indicatorOut.outIndicationColor.a = 0;
-    }
-
-    Connections{
-        target: UiCore.currentDevice
-
-        function onSigClipped(irClips, outClips){
-
-            var irIntensity = Math.log10(10 * irClips / _root.maxClips + 1);
-            var outIntensity = Math.log10(10 * outClips / _root.maxClips + 1);
-
-            if(irIntensity > 1) irIntensity = 1;
-            if(outIntensity > 1) outIntensity = 1;
-
-            if(_indicatorIr.irIndicationColor.a < irIntensity)
-                _indicatorIr.irIndicationColor.a = irIntensity;
-
-            if(_indicatorOut.outIndicationColor.a < outIntensity)
-                _indicatorOut.outIndicationColor.a = outIntensity;
+        Component.onCompleted:
+        {
+            _indicatorIn.indicationColor.a = 0;
+            _indicatorOut.indicationColor.a = 0;
         }
     }
 }

@@ -4,7 +4,6 @@ import QtCore
 import StyleSettings 1.0
 
 import CustomOverlays 1.0
-import ControlGroups 1.0
 import Modules 1.0
 import Elements 1.0
 
@@ -176,7 +175,7 @@ Item{
                     case ModuleType.IR:
                     {
                         _delegateLoader.source = "../Modules/IRCPModern.qml";
-                        _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
+                        _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.openIrManagementWindow.connect(_mapContent.showIrManagementWindow);
                         break;
                     }
@@ -294,11 +293,34 @@ Item{
             }
         }
 
-        ClipIndicator {
+        Rectangle {
             id: _clipIndContainer
+
+            color: Style.colorModul
 
             width: parent.width
             height: _main.height/countElements  - _moduleColumn.spacing
+
+            clip: true
+
+            radius: Style.baseRadius
+            border.width: 1
+            border.color: Style.currentTheme.colorBorderOn
+
+            ClipIndicator {
+                id: _clipInd
+
+                anchors.fill: parent
+
+                Connections{
+                    target: UiCore.currentDevice
+
+                    function onIoClipped(inClips, outClips){
+                        _clipInd.setInIndicator(inClips);
+                        _clipInd.setOutIndicator(outClips);
+                    }
+                }
+            }
         }
     }
 

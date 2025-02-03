@@ -21,45 +21,75 @@ BaseModule
 
     signal openIrManagementWindow();
 
-    contentItem:Item{
-        MText{
-            id: _impulseName
-
+    contentItem: Column{
+        CustomSlider
+        {
+            height: parent.height/3
             width: parent.width
 
-            text: (module.impulseName == "") ? qsTr("empty") : module.impulseName
-            color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
+            ctrlValInstance: module.send
 
-            elide: Text.ElideMiddle
+            moduleOn: main.on
+        }
 
-            horizontalAlignment: Qt.AlignHCenter
-            verticalAlignment: Qt.AlignVCenter
+        Item{
+            width: parent.width
+            height: parent.height/3
+            MText{
+                id: _impulseName
 
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+                width: parent.width
 
-            MouseArea
-            {
-                anchors.fill: parent
-                onClicked:
+                text: (module.impulseName == "") ? qsTr("empty") : module.impulseName
+                color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
+
+                elide: Text.ElideMiddle
+
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                // anchors.verticalCenter: parent.verticalCenter
+
+                MouseArea
                 {
-                    switch(UiCore.currentDevice.deviceType)
+                    anchors.fill: parent
+                    onClicked:
                     {
-                        case DeviceType.LA3:
-                        case DeviceType.MODERN_CP:
+                        switch(UiCore.currentDevice.deviceType)
                         {
-                            // _irManagement.open();
-                            openIrManagementWindow();
-                            // _irManagement.visible = true;
-                            break;
+                            case DeviceType.LA3:
+                            case DeviceType.MODERN_CP:
+                            {
+                                // _irManagement.open();
+                                openIrManagementWindow();
+                                // _irManagement.visible = true;
+                                break;
+                            }
+                            default:
+                            {
+                                UiCore.uploadIr("");
+                                break;
+                            }
                         }
-                        default:
-                        {
-                            UiCore.uploadIr("");
-                            break;
-                        }
-                    }
 
+                    }
+                }
+            }
+        }
+
+        ClipIndicator{
+            id: _clipInd
+
+            width: parent.width
+            height: parent.height/3
+
+            Connections{
+                target: UiCore.currentDevice
+
+                function onIrClipped(inClips, outClips){
+                    _clipInd.setInIndicator(inClips);
+                    _clipInd.setOutIndicator(outClips);
                 }
             }
         }

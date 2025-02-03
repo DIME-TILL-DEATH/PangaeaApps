@@ -13,6 +13,8 @@ WavConverterShell/output_bin/*
 *.exe
 *.zip
 
+**/.qmlls.ini
+
 # C++ objects and libs
 *.slo
 *.lo
