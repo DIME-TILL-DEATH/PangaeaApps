@@ -6,6 +6,7 @@ import CustomOverlays 1.0
 import StyleSettings 1.0
 
 import CppObjects
+import PangaeaBackend
 
 Row{
     id: _root

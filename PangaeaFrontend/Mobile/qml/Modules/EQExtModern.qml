@@ -206,8 +206,8 @@ Item
 
                     anchors.fill: parent
 
-                    property var xmin: main.eqModule.minFreq;
-                    property var xmax: main.eqModule.maxFreq;
+                    property real xmin: main.eqModule.minFreq;
+                    property real xmax: main.eqModule.maxFreq;
 
                     onPositionChanged: function(drag){
 
@@ -385,21 +385,21 @@ Item
         switch(currentBandIndex)
         {
         case 0:
-            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BPeakingShelfControl.qml";
+            loaderBandControl.source = "../ControlGroups/BPeakingShelfControl.qml";
             loaderBandControl.item.shelfType = FilterType.LOW_SHELF
             break;
         case 4:
-            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BPeakingShelfControl.qml";
+            loaderBandControl.source = "../ControlGroups/BPeakingShelfControl.qml";
             loaderBandControl.item.shelfType = FilterType.HIGH_SHELF
             break;
         case 5:
-            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BCutControl.qml";
+            loaderBandControl.source = "../ControlGroups/BCutControl.qml";
             break;
         case 6:
-            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BCutControl.qml";
+            loaderBandControl.source = "../ControlGroups/BCutControl.qml";
             break;
         default:
-            loaderBandControl.source = "/ControlGroups/qml/ControlGroups/BPeakingControl.qml";
+            loaderBandControl.source = "../ControlGroups/BPeakingControl.qml";
         }
         loaderBandControl.item.eqBand = eqModule.EqBands[currentBandIndex];
 

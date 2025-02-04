@@ -51,10 +51,8 @@ BaseModule{
 
         buttons: Dialog.Yes | Dialog.No
 
-        property string dstPath: (_irManagement === undefined) ? "" : _irManagement.dstIrPath
-
         onAccepted:{
-            UiCore.convertAndUploadIr("", dstPath);
+            UiCore.convertAndUploadIr("", "");
         }
     }
 
