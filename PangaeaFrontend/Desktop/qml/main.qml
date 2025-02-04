@@ -143,9 +143,9 @@ ApplicationWindow
         text: qsTr("Device is disconnected")
 
         modality: Qt.ApplicationModal
-        onAccepted: {
-            InterfaceManager.disconnectFromDevice();
-        }
+        // onAccepted: {
+        //     InterfaceManager.disconnectFromDevice();
+        // }
     }
 
     MessageDialog
@@ -215,14 +215,6 @@ ApplicationWindow
                 {
                     if(!wait && !msgPresetChangeSave.visible)
                         Qt.quit();
-                }
-            }
-
-            if(nameParam === "fw_update_enabled")
-            {
-                if(!value)
-                {
-                    operationCompleteDialog.open();
                 }
             }
         }
@@ -296,7 +288,7 @@ ApplicationWindow
 
                 case DeviceErrorType.PresetImportUnsuccesfull:
                 {
-                    msgInfo.title = sqTr("Error")
+                    msgInfo.title = qsTr("Error")
                     msgInfo.text = qsTr("Not a Pangaea preset file!")
                     msgInfo.open();
                     break;
@@ -352,6 +344,12 @@ ApplicationWindow
                     msgInfo.open();
                     break;
                 }
+
+                case DeviceMessageType.FirmwareUpdateFinished:
+                {
+                    operationCompleteDialog.open();
+                    break;
+                }
             }
         }
     }
@@ -367,6 +365,7 @@ ApplicationWindow
 
         function onSgExchangeError()
         {
+            controlLayoutLoader.source = "";
             msgExchangeError.text = qsTr("Command exchange error")
             msgExchangeError.open();
         }

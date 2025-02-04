@@ -114,6 +114,8 @@ void CPLegacy::initDevice(DeviceType deviceType)
 
     m_modulesListModel.refreshModel(&m_moduleList);
 
+
+
     emit modulesListModelChanged();
     emit presetListModelChanged();
     emit sgDeviceInstanciated();
@@ -181,7 +183,10 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
 void CPLegacy::readFullState()
 {
     m_presetManager.setCurrentState(PresetState::Changing);
-    m_parser.enableFullEndMode();
+
+    if(m_deviceType == DeviceType::LEGACY_CP16 || m_deviceType == DeviceType::LEGACY_CP16PA)
+        m_parser.enableFullEndMode();
+
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("rns");
 
@@ -658,6 +663,8 @@ void CPLegacy::amtVerCommHandler(const QString &command, const QByteArray &argum
         qWarning() << "firmware insufficient!";
         emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware->firmwareVersion(), m_minimalFirmware->firmwareVersion()});
     }
+
+    m_parser.enableFullEndMode(); // next comm rns
 }
 
 void CPLegacy::getBankPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

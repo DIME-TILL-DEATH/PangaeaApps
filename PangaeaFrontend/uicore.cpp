@@ -312,7 +312,11 @@ void UiCore::setModuleName(const QString &newModuleName)
 
 void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
 {
-    m_currentDevice = newDevice;
+    if(newDevice != nullptr)
+        m_currentDevice = newDevice;
+    else
+        m_currentDevice = &dummyDevice;
+
     emit currentDeviceChanged();
 }
 

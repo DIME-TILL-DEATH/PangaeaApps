@@ -257,11 +257,13 @@ void Core::recieveTimeout()
         {
             sendCount = 0;
 
-            disconnectFromDevice();
 
             commandsPending.clear();
             commandsSended.clear();
+            emit sgCurrentDeviceChanged(nullptr);
             emit sgExchangeError();
+
+            disconnectFromDevice();
             return;
         }
     }

@@ -1,8 +1,6 @@
 qt6_add_qml_module(${PROJECT_NAME}
-    URI PangaeaFrontend
+    URI "PangaeaFrontend"
     VERSION 1.0
-    RESOURCE_PREFIX /
-    # OUTPUT_DIRECTORY qml/
     QML_FILES
         Main.qml
     SOURCES
