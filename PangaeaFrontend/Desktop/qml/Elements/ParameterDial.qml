@@ -18,10 +18,17 @@ Item{
 
     property alias step: control.stepSize
 
+    property int floatDigits: 0
+
     property string name: controlValue.name
     property string units: controlValue.units
 
     signal moved()
+
+    onControlValueChanged: {
+        control.from = controlValue.minDisplayValue
+        control.to = controlValue.maxDisplayValue
+    }
 
     Column{
         anchors.fill: parent
@@ -49,7 +56,7 @@ Item{
                 anchors.centerIn: parent
                 color: Style.mainEnabledColor
                 font.pixelSize: parent.width/5
-                text: control.value.toFixed(2)
+                text: control.value.toFixed(floatDigits)
             }
 
             background: Rectangle {
@@ -60,7 +67,7 @@ Item{
                 height: width
                 radius: width / 2
 
-                color: (controlValue.enabled) ? "white" : "darkgrey"
+                color: (module.moduleEnabled) ? "white" : "darkgrey"
 
                 border.width: 1
                 border.color: "darkgrey"
@@ -94,9 +101,15 @@ Item{
                 controlValue.displayValue = control.value
             }
 
-            // onValueChanged: {
-            //     controlValue.displayValue = control.value
-            // }
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+
+                onWheel: wheel => {
+                    var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
+                    controlValue.displayValue = control.value + wheel.angleDelta.y * step;
+                }
+            }
         }
 
         Item{
@@ -105,7 +118,7 @@ Item{
             MText
             {
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: (controlValue.enabled) ? "white" : "darkgrey"
+                color: (module.moduleEnabled) ? "white" : "darkgrey"
                 font.pixelSize: parent.width/10
                 text: _root.name
             }
