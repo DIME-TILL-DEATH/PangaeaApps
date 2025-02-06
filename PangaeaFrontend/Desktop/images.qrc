@@ -5,13 +5,12 @@
         <file>Images/cp_100.svg</file>
         <file>Images/cp_100_pa.svg</file>
         <file>Images/Jack_6_3.svg</file>
-        <file>Images/Jack_6_3-2.svg</file>
         <file>Images/(V).svg</file>
         <file>Images/AMT.svg</file>
         <file>Images/Arrow Gear new.svg</file>
-        <file>Images/Arrow Gear.svg</file>
         <file>Images/Connected.svg</file>
         <file>Images/bluetooth-icon.svg</file>
         <file>Images/usb-icon.svg</file>
+        <file>Images/arrows-left-right.svg</file>
     </qresource>
 </RCC>

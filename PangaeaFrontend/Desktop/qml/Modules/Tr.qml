@@ -1,18 +1,14 @@
 import QtQuick 2.15
 
 import Elements 1.0
-import CppObjects
 
+import CppObjects 1.0
 import PangaeaBackend
 
 BaseModule{
-    id: _baseModule
+    id: main
 
-    property PresetVolume module: UiCore.currentDevice.MV
-
-    moduleName: "VL"
-
-    on: true
+    property Tremolo module
 
     contentItem: Column
     {
@@ -27,13 +23,17 @@ BaseModule{
         Item
         {
             width:  parent.width
-            height: parent.height/1000*165*4
+            height: parent.height/1000*165*3
         }
 
-        ParameterDial{
-            id: vlControl
 
-            controlValue: UiCore.currentDevice.MV.presetVolume
+        ParameterDial{
+            controlValue: module.rate
+        }
+
+
+        ParameterDial{
+            controlValue: module.depth
         }
 
         Item
@@ -41,9 +41,5 @@ BaseModule{
             width:  parent.width
             height: parent.height/1000*25
         }
-    }
-
-    MouseArea{
-        anchors.fill: parent
     }
 }

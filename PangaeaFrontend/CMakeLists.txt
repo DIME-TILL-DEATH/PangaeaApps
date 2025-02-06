@@ -28,7 +28,7 @@ if(WIN32)
     )
 
     qt6_add_resources(RCC_FILES
-        "Desktop/qml.qrc"
+        "Desktop/images.qrc"
         "Desktop/translations.qrc"
         "docs.qrc"
         "firmwares.qrc"

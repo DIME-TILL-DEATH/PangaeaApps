@@ -7,6 +7,7 @@ import Qt.labs.platform 1.1 as Labs
 
 import QtQuick.Window 2.15
 
+import Modules 1.0
 import StyleSettings 1.0
 import Layouts 1.0
 
@@ -20,7 +21,7 @@ Column
     focus: true
     spacing: 2
 
-    Head
+    HeadLegacy
     {
         id: head
 
@@ -32,17 +33,109 @@ Column
         }
     }
 
-    ModulesList
+    Row
     {
-        id: modules
+        id: _mainRow
 
-        width:  parent.width
+        width: parent.width
         height: parent.height/1000*850
 
         enabled: !main.wait
 
-        onEmitIrModule: moduleInstance => {
-            head.irModule = moduleInstance
+
+        spacing: 2
+
+        property bool isPaFirmware: true
+        property int modulesCount: 15
+        property bool moduleVisible: false
+        property int widthWithoutSpaсe: width - spacing * 11
+
+        function emitIrModule(moduleInstance){
+            head.irModule = moduleInstance;
+        }
+
+        In{
+            id: inp
+
+            height: _mainRow.height
+            width:  _mainRow.widthWithoutSpaсe/ _mainRow.modulesCount/2
+            // visible: moduleVisible
+        }
+
+        ListView{
+            id: listViewModules
+
+            width: contentWidth
+            height: _mainRow.height
+
+            spacing: _mainRow.spacing
+
+            interactive: false
+            orientation: ListView.Horizontal
+
+            layoutDirection:  UiSettings.isModulesRightAligned ? Qt.RightToLeft : Qt.LeftToRight
+
+            model: UiCore.currentDevice.modulesListModel;
+
+            add: Transition{
+                NumberAnimation { properties: "x"; duration: 500 }
+            }
+
+            move: Transition {
+                 NumberAnimation { properties: "x"; duration: 250 }
+            }
+
+            displaced: Transition {
+                 NumberAnimation { properties: "x"; duration: 250 }
+             }
+
+            delegate: Loader{
+                id: _delegateLoader
+
+                property int widthMult: 1
+                width: _mainRow.widthWithoutSpaсe/_mainRow.modulesCount * widthMult
+                height: _mainRow.height
+
+                Component.onCompleted: function(){
+                    switch(moduleType)
+                    {
+                    case ModuleType.NG: _delegateLoader.source = "../Modules/Ng.qml"; break;
+                    case ModuleType.CM: _delegateLoader.source = "../Modules/Cm.qml"; break;
+                    case ModuleType.PR: _delegateLoader.source = "../Modules/Pr.qml"; break;
+                    case ModuleType.PA: _delegateLoader.source = "../Modules/Pa.qml"; break;
+                    case ModuleType.PS: _delegateLoader.source = "../Modules/Ps.qml"; break;
+                    case ModuleType.IR: {
+                        _delegateLoader.source = "../Modules/Ir.qml";
+                        _mainRow.emitIrModule(moduleInstance);
+                        break;
+                    }
+                    case ModuleType.HP: _delegateLoader.source = "../Modules/Hp.qml"; break;
+                    case ModuleType.EQ1: {
+                        _delegateLoader.source = "../Modules/EqParametric.qml";
+                        _delegateLoader.widthMult = 5;
+                        break;
+                    }
+                    case ModuleType.LP: _delegateLoader.source = "../Modules/Lp.qml"; break;
+                    case ModuleType.ER_MONO:
+                    case ModuleType.ER_STEREO: _delegateLoader.source = "../Modules/Er.qml"; break;
+                    }
+
+                    _delegateLoader.item.module = moduleInstance;
+                }
+            }
+        }
+
+        Vl{
+            id: vl
+            height: _mainRow.height
+            width:  _mainRow.widthWithoutSpaсe/_mainRow.modulesCount
+        }
+
+        Out{
+            id: outp
+
+            height: _mainRow.height
+            width:  _mainRow.widthWithoutSpaсe/_mainRow.modulesCount/2
         }
     }
 

@@ -1,18 +1,14 @@
 import QtQuick 2.15
 
 import Elements 1.0
-import CppObjects
 
+import CppObjects 1.0
 import PangaeaBackend
 
 BaseModule{
-    id: _baseModule
+    id: main
 
-    property PresetVolume module: UiCore.currentDevice.MV
-
-    moduleName: "VL"
-
-    on: true
+    property Chorus module
 
     contentItem: Column
     {
@@ -27,13 +23,25 @@ BaseModule{
         Item
         {
             width:  parent.width
-            height: parent.height/1000*165*4
+            height: parent.height/1000*165
+        }
+
+
+        ParameterDial{
+            controlValue: module.rate
+        }
+
+
+        ParameterDial{
+            controlValue: module.width
         }
 
         ParameterDial{
-            id: vlControl
+            controlValue: module.hpf
+        }
 
-            controlValue: UiCore.currentDevice.MV.presetVolume
+        ParameterDial{
+            controlValue: module.mix
         }
 
         Item
@@ -41,9 +49,5 @@ BaseModule{
             width:  parent.width
             height: parent.height/1000*25
         }
-    }
-
-    MouseArea{
-        anchors.fill: parent
     }
 }

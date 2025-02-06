@@ -246,6 +246,8 @@ BaseModule{
                         height: parent.height*0.9
                         anchors.verticalCenter: parent.verticalCenter
 
+                        floatDigits: 2
+
                         property EqParametric module: main.module
 
                         step: 0.1

@@ -6,11 +6,15 @@ qt_add_qml_module(qml_layouts
     QML_FILES
         ConnectionLayout.qml
         CopyPaste.qml
-        Head.qml
+        HeadLegacy.qml
         MainMenu.qml
         MBusy.qml
-        ModulesList.qml
         SaveCompare.qml
         StartLayout.qml
         ControlLayoutLegacy.qml
+        ControlLayoutCPModern.qml
+        ModulesListModern.qml
+        ModulesConfigWindow.qml
+        HeadCPModern.qml
+        Map.qml
 )

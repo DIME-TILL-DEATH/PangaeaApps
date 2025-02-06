@@ -97,12 +97,12 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     setParamsHandler("ph_st", &currentPresetData.phaser.stages);
     setParamsHandler("ph_hp", &currentPresetData.phaser.hpf);
 
-    setParamsHandler("ch_on", &currentPresetData.delay.on);
-    setParamsHandler("ch_mx", &currentPresetData.delay.mix);
-    setParamsHandler("ch_rt", &currentPresetData.delay.time);
-    setParamsHandler("ch_wd", &currentPresetData.delay.feedback);
-    setParamsHandler("ch_hp", &currentPresetData.delay.hpf);
-    setParamsHandler("ch_hp", &currentPresetData.delay.lpf);
+    setParamsHandler("dl_on", &currentPresetData.delay.on);
+    setParamsHandler("dl_mx", &currentPresetData.delay.mix);
+    setParamsHandler("dl_tm", &currentPresetData.delay.time);
+    setParamsHandler("dl_fb", &currentPresetData.delay.feedback);
+    setParamsHandler("dl_hp", &currentPresetData.delay.hpf);
+    setParamsHandler("dl_lp", &currentPresetData.delay.lpf);
 
     //--------------------------------------------------------------
 

@@ -9,7 +9,6 @@ BaseModule{
 
     property PowerAmp module
 
-
     contentItem: Column
     {
         id: _column
@@ -49,7 +48,9 @@ BaseModule{
         }
 
         ParameterDial{
+            id: _slave
             controlValue: module.slave
+
         }
 
         Item

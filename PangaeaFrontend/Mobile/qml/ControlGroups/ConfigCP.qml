@@ -107,11 +107,11 @@ Item {
                 delegate: DropArea{
                     id: _delegateRoot
 
-                    property int modelIndex
-                    property int visualIndex: DelegateModel.itemsIndex
-
                     width: _listConfig.width
                     height: _listConfig.height * 1/8
+
+                    property int modelIndex
+                    property int visualIndex: DelegateModel.itemsIndex
 
                     onEntered: function (drag) {
                         var from = drag.source.visualIndex;
@@ -311,14 +311,15 @@ Item {
                         {
                             if(UiCore.currentDevice.processingUsed + UiCore.currentDevice.DL.processing > UiCore.currentDevice.processingBudget)
                             {
+                                if(_delayCombo.currentIndex === 1)
+                                    _msgBudegetError.open();
+
                                 _delayCombo.currentIndex = 0;
-                                _msgBudegetError.open();
                             }
-                            else
-                            {
-                                UiCore.currentDevice.DL.used = _delayCombo.currentIndex;
-                                UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
-                            }
+
+                            UiCore.currentDevice.DL.used = _delayCombo.currentIndex;
+                            UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
+
                         }
                     }
                 }

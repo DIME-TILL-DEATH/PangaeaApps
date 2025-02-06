@@ -84,8 +84,8 @@ ApplicationWindow
                     if(!main.appClosing)
                     {
                         UiCore.currentDevice.changePreset(newBank, newPreset, true);
-
-                        UiCore.currentDevice.escImpulse();
+                        if(UiCore.currentDevice.deviceType < DeviceType.LEGACY_DEVICES)
+                            UiCore.currentDevice.escImpulse();
                     }
                     else
                     {
@@ -251,6 +251,8 @@ ApplicationWindow
             }
 
             case DeviceType.MODERN_CP:{
+                startUi.visible = false;
+                controlLayoutLoader.source = "/Layouts/ControlLayoutCPModern.qml";
                 break;
             }
 

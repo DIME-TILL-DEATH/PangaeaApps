@@ -671,6 +671,7 @@ void CPModern::configModules(const PresetModern &preset)
 
     m_modulesListModel.refreshModel(&m_moduleList);
     emit modulesListModelChanged();
+    emit processingUsedChanged();
 }
 
 void CPModern::setModules()

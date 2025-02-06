@@ -9,267 +9,241 @@ import StyleSettings 1.0
 import CppObjects
 import PangaeaBackend
 
-Row
-{
-    id: _mainRow
-
-    spacing: 2
-
-    property bool isPaFirmware: true
-    property int modulesCount: 15
-    property bool moduleVisible: false
-    property int widthWithoutSpase: width - spacing * 11
+Flickable{
+    id: _mainFlickable
 
     signal emitIrModule(CabSim moduleInstance);
 
-    In
-    {
-        id: inp
+    flickableDirection: Flickable.HorizontalFlick
 
-        height: _mainRow.height
-        width:  _mainRow.widthWithoutSpase/modulesCount/2
-        // visible: moduleVisible
+    contentWidth: _mainRow.width
+
+    clip: true
+
+    ScrollBar.horizontal: ScrollBar {
+        orientation: Qt.Horizontal
+        policy: ScrollBar.AlwaysOn
     }
 
-    ListView
-    {
-        id: listViewModules
+    boundsBehavior: Flickable.StopAtBounds
 
-        width: _mainRow.width - inp.width - outp.width - vl.width - spacing * 3
-        height: _mainRow.height
+    Row{
+        id: _mainRow
 
-        spacing: _mainRow.spacing
+        property bool isPaFirmware: true
+        property int modulesCount: 15
+        property bool moduleVisible: false
+        property int widthWithoutSpaсe: _mainFlickable.width - spacing * 11
 
-        interactive: false
-        orientation: ListView.Horizontal
+        spacing: 2
 
-        layoutDirection:  UiSettings.isModulesRightAligned ? Qt.RightToLeft : Qt.LeftToRight
+        width: inp.width + _listViewModules.width + dl.width + er.width
+               + vl.width + outp.width + spacing * 4
+        height: parent.height
 
-        model: UiCore.currentDevice.modulesListModel;
+        In{
+            id: inp
 
-        add: Transition{
-            NumberAnimation { properties: "x"; duration: 500 }
+            height: _mainRow.height
+            width:  _mainRow.widthWithoutSpaсe/_mainRow.modulesCount/2
+            // visible: moduleVisible
         }
 
-        move: Transition {
-             NumberAnimation { properties: "x"; duration: 250 }
-        }
+        ListView{
+            id: _listViewModules
 
-        displaced: Transition {
-             NumberAnimation { properties: "x"; duration: 250 }
-         }
+            width: contentWidth
+            height: _mainRow.height
 
-        delegate: Loader{
-            id: _delegateLoader
+            spacing: _mainRow.spacing
 
-            width: listViewModules.width
+            interactive: false
+            orientation: ListView.Horizontal
 
-            Component.onCompleted: function(){
-                switch(moduleType)
-                {
-                case ModuleType.NG:
-                {
-                    _delegateLoader.source = "../Modules/Ng.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-                    break;
+            layoutDirection:  UiSettings.isModulesRightAligned ? Qt.RightToLeft : Qt.LeftToRight
+
+            model: DelegateModel{
+                id: _visualModel
+
+                model: UiCore.currentDevice.modulesListModel;
+                delegate: DropArea{
+                    id: _delegateRoot
+
+                    property int widthMult: 1
+                    width: _mainRow.widthWithoutSpaсe/_mainRow.modulesCount * widthMult
+                    height: _mainRow.height
+
+                    property int modelIndex
+                    property int visualIndex: DelegateModel.itemsIndex
+
+                    onEntered: function (drag) {
+                        var from = drag.source.visualIndex;
+                        var to = _thing.visualIndex;
+                        _visualModel.items.move(from, to);
+                    }
+
+                    onDropped: function (drag) {
+                        var from = modelIndex;
+                        var to = (drag.source as Item).visualIndex;
+                        UiCore.currentDevice.modulesListModel.moveModule(from, to);
+                    }
+
+                    Column{
+                        id: _thing
+
+                        property Item dragParent: _delegateRoot
+                        property int visualIndex: _delegateRoot.visualIndex
+
+                        width: _delegateRoot.width
+                        height: _delegateRoot.height
+
+                        Drag.active: _mouseAreaDrag.drag.active
+                        Drag.source: _thing
+                        Drag.hotSpot.x: width / 2
+                        Drag.hotSpot.y: _dragRect.y + _dragRect.height / 2
+
+                        opacity: Drag.active ? 0.5 : 1
+
+                        Loader{
+                            id: _delegateLoader
+
+                            height: parent.height * 0.925
+                            width: parent.width
+
+                            Component.onCompleted: function(){
+                                switch(moduleType)
+                                {
+                                case ModuleType.NG: _delegateLoader.source = "../Modules/Ng.qml"; break;
+                                case ModuleType.CM: _delegateLoader.source = "../Modules/Cm.qml"; break;
+                                case ModuleType.PR: _delegateLoader.source = "../Modules/Pr.qml"; break;
+                                case ModuleType.PA: _delegateLoader.source = "../Modules/Pa.qml"; break;
+                                case ModuleType.TR: _delegateLoader.source = "../Modules/Tr.qml"; break;
+                                case ModuleType.CH: _delegateLoader.source = "../Modules/Ch.qml"; break;
+
+                                case ModuleType.IR:{
+                                    _delegateLoader.source = "../Modules/Ir.qml";
+                                    emitIrModule(moduleInstance);
+                                    break;
+                                }
+
+                                case ModuleType.EQ1:
+                                case ModuleType.EQ2:{
+                                    _delegateLoader.source = "../Modules/EqParametric.qml";
+                                    _delegateRoot.widthMult = 5
+                                    break;
+                                }
+
+                                case ModuleType.PH:{
+                                    _delegateLoader.source = "../Modules/Ph.qml";
+                                    _delegateRoot.widthMult = 2
+                                    break;
+                                }
+                                }
+                                _delegateLoader.item.module = moduleInstance;
+                            }
+                        }
+
+                        Rectangle{
+                            id: _separator
+                            width: parent.width
+                            height: 1
+                        }
+
+                        Rectangle{
+                            id: _dragRect
+
+                            width: parent.width
+                            height: parent.height * 0.075
+
+                            color: _delegateLoader.item.module.moduleEnabled ? Style.mainEnabledColor : Style.mainDisabledColor
+
+                            MouseArea {
+                                id: _mouseAreaDrag
+                                anchors.fill: parent
+
+                                drag.target: _thing
+                                drag.axis: Drag.XAxis
+                                // drag.minimumX: 0//_listViewModules.x
+                                // drag.maximumX: _listViewModules.x + _listViewModules.width
+
+                                onPressed: _delegateRoot.modelIndex = visualIndex
+                                onReleased: _thing.Drag.drop()
+                            }
+
+                            ColorImage{
+                                id: _scanImg
+                                source: "qrc:/Images/arrows-left-right.svg"
+
+                                width: parent.width * 0.4
+                                height: width
+
+                                anchors.fill: parent
+
+                                color: "white"
+
+                                fillMode: Image.PreserveAspectFit
+                            }
+
+                        }
+                        states: State {
+                                when: _mouseAreaDrag.drag.active
+                                ParentChange {
+                                    target: _thing
+                                    parent: _listViewModules
+                                }
+
+                                AnchorChanges {
+                                    target: _thing
+                                    anchors.horizontalCenter: undefined
+                                    anchors.verticalCenter: undefined
+                                }
+                            }
+                    }
                 }
-
-                case ModuleType.CM:
-                {
-                    _delegateLoader.source = "../Modules/Cm.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-                    break;
-                }
-
-                case ModuleType.PR:
-                {
-                    _delegateLoader.source = "../Modules/Pr.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-                    break;
-                }
-
-                case ModuleType.PA:
-                {
-                    _delegateLoader.source = "../Modules/Pa.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-                    break;
-                }
-
-                case ModuleType.PS:
-                {
-                    _delegateLoader.source = "../Modules/Ps.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-                    break;
-                }
-
-                case ModuleType.IR:
-                {
-                    _delegateLoader.source = "../Modules/Ir.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-
-                    emitIrModule(moduleInstance);
-                    break;
-                }
-
-                case ModuleType.HP:
-                {
-                    _delegateLoader.source = "../Modules/Hp.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-                    break;
-                }
-                case ModuleType.EQ1:
-                {
-                    _delegateLoader.source = "../Modules/EqParametric.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount * 5
-                    _delegateLoader.height = _mainRow.height
-                    break;
-                }
-                case ModuleType.LP:
-                {
-                    _delegateLoader.source = "../Modules/Lp.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-                    break;
-                }
-
-                case ModuleType.ER_MONO:
-                case ModuleType.ER_STEREO:
-                {
-                    _delegateLoader.source = "../Modules/Er.qml";
-                    _delegateLoader.width = _mainRow.widthWithoutSpase/modulesCount
-                    _delegateLoader.height = _mainRow.height
-                    break;
-                }
-                }
-
-                _delegateLoader.item.module = moduleInstance;
             }
-        }
-    }
 
-    Vl
-    {
-        id: vl
-        height: _mainRow.height
-        width:  _mainRow.widthWithoutSpase/modulesCount
-    }
+            // Transitions
 
-    Out
-    {
-        id: outp
-
-        height: _mainRow.height
-        width:  _mainRow.widthWithoutSpase/modulesCount/2
-    }
-
-
-    // Ps
-    // {
-    //     id: ps
-
-    //     height: listViewModules.height
-    //     width:  listViewModules.widthWithoutSpase/modulesCount
-    //     visible: moduleVisible & (!isPaFirmware)
-
-    //     //onChPresence: pa.setPresence(value)
-    // }
-
-    // Lp
-    // {
-    //     id: lp
-    //     height: listViewModules.height
-    //     width:  listViewModules.widthWithoutSpase/modulesCount
-    //     visible: moduleVisible
-    // }
-
-    // EqsMap
-    // {
-    //     id: eqsMap
-
-    //     height: listViewModules.height
-    //     width:  listViewModules.widthWithoutSpase/modulesCount*5
-    //     visible: moduleVisible
-
-    //     property int prePositionIndex: 3
-    //     property int postPositionIndex: 7
-
-    //     property bool isPrePosition: (ObjectModel.index === prePositionIndex)
-
-    // }
-
-    // Hp
-    // {
-    //     id: hp
-    //     height: listViewModules.height
-    //     width:  listViewModules.widthWithoutSpase/modulesCount
-    //     visible: moduleVisible
-    // }
-
-    // Ir
-    // {
-    //     id: ir
-    //     height: listViewModules.height
-    //     width:  listViewModules.widthWithoutSpase/modulesCount
-    //     visible: moduleVisible
-    // }
-
-    // Pa
-    // {
-    //     id: pa
-    //     height: listViewModules.height
-    //     width: listViewModules.widthWithoutSpase/modulesCount
-    //     visible: moduleVisible & isPaFirmware
-
-    //     //onChPresence: ps.setPresence(value)
-    // }
-
-    // Pr
-    // {
-    //     id: pr
-    //     height: listViewModules.height
-    //     width:  listViewModules.widthWithoutSpase/modulesCount
-    //     visible: moduleVisible
-    // }
-
-    Connections
-    {
-        target: UiCore
-
-        function onCurrentDeviceChanged()
-        {
-            switch(UiCore.currentDevice.deviceType)
-            {
-                // case DeviceType.LA3:
-                // {
-                //     _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_LA.qml";
-                //     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
-                //     setMapContent();
-                //     break;
-                // }
-                // default:
-                // {
-                //     _masterControlsLoader.source = "/ControlGroups/qml/ControlGroups/MasterControls_CP.qml";
-                //     _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
-                //     setMapContent();
-                //     break;
-                // }
+            add: Transition{
+                NumberAnimation { properties: "x"; duration: 200 }
             }
+
+            move: Transition {
+                 NumberAnimation { properties: "x"; duration: 250 }
+            }
+
+            displaced: Transition {
+                 NumberAnimation { properties: "x"; duration: 250 }
+             }
+        }
+
+        Dl{
+            id: dl
+
+            module: UiCore.currentDevice.DL
+            height: _mainRow.height
+            width: UiCore.currentDevice.DL.used ? _mainRow.widthWithoutSpaсe/_mainRow.modulesCount * 2 : 0
+        }
+
+        Er{
+            id: er
+
+            module: UiCore.currentDevice.ER
+            height: _mainRow.height
+            width:  UiCore.currentDevice.ER.used ? _mainRow.widthWithoutSpaсe/_mainRow.modulesCount : 0
+        }
+
+        Vl{
+            id: vl
+            height: _mainRow.height
+            width:  _mainRow.widthWithoutSpaсe/_mainRow.modulesCount
+        }
+
+        Out{
+            id: outp
+
+            height: _mainRow.height
+            width:  _mainRow.widthWithoutSpaсe/_mainRow.modulesCount/2
         }
     }
-    // Connections{
-    //     target: UiCore.currentDevice.modulesListModel
-
-    //     function onModelReset(){
-    //         listViewModules.item.modulesModel = undefined // без этого пропускает первое обновление
-    //         listViewModules.item.modulesModel = UiCore.currentDevice.modulesListModel
-    //     }
-    // }
-
 }
