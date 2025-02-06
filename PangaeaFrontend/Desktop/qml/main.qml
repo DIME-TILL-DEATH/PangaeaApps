@@ -35,7 +35,6 @@ ApplicationWindow
     property string markConnect: connected ? qsTr("Connected to ") + interfaceDescription : qsTr("Disconnected")
 
     property bool connected: false
-    property bool wait: true
     property bool appClosing: false
 
     title: connected ? "AMT PangaeaCPPA " +  " v." + Qt.application.version + " "
@@ -166,7 +165,7 @@ ApplicationWindow
 
         onAccepted: {
             mBusy.visible = false;
-            InterfaceManager.disconnectFromDevice();
+            UiCore.disconnectFromDevice();
         }
     }
 
@@ -203,19 +202,6 @@ ApplicationWindow
                         inString +
                         qsTr(") avaliable on the server")
                 _msgVersionInform.visible = true;
-            }
-        }
-
-        function onSgSetUIParameter(nameParam, value)
-        {
-            if(nameParam === "wait")
-            {
-                wait = value;
-                if(main.appClosing)
-                {
-                    if(!wait && !msgPresetChangeSave.visible)
-                        Qt.quit();
-                }
             }
         }
     }

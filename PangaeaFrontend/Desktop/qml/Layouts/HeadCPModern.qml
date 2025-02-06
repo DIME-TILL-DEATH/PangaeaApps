@@ -14,9 +14,8 @@ Item
 
     property CabSim irModule
 
-    signal setImpuls()
     signal openModulesConfigWindow()
-    signal openIrSelectWindow()
+    signal openIrManagerWindow()
 
     Row
     {
@@ -87,7 +86,7 @@ Item
                 MouseArea
                 {
                     anchors.fill: parent
-                    onClicked: main.setImpuls()
+                    onClicked: openIrManagerWindow();
 
                     cursorShape: Qt.PointingHandCursor
                 }

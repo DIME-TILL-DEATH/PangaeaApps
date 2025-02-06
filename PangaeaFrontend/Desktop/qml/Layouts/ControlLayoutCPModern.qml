@@ -25,6 +25,14 @@ Column
         id: _modulesConfigWindow
     }
 
+    IrManagerWindow{
+        id: _irManagerWindow
+
+        onUploadFileReq: {
+            irFileDialog.open();
+        }
+    }
+
     HeadCPModern
     {
         id: head
@@ -32,8 +40,9 @@ Column
         width:  parent.width
         height: parent.height/1000*150
 
-        onSetImpuls: {
-            irFileDialog.open();
+        onOpenIrManagerWindow: {
+            _irManagerWindow.show();
+            console.log("Models:", UiCore.currentDevice.irsInLibrary, UiCore.currentDevice.irsInFolder)
         }
 
         onOpenModulesConfigWindow: {
@@ -47,8 +56,6 @@ Column
 
         width: parent.width
         height: parent.height/1000*850
-
-        enabled: !main.wait
 
         onEmitIrModule: moduleInstance => {
             head.irModule = moduleInstance;
@@ -69,32 +76,10 @@ Column
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            UiCore.uploadIr(cleanPath);
+            UiCore.uploadIr(cleanPath, _irManagerWindow.dstIrPath);
 
         }
 
-        onRejected:
-        {
-            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
-                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
-            {
-                UiCore.escImpuls()
-            }
-        }
-
-        onSelectedFileChanged:
-        {
-            var cleanPath = irFileDialog.currentFile.toString();
-            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
-
-            // TODO по connection type выбирать сразу грузить или предпросмотр
-            // if(InterfaceManager.conectionType === DeviceConnectionType.USB)
-            // {
-            //     // TODO: переделать cleanPath на QUrl
-            //     UiCore.uploadIr(cleanPath);
-            // }
-        }
         Settings
         {
             category: "Current_folder"

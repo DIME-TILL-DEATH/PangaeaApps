@@ -12,5 +12,6 @@
         <file>Images/bluetooth-icon.svg</file>
         <file>Images/usb-icon.svg</file>
         <file>Images/arrows-left-right.svg</file>
+        <file>Images/bin.svg</file>
     </qresource>
 </RCC>

@@ -45,7 +45,6 @@ Flickable{
 
             height: _mainRow.height
             width:  _mainRow.widthWithoutSpaсe/_mainRow.modulesCount/2
-            // visible: moduleVisible
         }
 
         ListView{

@@ -2,7 +2,10 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import Elements
+
 import CppObjects 1.0
+import PangaeaBackend
 
 Item
 {
@@ -81,7 +84,7 @@ Item
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: parent.height/4
             Layout.fillWidth: true
-            Text{
+            MText{
                 id: txt
 
                 anchors.fill: parent
@@ -90,6 +93,8 @@ Item
 
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
+
+                color: "black"
             }
         }
     }
@@ -108,29 +113,66 @@ Item
             if(nameParam === ("wait"))
             {
                 rWait.visible = inValue;
-                txt.text = qsTr("Sending commands to device");
+
+                switch(UiCore.currentDevice.presetManager.currentState)
+                {
+                    case PresetState.UploadingIr:
+                    {
+                        txt.text = qsTr("Uploading file data to device");
+                        break;
+                    }
+
+                    default: txt.text = qsTr("Sending commands to device");
+                }
                 progressBar.visible = true
             }
+        }
+    }
 
-            if(nameParam === ("data_uploading"))
-            {
-                rWait.visible = inValue;
-                txt.text = qsTr("Uploading file data to device");
-                progressBar.visible = true
-            }
+    Connections{
+        target: UiCore.currentDevice.presetManager
 
-            if(nameParam === ("ir_downloading"))
+        function onCurrentStateChanged()
+        {
+            switch(UiCore.currentDevice.presetManager.currentState)
             {
-                rWait.visible = inValue;
-                txt.text = qsTr("Downloading impulse data from device");
-                progressBar.visible = true
-            }
+                // case PresetState.Changing:
+                // {
+                //     rWait.visible = inValue;
+                //     txt.text = qsTr("Sending commands to device");
+                //     progressBar.visible = true
+                //     break;
+                // }
+                case PresetState.UploadingIr:
+                {
+                    rWait.visible = true;
+                    txt.text = qsTr("Uploading file data to device");
+                    progressBar.visible = true
+                    break;
+                }
 
-            if(nameParam === ("ir_upload_finished"))
-            {
-                rWait.visible = true;
-                txt.text = qsTr("Applying impulse to device. Please wait...");
-                progressBar.visible = false
+                case PresetState.Exporting:
+                case PresetState.Copying:
+                {
+                    rWait.visible = true;
+                    txt.text = qsTr("Downloading impulse data from device");
+                    progressBar.visible = true
+                    break;
+                }
+
+                case PresetState.SavingIr:
+                {
+                    rWait.visible = true;
+                    txt.text = qsTr("Applying impulse to device. Please wait...");
+                    progressBar.visible = false
+                    break;
+                }
+
+                // case PresetState.Idle:
+                // {
+                //     rWait.visible = false;
+                //     break;
+                // }
             }
         }
     }

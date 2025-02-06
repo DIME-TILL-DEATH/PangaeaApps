@@ -16,6 +16,8 @@ Window
 
     property int maxMapRow: Math.max(UiCore.currentDevice.maxBankCount, UiCore.currentDevice.maxPresetCount)
 
+    title: qsTr("Preset map")
+
     Rectangle
     {
         anchors.fill: parent

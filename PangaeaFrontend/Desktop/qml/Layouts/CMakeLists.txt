@@ -20,4 +20,5 @@ qt_add_qml_module(qml_layouts
         BPeakingShelfControl.qml
         BCutControl.qml
         BPeakingControl.qml
+        IrManagerWindow.qml
 )

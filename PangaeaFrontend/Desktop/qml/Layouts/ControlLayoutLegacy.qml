@@ -40,9 +40,6 @@ Column
         width: parent.width
         height: parent.height/1000*850
 
-        enabled: !main.wait
-
-
         spacing: 2
 
         property bool isPaFirmware: true
