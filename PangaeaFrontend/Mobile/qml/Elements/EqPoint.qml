@@ -59,13 +59,6 @@ Rectangle{
 
         drag.target: root
 
-        // drag.axis: (eqBand.type === FilterType.HIGH_CUT || eqBand.type === FilterType.LOW_CUT) ? Drag.XAxis : Drag.XAndYAxis
-
-        // property real xmin: eqModule.points[0].x;
-        // property real xmax: eqModule.points[eqModule.points.length-1].x
-        // property real xmin: eqModule.minFreq;
-        // property real xmax: eqModule.maxFreq;
-
         drag.minimumX: _canvas.width*((Math.log10(eqBand.Fc.minDisplayValue)-Math.log10(xmin))
                                       /(Math.log10(xmax)-Math.log10(xmin))) - root.width/2;
         drag.maximumX: _canvas.width*((Math.log10(eqBand.Fc.maxDisplayValue)-Math.log10(xmin))
@@ -76,16 +69,9 @@ Rectangle{
 
         drag.smoothed: false
 
-        // drag.threshold
-
         onPressed: {
             pointSelected(index);
         }
-
-        // Component.onCompleted:{
-        //     console.log("Drag threshold: ", ma.drag.threshold)
-        //     console.log("Drag minimum-maximum X ", ma.drag.minimumX, ma.drag.maximumX)
-        // }
     }
 
     Component.onCompleted: {

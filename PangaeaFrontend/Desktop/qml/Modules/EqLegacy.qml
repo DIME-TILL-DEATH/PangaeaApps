@@ -35,9 +35,85 @@ BaseModule{
         Column{
             anchors.fill: parent
 
+            Row{
+                width: parent.width
+                height: parent.height*1/8 * 0.95
+
+                opacity: module.moduleEnabled ? 1 : 0.5
+
+                MButton{
+                    text: qsTr("RESET")
+
+                    width: parent.width * 1/5
+                    height: parent.height * 0.9
+
+                    onClicked: module.reset()
+                }
+
+                Item{
+                    width: parent.width * 1/10 * 3
+                    height: parent.height
+                }
+
+                MButton{
+                    text: "1"
+
+                    width: parent.width * 1/10
+                    height: parent.height * 0.9
+
+                    highlighted: _eqp.currentBandIndex === 0
+
+                    onClicked: _eqp.currentBandIndex = 0
+                }
+
+                MButton{
+                    text: "2"
+
+                    width: parent.width * 1/10
+                    height: parent.height * 0.9
+
+                    highlighted: _eqp.currentBandIndex === 1
+
+                    onClicked: _eqp.currentBandIndex = 1
+                }
+
+                MButton{
+                    text: "3"
+
+                    width: parent.width * 1/10
+                    height: parent.height * 0.9
+
+                    highlighted: _eqp.currentBandIndex === 2
+
+                    onClicked: _eqp.currentBandIndex = 2
+                }
+
+                MButton{
+                    text: "4"
+
+                    width: parent.width * 1/10
+                    height: parent.height * 0.9
+
+                    highlighted: _eqp.currentBandIndex === 3
+
+                    onClicked: _eqp.currentBandIndex = 3
+                }
+
+                MButton{
+                    text: "5"
+
+                    width: parent.width * 1/10
+                    height: parent.height * 0.9
+
+                    highlighted: _eqp.currentBandIndex === 4
+
+                    onClicked: _eqp.currentBandIndex = 4
+                }
+            }
+
             Item{
                 width: parent.width
-                height: parent.height*3/4
+                height: parent.height*5/8
 
                 MouseArea{
                     id: mAsteaalModuleOnOf
@@ -191,7 +267,7 @@ BaseModule{
                 id: bandInfoRect
 
                 width: parent.width
-                height: parent.height - _canvas.height - border.width*2
+                height: parent.height * 2/8
 
                 z:-1
 

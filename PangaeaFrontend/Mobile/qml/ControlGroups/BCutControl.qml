@@ -36,7 +36,6 @@ Column
 
         onMbPressed:
         {
-            console.log("band num:", eqBand, eqBand.filterType, eqBand.enabled)
             eqBand.enabled = !eqBand.enabled
         }
     }

@@ -17,4 +17,7 @@ qt_add_qml_module(qml_layouts
         ModulesConfigWindow.qml
         HeadCPModern.qml
         Map.qml
+        BPeakingShelfControl.qml
+        BCutControl.qml
+        BPeakingControl.qml
 )

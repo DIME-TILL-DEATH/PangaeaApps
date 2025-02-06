@@ -114,10 +114,26 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Item
+        Rectangle
         {
             height: parent.height
             width:  row.widthWithoutSpase/15*1
+
+            color: Style.mainEnabledColor
+
+
+            ParameterDial{
+                id: vlControl
+                property PresetVolume module: UiCore.currentDevice.MV
+
+                width:  parent.width * 0.9
+                height: parent.height * 0.9
+
+                controlValue: UiCore.currentDevice.MV.presetVolume
+
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
 
         PresetSpin

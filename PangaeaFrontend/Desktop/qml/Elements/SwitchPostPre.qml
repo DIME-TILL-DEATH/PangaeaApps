@@ -32,10 +32,10 @@ Item
             width: parent.width
             height: parent.height/100*40
 
-            value: UiCore.currentDevice.isPreEq
+            value: !UiCore.currentDevice.isPreEq
 
             onChValue: val => {
-                           UiCore.currentDevice.isPreEq = val;
+                           UiCore.currentDevice.isPreEq = !val;
                        }
 
             visible: isAvaliable
@@ -49,24 +49,25 @@ Item
             {
                 width: parent.width/2
                 height: parent.height
-                text: "POST"
+                text: "PRE"
                 check: mSwitch.value==0
 
                 visible: isAvaliable
-                onClicked: UiCore.currentDevice.isPreEq = 0
-
+                onClicked: UiCore.currentDevice.isPreEq = 1
             }
 
             CheckText
             {
                 width: parent.width/2
                 height: parent.height
-                text: "PRE"
+                text: "POST"
                 check: mSwitch.value==1
 
                 visible: isAvaliable
-                onClicked: UiCore.currentDevice.isPreEq = 1
+                onClicked: UiCore.currentDevice.isPreEq = 0
+
             }
+
         }
 
         Item

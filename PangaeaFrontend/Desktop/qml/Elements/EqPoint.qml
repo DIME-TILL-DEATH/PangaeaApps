@@ -20,23 +20,33 @@ Rectangle{
 
     transformOrigin: Item.Center
 
-    width: Math.min(parent.width/15, parent.height/15)
+    width: Math.min(parent.width/12, parent.height/12)
     height: width
 
     radius: width/2
 
+    property color selectedColor: "red"
+
     color: (selectedBandIndex === index) ?
-               (main.on ? "red" : "darkgrey") :
+               (main.on ? selectedColor : "darkgrey") :
                "transparent"
 
+
     border.width: Math.max(2, width/20)
-    border.color: main.on ? "Salmon" : "darkgrey"
+    border.color: main.on ? selectedColor : "darkgrey"
 
     signal pointSelected(var index);
 
     Drag.active: ma.drag.active
     Drag.hotSpot.x: width/2
     Drag.hotSpot.y: height/2
+
+    MText{
+        id: _textBandNum
+
+        anchors.centerIn: parent
+        color:  (selectedBandIndex === index) ? "black" : (main.on ? selectedColor : "darkgrey")
+    }
 
     MouseArea{
         id: ma
@@ -78,6 +88,26 @@ Rectangle{
                 if(resultQ > module.EqBands[currentBandIndex].Q.maxDisplayValue) resultQ = module.EqBands[currentBandIndex].Q.maxDisplayValue;
             }
             module.EqBands[currentBandIndex].Q.displayValue = resultQ;
+        }
+    }
+
+    Component.onCompleted: {
+        switch(filterType)
+        {
+        case FilterType.HIGH_CUT:
+            _textBandNum.text = "LP"
+            ma.drag.axis = Drag.XAxis
+            selectedColor = "green"
+            break;
+        case FilterType.LOW_CUT:
+            _textBandNum.text = "HP"
+            ma.drag.axis = Drag.XAxis
+            selectedColor = "blue"
+            break;
+        default:
+            _textBandNum.text = index+1
+            ma.drag.axis = Drag.XAndYAxis
+            selectedColor = "salmon"
         }
     }
 }

@@ -5,7 +5,7 @@ qt_add_qml_module(qml_modules
     VERSION 1.0
     QML_FILES
         BaseModule.qml
-        EqParametric.qml
+        EqLegacy.qml
 
         Cm.qml
         Er.qml
@@ -23,4 +23,5 @@ qt_add_qml_module(qml_modules
         Ch.qml
         Dl.qml
         Ph.qml
+        QML_FILES EqModern.qml
     )

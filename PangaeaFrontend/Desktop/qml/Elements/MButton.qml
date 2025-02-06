@@ -12,16 +12,18 @@ Item
     property double scaleText: 1
 
     property bool  highlighted: false
+    property color highlightColor: Style.highlightColor
     signal clicked();
 
     Rectangle
     {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter:  parent.verticalCenter
-        width:  parent.width/1.5
-        height: width/2
+        width:  parent.width/1.3
+        height: parent.height/1.3 //width/2
+
         radius: height/2
-        color:  main.highlighted ? Style.highlightColor : Style.backgroundColor
+        color:  main.highlighted ? highlightColor : Style.backgroundColor
         clip: true
 
         Item

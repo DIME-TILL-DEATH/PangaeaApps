@@ -1,10 +1,10 @@
 import QtQuick
 import QtQuick.Controls
 
-import QtQml.Models 2.2
+import QtQml.Models
 
-import Modules 1.0
-import StyleSettings 1.0
+import Modules
+import StyleSettings
 
 import CppObjects
 import PangaeaBackend
@@ -37,8 +37,7 @@ Flickable{
 
         spacing: 2
 
-        width: inp.width + _listViewModules.width + dl.width + er.width
-               + vl.width + outp.width + spacing * 4
+        width: inp.width + _listViewModules.width + dl.width + er.width + outp.width + spacing * 4
         height: parent.height
 
         In{
@@ -128,7 +127,7 @@ Flickable{
 
                                 case ModuleType.EQ1:
                                 case ModuleType.EQ2:{
-                                    _delegateLoader.source = "../Modules/EqParametric.qml";
+                                    _delegateLoader.source = "../Modules/EqModern.qml";
                                     _delegateRoot.widthMult = 5
                                     break;
                                 }
@@ -231,12 +230,6 @@ Flickable{
             module: UiCore.currentDevice.ER
             height: _mainRow.height
             width:  UiCore.currentDevice.ER.used ? _mainRow.widthWithoutSpaсe/_mainRow.modulesCount : 0
-        }
-
-        Vl{
-            id: vl
-            height: _mainRow.height
-            width:  _mainRow.widthWithoutSpaсe/_mainRow.modulesCount
         }
 
         Out{

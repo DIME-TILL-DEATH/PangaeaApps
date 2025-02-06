@@ -82,14 +82,6 @@ Window
                 width: _moduleListView.width
                 height: _moduleListView.height/11
 
-                // gradient: Gradient{
-                //     GradientStop{
-                //         position: 0.0; color: Style.colorModul
-                //     }
-                //     GradientStop{position: 1.0; color: "black"}
-
-                // }
-
                 color: "steelblue"
 
                 radius: 1

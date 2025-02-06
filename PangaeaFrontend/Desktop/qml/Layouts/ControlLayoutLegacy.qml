@@ -111,7 +111,7 @@ Column
                     }
                     case ModuleType.HP: _delegateLoader.source = "../Modules/Hp.qml"; break;
                     case ModuleType.EQ1: {
-                        _delegateLoader.source = "../Modules/EqParametric.qml";
+                        _delegateLoader.source = "../Modules/EqLegacy.qml";
                         _delegateLoader.widthMult = 5;
                         break;
                     }

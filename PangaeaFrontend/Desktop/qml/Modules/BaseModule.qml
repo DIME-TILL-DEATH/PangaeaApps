@@ -37,7 +37,7 @@ Rectangle {
             id: _header
 
             width:  parent.width
-            height: parent.height/1000*70
+            height: isHeaderVisible ? parent.height/1000*70 : 0
 
             visible: isHeaderVisible
 

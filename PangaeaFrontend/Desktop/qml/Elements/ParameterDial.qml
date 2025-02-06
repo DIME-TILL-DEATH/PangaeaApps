@@ -117,9 +117,15 @@ Item{
             height: parent.height - control.height
             MText
             {
+                id: _txtParamName
+
                 anchors.horizontalCenter: parent.horizontalCenter
+
+                maximumLineCount: 2
+                wrapMode: Text.WordWrap
+
                 color: (module.moduleEnabled) ? "white" : "darkgrey"
-                font.pixelSize: parent.width/10
+                font.pixelSize: parent.width/8
                 text: _root.name
             }
         }
