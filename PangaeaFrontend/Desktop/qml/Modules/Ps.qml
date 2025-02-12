@@ -2,85 +2,39 @@ import QtQuick
 
 import Elements 1.0
 import CppObjects 1.0
+import PangaeaBackend
 
-Item
-{
-    id: main
 
-    property string name:     "PS"
-    property int paramType: DeviceParameter.PRESENCE_ON
+BaseModule{
+    id: _baseModule
 
-    property bool on: true
+    property Presence module
 
-    signal chPresence(int value)
-
-    BaseModule{
-        id: _baseModule
-
-        moduleName: main.name
-        // paramType: main.paramType
-
-        on: main.on
-
-        contentItem: Column
-        {
-            id: _column
-            anchors.fill: parent
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*150
-            }
-
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*165*4
-            }
-
-            Dial
-            {
-                id: presence
-
-                width:  parent.width
-                height: parent.height/1000*165
-
-                enabled: main.on
-                name: "PRESENCE"
-                paramType: DeviceParameter.PRESENCE_VOLUME
-                checkable: false
-                onChValue: function (value) {
-                    main.chPresence(value)
-                }
-            }
-
-            Item
-            {
-                width:  parent.width
-                height: parent.height/1000*25
-            }
-        }
-    }
-
-    Connections
+    contentItem: Column
     {
-        target: UiCore
-        function onSgSetUiDeviceParameter(paramType, value)
+        id: _column
+        anchors.fill: parent
+        Item
         {
-            if(paramType === main.paramType)
-            {
-                main.on = value;
-            }
+            width:  parent.width
+            height: parent.height/1000*150
         }
-    }
 
-
-    Connections{
-        target: _baseModule
-        function onSgModuleOnOf()
+        Item
         {
-            main.on = (!main.on);
-            UiCore.setDeviceParameter(main.paramType, main.on);
+            width:  parent.width
+            height: parent.height/1000*165*4
+        }
+
+        ParameterDial{
+            controlValue: module.presenceVolume
+        }
+
+        Item
+        {
+            width:  parent.width
+            height: parent.height/1000*25
         }
     }
 }
+
