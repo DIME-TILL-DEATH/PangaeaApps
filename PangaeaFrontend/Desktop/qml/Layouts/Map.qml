@@ -23,6 +23,9 @@ Window
         anchors.fill: parent
         color: Style.mainEnabledColor
 
+        enabled: UiCore.currentDevice.presetManager.currentState === PresetState.Idle
+        opacity: enabled ? 1 : 0.5
+
         Row
         {
             height: parent.height/1.1

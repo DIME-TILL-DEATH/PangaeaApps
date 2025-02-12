@@ -219,7 +219,9 @@ void Core::processCommands()
     else
     {
         if(symbolsSended >= symbolsToSend)
+        {
             emit sgSetUIParameter("wait", false);
+        }
     }
 }
 

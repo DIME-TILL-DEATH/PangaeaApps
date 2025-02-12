@@ -2,6 +2,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
+import QtQuick.Dialogs
+import QtCore
 
 import StyleSettings 1.0
 
@@ -9,6 +11,7 @@ import Modules 1.0
 import Elements 1.0
 
 import CppObjects
+import PangaeaBackend
 
 Window{
     id: _root
@@ -19,7 +22,8 @@ Window{
     property string dstIrPath: (_bar.currentIndex === 0) ? "ir_library/"
                                                          : "bank_" + UiCore.currentDevice.bank + "/preset_" + UiCore.currentDevice.preset+ "/"
 
-    signal uploadFileReq();
+    // signal uploadFileReq();
+
 
     title: qsTr("IR management")
 
@@ -28,7 +32,8 @@ Window{
         width: parent.width
         height: parent.height
 
-        z: parent.z+5
+        enabled: UiCore.currentDevice.presetManager.currentState === PresetState.Idle
+        opacity: enabled ? 1 : 0.5
 
         color: Style.mainEnabledColor
 
@@ -49,7 +54,8 @@ Window{
                 text: qsTr("UPLOAD IR")
 
                 onClicked: {
-                    uploadFileReq();
+                    // uploadFileReq();
+                    irFileDialog.open();
                 }
             }
 
@@ -201,6 +207,68 @@ Window{
                      anchors.top: parent.top
                      text: qsTr("Preset folder")
                  }
+            }
+        }
+    }
+
+    FileDialog
+    {
+        id: irFileDialog
+
+        title: qsTr("Select IR")
+        nameFilters: [ "Wav files (*.wav)" ]
+
+        onAccepted:
+        {
+            // TODO: переделать cleanPath на QUrl
+            var cleanPath = irFileDialog.currentFile.toString();
+            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+
+            UiCore.uploadIr(cleanPath, _irManagerWindow.dstIrPath);
+
+        }
+
+        Settings
+        {
+            category: "Current_folder"
+            property alias curFolder: irFileDialog.currentFolder
+        }
+    }
+
+    MessageDialog{
+        id: msgIncorretIR
+
+        title: qsTr("Incorrect wav format")
+
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes:
+                // TODO: переделать cleanPath на QUrl
+                var cleanPath = irFileDialog.currentFile.toString();
+                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+                UiCore.convertAndUploadIr(cleanPath, _root.dstIrPath);
+                break;
+            }
+        }
+    }
+
+    Connections{
+        target: UiCore.currentDevice
+
+        function onSgDeviceError(type, description, params)
+        {
+            switch(type)
+            {
+                case DeviceErrorType.IrFormatNotSupported:
+                {
+                    msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
+                                         description + "\n" +
+                                         qsTr("Do you want to convert it before upload?")
+                    msgIncorretIR.open();
+                    break;
+                }
             }
         }
     }

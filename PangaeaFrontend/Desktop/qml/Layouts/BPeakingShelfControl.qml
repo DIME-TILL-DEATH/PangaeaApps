@@ -69,6 +69,8 @@ Rectangle{
 
             spacing: parent.height/10
 
+            opacity: main.module.moduleEnabled ? 1 : 0.5
+
             Item
             {
                 width: parent.width

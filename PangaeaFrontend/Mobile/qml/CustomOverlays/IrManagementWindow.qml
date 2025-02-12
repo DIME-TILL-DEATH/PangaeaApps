@@ -85,22 +85,26 @@ Item{
             }
 
             Button{
-                width: parent.width * 0.9
-                height: parent.height * 0.07
-
                 anchors.horizontalCenter: parent.horizontalCenter
+
+                width: parent.width * 0.9
+                height: parent.height * 0.065
+
+                topInset: 0
+                bottomInset: 0
 
                 text: qsTr("UPLOAD IR")
 
                 onClicked: {
                     UiCore.uploadIr("", dstIrPath);
                 }
+
             }
 
             ListView{
                 id: _irListView
 
-                width: parent.width * 0.9
+                width: parent.width * 0.95
                 height: parent.height * 0.6
 
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -116,7 +120,11 @@ Item{
                 ScrollBar.vertical: ScrollBar{
                     active: true
                     visible: true
+
+                    policy: ScrollBar.AlwaysOn
                 }
+
+                clip: true
 
                 spacing: 4
 
@@ -125,8 +133,10 @@ Item{
                 delegate: Item{
                     id: _item
 
-                    width: _irListView.width
+                    width: _irListView.width*0.75
                     height: _irListView.height/20
+
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     property var irFile: modelData
 
@@ -232,7 +242,7 @@ Item{
                 id: _bar
 
                 width: parent.width
-                height: parent.height * 0.07
+                height: parent.height * 0.065
 
                 currentIndex: 0
 
@@ -252,13 +262,16 @@ Item{
                 text: qsTr("HIDE")
 
                 width: parent.width * 0.9
-                height: parent.height * 0.07
+                height: parent.height * 0.065
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 onClicked: {
                     _root.visible = false
                 }
+
+                topInset: 0
+                bottomInset: 0
             }
         }
     }

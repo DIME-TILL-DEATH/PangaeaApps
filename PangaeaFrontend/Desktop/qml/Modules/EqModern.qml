@@ -323,10 +323,6 @@ BaseModule{
             _eqp.update();
         }
 
-        Component.onCompleted: {
-            bandSelected(0);
-        }
-
         Connections{
             target: module
 
@@ -340,5 +336,14 @@ BaseModule{
                 _eqp.update();
             }
         }
+
+        Connections{
+            target: main
+
+            function onModuleChanged() {
+               bandSelected(0)
+            }
+        }
     }
+
 }

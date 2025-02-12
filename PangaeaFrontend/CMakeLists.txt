@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.21.1)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
-    project(Pangaea-mobile VERSION 0.12.10 LANGUAGES CXX)
-    set(VERSION_CODE 38)
+    project(Pangaea-mobile VERSION 0.12.11 LANGUAGES CXX)
+    set(VERSION_CODE 39)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -66,7 +66,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ../WavConverterLib/
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Bluetooth Gui Network Positioning Quick QuickControls2 LinguistTools Svg SerialPort Concurrent)
+find_package(Qt6 REQUIRED COMPONENTS Qml Bluetooth Gui Network Positioning
+    Quick QuickControls2 LinguistTools Svg SerialPort Concurrent)
 target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt6::Core
     Qt6::Bluetooth
@@ -76,6 +77,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt6::QuickControls2
     Qt6::Svg
     Qt6::Positioning
+    Qt6::Qml
 
     PangaeaBackend
     PangaeaBackendplugin
@@ -92,4 +94,24 @@ if(ANDROID OR IOS)
     add_subdirectory(Mobile)
 else()
     add_subdirectory(Desktop)
+
+    set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/deploy_windows/release)
+
+    message("Install path: " ${PROJECT_SOURCE_DIR}/deploy_windows/release)
+    message("Build type: " ${CMAKE_BUILD_TYPE})
+
+    # install(TARGETS ${PROJECT_NAME}
+    #     # BUNDLE  DESTINATION .
+    #     # RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    #     DESTINATION ${PROJECT_SOURCE_DIR}/../deploy_windows/release
+    # )
+
+
+    # qt6_generate_deploy_qml_app_script(
+    #     TARGET ${PROJECT_NAME}
+    #     OUTPUT_SCRIPT deploy_script
+    # )
+    # install(SCRIPT ${deploy_script})
+
+
 endif()

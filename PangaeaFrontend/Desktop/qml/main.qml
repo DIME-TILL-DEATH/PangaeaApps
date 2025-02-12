@@ -102,25 +102,6 @@ ApplicationWindow
         }
     }
 
-    MessageDialog{
-        id: msgIncorretIR
-
-        title: qsTr("Incorrect wav format")
-
-        buttons: MessageDialog.Yes | MessageDialog.No
-
-        onButtonClicked: function (button, role) {
-            switch(button){
-            case MessageDialog.Yes:
-                // TODO: переделать cleanPath на QUrl
-                var cleanPath = irFileDialog.currentFile.toString();
-                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-                UiCore.convertAndUploadImpulse(cleanPath);
-                break;
-            }
-        }
-    }
-
     MessageDialog
     {
         id: msgInfo
@@ -172,7 +153,7 @@ ApplicationWindow
     MBusy
     {
         id: mBusy
-        z:1
+        z: main.z + 50
     }
 
     Connections

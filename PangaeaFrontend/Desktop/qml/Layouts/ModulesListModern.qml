@@ -119,7 +119,7 @@ Flickable{
                                 case ModuleType.CH: _delegateLoader.source = "../Modules/Ch.qml"; break;
 
                                 case ModuleType.IR:{
-                                    _delegateLoader.source = "../Modules/Ir.qml";
+                                    _delegateLoader.source = "../Modules/IrCpModern.qml";
                                     emitIrModule(moduleInstance);
                                     break;
                                 }
@@ -139,6 +139,7 @@ Flickable{
                                 }
                                 _delegateLoader.item.module = moduleInstance;
                             }
+
                         }
 
                         Rectangle{
