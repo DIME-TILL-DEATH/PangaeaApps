@@ -3,7 +3,7 @@
 CabSim::CabSim(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::IR, "IR", "ce"}
 {
-    m_fullModuleName = AbstractModule::tr("Cabinet simulator");
+    m_fullModuleName = AbstractModule::tr("Cab. sim.");
 
     m_send = new ControlValue(this, "ir_sn", "Send", "", 0, 31, 0, 31);
 }

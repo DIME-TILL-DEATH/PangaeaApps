@@ -29,7 +29,8 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
         m_commandOnOff = "eq" + QString().setNum(eqNumber) + " par o";
 
         m_moduleType = (m_eqNumber == 0) ? ModuleType::EQ1 : ModuleType::EQ2;
-        m_moduleName = (m_eqNumber == 0) ? "EQ1" : "EQ2";
+        m_moduleName += QString::number(eqNumber+1);
+        m_fullModuleName += QString::number(eqNumber+1);
     }
     else
     {

@@ -12,7 +12,7 @@ Window
 {
     id: main
 
-    width: 300
+    width: 400
     height: 500
 
     title: qsTr("Add/Remove module")
@@ -104,10 +104,10 @@ Window
                         property bool isResourcesEnough: (UiCore.currentDevice.processingUsed + modelData.processingTime < UiCore.currentDevice.processingBudget)
 
                         Item{
-                            width: parent.width * 1/4
+                            width: parent.width * 6/16
                             height: parent.height
                             MText{
-                                text: modelData.moduleName
+                                text: modelData.fullModuleName
 
 
                                 color:  modelData.used ? Style.textDisabled : Style.textEnabled
@@ -142,7 +142,7 @@ Window
                         Button{
                             text: "?"
 
-                            width: parent.width * 3/16
+                            width: parent.width * 2/16
                             height: parent.height
 
                             onClicked:{
@@ -155,7 +155,7 @@ Window
 
                             text: modelData.used ? "-" : "+"
 
-                            width: parent.width * 3/16
+                            width: parent.width * 2/16
                             height: parent.height
 
                             enabled: modelData.used ? "true" : _delegateRow.isResourcesEnough
