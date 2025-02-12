@@ -20,7 +20,7 @@ Rectangle{
     border.width: 2
     border.color: (main.on) ? "white" : "darkgrey"
 
-    property EqBand eqBand: module.EqBands[0];
+    property EqBand eqBand: module.EqBands[0]
     property bool bandOn: true
     property var enabledController: module
 

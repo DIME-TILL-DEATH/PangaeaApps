@@ -30,7 +30,7 @@ class CPModern : public AbstractDevice
 {
     Q_OBJECT
 
-    // Q_PROPERTY(PresetVolume* MV READ getMV CONSTANT)
+    Q_PROPERTY(CabSim* IR  READ getIR CONSTANT)
     Q_PROPERTY(EarlyReflections* ER  READ getER CONSTANT)
     Q_PROPERTY(Delay* DL  READ getDL CONSTANT)
     Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
@@ -71,6 +71,7 @@ public:
     Q_INVOKABLE bool isFileInFolder(const QString& fileName);
 
     // PresetVolume* getMV() {return MV;};
+    CabSim* getIR() {return IR;};
     EarlyReflections* getER() {return ER;};
     Delay *getDL() {return DL;};
 

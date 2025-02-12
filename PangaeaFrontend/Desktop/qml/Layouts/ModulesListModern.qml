@@ -12,8 +12,6 @@ import PangaeaBackend
 Flickable{
     id: _mainFlickable
 
-    signal emitIrModule(CabSim moduleInstance);
-
     flickableDirection: Flickable.HorizontalFlick
 
     contentWidth: _mainRow.width
@@ -117,13 +115,7 @@ Flickable{
                                 case ModuleType.PA: _delegateLoader.source = "../Modules/Pa.qml"; break;
                                 case ModuleType.TR: _delegateLoader.source = "../Modules/Tr.qml"; break;
                                 case ModuleType.CH: _delegateLoader.source = "../Modules/Ch.qml"; break;
-
-                                case ModuleType.IR:{
-                                    _delegateLoader.source = "../Modules/IrCpModern.qml";
-                                    emitIrModule(moduleInstance);
-                                    break;
-                                }
-
+                                case ModuleType.IR: _delegateLoader.source = "../Modules/IrCpModern.qml"; break;
                                 case ModuleType.EQ1:
                                 case ModuleType.EQ2:{
                                     _delegateLoader.source = "../Modules/EqModern.qml";

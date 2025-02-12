@@ -12,7 +12,7 @@ Item
 {
     id: main
 
-    property CabSim irModule
+    property CabSim irModule: UiCore.currentDevice.IR
 
     signal openModulesConfigWindow()
     signal openIrManagerWindow()
@@ -60,7 +60,9 @@ Item
                 width: parent.width
                 height: parent.height * 0.7
 
-                color: Style.headColor
+                enabled: UiCore.currentDevice.IR.used
+
+                color: enabled ? Style.headColor : "gray"
 
                 border.width: 1
 
@@ -74,7 +76,8 @@ Item
                 {
                     anchors.fill: parent
                     id: impulsTxt
-                    text: irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName
+                    text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
+                                         : qsTr("IR module not configured")
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment:   Text.AlignVCenter
 

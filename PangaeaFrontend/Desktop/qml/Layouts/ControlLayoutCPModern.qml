@@ -51,9 +51,5 @@ Column
 
         width: parent.width
         height: parent.height/1000*850
-
-        onEmitIrModule: moduleInstance => {
-            head.irModule = moduleInstance;
-        }
     }
 }
