@@ -38,10 +38,66 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        SwitchOutput
-        {
+        Rectangle{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
+            color: Style.mainEnabledColor
+
+            Column{
+                anchors.fill: parent
+                Item
+                {
+                    width:  parent.width
+                    height: parent.height/4
+                    CheckText
+                    {
+                        text:  qsTr("Phones")
+                        check: UiCore.currentDevice.outputMode === 0
+                        onClicked: UiCore.currentDevice.outputMode = 0
+
+                        anchors.fill: parent
+                    }
+                }
+                Item
+                {
+                    width:  parent.width
+                    height: parent.height/4
+                    CheckText
+                    {
+                        text:  qsTr("Line")
+                        check: UiCore.currentDevice.outputMode === 1
+                        onClicked: UiCore.currentDevice.outputMode = 1
+
+                        anchors.fill: parent
+                    }
+                }
+                Item
+                {
+                    width:  parent.width
+                    height: parent.height/4
+                    CheckText
+                    {
+                        text:  qsTr("Balanced")
+                        check: UiCore.currentDevice.outputMode === 2
+                        onClicked: UiCore.currentDevice.outputMode = 2
+
+                        anchors.fill: parent
+                    }
+                }
+                Item
+                {
+                    width:  parent.width
+                    height: parent.height/4
+                    CheckText
+                    {
+                        text:  qsTr("Wet/Dry")
+                        check: UiCore.currentDevice.outputMode === 3
+                        onClicked: UiCore.currentDevice.outputMode = 3
+
+                        anchors.fill: parent
+                    }
+                }
+            }
         }
 
         SaveCompare
