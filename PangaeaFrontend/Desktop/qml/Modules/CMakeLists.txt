@@ -6,7 +6,7 @@ qt_add_qml_module(qml_modules
     QML_FILES
         BaseModule.qml
         EqLegacy.qml
-
+        EqModern.qml
         Cm.qml
         Er.qml
         Ng.qml
@@ -14,6 +14,7 @@ qt_add_qml_module(qml_modules
         In.qml
         Out.qml
         Ir.qml
+        IrCpModern.qml
         Lp.qml
         Pa.qml
         Pr.qml
@@ -23,5 +24,4 @@ qt_add_qml_module(qml_modules
         Ch.qml
         Dl.qml
         Ph.qml
-        QML_FILES EqModern.qml
     )

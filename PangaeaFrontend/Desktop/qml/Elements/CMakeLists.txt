@@ -29,4 +29,5 @@ qt_add_qml_module(qml_elements
         SwitchPostPre.qml
         SwitchRoom.qml
         TypePA.qml
+        ClipIndicator.qml
     )

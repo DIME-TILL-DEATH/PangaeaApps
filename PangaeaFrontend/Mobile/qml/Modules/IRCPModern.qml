@@ -35,47 +35,86 @@ BaseModule
         Item{
             width: parent.width
             height: parent.height/3
-            MText{
-                id: _impulseName
 
-                width: parent.width
-
+            Button{
+                id: _irBtn
+                anchors.fill: parent
                 text: (module.impulseName == "") ? qsTr("empty") : module.impulseName
-                color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
 
-                elide: Text.ElideMiddle
+                contentItem: MText {
+                         text: _irBtn.text
+                         font: _irBtn.font
+                         opacity: enabled ? 1.0 : 0.3
+                         color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
+                         horizontalAlignment: Text.AlignHCenter
+                         verticalAlignment: Text.AlignVCenter
+                         elide: Text.ElideMiddle
+                     }
 
-                horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
-
-                anchors.horizontalCenter: parent.horizontalCenter
-                // anchors.verticalCenter: parent.verticalCenter
-
-                MouseArea
-                {
-                    anchors.fill: parent
-                    onClicked:
+                onClicked: {
+                    switch(UiCore.currentDevice.deviceType)
                     {
-                        switch(UiCore.currentDevice.deviceType)
+                        case DeviceType.LA3:
+                        case DeviceType.MODERN_CP:
                         {
-                            case DeviceType.LA3:
-                            case DeviceType.MODERN_CP:
-                            {
-                                // _irManagement.open();
-                                openIrManagementWindow();
-                                // _irManagement.visible = true;
-                                break;
-                            }
-                            default:
-                            {
-                                UiCore.uploadIr("");
-                                break;
-                            }
+                            // _irManagement.open();
+                            openIrManagementWindow();
+                            // _irManagement.visible = true;
+                            break;
                         }
-
+                        default:
+                        {
+                            UiCore.uploadIr("");
+                            break;
+                        }
                     }
                 }
+
+                topInset: 2
+                bottomInset: 2
             }
+
+            // MText{
+            //     id: _impulseName
+
+            //     width: parent.width
+
+            //     text: (module.impulseName == "") ? qsTr("empty") : module.impulseName
+            //     color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
+
+            //     elide: Text.ElideMiddle
+
+            //     horizontalAlignment: Qt.AlignHCenter
+            //     verticalAlignment: Qt.AlignVCenter
+
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     // anchors.verticalCenter: parent.verticalCenter
+
+            //     MouseArea
+            //     {
+            //         anchors.fill: parent
+            //         onClicked:
+            //         {
+            //             switch(UiCore.currentDevice.deviceType)
+            //             {
+            //                 case DeviceType.LA3:
+            //                 case DeviceType.MODERN_CP:
+            //                 {
+            //                     // _irManagement.open();
+            //                     openIrManagementWindow();
+            //                     // _irManagement.visible = true;
+            //                     break;
+            //                 }
+            //                 default:
+            //                 {
+            //                     UiCore.uploadIr("");
+            //                     break;
+            //                 }
+            //             }
+
+            //         }
+            //     }
+            // }
         }
 
         ClipIndicator{

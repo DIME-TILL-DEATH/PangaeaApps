@@ -4,6 +4,7 @@ import Elements
 import StyleSettings
 
 import CppObjects
+import PangaeaBackend
 
 Rectangle {
     id: root
@@ -19,13 +20,38 @@ Rectangle {
 
         spacing: height/50
 
-        Row
-        {
-            width: parent.width * 0.8
-            height: parent.height * 0.45
+        Item{
+            width: parent.width //* 0.5
+            height: parent.height * 0.25
+        }
 
-            spacing: width/25
+        Item{
+            // item for "visible = false" mode
+            width: parent.width //* 0.5
+            height: parent.height * 0.2
             anchors.horizontalCenter: parent.horizontalCenter
+
+
+            ClipIndicator{
+                id: clipInd
+
+                visible: UiCore.currentDevice.deviceType > DeviceType.LEGACY_DEVICES
+
+                anchors.centerIn: parent
+
+                width: parent.width
+                height: parent.height
+
+                label: qsTr("CLIP")
+            }
+
+            Connections{
+                target: UiCore.currentDevice
+
+                function onIoClipped(inClips, outClips){
+                    clipInd.setIndicator(outClips);
+                }
+            }
         }
 
         Image
