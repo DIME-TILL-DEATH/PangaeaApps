@@ -146,7 +146,25 @@ Window
                             height: parent.height
 
                             onClicked:{
-                                _tutorialItem.item.open()
+                                switch(modelData.moduleType)
+                                {
+                                case ModuleType.NG: _tutorialDialog.text = _tutorials.ngTutorial; break;
+                                case ModuleType.CM: _tutorialDialog.text = _tutorials.cmTutorial; break;
+                                case ModuleType.PR: _tutorialDialog.text = _tutorials.prTutorial; break;
+                                case ModuleType.PA: _tutorialDialog.text = _tutorials.paTutorial; break;
+                                case ModuleType.IR: _tutorialDialog.text = _tutorials.irTutorial; break;
+                                case ModuleType.TR: _tutorialDialog.text = _tutorials.trTutorial; break;
+                                case ModuleType.CH: _tutorialDialog.text = _tutorials.chTutorial; break;
+                                case ModuleType.PH: _tutorialDialog.text = _tutorials.phTutorial; break;
+                                case ModuleType.EQ1:
+                                case ModuleType.EQ2: _tutorialDialog.text = _tutorials.eqTutorial; break;
+                                }
+
+                                _tutorialDialog.open()
+                            }
+
+                            Tutorials{
+                                id: _tutorials
                             }
                         }
 
@@ -178,31 +196,6 @@ Window
                         }
 
                     }
-
-
-                    // Loader{
-                    //     id: _tutorialItem
-
-                    //     width: parent.width * 1.2
-
-                    //     // source: "/Tutorials/qml/Tutorials/TutorialNG.qml"
-                    // }
-
-                    // Component.onCompleted: function(){
-                    //     switch(modelData.moduleType)
-                    //     {
-                    //     case ModuleType.NG: _tutorialItem.source = "../Tutorials/TutorialNG.qml"; break;
-                    //     case ModuleType.CM: _tutorialItem.source = "../Tutorials/TutorialCM.qml"; break;
-                    //     case ModuleType.PR: _tutorialItem.source = "../Tutorials/TutorialPR.qml"; break;
-                    //     case ModuleType.PA: _tutorialItem.source = "../Tutorials/TutorialPA.qml"; break;
-                    //     case ModuleType.IR: _tutorialItem.source = "../Tutorials/TutorialIR.qml"; break;
-                    //     case ModuleType.TR: _tutorialItem.source = "../Tutorials/TutorialTR.qml"; break;
-                    //     case ModuleType.CH: _tutorialItem.source = "../Tutorials/TutorialCH.qml"; break;
-                    //     case ModuleType.PH: _tutorialItem.source = "../Tutorials/TutorialPH.qml"; break;
-                    //     case ModuleType.EQ1:
-                    //     case ModuleType.EQ2: _tutorialItem.source = "../Tutorials/TutorialEQ.qml"; break;
-                    //     }
-                    // }
                 }
             }
 
@@ -324,6 +317,12 @@ Window
 
     Component.onCompleted:{
        _moduleListView.model = UiCore.currentDevice.avaliableModulesList
+    }
+
+    MessageDialog{
+        id: _tutorialDialog
+
+        buttons: Dialog.Ok
     }
 
     MessageDialog

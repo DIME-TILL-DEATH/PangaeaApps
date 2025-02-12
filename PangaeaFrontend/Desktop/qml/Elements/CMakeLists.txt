@@ -30,4 +30,5 @@ qt_add_qml_module(qml_elements
         SwitchRoom.qml
         TypePA.qml
         ClipIndicator.qml
+        Tutorials.qml
     )
