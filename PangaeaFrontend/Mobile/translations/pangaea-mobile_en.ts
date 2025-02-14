@@ -5,115 +5,116 @@
     <name>AbstractDevice</name>
     <message>
         <source>Phones</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Line</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Balanced</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>L: Processed/R: Monitor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>AbstractModule</name>
     <message>
-        <source>Cabinet simulator</source>
-        <translation type="unfinished"></translation>
+        <source>Cab. sim.</source>
+        <translation></translation>
     </message>
     <message>
         <source>Chorus</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Compressor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Early reflections</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Parametric EQ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>High-pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Low pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Low-pass filter</translation>
     </message>
     <message>
         <source>Noise gate</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Phaser</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Power amp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Preamp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Presence</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>BCutControl</name>
     <message>
         <source>CUT ON</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>BankSpin</name>
     <message>
         <source>MAP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>BANK</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>BusyScreen</name>
     <message>
         <source>Sending commands to device</source>
-        <translation></translation>
+        <translation>Sending commands to the device</translation>
     </message>
     <message>
         <source>Uploading file data to device</source>
-        <translation></translation>
+        <translation>Uploading a file data to the device</translation>
     </message>
     <message>
         <source>Downloading impulse data from device</source>
-        <translation></translation>
+        <translation>Downloading IR data from the device</translation>
     </message>
     <message>
         <source>Applying impulse to device. Please wait...</source>
-        <translation>Applying the WAV IR (impulse response) to device. Please wait...</translation>
+        <translation>Applying the WAV IR (Impulse Response) to the device.
+Please wait...</translation>
     </message>
     <message>
         <source>Connecting to device...</source>
@@ -124,73 +125,73 @@
     <name>ClipIndicator</name>
     <message>
         <source>CLIPPING</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>OUT</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>IN</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>ConfigCP</name>
     <message>
         <source>Add/Remove module</source>
-        <translation type="unfinished"></translation>
+        <translation>Add/Remove the module</translation>
     </message>
     <message>
         <source> of </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>, cost: </source>
-        <translation type="unfinished"></translation>
+        <translation>, units: </translation>
     </message>
     <message>
         <source>Device doesn&apos;t have enough processing budget to use selected configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>There is not enough device&apos;s processing capacity for using selected configuration!</translation>
     </message>
     <message>
         <source>Processing budget error</source>
-        <translation type="unfinished"></translation>
+        <translation>The calculating system load error</translation>
     </message>
     <message>
         <source>Processing points used </source>
-        <translation type="unfinished"></translation>
+        <translation>Current system load (in units): </translation>
     </message>
     <message>
         <source>Delay/Reverb config</source>
-        <translation type="unfinished"></translation>
+        <translation>Delay/Reverb config</translation>
     </message>
     <message>
         <source>Delay(DL) disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Delay (DL) disabled</translation>
     </message>
     <message>
         <source>Delay(DL) enabled(cost </source>
-        <translation type="unfinished"></translation>
+        <translation>Delay (DL) enabled (units </translation>
     </message>
     <message>
         <source>Early reflections(ER) disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Early Refl. (ER) disabled</translation>
     </message>
     <message>
         <source>Early reflections(ER) mono(cost </source>
-        <translation type="unfinished"></translation>
+        <translation>Early Refl. (ER) mono (units </translation>
     </message>
     <message>
         <source>Early reflections(ER) stereo(cost) </source>
-        <translation type="unfinished"></translation>
+        <translation>Early Refl. (ER) stereo (units </translation>
     </message>
 </context>
 <context>
     <name>ConfigUnavaliable</name>
     <message>
         <source>The configuration of processing modules is not available in this firmware. Please update your device&apos;s firmware to the latest version.</source>
-        <translation type="unfinished"></translation>
+        <translation>The configuration of processing modules is not available in this firmware. Please update your device&apos;s firmware to the latest version.</translation>
     </message>
 </context>
 <context>
@@ -229,7 +230,7 @@
     </message>
     <message>
         <source>Show offline(virtual) devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Show offline (virtual) devices</translation>
     </message>
 </context>
 <context>
@@ -242,32 +243,32 @@
     <message>
         <source>Export</source>
         <extracomment>Button text. Export preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Save</source>
         <extracomment>Button text. Save preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Comp</source>
         <extracomment>Button text. Compare preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Import</source>
         <extracomment>Button text. Import preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Copy</source>
         <extracomment>Button text. Copy preset.</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Paste</source>
         <extracomment>Button text. Paste preset</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -275,7 +276,7 @@
     <message>
         <source>Media center</source>
         <extracomment>Button text. Format device</extracomment>
-        <translation>Media center AMT</translation>
+        <translation>AMT Media center</translation>
     </message>
     <message>
         <source>Application manual</source>
@@ -305,40 +306,40 @@
     <name>EQExtLegacy</name>
     <message>
         <source>HIDE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>RESET</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>EQExtModern</name>
     <message>
         <source>RESET</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>HIDE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>EQPreviewLegacy</name>
     <message>
         <source>PRE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>POST</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>EditValueDialog</name>
     <message>
         <source>Fine value</source>
-        <translation type="unfinished"></translation>
+        <translation>Exact value</translation>
     </message>
 </context>
 <context>
@@ -378,7 +379,7 @@
     </message>
     <message>
         <source>WARNING: Do not power off device or exit from application while updating firmware!</source>
-        <translation>WARNING! Do not power off your device or exit the application while updating the firmware!</translation>
+        <translation>WARNING! Do not power off your device or exit the App while updating the firmware!</translation>
     </message>
     <message>
         <source>Firmware file: </source>
@@ -397,104 +398,120 @@
     <name>HP</name>
     <message>
         <source>High pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation>High-pass filter</translation>
     </message>
     <message>
         <source>High-pass filter passes through frequencies above the cutoff frequency and attenuates everything below that point.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>IR</name>
     <message>
         <source>empty</source>
-        <translation type="obsolete">empty</translation>
+        <translation type="vanished">empty</translation>
     </message>
     <message>
         <source>Not supported format</source>
-        <translation type="obsolete">There is not supported format</translation>
+        <translation type="vanished">There is not supported format!</translation>
     </message>
     <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
-        <translation type="obsolete">The Pangaea doesn&apos;t support this wav format:</translation>
+        <translation type="vanished">The Pangaea doesn&apos;t support this WAV format:</translation>
+    </message>
+    <message>
+        <source>Do you want to convert it before upload?</source>
+        <translation type="vanished">Do you want to convert it before uploading?</translation>
+    </message>
+    <message>
+        <source> already on device.</source>
+        <translation type="vanished"> is already on the device.</translation>
+    </message>
+    <message>
+        <source>Trim IR file</source>
+        <translation type="vanished">Crop the IR file</translation>
+    </message>
+    <message>
+        <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
+        <translation type="vanished">The selected file&apos;s length is longer than is used when processing the signal. Would you like to crop this WAV IR to speed up the uploading process and save the device&apos;s memory space?</translation>
     </message>
 </context>
 <context>
     <name>IRCPLegacy</name>
     <message>
         <source>empty</source>
-        <translation type="unfinished">empty</translation>
+        <translation>empty</translation>
     </message>
     <message>
         <source>Not supported format</source>
-        <translation type="unfinished">There is not supported format</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Trim IR file</source>
-        <translation type="unfinished"></translation>
+        <translation>Crop the IR file</translation>
     </message>
     <message>
         <source>IR file exists</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
-        <translation type="unfinished">The Pangaea doesn&apos;t support this wav format:</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Do you want to convert it before upload?</source>
-        <translation type="unfinished"></translation>
+        <translation>Do you want to convert it before uploading?</translation>
     </message>
     <message>
         <source>File </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source> already on device.</source>
-        <translation type="unfinished"></translation>
+        <translation> is already on the device.</translation>
     </message>
     <message>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
-        <translation type="unfinished"></translation>
+        <translation>The selected file&apos;s length is longer than is used when processing the signal. Would you like to crop this WAV IR to speed up the uploading process and save the device&apos;s memory space?</translation>
     </message>
 </context>
 <context>
     <name>IRCPModern</name>
     <message>
         <source>empty</source>
-        <translation type="unfinished">empty</translation>
+        <translation>empty</translation>
     </message>
     <message>
         <source>Not supported format</source>
-        <translation type="unfinished">There is not supported format</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Trim IR file</source>
-        <translation type="unfinished"></translation>
+        <translation>Crop the IR file</translation>
     </message>
     <message>
         <source>IR file exists</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Pangaea doesn&apos;t support this wav format:</source>
-        <translation type="unfinished">The Pangaea doesn&apos;t support this wav format:</translation>
+        <translation></translation>
     </message>
     <message>
         <source>Do you want to convert it before upload?</source>
-        <translation type="unfinished"></translation>
+        <translation>Do you want to convert it before uploading?</translation>
     </message>
     <message>
         <source>File </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source> already on device.</source>
-        <translation type="unfinished"></translation>
+        <translation> is already on the device.</translation>
     </message>
     <message>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
-        <translation type="unfinished"></translation>
+        <translation>The selected file&apos;s length is longer than is used when processing the signal. Would you like to crop this WAV IR to speed up the uploading process and save the device&apos;s memory space?</translation>
     </message>
 </context>
 <context>
@@ -522,167 +539,167 @@ The PANGAEA supports only 48kHz/24bits/1-channel files</translation>
     <name>IrManagementWindow</name>
     <message>
         <source>IR management</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>UPLOAD IR</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Library</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>HIDE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Preset folder</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>LP</name>
     <message>
         <source>Low pass filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Low-pass filter</translation>
     </message>
     <message>
         <source>Low-pass filter passes through frequencies below the cutoff frequency and attenuates everything above that point</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>Main</name>
     <message>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Config</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Service</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Exchange error</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Firmware version error!</source>
-        <translation type="unfinished">The Firmware version error!</translation>
+        <translation>The Firmware version error!</translation>
     </message>
     <message>
         <source>Update firmware</source>
-        <translation type="unfinished">Update the firmware</translation>
+        <translation>Update the firmware</translation>
     </message>
     <message>
         <source>Newest firmware avaliable on the server.</source>
-        <translation type="unfinished">The newest firmware is available on the server.</translation>
+        <translation>The newest firmware is available on the server.</translation>
     </message>
     <message>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
-        <translation type="unfinished">Bluetooth module is off! Please turn on Bluetooth module on your mobile device and click OK</translation>
+        <translation>Bluetooth module is off! Please turn on Bluetooth module on your mobile device and click OK</translation>
     </message>
     <message>
         <source>Firmware version of your device is </source>
-        <translation type="unfinished">The firmware version of your device is </translation>
+        <translation>The firmware version of your device is </translation>
     </message>
     <message>
         <source>
 Minimum required version is </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished">
+        <translation>
 Do you want to update the firmware now?
 WARNING!!! Updating firmware may take several minutes!</translation>
     </message>
     <message>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
-        <translation type="unfinished">The new firmware is available on the server.
+        <translation>The new firmware is available on the server.
 The firmware version of your device is: </translation>
     </message>
     <message>
         <source>
 New firmware version is: </source>
-        <translation type="unfinished">
+        <translation>
 The new firmware version is: </translation>
     </message>
     <message>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
-        <translation type="unfinished">
+        <translation>
 Do you want to download and update the firmware now?
 WARNING!!! Updating the firmware may take several minutes!</translation>
     </message>
     <message>
-        <source>You must save preset before export</source>
-        <translation type="unfinished">You must save this preset before export</translation>
-    </message>
-    <message>
         <source>Device parse error</source>
-        <translation type="unfinished"></translation>
+        <translation>The device parse error</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Error while saving IR. Please, try to reload impulse.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error while saving IR. Please try to reload the impulse.</translation>
     </message>
     <message>
         <source>Preset import error!</source>
-        <translation type="unfinished">Preset&apos;s import error!</translation>
+        <translation>Preset&apos;s import error!</translation>
+    </message>
+    <message>
+        <source>You must save preset before export</source>
+        <translation>You must save this preset before export</translation>
     </message>
     <message>
         <source>IR file copying error.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Preset export finished</source>
-        <translation type="unfinished">Preset&apos;s export is finished</translation>
+        <translation>Preset&apos;s export is done</translation>
     </message>
     <message>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
-        <translation type="unfinished">Geolocation is required by Android OS to scan Bluetooth LE devices. Please turn on geolocation module and click OK</translation>
+        <translation>Geolocation is required by Android OS to scan Bluetooth LE devices. Please turn on geolocation module and click OK</translation>
     </message>
     <message>
         <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
-        <translation type="unfinished">Application needs Geolocation permission to scan Bluetooth LE devices. Please give all necessary app&apos;s permissions and click OK</translation>
+        <translation>Application needs Geolocation permission to scan Bluetooth LE devices. Please give all necessary app&apos;s permissions and click OK</translation>
     </message>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation type="unfinished">Unknown bluetooth error is occurred. Please check if bluetooth and geolocation modules are enabled and click ok.</translation>
+        <translation>Unknown bluetooth error is occurred. Please check if bluetooth and geolocation modules are enabled and click ok.</translation>
     </message>
     <message>
         <source>Device is unavaliable</source>
-        <translation type="unfinished">Device is unavailable</translation>
+        <translation>The device is unavailable</translation>
     </message>
     <message>
         <source>Device disconnected
 </source>
-        <translation type="unfinished">Device is disconnected
+        <translation>The device is disconnected
 </translation>
     </message>
 </context>
@@ -690,26 +707,26 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     <name>MapCPModern</name>
     <message>
         <source>Preset name: </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Set preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>Set the preset&apos;s name</translation>
     </message>
     <message>
         <source>Set name for current preset:</source>
-        <translation type="unfinished"></translation>
+        <translation>Set the name for the current preset:</translation>
     </message>
     <message>
         <source>Delay/Reverb</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>MapPage</name>
     <message>
         <source>Save preset</source>
-        <translation></translation>
+        <translation>Save the preset</translation>
     </message>
     <message>
         <source>Do you want to save your changes?</source>
@@ -727,7 +744,7 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
 <context>
     <name>ModeSpin_LA</name>
     <message>
-        <source>SET</source>
+        <source>Set SW.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -735,55 +752,55 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     <name>ModulsManagementWindow</name>
     <message>
         <source>Add/Remove module</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>cost: </source>
-        <translation type="unfinished"></translation>
+        <translation>unit: </translation>
     </message>
     <message>
         <source>HIDE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>PS</name>
     <message>
         <source>Presence</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Just like a real power amp this effect block has a Presence control. Use it to add some extra brightness to the tone.</source>
-        <translation type="unfinished"></translation>
+        <translation>This effect block has a Presence control in the same way how it works in the real power amp. You can use it for the adding some extra brightness to the tone.</translation>
     </message>
 </context>
 <context>
     <name>PresetSpin</name>
     <message>
         <source>MAP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>PRESET</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>PresetSpin_LA</name>
     <message>
         <source>MAP</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>PRESET</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>PresetsListDelegate</name>
     <message>
         <source>empty</source>
-        <translation type="unfinished">empty</translation>
+        <translation>empty</translation>
     </message>
 </context>
 <context>
@@ -794,7 +811,7 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     </message>
     <message>
         <source>HIDE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -819,17 +836,17 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     <message>
         <source>The Firmware file has been transmitted
 Please, reconnect to device</source>
-        <translation>The Firmware file has been transmitted.
+        <translation>The Firmware file has been transmitted successfully.
 Please, reconnect to the device</translation>
     </message>
     <message>
         <source>Operation complete</source>
         <extracomment>Complete formatting operation</extracomment>
-        <translation>Operation is completed</translation>
+        <translation>The operation is completed</translation>
     </message>
     <message>
         <source>Format complete</source>
-        <translation>Formatting is completed</translation>
+        <translation>The formatting is completed</translation>
     </message>
     <message>
         <source>Set module name</source>
@@ -842,8 +859,8 @@ Please, reconnect to the device</translation>
     <message>
         <source>Formatting is complete
 Please reset the device power and reconnect</source>
-        <translation>Formatting is completed.
-Please reset the AMT PANGAEA device power and reconnect via this application</translation>
+        <translation>The formatting is completed.
+Please reset the AMT PANGAEA device power and reconnect via this Application</translation>
     </message>
     <message>
         <source>The Firmware file has been transmitted
@@ -877,7 +894,7 @@ Please reset the AMT PANGAEA device power and reconnect via this application</tr
     </message>
     <message>
         <source>Continue?</source>
-        <translation></translation>
+        <translation>Do you want to continue?</translation>
     </message>
     <message>
         <source>Do you want to load firmware file:</source>
@@ -889,7 +906,7 @@ Please reset the AMT PANGAEA device power and reconnect via this application</tr
     </message>
     <message>
         <source>This file is not a firmware file</source>
-        <translation></translation>
+        <translation>This file is not the firmware file</translation>
     </message>
     <message>
         <source>AMT Pangaea CP-16/CP-100
@@ -903,7 +920,7 @@ Version: </source>
     </message>
     <message>
         <source>Formatting! User data will be lost!</source>
-        <translation></translation>
+        <translation>Formatting! All user data will be lost!</translation>
     </message>
     <message>
         <source>Do you want to load firmware file:
@@ -913,16 +930,23 @@ Version: </source>
     </message>
     <message>
         <source>Attention!</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <source>(c) 2024
+website: https://amtelectronics.com</source>
+        <translation type="vanished">(c) 2025
+website: https://amtelectronics.com</translation>
     </message>
     <message>
         <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>The firmware uploading process requires a stable connection. Please place your mobile phone (tablet) to the device as close as possible. Make sure the signal level is more than -75 dBm (RSSI -35...-75 dBm)
+</translation>
     </message>
     <message>
         <source>Current RSSI: </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -965,7 +989,7 @@ Version: </source>
     <name>TutorialCH</name>
     <message>
         <source>Chorus</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Chorus is a type of guitar effect that belongs to the Modulation family of effects. It emulates the sound of multiple instruments playing together at the same time which can cause micro shifts in pitch and timing. Chorus works by duplicating your guitar signal and slightly detuning one side of it.
@@ -977,14 +1001,22 @@ WIDTH: in mono processing &apos;width&apos; is using to alterate type of chorus 
 HPF: high pass filter for processed signal.
 
 MIX: proportion of dry and wet signal.</source>
-        <translation type="unfinished"></translation>
+        <translation>CHORUS — is one of the Modulation guitar effects. It emulates the sound of multiple instruments playing together at the same time which may affects micro shifts in pitch and timing. The Chorus effect works when duplicating the guitar signal and slightly detuning one side of it.
+
+[RATE] — The Rate is controlling the speed of the LFO that modulates the chorus delay time. Remember: the processed signal in a chorus is constantly shifting in time (and pitch) thanks to this undulating LFO. With a lower rate, the change happens slowly, creating a gentle swaying feel. Faster rates create a more noticeable warbling effect.
+
+[WIDTH] — In the mono processing «width» is using to alterate type of chorus processing.
+
+[HPF] — High pass filter for processed signal.
+
+[MIX] — The mixing value of dry and wet signals.</translation>
     </message>
 </context>
 <context>
     <name>TutorialCM</name>
     <message>
         <source>Compressor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Compressor reduces the volume of loud sounds and amplifies quiet sounds smoothening the dynamics. At the same time, it can be used as a sustainer making your single notes sound longer.
@@ -993,7 +1025,13 @@ It’s a great tool to letting some parts stand out. It is as easy to find setti
 SUSTAIN: Combination of threshold and release parameters. the higher the value, the longer the notes will decay.
 
 VOLUME: Sets the output volume. It can be used to compensate for signal attenuation caused by compression.</source>
-        <translation type="unfinished"></translation>
+        <translation>COMPRESSOR reduces the volume of loud sounds and amplifies quiet sounds smoothening the dynamics. At the same time, it can be used as a sustainer making your single notes sound longer.
+
+It’s a great tool to letting some audio parts stand out. In the meantime, be carefully using the Compressor effect: too much compression may bring up some hum and noise when used together with overdrive or distortion.
+
+[SUSTAIN] — The сombination of threshold and release parameters. The higher the value — the longer the notes will decay.
+
+[VOLUME] — Sets the output volume. It can be used to compensate for signal attenuation because of the compression.</translation>
     </message>
 </context>
 <context>
@@ -1009,18 +1047,27 @@ FEEDBACK controls the number of times the delayed sound will repeat.  Lower sett
 
 HPF, LPF: lets you adjust the frequency range and shape the tone of the delayed sound.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>DELAY EFFECT — records a part of the audio signal coming from your instrument and plays it back multiple times after a predetermined time. This creates an echo-like effect, with the delayed sound typically being quieter than the original signal and decaying and fading out over time.
+
+[MIX] — The volume of the resulting delayed signal.
+
+[TIME] — Controls the amount of time it takes for the delayed sound to kick in after you play a note.
+
+[FEEDBACK] — Controls the number of times the delayed sound will repeat. Lower settings result in fewer repeats.
+
+[HPF, LPF] — Lets you adjust the frequency range and shape the tone of the delayed sound.
+</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>TutorialEQ</name>
     <message>
         <source>Parametric EQ</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This effect block provides 5-band parametric equalizer for fine-tuning your tone.
@@ -1032,14 +1079,22 @@ FREQUENCY: Central frequency of the band.
 GAIN: Amplification/attenuation factor of the band.
 
 Q(quality): Bandwidth - the area around the set frequency that the EQ will amplify or attenuate.</source>
-        <translation type="unfinished"></translation>
+        <translation>This effect&apos;s block provides of 5-band parametric equalizer for fine-tuning your guitar tone.
+
+There are parameters for each EQ band:
+
+[FREQUENCY] — Central frequency of the band.
+
+[GAIN] — Amplification/attenuation factor of the band.
+
+[Q] (quality) —&#xa0;Bandwidth is the area around the set frequency that is increased or attenuated by the EQ.</translation>
     </message>
 </context>
 <context>
     <name>TutorialER</name>
     <message>
         <source>Early reflections</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This effect block emulates room acoustics. Unlike Reverb, Early Reflections are sounds that you hear right after the direct sound before full reverberation takes over. It’s more like a series of discrete delays rather than a smooth tail associated with Reverb.
@@ -1050,25 +1105,32 @@ TYPE: There are 3 types of the effect to choose from:
 1. Short: Small room
 2. Medium: Meduim size room
 3. Long: Large room</source>
-        <translation type="unfinished"></translation>
+        <translation>This effect&apos;s block emulates room acoustics. Unlike Reverb, Early Reflections are sounds that you hear right after the direct sound before the full reverberation takes over. It’s more like a series of discrete delays rather than a smooth tail associated with Reverb effect.
+
+[VOLUME] —&#xa0;The amount of reflections mixed to the direct signal.
+
+[TYPE] — There are 3 types of the effect to choose:
+1. Short: Small room
+2. Medium: Medium size room
+3. Long: Large room</translation>
     </message>
 </context>
 <context>
     <name>TutorialIR</name>
     <message>
         <source>Impulse responce(cabinet simulator)</source>
-        <translation type="unfinished"></translation>
+        <translation>Impulse Responce (cabinet simulator)</translation>
     </message>
     <message>
         <source>Impulse Response or IR is a sonic fingerprint of a certain speaker, cabinet, mic, mic preamp and room where the profile was captured.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impulse Response (or IR) is a sonic print of some speaker, cabinet, mic, mic preamp and room where the profile was captured.</translation>
     </message>
 </context>
 <context>
     <name>TutorialNG</name>
     <message>
         <source>Noise gate</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Noise Gate is used to attenuate the signal in pauses when you don’t play guitar, helping you to hide some hiss, hum and other noise present in any guitar setup.
@@ -1078,14 +1140,20 @@ When the input signal is below the threshold, the gate is ‘closed’ and no si
 Set it a little higher than the noise level in your system to achieve noise dampening. If the threshold is set too high, it may cut out your soft notes.
 
 DECAY: Determines how fast the gate closes. Low values won’t let any noise to pass but may cut your notes short.</source>
-        <translation type="unfinished"></translation>
+        <translation>NOISE GATE effect is used to attenuate the signal in pauses when you don’t play guitar, helping you to hide some hiss, hum and other noise are presented in any guitar setup.
+
+[THRESHOLD] — The Noise Gate allows the signal to pass through only when it is above the threshold. When the input signal is below the threshold, the gate is «closed» and no signal is allowed to pass. 
+
+Set it a little higher than the noise level in your system to achieve noise dampening. If the threshold is set too high, it may cut out your soft notes.
+
+[DECAY] — Determines how fast the gate closes. Low values won’t let any noise to pass but may cut your notes short.</translation>
     </message>
 </context>
 <context>
     <name>TutorialPA</name>
     <message>
         <source>Power amp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Module reproduce the compression, saturation and playing feel of a cranked up tube power amp. Alse represents frequency characteristic.
@@ -1097,14 +1165,22 @@ PRESENCE: Just like a real power amp this effect block has a Presence control. U
 LEVEL: When you crank up the Volume, use this parameter to attenuate the level to avoid clipping. If Volume is low, turn LEVRL up to boost the output.
 
 TYPE: Model of output section</source>
-        <translation type="unfinished"></translation>
+        <translation>This effect&apos;s module reproduce the compression, saturation and playing feel of a cranked up tube power amp. Also the frequency characteristic is represented.
+
+[MASTER] — Think of it as a Master volume of an amp. As you turn it up, you’ll notice how the sound gets more and more saturated and compressed. Just like with a real power amp, you can get some overdrive when Volume is set to maximum.
+
+[PRESENCE] — As inside of the real power amp this effect&apos;s block has a Presence control. Use it to add some extra brightness to the tone.
+
+[LEVEL] — When you crank up the Volume, use this parameter to attenuate the level to avoid clipping. If Volume is low, turn LEVEL up to boost the output.
+
+[TYPE] — The model of the power amp section</translation>
     </message>
 </context>
 <context>
     <name>TutorialPH</name>
     <message>
         <source>Phaser</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Phasers generate a sound that’s full of movement and intensity. Generally, phase shifters often evoke a feeling of the signal being sent to space, orbiting around some imaginary planet trapped inside the device and returning to the listener at a customizable BPM.
@@ -1118,14 +1194,24 @@ FEEDBACK: will control the amount of processed signal that is added back into th
 STAGES: how many &apos;notches&apos; is used to process signal.
 
 MIX: proportion of dry and wet signal.</source>
-        <translation type="unfinished"></translation>
+        <translation>Phasers generate a sound that’s full of movement and intensity. Generally, phase shifters often evoke a feeling of the signal being sent to space, orbiting around some imaginary planet trapped inside the device and returning to the listener at a customizable BPM.
+
+[RATE] — The rate controls the speed of the LFO that modulates the chorus delay time. Just keep in mind: the processed signal in a Phaser is constantly shifting in time (and pitch) thanks to this undulating LFO. With a lower rate, the change happens slowly, creating a gentle swaying feel. Faster rates create a more noticeable warbling effect.
+
+[WIDTH, CENTER] — In the mono processing «width» and «center» is using to alterate type of phaser processing.
+
+[FEEDBACK] — Will control the amount of processed signal that is added back into the Dimension module.
+
+[STAGES] — How many «notches» is used to process signal.
+
+[MIX] — The mixing value of dry and wet signals.</translation>
     </message>
 </context>
 <context>
     <name>TutorialPR</name>
     <message>
         <source>Preamp</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Represents EQ response of guitar preamp.
@@ -1133,14 +1219,18 @@ MIX: proportion of dry and wet signal.</source>
 LOW, MID, HIGH: Corresponding frequency bands.
 
 VOLUME: Output signal level.</source>
-        <translation type="unfinished"></translation>
+        <translation>Represents EQ response of guitar preamp.
+
+[LOW, MID, HIGH] — The Corresponding frequency bands.
+
+[VOLUME] — The output signal level.</translation>
     </message>
 </context>
 <context>
     <name>TutorialTR</name>
     <message>
         <source>Tremolo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Tremolo is a modulation effect that rhythmically changes the volume of your signal.
@@ -1148,7 +1238,11 @@ VOLUME: Output signal level.</source>
 RATE: period of modulation.
 
 DEPTH: how strong volume attenuates on each period.</source>
-        <translation type="unfinished"></translation>
+        <translation>TREMOLO — is a modulation effect that rhythmically changes the volume of your signal.
+
+[RATE] — The period of modulation.
+
+[DEPTH] — This parameter is shown how the volume attenuates on each period.</translation>
     </message>
 </context>
 <context>
@@ -1157,22 +1251,26 @@ DEPTH: how strong volume attenuates on each period.</source>
         <source>This option appends virtual(offline) devices to the list. These devices completely simulate the interaction of the application with a real Pangea device.
 On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created in which the file structure corresponding to the real device. After editing offline, you can copy it to your device.
 (And vice versa, by copying files from the device to the desired folders, you can view all the presets).</source>
-        <translation type="unfinished"></translation>
+        <translation>This option appends VIRTUAL (offline) DEVICES to the list. Such devices completely simulate the interaction of the Application with a real Pangaea device.
+
+On the mobile phone (or your tablet), along the path «AMT/pangae-mobile/», a directory is created in which the file structure corresponding to the real device. 
+
+After the editing offline, you can copy it to your REAL DEVICE (as well as in the opposite direction — by copying files from the REAL DEVICE to the desired folders, you can view all the presets).</translation>
     </message>
     <message>
         <source>Virtual device</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>VL</name>
     <message>
         <source>VL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Preset volume</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1231,7 +1329,7 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     </message>
     <message>
         <source>Preset export finished</source>
-        <translation type="vanished">Preset&apos;s export is finished</translation>
+        <translation type="vanished">Preset&apos;s export is done</translation>
     </message>
     <message>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
@@ -1243,7 +1341,7 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     </message>
     <message>
         <source>Device is unavaliable</source>
-        <translation type="vanished">Device is unavailable</translation>
+        <translation type="vanished">The device is unavailable</translation>
     </message>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
@@ -1256,8 +1354,16 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     <message>
         <source>Device disconnected
 </source>
-        <translation type="vanished">Device is disconnected
+        <translation type="vanished">The device is disconnected
 </translation>
+    </message>
+    <message>
+        <source>Error while saving IR. Please, try to reload impulse.</source>
+        <translation type="vanished">Error while saving IR. Please try to reload the impulse.</translation>
+    </message>
+    <message>
+        <source>Device parse error</source>
+        <translation type="vanished">The device parse error</translation>
     </message>
 </context>
 </TS>

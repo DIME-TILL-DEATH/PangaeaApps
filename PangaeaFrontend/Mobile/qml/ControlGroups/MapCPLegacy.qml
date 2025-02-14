@@ -22,7 +22,7 @@ Item{
     {
         id: _moduleColumn
 
-        width: parent.width*0.98
+        width: parent.width
         height: parent.height
         anchors.horizontalCenter: parent.horizontalCenter
 

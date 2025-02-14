@@ -17,13 +17,13 @@
     </message>
     <message>
         <source>L: Processed/R: Monitor</source>
-        <translation>Л: Обраб./П: Мониторн.</translation>
+        <translation>L: Обраб./R: Мониторн.</translation>
     </message>
 </context>
 <context>
     <name>AbstractModule</name>
     <message>
-        <source>Cabinet simulator</source>
+        <source>Cab. sim.</source>
         <translation></translation>
     </message>
     <message>
@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>Low pass filter</source>
-        <translation></translation>
+        <translation>Low-pass filter</translation>
     </message>
     <message>
         <source>Noise gate</source>
@@ -105,15 +105,15 @@
     </message>
     <message>
         <source>Uploading file data to device</source>
-        <translation>Загрузка файла импульса в устройство</translation>
+        <translation>Загрузка файла WAV импульса в устройство</translation>
     </message>
     <message>
         <source>Downloading impulse data from device</source>
-        <translation>Выгрузка данных из устройства</translation>
+        <translation>Выгрузка WAV данных из устройства</translation>
     </message>
     <message>
         <source>Applying impulse to device. Please wait...</source>
-        <translation>Применение импульса. Пожалуйста подождите...</translation>
+        <translation>Применение WAV импульса. Пожалуйста, подождите...</translation>
     </message>
     <message>
         <source>Connecting to device...</source>
@@ -136,7 +136,7 @@
     </message>
     <message>
         <source>IN</source>
-        <translation>ВХ.</translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -155,15 +155,15 @@
     </message>
     <message>
         <source>Device doesn&apos;t have enough processing budget to use selected configuration</source>
-        <translation>Устройству не хватает единиц обработки для выбранной конфигурации</translation>
+        <translation>Вычислительной мощности устройства недостаточно для использования выбранной конфигурации!</translation>
     </message>
     <message>
         <source>Processing budget error</source>
-        <translation>Ошибка бюджета обработки</translation>
+        <translation>Ошибка рассчета производительности системы</translation>
     </message>
     <message>
         <source>Processing points used </source>
-        <translation>Использовано единиц обработки: </translation>
+        <translation>Текущая загрузка системы (в ед.): </translation>
     </message>
     <message>
         <source>Delay/Reverb config</source>
@@ -171,30 +171,30 @@
     </message>
     <message>
         <source>Delay(DL) disabled</source>
-        <translation>Дилей(DL) отключён</translation>
+        <translation>Дилей (DL) отключён</translation>
     </message>
     <message>
         <source>Delay(DL) enabled(cost </source>
-        <translation>Дилей(DL) включен(ед </translation>
+        <translation>Дилей (DL) включен (ед </translation>
     </message>
     <message>
         <source>Early reflections(ER) disabled</source>
-        <translation>Ранние отр.(ER) отключены</translation>
+        <translation>Ранние отр. (ER) отключены</translation>
     </message>
     <message>
         <source>Early reflections(ER) mono(cost </source>
-        <translation>Ранние отр.(ER) моно (ед </translation>
+        <translation>Ранние отр. (ER) моно (ед. </translation>
     </message>
     <message>
         <source>Early reflections(ER) stereo(cost) </source>
-        <translation>Ранние отр.(ER) стерео(ед. </translation>
+        <translation>Ранние отр. (ER) стерео (ед. </translation>
     </message>
 </context>
 <context>
     <name>ConfigUnavaliable</name>
     <message>
         <source>The configuration of processing modules is not available in this firmware. Please update your device&apos;s firmware to the latest version.</source>
-        <translation>Конфигурация модулей недоступна в данной версии прошивки.</translation>
+        <translation>Конфигурация модулей недоступна в данной версии прошивки. Пожалуйста, обновите прошивку вашего устройства до последней версии.</translation>
     </message>
 </context>
 <context>
@@ -341,11 +341,11 @@
     <name>EQPreviewLegacy</name>
     <message>
         <source>PRE</source>
-        <translation></translation>
+        <translation>PRE</translation>
     </message>
     <message>
         <source>POST</source>
-        <translation></translation>
+        <translation>POST</translation>
     </message>
 </context>
 <context>
@@ -426,11 +426,11 @@
     <name>HP</name>
     <message>
         <source>High pass filter</source>
-        <translation></translation>
+        <translation>High-pass filter</translation>
     </message>
     <message>
         <source>High-pass filter passes through frequencies above the cutoff frequency and attenuates everything below that point.</source>
-        <translation>Фильтр высоких частот. Пропускает все составляющие выше частоты среза и подавляет остальные.</translation>
+        <translation>High-pass filter — фильтр высоких частот. Пропускает все составляющие выше частоты среза и подавляет остальные частоты, расположенные ниже.</translation>
     </message>
 </context>
 <context>
@@ -461,7 +461,7 @@
     </message>
     <message>
         <source>File </source>
-        <translation type="vanished">Файл</translation>
+        <translation type="vanished">Файл </translation>
     </message>
     <message>
         <source> already on device.</source>
@@ -473,7 +473,7 @@
     </message>
     <message>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
-        <translation type="vanished">Длительность выбранного файла больше чем длительность используемая при обработке. Желаете ли вы обрезать файл для ускорения загрузки и экномии памяти в устройстве?</translation>
+        <translation type="vanished">Длительность выбранного файла больше чем длительность, используемая при обработке. Желаете ли Вы укоротить файл для ускорения загрузки и экономии памяти в устройстве?</translation>
     </message>
 </context>
 <context>
@@ -504,7 +504,7 @@
     </message>
     <message>
         <source>File </source>
-        <translation>Файл</translation>
+        <translation>Файл </translation>
     </message>
     <message>
         <source> already on device.</source>
@@ -512,7 +512,7 @@
     </message>
     <message>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
-        <translation>Длительность выбранного файла больше чем длительность используемая при обработке. Желаете ли вы обрезать файл для ускорения загрузки и экномии памяти в устройстве?</translation>
+        <translation>Длительность выбранного файла больше чем длительность, используемая при обработке. Желаете ли Вы укоротить файл для ускорения загрузки и экономии памяти в устройстве?</translation>
     </message>
 </context>
 <context>
@@ -543,7 +543,7 @@
     </message>
     <message>
         <source>File </source>
-        <translation>Файл</translation>
+        <translation>Файл </translation>
     </message>
     <message>
         <source> already on device.</source>
@@ -551,7 +551,7 @@
     </message>
     <message>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
-        <translation>Длительность выбранного файла больше чем длительность используемая при обработке. Желаете ли вы обрезать файл для ускорения загрузки и экномии памяти в устройстве?</translation>
+        <translation>Длительность выбранного файла больше чем длительность, используемая при обработке. Желаете ли Вы укоротить файл для ускорения загрузки и экономии памяти в устройстве?</translation>
     </message>
 </context>
 <context>
@@ -587,7 +587,7 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>IrManagementWindow</name>
     <message>
         <source>IR management</source>
-        <translation>Менеджмент файлов импульсов</translation>
+        <translation>Файл-менеджер WAV импульсов</translation>
     </message>
     <message>
         <source>UPLOAD IR</source>
@@ -614,11 +614,11 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <name>LP</name>
     <message>
         <source>Low pass filter</source>
-        <translation></translation>
+        <translation>Low-pass filter</translation>
     </message>
     <message>
         <source>Low-pass filter passes through frequencies below the cutoff frequency and attenuates everything above that point</source>
-        <translation>ФИльтр низких частот. Пропускает все составляющие ниже частоты среза и подавляет остальные</translation>
+        <translation>Low-pass filter — фильтр низких частот. Пропускает все составляющие ниже частоты среза и подавляет остальные частоты, расположенные выше.</translation>
     </message>
 </context>
 <context>
@@ -713,10 +713,6 @@ WARNING!!! Updating firmware may take several minutes!</source>
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
-        <source>You must save preset before export</source>
-        <translation>Вы должны схранить пресет перед экспортом</translation>
-    </message>
-    <message>
         <source>Device parse error</source>
         <translation>Ошибка разбора команды</translation>
     </message>
@@ -731,6 +727,10 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <source>Preset import error!</source>
         <translation>Ошибка импорта пресета!</translation>
+    </message>
+    <message>
+        <source>You must save preset before export</source>
+        <translation>Вы должны схранить пресет перед экспортом</translation>
     </message>
     <message>
         <source>IR file copying error.</source>
@@ -750,7 +750,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
     </message>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation>Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
+        <translation>Произошла неизвестная ошибка Bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
     </message>
     <message>
         <source>Device is unavaliable</source>
@@ -864,7 +864,11 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <name>ModeSpin_LA</name>
     <message>
         <source>SET</source>
-        <translation>Сохр.</translation>
+        <translation type="vanished">Сохр.</translation>
+    </message>
+    <message>
+        <source>Set SW.</source>
+        <translation>Уст.ПЕР.</translation>
     </message>
 </context>
 <context>
@@ -875,7 +879,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
     </message>
     <message>
         <source>cost: </source>
-        <translation>ед.:</translation>
+        <translation>ед.: </translation>
     </message>
     <message>
         <source>HIDE</source>
@@ -890,7 +894,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
     </message>
     <message>
         <source>Just like a real power amp this effect block has a Presence control. Use it to add some extra brightness to the tone.</source>
-        <translation>Каки в реальном усилителе данная настройка позволяет добавить дополнительной яркости вашему тону.</translation>
+        <translation>Как и в реальном усилителе, данный регулятор PRESENCE позволяет добавить дополнительной яркости вашему тону.</translation>
     </message>
 </context>
 <context>
@@ -1010,13 +1014,13 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <source>About...</source>
         <extracomment>Button text</extracomment>
-        <translation>О приложени...</translation>
+        <translation>О приложении...</translation>
     </message>
     <message>
         <source>The Firmware file has been transmitted
 Please, reconnect to device</source>
         <translation>Файл прошивки был передан
-Пожалуйста, переподключитесь к устройству заново</translation>
+Пожалуйста, переподключитесь к устройству заново.</translation>
     </message>
     <message>
         <source>Do you want to load firmware file:
@@ -1027,7 +1031,7 @@ Please, reconnect to device</source>
     </message>
     <message>
         <source>Continue?</source>
-        <translation>Продолжить?</translation>
+        <translation>Желаете продолжить?</translation>
     </message>
     <message>
         <source>Documentation</source>
@@ -1054,7 +1058,7 @@ Please, reconnect to device</source>
     </message>
     <message>
         <source>This file is not a firmware file</source>
-        <translation>Этот файл не является файлом прошивки</translation>
+        <translation>Этот файл не является файлом прошивки!</translation>
     </message>
     <message>
         <source>AMT Pangaea CP-16/CP-100
@@ -1090,7 +1094,7 @@ website: https://amtelectronics.com</source>
         <source>Formatting is complete
 Please reset the device power and reconnect</source>
         <translation>Форматирование завершено.
-Пожалуйста, перезапустите питание Вашего устройства AMT PANGAEA, а затем снова подключитесь к нему через данное приложение</translation>
+Пожалуйста, перезапустите питание Вашего устройства AMT PANGAEA, а затем снова подключитесь к нему через данное приложение.</translation>
     </message>
     <message>
         <source>The Firmware file has been transmitted
@@ -1131,13 +1135,13 @@ Current RSSI: </source>
     <message>
         <source>(c) 2024
 website: https://amtelectronics.com</source>
-        <translation type="vanished">© 2024
+        <translation type="vanished">© 2025
 Веб-сайт: https://amt-sales.ru </translation>
     </message>
     <message>
         <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)
 </source>
-        <translation>Обновление прошивки требует устойчивого соединения. Пожалуйста, положите ваш телефон как можно ближе к устройству. Убедитесь что уровень сигнала больше -75 dBm.(RSSI -35...-75 dBm)</translation>
+        <translation>Обновление прошивки требует устойчивого соединения. Пожалуйста, положите Ваш мобильный телефон (или планшет) как можно ближе к устройству. Убедитесь, что уровень сигнала больше чем -75 dBm.(RSSI -35...-75 dBm)</translation>
     </message>
     <message>
         <source>Current RSSI: </source>
@@ -1196,15 +1200,15 @@ WIDTH: in mono processing &apos;width&apos; is using to alterate type of chorus 
 HPF: high pass filter for processed signal.
 
 MIX: proportion of dry and wet signal.</source>
-        <translation>Хорус имитирует эффект совместной игры нескольких одинаковых инструментов
+        <translation>ХОРУС —  имитирует эффект совместной игры нескольких одинаковых инструментов
 
-RATE: контролирует скорость с которой низкочастотный генератор модулирует задержку эффекта.
+[RATE] — контролирует скорость с которой низкочастотный генератор модулирует задержку эффекта.
 
-WIDTH: в моно варианте позволяет получить разные окраски эффекта.
+[WIDTH] — в моно варианте позволяет получить разные окраски эффекта.
 
-HPF: фильтр высоких частот для сигнала который отправляется в обработку. Только составляющие выше частоты среза будут использованы для создания эффекта.
+[HPF] — фильтр высоких частот для сигнала который отправляется в обработку. Только составляющие выше частоты среза будут использованы для создания эффекта.
 
-MIX: определяет какое количество обработанного сигнала будет подмешано к основному.</translation>
+[MIX] — определяет какое количество обработанного сигнала будет подмешано к основному.</translation>
     </message>
 </context>
 <context>
@@ -1222,9 +1226,9 @@ SUSTAIN: Combination of threshold and release parameters. the higher the value, 
 VOLUME: Sets the output volume. It can be used to compensate for signal attenuation caused by compression.</source>
         <translation>Компрессор делает громкие сигналы тише. Также он может быть использован для того чтобы сделать тихие звуки громче. Тем самым смягчается динамика исполнения. Слишком много компрессии добавят много шума в ваш сигнал, особенно при использовании эффектов overdrive и distortion.
 
-SUSTAIN: комбинация таких классических параметров компрессора как attack и release. Чем больше это значение, тем дольше ноты будут затухать.
+[SUSTAIN] — комбинация таких классических параметров компрессора как attack и release. Чем больше это значение, тем дольше ноты будут затухать.
 
-VOLUME: громкость выходного сигнала. Может быть использована для компенсации ослабления громкости ввиду подавления нот большой амплитуды.</translation>
+[VOLUME] — громкость выходного сигнала. Может быть использована для компенсации ослабления громкости ввиду подавления нот большой амплитуды.</translation>
     </message>
 </context>
 <context>
@@ -1240,15 +1244,15 @@ FEEDBACK controls the number of times the delayed sound will repeat.  Lower sett
 
 HPF, LPF: lets you adjust the frequency range and shape the tone of the delayed sound.
 </source>
-        <translation>Создаёт эффект эхо. Записанный сигнал воспроизводится несколько раз в установленное время, каждое следующее повторение звучит тише предыдущего.
+        <translation>ДИЛЕЙ — создаёт эффект эхо. Записанный сигнал воспроизводится несколько раз в установленное время, каждое следующее повторение звучит тише предыдущего.
 
-MIX: определяет какое количество обработанного сигнала будет подмешано к основному.
+[MIX] — определяет какое количество обработанного сигнала будет подмешано к основному.
 
-TIME: время через которое будут слышны повторы сигнала.
+[TIME] — время через которое будут слышны повторы сигнала.
 
-FEEDBACK: определяет как долго будут слышны повторения сигнала. Меньшие значение отвечают за меньшее число повторений.
+[FEEDBACK] — определяет как долго будут слышны повторения сигнала. Меньшие значение отвечают за меньшее число повторений.
 
-HPF, LPF: Фильтры высоких и низких частот для сигнала который будет отправлен в обработку. Позволяет задать частотный диапазон отражений.</translation>
+[HPF, LPF] — Фильтры высоких и низких частот для сигнала который будет отправлен в обработку. Позволяет задать частотный диапазон отражений.</translation>
     </message>
     <message>
         <source>Delay</source>
@@ -1273,11 +1277,11 @@ GAIN: Amplification/attenuation factor of the band.
 Q(quality): Bandwidth - the area around the set frequency that the EQ will amplify or attenuate.</source>
         <translation>5-полосный параметрический эквалайзер.
 
-FREQUENCY: центральная частота полосы
+[FREQUENCY] — центральная частота полосы
 
-GAIN: усиление/ослабление выбранной полосы
+[GAIN] — усиление/ослабление выбранной полосы
 
-Q (добротность): определяет ширину полосы. Чем больше значение, тем уже полоса.</translation>
+[Q (добротность)] — определяет ширину полосы. Чем больше значение, тем уже полоса.</translation>
     </message>
 </context>
 <context>
@@ -1295,11 +1299,11 @@ TYPE: There are 3 types of the effect to choose from:
 1. Short: Small room
 2. Medium: Meduim size room
 3. Long: Large room</source>
-        <translation>Этот эффект имитирует акустику комнаты. Ранние отражения это звуки, которые воспринимаются сразу после прямого сигнала, до того как вся реверберация помещения будет слышна.
+        <translation>Early Reflections — эффект, имитирующий акустику комнаты. «Ранние отражения» — звуки, которые воспринимаются сразу после прямого сигнала, до того как вся реверберация помещения будет слышна.
 
-VOLUME: количество ранних отражений подмешанных к прямому сигналу.
+[VOLUME] — количество ранних отражений подмешанных к прямому сигналу.
 
-TYPE:  SHORT, MEDIUM, LONG (малая, средняя, большая) - три размера комнаты на выбор</translation>
+[TYPE] — SHORT, MEDIUM, LONG (малая, средняя, большая) - три размера комнаты на выбор</translation>
     </message>
 </context>
 <context>
@@ -1310,7 +1314,7 @@ TYPE:  SHORT, MEDIUM, LONG (малая, средняя, большая) - три
     </message>
     <message>
         <source>Impulse Response or IR is a sonic fingerprint of a certain speaker, cabinet, mic, mic preamp and room where the profile was captured.</source>
-        <translation>Impulse responce(IR или частотный отклик) это слепок конкретного гитарного динамика или кабинета снятого опрделённым микрофоном в определённой комнате.</translation>
+        <translation>Impulse Responce (IR или частотный отклик) — это слепок конкретного гитарного динамика или кабинета, снятого определённым микрофоном в определённой комнате.</translation>
     </message>
 </context>
 <context>
@@ -1327,11 +1331,11 @@ When the input signal is below the threshold, the gate is ‘closed’ and no si
 Set it a little higher than the noise level in your system to achieve noise dampening. If the threshold is set too high, it may cut out your soft notes.
 
 DECAY: Determines how fast the gate closes. Low values won’t let any noise to pass but may cut your notes short.</source>
-        <translation>Подавитель шума. Помогает избавиться от шума и шипения в паузах между исполнением.
+        <translation>ПОДАВИТЕЛЬ ШУМА. Помогает избавиться от шума и шипения в паузах между исполнением.
 
-THRESHOLD: чувствительность. Весь сигнал ниже выбранной границы будет подавлен. Если значение будет выбрано слишком высоким, то это может срезать хвосты тихих нот.
+[THRESHOLD] — чувствительность. Весь сигнал ниже выбранной границы будет подавлен. Если значение будет выбрано слишком высоким, то это может срезать хвосты тихих нот.
 
-DECAY: определяет насколько быстро закрывается шумодав.</translation>
+[DECAY] — определяет насколько быстро закрывается шумодав.</translation>
     </message>
 </context>
 <context>
@@ -1350,13 +1354,13 @@ PRESENCE: Just like a real power amp this effect block has a Presence control. U
 LEVEL: When you crank up the Volume, use this parameter to attenuate the level to avoid clipping. If Volume is low, turn LEVRL up to boost the output.
 
 TYPE: Model of output section</source>
-        <translation>Модуль вопроизводит компрессию, сатурацию и ощущение от игры через разогнанный до большой громкости ламповый оконечный усилитель. Также воспроизводится частотная характеристика популярных моделей.
+        <translation>Модуль «Power Amp» (виртуальный гитарный оконечник) — вопроизводит компрессию, сатурацию и ощущение от игры через разогнанный до большой громкости ламповый оконечный усилитель. Также воспроизводится частотная характеристика популярных моделей оконечников.
 
-MASTER: работает как ручка &quot;Master&quot; реального усилителя. Чем больше значение, тем сильнее перегруз и громкость усилителя.
+[MASTER] — работает как ручка &quot;Master&quot; реального усилителя. Чем больше значение, тем сильнее перегруз и громкость усилителя.
 
-LEVEL: данный регулятор отвечает за цифровую громкость модуля. Позволяет компенсировать излишнее усиление чтобы не вызывать цифровой клиппинг последующих модулей.
+[LEVEL] — данный регулятор отвечает за цифровую громкость модуля. Позволяет компенсировать излишнее усиление чтобы не вызывать цифровой клиппинг последующих модулей.
 
-TYPE: тип эмулируемого оконечного усилителя.</translation>
+[TYPE] — тип эмулируемого оконечного усилителя.</translation>
     </message>
 </context>
 <context>
@@ -1377,15 +1381,15 @@ FEEDBACK: will control the amount of processed signal that is added back into th
 STAGES: how many &apos;notches&apos; is used to process signal.
 
 MIX: proportion of dry and wet signal.</source>
-        <translation>Фазер позволяет создать звук полный движения и изменчивости.
+        <translation>Эффект «Фейзер» позволяет создать звук, полный движения и изменчивости.
 
-RATE: контролирует скорость с которой низкочастотный генератор модулирует задержку эффекта.
+[RATE] — контролирует скорость, с которой низкочастотный генератор модулирует задержку эффекта.
 
-WIDTH, CENTER: в моно варианте позволяет получить разные окраски эффекта.
+[WIDTH, CENTER] — в моно варианте позволяет получить разные окраски эффекта.
 
-STAGES: количество стадий обработки, чем больше значение, тем более разнообразный сигнал получается на выходе.
+[STAGES] — количество стадий обработки: чем больше значение, тем более разнообразный сигнал получается на выходе.
 
-MIX: определяет какое количество обработанного сигнала будет подмешано к основному.</translation>
+[MIX] — определяет, какое количество обработанного сигнала будет подмешано к основному.</translation>
     </message>
 </context>
 <context>
@@ -1402,9 +1406,9 @@ LOW, MID, HIGH: Corresponding frequency bands.
 VOLUME: Output signal level.</source>
         <translation>Воспроизводит частотную характеристику гитарного предусилителя.
 
-LOW, MID, HIGH: соответствующие частотные полосы.
+[LOW, MID, HIGH] — соответствующие частотные полосы.
 
-VOLUME: уровень выходного сигнала.</translation>
+[VOLUME] — уровень выходного сигнала.</translation>
     </message>
 </context>
 <context>
@@ -1419,11 +1423,11 @@ VOLUME: уровень выходного сигнала.</translation>
 RATE: period of modulation.
 
 DEPTH: how strong volume attenuates on each period.</source>
-        <translation>Эффект тремоло динамически меняет громкость сигнала.
+        <translation>Эффект «Тремоло» — динамически меняет громкость сигнала.
 
-RATE: период изменения громкости
+[RATE] — период изменения громкости
 
-DEPTH: насколько сильно меняется громкость сигнала в каждом периоде.</translation>
+[DEPTH] — насколько сильно меняется громкость сигнала в каждом периоде.</translation>
     </message>
 </context>
 <context>
@@ -1432,7 +1436,11 @@ DEPTH: насколько сильно меняется громкость си�
         <source>This option appends virtual(offline) devices to the list. These devices completely simulate the interaction of the application with a real Pangea device.
 On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created in which the file structure corresponding to the real device. After editing offline, you can copy it to your device.
 (And vice versa, by copying files from the device to the desired folders, you can view all the presets).</source>
-        <translation>К списку устройств будут добавлены виртуальные устройства. Данные модели полностью эмулируют взаимодействие реальных приборов серии Pangaea с приложением. На телефоне/планшете в директории AMT/pangaea-mobile/ будет создана структура папок и файлов полностью соответствующая реальному устройству. После редактирования пресетов в виртуальном устройстве вы можете скопировать содержимое данной директории на своё устройство.(И наоборот, содержимое устройство в созданную директорию чтобы просмотреть и отредактировать пресеты не подключаясь к устройству).</translation>
+        <translation>К списку устройств будут добавлены виртуальные устройства. Данные модели полностью эмулируют взаимодействие реальных приборов серии Pangaea с приложением.
+
+На телефоне/планшете в директории «AMT/pangaea-mobile/» будет создана структура папок и файлов, полностью соответствующая реальному устройству. 
+
+После редактирования пресетов в виртуальном устройстве Вы можете скопировать содержимое данной директории на своё устройство (и наоборот: содержимое устройства — в созданную директорию, чтобы просмотреть и редактировать пресеты, не подключаясь к устройству).</translation>
     </message>
     <message>
         <source>Virtual device</source>
@@ -1447,7 +1455,7 @@ On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created i
     </message>
     <message>
         <source>Preset volume</source>
-        <translation></translation>
+        <translation>Громкость пресета</translation>
     </message>
 </context>
 <context>
@@ -1556,7 +1564,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
     </message>
     <message>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
-        <translation type="vanished">Произошла неизвестная ошибка bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
+        <translation type="vanished">Произошла неизвестная ошибка Bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
     </message>
     <message>
         <source>Device disconnected

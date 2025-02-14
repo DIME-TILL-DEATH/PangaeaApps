@@ -15,7 +15,8 @@ Rectangle
 
     property string text
 
-    property bool isModified: false
+    // property bool isModified: false
+    property bool isDeviceUpdatingValues: false
 
     color: "transparent"
     border.width: 1
@@ -26,6 +27,7 @@ Rectangle
     {
         anchors.fill:  parent
 
+
         Rectangle{
             id: _setBtn
 
@@ -34,16 +36,16 @@ Rectangle
 
             enabled: main.isModified
 
-            color: _mapBtnMa.pressed ? Style.currentTheme.colorItemHighlight : Style.colorFon
+            color: Style.colorFon
 
             border.width: 1
             border.color: Style.currentTheme.colorBorderOn
             radius: Style.baseRadius
 
             MText{
-                text: qsTr("SET")
+                text: qsTr("Set SW.")
 
-                color:  main.isModified ? Style.colorText : Style.colorBtnDisabled
+                color:  Style.colorText
 
                 anchors.centerIn: parent
 
@@ -51,16 +53,16 @@ Rectangle
                 font.pixelSize: main.width/5
             }
 
-            MouseArea{
-                id: _mapBtnMa
+            // MouseArea{
+            //     id: _mapBtnMa
 
 
-                anchors.fill: parent
-                onClicked: {
-                    main.isModified = false;
-                    UiCore.currentDevice.setLa3Mappings(_tumblerCln.currentIndex, _tumblerDst.currentIndex);
-                }
-            }
+            //     anchors.fill: parent
+            //     onClicked: {
+            //         main.isModified = false;
+            //         UiCore.currentDevice.setLa3Mappings(_tumblerCln.currentIndex, _tumblerDst.currentIndex);
+            //     }
+            // }
         }
 
         Row{
@@ -106,7 +108,9 @@ Rectangle
                 }
 
                 onCurrentIndexChanged: {
-                    main.isModified = true;
+                    if(!main.isDeviceUpdatingValues){
+                        timer.restart();
+                    }
                 }
             }
         }
@@ -153,9 +157,23 @@ Rectangle
                 }
 
                 onCurrentIndexChanged: {
-                    main.isModified = true;
+                    if(!main.isDeviceUpdatingValues){
+                        timer.restart();
+                    }
                 }
             }
+        }
+    }
+
+    // set only last value
+    Timer
+    {
+        id: timer
+        interval: 500
+        repeat: false
+        onTriggered:
+        {
+            UiCore.currentDevice.setLa3Mappings(_tumblerCln.currentIndex, _tumblerDst.currentIndex);
         }
     }
 
@@ -164,9 +182,11 @@ Rectangle
 
         function onPresetMapChanged()
         {
+            main.isDeviceUpdatingValues = true;
             _tumblerCln.currentIndex = UiCore.currentDevice.clnPresetMap
             _tumblerDst.currentIndex = UiCore.currentDevice.drvPresetMap
-            main.isModified = false;
+            main.isDeviceUpdatingValues = false;
+            // main.isModified = false;
         }
     }
 }

@@ -23,10 +23,6 @@
 <context>
     <name>AbstractModule</name>
     <message>
-        <source>Cabinet simulator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Chorus</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,6 +72,10 @@
     </message>
     <message>
         <source>Tremolo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cab. sim.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -747,7 +747,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
 <context>
     <name>ModeSpin_LA</name>
     <message>
-        <source>SET</source>
+        <source>Set SW.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
