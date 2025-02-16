@@ -186,7 +186,6 @@ Rectangle
             _tumblerCln.currentIndex = UiCore.currentDevice.clnPresetMap
             _tumblerDst.currentIndex = UiCore.currentDevice.drvPresetMap
             main.isDeviceUpdatingValues = false;
-            // main.isModified = false;
         }
     }
 }

@@ -32,6 +32,11 @@ if(WIN32)
         ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/liblpc10.lib
         ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.msvc2019/libgsm.lib
     )
+
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_BINARY_DIR}/WavConverterLib/WavConverterLib.dll"
+            "${PROJECT_SOURCE_DIR}/../deploy_windows/release/WavConverterLib.dll")
 endif()
 
 if(APPLE)

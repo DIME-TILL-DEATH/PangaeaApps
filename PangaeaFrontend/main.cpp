@@ -167,13 +167,14 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     engine.loadFromModule("Pages", "Main"); // Баг или вроде него. Не видит новых модулей. Только созданные ранее
 #else
-    engine.loadFromModule("PangaeaFrontend", "Main");
+    engine.addImportPath(":/");
+    engine.loadFromModule("Layouts", "Main");
 #endif
 
+#ifdef Q_OS_ANDROID
     //-----------------------------------------------------------------------
     // keep screen always on
     // also WAKE_LOCK permision in manifest
-#ifdef Q_OS_ANDROID
         qt5RunOnAndroidMainThread([]
         {
             QJniObject activity = QNativeInterface::QAndroidApplication::context();

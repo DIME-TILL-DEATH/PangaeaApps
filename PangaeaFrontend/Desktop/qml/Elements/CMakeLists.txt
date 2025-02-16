@@ -3,6 +3,7 @@ qt_add_library(qml_elements STATIC)
 qt_add_qml_module(qml_elements
     URI "Elements"
     VERSION 1.0
+    # NO_PLUGIN
     QML_FILES
         BankSpin.qml
         CheckText.qml

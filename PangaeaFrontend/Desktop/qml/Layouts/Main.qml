@@ -217,6 +217,7 @@ ApplicationWindow
                 break;
             }
 
+            case DeviceType.LA3:
             case DeviceType.MODERN_CP:{
                 startUi.visible = false;
                 controlLayoutLoader.source = "/Layouts/ControlLayoutCPModern.qml";

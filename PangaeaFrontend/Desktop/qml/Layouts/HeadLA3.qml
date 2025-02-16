@@ -1,0 +1,297 @@
+import QtQuick 2.15
+
+import QtQuick
+import QtQuick.Controls
+
+import Elements
+import StyleSettings
+import Modules
+
+import CppObjects
+import PangaeaBackend
+
+Item
+{
+    id: main
+
+    property CabSim irModule: UiCore.currentDevice.IR
+
+    signal openModulesConfigWindow()
+    signal openIrManagerWindow()
+
+    Row
+    {
+        id: row
+        anchors.fill: parent
+        spacing: 2
+        property int widthWithoutSpase: width-spacing*10
+
+        Logo
+        {
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+        }
+
+        Rectangle{
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+            color: Style.mainEnabledColor
+
+            Column{
+                anchors.fill: parent
+                Item
+                {
+                    width:  parent.width
+                    height: parent.height/4
+                    CheckText
+                    {
+                        text:  qsTr("Phones")
+                        check: UiCore.currentDevice.outputMode === 0
+                        onClicked: UiCore.currentDevice.outputMode = 0
+
+                        anchors.fill: parent
+                    }
+                }
+                Item
+                {
+                    width:  parent.width
+                    height: parent.height/4
+                    CheckText
+                    {
+                        text:  qsTr("Line")
+                        check: UiCore.currentDevice.outputMode === 1
+                        onClicked: UiCore.currentDevice.outputMode = 1
+
+                        anchors.fill: parent
+                    }
+                }
+                Item
+                {
+                    width:  parent.width
+                    height: parent.height/4
+                    CheckText
+                    {
+                        text:  qsTr("Balanced")
+                        check: UiCore.currentDevice.outputMode === 2
+                        onClicked: UiCore.currentDevice.outputMode = 2
+
+                        anchors.fill: parent
+                    }
+                }
+                Item
+                {
+                    width:  parent.width
+                    height: parent.height/4
+                    CheckText
+                    {
+                        text:  qsTr("Wet/Dry")
+                        check: UiCore.currentDevice.outputMode === 3
+                        onClicked: UiCore.currentDevice.outputMode = 3
+
+                        anchors.fill: parent
+                    }
+                }
+            }
+        }
+
+        SaveCompare
+        {
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+        }
+
+        Column{
+            width:  row.widthWithoutSpase/15*7+4
+            height: parent.height
+            Rectangle
+            {
+                id: impuls
+
+                width: parent.width
+                height: parent.height * 0.7
+
+                enabled: UiCore.currentDevice.IR.used
+
+                color: enabled ? Style.headColor : "gray"
+
+                border.width: 1
+
+                opacity: main.irModule.moduleEnabled ? 1:0.3
+
+                Behavior on opacity{
+                    NumberAnimation{duration: 500}
+                }
+
+                MText
+                {
+                    anchors.fill: parent
+                    id: impulsTxt
+                    text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
+                                         : qsTr("IR module not configured")
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment:   Text.AlignVCenter
+
+                    color: "black"
+
+                    font.pixelSize: parent.height/2.5
+                    wrapMode: Text.Wrap
+                }
+                MouseArea
+                {
+                    anchors.fill: parent
+                    onClicked: openIrManagerWindow();
+
+                    cursorShape: Qt.PointingHandCursor
+                }
+            }
+
+            Item{
+                height: parent.height * 0.3
+                width:  parent.width
+
+                Button{
+                    width: parent.width
+                    height: parent.height
+
+                    text: qsTr("Add/Remove module")
+
+                    onClicked: openModulesConfigWindow();
+                }
+            }
+        }
+
+        CopyPaste
+        {
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+        }
+
+        Rectangle
+        {
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+
+            color: Style.mainEnabledColor
+
+
+            ParameterDial{
+                id: vlControl
+                property PresetVolume module: UiCore.currentDevice.MV
+
+                width:  parent.width * 0.9
+                height: parent.height * 0.9
+
+                controlValue: UiCore.currentDevice.MV.presetVolume
+
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
+
+        PresetSpin
+        {
+            id: preset
+
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+        }
+
+        Rectangle
+        {
+            color: Style.mainEnabledColor
+
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+
+            Grid{
+                id: _laModeSelector
+
+                anchors.fill: parent
+
+                property bool isDeviceUpdatingValues: false
+                columns: 2
+                rows: 2
+
+                MText{
+                    width: parent.width/2
+                    height: parent.height/2
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    text: qsTr("CLN")
+                    color: "lightgreen"
+                }
+
+                ComboBox{
+                    id: clnCombo
+
+                    width: parent.width/2
+                    height: parent.height/2
+
+                    model: UiCore.currentDevice.maxPresetCount
+
+                    onActivated: {
+                        if(!_laModeSelector.isDeviceUpdatingValues){
+                            UiCore.currentDevice.setLa3Mappings(clnCombo.currentIndex, _dstCombo.currentIndex);
+                        }
+                    }
+                }
+
+                MText{
+                    width: parent.width/2
+                    height: parent.height/2
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    text: qsTr("DST")
+                    color: "red"
+                }
+
+                ComboBox{
+                    id: _dstCombo
+                    width: parent.width/2
+                    height: parent.height/2
+
+                    model: UiCore.currentDevice.maxPresetCount
+
+                    onActivated: {
+                        if(!_laModeSelector.isDeviceUpdatingValues){
+                            UiCore.currentDevice.setLa3Mappings(clnCombo.currentIndex, _dstCombo.currentIndex);
+                        }
+                    }
+                }
+
+                Connections{
+                    target: UiCore.currentDevice
+
+                    function onPresetMapChanged()
+                    {
+                        _laModeSelector.isDeviceUpdatingValues = true;
+                        clnCombo.currentIndex = UiCore.currentDevice.clnPresetMap
+                        _dstCombo.currentIndex = UiCore.currentDevice.drvPresetMap
+                        _laModeSelector.isDeviceUpdatingValues = false;
+                    }
+                }
+            }
+        }
+
+        Button
+        {
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+
+            text: qsTr("MAP")
+
+            onClicked: {
+                map.show()
+            }
+        }
+    }
+
+    Map{
+        id: map
+
+    }
+}

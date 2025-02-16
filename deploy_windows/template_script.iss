@@ -5,7 +5,8 @@
 #define ConverterName "IR converter tool"
 #define MyAppNameUn "Uninstall AMT Pangaea CP PA"
 
-#define MyAppVersionREPLACE
+;#define MyAppVersionREPLACE
+#define MyAppVersion "@MY_PRODUCT_NUMBER@.@MY_PRODUCT_VERSION@.@MY_BUILD_NUMBER@.0"
 #define MyAppPublisher "AMT Electronics"
 #define MyAppURL "http://www.amtelectronics.com/"
 #define MyAppExeName "PangaeaCPPA.exe"

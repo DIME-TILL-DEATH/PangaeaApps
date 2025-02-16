@@ -21,6 +21,8 @@ Column
     focus: true
     spacing: 2
 
+    property bool isLA3Mode: UiCore.currentDevice.deviceType === DeviceType.LA3
+
     ModulesConfigWindow{
         id: _modulesConfigWindow
     }
@@ -31,10 +33,30 @@ Column
 
     HeadCPModern
     {
-        id: head
+        id: headCP
 
         width:  parent.width
         height: parent.height/1000*150
+
+        visible: !isLA3Mode
+
+        onOpenIrManagerWindow: {
+            _irManagerWindow.show();
+        }
+
+        onOpenModulesConfigWindow: {
+            _modulesConfigWindow.show();
+        }
+    }
+
+    HeadLA3
+    {
+        id: headLA3
+
+        width:  parent.width
+        height: parent.height/1000*150
+
+        visible: isLA3Mode
 
         onOpenIrManagerWindow: {
             _irManagerWindow.show();

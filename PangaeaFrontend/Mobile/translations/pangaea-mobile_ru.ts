@@ -132,7 +132,7 @@
     </message>
     <message>
         <source>OUT</source>
-        <translation>ВЫХ.</translation>
+        <translation></translation>
     </message>
     <message>
         <source>IN</source>

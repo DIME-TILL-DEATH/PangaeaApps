@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.21.1)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
-    project(Pangaea-mobile VERSION 0.12.12 LANGUAGES CXX)
-    set(VERSION_CODE 40)
+    project(Pangaea-mobile VERSION 1.00.00 LANGUAGES CXX)
+    set(VERSION_CODE 41)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -17,14 +17,23 @@ if(ANDROID)
         "docs.qrc"
         "firmwares.qrc"
     )
-
 endif()
 
+set(MY_PRODUCT_NUMBER 1)
+set(MY_PRODUCT_VERSION 1)
+set(MY_BUILD_NUMBER 2502)
+
 if(WIN32)
-    project(PangaeaCPPA VERSION 1.0.2000.1 LANGUAGES CXX)
+    configure_file(
+      ${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
+      ${CMAKE_CURRENT_SOURCE_DIR}/version.rc
+      @ONLY)
+
+    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.0 LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Desktop/icons/icon.rc
+        ${CMAKE_CURRENT_SOURCE_DIR}/version.rc
     )
 
     qt6_add_resources(RCC_FILES
@@ -33,6 +42,8 @@ if(WIN32)
         "docs.qrc"
         "firmwares.qrc"
     )
+
+    set(WIN_DEPLOY_PATH "${PROJECT_SOURCE_DIR}/../deploy_windows/release/WavConverterLib.dll")
 endif()
 
 set(CMAKE_AUTOMOC ON)
@@ -82,8 +93,14 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     PangaeaBackend
     PangaeaBackendplugin
     converter-lib
+
+    qml_layoutsplugin
+    qml_elementsplugin
+    qml_modulesplugin
+    qml_styleplugin
 )
 
+qt_policy(SET QTP0001 OLD)
 qt_policy(SET QTP0002 OLD)
 
 set(QT_QML_GENERATE_QMLLS_INI ON)
@@ -95,23 +112,30 @@ if(ANDROID OR IOS)
 else()
     add_subdirectory(Desktop)
 
-    set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/deploy_windows/release)
+    set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_windows/)
 
-    message("Install path: " ${PROJECT_SOURCE_DIR}/deploy_windows/release)
     message("Build type: " ${CMAKE_BUILD_TYPE})
+    message("Deploy path: " ${DEPLOY_PATH})
 
-    # install(TARGETS ${PROJECT_NAME}
-    #     # BUNDLE  DESTINATION .
-    #     # RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    #     DESTINATION ${PROJECT_SOURCE_DIR}/../deploy_windows/release
-    # )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.exe"
+            "${DEPLOY_PATH}/release/PangaeaCPPA.exe")
 
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${PROJECT_SOURCE_DIR}/docs"
+            "${DEPLOY_PATH}/release/docs/")
 
-    # qt6_generate_deploy_qml_app_script(
-    #     TARGET ${PROJECT_NAME}
-    #     OUTPUT_SCRIPT deploy_script
-    # )
-    # install(SCRIPT ${deploy_script})
+    configure_file(
+      ${DEPLOY_PATH}/template_script.iss
+      ${DEPLOY_PATH}/installer_script.iss
+      @ONLY)
 
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${WINDEPLOYQT_EXECUTABLE} "${DEPLOY_PATH}/release/PangaeaCPPA.exe"
+                                --qmldir "${PROJECT_SOURCE_DIR}/Desktop/qml")
 
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ISCC.exe "/O${DEPLOY_PATH}/bin" "${DEPLOY_PATH}/installer_script.iss")
 endif()

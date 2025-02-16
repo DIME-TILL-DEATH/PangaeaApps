@@ -745,7 +745,7 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     <name>ModeSpin_LA</name>
     <message>
         <source>Set SW.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

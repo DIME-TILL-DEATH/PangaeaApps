@@ -48,4 +48,8 @@ if(WIN32)
             COMMAND ${CMAKE_COMMAND} -E copy
             "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.exe"
             "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${WINDEPLOYQT_EXECUTABLE} "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe"
+                                    --qmldir "${PROJECT_SOURCE_DIR}/")
 endif()
