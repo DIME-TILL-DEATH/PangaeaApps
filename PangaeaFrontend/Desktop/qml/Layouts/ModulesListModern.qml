@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import Qt5Compat.GraphicalEffects
 
 import QtQml.Models
 
@@ -161,7 +162,7 @@ Flickable{
                                 onReleased: _thing.Drag.drop()
                             }
 
-                            ColorImage{
+                            Image{
                                 id: _scanImg
                                 source: "qrc:/Images/arrows-left-right.svg"
 
@@ -170,9 +171,12 @@ Flickable{
 
                                 anchors.fill: parent
 
-                                color: "white"
-
                                 fillMode: Image.PreserveAspectFit
+                            }
+                            ColorOverlay {
+                                anchors.fill: _scanImg
+                                source: _scanImg
+                                color: "white"
                             }
 
                         }

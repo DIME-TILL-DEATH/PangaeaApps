@@ -188,7 +188,7 @@ Window
                             contentItem: MText{
                                 text: _ctrlBtn.text
 
-                                color:  _ctrlBtn.enabled ? Style.textEnabled : Style.textDisabled
+                                color: palette.buttonText
 
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter

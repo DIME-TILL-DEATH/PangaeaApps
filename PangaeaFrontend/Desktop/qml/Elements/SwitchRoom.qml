@@ -9,8 +9,6 @@ Item
 
     property ControlValue controlValue
 
-    enabled: controlValue.enabled
-
     Column
     {
         anchors.fill:  parent
@@ -20,7 +18,7 @@ Item
             id:    mSwitch
             width: parent.width
             height: parent.height/100*50
-            opacity: main.enabled?1:0.5
+            opacity: module.moduleEnabled ? 1 : 0.5
 
             value: controlValue.displayValue
 

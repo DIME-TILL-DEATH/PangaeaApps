@@ -21,15 +21,22 @@ if(ANDROID)
         "docs.qrc"
         "firmwares.qrc"
     )
-endif()
+elseif(IOS)
+    project(Pangaea-mobile VERSION 1.00.00 LANGUAGES CXX)
 
-if(WIN32)
+    qt6_add_resources(RCC_FILES
+        "Mobile/qml.qrc"
+        "Mobile/translations.qrc"
+        "docs.qrc"
+        "firmwares.qrc"
+    )
+elseif(WIN32)
     configure_file(
       ${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
       ${CMAKE_CURRENT_SOURCE_DIR}/version.rc
       @ONLY)
 
-    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.0 LANGUAGES CXX)
+    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.1 LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Desktop/icons/icon.rc
@@ -42,9 +49,7 @@ if(WIN32)
         "docs.qrc"
         "firmwares.qrc"
     )
-endif()
-
-if(APPLE)
+elseif(APPLE) # MacOS
     project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
     qt6_add_resources(RCC_FILES
@@ -53,6 +58,10 @@ if(APPLE)
         "docs.qrc"
         "firmwares.qrc"
     )
+
+   set(PLATFORM_SPECIFIC_SOURCES "${PROJECT_SOURCE_DIR}/Desktop/icons/pangaea.icns")
+   set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES
+          MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
 set(CMAKE_AUTOMOC ON)
@@ -86,52 +95,26 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ../WavConverterLib/
 )
 
-if(NOT IOS)
-    find_package(Qt6 REQUIRED COMPONENTS Qml Bluetooth Gui Network Positioning
-        Quick QuickControls2 LinguistTools Svg SerialPort Concurrent)
-    target_link_libraries(${PROJECT_NAME} PUBLIC
-        Qt6::Core
-        Qt6::Bluetooth
-        Qt6::SerialPort
-        Qt6::Gui
-        Qt6::Quick
-        Qt6::QuickControls2
-        Qt6::Svg
-        Qt6::Positioning
-        Qt6::Qml
 
-        PangaeaBackend
-        PangaeaBackendplugin
-        converter-lib
+find_package(Qt6 REQUIRED COMPONENTS Qml Gui Network Positioning
+    Quick LinguistTools Svg Concurrent)
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Quick
+    Qt6::Svg
+    Qt6::Qml
 
-        qml_layoutsplugin
-        qml_elementsplugin
-        qml_modulesplugin
-        qml_styleplugin
-    )
-else()
-    find_package(Qt6 REQUIRED COMPONENTS Qml Bluetooth Gui Network Positioning
-        Quick QuickControls2 LinguistTools Svg Concurrent)
-    target_link_libraries(${PROJECT_NAME} PUBLIC
-        Qt6::Core
-        Qt6::Bluetooth
-        Qt6::Gui
-        Qt6::Quick
-        Qt6::QuickControls2
-        Qt6::Svg
-        Qt6::Positioning
-        Qt6::Qml
+    PangaeaBackend
+    PangaeaBackendplugin
+    converter-lib
 
-        PangaeaBackend
-        PangaeaBackendplugin
-        converter-lib
+    qml_layoutsplugin
+    qml_elementsplugin
+    qml_modulesplugin
+    qml_styleplugin
+)
 
-        qml_layoutsplugin
-        qml_elementsplugin
-        qml_modulesplugin
-        qml_styleplugin
-    )
-endif()
 
 qt_policy(SET QTP0001 OLD)
 qt_policy(SET QTP0002 OLD)
@@ -179,6 +162,28 @@ else()
         set_target_properties(${PROJECT_NAME}
                 PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist")
 
+        set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.app)
+        message("Build type: " ${CMAKE_BUILD_TYPE})
+        message("Release app path: " ${RELEASE_APP_PATH})
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${PROJECT_SOURCE_DIR}/docs"
+                "${RELEASE_APP_PATH}/Contents/MacOS/docs")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${CMAKE_BINARY_DIR}/../WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
+                "${RELEASE_APP_PATH}/Contents/MacOS/")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
+                                    -qmldir "${PROJECT_SOURCE_DIR}/Desktop/qml"
+                                    -libpath "${CMAKE_BINARY_DIR}/../WavConverterLib/")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"
+                COMMAND sh "package_script.sh")
     endif()
 
 endif()
