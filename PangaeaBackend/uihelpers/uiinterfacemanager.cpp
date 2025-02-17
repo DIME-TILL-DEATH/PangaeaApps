@@ -12,6 +12,13 @@ UiInterfaceManager::~UiInterfaceManager()
 {
 }
 
+void UiInterfaceManager::connectToDevice(DeviceDescription device)
+{
+    m_connectedInterface = device;
+    emit connectedInterfaceChanged();
+    emit sgConnectToDevice(device);
+}
+
 void UiInterfaceManager::updateDevicesList(DeviceConnectionType connectionType, QList<DeviceDescription> list)
 {
     if(connectionType == DeviceConnectionType::BLE)
@@ -63,4 +70,9 @@ void UiInterfaceManager::setRssi(qint16 newBleRssi)
         return;
     m_bleRssi = newBleRssi;
     emit bleRssiChanged();
+}
+
+DeviceDescription UiInterfaceManager::connectedInterface() const
+{
+    return m_connectedInterface;
 }

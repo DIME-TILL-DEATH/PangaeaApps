@@ -13,11 +13,14 @@ class UiInterfaceManager : public QObject
     Q_PROPERTY(bool isBleAvaliable READ isBleAvaliable NOTIFY isBleAvaliableChanged)
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
     Q_PROPERTY(qint16 bleRssi READ bleRssi WRITE setRssi NOTIFY bleRssiChanged FINAL)
+    Q_PROPERTY(DeviceDescription connectedInterface READ connectedInterface NOTIFY connectedInterfaceChanged FINAL)
 public:
     explicit UiInterfaceManager(QObject *parent = nullptr);
     ~UiInterfaceManager();
 
     Q_INVOKABLE void rssiMeasuring(bool enabled) {emit sgRssiMeasuring(enabled);}
+
+    Q_INVOKABLE void connectToDevice(DeviceDescription device);
 
     void updateDevicesList(DeviceConnectionType connectionType, QList<DeviceDescription> list);
 
@@ -32,13 +35,15 @@ public:
 
     void setRssi(qint16 newBleRssi);
 
+    DeviceDescription connectedInterface() const;
+
 public slots:
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
 
 signals:
     void startScanning(DeviceConnectionType);
 
-    void connectToDevice(DeviceDescription device);
+    void sgConnectToDevice(DeviceDescription device);
     // void disconnectFromDevice();
     void sgInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
     void sgDeviceUnavaliable(DeviceConnectionType senderType, QString reason);
@@ -56,12 +61,15 @@ signals:
     void bleRssiChanged();
     void sgRssiMeasuring(bool isEnabled);
 
+    void connectedInterfaceChanged();
+
 private:
     bool m_isBleAvaliable{true};
 
     DevicesListModel m_devicesListModel;
     QString m_moduleName;
     qint16 m_bleRssi{-50};
+    DeviceDescription m_connectedInterface;
 };
 
 #endif // UIINTERFACEMANAGER_H

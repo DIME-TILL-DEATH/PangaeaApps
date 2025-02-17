@@ -351,6 +351,50 @@ void CPModern::restoreValue(QString name)
     }
 }
 
+void CPModern::previewIr(QString srcFilePath)
+{
+    stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
+
+    QByteArray impulseData;
+    if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
+    {
+        qWarning() << __FUNCTION__ << "Not supported wav format";
+        emit sgDeviceError(DeviceErrorType::IrFormatNotSupported, QString().setNum(wavHead.sampleRate)+" Hz/"+
+                                                                      QString().setNum(wavHead.bitsPerSample)+" bits/"+
+                                                                      QString().setNum(wavHead.numChannels)+" channel");
+        return;
+    }
+    else
+    {
+        irWorker.decodeWav(srcFilePath);
+        impulseData = irWorker.formFileData();
+    }
+
+    if(impulseData.isEmpty())
+        return;
+
+    QByteArray baSend = QString("ir preview\r").toUtf8();
+    QByteArray irData = impulseData.mid(44); //cut wav header
+
+    // qDebug() << Q_FUNC_INFO << baSend;
+
+    for(quint16 i=0; i<irData.size(); i++)
+    {
+        QString sTmp;
+        quint8  chr;
+        if(i>=irData.length())
+            sTmp = QString("00");
+        else
+        {
+            chr = irData.at(i);
+            sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
+        }
+        baSend.append(sTmp.toUtf8());
+    }
+    emit sgPushCommandToQueue(baSend);
+    emit sgProcessCommands();
+}
+
 void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
 {
     QString fileName;

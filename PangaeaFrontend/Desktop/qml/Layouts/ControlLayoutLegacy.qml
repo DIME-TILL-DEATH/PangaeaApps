@@ -148,8 +148,9 @@ Column
             // TODO: переделать cleanPath на QUrl
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16PA)
-                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16))
+            // if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16PA)
+            //         || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16))
+            if(InterfaceManager.connectedInterface.connectionType !== DeviceConnectionType.USB)
             {
                 // TODO: переделать cleanPath на QUrl
                 UiCore.uploadIr(cleanPath);
@@ -158,10 +159,11 @@ Column
 
         onRejected:
         {
-            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
-                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
+            // if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
+            //         || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
+            if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB)
             {
-                UiCore.escImpuls()
+                UiCore.currentDevice.escImpulse()
             }
         }
 
@@ -170,9 +172,7 @@ Column
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
-                    || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
-            {
+            if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
                 // TODO: переделать cleanPath на QUrl
                 UiCore.uploadIr(cleanPath);
             }

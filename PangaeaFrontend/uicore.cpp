@@ -78,7 +78,7 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 #else
     m_pickedIrPath = srcFilePath;
     QFileInfo fileInfo(m_pickedIrPath);
-    QString impulseName = fileInfo.fileName();
+    // QString impulseName = fileInfo.fileName();
     m_currentDevice->startIrUpload(m_pickedIrPath, m_dstIrPath);
 #endif
 }
