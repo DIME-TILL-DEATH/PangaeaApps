@@ -127,8 +127,23 @@ if(ANDROID OR IOS)
     add_subdirectory(Mobile)
 
     if(IOS)
-        set_target_properties(${PROJECT_NAME}
-            PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist")
+        set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist")
+        set_target_properties(${PROJECT_NAME} PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon)
+
+        set(asset_catalog_path "Mobile/ios/Assets.xcassets")
+
+        target_sources(${PROJECT_NAME} PRIVATE "${asset_catalog_path}")
+        set_source_files_properties(
+            ${asset_catalog_path}
+            PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
+        qt6_add_resources(${PROJECT_NAME} "IosResources"
+            PREFIX
+                "/"
+            FILES
+
+                Mobile/ios/Assets.xcassets
+        )
     endif()
 
 else()
