@@ -163,8 +163,11 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
-#ifdef Q_OS_ANDROID
-    engine.loadFromModule("Pages", "Main"); // Баг или вроде него. Не видит новых модулей. Только созданные ранее
+#ifdef Q_OS_IOS
+    engine.addImportPath(":/");
+    engine.loadFromModule("Pages", "Main");
+#elif Q_OS_ANDROID
+    engine.loadFromModule("Pages", "Main");
 #else
     engine.addImportPath(":/");
     engine.loadFromModule("Layouts", "Main");

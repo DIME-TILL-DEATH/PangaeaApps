@@ -1,5 +1,4 @@
 #include <QThread>
-#include <QSerialPortInfo>
 #include <QDir>
 #include <QStandardPaths>
 

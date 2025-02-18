@@ -368,9 +368,9 @@ void UiCore::pickFile(ActivityType fileType, QString filter)
 
 void UiCore::runIrConvertor()
 {
-    QProcess irConvertorProcess;
 
 #ifdef Q_OS_WIN
+    QProcess irConvertorProcess;
     irConvertorProcess.setWorkingDirectory(QCoreApplication::applicationDirPath());
     irConvertorProcess.setProgram("IrConverter.exe");
     irConvertorProcess.startDetached();

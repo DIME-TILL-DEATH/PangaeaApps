@@ -109,10 +109,10 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     PangaeaBackendplugin
     converter-lib
 
-    qml_layoutsplugin
-    qml_elementsplugin
-    qml_modulesplugin
-    qml_styleplugin
+    # qml_layoutsplugin
+    # qml_elementsplugin
+    # qml_modulesplugin
+    # qml_styleplugin
 )
 
 
@@ -125,6 +125,12 @@ set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt
 
 if(ANDROID OR IOS)
     add_subdirectory(Mobile)
+
+    if(IOS)
+        set_target_properties(${PROJECT_NAME}
+            PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist")
+    endif()
+
 else()
     add_subdirectory(Desktop)
 
