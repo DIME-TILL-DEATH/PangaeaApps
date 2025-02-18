@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.0
-//import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import CustomOverlays 1.0
 import StyleSettings 1.0
@@ -143,6 +143,8 @@ BaseModule
 
         buttons: Dialog.Ok
     }
+
+
 
 
     Connections

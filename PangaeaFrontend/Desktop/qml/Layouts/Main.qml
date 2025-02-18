@@ -292,14 +292,6 @@ ApplicationWindow
                     msgInfo.visible = true;
                     break;
                 }
-
-                case DeviceErrorType.FileExists:
-                {
-                    msgInfo.title = qsTr("Error")
-                    msgInfo.text = qsTr("File ") + params + qsTr(" already on device.")
-                    msgInfo.open();
-                    break;
-                }
             }
         }
 

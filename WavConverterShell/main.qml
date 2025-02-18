@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 import QtQml.Models 2.11
 import QtQuick.Dialogs
 import Qt.labs.platform 1.0 as Labs
-import Qt.labs.settings 1.0
+import QtCore
 
 ApplicationWindow
 {

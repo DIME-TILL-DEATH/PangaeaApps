@@ -70,5 +70,9 @@
 	<string>Pangaea-mobile needs BLE for connect to devices</string>
 	<key>DTPlatformBuild</key>
 	<string>22C146</string>
+	<key>NSFileProviderDomainUsageDescription</key>
+	<string>Pangaea-mobile needs dile provide for downloar IR in devices</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>Pangaea-mobile needs document folder to store logs and presets</string>
 </dict>
 </plist>

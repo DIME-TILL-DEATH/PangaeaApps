@@ -78,8 +78,17 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 #else
     m_pickedIrPath = srcFilePath;
     QFileInfo fileInfo(m_pickedIrPath);
-    QString impulseName = fileInfo.fileName();
-    m_currentDevice->startIrUpload(m_pickedIrPath, m_dstIrPath);
+    QString fileName = fileInfo.fileName();
+
+    if(m_currentDevice->deviceType() > DeviceType::LEGACY_DEVICES)
+    {
+        if(fileInfo.size() > m_currentDevice->maxIrSize())
+        {
+            emit sgUiMessage(UiMessageType::PROPOSE_IR_TRIM, "File is bigger than processing IR", {fileName, m_pickedIrPath, m_dstIrPath});
+            return;
+        }
+    }
+    m_currentDevice->startIrUpload(m_pickedIrPath, m_dstIrPath, false);
 #endif
 }
 
@@ -377,6 +386,7 @@ void UiCore::runIrConvertor()
 #endif
 
 #ifdef Q_OS_MACOS
+    QProcess irConvertorProcess;
     qDebug() << "Run converter" << irConvertorProcess.startDetached(QCoreApplication::applicationDirPath() + "/IrConverter");
 #endif
 
