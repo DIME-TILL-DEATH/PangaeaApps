@@ -185,7 +185,13 @@ void CPModern::pushReadPresetCommands()
 
 QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
 {
-    QList<QByteArray> recievedCommAnswers;
+    QList<QByteArray> recievedCommAnswers, parseResults;
+
+    if(ackCC.getParse(baAnswer, &parseResults))
+    {
+        m_presetManager.returnToPreviousState();
+        recievedCommAnswers.append("cc");
+    }
 
     recievedCommAnswers += m_parser.parseNewData(baAnswer);
 
@@ -373,7 +379,7 @@ void CPModern::previewIr(QString srcFilePath)
     if(impulseData.isEmpty())
         return;
 
-    QByteArray baSend = QString("ir preview\r").toUtf8();
+    QByteArray baSend = QString("cc 1 s\r").toUtf8();
     QByteArray irData = impulseData.mid(44); //cut wav header
 
     // qDebug() << Q_FUNC_INFO << baSend;
@@ -391,6 +397,7 @@ void CPModern::previewIr(QString srcFilePath)
         }
         baSend.append(sTmp.toUtf8());
     }
+
     emit sgPushCommandToQueue(baSend);
     emit sgProcessCommands();
 }

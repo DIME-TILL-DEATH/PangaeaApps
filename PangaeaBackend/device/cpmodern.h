@@ -154,6 +154,8 @@ protected:
     void uploadFirmware(const QByteArray& fwData);
 
     void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    MaskedParser ackCC{"cc * *\r", "111X1X1"}; // for preview on USB
     void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getPresetListCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void listCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);

@@ -159,29 +159,33 @@ else()
     add_subdirectory(Desktop)
 
     if(WIN32)
-        set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_windows/)
+        message("Build type: " ${CMAKE_BUILD_TYPE})
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.exe"
-                "${DEPLOY_PATH}/release/PangaeaCPPA.exe")
+        if(${CMAKE_BUILD_TYPE} EQUAL "Release")
+            set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_windows/)
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_directory
-                "${PROJECT_SOURCE_DIR}/docs"
-                "${DEPLOY_PATH}/release/docs/")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+                    "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.exe"
+                    "${DEPLOY_PATH}/release/PangaeaCPPA.exe")
 
-        configure_file(
-          ${DEPLOY_PATH}/template_script.iss
-          ${DEPLOY_PATH}/installer_script.iss
-          @ONLY)
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    "${PROJECT_SOURCE_DIR}/docs"
+                    "${DEPLOY_PATH}/release/docs/")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${WINDEPLOYQT_EXECUTABLE} "${DEPLOY_PATH}/release/PangaeaCPPA.exe"
-                                    --qmldir "${PROJECT_SOURCE_DIR}/Desktop/qml")
+            configure_file(
+              ${DEPLOY_PATH}/template_script.iss
+              ${DEPLOY_PATH}/installer_script.iss
+              @ONLY)
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ISCC.exe "/O${DEPLOY_PATH}/bin" "${DEPLOY_PATH}/installer_script.iss")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${WINDEPLOYQT_EXECUTABLE} "${DEPLOY_PATH}/release/PangaeaCPPA.exe"
+                                        --qmldir "${PROJECT_SOURCE_DIR}/Desktop/qml")
+
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ISCC.exe "/O${DEPLOY_PATH}/bin" "${DEPLOY_PATH}/installer_script.iss")
+        endif()
     endif()
 
     if(APPLE)
@@ -189,31 +193,33 @@ else()
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
             MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
 
-        set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.app)
+        if(${CMAKE_BUILD_TYPE} EQUAL "Release")
+            set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.app)
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_directory
-                "${PROJECT_SOURCE_DIR}/docs"
-                "${RELEASE_APP_PATH}/Contents/MacOS/docs")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    "${PROJECT_SOURCE_DIR}/docs"
+                    "${RELEASE_APP_PATH}/Contents/MacOS/docs")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
-                "${RELEASE_APP_PATH}/Contents/MacOS/")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy
+                    "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
+                    "${RELEASE_APP_PATH}/Contents/MacOS/")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
-                                    "-qmldir=${PROJECT_SOURCE_DIR}/Desktop/qml"
-                                    "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
+                                        "-qmldir=${PROJECT_SOURCE_DIR}/Desktop/qml"
+                                        "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_directory
-                "${RELEASE_APP_PATH}"
-                "${PROJECT_SOURCE_DIR}/../deploy_mac/dmg_content/PangaeaCPPA.app")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    "${RELEASE_APP_PATH}"
+                    "${PROJECT_SOURCE_DIR}/../deploy_mac/dmg_content/PangaeaCPPA.app")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"
-                COMMAND sh "package_script.sh")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"
+                    COMMAND sh "package_script.sh")
+        endif()
     endif()
 
 endif()

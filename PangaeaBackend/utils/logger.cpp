@@ -109,7 +109,7 @@ void Logger::messageOutputHandlerImplementation(QtMsgType type, const QMessageLo
         #ifdef ANDROID
             __android_log_print(ANDROID_LOG_INFO, "pangaea_mobile info", "%s", qPrintable(localMsg.constData()));
         #endif
-            std::cout << localMsg.constData() << std::flush;
+            std::cout << localMsg.constData() << std::endl << std::flush;
 
             outLog << QTime::currentTime().toString() << " info: "
                    << localMsg.constData() << "\n("
