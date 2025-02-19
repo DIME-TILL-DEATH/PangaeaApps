@@ -17,7 +17,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleVersion</key>
-	<string>1.00.01</string>
+	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
 	<key>BuildMachineOSBuild</key>
 	<string>23H311</string>
 	<key>DTPlatformName</key>
@@ -71,8 +71,16 @@
 	<key>DTPlatformBuild</key>
 	<string>22C146</string>
 	<key>NSFileProviderDomainUsageDescription</key>
-	<string>Pangaea-mobile needs dile provide for downloar IR in devices</string>
+	<string>Pangaea-mobile needs file provide for downloar IR in devices</string>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>Pangaea-mobile needs document folder to store logs and presets</string>
+	<key>NSNetworkVolumesUsageDescription</key>
+	<string>For uploading IR from network to device</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
 </dict>
 </plist>
