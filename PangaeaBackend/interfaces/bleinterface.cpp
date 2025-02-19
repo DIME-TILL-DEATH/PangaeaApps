@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QGeoPositionInfoSource>
 
+
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
 #include "androidutils.h"
@@ -20,13 +21,15 @@ BleInterface::BleInterface(QObject *parent)
     QCoreApplication *app = QCoreApplication::instance();
     if(app)
     {
-        app->requestPermission(QBluetoothPermission{}, [](const QPermission &permission)
-                               {
-                                   if (permission.status() == Qt::PermissionStatus::Granted)
-                                   {
-                                       qDebug() << "Bluetooth permission granted";
-                                   }
-                               });
+       app->requestPermission(QBluetoothPermission{}, [](const QPermission &permission)
+       {
+           if(permission.status() == Qt::PermissionStatus::Granted){
+               qDebug() << "Bluetooth permission granted";
+           }
+           else{
+               qWarning() << "Bluetooth permission not granted!";
+           }
+       });
     }
 
 #ifdef Q_OS_ANDROID
@@ -52,9 +55,9 @@ BleInterface::BleInterface(QObject *parent)
     appSettings = new QSettings(QSettings::UserScope, this);
 #endif
 
-        qDebug() << "BLE thread" << thread();
+    qDebug() << "BLE thread" << thread();
     m_deviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent(); // parent = this: Main COM uninit tried from another thread
-        qDebug() << "Discovery agent thread" << m_deviceDiscoveryAgent->thread();
+    qDebug() << "Discovery agent thread" << m_deviceDiscoveryAgent->thread();
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
             this, &BleInterface::addDevice);
@@ -83,7 +86,15 @@ BleInterface::~BleInterface()
 }
 
 void BleInterface::startScan()
-{    
+{
+    QCoreApplication *app = QCoreApplication::instance();
+    if(app){
+       if(app->checkPermission(QBluetoothPermission{}) != Qt::PermissionStatus::Granted){
+           qWarning() << "Bluetooth permission not granted!";
+           return;
+       }
+    }
+    
     if(state() == InterfaceState::Idle)
     {
         startDiscovering();
@@ -143,6 +154,7 @@ void BleInterface::startDiscovering()
         return;
     }
 #endif
+    
     m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
     m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 

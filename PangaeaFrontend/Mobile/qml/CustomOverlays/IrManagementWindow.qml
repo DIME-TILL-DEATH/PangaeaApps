@@ -284,12 +284,8 @@ Item{
         id: _iosFileDialog
 
         onAccepted:
-        {
-            // TODO: переделать cleanPath на QUrl
-            var cleanPath = _iosFileDialog.selectedFile.toString();
-            //cleanPath = decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
-            UiCore.uploadIr(cleanPath, _root.dstIrPath);
+        {            
+            UiCore.uploadIr(irFileDialog.currentFile, _root.dstIrPath);
 
         }
     }

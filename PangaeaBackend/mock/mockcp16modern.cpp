@@ -106,7 +106,7 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
 
     //--------------------------------------------------------------
 
-    QFile systemFile(basePath + "/system.pan");
+    QFile systemFile(m_basePath + "/system.pan");
     system_parameters_t sysParameters;
     memset(&sysParameters, 0, sizeof(system_parameters_t));
     if(systemFile.open(QIODevice::ReadOnly))
@@ -201,24 +201,26 @@ void MockCP16Modern::newDataRecieved()
 void MockCP16Modern::initFolders()
 {
 #ifdef Q_OS_ANDROID
-    basePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
+    m_basePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
 #else
-    basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/AMT/pangaeaCPPA/";
+    m_basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/";
+#ifndef Q_OS_IOS
+    m_basePath += "AMT/pangaeaCPPA/";
 #endif
+#endif
+    m_basePath += m_mockName;
+    
+    if(!QDir(m_basePath).exists()) QDir().mkpath(m_basePath);
 
-    if(!QDir(basePath).exists()) QDir().mkpath(basePath);
-
-    basePath += m_mockName;
-
-    QDir::setCurrent(basePath);
+    QDir::setCurrent(m_basePath);
     qInfo() << "Current mock directory:" << QDir::current();
 
-    if(!QDir(basePath).exists()) QDir().mkpath(basePath);
+    if(!QDir(m_basePath).exists()) QDir().mkpath(m_basePath);
 
-    QString libPath = basePath + "/ir_library/";
+    QString libPath = m_basePath + "/ir_library/";
     if(!QDir().exists(libPath)) QDir().mkpath(libPath);
 
-    QFile systemFile(basePath + "/system.pan");
+    QFile systemFile(m_basePath + "/system.pan");
     if(!systemFile.exists())
     {
         m_systemParameters.output_mode = 0;
@@ -282,7 +284,7 @@ void MockCP16Modern::initFolders()
 
 bool MockCP16Modern::saveSysParameters()
 {
-    QFile systemFile(basePath + "/system.pan");
+    QFile systemFile(m_basePath + "/system.pan");
 
     QString ver("2.01.00");
     memcpy(m_systemParameters.firmware_version, ver.data(), ver.size());
@@ -568,7 +570,7 @@ void MockCP16Modern::getIrInfo()
 
 void MockCP16Modern::irDownload(const QString& pathToIr)
 {
-    QString filePath = basePath + "/" + pathToIr;
+    QString filePath = m_basePath + "/" + pathToIr;
     qDebug() << " Mock device ir download, path to file:" << filePath;
 
     QByteArray answer("ir download\r" + pathToIr.toUtf8() + "\r");
@@ -829,7 +831,7 @@ void MockCP16Modern::changePreset(quint8 bank, quint8 preset)
 
 void MockCP16Modern::formatMemoryCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    QDir homeDir(basePath);
+    QDir homeDir(m_basePath);
     homeDir.removeRecursively();
     initFolders();
 
@@ -974,7 +976,7 @@ void MockCP16Modern::startFwUpdateCommHandler(const QString &command, const QByt
 
     qDebug() << fwPart;
 
-    fwFile.setFileName(basePath + "/firmware.bin");
+    fwFile.setFileName(m_basePath + "/firmware.bin");
     if(fwFile.open(QIODevice::WriteOnly))
     {
         fwFile.write(fwPart);
