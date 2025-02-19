@@ -7,10 +7,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
-qt_add_library(converter-lib SHARED
-    resampler.cpp resampler.h
-    wavutils.cpp wavutils.h
-)
+if(IOS)
+    qt_add_library(converter-lib STATIC
+        resampler.cpp resampler.h
+        wavutils.cpp wavutils.h
+    )
+else()
+    qt_add_library(converter-lib SHARED
+        resampler.cpp resampler.h
+        wavutils.cpp wavutils.h
+    )
+endif()
 
 if(ANDROID)
     target_link_libraries(converter-lib PUBLIC

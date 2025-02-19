@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Window 2.0
-//import QtQuick.Dialogs 1.3
+import QtQuick.Dialogs
 
 import CustomOverlays 1.0
 import StyleSettings 1.0
@@ -73,48 +73,6 @@ BaseModule
                 topInset: 2
                 bottomInset: 2
             }
-
-            // MText{
-            //     id: _impulseName
-
-            //     width: parent.width
-
-            //     text: (module.impulseName == "") ? qsTr("empty") : module.impulseName
-            //     color: on ? Style.colorText : Style.currentTheme.colorTextDisabled
-
-            //     elide: Text.ElideMiddle
-
-            //     horizontalAlignment: Qt.AlignHCenter
-            //     verticalAlignment: Qt.AlignVCenter
-
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     // anchors.verticalCenter: parent.verticalCenter
-
-            //     MouseArea
-            //     {
-            //         anchors.fill: parent
-            //         onClicked:
-            //         {
-            //             switch(UiCore.currentDevice.deviceType)
-            //             {
-            //                 case DeviceType.LA3:
-            //                 case DeviceType.MODERN_CP:
-            //                 {
-            //                     // _irManagement.open();
-            //                     openIrManagementWindow();
-            //                     // _irManagement.visible = true;
-            //                     break;
-            //                 }
-            //                 default:
-            //                 {
-            //                     UiCore.uploadIr("");
-            //                     break;
-            //                 }
-            //             }
-
-            //         }
-            //     }
-            // }
         }
 
         ClipIndicator{
@@ -185,6 +143,8 @@ BaseModule
 
         buttons: Dialog.Ok
     }
+
+
 
 
     Connections

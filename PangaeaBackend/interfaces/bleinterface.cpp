@@ -101,6 +101,7 @@ void BleInterface::stopScan()
 
 void BleInterface::startDiscovering()
 {
+#ifndef Q_OS_IOS
     QBluetoothLocalDevice device;
 
     if(!device.isValid())
@@ -141,7 +142,7 @@ void BleInterface::startDiscovering()
         device.powerOn();
         return;
     }
-
+#endif
     m_deviceDiscoveryAgent->setLowEnergyDiscoveryTimeout(5000);
     m_deviceDiscoveryAgent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
 

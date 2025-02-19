@@ -397,6 +397,11 @@ void CPModern::previewIr(QString srcFilePath)
 
 void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
 {
+    // qDebug() << Q_FUNC_INFO << srcFilePath;
+
+    // QUrl url(srcFilePath);
+    // srcFilePath = url.toLocalFile();
+    
     QString fileName;
     QFileInfo fileInfo(srcFilePath);
 
@@ -407,7 +412,7 @@ void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath, bool trim
     }
     else
     {
-        qWarning() << "Can't open file";
+        qWarning() << "Can't find file :" << srcFilePath;
         emit sgDeviceError(DeviceErrorType::FileNotFound, "", {fileName});
         return;
     }

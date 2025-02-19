@@ -61,11 +61,18 @@ QByteArray IRWorker::decodeSample(QByteArray data, quint8 lenSample)
 stWavHeader IRWorker::getFormatWav(QString filePath)
 {
     QFile *file = new QFile(filePath);
-    file->open(QIODevice::ReadOnly);
-    QByteArray baWav;
-    baWav = file->read(44+32000);
-    stWavHeader *wavHeader = reinterpret_cast<stWavHeader*>(baWav.data());
-    return *wavHeader;
+    if(file->open(QIODevice::ReadOnly))
+    {
+        QByteArray baWav;
+        baWav = file->read(44+32000);
+        stWavHeader *wavHeader = reinterpret_cast<stWavHeader*>(baWav.data());
+        return *wavHeader;
+    }
+    else
+    {
+        qWarning() << Q_FUNC_INFO << "Can't open file: " << filePath;
+        return stWavHeader{0};
+    }
 
 }
 
@@ -108,7 +115,8 @@ const QByteArray &IRWorker::formFileData()
 void IRWorker::decodeWav(QString filePath)
 {
     QFile *file = new QFile(filePath);
-    file->open(QIODevice::ReadOnly);
+    if(!file->open(QIODevice::ReadOnly)) qWarning() << Q_FUNC_INFO << "Can't open file: " << filePath;
+
     QByteArray baWav;
 
     baWav = file->read(44+32000);

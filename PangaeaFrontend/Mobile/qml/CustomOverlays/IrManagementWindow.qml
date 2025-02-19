@@ -1,15 +1,16 @@
+import QtQml
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+
 import QtQuick.Window 2.15
+import QtQuick.Dialogs
 
 import StyleSettings 1.0
 
-import CustomOverlays 1.0
-import ControlGroups 1.0
-import Modules 1.0
+
 import Elements 1.0
 
+import PangaeaBackend
 import CppObjects
 
 Item{
@@ -96,7 +97,10 @@ Item{
                 text: qsTr("UPLOAD IR")
 
                 onClicked: {
-                    UiCore.uploadIr("", dstIrPath);
+                    if(Qt.platform === "android")
+                        UiCore.uploadIr("", dstIrPath);
+                    else
+                        _iosFileDialog.open();
                 }
 
             }
@@ -273,6 +277,20 @@ Item{
                 topInset: 0
                 bottomInset: 0
             }
+        }
+    }
+
+    FileDialog{
+        id: _iosFileDialog
+
+        onAccepted:
+        {
+            // TODO: переделать cleanPath на QUrl
+            var cleanPath = _iosFileDialog.selectedFile.toString();
+            //cleanPath = decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+
+            UiCore.uploadIr(cleanPath, _root.dstIrPath);
+
         }
     }
 }

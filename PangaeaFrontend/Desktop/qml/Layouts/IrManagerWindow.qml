@@ -272,6 +272,38 @@ Window{
         }
     }
 
+    MessageDialog{
+        id: _msgTrimFileDialog
+
+        title: qsTr("Trim IR file")
+
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        property string srcPath
+        property string dstPath
+
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes: {
+                UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
+                break;
+            }
+
+            case MessageDialog.No: {
+                UiCore.currentDevice.startIrUpload(srcPath, dstPath, false);
+                break;
+            }
+            }
+        }
+    }
+
+    MessageDialog
+    {
+        id: _msgInfo
+
+        title: qsTr("File already on device")
+    }
+
     Connections{
         target: UiCore.currentDevice
 
@@ -287,7 +319,31 @@ Window{
                     msgIncorretIR.open();
                     break;
                 }
+
+                case DeviceErrorType.FileExists:
+                {
+                    _msgInfo.text = qsTr("File ") + params + qsTr(" already on device.")
+                    _msgInfo.open();
+                    break;
+                }
             }
         }
+    }
+
+    Connections
+    {
+        target: UiCore
+
+        function onSgUiMessage(type, message, messageParams)
+        {
+            if(type === UiMessageType.PROPOSE_IR_TRIM)
+            {
+                _msgTrimFileDialog.text = qsTr("The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?")
+                _msgTrimFileDialog.srcPath = messageParams[1]
+                _msgTrimFileDialog.dstPath = messageParams[2]
+                _msgTrimFileDialog.open()
+            }
+        }
+
     }
 }

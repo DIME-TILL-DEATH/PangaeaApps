@@ -7,8 +7,8 @@ set(MY_BUILD_NUMBER 2502)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
-    project(Pangaea-mobile VERSION 1.00.00 LANGUAGES CXX)
-    set(VERSION_CODE 41)
+    project(Pangaea-mobile VERSION 1.00.02 LANGUAGES CXX)
+    set(VERSION_CODE 42)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -22,7 +22,7 @@ if(ANDROID)
         "firmwares.qrc"
     )
 elseif(IOS)
-    project(Pangaea-mobile VERSION 1.00.00 LANGUAGES CXX)
+    project(Pangaea-mobile VERSION 1.00.02 LANGUAGES CXX)
 
     qt6_add_resources(RCC_FILES
         "Mobile/qml.qrc"
@@ -60,8 +60,7 @@ elseif(APPLE) # MacOS
     )
 
    set(PLATFORM_SPECIFIC_SOURCES "${PROJECT_SOURCE_DIR}/Desktop/icons/pangaea.icns")
-   set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES
-          MACOSX_PACKAGE_LOCATION "Resources")
+   set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
 set(CMAKE_AUTOMOC ON)
@@ -109,10 +108,10 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     PangaeaBackendplugin
     converter-lib
 
-    qml_layoutsplugin
-    qml_elementsplugin
-    qml_modulesplugin
-    qml_styleplugin
+    # qml_layoutsplugin
+    # qml_elementsplugin
+    # qml_modulesplugin
+    # qml_styleplugin
 )
 
 
@@ -125,15 +124,42 @@ set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt
 
 if(ANDROID OR IOS)
     add_subdirectory(Mobile)
+
+    if(IOS)
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+        #    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appTableControl
+            MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist"
+            XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon
+            MACOSX_BUNDLE TRUE
+            WIN32_EXECUTABLE TRUE
+        )
+
+        # set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist")
+        # set_target_properties(${PROJECT_NAME} PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon)
+
+        set(asset_catalog_path "Mobile/ios/Assets.xcassets")
+
+        target_sources(${PROJECT_NAME} PRIVATE "${asset_catalog_path}")
+        set_source_files_properties(
+            ${asset_catalog_path}
+            PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
+        qt6_add_resources(${PROJECT_NAME} "IosResources"
+            PREFIX
+                "/"
+            FILES
+
+                Mobile/ios/Assets.xcassets
+        )
+    endif()
+
 else()
     add_subdirectory(Desktop)
 
-
     if(WIN32)
         set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_windows/)
-
-        message("Build type: " ${CMAKE_BUILD_TYPE})
-        message("Deploy path: " ${DEPLOY_PATH})
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
@@ -159,12 +185,11 @@ else()
     endif()
 
     if(APPLE)
-        set_target_properties(${PROJECT_NAME}
-                PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist")
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
 
         set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.app)
-        message("Build type: " ${CMAKE_BUILD_TYPE})
-        message("Release app path: " ${RELEASE_APP_PATH})
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -173,13 +198,18 @@ else()
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
-                "${CMAKE_BINARY_DIR}/../WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
+                "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
                 "${RELEASE_APP_PATH}/Contents/MacOS/")
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
-                                    -qmldir "${PROJECT_SOURCE_DIR}/Desktop/qml"
-                                    -libpath "${CMAKE_BINARY_DIR}/../WavConverterLib/")
+                                    "-qmldir=${PROJECT_SOURCE_DIR}/Desktop/qml"
+                                    "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${RELEASE_APP_PATH}"
+                "${PROJECT_SOURCE_DIR}/../deploy_mac/dmg_content/PangaeaCPPA.app")
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"

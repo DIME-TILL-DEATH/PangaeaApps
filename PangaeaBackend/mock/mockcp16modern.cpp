@@ -205,6 +205,7 @@ void MockCP16Modern::initFolders()
 #else
     basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/AMT/pangaeaCPPA/";
 #endif
+
     if(!QDir(basePath).exists()) QDir().mkpath(basePath);
 
     basePath += m_mockName;
