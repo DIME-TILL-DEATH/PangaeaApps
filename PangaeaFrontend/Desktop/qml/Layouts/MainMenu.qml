@@ -7,6 +7,7 @@ import QtQuick.Window 2.15
 import StyleSettings 1.0
 import Qt.labs.platform 1.1 as Labs
 import QtCore
+import QtQml
 
 import CppObjects
 
@@ -44,7 +45,7 @@ MenuBar{
         MenuSeparator{}
         MenuItem{
             text: qsTr("Quit")
-            onTriggered: {Window.window.close()}
+            onTriggered: {Qt.quit()}
         }
     }
 

@@ -187,12 +187,6 @@ QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
 {
     QList<QByteArray> recievedCommAnswers, parseResults;
 
-    if(ackCC.getParse(baAnswer, &parseResults))
-    {
-        m_presetManager.returnToPreviousState();
-        recievedCommAnswers.append("cc");
-    }
-
     recievedCommAnswers += m_parser.parseNewData(baAnswer);
 
     QList<QByteArray> args;
@@ -364,10 +358,6 @@ void CPModern::previewIr(QString srcFilePath)
     QByteArray impulseData;
     if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
     {
-        qWarning() << __FUNCTION__ << "Not supported wav format";
-        emit sgDeviceError(DeviceErrorType::IrFormatNotSupported, QString().setNum(wavHead.sampleRate)+" Hz/"+
-                                                                      QString().setNum(wavHead.bitsPerSample)+" bits/"+
-                                                                      QString().setNum(wavHead.numChannels)+" channel");
         return;
     }
     else
@@ -379,26 +369,12 @@ void CPModern::previewIr(QString srcFilePath)
     if(impulseData.isEmpty())
         return;
 
-    QByteArray baSend = QString("cc 1 s\r").toUtf8();
-    QByteArray irData = impulseData.mid(44); //cut wav header
+    QByteArray baSend = QString("ir preview\r").toUtf8();
+    QByteArray irData = impulseData.left(maxIrSize());
+    irData = irData.mid(44); //cut wav header
 
-    // qDebug() << Q_FUNC_INFO << baSend;
-
-    for(quint16 i=0; i<irData.size(); i++)
-    {
-        QString sTmp;
-        quint8  chr;
-        if(i>=irData.length())
-            sTmp = QString("00");
-        else
-        {
-            chr = irData.at(i);
-            sTmp = QString("%1").arg (chr, 2, 16, QChar('0'));
-        }
-        baSend.append(sTmp.toUtf8());
-    }
-
-    emit sgPushCommandToQueue(baSend);
+    m_presetManager.setCurrentState(PresetState::UploadingIr);
+    emit sgPushCommandToQueue(baSend + irData);
     emit sgProcessCommands();
 }
 
@@ -406,8 +382,8 @@ void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath, bool trim
 {
     // qDebug() << Q_FUNC_INFO << srcFilePath;
 
-     QUrl url(srcFilePath);
-     srcFilePath = url.toLocalFile();
+     // QUrl url(srcFilePath);
+     // srcFilePath = url.toLocalFile();
     
     
     qDebug() << "Clean url" << srcFilePath;
@@ -973,6 +949,11 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
             emit sgPushCommandToQueue("ls " + presetPath.toUtf8() + "\r\n", false);
         }
         emit sgProcessCommands();
+    }
+
+    if(arguments == "preview"){
+        if(data == "APPLIED")
+            m_presetManager.returnToPreviousState();
     }
 
     if(arguments == "error")

@@ -159,9 +159,7 @@ else()
     add_subdirectory(Desktop)
 
     if(WIN32)
-        message("Build type: " ${CMAKE_BUILD_TYPE})
-
-        if(${CMAKE_BUILD_TYPE} EQUAL "Release")
+        if(${CMAKE_BUILD_TYPE} EQUAL Release)
             set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_windows/)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -193,7 +191,7 @@ else()
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
             MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
 
-        if(${CMAKE_BUILD_TYPE} EQUAL "Release")
+        if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
             set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.app)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

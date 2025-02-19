@@ -471,7 +471,7 @@ void MockCP16Legacy::ccCommHandler(const QString &command, const QByteArray &arg
     else
     {
         // file upload(preview and save)
-        QByteArray answer("CC ");
+        QByteArray answer("cc ");
 
         QByteArray commArgs = arguments;
         QByteArray fileData = data.left(data.size()-1); // отрезать последнюю \r

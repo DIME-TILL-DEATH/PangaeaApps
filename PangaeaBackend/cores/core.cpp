@@ -171,10 +171,7 @@ void Core::processCommands()
         // case DeviceDescription::DeviceConnectionType::USBManual:
         case DeviceConnectionType::USB:
         {
-            // возможно для CP16 нужен больше sleep time
-            // chunckSize=512;
-
-            chunckSize=128;
+            chunckSize=512;
             sleepTime=50;
             break;
         }
@@ -200,7 +197,6 @@ void Core::processCommands()
                 {
                     for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
                     {
-                        qDebug() << "Sleep time:" << sleepTime;
                         emit sgSetUIParameter("wait", true);
                         timeoutTimer->stop();
                         sendCommand(commandToSend.mid(sendPosition, chunckSize));
