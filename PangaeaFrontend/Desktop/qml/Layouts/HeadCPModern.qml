@@ -109,12 +109,62 @@ Item
         Column{
             width:  row.widthWithoutSpase/15*7+4
             height: parent.height
+            Rectangle{
+                id: _presetNameRect
+
+                width: parent.width
+                height: parent.height/3
+
+                border.width: 1
+
+                color: "transparent"
+                Row{
+                    anchors.fill: parent
+                    Rectangle{
+                        border.width: 1
+                        color: Style.mainEnabledColor
+                        height: parent.height
+                        width: parent.width/5
+                        MText{
+                            color: palette.text
+                            anchors.fill: parent
+                            verticalAlignment:   Text.AlignVCenter
+                            font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
+
+                            text: qsTr(" Preset name")
+                        }
+                    }
+
+                    TextInput{
+                        id: _presetNameEdit
+                        text: UiCore.currentDevice.currentPresetName
+
+                        height: parent.height
+                        width: parent.width*4/5
+
+                        horizontalAlignment: TextInput.AlignHCenter
+                        verticalAlignment:   TextInput.AlignVCenter
+
+                        color: Style.textEnabled
+                        font.bold: true
+                        font.family: "Arial Black"
+                        font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+
+                        onAccepted:{
+                            focus = false
+                            UiCore.currentDevice.currentPresetName = _presetNameEdit.text
+                        }
+                    }
+                }
+
+            }
+
             Rectangle
             {
                 id: impuls
 
                 width: parent.width
-                height: parent.height * 0.7
+                height: parent.height/3
 
                 enabled: UiCore.currentDevice.IR.used
 
@@ -128,31 +178,57 @@ Item
                     NumberAnimation{duration: 500}
                 }
 
-                MText
-                {
+                Row{
                     anchors.fill: parent
-                    id: impulsTxt
-                    text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
-                                         : qsTr("IR module not configured")
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment:   Text.AlignVCenter
 
-                    color: "black"
+                    Rectangle{
+                        border.width: 1
+                        color: Style.mainEnabledColor
+                        height: parent.height
+                        width: impuls.enabled ? parent.width/5 : 0
+                        MText{
 
-                    font.pixelSize: parent.height/2.5
-                    wrapMode: Text.Wrap
-                }
-                MouseArea
-                {
-                    anchors.fill: parent
-                    onClicked: openIrManagerWindow();
+                            anchors.fill: parent
+                            verticalAlignment:   Text.AlignVCenter
+                            font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
 
-                    cursorShape: Qt.PointingHandCursor
+                            visible: impuls.enabled
+
+                            text: qsTr(" IR name")
+                        }
+                    }
+
+
+                    MText
+                    {
+                        id: impulsTxt
+
+                        height: parent.height
+                        width: impuls.enabled ? parent.width*4/5 : parent.width
+
+                        text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
+                                             : qsTr("IR module not configured")
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment:   Text.AlignVCenter
+
+                        color: "black"
+
+                        font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+                        wrapMode: Text.Wrap
+
+                        MouseArea
+                        {
+                            anchors.fill: parent
+                            onClicked: openIrManagerWindow();
+
+                            cursorShape: Qt.PointingHandCursor
+                        }
+                    }
                 }
             }
 
             Item{
-                height: parent.height * 0.3
+                height: parent.height/3
                 width:  parent.width
 
                 Button{
