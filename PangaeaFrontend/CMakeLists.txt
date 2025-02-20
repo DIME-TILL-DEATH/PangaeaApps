@@ -159,7 +159,7 @@ else()
     add_subdirectory(Desktop)
 
     if(WIN32)
-        if(${CMAKE_BUILD_TYPE} EQUAL Release)
+        if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
             set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_windows/)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
