@@ -14,11 +14,15 @@
 
 #include "uicore.h"
 
-#ifdef __ANDROID__
+#ifdef Q_OS_ANDROID
 #include <jni.h>
 #include "activityresultmanager.h"
 
 ActivityResultManager activityResultHandler;
+#endif
+
+#ifdef Q_OS_IOS
+#include "Mobile/ios/src/iosfileutils.hpp"
 #endif
 
 UiCore::UiCore(QObject *parent)
@@ -75,8 +79,12 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 #ifdef Q_OS_ANDROID
     Q_UNUSED(srcFilePath)
     pickFile(ActivityType::PICK_IR, "audio/*");
+    return;
+#elif defined(Q_OS_IOS)
+    IosFileUtils::copyFileToTmp(srcFilePath, m_pickedIrPath);
 #else
     m_pickedIrPath = srcFilePath;
+#endif
     QFileInfo fileInfo(m_pickedIrPath);
     QString fileName = fileInfo.fileName();
 
@@ -89,7 +97,6 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
         }
     }
     m_currentDevice->startIrUpload(m_pickedIrPath, m_dstIrPath, false);
-#endif
 }
 
 void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)

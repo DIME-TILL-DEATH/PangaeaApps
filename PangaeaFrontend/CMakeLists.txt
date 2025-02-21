@@ -7,7 +7,7 @@ set(MY_BUILD_NUMBER 2502)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
-    project(Pangaea-mobile VERSION 1.00.02 LANGUAGES CXX)
+    project(Pangaea-mobile VERSION 1.00.03 LANGUAGES CXX)
     set(VERSION_CODE 42)
 
     set(PLATFORM_SPECIFIC_SOURCES
@@ -22,7 +22,12 @@ if(ANDROID)
         "firmwares.qrc"
     )
 elseif(IOS)
-    project(Pangaea-mobile VERSION 1.00.02 LANGUAGES CXX)
+    project(Pangaea-mobile VERSION 1.00.03 LANGUAGES CXX)
+
+    set(PLATFORM_SPECIFIC_SOURCES
+
+        Mobile/ios/src/iosfileutils.hpp
+        Mobile/ios/src/iosfileutils.mm)
 
     qt6_add_resources(RCC_FILES
         "Mobile/qml.qrc"
@@ -59,7 +64,9 @@ elseif(APPLE) # MacOS
         "firmwares.qrc"
     )
 
-   set(PLATFORM_SPECIFIC_SOURCES "${PROJECT_SOURCE_DIR}/Desktop/icons/pangaea.icns")
+   set(PLATFORM_SPECIFIC_SOURCES
+       "${PROJECT_SOURCE_DIR}/Desktop/icons/pangaea.icns")
+
    set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 

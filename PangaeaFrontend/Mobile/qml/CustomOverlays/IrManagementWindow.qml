@@ -285,7 +285,7 @@ Item{
 
         onAccepted:
         {            
-            UiCore.uploadIr(irFileDialog.currentFile, _root.dstIrPath);
+            UiCore.uploadIr(_iosFileDialog.currentFile, _root.dstIrPath);
 
         }
     }

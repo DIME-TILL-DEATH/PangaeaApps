@@ -379,22 +379,10 @@ void CPModern::previewIr(QString srcFilePath)
 }
 
 void CPModern::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
-{
-    // qDebug() << Q_FUNC_INFO << srcFilePath;
-
-     // QUrl url(srcFilePath);
-     // srcFilePath = url.toLocalFile();
-    
-    
-    qDebug() << "Clean url" << srcFilePath;
-    
+{    
     QString fileName;
     QFileInfo fileInfo(srcFilePath);
     
-    qDebug() << "dir" << fileInfo.absoluteDir();
-    
-    QDir dir(fileInfo.absoluteDir());
-    qDebug() << "list" << dir.entryList();
 
     if(fileInfo.isFile())
     {
