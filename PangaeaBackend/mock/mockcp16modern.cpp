@@ -25,6 +25,7 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     m_parser.addCommandHandler("state", std::bind(&MockCP16Modern::stateCommHandler, this,  _1, _2, _3));
     m_parser.addCommandHandler("pname", std::bind(&MockCP16Modern::pnameCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("ir", std::bind(&MockCP16Modern::irCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("lcc", std::bind(&MockCP16Modern::lccCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("ls", std::bind(&MockCP16Modern::listCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("list", std::bind(&MockCP16Modern::listCommHandler, this, _1, _2, _3));
@@ -534,6 +535,11 @@ void MockCP16Modern::irCommHandler(const QString &command, const QByteArray &arg
         }
         emit answerReady(answer);
     }
+}
+
+void MockCP16Modern::lccCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    emit answerReady("lcc\r\n");
 }
 
 void MockCP16Modern::getIrInfo()

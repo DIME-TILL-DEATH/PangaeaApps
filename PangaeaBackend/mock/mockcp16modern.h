@@ -49,6 +49,7 @@ protected:
     void pnameCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void stateCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void irCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
+    void lccCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void listCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void mconfigCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void rvconfigCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);

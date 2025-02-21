@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import CppObjects 1.0
+import PangaeaBackend
 
 Item{
     id: _root
@@ -41,7 +42,12 @@ Item{
         ToolTip
         {
             id: tp
-            text: currentIndex === presetMapIndex ? currentImpulseName : impulseName
+
+            property string shownIrName: currentIndex === presetMapIndex ? currentImpulseName : impulseName
+
+            text: qsTr("Preset name: ") + presetName + "\n" + qsTr("IR name: ") + shownIrName
+
+            // text: currentIndex === presetMapIndex ? currentImpulseName : impulseName
             visible: false
             timeout: 0
         }

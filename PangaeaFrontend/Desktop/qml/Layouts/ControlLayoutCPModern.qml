@@ -25,10 +25,15 @@ Column
 
     ModulesConfigWindow{
         id: _modulesConfigWindow
+
     }
 
     IrManagerWindow{
         id: _irManagerWindow
+        x: mainUi.Window.window.x + mainUi.width
+        y: mainUi.Window.window.y
+
+        height: mainUi.height
     }
 
     HeadCPModern

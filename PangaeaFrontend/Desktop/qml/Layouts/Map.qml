@@ -24,7 +24,6 @@ Window
         color: Style.mainEnabledColor
 
         enabled: UiCore.currentDevice.presetManager.currentState === PresetState.Idle
-        opacity: enabled ? 1 : 0.5
 
         Row
         {
@@ -92,7 +91,7 @@ Window
 
                     }
 
-                    model: UiCore.currentDevice.presetListModel
+                    // model: UiCore.currentDevice.presetListModel
 
                     delegate: MapDelegate{
                         id: _root
@@ -104,6 +103,16 @@ Window
                     }
                 }
             }
+        }
+    }
+
+    Connections{
+        target: UiCore.currentDevice
+
+        function onPresetSwitched(){
+            // console.log("preset switched")
+            // console.log(UiCore.currentDevice.presetListModel.rowCount())
+            _mapGrid.model = UiCore.currentDevice.presetListModel
         }
     }
 }

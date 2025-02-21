@@ -13,5 +13,7 @@
         <file>Images/usb-icon.svg</file>
         <file>Images/arrows-left-right.svg</file>
         <file>Images/bin.svg</file>
+        <file>Images/cp_16m_la3_light.svg</file>
+        <file>Images/cp_16m_modern.svg</file>
     </qresource>
 </RCC>
