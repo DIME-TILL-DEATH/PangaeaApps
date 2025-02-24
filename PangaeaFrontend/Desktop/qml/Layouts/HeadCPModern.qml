@@ -127,6 +127,7 @@ Item
                         width: parent.width/5
                         MText{
                             color: palette.text
+
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
@@ -145,7 +146,7 @@ Item
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
 
-                        color: Style.textEnabled
+                        color: palette.text
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
@@ -199,29 +200,41 @@ Item
                     }
 
 
-                    MText
-                    {
-                        id: impulsTxt
-
-                        height: parent.height
+                    Item{
                         width: impuls.enabled ? parent.width*4/5 : parent.width
-
-                        text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
-                                             : qsTr("IR module not configured")
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment:   Text.AlignVCenter
-
-                        color: "black"
-
-                        font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
-                        wrapMode: Text.Wrap
-
-                        MouseArea
+                        height: parent.height
+                        MText
                         {
-                            anchors.fill: parent
-                            onClicked: openIrManagerWindow();
+                            id: impulsTxt
 
-                            cursorShape: Qt.PointingHandCursor
+                            width: parent.width * 0.95
+                            height: parent.height
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
+                                                 : qsTr("IR module not configured")
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment:   Text.AlignVCenter
+
+                            color: "black"
+
+                            font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+                            elide: Text.ElideMiddle
+
+                            MouseArea
+                            {
+                                anchors.fill: parent
+                                onClicked: openIrManagerWindow();
+
+                                cursorShape: Qt.PointingHandCursor
+                            }
+
+                        }
+                        ToolTip{
+                            text: impulsTxt.text
+                            visible: false
+                            timeout: 0
                         }
                     }
                 }
