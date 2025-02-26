@@ -224,16 +224,22 @@ Item
 
                             MouseArea
                             {
+                                id: _maIrSelect
+
                                 anchors.fill: parent
                                 onClicked: openIrManagerWindow();
 
                                 cursorShape: Qt.PointingHandCursor
+
+                                hoverEnabled: true
                             }
 
                         }
                         ToolTip{
+                            id: __toolTipIrName
+
                             text: impulsTxt.text
-                            visible: false
+                            visible: _maIrSelect.containsMouse & impulsTxt.truncated
                             timeout: 0
                         }
                     }
