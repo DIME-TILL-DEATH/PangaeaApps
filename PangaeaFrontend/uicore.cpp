@@ -173,6 +173,10 @@ void UiCore::importPreset(QString filePath)
     Q_UNUSED(filePath)
 
     pickFile(ActivityType::PICK_PRESET, "*/*");
+#elif defined(Q_OS_IOS)
+    QString tmpFilePath;
+    IosFileUtils::copyFileToTmp(filePath, tmpFilePath);
+    slImportPreset(tmpFilePath, "");
 #else
     slImportPreset(filePath, "");
 #endif
@@ -301,7 +305,24 @@ void UiCore::openManualExternally(QString fileName)
         "(Ljava/lang/String;Landroid/content/Context;)V",
         QJniObject::fromString(fullFileName).object<jstring>(),
         QNativeInterface::QAndroidApplication::context());
-#elif Q_OS_LINUX
+#elif defined(Q_OS_IOS)
+        QString filePath = ":/docs/" + fullFileName;
+        QFile pdfFile(filePath);
+
+        if(!pdfFile.exists())
+        {
+            qDebug() << "Manual finded inresources";
+            fullFileName = fileName + ".pdf";
+            filePath = ":/docs/" + fullFileName;
+            pdfFile.setFileName(filePath);
+        }
+
+        QString temporallyPath = QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/" + fullFileName;
+        pdfFile.copy(temporallyPath);
+
+        qDebug() << "Final manual path: " << temporallyPath;
+        QDesktopServices::openUrl(QUrl::fromLocalFile(temporallyPath));
+#elif defined(Q_OS_LINUX)
         QString filePath = QCoreApplication::applicationDirPath() + "/../docs/" + fullFileName;
 
         QProcess proc;
@@ -398,6 +419,7 @@ void UiCore::runIrConvertor()
 #endif
 
 #ifdef Q_OS_LINUX
+    QProcess irConvertorProcess;
     QString path = QCoreApplication::applicationDirPath() + "/IrConverter";
     qDebug() << "Run converter, paht" << path << "result:" << irConvertorProcess.startDetached(path);
 #endif

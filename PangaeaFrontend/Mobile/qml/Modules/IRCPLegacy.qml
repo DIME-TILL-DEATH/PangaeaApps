@@ -1,11 +1,11 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Window 2.0
-//import QtQuick.Dialogs 1.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
+import QtQuick.Dialogs
 
-import CustomOverlays 1.0
-import StyleSettings 1.0
-import Elements 1.0
+import CustomOverlays
+import StyleSettings
+import Elements
 import Tutorials
 
 import CppObjects
@@ -37,7 +37,22 @@ BaseModule{
 
             MouseArea{
                 anchors.fill: parent
-                onClicked: UiCore.uploadIr("");
+                onClicked: {
+                    if(Qt.platform === "android")
+                        UiCore.uploadIr("", dstIrPath);
+                    else
+                        _iosFileDialog.open();
+                }
+            }
+
+            FileDialog{
+                id: _iosFileDialog
+
+                onAccepted:
+                {
+                    UiCore.importPreset(_iosFileDialog.currentFile, _root.dstIrPath);
+
+                }
             }
         }
     }

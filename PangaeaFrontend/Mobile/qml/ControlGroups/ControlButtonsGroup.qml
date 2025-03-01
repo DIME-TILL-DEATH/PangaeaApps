@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.15
+import QtQuick.Dialogs
 
 import StyleSettings 1.0
 
@@ -121,7 +122,20 @@ GridLayout
 
             onMbPressed:
             {
-                UiCore.importPreset("");
+                if(Qt.platform === "android")
+                    UiCore.importPreset("");
+                else
+                    _iosFileImportDialog.open();
+            }
+
+            FileDialog{
+                id: _iosFileImportDialog
+
+                onAccepted:
+                {
+                    UiCore.importPreset(_iosFileImportDialog.currentFile, _root.dstIrPath);
+
+                }
             }
         }
 
@@ -135,10 +149,27 @@ GridLayout
             enabled: UiCore.currentDevice.presetManager.currentState !== PresetState.Compare
 
             onMbPressed: {
-                if(_root.presetEdited)
+                if(_root.presetEdited){
                     UiCore.currentDevice.sgDeviceError(DeviceErrorType.PresetNotSaved);
-                else
-                    UiCore.exportPreset("");
+                }
+                else{
+                    if(Qt.platform === "android")
+                        UiCore.exportPreset("");
+                    else
+                        _iosFileExportDialog.open();
+                }
+            }
+
+            FileDialog{
+                id: _iosFileExportDialog
+
+                fileMode: FileDialog.SaveFile
+
+                onAccepted:
+                {
+                    UiCore.exportPreset(_iosFileExportDialog.currentFile, _root.dstIrPath);
+
+                }
             }
         }
     }

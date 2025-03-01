@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_IOS
     engine.addImportPath(":/");
     engine.loadFromModule("Pages", "Main");
-#elif Q_OS_ANDROID
+#elif defined(Q_OS_ANDROID)
     engine.loadFromModule("Pages", "Main");
 #else
     engine.addImportPath(":/");
