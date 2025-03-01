@@ -51,12 +51,43 @@ Item{
 
             snapMode: Dial.SnapAlways
 
-            MText
-            {
+            // MText
+            // {
+            //     anchors.centerIn: parent
+            //     color: Style.mainEnabledColor
+            //     font.pixelSize: parent.width/5
+            //     text: control.value.toFixed(floatDigits)
+            // }
+
+            TextInput{
+                id: _txtInput
+
+                inputMethodHints: Qt.ImhFormattedNumbersOnly
+
                 anchors.centerIn: parent
-                color: Style.mainEnabledColor
+                color: acceptableInput ? Style.mainEnabledColor : "red"
+
+                font.bold: true
+                font.family: "Arial Black"
                 font.pixelSize: parent.width/5
                 text: control.value.toFixed(floatDigits)
+
+                validator: DoubleValidator{
+                    bottom: controlValue.minDisplayValue
+                    top: controlValue.maxDisplayValue
+                    decimals: floatDigits
+
+                    locale: "en"
+                }
+
+                onEditingFinished: {
+                    if(parseFloat(text) > controlValue.maxDisplayValue) text = controlValue.maxDisplayValue
+                    if(parseFloat(text) < controlValue.minDisplayValue) text = controlValue.minDisplayValue
+
+                    controlValue.displayValue = text
+
+                    focus = false
+                }
             }
 
             background: Rectangle {
@@ -103,11 +134,15 @@ Item{
 
             MouseArea {
                 anchors.fill: parent
-                acceptedButtons: Qt.NoButton
+                acceptedButtons: Qt.RightButton//Qt.NoButton
 
                 onWheel: wheel => {
                     var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
                     controlValue.displayValue = control.value + wheel.angleDelta.y * step;
+                }
+
+                onClicked: mouse => {
+                    _txtInput.focus = true;
                 }
             }
         }

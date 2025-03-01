@@ -193,29 +193,47 @@ Item
                     }
 
 
-                    MText
-                    {
-                        id: impulsTxt
-
-                        height: parent.height
+                    Item{
                         width: impuls.enabled ? parent.width*4/5 : parent.width
-
-                        text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
-                                             : qsTr("IR module not configured")
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment:   Text.AlignVCenter
-
-                        color: "black"
-
-                        font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
-                        wrapMode: Text.Wrap
-
-                        MouseArea
+                        height: parent.height
+                        MText
                         {
-                            anchors.fill: parent
-                            onClicked: openIrManagerWindow();
+                            id: impulsTxt
 
-                            cursorShape: Qt.PointingHandCursor
+                            width: parent.width * 0.95
+                            height: parent.height
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
+                                                 : qsTr("IR module not configured")
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment:   Text.AlignVCenter
+
+                            color: "black"
+
+                            font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+                            elide: Text.ElideMiddle
+
+                            MouseArea
+                            {
+                                id: _maIrSelect
+
+                                anchors.fill: parent
+                                onClicked: openIrManagerWindow();
+
+                                cursorShape: Qt.PointingHandCursor
+
+                                hoverEnabled: true
+                            }
+
+                        }
+                        ToolTip{
+                            id: __toolTipIrName
+
+                            text: impulsTxt.text
+                            visible: _maIrSelect.containsMouse & impulsTxt.truncated
+                            timeout: 0
                         }
                     }
                 }

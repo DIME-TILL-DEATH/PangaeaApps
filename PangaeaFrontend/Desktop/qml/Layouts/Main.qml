@@ -33,12 +33,13 @@ ApplicationWindow
 
     property string interfaceDescription: ""
     property string markConnect: connected ? qsTr("Connected to ") + interfaceDescription : qsTr("Disconnected")
+    property string interfaceType
 
     property bool connected: false
     property bool appClosing: false
 
     title: connected ? "AMT PangaeaCPPA " +  " v." + Qt.application.version + " "
-                + markConnect + devName + markEdit
+                + markConnect + devName + " (" + interfaceType + ")" + markEdit
                 : "AMT PangaeaCPPA " + " v." + Qt.application.version + " " + markConnect
 
 
@@ -335,7 +336,14 @@ ApplicationWindow
         function onSgInterfaceConnected(interfaceDescription)
         {
             connected = true;
-            interfaceDescription = interfaceDescription.address
+
+            switch(interfaceDescription.connectionType){
+                case DeviceConnectionType.USB: main.interfaceType = qsTr("USB"); break;
+                case DeviceConnectionType.BLE: main.interfaceType = qsTr("BLUETOOTH"); break;
+                case DeviceConnectionType.Offline: main.interfaceType = qsTr("VIRTUAL"); break;
+                default: main.interfaceType = qsTr("Unknown interface"); break;
+            }
+
             msgInfo.close();
         }
 
