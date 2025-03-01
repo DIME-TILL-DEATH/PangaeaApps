@@ -81,7 +81,7 @@ BaseModule{
 
                 property ControlValue controlValue: module.stages
 
-                enabled: controlValue.enabled
+                enabled: module.moduleEnabled
 
                 Column
                 {
@@ -92,7 +92,7 @@ BaseModule{
                         id:    mSwitch
                         width: parent.width
                         height: parent.height/100*50
-                        opacity: _stagesSwitch.enabled?1:0.5
+                        opacity: _stagesSwitch.enabled ? 1 : 0.5
 
                         value: _stagesSwitch.controlValue.displayValue
 
