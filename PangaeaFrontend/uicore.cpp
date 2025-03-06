@@ -194,6 +194,16 @@ void UiCore::slImportPreset(QString fullFilePath, QString fileName)
 
 void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
 {
+#ifdef Q_OS_IOS
+    QString tmpFilePath;
+    IosFileUtils::copyFileToTmp(filePath, tmpFilePath);
+
+    filePath = tmpFilePath;
+
+    QFileInfo fileInfo(filePath);
+    fileName = fileInfo.fileName();
+#endif
+
     emit sgSetUIText("firmware_file_picked", filePath + ',' + fileName);
 }
 

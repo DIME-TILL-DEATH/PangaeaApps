@@ -23,6 +23,12 @@ void IosFileUtils::copyFileToTmp(const QUrl &url, QString& pathToCopiedFile)
   {
     fileName = fileInfo.fileName();
     copiedFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/" + fileName;
+      
+      if(QFile(copiedFilePath).exists())
+      {
+          QFile(copiedFilePath).remove();
+      }
+      
     if(!file.copy(copiedFilePath))
     {
       qWarning() << "Can't copy file to temporally directory";

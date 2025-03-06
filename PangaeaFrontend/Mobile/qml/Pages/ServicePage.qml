@@ -124,7 +124,7 @@ Item
 
         onAccepted:
         {
-            UiCore.sgSetUIText("firmware_file_picked", _iosFileDialog.currentFile + ',' + _iosFileDialog.currentFile,)
+            UiCore.slFirmwareFilePicked(_iosFileDialog.currentFile, "")
 
         }
     }
@@ -251,8 +251,7 @@ Item
 
         property string appString: (Qt.platform === "android") ? qsTr("AMT Pangaea CP-16/CP-100\nAndroid application\nVersion: ")
                                                                : qsTr("AMT Pangaea CP-16/CP-100\niOS application\nVersion: ")
-        text:
-              + Qt.application.version + "\n"
+        text: appString + Qt.application.version + "\n"
               + "(c) 2025\nwebsite: https://amtelectronics.com"
 
         closeOnDisconnect: true
