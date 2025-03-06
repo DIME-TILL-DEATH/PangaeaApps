@@ -1,5 +1,5 @@
 Package: PangaeaCPPA
-Version: APPVERSION
+Version: @MY_PRODUCT_NUMBER@.@MY_PRODUCT_VERSION@.@MY_BUILD_NUMBER@
 Maintainer: AMT electronics
 Architecture: all
 Description: Control application for PANGAEA devices

@@ -78,7 +78,9 @@ elseif(LINUX)
         "firmwares.qrc"
     )
 
-   set(PLATFORM_SPECIFIC_SOURCES
+    add_definitions( -DVERSION_STRING="${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
+
+    set(PLATFORM_SPECIFIC_SOURCES
        "${PROJECT_SOURCE_DIR}/Desktop/icons/pangaea.icns")
 endif()
 
@@ -240,57 +242,49 @@ else()
     endif()
 
     if(LINUX)
-        # set_target_properties(${PROJECT_NAME} PROPERTIES
-        #     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
-        #     MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
-
-        # if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-        #     set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA)
-
-        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        #             COMMAND ${CMAKE_COMMAND} -E copy_directory
-        #             "${PROJECT_SOURCE_DIR}/docs"
-        #             "${RELEASE_APP_PATH}/Contents/MacOS/docs")
-
-        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        #             COMMAND ${CMAKE_COMMAND} -E copy
-        #             "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
-        #             "${RELEASE_APP_PATH}/Contents/MacOS/")
-
-        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        #             COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
-        #                                 "-qmldir=${PROJECT_SOURCE_DIR}/Desktop/qml"
-        #                                 "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/")
-
-        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        #             COMMAND ${CMAKE_COMMAND} -E copy_directory
-        #             "${RELEASE_APP_PATH}"
-        #             "${PROJECT_SOURCE_DIR}/../deploy_mac/dmg_content/PangaeaCPPA.app")
-
-        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        #             COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"
-        #             COMMAND sh "package_script.sh")
-        # endif()
-
         set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_linux/)
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA"
-                "${DEPLOY_PATH}/app/bin/PangaeaCPPA")
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA"
+            "${DEPLOY_PATH}/app/bin/PangaeaCPPA")
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_directory
-                "${PROJECT_SOURCE_DIR}/docs"
-                "${DEPLOY_PATH}/app/docs/")
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${PROJECT_SOURCE_DIR}/docs"
+            "${DEPLOY_PATH}/app/docs/")
 
+
+        # using cqtdeployer, installed from snap
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/PangaeaCPPA"
+                                -targetDir "${DEPLOY_PATH}/app/"
+                                -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
+                                -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
+                                -qmake "~/Qt/6.8.1/gcc_64/bin/qmake")
+
+        # make tarball archive
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" "${DEPLOY_PATH}/app/")
+
+        # make .deb package
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${DEPLOY_PATH}/app/"
+            "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/")
+
+        configure_file(
+            ${DEPLOY_PATH}/DEBIAN/control
+            ${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/DEBIAN/control
+            @ONLY)
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/PangaeaCPPA"
-                                    -targetDir "${DEPLOY_PATH}/app/"
-                                    -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
-                                    -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
-                                    -qmake "~/Qt/6.8.1/gcc_64/bin/qmake")
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${DEPLOY_PATH}/usr/"
+            "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/")
     endif()
 
 endif()

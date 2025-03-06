@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QtQml>
 
+#include <qicon.h>
 #include <signal.h>
 
 #include <QDir>
@@ -65,10 +66,10 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("amtelectronics.com");
     app.setApplicationName("pangaea mobile");
 
-// #ifdef Q_OS_LINUX
-//     QApplication::setWindowIcon(QIcon(":/Images/AMT.svg"));
-//     app.setApplicationVersion(VERSION_STRING);
-// #endif
+#if defined(Q_OS_LINUX) & !defined(Q_OS_ANDROID)
+    app.setWindowIcon(QIcon(":/Images/AMT.svg"));
+    app.setApplicationVersion(VERSION_STRING);
+#endif
 
     Logger log;
     log.setAsMessageHandlerForApp();
