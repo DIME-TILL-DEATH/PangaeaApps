@@ -18,7 +18,7 @@ void ControlQLegacy::setDisplayValue(double newDisplayValue)
     emit displayValueChanged();
 
 
-    quint8 controlValue = 100 - powf((m_displayValue-0.225) * powf(200, 3)/5, 1.0/3.0);
+    quint8 controlValue =static_cast<qint8>(100 - powf((m_displayValue-0.225) * powf(200, 3)/5, 1.0/3.0));
 
     QString strValue;
     strValue.setNum(controlValue, 16);

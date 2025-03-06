@@ -46,14 +46,15 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     QString strValue;
     if(m_maxControlValue>0xFF)
     {
-        quint16 controlValue = (m_displayValue - k1)/k2;
+        quint16 controlValue = static_cast<qint16>((m_displayValue - k1)/k2);
         strValue.setNum(controlValue, 16);
         if(strValue.size() > 4) strValue = strValue.right(4);
         fullCommand = m_commandString + " " + strValue + "\r\n";
     }
     else
     {
-        quint8 controlValue = (m_displayValue - k1)/k2;
+        quint8 controlValue = static_cast<qint8>((m_displayValue - k1)/k2);
+        
         strValue.setNum(controlValue, 16);
         if(strValue.size() > 2) strValue = strValue.right(2);
     }
