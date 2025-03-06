@@ -388,7 +388,7 @@ void BleInterface::deviceConnected()
     m_control->requestConnectionUpdate(connectionParams);
     QObject::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
 
-#ifndef Q_OS_WINDOWS
+#if defined(Q_OS_ANDROID) | defined(Q_OS_IOS) | defined(Q_OS_MACOS)
     m_control->readRssi();
     QObject::connect(m_control, &QLowEnergyController::rssiRead, this, &BleInterface::rssiReaded);
 #endif
@@ -615,7 +615,7 @@ void BleInterface::rssiMeasuring(bool isEnabled)
 
 void BleInterface::requestRssi()
 {
-#ifndef Q_OS_WINDOWS
+#if defined(Q_OS_ANDROID) | defined(Q_OS_IOS) | defined(Q_OS_MACOS)
     if(m_control)
         m_control->readRssi();
 #endif
