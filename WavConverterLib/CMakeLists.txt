@@ -27,6 +27,14 @@ if(ANDROID)
     )
 endif()
 
+if(LINUX)
+    target_link_libraries(converter-lib PUBLIC
+        Qt6::Core
+
+        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.linux/libsox.so
+    )
+endif()
+
 if(WIN32)
     add_compile_definitions(WAVCONVERTERLIB_LIBRARY)
 

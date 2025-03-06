@@ -68,6 +68,18 @@ elseif(APPLE) # MacOS
        "${PROJECT_SOURCE_DIR}/Desktop/icons/pangaea.icns")
 
    set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+elseif(LINUX)
+    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
+
+    qt6_add_resources(RCC_FILES
+        "Desktop/images.qrc"
+        "Desktop/translations.qrc"
+        "docs.qrc"
+        "firmwares.qrc"
+    )
+
+   set(PLATFORM_SPECIFIC_SOURCES
+       "${PROJECT_SOURCE_DIR}/Desktop/icons/pangaea.icns")
 endif()
 
 set(CMAKE_AUTOMOC ON)
@@ -225,6 +237,60 @@ else()
                     COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"
                     COMMAND sh "package_script.sh")
         endif()
+    endif()
+
+    if(LINUX)
+        # set_target_properties(${PROJECT_NAME} PROPERTIES
+        #     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
+        #     MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
+
+        # if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+        #     set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA)
+
+        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        #             COMMAND ${CMAKE_COMMAND} -E copy_directory
+        #             "${PROJECT_SOURCE_DIR}/docs"
+        #             "${RELEASE_APP_PATH}/Contents/MacOS/docs")
+
+        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        #             COMMAND ${CMAKE_COMMAND} -E copy
+        #             "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
+        #             "${RELEASE_APP_PATH}/Contents/MacOS/")
+
+        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        #             COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
+        #                                 "-qmldir=${PROJECT_SOURCE_DIR}/Desktop/qml"
+        #                                 "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/")
+
+        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        #             COMMAND ${CMAKE_COMMAND} -E copy_directory
+        #             "${RELEASE_APP_PATH}"
+        #             "${PROJECT_SOURCE_DIR}/../deploy_mac/dmg_content/PangaeaCPPA.app")
+
+        #     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        #             COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"
+        #             COMMAND sh "package_script.sh")
+        # endif()
+
+        set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_linux/)
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA"
+                "${DEPLOY_PATH}/app/bin/PangaeaCPPA")
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${PROJECT_SOURCE_DIR}/docs"
+                "${DEPLOY_PATH}/app/docs/")
+
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/PangaeaCPPA"
+                                    -targetDir "${DEPLOY_PATH}/app/"
+                                    -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
+                                    -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
+                                    -qmake "~/Qt/6.8.1/gcc_64/bin/qmake")
     endif()
 
 endif()

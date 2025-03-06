@@ -421,6 +421,6 @@ void UiCore::runIrConvertor()
 #ifdef Q_OS_LINUX
     QProcess irConvertorProcess;
     QString path = QCoreApplication::applicationDirPath() + "/IrConverter";
-    qDebug() << "Run converter, paht" << path << "result:" << irConvertorProcess.startDetached(path);
+    qDebug() << "Run converter, path" << path << "result:" << irConvertorProcess.startDetached(path);
 #endif
 }

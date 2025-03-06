@@ -49,7 +49,14 @@ if(WIN32)
             "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.exe"
             "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND ${WINDEPLOYQT_EXECUTABLE} "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe"
-                                    --qmldir "${PROJECT_SOURCE_DIR}/")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${WINDEPLOYQT_EXECUTABLE} "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe"
+                                --qmldir "${PROJECT_SOURCE_DIR}/")
+endif()
+
+if(LINUX)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter"
+            "${PROJECT_SOURCE_DIR}/../deploy_linux/app/bin/IrConverter")
 endif()
