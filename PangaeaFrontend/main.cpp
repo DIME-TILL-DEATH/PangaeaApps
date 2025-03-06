@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("pangaea mobile");
 
 #if defined(Q_OS_LINUX) & !defined(Q_OS_ANDROID)
-    app.setWindowIcon(QIcon(":/Images/AMT.svg"));
+    QGuiApplication::setWindowIcon(QIcon("qrc:/Images/AMT.svg"));
     app.setApplicationVersion(VERSION_STRING);
 #endif
 

@@ -78,10 +78,7 @@ elseif(LINUX)
         "firmwares.qrc"
     )
 
-    add_definitions( -DVERSION_STRING="${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
-
-    set(PLATFORM_SPECIFIC_SOURCES
-       "${PROJECT_SOURCE_DIR}/Desktop/icons/pangaea.icns")
+    add_definitions(-DVERSION_STRING="${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
 endif()
 
 set(CMAKE_AUTOMOC ON)
