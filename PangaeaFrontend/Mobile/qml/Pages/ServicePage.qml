@@ -1,4 +1,5 @@
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Dialogs
 import QtQuick.Controls.Material
 
 import QtQuick.Layouts 1.3
@@ -54,8 +55,10 @@ Item
             textButton: qsTr("Update Firmware")
             onMbPressed:
             {
-                //fileFirmWare.open();
-                UiCore.pickFirmwareFile();
+                if(Qt.platform === "android")
+                    UiCore.pickFirmwareFile();
+                else
+                    _iosFileDialog.open();
             }
         }
 
@@ -113,6 +116,16 @@ Item
             {
                 mesAbout.open();
             }
+        }
+    }
+
+    FileDialog{
+        id: _iosFileDialog
+
+        onAccepted:
+        {
+            UiCore.sgSetUIText("firmware_file_picked", _iosFileDialog.currentFile + ',' + _iosFileDialog.currentFile,)
+
         }
     }
 
@@ -235,7 +248,10 @@ Item
     {
         id: mesAbout
         headerText: qsTr("About...")
-        text: qsTr("AMT Pangaea CP-16/CP-100\nAndroid application\nVersion: ")
+
+        property string appString: (Qt.platform === "android") ? qsTr("AMT Pangaea CP-16/CP-100\nAndroid application\nVersion: ")
+                                                               : qsTr("AMT Pangaea CP-16/CP-100\niOS application\nVersion: ")
+        text:
               + Qt.application.version + "\n"
               + "(c) 2025\nwebsite: https://amtelectronics.com"
 
