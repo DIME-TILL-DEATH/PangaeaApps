@@ -19,6 +19,8 @@ Item
         anchors.verticalCenter: parent.verticalCenter
 
         text: deviceDescription.name + "\n" + deviceDescription.address
+
+        elide: Text.ElideMiddle
         // text: name + "\n" + address
     }
 

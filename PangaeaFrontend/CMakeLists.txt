@@ -7,7 +7,7 @@ set(MY_BUILD_NUMBER 2503)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
-    project(Pangaea-mobile VERSION 1.00.04 LANGUAGES CXX)
+    project(Pangaea-mobile VERSION 1.01.00 LANGUAGES CXX)
     set(VERSION_CODE 42)
 
     set(PLATFORM_SPECIFIC_SOURCES
@@ -22,10 +22,9 @@ if(ANDROID)
         "firmwares.qrc"
     )
 elseif(IOS)
-    project(Pangaea-mobile VERSION 1.00.04 LANGUAGES CXX)
+    project(Pangaea-mobile VERSION 1.1.0 LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
-
         Mobile/ios/src/iosfileutils.hpp
         Mobile/ios/src/iosfileutils.mm)
 
@@ -149,6 +148,7 @@ if(ANDROID OR IOS)
             MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
             MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist"
+            QT_IOS_LAUNCH_SCREEN "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/LaunchScreen.storyboard"
             XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon
             MACOSX_BUNDLE TRUE
             WIN32_EXECUTABLE TRUE
