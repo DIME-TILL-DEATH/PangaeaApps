@@ -251,6 +251,11 @@ else()
             "${PROJECT_SOURCE_DIR}/docs"
             "${DEPLOY_PATH}/app/docs/")
 
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${DEPLOY_PATH}/libxcb-cursor.so.0"
+            "${DEPLOY_PATH}/app/lib/libxcb-cursor.so.0")
+
 
         # using cqtdeployer, installed from snap
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

@@ -41,9 +41,9 @@ if(LINUX)
             "${DEPLOY_PATH}/app/lib/libconverter-lib.so")
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.linux/libsox.so"
-            "${DEPLOY_PATH}/app/lib/libsox.so")
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.linux/"
+            "${DEPLOY_PATH}/app/lib/")
 endif()
 
 if(WIN32)
