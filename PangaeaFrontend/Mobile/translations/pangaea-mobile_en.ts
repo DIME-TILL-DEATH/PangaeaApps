@@ -948,6 +948,12 @@ website: https://amtelectronics.com</translation>
         <source>Current RSSI: </source>
         <translation></translation>
     </message>
+    <message>
+        <source>AMT Pangaea CP-16/CP-100
+iOS application
+Version: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingsPage</name>

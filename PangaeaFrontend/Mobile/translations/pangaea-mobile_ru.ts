@@ -508,7 +508,7 @@
     </message>
     <message>
         <source> already on device.</source>
-        <translation>уже загружен на устройство.</translation>
+        <translation> уже загружен на устройство.</translation>
     </message>
     <message>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
@@ -547,7 +547,7 @@
     </message>
     <message>
         <source> already on device.</source>
-        <translation>уже загружен на устройство.</translation>
+        <translation> уже загружен на устройство.</translation>
     </message>
     <message>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
@@ -1146,6 +1146,14 @@ website: https://amtelectronics.com</source>
     <message>
         <source>Current RSSI: </source>
         <translation>Измеренный RSSI:</translation>
+    </message>
+    <message>
+        <source>AMT Pangaea CP-16/CP-100
+iOS application
+Version: </source>
+        <translation>AMT Pangaea CP-16/CP-100
+Приложение iOS
+Версия: </translation>
     </message>
 </context>
 <context>
