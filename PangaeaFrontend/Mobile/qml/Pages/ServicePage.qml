@@ -55,7 +55,7 @@ Item
             textButton: qsTr("Update Firmware")
             onMbPressed:
             {
-                if(Qt.platform === "android")
+                if(Qt.platform.os === "android")
                     UiCore.pickFirmwareFile();
                 else
                     _iosFileDialog.open();
@@ -249,7 +249,7 @@ Item
         id: mesAbout
         headerText: qsTr("About...")
 
-        property string appString: (Qt.platform === "android") ? qsTr("AMT Pangaea CP-16/CP-100\nAndroid application\nVersion: ")
+        property string appString: (Qt.platform.os === "android") ? qsTr("AMT Pangaea CP-16/CP-100\nAndroid application\nVersion: ")
                                                                : qsTr("AMT Pangaea CP-16/CP-100\niOS application\nVersion: ")
         text: appString + Qt.application.version + "\n"
               + "(c) 2025\nwebsite: https://amtelectronics.com"

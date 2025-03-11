@@ -97,8 +97,11 @@ Item{
                 text: qsTr("UPLOAD IR")
 
                 onClicked: {
-                    if(Qt.platform === "android")
+                    if(Qt.platform.os === "android")
+                    {
                         UiCore.uploadIr("", dstIrPath);
+
+                    }
                     else
                         _iosFileDialog.open();
                 }

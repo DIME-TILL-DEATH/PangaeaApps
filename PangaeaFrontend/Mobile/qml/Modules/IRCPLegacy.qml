@@ -38,8 +38,8 @@ BaseModule{
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    if(Qt.platform === "android")
-                        UiCore.uploadIr("", dstIrPath);
+                    if(Qt.platform.os === "android")
+                        UiCore.uploadIr("", "");
                     else
                         _iosFileDialog.open();
                 }

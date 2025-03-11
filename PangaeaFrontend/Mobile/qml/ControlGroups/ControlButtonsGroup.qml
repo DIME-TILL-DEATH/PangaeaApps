@@ -122,7 +122,7 @@ GridLayout
 
             onMbPressed:
             {
-                if(Qt.platform === "android")
+                if(Qt.platform.os === "android")
                     UiCore.importPreset("");
                 else
                     _iosFileImportDialog.open();
@@ -153,7 +153,7 @@ GridLayout
                     UiCore.currentDevice.sgDeviceError(DeviceErrorType.PresetNotSaved);
                 }
                 else{
-                    if(Qt.platform === "android")
+                    if(Qt.platform.os === "android")
                         UiCore.exportPreset("");
                     else
                         _iosFileExportDialog.open();
