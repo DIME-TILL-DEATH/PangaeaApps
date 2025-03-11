@@ -407,8 +407,6 @@ ApplicationWindow
             console.log("signal device unavaliable");
         }
 
-
-
         function onSgInterfaceError(errorDescription)
         {
             _main.connected = false;
@@ -426,11 +424,23 @@ ApplicationWindow
         }
     }
 
+    // CustomMessageDialog
+    // {
+    //     id: _msgExit
+
+    //     buttons: Dialog.Yes | Dialog.No
+
+    //     text: qsTr("Do you really want to quit?");
+
+    //     headerText: qsTr("Quit?")
+    //     onAccepted: {
+    //         Qt.quit();
+    //     }
+    // }
+
     onClosing: function(close)
     {
         close.accepted = false;
-        // UiCore.sgSw4Enable();
-        // console.log("Close");
-
+        // _msgExit.open();
     }
 }

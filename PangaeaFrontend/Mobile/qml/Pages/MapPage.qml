@@ -18,13 +18,11 @@ Item
             case DeviceType.LA3:
             case DeviceType.MODERN_CP:
             {
-                console.log("modern")
                 _mapContentLoader.source = "../ControlGroups/MapCPModern.qml";
                 break;
             }
             default:
             {
-                console.log("default")
                 _mapContentLoader.source = "../ControlGroups/MapCPLegacy.qml";
                 break;
             }

@@ -465,7 +465,7 @@
     </message>
     <message>
         <source> already on device.</source>
-        <translation type="vanished">уже загружен на устройство.</translation>
+        <translation type="vanished"> уже загружен на устройство.</translation>
     </message>
     <message>
         <source>Trim IR file</source>

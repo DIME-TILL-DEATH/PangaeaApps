@@ -307,13 +307,18 @@ Item
         main.update();
     }
 
-    Keys.onReleased: function(event)
-    {
-        if(event.key === Qt.Key_Back)
-        {
-            main.hide();
-        }
-    }
+    // Keys.onReleased: function(event)
+    // {
+    //     if(event.key === Qt.Key_Back)
+    //     {
+    //         main.hide();
+    //     }
+    // }
+
+    // Shortcut{
+    //     sequence: StandardKey.Back
+    //     onActivated: main.hide();
+    // }
 
     Connections{
         target: eqModule

@@ -101,10 +101,6 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/firmwares");
     engine.addImportPath(":/translations");
 
-// #ifdef Q_OS_MACOS
-    // QQuickStyle::setStyle("Basic");
-// #endif
-
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
     qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);

@@ -23,7 +23,7 @@ Item
         id: background
 
         anchors.fill: parent
-        opacity: 0.6
+        opacity: 0.5
     }
 
     Column
@@ -87,8 +87,10 @@ Item
         {
             id: txt
 
-            width: parent.width
+            width: parent.width * 0.8
             height: parent.height*1/10
+
+            wrapMode: Text.WordWrap
 
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignBottom
@@ -102,7 +104,7 @@ Item
 
             text: ""
 
-            color: Style.colorFon
+            color: Style.colorText
         }
 
     }
