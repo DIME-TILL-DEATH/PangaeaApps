@@ -143,7 +143,8 @@ Item{
                                 text: modelData.moduleName
 
 
-                                color:  modelData.used ? Style.colorBtnDisabled : Style.colorText
+                                // color:  modelData.used ? Style.colorBtnDisabled : Style.colorText
+                                color:  modelData.used ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
 
                                 anchors.fill: parent
 
@@ -161,8 +162,8 @@ Item{
                                 text: qsTr("cost: ") + modelData.processingTime
 
                                 anchors.centerIn: parent
-                                color: modelData.used ? (Style.colorBtnDisabled) :
-                                                        (_delegateRow.isResourcesEnough ? Style.colorText : "red")
+                                color: modelData.used ? (Style.currentTheme.colorTextDisabled) :
+                                                        (_delegateRow.isResourcesEnough ? Style.currentTheme.colorTextEnabled  : "red")
 
 
                                 elide: Text.ElideMiddle
@@ -178,6 +179,8 @@ Item{
                             width: parent.width * 3/16
                             height: parent.height
 
+                            textColor:  Style.currentTheme.colorTextEnabled
+
                             onMbPressed:{
                                 onClicked: _tutorialItem.item.open()
                             }
@@ -191,6 +194,7 @@ Item{
                             height: parent.height
 
                             enabled: modelData.used ? "true" : _delegateRow.isResourcesEnough
+                            textColor:  enabled ? Style.currentTheme.colorTextEnabled : Style.currentTheme.colorTextDisabled
 
                             onMbPressed:{
                                 if(!modelData.used )
