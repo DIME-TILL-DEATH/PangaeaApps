@@ -7,8 +7,8 @@ set(MY_BUILD_NUMBER 2503)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
-    project(Pangaea-mobile VERSION 1.1.0 LANGUAGES CXX)
-    set(VERSION_CODE 42)
+    project(Pangaea-mobile VERSION 1.1.1 LANGUAGES CXX)
+    set(VERSION_CODE 44)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -22,7 +22,7 @@ if(ANDROID)
         "firmwares.qrc"
     )
 elseif(IOS)
-    project(Pangaea-mobile VERSION 1.1.0 LANGUAGES CXX)
+    project(Pangaea-mobile VERSION 1.1.1 LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/ios/src/iosfileutils.hpp

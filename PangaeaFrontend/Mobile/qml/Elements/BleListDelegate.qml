@@ -11,17 +11,38 @@ Item
     width: _list.width
     height: 50
 
-    MText
-    {
-        color: "white"
-        width: parent.width-40
-        leftPadding: parent.width/20
-        anchors.verticalCenter: parent.verticalCenter
+    Column{
+        anchors.fill: parent
+        Item{
+            width: parent.width
+            height: parent.height/2
 
-        text: deviceDescription.name + "\n" + deviceDescription.address
+            MText
+            {
+                color: "white"
+                width: parent.width - leftPadding*2
+                leftPadding: parent.width/20
+                anchors.verticalCenter: parent.verticalCenter
 
-        elide: Text.ElideMiddle
-        // text: name + "\n" + address
+                text: deviceDescription.name
+                elide: Text.ElideMiddle
+            }
+        }
+
+        Item{
+            width: parent.width
+            height: parent.height/2
+            MText
+            {
+                color: "white"
+                width: parent.width - leftPadding*2
+                height: parent.height/2
+                leftPadding: parent.width/20
+
+                text: deviceDescription.address
+                elide: Text.ElideMiddle
+            }
+        }
     }
 
 
