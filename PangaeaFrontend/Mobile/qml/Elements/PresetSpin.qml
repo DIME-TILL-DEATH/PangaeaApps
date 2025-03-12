@@ -46,7 +46,7 @@ Rectangle
                 anchors.centerIn: parent
 
                 font.bold: true
-                font.pixelSize: main.width/5
+                font.pixelSize: Math.min(main.width/5, main.height/5)
             }
 
             MouseArea{
@@ -77,7 +77,7 @@ Rectangle
                 text: modelData
                 opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: Style.colorText
-                font.pixelSize: _tumbler.height*0.75//DeviceProperties.isLa3Mode ? _tumbler.height*0.6 : _tumbler.height*0.75
+                font.pixelSize: Math.min(_tumbler.height*0.75, _tumbler.width*0.75)
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 font.bold: true
@@ -103,7 +103,7 @@ Rectangle
             horizontalAlignment: Text.AlignHCenter
 
             font.bold: true
-            font.pixelSize: main.width/5
+            font.pixelSize: Math.min(main.width/5, main.height/5)
 
             text: qsTr("PRESET")
         }
