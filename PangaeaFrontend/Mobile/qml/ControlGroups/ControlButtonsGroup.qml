@@ -2,11 +2,13 @@ import QtQuick 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.15
 import QtQuick.Dialogs
+import QtCore
 
 import StyleSettings 1.0
 
 import Elements 1.0
 import Modules 1.0
+import CustomOverlays
 
 import CppObjects
 import PangaeaBackend
@@ -156,21 +158,33 @@ GridLayout
                     if(Qt.platform.os === "android")
                         UiCore.exportPreset("");
                     else
-                        _iosFileExportDialog.open();
+                        _fileNameDialog.open();
                 }
             }
+        }
+    }
 
-            FileDialog{
-                id: _iosFileExportDialog
+    EditTextDialog
+    {
+        id: _fileNameDialog
 
-                fileMode: FileDialog.SaveFile
+        contentText: UiCore.moduleName
 
-                onAccepted:
-                {
-                    UiCore.exportPreset(_iosFileExportDialog.currentFile, _root.dstIrPath);
+        width: Screen.width * 0.75
 
-                }
-            }
+        headerText: qsTr("Export preset")
+        text: qsTr("Enter file name:")
+
+        onAccepted:
+        {
+            var path = StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+
+            var name = contentText
+            if(name === "") name = "preset"
+
+            var fullPath = path + "/" + name + ".pst"
+
+            UiCore.exportPreset(fullPath);
         }
     }
 

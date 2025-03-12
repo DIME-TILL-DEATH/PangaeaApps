@@ -158,6 +158,8 @@ void UiCore::exportPreset(QUrl dstPath)
 
         QtAndroidPrivate::startActivity(intent, ActivityType::CREATE_PRESET, &activityResultHandler);
     }
+// #elif defined(Q_OS_IOS)
+
 #else
     QString filePath = dstPath.path();
     #ifdef Q_OS_WIN
