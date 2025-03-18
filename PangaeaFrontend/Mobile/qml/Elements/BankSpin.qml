@@ -62,7 +62,7 @@ Rectangle
             id: _tumbler
 
             width:  parent.width
-            height: parent.height*6/10
+            height: (Screen.orientation ===  Qt.LandscapeOrientation) ? parent.height*5/10 : parent.height*6/10
 
             model: UiCore.currentDevice.maxBankCount
 
@@ -102,7 +102,7 @@ Rectangle
             horizontalAlignment: Text.AlignHCenter
 
             font.bold: true
-            font.pixelSize: Math.min(main.width/5, main.height/5)
+            font.pixelSize: (Screen.orientation ===  Qt.LandscapeOrientation) ? main.height/6 : main.width/5
 
             text: qsTr("BANK")
         }
