@@ -30,7 +30,7 @@ UiCore::UiCore(QObject *parent)
 {
     m_currentDevice = &dummyDevice;
 
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
     
@@ -38,6 +38,9 @@ UiCore::UiCore(QObject *parent)
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::slImportPreset);
     connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UiCore::slFirmwareFilePicked);
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::slExportPreset);
+#elif defined(Q_OS_IOS)
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.plist", QSettings::NativeFormat);
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif

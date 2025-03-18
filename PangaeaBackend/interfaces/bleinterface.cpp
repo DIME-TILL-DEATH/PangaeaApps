@@ -51,6 +51,24 @@ BleInterface::BleInterface(QObject *parent)
             m_moduleUniqueNames.insert(MACAddress, name);
         }
         appSettings->endArray();
+#elif defined(Q_OS_IOS)
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.plist", QSettings::NativeFormat);
+
+    appSettings->setFallbacksEnabled(false);
+    appSettings->beginGroup("AutoconnectSettings");
+    appSettings->endGroup();
+
+    int size = appSettings->beginReadArray("Unique module names");
+    for(int i=0; i<size; ++i)
+    {
+        appSettings->setArrayIndex(i);
+
+        QString MACAddress = appSettings->value("MAC address").toString();
+        QString name = appSettings->value("Name").toString();
+        m_moduleUniqueNames.insert(MACAddress, name);
+    }
+    appSettings->endArray();
 #else
     appSettings = new QSettings(QSettings::UserScope, this);
 #endif
@@ -580,9 +598,12 @@ void BleInterface::setModuleName(QString name)
 
         m_moduleUniqueNames.insert(m_currentDeviceAddress, m_moduleName);
 
-#ifdef Q_OS_ANDROID
+#if  defined(Q_OS_ANDROID)
         QSettings settings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                            + "/settings.conf", QSettings::NativeFormat);
+#elif defined(Q_OS_IOS)
+        QSettings settings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                        + "/settings.plist", QSettings::NativeFormat);
 #else
         QSettings settings(QSettings::UserScope);
 #endif

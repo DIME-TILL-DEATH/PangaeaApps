@@ -22,7 +22,7 @@ if(ANDROID)
         "firmwares.qrc"
     )
 elseif(IOS)
-    project(Pangaea-mobile VERSION 1.1.1 LANGUAGES CXX)
+    project(Pangaea-mobile VERSION 1.2.1 LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/ios/src/iosfileutils.hpp

@@ -16,6 +16,9 @@ NetCore::NetCore(QObject *parent)
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                                     + "/settings.conf", QSettings::NativeFormat);
+#elif defined(Q_OS_IOS)
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                           + "/settings.plist", QSettings::NativeFormat);
 #else
     appSettings = new QSettings();
 #endif
