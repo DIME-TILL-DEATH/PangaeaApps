@@ -415,6 +415,8 @@ void CPLegacy::restoreValue(QString name)
 
 void CPLegacy::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
 {
+    qInfo() << __FUNCTION__;
+
     QString fileName;
     QFileInfo fileInfo(srcFilePath);
 
@@ -423,7 +425,11 @@ void CPLegacy::startIrUpload(QString srcFilePath, QString dstFilePath, bool trim
         fileInfo.absoluteDir();
         fileName = fileInfo.fileName();
     }
-    else return;
+    else
+    {
+        qWarning() << __FUNCTION__ << "Path is not valid";
+        return;
+    }
 
     stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
 
