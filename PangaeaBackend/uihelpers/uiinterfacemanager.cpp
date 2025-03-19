@@ -14,8 +14,6 @@ UiInterfaceManager::~UiInterfaceManager()
 
 void UiInterfaceManager::connectToDevice(DeviceDescription device)
 {
-    m_connectedInterface = device;
-    emit connectedInterfaceChanged();
     emit sgConnectToDevice(device);
 }
 
@@ -39,6 +37,13 @@ void UiInterfaceManager::slInterfaceUnavaliable(DeviceConnectionType senderType,
     }
 
     emit sgInterfaceUnavaliable(senderType, reason);
+}
+
+void UiInterfaceManager::slInterfaceConnected(DeviceDescription device)
+{
+    m_connectedInterface = device;
+    emit connectedInterfaceChanged();
+    emit sgInterfaceConnected(device);
 }
 
 bool UiInterfaceManager::isBleAvaliable()
