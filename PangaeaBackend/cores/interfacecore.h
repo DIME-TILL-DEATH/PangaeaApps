@@ -43,7 +43,6 @@ signals:
 
     void sgErrorDisconnect();
 
-
     void sgRssiReaded(qint16 rssi);
 private:
     AbstractInterface* m_exchangeInterface{nullptr};

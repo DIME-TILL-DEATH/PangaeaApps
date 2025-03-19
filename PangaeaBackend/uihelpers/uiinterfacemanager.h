@@ -39,6 +39,7 @@ public:
 
 public slots:
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
+    void slInterfaceConnected(DeviceDescription device);
 
 signals:
     void startScanning(DeviceConnectionType);

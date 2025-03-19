@@ -149,9 +149,6 @@ Column
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            console.log("DeviceConnectionType:", InterfaceManager.connectedInterface.connectionType)
-            console.log("onAccepted. File selected, path:", cleanPath)
-
             if(InterfaceManager.connectedInterface.connectionType !== DeviceConnectionType.USB)
             {
                 // TODO: переделать cleanPath на QUrl
@@ -161,8 +158,6 @@ Column
 
         onRejected:
         {
-            // if((UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100)
-            //         || (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP100PA))
             if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB)
             {
                 UiCore.currentDevice.escImpulse()
@@ -175,13 +170,9 @@ Column
             var cleanPath = irFileDialog.currentFile.toString();
             cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
 
-            console.log("DeviceConnectionType:", InterfaceManager.connectedInterface.connectionType)
-            console.log("onSelectedFileChanged. File selected, path:", cleanPath)
-
             if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
                 // TODO: переделать cleanPath на QUrl
                 UiCore.uploadIr(cleanPath);
-                console.log("Function called")
             }
         }
         Settings

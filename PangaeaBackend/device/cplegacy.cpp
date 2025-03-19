@@ -415,8 +415,6 @@ void CPLegacy::restoreValue(QString name)
 
 void CPLegacy::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
 {
-    qInfo() << __FUNCTION__;
-
     QString fileName;
     QFileInfo fileInfo(srcFilePath);
 
