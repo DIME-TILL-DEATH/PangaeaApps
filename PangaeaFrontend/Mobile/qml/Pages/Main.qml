@@ -411,7 +411,7 @@ ApplicationWindow
         {
             _main.connected = false;
             _main.openConnectPage();
-            _msgBluetoothNotReady.text = qsTr("Device disconnected\n") + errorDescription
+            _msgBluetoothNotReady.text = qsTr("Device disconnected. \n") + errorDescription
             _msgBluetoothNotReady.open();
 
             InterfaceManager.startScanning(DeviceConnectionType.BLE);
