@@ -393,6 +393,8 @@ void BleInterface::deviceConnected()
     QObject::connect(m_control, &QLowEnergyController::rssiRead, this, &BleInterface::rssiReaded);
 #endif
 
+    dataToWrite.clear();
+
     setState(Connected);
     m_control->discoverServices();
 }

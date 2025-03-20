@@ -133,11 +133,11 @@ void Core::pushCommandToQueue(QByteArray command, bool finalize)
     calculateSendVolume();
 }
 
-void Core::sendWithoutConfirmation(QByteArray data, qint64 dataSizeToSend, qint64 dataSizeToRecieve)
+void Core::sendWithoutConfirmation(QByteArray data, qint32 dataSizeToSend, qint32 dataSizeToRecieve)
 {
     if(dataSizeToSend > -1) symbolsToSend = dataSizeToSend;
 
-    if(dataSizeToRecieve != -1) symbolsToRecieve = dataSizeToRecieve;
+    if(dataSizeToRecieve > -1) symbolsToRecieve = dataSizeToRecieve;
 
     commandsSended.clear();
     commandsPending.append(data);
