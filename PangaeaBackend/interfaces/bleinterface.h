@@ -7,6 +7,8 @@
 #include <QLowEnergyController>
 #include <QLowEnergyService>
 
+#include <QQueue>
+
 #include <QHash>
 #include <QSettings>
 #include <qpermissions.h>
@@ -68,6 +70,7 @@ private slots:
     void serviceStateChanged(QLowEnergyService::ServiceState s);
     void updateData(const QLowEnergyCharacteristic &c, const QByteArray &value);
     void confirmedDescriptorWrite(const QLowEnergyDescriptor &d, const QByteArray &value);
+    void characteristicWritten(const QLowEnergyCharacteristic &characteristic, const QByteArray &newValue);
 
     /* Slots for user */
     void slStartConnect(QString address);
@@ -79,6 +82,7 @@ private:
     bool isAvaliable;
 
     int mtu;
+    QQueue<QByteArray> dataToWrite;
 
     QBluetoothDeviceDiscoveryAgent *m_deviceDiscoveryAgent{nullptr};
 

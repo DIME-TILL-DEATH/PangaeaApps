@@ -451,7 +451,9 @@ void BleInterface::serviceScanDone()
     QBluetoothDeviceDiscoveryAgent::connect(m_service, &QLowEnergyService::descriptorWritten,
             this, &BleInterface::confirmedDescriptorWrite);
     QBluetoothDeviceDiscoveryAgent::connect(m_service, &QLowEnergyService::errorOccurred,
-                                            this, &BleInterface::serviceError);
+            this, &BleInterface::serviceError);
+    QBluetoothDeviceDiscoveryAgent::connect(m_service, &QLowEnergyService::characteristicWritten,
+            this, &BleInterface::characteristicWritten);
 
     m_service->discoverDetails();
     setState(ServiceFound);
@@ -533,19 +535,22 @@ void BleInterface::connectionParametersUpdated(const QLowEnergyConnectionParamet
 
 void BleInterface::write(const QByteArray &data)
 {
-    const QLowEnergyCharacteristic  RxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
+    if(dataToWrite.empty()){
+        const QLowEnergyCharacteristic rxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
+        m_service->writeCharacteristic(rxChar, data, QLowEnergyService::WriteWithResponse);
+    }
 
-    QByteArray Data;
-    Data.append(data);
+    dataToWrite.enqueue(data);
+}
 
-    // if(data.size() > 48)
-    // {
-    //     QLowEnergyConnectionParameters connectionParams;
-    //     connectionParams.setIntervalRange(10, 25);
-    //     m_control->requestConnectionUpdate(connectionParams);
-    // }
+void BleInterface::characteristicWritten(const QLowEnergyCharacteristic &characteristic, const QByteArray &newValue)
+{
+    if(!dataToWrite.empty()) dataToWrite.dequeue();
 
-    m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithResponse);
+    if(!dataToWrite.empty()){
+        const QLowEnergyCharacteristic rxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
+        m_service->writeCharacteristic(rxChar, dataToWrite.head(), QLowEnergyService::WriteWithResponse);
+    }
 }
 
 void BleInterface::serviceError(QLowEnergyService::ServiceError newError)

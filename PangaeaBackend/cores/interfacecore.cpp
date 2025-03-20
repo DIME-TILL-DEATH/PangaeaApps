@@ -199,10 +199,6 @@ void InterfaceCore::slDeviceListUpdated(DeviceConnectionType connectionType, QLi
 
     if(m_exchangeInterface == nullptr && makeAutoconnect)
     {
-        // if(!list.empty())
-        // {
-        //     connectToDevice(list.first());
-        // }
         foreach(DeviceDescription device, list)
         {
             if(device.connectionType() == DeviceConnectionType::Offline)
