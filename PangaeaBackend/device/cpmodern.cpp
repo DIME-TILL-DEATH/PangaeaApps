@@ -453,8 +453,8 @@ void CPModern::uploadIrData(const QString& irName, const QString& dstPath, const
     m_rawIrData = irData;
     QByteArray command = QString("ir start_upload\r").toUtf8() + irName.toUtf8() + "\r" + dstPath.toUtf8() + "\n";
 
-    qint64 symbolsToSend = command.size() + m_rawIrData.size() + 20 * (m_rawIrData.size() / uploadBlockSize + 1); // header: ir part_upload\r*\n = 16
-    qint64 symbolsToRecieve = 0;
+    qint32 symbolsToSend = command.size() + m_rawIrData.size() + 20 * (m_rawIrData.size() / uploadBlockSize + 1); // header: ir part_upload\r*\n = 16
+    qint32 symbolsToRecieve = 0;
 
     emit sgSendWithoutConfirmation(command, symbolsToSend, symbolsToRecieve);
     emit sgProcessCommands();

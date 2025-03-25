@@ -130,7 +130,7 @@ signals:
 
     void sgWriteToInterface(QByteArray data, bool logCommand = true);
     void sgPushCommandToQueue(QByteArray command, bool finalize = true);
-    void sgSendWithoutConfirmation(QByteArray data, qint64 symbolsToSend = -1, qint64 symbolsTorecieve = -1); // -1 don't update
+    void sgSendWithoutConfirmation(QByteArray data, qint32 symbolsToSend = -1, qint32 symbolsTorecieve = -1); // -1 don't update
     void sgProcessCommands();
 
     void sgModuleListUpdated(QList<AbstractModule*> modulesList);
