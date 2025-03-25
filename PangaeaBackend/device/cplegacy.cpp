@@ -562,8 +562,8 @@ void CPLegacy::uploadFirmware(const QByteArray& firmware)
     {
         m_rawFirmwareData = firmware;
 
-        qint64 symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / fwUploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
-        qint64 symbolsToRecieve = 0;// 18 * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
+        qint32 symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / fwUploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
+        qint32 symbolsToRecieve = 0;// 18 * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
 
         qDebug() << Q_FUNC_INFO << symbolsToSend;
 
@@ -737,7 +737,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     {
         eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);
         eqData.gain[i] = legacyData.eq_band_vol[i];
-        eqData.freq[i] = legacyData.eq_freq[i];
+        eqData.freq[i] = static_cast<int8_t>(legacyData.eq_freq[i]); // treat value as signed when converting in 16 bits
         eqData.Q[i] = legacyData.eq_Q[i];
     }
     eqData.parametric_on = legacyData.eq_on;
