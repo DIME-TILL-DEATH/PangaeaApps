@@ -740,7 +740,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     {
         eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);
         eqData.gain[i] = legacyData.eq_band_vol[i];
-        eqData.freq[i] = legacyData.eq_freq[i];
+        eqData.freq[i] = static_cast<int8_t>(legacyData.eq_freq[i]);
         eqData.Q[i] = legacyData.eq_Q[i];
     }
     eqData.parametric_on = legacyData.eq_on;

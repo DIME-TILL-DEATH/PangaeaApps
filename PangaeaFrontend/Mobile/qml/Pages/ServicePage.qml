@@ -227,8 +227,8 @@ Item
 
         onRejected:
         {
-            _main.openConnectPage();
             UiCore.disconnectFromDevice();
+            _main.openConnectPage();
         }
     }
 
