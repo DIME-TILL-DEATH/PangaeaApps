@@ -915,9 +915,15 @@ WARNING!!! Updating firmware may take several minutes!</source>
     </message>
     <message>
         <location filename="../qml/Pages/Main.qml" line="414"/>
+        <source>Device disconnected. 
+</source>
+        <translation>Устройство отключено. 
+</translation>
+    </message>
+    <message>
         <source>Device disconnected
 </source>
-        <translation>Устройство отключено</translation>
+        <translation type="vanished">Устройство отключено</translation>
     </message>
 </context>
 <context>
@@ -934,11 +940,15 @@ WARNING!!! Updating firmware may take several minutes!</source>
     </message>
     <message>
         <location filename="../qml/ControlGroups/MapCPModern.qml" line="83"/>
-        <source>Set name for current preset:</source>
-        <translation>Укажите имя для пресета:</translation>
+        <source>Preset name(Only numbers and english letters allowed):</source>
+        <translation>Имя пресета(Допустимы только цифры и латинский алфавит):</translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/MapCPModern.qml" line="241"/>
+        <source>Set name for current preset:</source>
+        <translation type="vanished">Укажите имя для пресета:</translation>
+    </message>
+    <message>
+        <location filename="../qml/ControlGroups/MapCPModern.qml" line="245"/>
         <source>Delay/Reverb</source>
         <translation>Модули Дилея/Реверберации</translation>
     </message>

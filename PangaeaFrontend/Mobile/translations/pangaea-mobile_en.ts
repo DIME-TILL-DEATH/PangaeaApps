@@ -855,9 +855,14 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     </message>
     <message>
         <location filename="../qml/Pages/Main.qml" line="414"/>
+        <source>Device disconnected. 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Device disconnected
 </source>
-        <translation>The device is disconnected
+        <translation type="vanished">The device is disconnected
 </translation>
     </message>
 </context>
@@ -875,11 +880,15 @@ WARNING!!! Updating the firmware may take several minutes!</translation>
     </message>
     <message>
         <location filename="../qml/ControlGroups/MapCPModern.qml" line="83"/>
-        <source>Set name for current preset:</source>
-        <translation>Set the name for the current preset:</translation>
+        <source>Preset name(Only numbers and english letters allowed):</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/MapCPModern.qml" line="241"/>
+        <source>Set name for current preset:</source>
+        <translation type="vanished">Set the name for the current preset:</translation>
+    </message>
+    <message>
+        <location filename="../qml/ControlGroups/MapCPModern.qml" line="245"/>
         <source>Delay/Reverb</source>
         <translation></translation>
     </message>

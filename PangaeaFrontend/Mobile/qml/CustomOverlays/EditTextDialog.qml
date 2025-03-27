@@ -12,6 +12,7 @@ CustomMessageDialog
     id: _root
 
     property alias contentText: _textField.text
+    property alias validator: _textField.validator
 
     standardButtons: Dialog.Ok  | Dialog.Cancel
 
