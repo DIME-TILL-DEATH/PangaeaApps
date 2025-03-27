@@ -538,7 +538,7 @@ void BleInterface::characteristicWritten(const QLowEnergyCharacteristic &charact
     if(!dataToWrite.empty()) dataToWrite.dequeue();
 
     if(!dataToWrite.empty()){
-        qInfo() << "dataToWrite not empty" << dataToWrite.size();
+        // qInfo() << "dataToWrite not empty" << dataToWrite.size();
         const QLowEnergyCharacteristic rxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
         m_service->writeCharacteristic(rxChar, dataToWrite.head(), QLowEnergyService::WriteWithResponse);
     }

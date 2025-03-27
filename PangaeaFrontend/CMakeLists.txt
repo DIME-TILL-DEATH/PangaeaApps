@@ -6,7 +6,7 @@ set(MY_BUILD_NUMBER 2503)
 
 set(MOBILE_VERSION_MAJOR 1)
 set(MOBILE_VERSION_MINOR 2)
-set(MOBILE_VERSION_BUILD 3)
+set(MOBILE_VERSION_BUILD 4)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
@@ -29,8 +29,8 @@ elseif(IOS)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
-        Mobile/ios/src/iosfileutils.hpp
-        Mobile/ios/src/iosfileutils.mm)
+        Mobile/ios/src/iosutils.hpp
+        Mobile/ios/src/iosutils.mm)
 
     qt6_add_resources(RCC_FILES
         "Mobile/qml.qrc"

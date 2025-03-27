@@ -456,8 +456,8 @@ void CPModern::uploadIrData(const QString& irName, const QString& dstPath, const
     m_rawIrData = irData;
     QByteArray command = QString("ir start_upload\r").toUtf8() + irName.toUtf8() + "\r" + dstPath.toUtf8() + "\n";
 
-    qint64 symbolsToSend = command.size() + m_rawIrData.size() + 20 * (m_rawIrData.size() / uploadBlockSize + 1); // header: ir part_upload\r*\n = 16
-    qint64 symbolsToRecieve = 0;
+    qint32 symbolsToSend = command.size() + m_rawIrData.size() + 20 * (m_rawIrData.size() / uploadBlockSize + 1); // header: ir part_upload\r*\n = 16
+    qint32 symbolsToRecieve = 0;
 
     emit sgSendWithoutConfirmation(command, symbolsToSend, symbolsToRecieve);
     emit sgProcessCommands();
@@ -547,7 +547,7 @@ void CPModern::uploadFirmware(const QByteArray &firmware)
         m_rawFirmwareData = firmware;
 
         qint32 symbolsToSend = m_rawFirmwareData.size() + 4 * m_rawFirmwareData.size() / uploadBlockSize + 2; // 128\n = 4 * (parts num and 0\n = 2
-        // qint64 symbolsToRecieve = 0; //QString("REQUEST_NEXT_CHUNK\n").size() * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
+        qint32 symbolsToRecieve = m_symbolsToRecieve = 0; //QString("REQUEST_NEXT_CHUNK\n").size() * m_rawFirmwareData.size() / fwUploadBlockSize; // REQUEST_CHUNK_SIZE\n = 18
 
         qDebug() << Q_FUNC_INFO << symbolsToSend;
 
@@ -565,7 +565,7 @@ void CPModern::uploadFirmware(const QByteArray &firmware)
         baSend.append(QString("%1\n").arg(baTmp.length()).toUtf8());
         baSend.append(baTmp);
 
-        emit sgSendWithoutConfirmation(baSend, symbolsToSend, 0);
+        emit sgSendWithoutConfirmation(baSend, symbolsToSend, symbolsToRecieve);
         emit sgProcessCommands();
     }
 }

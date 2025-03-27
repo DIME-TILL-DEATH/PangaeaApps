@@ -65,10 +65,10 @@ private:
     QList<QByteArray> commandsSended;
     quint16 commandCount;
 
-    qint64 symbolsToSend{0};
-    qint64 symbolsSended{0};
-    qint64 symbolsToRecieve{0};
-    qint64 symbolsRecieved{0};
+    qint32 symbolsToSend{0};
+    qint32 symbolsSended{0};
+    qint32 symbolsToRecieve{0};
+    qint32 symbolsRecieved{0};
 
     void calculateSendVolume();
     void updateProgressBar();
