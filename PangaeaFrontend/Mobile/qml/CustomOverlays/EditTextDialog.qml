@@ -13,6 +13,7 @@ CustomMessageDialog
 
     property alias contentText: _textField.text
     property alias validator: _textField.validator
+    property alias inputMethodHints: _textField.inputMethodHints
 
     standardButtons: Dialog.Ok  | Dialog.Cancel
 

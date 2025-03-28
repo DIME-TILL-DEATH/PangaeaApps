@@ -82,9 +82,11 @@ Item{
                 headerText: qsTr("Set preset name")
                 text: qsTr("Preset name(Only numbers and english letters allowed):")
 
-                validator: RegularExpressionValidator{
-                    regularExpression: /[A-za-z0-9_- ]{0,255}/
-                }
+                inputMethodHints: Qt.ImhUrlCharactersOnly
+
+                // validator: RegularExpressionValidator{
+                //     regularExpression: /[A-za-z0-9_- ]{0,255}/
+                // }
 
                 onAccepted:
                 {
