@@ -46,7 +46,7 @@ Rectangle
                 anchors.centerIn: parent
 
                 font.bold: true
-                font.pixelSize: main.width/5
+                font.pixelSize: Math.min(main.width/5, main.height/5)
             }
 
             MouseArea{
@@ -62,7 +62,7 @@ Rectangle
             id: _tumbler
 
             width:  parent.width
-            height: parent.height*6/10
+            height: (Screen.orientation ===  Qt.LandscapeOrientation) ? parent.height*5/10 : parent.height*6/10
 
             model: UiCore.currentDevice.maxPresetCount
             // currentIndex: DeviceProperties.bank*4 + DeviceProperties.preset
@@ -98,7 +98,7 @@ Rectangle
                 text: modelData
                 opacity: 0.1 + Math.max(0, 1 - Math.abs(Tumbler.displacement)) * 0.6
                 color: _tumbler.currentTextColor
-                font.pixelSize: _tumbler.height*0.6
+                font.pixelSize: Math.min(_tumbler.height*0.6, _tumbler.width*0.6)
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 font.bold: true
@@ -132,7 +132,7 @@ Rectangle
             horizontalAlignment: Text.AlignHCenter
 
             font.bold: true
-            font.pixelSize: main.width/5
+            font.pixelSize: (Screen.orientation ===  Qt.LandscapeOrientation) ? main.height/6 : main.width/5
 
             text: qsTr("PRESET")
         }

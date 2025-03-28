@@ -9,14 +9,15 @@ Text{
     font.pixelSize: 10 * Style.dip
     font.bold: true
 
-    property alias textWidth: _tMetrics.tightBoundingRect.width
-    property alias textHeight: _tMetrics.tightBoundingRect.height // _tMetrics.height
+    property alias textWidth: _tMetrics.boundingRect.width
+    property alias textHeight: _tMetrics.boundingRect.height // _tMetrics.height
 
     TextMetrics{
         id: _tMetrics
 
         font: _root.font
         text: _root.text
+        elide: _root.elide
     }
 }
 

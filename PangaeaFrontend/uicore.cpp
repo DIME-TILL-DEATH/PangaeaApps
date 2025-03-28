@@ -22,7 +22,7 @@ ActivityResultManager activityResultHandler;
 #endif
 
 #ifdef Q_OS_IOS
-#include "Mobile/ios/src/iosfileutils.hpp"
+#include "Mobile/ios/src/iosutils.hpp"
 #endif
 
 UiCore::UiCore(QObject *parent)
@@ -30,7 +30,7 @@ UiCore::UiCore(QObject *parent)
 {
     m_currentDevice = &dummyDevice;
 
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
     
@@ -38,6 +38,11 @@ UiCore::UiCore(QObject *parent)
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::slImportPreset);
     connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UiCore::slFirmwareFilePicked);
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::slExportPreset);
+#elif defined(Q_OS_IOS)
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.plist", QSettings::NativeFormat);
+
+    IosUtils::wakeLockDisable();
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
@@ -81,7 +86,7 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
     pickFile(ActivityType::PICK_IR, "audio/*");
     return;
 #elif defined(Q_OS_IOS)
-    IosFileUtils::copyFileToTmp(srcFilePath, m_pickedIrPath);
+    IosUtils::copyFileToTmp(srcFilePath, m_pickedIrPath);
 #else
     m_pickedIrPath = srcFilePath;
 #endif
@@ -158,6 +163,8 @@ void UiCore::exportPreset(QUrl dstPath)
 
         QtAndroidPrivate::startActivity(intent, ActivityType::CREATE_PRESET, &activityResultHandler);
     }
+// #elif defined(Q_OS_IOS)
+
 #else
     QString filePath = dstPath.path();
     #ifdef Q_OS_WIN
@@ -175,7 +182,7 @@ void UiCore::importPreset(QString filePath)
     pickFile(ActivityType::PICK_PRESET, "*/*");
 #elif defined(Q_OS_IOS)
     QString tmpFilePath;
-    IosFileUtils::copyFileToTmp(filePath, tmpFilePath);
+    IosUtils::copyFileToTmp(filePath, tmpFilePath);
     slImportPreset(tmpFilePath, "");
 #else
     slImportPreset(filePath, "");
@@ -196,7 +203,7 @@ void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
 {
 #ifdef Q_OS_IOS
     QString tmpFilePath;
-    IosFileUtils::copyFileToTmp(filePath, tmpFilePath);
+    IosUtils::copyFileToTmp(filePath, tmpFilePath);
 
     filePath = tmpFilePath;
 

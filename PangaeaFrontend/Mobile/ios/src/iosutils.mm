@@ -1,4 +1,4 @@
-#import "iosfileutils.hpp"
+#import "iosutils.hpp"
 
 #import <QFile>
 #import <QFileInfo>
@@ -6,7 +6,9 @@
 
 #import <Foundation/Foundation.h>
 
-void IosFileUtils::copyFileToTmp(const QUrl &url, QString& pathToCopiedFile)
+#import <UiKit/UIApplication.h>
+
+void IosUtils::copyFileToTmp(const QUrl &url, QString& pathToCopiedFile)
 {
   NSURL *iosURL = url.toNSURL();
 
@@ -44,4 +46,9 @@ void IosFileUtils::copyFileToTmp(const QUrl &url, QString& pathToCopiedFile)
   }
 
   [iosURL stopAccessingSecurityScopedResource];
+}
+
+void IosUtils::wakeLockDisable()
+{
+  [UIApplication sharedApplication].idleTimerDisabled = YES;
 }

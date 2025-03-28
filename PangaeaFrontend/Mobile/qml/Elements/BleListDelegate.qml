@@ -20,7 +20,7 @@ Item
             MText
             {
                 color: "white"
-                width: parent.width - leftPadding*2
+                width: parent.width - leftPadding - 50 // 50 - IconWidth
                 leftPadding: parent.width/20
                 anchors.verticalCenter: parent.verticalCenter
 
@@ -35,7 +35,7 @@ Item
             MText
             {
                 color: "white"
-                width: parent.width - leftPadding*2
+                width: parent.width - leftPadding - 50
                 height: parent.height/2
                 leftPadding: parent.width/20
 

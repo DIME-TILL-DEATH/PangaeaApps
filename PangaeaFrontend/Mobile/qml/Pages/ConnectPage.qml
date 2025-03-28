@@ -107,7 +107,6 @@ Item
                     anchors.horizontalCenter: parent.horizontalCenter
                     color: Style.colorText
                     text: isConnected ? qsTr("CONNECTED") : qsTr("SCANNING...")
-                    // text: isConnected ? "CONNECTED" : "SCANNING"
                 }
                 MText
                 {
