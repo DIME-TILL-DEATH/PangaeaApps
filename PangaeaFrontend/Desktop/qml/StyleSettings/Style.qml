@@ -15,4 +15,7 @@ QtObject {
 
     readonly property color textEnabled: "white"
     readonly property color textDisabled: "black"
+
+    readonly property color borderOn: "white"
+    readonly property color borderOff: "grey"
 }

@@ -15,6 +15,7 @@ qt_add_qml_module(qml_layouts
         StartLayout.qml
         ControlLayoutLegacy.qml
         ControlLayoutCPModern.qml
+        ControlLayoutCP100FX.qml
         ModulesListModern.qml
         ModulesConfigWindow.qml
         HeadCPModern.qml

@@ -100,6 +100,8 @@ qt_add_qml_module(PangaeaBackend
         modules/tremolo.h modules/tremolo.cpp
         modules/chorus.h modules/chorus.cpp
         modules/phaser.h modules/phaser.cpp
+        SOURCES device/cp100fx.h device/cp100fx.cpp
+        SOURCES mock/mockcp100fx.h mock/mockcp100fx.cpp
 )
 
 

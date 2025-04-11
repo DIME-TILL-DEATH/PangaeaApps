@@ -8,7 +8,6 @@ import QtCore
 
 import StyleSettings 1.0
 
-import Modules 1.0
 import Elements 1.0
 
 import CppObjects

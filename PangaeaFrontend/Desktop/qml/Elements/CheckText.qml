@@ -1,6 +1,5 @@
 import QtQuick
 
-import Modules
 import StyleSettings
 
 MText

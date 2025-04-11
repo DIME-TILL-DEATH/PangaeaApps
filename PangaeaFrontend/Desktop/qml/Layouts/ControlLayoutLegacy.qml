@@ -7,7 +7,7 @@ import Qt.labs.platform 1.1 as Labs
 
 import QtQuick.Window 2.15
 
-import Modules 1.0
+import ModulesClassic 1.0
 import StyleSettings 1.0
 import Layouts 1.0
 
@@ -96,25 +96,25 @@ Column
                 Component.onCompleted: function(){
                     switch(moduleType)
                     {
-                    case ModuleType.NG: _delegateLoader.source = "../Modules/Ng.qml"; break;
-                    case ModuleType.CM: _delegateLoader.source = "../Modules/Cm.qml"; break;
-                    case ModuleType.PR: _delegateLoader.source = "../Modules/Pr.qml"; break;
-                    case ModuleType.PA: _delegateLoader.source = "../Modules/Pa.qml"; break;
-                    case ModuleType.PS: _delegateLoader.source = "../Modules/Ps.qml"; break;
+                    case ModuleType.NG: _delegateLoader.source = "../ModulesClassic/Ng.qml"; break;
+                    case ModuleType.CM: _delegateLoader.source = "../ModulesClassic/Cm.qml"; break;
+                    case ModuleType.PR: _delegateLoader.source = "../ModulesClassic/Pr.qml"; break;
+                    case ModuleType.PA: _delegateLoader.source = "../ModulesClassic/Pa.qml"; break;
+                    case ModuleType.PS: _delegateLoader.source = "../ModulesClassic/Ps.qml"; break;
                     case ModuleType.IR: {
-                        _delegateLoader.source = "../Modules/Ir.qml";
+                        _delegateLoader.source = "../ModulesClassic/Ir.qml";
                         _mainRow.emitIrModule(moduleInstance);
                         break;
                     }
-                    case ModuleType.HP: _delegateLoader.source = "../Modules/Hp.qml"; break;
+                    case ModuleType.HP: _delegateLoader.source = "../ModulesClassic/Hp.qml"; break;
                     case ModuleType.EQ1: {
-                        _delegateLoader.source = "../Modules/EqLegacy.qml";
+                        _delegateLoader.source = "../ModulesClassic/EqLegacy.qml";
                         _delegateLoader.widthMult = 5;
                         break;
                     }
-                    case ModuleType.LP: _delegateLoader.source = "../Modules/Lp.qml"; break;
+                    case ModuleType.LP: _delegateLoader.source = "../ModulesClassic/Lp.qml"; break;
                     case ModuleType.ER_MONO:
-                    case ModuleType.ER_STEREO: _delegateLoader.source = "../Modules/Er.qml"; break;
+                    case ModuleType.ER_STEREO: _delegateLoader.source = "../ModulesClassic/Er.qml"; break;
                     }
 
                     _delegateLoader.item.module = moduleInstance;

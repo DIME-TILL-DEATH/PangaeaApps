@@ -1,7 +1,5 @@
 import QtQuick
 
-import Modules
-
 import CppObjects 1.0
 import PangaeaBackend
 

@@ -5,7 +5,6 @@
 #include <QStandardPaths>
 
 #include "core.h"
-
 #include "eqband.h"
 
 CPLegacy::CPLegacy(Core *parent)

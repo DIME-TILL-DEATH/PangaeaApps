@@ -5,7 +5,6 @@ import QtQuick.Controls
 
 import Elements
 import StyleSettings
-import Modules
 
 import CppObjects
 import PangaeaBackend

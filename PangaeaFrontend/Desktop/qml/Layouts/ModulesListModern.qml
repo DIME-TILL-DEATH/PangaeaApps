@@ -4,7 +4,7 @@ import Qt5Compat.GraphicalEffects
 
 import QtQml.Models
 
-import Modules
+import ModulesClassic
 import StyleSettings
 
 import CppObjects
@@ -110,22 +110,22 @@ Flickable{
                             Component.onCompleted: function(){
                                 switch(moduleType)
                                 {
-                                case ModuleType.NG: _delegateLoader.source = "../Modules/Ng.qml"; break;
-                                case ModuleType.CM: _delegateLoader.source = "../Modules/Cm.qml"; break;
-                                case ModuleType.PR: _delegateLoader.source = "../Modules/Pr.qml"; break;
-                                case ModuleType.PA: _delegateLoader.source = "../Modules/Pa.qml"; break;
-                                case ModuleType.TR: _delegateLoader.source = "../Modules/Tr.qml"; break;
-                                case ModuleType.CH: _delegateLoader.source = "../Modules/Ch.qml"; break;
-                                case ModuleType.IR: _delegateLoader.source = "../Modules/IrCpModern.qml"; break;
+                                case ModuleType.NG: _delegateLoader.source = "../ModulesClassic/Ng.qml"; break;
+                                case ModuleType.CM: _delegateLoader.source = "../ModulesClassic/Cm.qml"; break;
+                                case ModuleType.PR: _delegateLoader.source = "../ModulesClassic/Pr.qml"; break;
+                                case ModuleType.PA: _delegateLoader.source = "../ModulesClassic/Pa.qml"; break;
+                                case ModuleType.TR: _delegateLoader.source = "../ModulesClassic/Tr.qml"; break;
+                                case ModuleType.CH: _delegateLoader.source = "../ModulesClassic/Ch.qml"; break;
+                                case ModuleType.IR: _delegateLoader.source = "../ModulesClassic/IrCpModern.qml"; break;
                                 case ModuleType.EQ1:
                                 case ModuleType.EQ2:{
-                                    _delegateLoader.source = "../Modules/EqModern.qml";
+                                    _delegateLoader.source = "../ModulesClassic/EqModern.qml";
                                     _delegateRoot.widthMult = 5
                                     break;
                                 }
 
                                 case ModuleType.PH:{
-                                    _delegateLoader.source = "../Modules/Ph.qml";
+                                    _delegateLoader.source = "../ModulesClassic/Ph.qml";
                                     _delegateRoot.widthMult = 2
                                     break;
                                 }

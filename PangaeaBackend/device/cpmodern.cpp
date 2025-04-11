@@ -185,7 +185,7 @@ void CPModern::pushReadPresetCommands()
 
 QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
 {
-    QList<QByteArray> recievedCommAnswers, parseResults;
+    QList<QByteArray> recievedCommAnswers;
 
     recievedCommAnswers += m_parser.parseNewData(baAnswer);
 
