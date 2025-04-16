@@ -11,23 +11,16 @@ import PangaeaBackend
 Rectangle {
     id: _main
 
-    property bool on: true// module.moduleEnabled
-
-    property bool disabled: UiCore.currentDevice.presetManager.currentState === PresetState.Compare
-
-    property string moduleName: "BM"//module.moduleName
+    property bool on: module.moduleEnabled
+    property string moduleName: module.moduleName
 
     property bool showDescription : true
 
+    property bool disabled: UiCore.currentDevice.presetManager.currentState === PresetState.Compare
+
     property Component contentItem
-    // property SimpleTutorialMessage tutorialItem
-
-    property int dialWidth: width/10
-    property int dialHeight: height/3
-
-    signal showTutorial()
-
-    signal editingChanged(var editingState)
+    property int dialWidth: width/15
+    property int dialHeight: dialWidth
 
     width: parent.width
     height: parent.height
@@ -66,7 +59,7 @@ Rectangle {
         Rectangle {
             id: _headerRect
 
-            width: simmetryElementsWidth //parent.width * 0.25
+            width: simmetryElementsWidth/2 //parent.width * 0.25
             height: parent.height
 
 
@@ -117,11 +110,6 @@ Rectangle {
             MouseArea{
                 anchors.fill: parent
                 z: 5
-                // pressAndHoldInterval: 500
-
-                // onPressAndHold: {
-                //     tutorialItem.open()
-                // }
 
                 onClicked: {
                     module.moduleEnabled = !module.moduleEnabled

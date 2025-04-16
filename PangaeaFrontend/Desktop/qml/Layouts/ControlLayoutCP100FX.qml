@@ -32,40 +32,57 @@ Column
         // }
     }
 
-    Row{
-        width:  parent.width
-        height: parent.height/1000*300
+    ListView{
+        id: _modulesListView
 
-        spacing: parent.width/80
-        // Rectangle{
-        //     height: parent.height/1000*350
-        //     width: height
+        model: UiCore.currentDevice.modulesListModel;
 
-        //     color: "transparent"
-        //     border.width: 2
-        //     border.color: "green"
-        // }
-        Repeater{
-            model: 14
+        height: parent.height/1000*250
+        width: parent.width * 0.975
 
-            height: parent.height/1000*350
-            width: height
+        anchors.horizontalCenter: parent.horizontalCenter
 
-            Rectangle{
-                height: parent.height * 0.9
-                width: height/2
+        spacing: width/80
 
-                color: "transparent"
-                border.width: 2
-                border.color: "green"
+        interactive: false
+        orientation: ListView.Horizontal
+
+        currentIndex: -1
+
+        delegate: Rectangle{
+            width: _modulesListView.width/14 //- _modulesListView.spacing * (14-1)
+            height: _modulesListView.height * 0.95
+
+            color: "transparent"
+            border.width: 2
+            border.color: index === _modulesListView.currentIndex ? "blue" : "green"
+
+            MouseArea{
+                anchors.fill: parent
+
+                onClicked: {
+                    _moduleLoader.source = ""
+                    _moduleLoader.selectedModuleInstance = moduleInstance
+                    _modulesListView.currentIndex = index
+                }
+            }
+        }
+
+        onCurrentIndexChanged: {
+            switch(_moduleLoader.selectedModuleInstance.moduleType)
+            {
+            case ModuleType.PR: _moduleLoader.source = "../ModulesFX/PR.qml"; break;
+            case ModuleType.PA: _moduleLoader.source = "../ModulesFX/PA.qml"; break;
             }
         }
     }
 
     Loader{
-        width:  parent.width
-        height: parent.height/1000*500
+        id: _moduleLoader
 
-        source: "../ModulesFX/PR.qml";
+        width:  parent.width
+        height: parent.height/1000*250
+
+        property var selectedModuleInstance
     }
 }

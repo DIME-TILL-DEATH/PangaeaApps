@@ -4,6 +4,9 @@
 #include <QObject>
 #include "abstractdevice.h"
 
+#include "preamp.h"
+#include "poweramp.h"
+
 class Cp100fx : public AbstractDevice
 {
     Q_OBJECT
@@ -34,6 +37,9 @@ public:
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
     Q_INVOKABLE void formatMemory() override;
+
+    Preamp* PR;
+    PowerAmp* PA;
 
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;

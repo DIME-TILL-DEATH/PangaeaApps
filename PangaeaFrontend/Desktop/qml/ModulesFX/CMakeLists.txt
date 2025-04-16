@@ -6,4 +6,5 @@ qt_add_qml_module(qml_modules_fx
     QML_FILES
         BaseModule.qml
         PR.qml
+        QML_FILES PA.qml
     )

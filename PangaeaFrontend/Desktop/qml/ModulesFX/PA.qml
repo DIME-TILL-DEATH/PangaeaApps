@@ -8,7 +8,7 @@ import PangaeaBackend
 BaseModule{
     id: main
 
-    property Preamp module: _moduleLoader.selectedModuleInstance
+    property PowerAmp module: _moduleLoader.selectedModuleInstance
 
     contentItem: Row
     {
@@ -20,31 +20,29 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
-            controlValue: module.high
-        }
-
-
-        ParameterDial{
-            width: main.dialWidth
-            height: main.dialHeight
-
-            controlValue: module.mid
-        }
-
-        ParameterDial{
-            width: main.dialWidth
-            height: main.dialHeight
-
-            controlValue: module.low
-        }
-
-        ParameterDial{
-            width: main.dialWidth
-            height: main.dialHeight
-
             controlValue: module.volume
+        }
+
+        ParameterDial{
+            width: main.dialWidth
+            height: main.dialHeight
+
+            controlValue: module.presence
+        }
+
+        ParameterDial{
+            width: main.dialWidth
+            height: main.dialHeight
+
+            controlValue: module.slave
+        }
+
+        TypePA
+        {
+            width:  main.dialWidth
+            height: parent.height
+
+            controlValue: module.ampType
         }
     }
 }
-
-

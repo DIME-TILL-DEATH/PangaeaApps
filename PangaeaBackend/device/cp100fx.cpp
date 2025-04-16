@@ -28,6 +28,18 @@ void Cp100fx::initDevice(DeviceType deviceType)
 {
     m_deviceType = deviceType;
 
+
+    PR = new Preamp(this);
+    PA = new PowerAmp(this);
+
+    // typeToModuleMap.insert(ModuleType::PR, PR);
+    // typeToModuleMap.insert(ModuleType::PA, PA);
+
+    m_moduleList.append(PR);
+    m_moduleList.append(PA);
+
+    m_modulesListModel.refreshModel(&m_moduleList);
+
     emit modulesListModelChanged();
     emit presetListModelChanged();
     emit sgDeviceInstanciated();
