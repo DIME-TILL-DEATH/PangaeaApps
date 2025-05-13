@@ -11,7 +11,7 @@ Item
     Image
     {
         id: _image
-        //QPen error on resize. В QT5 не было, в Qt6 появилось
+
         anchors.centerIn: parent
         width:  Math.min(parent.width, parent.height)*0.9
         height: Math.min(parent.width, parent.height)*0.9

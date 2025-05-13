@@ -7,8 +7,11 @@ Tremolo::Tremolo(AbstractDevice *owner)
     m_fullModuleName = AbstractModule::tr("Tremolo");
 
     m_depth = new ControlValue(this, "tr_dp", "Depth", "", 0, 127, 0, 127);
-    m_rate = new ControlValue(this, "tr_rt", "Rate", "",  0, 127, 0, 127);
-    m_form = new ControlValue(this, "tr_fm", "Form");
+    m_rate = new ControlValue(this, "tr_rt", "Rate", "",  0, 127, 0, 127);  // 0,048-14,5 Hz
+    m_form = new ControlValue(this, "tr_fm", "Form", "", 0, 127, 0, 127);
+
+    m_ms = new ControlValue(this, "tr_ms", "Mono-St.");
+    m_tap = new ControlValue(this, "tr_tp", "TAP");
 }
 
 ControlValue *Tremolo::depth() const
@@ -26,12 +29,37 @@ ControlValue *Tremolo::form() const
     return m_form;
 }
 
-void Tremolo::setValues(const tremolo_t &trData)
+ControlValue *Tremolo::ms() const
+{
+    return m_ms;
+}
+
+ControlValue *Tremolo::tap() const
+{
+    return m_tap;
+}
+
+void Tremolo::setValues(const tremolo_cpmodern_t &trData)
 {
     m_moduleEnabled = trData.on;
+
     m_depth->setControlValue(trData.depth);
     m_rate->setControlValue(trData.rate);
     m_form->setControlValue(trData.type);
+
+    emit dataChanged();
+}
+
+void Tremolo::setValues(uint8_t enabled, const tremolo_fx_t &trData, uint8_t tap, uint8_t form)
+{
+    m_moduleEnabled = enabled;
+
+    m_depth->setControlValue(trData.depth);
+    m_rate->setControlValue(trData.rate);
+    m_form->setControlValue(trData.lfo);
+    m_ms->setControlValue(trData.ms);
+
+    m_tap->setControlValue(tap);
 
     emit dataChanged();
 }

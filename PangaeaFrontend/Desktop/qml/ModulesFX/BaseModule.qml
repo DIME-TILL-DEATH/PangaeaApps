@@ -19,15 +19,15 @@ Rectangle {
     property bool disabled: UiCore.currentDevice.presetManager.currentState === PresetState.Compare
 
     property Component contentItem
-    property int dialWidth: width/15
-    property int dialHeight: dialWidth
+    property int dialWidth: dialHeight
+    property int dialHeight: height
 
     width: parent.width
     height: parent.height
 
     color: on ? Style.mainEnabledColor : Style.mainDisabledColor
 
-    property int simmetryElementsWidth: width/6
+    // property int simmetryElementsWidth: width/6
 
     Rectangle{
         id: _maskCompare
@@ -54,18 +54,18 @@ Rectangle {
         width: _main.width
         height: _main.height
 
-        spacing: width / 50
+        spacing: width / 250
 
         Rectangle {
             id: _headerRect
 
-            width: simmetryElementsWidth/2 //parent.width * 0.25
+            width: _main.dialWidth
             height: parent.height
 
 
             gradient: Gradient{
                 GradientStop{
-                    position:_main.on ? 0.0 : 1.0
+                    position: _main.on ? 0.0 : 1.0
                     color: Style.mainEnabledColor
 
                     Behavior on position {NumberAnimation{duration: 100}}
@@ -76,7 +76,7 @@ Rectangle {
 
             radius: width/25
             border.width: 1
-            border.color: _main.on ? Style.borderOn : Style.currentTheme.borderOff
+            border.color: _main.on ? Style.borderOn : Style.borderOff
 
             Behavior on color {ColorAnimation{duration: 200}}
 
@@ -135,10 +135,10 @@ Rectangle {
                 id: _contentItem
 
                 anchors.fill: parent
-                anchors.rightMargin: parent.width/50
-                anchors.leftMargin: parent.width/50
-                anchors.bottomMargin: 3
-                anchors.topMargin: 3
+                anchors.rightMargin: parent.width/100
+                anchors.leftMargin: parent.width/100
+                anchors.bottomMargin: parent.height/10
+                anchors.topMargin: parent.height/10
 
                 Loader{
 

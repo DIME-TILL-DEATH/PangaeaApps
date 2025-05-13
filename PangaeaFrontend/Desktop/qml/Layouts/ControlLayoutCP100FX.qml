@@ -5,12 +5,14 @@ import QtCore
 
 import QtQuick.Window 2.15
 
+import Elements 1.0
 import ModulesFX 1.0
 import StyleSettings 1.0
 import Layouts 1.0
 
 import CppObjects
 import PangaeaBackend
+
 
 Column
 {
@@ -32,47 +34,97 @@ Column
         // }
     }
 
-    ListView{
-        id: _modulesListView
-
-        model: UiCore.currentDevice.modulesListModel;
-
-        height: parent.height/1000*250
-        width: parent.width * 0.975
-
+    Rectangle{
+        height: parent.height/1000*300
+        width: parent.width // * 0.975
         anchors.horizontalCenter: parent.horizontalCenter
 
-        spacing: width/80
+        color: Style.mainEnabledColor
 
-        interactive: false
-        orientation: ListView.Horizontal
+        ListView{
+            id: _modulesListView
 
-        currentIndex: -1
+            model: UiCore.currentDevice.modulesListModel;
 
-        delegate: Rectangle{
-            width: _modulesListView.width/14 //- _modulesListView.spacing * (14-1)
-            height: _modulesListView.height * 0.95
+            anchors.fill: parent
 
-            color: "transparent"
-            border.width: 2
-            border.color: index === _modulesListView.currentIndex ? "blue" : "green"
+            spacing: 0 //width/500
 
-            MouseArea{
-                anchors.fill: parent
+            interactive: false
+            orientation: ListView.Horizontal
 
-                onClicked: {
-                    _moduleLoader.source = ""
-                    _moduleLoader.selectedModuleInstance = moduleInstance
-                    _modulesListView.currentIndex = index
+            currentIndex: -1
+
+            delegate: Rectangle{
+                width: _modulesListView.width/14 - _modulesListView.spacing
+                height: _modulesListView.height //* 0.95
+
+                color: "transparent"
+                border.width: 2
+                border.color: index === _modulesListView.currentIndex ? "white" : "transparent"
+
+
+                Image
+                {
+                    id: _image
+
+                    anchors.centerIn: parent
+                    width: parent.width
+                    height: parent.height
+
+                    fillMode: Image.PreserveAspectFit
+                    smooth: true
+
+                    source: "qrc:/Images/pedal.svg"
+
+                    opacity: moduleInstance.moduleEnabled ? 1 : 0.35
+                    // sourceSize.width:  width
+                    // sourceSize.height: height
+                }
+
+                MText{
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    y: parent.height * 5.5/10
+
+                    color: "black"
+
+                    text: moduleInstance.moduleName
+                }
+
+                MouseArea{
+                    anchors.fill: parent
+
+                    onClicked: {
+                        if(index !== _modulesListView.currentIndex)
+                        {
+                            _moduleLoader.source = ""
+                            _moduleLoader.selectedModuleInstance = moduleInstance
+                            _modulesListView.currentIndex = index
+                        }
+                    }
                 }
             }
-        }
 
-        onCurrentIndexChanged: {
-            switch(_moduleLoader.selectedModuleInstance.moduleType)
-            {
-            case ModuleType.PR: _moduleLoader.source = "../ModulesFX/PR.qml"; break;
-            case ModuleType.PA: _moduleLoader.source = "../ModulesFX/PA.qml"; break;
+            onCurrentIndexChanged: {
+                switch(_moduleLoader.selectedModuleInstance.moduleType)
+                {
+                    case ModuleType.RF: _moduleLoader.source = "../ModulesFX/RF.qml"; break;
+                    case ModuleType.NG: _moduleLoader.source = "../ModulesFX/NG.qml"; break;
+                    case ModuleType.CM: _moduleLoader.source = "../ModulesFX/CM.qml"; break;
+                    case ModuleType.PR: _moduleLoader.source = "../ModulesFX/PR.qml"; break;
+                    case ModuleType.PA: _moduleLoader.source = "../ModulesFX/PA.qml"; break;
+                    case ModuleType.IR_STEREO: _moduleLoader.source = "../ModulesFX/IR.qml"; break;
+                    case ModuleType.EQ: _moduleLoader.source = "../ModulesFX/EQ.qml"; break;
+                    case ModuleType.DELAY: _moduleLoader.source = "../ModulesFX/DL.qml"; break;
+                    case ModuleType.PH: _moduleLoader.source = "../ModulesFX/PH.qml"; break;
+                    case ModuleType.FL: _moduleLoader.source = "../ModulesFX/FL.qml"; break;
+                    case ModuleType.CH: _moduleLoader.source = "../ModulesFX/CH.qml"; break;
+                    case ModuleType.ER_MONO:
+                    case ModuleType.ER_STEREO: _moduleLoader.source = "../ModulesFX/ER.qml"; break;
+                    case ModuleType.RV: _moduleLoader.source = "../ModulesFX/RV.qml"; break;
+                    case ModuleType.TR: _moduleLoader.source = "../ModulesFX/TR.qml"; break;
+                }
             }
         }
     }
@@ -81,7 +133,7 @@ Column
         id: _moduleLoader
 
         width:  parent.width
-        height: parent.height/1000*250
+        height: parent.height/1000*150
 
         property var selectedModuleInstance
     }

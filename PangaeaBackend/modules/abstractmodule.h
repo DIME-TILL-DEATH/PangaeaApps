@@ -4,7 +4,8 @@
 #include <QObject>
 
 #include "moduletypeenum.h"
-#include "hardwarepreset.h"
+#include "hardwareclassicpreset.h"
+#include "hardwarefxpreset.h"
 
 #include <QtQml/qqmlregistration.h>
 

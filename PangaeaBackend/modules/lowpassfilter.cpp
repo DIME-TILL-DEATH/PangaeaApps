@@ -19,7 +19,7 @@ void LowPassFilter::setValues(bool enabled, quint8 value)
     emit dataChanged();
 }
 
-void LowPassFilter::setValues(const eq_t &eq)
+void LowPassFilter::setValues(const eq_cpmodern_t &eq)
 {
     m_moduleEnabled = eq.lp_on;
     m_lpf->setControlValue(eq.lp_freq);

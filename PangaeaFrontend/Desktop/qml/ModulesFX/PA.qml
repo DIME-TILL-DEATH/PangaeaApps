@@ -37,12 +37,31 @@ BaseModule{
             controlValue: module.slave
         }
 
-        TypePA
-        {
-            width:  main.dialWidth
-            height: parent.height
+        ParameterComboBox{
+            width: main.dialWidth * 2
+            height: main.dialHeight
 
-            controlValue: module.ampType
+            anchors.verticalCenter: parent.verticalCenter
+
+            ctrlValInstance: module.ampType
+
+            moduleOn: module.moduleEnabled
+
+            model: ["1. Push-pull 6L6",
+                "2. Push-pull EL34",
+                "3. Single-ended 6L6",
+                "4. Single-ended EL34",
+                "5. AMT Tube cake",
+                "6. California",
+                "7. British M",
+                "8. British L",
+                /*"Flat",
+                "Califonia modern",
+                "California vintage",
+                "PVH Presence 01",
+                "PVH Presence 02",
+                "PVH Presence 03",
+                "PVH Presence 04"*/]
         }
     }
 }

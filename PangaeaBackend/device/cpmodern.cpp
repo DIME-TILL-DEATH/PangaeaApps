@@ -180,7 +180,7 @@ void CPModern::pushReadPresetCommands()
     // emit sgPushCommandToQueue("mconfig get");
     emit sgPushCommandToQueue("state get");
 
-    m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_t) * 2;
+    m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_cpmodern_t) * 2;
 }
 
 QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
@@ -750,7 +750,7 @@ void CPModern::pnameCommHandler(const QString &command, const QByteArray &argume
 
 void CPModern::stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(data.size() < sizeof(preset_data_t)*2) return;
+    if(data.size() < sizeof(preset_data_cpmodern_t)*2) return;
 
     QByteArray baPresetData = data;
 
@@ -758,7 +758,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     quint8 nomByte=0;
     QString curByte;
 
-    quint8 dataBuffer[sizeof(preset_data_t)*2];
+    quint8 dataBuffer[sizeof(preset_data_cpmodern_t)*2];
 
     foreach(QChar val, baPresetData) //quint8
     {
@@ -776,8 +776,8 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
         nomByte++;
     }
 
-    preset_data_t presetData;
-    memcpy(&presetData, dataBuffer, sizeof(preset_data_t));
+    preset_data_cpmodern_t presetData;
+    memcpy(&presetData, dataBuffer, sizeof(preset_data_cpmodern_t));
 
     MV->setValue(presetData.volume);
 

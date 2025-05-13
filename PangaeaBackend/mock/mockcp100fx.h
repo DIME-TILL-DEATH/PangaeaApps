@@ -1,8 +1,10 @@
-#ifndef MOCKCP1_FX_H
-#define MOCKCP1_FX_H
+#ifndef MOCKCP100_FX_H
+#define MOCKCP100_FX_H
 
 #include <QObject>
 #include "abstractmockdevice.h"
+
+#include "hardwarefxpreset.h"
 
 class MockCP100fx : public AbstractMockDevice
 {
@@ -15,6 +17,8 @@ public:
 
     static QString mockName() {return "offline CP100FX";};
 
+    preset_data_fx_t currentPresetData;
+    preset_data_fx_t defaultPresetData;
 private:
     void initFolders();
 
@@ -23,4 +27,4 @@ private:
 
 };
 
-#endif // MOCKCP1_FX_H
+#endif // MOCKCP100_FX_H

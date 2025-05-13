@@ -5,6 +5,16 @@ qt_add_qml_module(qml_modules_fx
     VERSION 1.0
     QML_FILES
         BaseModule.qml
+        RF.qml
+        NG.qml
+        CM.qml
         PR.qml
-        QML_FILES PA.qml
+        PA.qml
+        CH.qml
+        DL.qml
+        FL.qml
+        PH.qml
+        ER.qml
+        RV.qml
+        TR.qml
     )

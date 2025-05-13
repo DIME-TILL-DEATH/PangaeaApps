@@ -23,6 +23,7 @@ public:
 
     ControlValue *send() const {return m_send;};
     void setSendLevel(quint8 sendLevel);
+
 private:
     QString m_impulseName{"FILENAME.WAV"};
 

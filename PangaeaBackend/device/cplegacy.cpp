@@ -690,7 +690,7 @@ void CPLegacy::getOutputModeCommHandler(const QString &command, const QByteArray
 
 void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(data.size() < sizeof(preset_data_legacy_t)*2) return;
+    if(data.size() < sizeof(preset_cplegacy_t)*2) return;
 
     QByteArray baPresetData = data;
 
@@ -700,8 +700,8 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
 
     quint8 dataBuffer[256];
 
-    preset_data_legacy_t str;
-    memcpy(&str, baPresetData.data(), sizeof(preset_data_legacy_t));
+    preset_cplegacy_t str;
+    memcpy(&str, baPresetData.data(), sizeof(preset_cplegacy_t));
 
 
     foreach(QChar val, baPresetData) //quint8
@@ -720,8 +720,8 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         nomByte++;
     }
 
-    preset_data_legacy_t legacyData;
-    memcpy(&legacyData, dataBuffer, sizeof(preset_data_legacy_t));
+    preset_cplegacy_t legacyData;
+    memcpy(&legacyData, dataBuffer, sizeof(preset_cplegacy_t));
 
     MV->setValue(legacyData.preset_volume);
 
@@ -731,7 +731,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
     PS->setValues(legacyData.presence_on, legacyData.presence_vol);
 
-    eq_t eqData;
+    eq_cpmodern_t eqData;
     for(int i=0; i<5; i++)
     {
         eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);

@@ -161,7 +161,7 @@ Item{
 
                 color: (module.moduleEnabled) ? "white" : "darkgrey"
                 font.pixelSize: parent.width/8
-                text: _root.name
+                text: _root.units !=="" ? _root.name + ", " + _root.units  : _root.name
             }
         }
     }

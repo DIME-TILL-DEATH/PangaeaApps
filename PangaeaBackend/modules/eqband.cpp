@@ -22,7 +22,7 @@ EqBand::EqBand(EqParametric *ownerModule, FilterType bandType, double fStart, do
         {
             case FilterType::LOW_CUT:
             {
-                m_Fc = new ControlValue(ownerModule, "hv", "Cut frequency", "Hz", fControlStart, fControlStop, fStart, fStop);
+                m_Fc = new ControlValue(ownerModule, "hv", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
                 m_gain = new ControlValue(ownerModule, "");
                 m_Q = new ControlQLegacy(ownerModule, "");
                 break;
@@ -30,7 +30,7 @@ EqBand::EqBand(EqParametric *ownerModule, FilterType bandType, double fStart, do
 
             case FilterType::HIGH_CUT:
             {
-                m_Fc = new ControlValue(ownerModule, "lv", "Cut frequency", "Hz", fControlStart, fControlStop, fStart, fStop);
+                m_Fc = new ControlValue(ownerModule, "lv", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
                 m_gain = new ControlValue(ownerModule, "");
                 m_Q = new ControlQLegacy(ownerModule, "");
                 break;
@@ -38,7 +38,7 @@ EqBand::EqBand(EqParametric *ownerModule, FilterType bandType, double fStart, do
             default:
             {
                 m_Fc = new ControlValue(ownerModule, "eqf " + QString().setNum(m_bandNum),
-                                        "Central Frequency", "Hz",
+                                        "Central freq.", "Hz",
                                         fControlStart, fControlStop, m_fStart, m_fStop);
                 m_gain = new ControlValue(ownerModule, "eqv " + QString().setNum(m_bandNum),
                                           "Gain", "dB",
@@ -73,7 +73,7 @@ EqBand::EqBand(EqParametric *ownerModule, FilterType bandType, double fStart, do
         default:
         {
             m_Fc = new ControlValue(ownerModule,  "eq" + QString().setNum(eqNumber) + " b" + QString().setNum(m_bandNum) + " f",
-                                    "Central Frequency", "Hz",
+                                    "Central freq.", "Hz",
                                     fControlStart, fControlStop, m_fStart, m_fStop);
             m_gain = new ControlValue(ownerModule, "eq" + QString().setNum(eqNumber) + " b" + QString().setNum(m_bandNum) + " g",
                                       "Gain", "dB",

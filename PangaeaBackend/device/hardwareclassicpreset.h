@@ -1,5 +1,5 @@
-#ifndef HARDWAREPRESET_H
-#define HARDWAREPRESET_H
+#ifndef HARDWARECLASSICPRESET_H
+#define HARDWARECLASSICPRESET_H
 
 #include <QObject>
 
@@ -49,7 +49,7 @@ typedef struct
 
     uint8_t eq_pre;
 
-}preset_data_legacy_t;
+}preset_cplegacy_t;
 
 //=======================New generation=======================
 
@@ -60,7 +60,7 @@ typedef struct
     uint8_t threshold;
     uint8_t decay;
     uint8_t reserved[4];
-}gate_data_t;
+}gate_cpmodern_t;
 
 typedef struct
 {
@@ -69,7 +69,7 @@ typedef struct
     uint8_t sustain;
     uint8_t volume;
     uint8_t reserved[4];
-}compressor_data_t;
+}compressor_cpmodern_t;
 
 typedef struct
 {
@@ -80,7 +80,7 @@ typedef struct
     uint8_t mid;
     uint8_t high;
     uint8_t reserved[2];
-}preamp_data_t;
+}preamp_cpmodern_t;
 
 typedef struct
 {
@@ -92,7 +92,7 @@ typedef struct
     uint8_t presence_vol;
     uint8_t depth;
     uint8_t reserved[1];
-}pa_data_t;
+}pa_cpmodern_t;
 
 typedef struct
 {
@@ -107,7 +107,7 @@ typedef struct
     uint16_t freq[EQ_BANDS_COUNT];
     int8_t Q[EQ_BANDS_COUNT];
     uint8_t band_type[EQ_BANDS_COUNT];
-}eq_t;
+}eq_cpmodern_t;
 
 typedef struct
 {
@@ -115,7 +115,7 @@ typedef struct
     uint8_t rate;
     uint8_t depth;
     uint8_t type;
-}tremolo_t;
+}tremolo_cpmodern_t;
 
 typedef struct
 {
@@ -127,7 +127,7 @@ typedef struct
     //	uint8_t delay;
     //	uint8_t type;
     uint8_t reserved[3];
-}chorus_t;
+}chorus_cpmodern_t;
 
 typedef struct
 {
@@ -139,7 +139,7 @@ typedef struct
     uint8_t feedback;
     uint8_t stages;
     uint8_t hpf;
-}phaser_t;
+}phaser_cpmodern_t;
 
 typedef struct
 {
@@ -147,7 +147,7 @@ typedef struct
     uint8_t type;
     uint8_t volume;
     uint8_t reserved[5];
-}reverb_data_t;
+}early_cpmodern_t;
 
 typedef struct
 {
@@ -158,7 +158,7 @@ typedef struct
     uint8_t lpf;
     uint8_t hpf;
     uint8_t reserved[2];
-}delay_t;
+}delay_cpmodern_t;
 
 #define MAX_PROCESSING_STAGES 10
 typedef struct
@@ -170,33 +170,33 @@ typedef struct
     uint8_t volume;
     uint8_t cab_sim_on;
 
-    gate_data_t 		gate;
-    compressor_data_t 	compressor;
-    preamp_data_t		preamp;
-    pa_data_t			power_amp;
+    gate_cpmodern_t 		gate;
+    compressor_cpmodern_t 	compressor;
+    preamp_cpmodern_t		preamp;
+    pa_cpmodern_t			power_amp;
 
-    eq_t eq1;
-    eq_t eq2;
+    eq_cpmodern_t eq1;
+    eq_cpmodern_t eq2;
 
-    tremolo_t tremolo;
-    chorus_t chorus;
-    phaser_t phaser;
+    tremolo_cpmodern_t tremolo;
+    chorus_cpmodern_t chorus;
+    phaser_cpmodern_t phaser;
     // flanger
     uint8_t reserved[12];
 
-    reverb_data_t reverb;
-    delay_t delay;
-}preset_data_t;
+    early_cpmodern_t reverb;
+    delay_cpmodern_t delay;
+}preset_data_cpmodern_t;
 
 typedef struct
 {
     char name[32];
-    preset_data_t parametersData;
-}save_data_t;
+    preset_data_cpmodern_t parametersData;
+}save_data_cpmodern_t;
 
-namespace HardwarePreset
+namespace HardwarePresetCPModern
 {
-preset_data_t convertLegacyToModern(const preset_data_legacy_t& legacyData);
+preset_data_cpmodern_t convertLegacyToModern(const preset_cplegacy_t& legacyData);
 }
 
-#endif // HARDWAREPRESET_H
+#endif // HARDWARECLASSICPRESET_H

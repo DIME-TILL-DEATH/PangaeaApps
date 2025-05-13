@@ -34,7 +34,7 @@ public:
 
     explicit EqParametric(AbstractDevice *owner, EqMode eqMode = EqMode::Legacy, quint8 eqNumber = 0);
 
-    void setEqData(eq_t eqData);
+    void setEqData(eq_cpmodern_t eqData);
 
     double getEqResponse(double f);
 

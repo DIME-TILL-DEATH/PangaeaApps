@@ -21,18 +21,23 @@ class Preamp : public AbstractModule
     Q_PROPERTY(ControlValue* low READ low NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* mid READ mid NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* high READ high NOTIFY dataChanged FINAL)
+
+    // FX
+    Q_PROPERTY(ControlValue* gain READ gain NOTIFY dataChanged FINAL)
 public:
     Preamp(AbstractDevice *owner);
 
+    ControlValue* gain() {return m_gain;};
     ControlValue* volume() {return m_volume;};
     ControlValue* low() {return m_low;};
     ControlValue* mid() {return m_mid;};
     ControlValue* high() {return m_high;};
 
     void setValues(bool enabled, quint8 volume, qint8 low, qint8 mid, qint8 high);
-    void setValues(const preamp_data_t& paData);
-
+    void setValues(const preamp_cpmodern_t& paData);
+    void setValues(uint8_t enabled, const preamp_fx_t& paData);
 private:
+    ControlValue* m_gain;
     ControlValue* m_volume;
     ControlValue* m_low;
     ControlValue* m_mid;

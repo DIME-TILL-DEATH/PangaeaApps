@@ -22,7 +22,12 @@ class PowerAmp : public AbstractModule
     Q_PROPERTY(ControlValue* ampType READ ampType NOTIFY dataChanged FINAL)
 
 public:
-    explicit PowerAmp(AbstractDevice *owner);
+    enum PaType{
+        Classic = 0,
+        FX
+    };
+
+    explicit PowerAmp(AbstractDevice *owner, PaType paType = PaType::Classic);
 
     ControlValue* volume() {return m_volume;};
     ControlValue* presence() {return m_presence;};
@@ -30,7 +35,8 @@ public:
     ControlValue* ampType() {return m_ampType;};
 
     void setValues(bool enabled, quint8 volume, quint8 presence, quint8 slave, quint8 ampType);
-    void setValues(const pa_data_t& paData);
+    void setValues(const pa_cpmodern_t& paData);
+    void setValues(uint8_t enabled, const pa_fx_t& paData);
 
 private:
     ControlValue *m_volume = nullptr;

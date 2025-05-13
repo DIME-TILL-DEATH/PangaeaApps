@@ -198,8 +198,8 @@ void MockCP16Legacy::initFolders()
             {
                 presetFile.open(QIODevice::WriteOnly);
 
-                preset_data_legacy_t defaultData;
-                memset(&defaultData, 0, sizeof(preset_data_legacy_t));
+                preset_cplegacy_t defaultData;
+                memset(&defaultData, 0, sizeof(preset_cplegacy_t));
 
                 defaultData.preset_volume = 31;
 
@@ -217,10 +217,10 @@ void MockCP16Legacy::initFolders()
                 defaultData.amp_slave = 16;
                 defaultData.preamp_volume = 25;
 
-                char rawData[sizeof(preset_data_legacy_t)];
-                memcpy(rawData, &defaultData, sizeof(preset_data_legacy_t));
+                char rawData[sizeof(preset_cplegacy_t)];
+                memcpy(rawData, &defaultData, sizeof(preset_cplegacy_t));
 
-                presetFile.write(rawData, sizeof(preset_data_legacy_t));
+                presetFile.write(rawData, sizeof(preset_cplegacy_t));
                 presetFile.close();
             }
         }
@@ -249,30 +249,30 @@ bool MockCP16Legacy::saveSysParameters()
     else return false;
 }
 
-bool MockCP16Legacy::loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t *presetData)
+bool MockCP16Legacy::loadPresetData(quint8 prBank, quint8 prPreset, preset_cplegacy_t *presetData)
 {
     QString dirPath = m_basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
     QFile presetFile(dirPath + "/preset.pan");
     if(presetFile.open(QIODevice::ReadOnly))
     {
-        QByteArray readedData = presetFile.read(sizeof(preset_data_legacy_t));
-        memcpy(presetData, readedData.data(), sizeof(preset_data_legacy_t));
+        QByteArray readedData = presetFile.read(sizeof(preset_cplegacy_t));
+        memcpy(presetData, readedData.data(), sizeof(preset_cplegacy_t));
         presetFile.close();
         return true;
     }
     else return false;
 }
 
-bool MockCP16Legacy::savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t *presetData)
+bool MockCP16Legacy::savePresetData(quint8 prBank, quint8 prPreset, const preset_cplegacy_t *presetData)
 {
     QString dirPath = m_basePath + "/bank_" + QString().setNum(prBank) + "/preset_" + QString().setNum(prPreset);
     QFile presetFile(dirPath + "/preset.pan");
     if(presetFile.open(QIODevice::WriteOnly))
     {
-        char rawData[sizeof(preset_data_legacy_t)];
-        memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
+        char rawData[sizeof(preset_cplegacy_t)];
+        memcpy(rawData, &currentPresetData, sizeof(preset_cplegacy_t));
 
-        presetFile.write(rawData, sizeof(preset_data_legacy_t));
+        presetFile.write(rawData, sizeof(preset_cplegacy_t));
         presetFile.close();
         return true;
     }
@@ -315,12 +315,12 @@ void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArra
 {
     if(data.size() == 0)
     {
-        quint8 rawData[sizeof(preset_data_legacy_t)];
-        memcpy(rawData, &currentPresetData, sizeof(preset_data_legacy_t));
+        quint8 rawData[sizeof(preset_cplegacy_t)];
+        memcpy(rawData, &currentPresetData, sizeof(preset_cplegacy_t));
 
         QByteArray baData = QString("gs\r").toUtf8();
 
-        for(int i=0; i < sizeof(preset_data_legacy_t);  i++)
+        for(int i=0; i < sizeof(preset_cplegacy_t);  i++)
         {
             QByteArray tempBa = QString().setNum(rawData[i], 16).toUtf8();
 
@@ -337,13 +337,13 @@ void MockCP16Legacy::getStateCommHandler(const QString &command, const QByteArra
         if(dataList.size()>0)
         {
             qDebug() << "Mock device, set state arguments:" << dataList.at(1);
-            quint8 rawArr[sizeof(preset_data_legacy_t)];
+            quint8 rawArr[sizeof(preset_cplegacy_t)];
             for(int i = 0; i < dataList.at(0).size(); i += 2)
             {
                 QString chByte = QString(dataList.at(0).at(i)) + QString(dataList.at(0).at(i+1));
                 rawArr[i/2] = chByte.toInt(nullptr, 16);
             }
-            memcpy(&currentPresetData, rawArr, sizeof(preset_data_legacy_t));
+            memcpy(&currentPresetData, rawArr, sizeof(preset_cplegacy_t));
         }
         emit answerReady("gs 1\rgsEND\n");
     }
@@ -387,7 +387,7 @@ void MockCP16Legacy::getRnsCommHandler(const QString &command, const QByteArray 
             answer += irName + "\n";
 
             QString enabled = "00";
-            preset_data_legacy_t presetData;
+            preset_cplegacy_t presetData;
             if(loadPresetData(b, p, &presetData))
             {
                 enabled.setNum(presetData.cab_on);

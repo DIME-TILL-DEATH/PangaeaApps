@@ -1,21 +1,32 @@
 #include "phaser.h"
 
-Phaser::Phaser(AbstractDevice *owner)
+Phaser::Phaser(AbstractDevice *owner, PhaserType phaserType)
     : AbstractModule{owner, ModuleType::PH, "PH", "ph_on"}
 {
     m_processingTime = 50;
     m_fullModuleName = AbstractModule::tr("Phaser");
 
-    m_mix = new ControlValue(this, "ph_mx", "Mix", "", 0, 63, 0, 63);
-    m_rate = new ControlValue(this, "ph_rt", "Rate", "",  0, 127, 0, 127);
+    switch(phaserType)
+    {
+    case PhaserType::Classic:
+        m_mix = new ControlValue(this, "ph_mx", "Mix", "", 0, 63, 0, 63);
+        m_rate = new ControlValue(this, "ph_rt", "Rate", "",  0, 127, 0, 127);
+        m_center = new ControlValue(this, "ph_cn", "Center", "",  0, 127, 0, 127);
+        break;
+    case PhaserType::FX:
+        m_mix = new ControlValue(this, "ph_mx", "Mix", "", -63, 64, -63, 64);
+        m_rate = new ControlValue(this, "ph_rt", "Rate", "Hz",  0, 127, 0.048, 4.85); //Range: 0 (0.048 Hz) to 127 (4.85 Hz).
+        m_center = new ControlValue(this, "ph_cn", "Center", "Hz",  0, 127, 80, 12000); //Range: 0 (80 Hz) to 127 (12 kHz).
+        break;
+    }
+
     m_width = new ControlValue(this, "ph_wd", "Width", "",  0, 127, 0, 127);
-    m_center = new ControlValue(this, "ph_cn", "Center", "",  0, 127, 0, 127);
     m_feedback = new ControlValue(this, "ph_fb", "Feedback", "",  0, 127, 0, 127);
     m_stages = new ControlValue(this, "ph_st", "Stages", "",  0, 3, 0, 3);
     m_hpf = new ControlValue(this, "ph_hp", "HPF", "Hz",  0, 255, 20, 2000);
 }
 
-void Phaser::setValues(const phaser_t &phData)
+void Phaser::setValues(const phaser_cpmodern_t &phData)
 {
     m_moduleEnabled = phData.on;
 
@@ -26,6 +37,23 @@ void Phaser::setValues(const phaser_t &phData)
     m_feedback->setControlValue(phData.feedback);
     m_stages->setControlValue(phData.stages);
     m_hpf->setControlValue(phData.hpf);
+
+    emit dataChanged();
+}
+
+void Phaser::setValues(uint8_t enabled, const phaser_fx_t &phData, uint8_t hpfValue)
+{
+    m_moduleEnabled = enabled;
+
+    m_mix->setControlValue(phData.mix);
+    m_rate->setControlValue(phData.rate);
+    m_center->setControlValue(phData.center);
+    m_width->setControlValue(phData.width);
+    m_feedback->setControlValue(phData.feedback);
+    m_stages->setControlValue(phData.type);
+
+    m_hpf->setControlValue(hpfValue);
+
     emit dataChanged();
 }
 

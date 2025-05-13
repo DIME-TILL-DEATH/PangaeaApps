@@ -4,7 +4,7 @@
 #include "abstractmockdevice.h"
 
 #include "presetlegacy.h"
-#include "hardwarepreset.h"
+#include "hardwareclassicpreset.h"
 
 
 class MockCP16Legacy : public AbstractMockDevice
@@ -21,11 +21,11 @@ private:
 
     void initFolders();
 
-    preset_data_legacy_t currentPresetData;
+    preset_cplegacy_t currentPresetData;
 
     bool saveSysParameters();
-    bool loadPresetData(quint8 prBank, quint8 prPreset, preset_data_legacy_t* presetData);
-    bool savePresetData(quint8 prBank, quint8 prPreset, const preset_data_legacy_t* presetData);
+    bool loadPresetData(quint8 prBank, quint8 prPreset, preset_cplegacy_t* presetData);
+    bool savePresetData(quint8 prBank, quint8 prPreset, const preset_cplegacy_t* presetData);
 
     void amtDevCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);
     void amtVerCommHandler(const QString &command, const QByteArray& arguments, const QByteArray &data);

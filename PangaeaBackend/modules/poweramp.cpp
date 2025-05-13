@@ -1,16 +1,36 @@
 #include "poweramp.h"
 
-PowerAmp::PowerAmp(AbstractDevice *owner)
+PowerAmp::PowerAmp(AbstractDevice *owner, PaType paType)
     : AbstractModule{owner, ModuleType::PA, "PA", "ao"}
 {
-    m_processingTime = 90;
     m_fullModuleName = AbstractModule::tr("Power amp");
 
-    m_volume = new ControlValue(this, "av", "Master"); //VOLUME
-    m_presence = new ControlValue(this, "pv", "Presence");
-    m_slave = new ControlValue(this, "as", "Level"); //SLAVE
 
-    m_ampType = new ControlValue(this, "at", "Amp type");
+
+    switch(paType)
+    {
+    case PaType::FX:
+    {
+        m_processingTime = 100;
+
+        m_commandOnOff = "pa_on";
+
+        m_volume = new ControlValue(this, "pa_ms", "Master", "", 0, 127, 0, 127); //VOLUME
+        m_presence = new ControlValue(this, "pa_ps", "Presence", "", 0, 127, 0, 127);
+        m_slave = new ControlValue(this, "pa_lv", "Level", "", 0, 127, 0, 127); //SLAVE
+        m_ampType = new ControlValue(this, "pa_tp", "Amp type", "", 0, 127, 0, 127);
+        break;
+    }
+    case PaType::Classic:
+    {
+        m_processingTime = 90;
+        m_volume = new ControlValue(this, "av", "Master"); //VOLUME
+        m_presence = new ControlValue(this, "pv", "Presence");
+        m_slave = new ControlValue(this, "as", "Level"); //SLAVE
+        m_ampType = new ControlValue(this, "at", "Amp type");
+        break;
+    }
+    }
 
     connect(this, &AbstractModule::dataChanged, this, &PowerAmp::slPaEnabledChanged);
 }
@@ -27,13 +47,24 @@ void PowerAmp::setValues(bool enabled, quint8 volume, quint8 presence, quint8 sl
     emit dataChanged();
 }
 
-void PowerAmp::setValues(const pa_data_t &paData)
+void PowerAmp::setValues(const pa_cpmodern_t &paData)
 {
     m_moduleEnabled = paData.on;
     m_volume->setControlValue(paData.volume);
     m_presence->setControlValue(paData.presence_vol);
     m_slave->setControlValue(paData.slave);
 
+    m_ampType->setControlValue(paData.type);
+
+    emit dataChanged();
+}
+
+void PowerAmp::setValues(uint8_t enabled, const pa_fx_t &paData)
+{
+    m_moduleEnabled = enabled;
+
+    m_volume->setControlValue(paData.master);
+    m_slave->setControlValue(paData.level);
     m_ampType->setControlValue(paData.type);
 
     emit dataChanged();

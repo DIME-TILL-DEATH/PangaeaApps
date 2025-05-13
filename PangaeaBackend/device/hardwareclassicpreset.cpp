@@ -1,13 +1,13 @@
-#include "hardwarepreset.h"
+#include "hardwareclassicpreset.h"
 
 #include "moduletypeenum.h"
 
-preset_data_t HardwarePreset::convertLegacyToModern(const preset_data_legacy_t& legacyData)
+preset_data_cpmodern_t HardwarePresetCPModern::convertLegacyToModern(const preset_cplegacy_t& legacyData)
 {
     qint16 defaultFrequencies[] = {120, 360, 800, 2000, 6000};
-    preset_data_t modernData{0};
+    preset_data_cpmodern_t modernData{0};
 
-    memset(&modernData, 0, sizeof(preset_data_t));
+    memset(&modernData, 0, sizeof(preset_data_cpmodern_t));
 
     // secondary eq default
     for(int i=0; i<5; i++)

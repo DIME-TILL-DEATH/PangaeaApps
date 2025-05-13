@@ -4,7 +4,7 @@
 #include <QObject>
 #include "abstractmockdevice.h"
 
-#include "hardwarepreset.h"
+#include "hardwareclassicpreset.h"
 #include "presetlegacy.h"
 
 #include "irfile.h"
@@ -23,7 +23,7 @@ public:
     // public for testing purposes
     IrFile linkedIr;
     QString currentPresetName;
-    preset_data_t currentPresetData;
+    preset_data_cpmodern_t currentPresetData;
 protected:
     QString m_mockName{"virtual_CP16Modern"};
 
@@ -34,8 +34,8 @@ protected:
     void initFolders();
 
     bool saveSysParameters();
-    bool loadPresetData(quint8 prBank, quint8 prPreset, save_data_t *presetSavedData);
-    bool savePresetData(quint8 prBank, quint8 prPreset, const save_data_t *presetSaveData);
+    bool loadPresetData(quint8 prBank, quint8 prPreset, save_data_cpmodern_t *presetSavedData);
+    bool savePresetData(quint8 prBank, quint8 prPreset, const save_data_cpmodern_t *presetSaveData);
 
     void getIrInfo();
     void irDownload(const QString& pathToIr);

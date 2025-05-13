@@ -170,7 +170,7 @@ void EqParametric::calcEqResponse()
     emit pointsChanged();
 }
 
-void EqParametric::setEqData(eq_t eqData)
+void EqParametric::setEqData(eq_cpmodern_t eqData)
 {
     m_moduleEnabled = eqData.parametric_on;
 

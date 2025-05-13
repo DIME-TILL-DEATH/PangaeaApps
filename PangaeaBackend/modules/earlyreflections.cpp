@@ -21,11 +21,21 @@ void EarlyReflections::setValues(bool enabled, quint8 volume, quint8 type)
     emit dataChanged();
 }
 
-void EarlyReflections::setValues(const reverb_data_t &rvData)
+void EarlyReflections::setValues(const early_cpmodern_t &rvData)
 {
     m_moduleEnabled = rvData.on;
     m_reflectionsVolume->setControlValue(rvData.volume);
     m_reflectionsType->setControlValue(rvData.type);
+
+    emit dataChanged();
+}
+
+void EarlyReflections::setValues(uint8_t enabled, const early_fx_t &earlyData)
+{
+    m_moduleEnabled = enabled;
+
+    m_reflectionsVolume->setControlValue(earlyData.volume);
+    m_reflectionsType->setControlValue(earlyData.type);
 
     emit dataChanged();
 }

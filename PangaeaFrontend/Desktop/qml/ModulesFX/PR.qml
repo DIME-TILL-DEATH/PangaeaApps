@@ -38,6 +38,11 @@ BaseModule{
             controlValue: module.low
         }
 
+        Rectangle{
+            width: 1
+            height: parent.height
+        }
+
         ParameterDial{
             width: main.dialWidth
             height: main.dialHeight

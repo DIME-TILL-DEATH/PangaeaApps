@@ -16,6 +16,9 @@ class Tremolo : public AbstractModule
     Q_PROPERTY(ControlValue* depth READ depth NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* rate READ rate NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* form READ form NOTIFY dataChanged FINAL)
+    // FX
+    Q_PROPERTY(ControlValue* ms READ ms NOTIFY dataChanged FINAL)
+    Q_PROPERTY(ControlValue* tap READ tap NOTIFY dataChanged FINAL)
 public:
     Tremolo(AbstractDevice *owner);
 
@@ -23,12 +26,19 @@ public:
     ControlValue *rate() const;
     ControlValue *form() const;
 
-    void setValues(const tremolo_t& trData);
+    ControlValue *ms() const;
+    ControlValue *tap() const;
+
+    void setValues(const tremolo_cpmodern_t& trData);
+    void setValues(uint8_t enabled, const tremolo_fx_t& trData, uint8_t tap, uint8_t form);
 
 private:
     ControlValue *m_depth = nullptr;
     ControlValue *m_rate = nullptr;
     ControlValue *m_form = nullptr;
+
+    ControlValue *m_ms = nullptr;
+    ControlValue *m_tap = nullptr;
 };
 
 #endif // TREMOLO_H

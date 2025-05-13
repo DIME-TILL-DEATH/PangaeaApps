@@ -4,7 +4,7 @@
 #include <QDebug>
 
 #include "presetabstract.h"
-#include "hardwarepreset.h"
+#include "hardwareclassicpreset.h"
 
 #include "irfile.h"
 
@@ -18,10 +18,10 @@ public:
 
     PresetAbstract& operator=(const PresetAbstract& preset) override;
 
-    preset_data_t presetData;
+    preset_data_cpmodern_t presetData;
 
-    static preset_data_t charsToPresetData(const QByteArray& ba);
-    static QByteArray presetDataToChars(const preset_data_t& presetData);
+    static preset_data_cpmodern_t charsToPresetData(const QByteArray& ba);
+    static QByteArray presetDataToChars(const preset_data_cpmodern_t& presetData);
 
     bool importData(const QString &filePath, QByteArray& loadedWavData);
     bool exportData(const QString &pathtoExport, const QByteArray& wavData);

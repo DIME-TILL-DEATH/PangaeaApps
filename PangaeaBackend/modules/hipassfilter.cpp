@@ -18,7 +18,7 @@ void HiPassFilter::setValues(bool enabled, quint8 value)
     emit dataChanged();
 }
 
-void HiPassFilter::setValues(const eq_t &eq)
+void HiPassFilter::setValues(const eq_cpmodern_t &eq)
 {
     m_moduleEnabled = eq.hp_on;
     m_hpf->setControlValue(eq.hp_freq);

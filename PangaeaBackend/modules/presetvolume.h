@@ -15,7 +15,12 @@ class PresetVolume : public AbstractModule
 
     Q_PROPERTY(ControlValue* presetVolume READ presetVolume NOTIFY dataChanged FINAL)
 public:
-    PresetVolume(AbstractDevice *owner);
+    enum VolumeType{
+        Classic = 0,
+        FX
+    };
+
+    PresetVolume(AbstractDevice *owner, VolumeType volumeType = VolumeType::Classic);
 
     ControlValue* presetVolume() const {return m_master;};
 
