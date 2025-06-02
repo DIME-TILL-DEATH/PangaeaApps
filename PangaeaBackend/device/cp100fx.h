@@ -1,5 +1,5 @@
-#ifndef CP1__FX_H
-#define CP1__FX_H
+#ifndef CP100FX_H
+#define CP100FX_H
 
 #include <QObject>
 
@@ -24,6 +24,14 @@
 class Cp100fx : public AbstractDevice
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
+    Q_PROPERTY(QString currentPresetComment READ currentPresetComment WRITE setCurrentPresetComment NOTIFY currentPresetCommentChanged FINAL)
+
+    Q_PROPERTY(Volume* masterVolume READ masterVolume CONSTANT)
+    Q_PROPERTY(Volume* phonesVolume READ phonesVolume CONSTANT)
+    Q_PROPERTY(Volume* presetVolume READ presetVolume CONSTANT)
+    Q_PROPERTY(Volume* attenuatorVolume READ attenuatorVolume CONSTANT)
 public:
     Cp100fx(Core *parent);
     ~Cp100fx();
@@ -67,8 +75,28 @@ public:
     Reverb* RV;
     Flanger* FL;
 
+    Volume m_masterVolume{this, Volume::VolumeType::MasterFx};
+    Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
+    Volume m_presetVolume{this, Volume::VolumeType::PresetFx};
+    Volume m_attenuatorVolume{this, Volume::VolumeType::AttenuatorFx};
+
+    Volume* masterVolume() {return &m_masterVolume;};
+    Volume* phonesVolume() {return &m_phonesVolume;};
+    Volume* presetVolume() {return &m_presetVolume;};
+    Volume* attenuatorVolume() {return &m_attenuatorVolume;};
+
+    QString currentPresetName() const {return m_currentPresetName;};
+    void setCurrentPresetName(const QString &newCurrentPresetName);
+
+    QString currentPresetComment() const {return m_currentPresetComment;};
+    void setCurrentPresetComment(const QString &newCurrentPresetComment);
+
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+
+signals:
+    void currentPresetNameChanged();
+    void currentPresetCommentChanged();
 
 private:
     QList<PresetAbstract*> m_presetsList;
@@ -77,6 +105,8 @@ private:
     PresetFx savedPreset{this}; // TODO используется из листа
     PresetFx copiedPreset{this};
 
+    void pushReadPresetCommands();
+
     void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void getPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
@@ -84,6 +114,8 @@ private:
     void pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    QString m_currentPresetName;
+    QString m_currentPresetComment;
 };
 
-#endif // CP1__FX_H
+#endif // CP100FX_H

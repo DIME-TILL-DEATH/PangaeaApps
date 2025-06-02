@@ -5,7 +5,7 @@ ResonanceFilter::ResonanceFilter(AbstractDevice *owner)
 {
     m_fullModuleName = AbstractModule::tr("Resonance filter");
 
-    m_mix = new ControlValue(this, "rf_mx", "Mix", "", -63, 64, -63, 64);
+    m_mix = new ControlValue(this, "rf_mx", "Mix", "", 0, 127, -63, 64);
     m_fType = new ControlValue(this, "rf_ft", "Filter type");
     m_fMod = new ControlValue(this, "rf_fm", "F mod");
     m_lfo = new ControlValue(this, "rf_lo", "LFO", "", 0, 127, 0, 127);

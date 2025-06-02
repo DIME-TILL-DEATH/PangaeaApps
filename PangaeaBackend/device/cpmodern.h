@@ -33,11 +33,14 @@ class CPModern : public AbstractDevice
     Q_PROPERTY(CabSim* IR  READ getIR CONSTANT)
     Q_PROPERTY(EarlyReflections* ER  READ getER CONSTANT)
     Q_PROPERTY(Delay* DL  READ getDL CONSTANT)
+
     Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
 
     Q_PROPERTY(IrFile currentIrFile READ currentIrFile WRITE setCurrentIrFile NOTIFY currentIrFileChanged FINAL)
     Q_PROPERTY(QList<IrFile> irsInLibrary READ irsInLibrary NOTIFY irsListChanged FINAL)
     Q_PROPERTY(QList<IrFile> irsInFolder READ irsInFolder NOTIFY irsListChanged FINAL)
+
+    Q_PROPERTY(Volume* MV READ getMV CONSTANT)
 public:
     CPModern(Core *parent);
     ~CPModern();
@@ -71,7 +74,7 @@ public:
     Q_INVOKABLE bool isFileInLibrary(const QString& fileName);
     Q_INVOKABLE bool isFileInFolder(const QString& fileName);
 
-    // PresetVolume* getMV() {return MV;};
+    Volume* getMV() {return MV;};
     CabSim* getIR() {return IR;};
     EarlyReflections* getER() {return ER;};
     Delay *getDL() {return DL;};
@@ -87,7 +90,7 @@ public:
     // avaliable modules
     // вынести создание наружу? DependencyContainer
     // public для тестов
-    // PresetVolume* MV;
+    Volume* MV;
     Compressor* CM;
     NoiseGate* NG;
     Preamp* PR;

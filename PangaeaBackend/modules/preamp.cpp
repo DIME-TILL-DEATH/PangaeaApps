@@ -7,6 +7,7 @@ Preamp::Preamp(AbstractDevice *owner)
     m_fullModuleName = AbstractModule::tr("Preamp");
 
     // TODO: диапазоны для FX
+    m_gain = new ControlValue(this, "prg", "Gain");
     m_volume = new ControlValue(this, "prv", "Volume");
 
     m_low = new ControlValue(this, "prl", "Low", "", -64, 63, 0, 127);

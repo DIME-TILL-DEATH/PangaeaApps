@@ -18,10 +18,10 @@ public:
     static QString mockName() {return "offline CP16(LEGACY)";};
 
 private:
+    quint8 m_outputMode{0};
+    preset_cplegacy_t currentPresetData;
 
     void initFolders();
-
-    preset_cplegacy_t currentPresetData;
 
     bool saveSysParameters();
     bool loadPresetData(quint8 prBank, quint8 prPreset, preset_cplegacy_t* presetData);

@@ -76,12 +76,12 @@ MockCP16Legacy::MockCP16Legacy(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     //--------------------------------------------------------------
 
     QFile systemFile(m_basePath + "/system.pan");
-    system_parameters_t sysParameters;
-    memset(&sysParameters, 0, sizeof(system_parameters_t));
+    system_parameters_cp_t sysParameters;
+    memset(&sysParameters, 0, sizeof(system_parameters_cp_t));
     if(systemFile.open(QIODevice::ReadOnly))
     {
-        QByteArray readedData = systemFile.read(sizeof(system_parameters_t));
-        memcpy(&sysParameters, readedData.data(), sizeof(system_parameters_t));
+        QByteArray readedData = systemFile.read(sizeof(system_parameters_cp_t));
+        memcpy(&sysParameters, readedData.data(), sizeof(system_parameters_cp_t));
         m_outputMode = sysParameters.output_mode;
         systemFile.close();
     }
@@ -231,17 +231,17 @@ bool MockCP16Legacy::saveSysParameters()
 {
     QFile systemFile(m_basePath + "/system.pan");
 
-    system_parameters_t sysParameters;
-    memset(&sysParameters, 0, sizeof(system_parameters_t));
+    system_parameters_cp_t sysParameters;
+    memset(&sysParameters, 0, sizeof(system_parameters_cp_t));
     sysParameters.output_mode = m_outputMode;
     QString ver("1.04.04");
     memcpy(sysParameters.firmware_version, ver.data(), ver.size());
 
     if(systemFile.open(QIODevice::WriteOnly))
     {
-        char rawData[sizeof(system_parameters_t)];
-        memcpy(rawData, &sysParameters, sizeof(system_parameters_t));
-        systemFile.write(rawData, sizeof(system_parameters_t));
+        char rawData[sizeof(system_parameters_cp_t)];
+        memcpy(rawData, &sysParameters, sizeof(system_parameters_cp_t));
+        systemFile.write(rawData, sizeof(system_parameters_cp_t));
 
         systemFile.close();
         return true;

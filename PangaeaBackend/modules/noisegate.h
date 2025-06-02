@@ -32,7 +32,7 @@ public:
     ControlValue *attack() {return m_attack;};
     ControlValue *decay() {return m_decay;};
 
-    void setValues(bool enabled, quint8 threshold, quint8 decay, quint8 attack = 0);
+    void setValues(bool enabled, quint8 threshold, quint8 decay);
     void setValues(const gate_cpmodern_t& ngData);
     void setValues(uint8_t enabled, const gate_fx_t& ngData);
 

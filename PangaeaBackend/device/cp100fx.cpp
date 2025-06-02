@@ -6,7 +6,9 @@
 Cp100fx::Cp100fx(Core *parent)
     : AbstractDevice{parent}
 {
+    using namespace std::placeholders;
 
+    m_parser.addCommandHandler("state", std::bind(&Cp100fx::stateCommHandler, this, _1, _2, _3));
 }
 
 Cp100fx::~Cp100fx()
@@ -67,7 +69,26 @@ void Cp100fx::initDevice(DeviceType deviceType)
 
 void Cp100fx::readFullState()
 {
+    m_presetManager.setCurrentState(PresetState::Changing);
 
+    emit sgPushCommandToQueue("amtver");
+    // emit sgPushCommandToQueue("plist");
+    // emit sgPushCommandToQueue("ls ir_library");
+    // emit sgPushCommandToQueue("gm");
+    pushReadPresetCommands();
+
+    emit sgProcessCommands();
+}
+
+void Cp100fx::pushReadPresetCommands()
+{
+    // emit sgPushCommandToQueue("gb");
+    // emit sgPushCommandToQueue("ir info");
+    // emit sgPushCommandToQueue("pname get");
+    // emit sgPushCommandToQueue("mconfig get");
+    emit sgPushCommandToQueue("state get");
+
+    // m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_cpmodern_t) * 2;
 }
 
 void Cp100fx::saveChanges()
@@ -133,9 +154,43 @@ void Cp100fx::formatMemory()
 QList<QByteArray> Cp100fx::parseAnswers(QByteArray &baAnswer)
 {
     QList<QByteArray> recievedCommAnswers;
+    recievedCommAnswers += m_parser.parseNewData(baAnswer);
+
     return recievedCommAnswers;
 }
 
+void Cp100fx::setCurrentPresetName(const QString &newCurrentPresetName)
+{
+    if (actualPreset.presetName() == newCurrentPresetName)
+        return;
+    if(newCurrentPresetName.size()>15) actualPreset.setPresetName(newCurrentPresetName.left(15));
+    else actualPreset.setPresetName(newCurrentPresetName);
+    m_presetListModel.updatePreset(&actualPreset);
+
+    emit currentPresetNameChanged();
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
+    emit sgPushCommandToQueue("pname set\r" + actualPreset.presetName().toUtf8() + "\n", false);
+    emit sgProcessCommands();
+}
+
+
+void Cp100fx::setCurrentPresetComment(const QString &newCurrentPresetComment)
+{
+    if (actualPreset.presetComment() == newCurrentPresetComment)
+        return;
+    if(newCurrentPresetComment.size()>15) actualPreset.setPresetComment(newCurrentPresetComment.left(15));
+    else actualPreset.setPresetComment(newCurrentPresetComment);
+    m_presetListModel.updatePreset(&actualPreset);
+
+    emit currentPresetCommentChanged();
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
+    emit sgPushCommandToQueue("pcomment set\r" + actualPreset.presetComment().toUtf8() + "\n", false);
+    emit sgProcessCommands();
+}
 
 //=======================================================================================
 //                  ***************Comm handlers************
@@ -207,15 +262,15 @@ void Cp100fx::pnameCommHandler(const QString &command, const QByteArray &argumen
 
 void Cp100fx::stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(data.size() < sizeof(preset_data_cpmodern_t)*2) return;
+    if(data.size() < sizeof(preset_data_fx_t)*2) return;
 
     QByteArray baPresetData = data;
 
-    quint8 count=0;
-    quint8 nomByte=0;
+    quint16 count=0;
+    quint16 nomByte=0;
     QString curByte;
 
-    quint8 dataBuffer[sizeof(preset_data_cpmodern_t)*2];
+    quint8 dataBuffer[sizeof(preset_data_fx_t)*2];
 
     foreach(QChar val, baPresetData) //quint8
     {
@@ -234,34 +289,41 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     }
 
     preset_data_fx_t presetData;
-    memcpy(&presetData, dataBuffer, sizeof(preset_data_cpmodern_t));
+    memcpy(&presetData, dataBuffer, sizeof(preset_data_fx_t));
 
-    MV->setValue(presetData.preset_volume);
+    // MV->setValue(presetData.preset_volume);
 
+    RF->setControlValue(presetData.switches.resonance_filter, presetData.resonance_filter, presetData.resonance_filter_gen_type);
     NG->setValues(presetData.switches.gate, presetData.gate);
     CM->setValues(presetData.switches.compressor, presetData.compressor);
     PR->setValues(presetData.switches.preamp, presetData.preamp);
     PA->setValues(presetData.switches.amp, presetData.pa);
-    // EQ->setEqData(presetData.eq1);
+
     // IR->setEnabled(presetData.cab_sim_on);
     // IR->setSendLevel(presetData.ir_send_level);
-    TR->setValues(presetData.switches.tremolo, presetData.tremolo, presetData.tremolo_tap, presetData.tremolo_lfo_type);
-    CH->setValues(presetData.switches.chorus, presetData.chorus, presetData.hpf_chorus);
-    PH->setValues(presetData.switches.phaser, presetData.phaser, presetData.hpf_phaser);
-    ER->setValues(presetData.switches.early_reflections, presetData.early_reflections);
+
+    // EQ->setEqData(presetData.eq1);
 
     uint16_t time = presetData.delay_time_hi << 8 || presetData.delay_time_lo;
     DL->setValues(presetData.switches.delay, presetData.delay, time,
                   presetData.delay_tap, presetData.delay_tail);
+
+    PH->setValues(presetData.switches.phaser, presetData.phaser, presetData.hpf_phaser);
+    FL->setValues(presetData.switches.flanger, presetData.flanger, presetData.hpf_flanger);
+    CH->setValues(presetData.switches.chorus, presetData.chorus, presetData.hpf_chorus);
+    ER->setValues(presetData.switches.early_reflections, presetData.early_reflections);
+    RV->setValues(presetData.switches.reverb, presetData.reverb);
+    TR->setValues(presetData.switches.tremolo, presetData.tremolo, presetData.tremolo_tap, presetData.tremolo_lfo_type);
+
     emit deviceUpdatingValues();
 
     switch(m_presetManager.currentState())
     {
     case PresetState::Copying:
     {
-/*        copiedPreset = actualPreset;
-        copiedPreset.presetData = PresetModern::charsToPresetData(baPresetData);
-        copiedPreset.irFile.setIrLinkPath("ir_library");*/ // Скопированные пресеты могут ссылаться только на библиотеку
+        copiedPreset = actualPreset;
+        copiedPreset.presetData = PresetFx::charsToPresetData(baPresetData);
+        // copiedPreset.irFile.setIrLinkPath("ir_library"); // Скопированные пресеты могут ссылаться только на библиотеку
         m_presetManager.returnToPreviousState();
         emit presetCopied();
         break;

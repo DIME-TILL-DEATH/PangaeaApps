@@ -108,12 +108,12 @@ MockCP16Modern::MockCP16Modern(QMutex *mutex, QByteArray *uartBuffer, QObject *p
     //--------------------------------------------------------------
 
     QFile systemFile(m_basePath + "/system.pan");
-    system_parameters_t sysParameters;
-    memset(&sysParameters, 0, sizeof(system_parameters_t));
+    system_parameters_cp_t sysParameters;
+    memset(&sysParameters, 0, sizeof(system_parameters_cp_t));
     if(systemFile.open(QIODevice::ReadOnly))
     {
-        QByteArray readedData = systemFile.read(sizeof(system_parameters_t));
-        memcpy(&sysParameters, readedData.data(), sizeof(system_parameters_t));
+        QByteArray readedData = systemFile.read(sizeof(system_parameters_cp_t));
+        memcpy(&sysParameters, readedData.data(), sizeof(system_parameters_cp_t));
         m_outputMode = sysParameters.output_mode;
         systemFile.close();
     }
@@ -234,7 +234,7 @@ void MockCP16Modern::initFolders()
         if(systemFile.open(QIODevice::ReadOnly))
         {
             QByteArray baFileData = systemFile.readAll();
-            memcpy(&m_systemParameters, baFileData.data(), sizeof(system_parameters_t));
+            memcpy(&m_systemParameters, baFileData.data(), sizeof(system_parameters_cp_t));
             systemFile.close();
         }
     }
@@ -292,9 +292,9 @@ bool MockCP16Modern::saveSysParameters()
 
     if(systemFile.open(QIODevice::WriteOnly))
     {
-        char rawData[sizeof(system_parameters_t)];
-        memcpy(rawData, &m_systemParameters, sizeof(system_parameters_t));
-        systemFile.write(rawData, sizeof(system_parameters_t));
+        char rawData[sizeof(system_parameters_cp_t)];
+        memcpy(rawData, &m_systemParameters, sizeof(system_parameters_cp_t));
+        systemFile.write(rawData, sizeof(system_parameters_cp_t));
 
         systemFile.close();
         return true;

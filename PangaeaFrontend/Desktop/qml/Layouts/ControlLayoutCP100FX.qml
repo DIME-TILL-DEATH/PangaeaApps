@@ -21,17 +21,15 @@ Column
     focus: true
     spacing: 2
 
+    property alias modulesListView: _modulesListView
 
-    HeadCPModern
+
+    HeadCP100FX
     {
         id: _headCP100FX
 
         width:  parent.width
         height: parent.height/1000*200 - _mainUi.spacing * 3
-
-        // onOpenIrManagerWindow: {
-        //     _irManagerWindow.show();
-        // }
     }
 
     Rectangle{
@@ -136,5 +134,6 @@ Column
         height: parent.height/1000*150
 
         property var selectedModuleInstance
+
     }
 }

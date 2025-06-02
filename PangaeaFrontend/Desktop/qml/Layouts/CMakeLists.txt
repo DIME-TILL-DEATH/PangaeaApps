@@ -25,4 +25,5 @@ qt_add_qml_module(qml_layouts
         BPeakingControl.qml
         IrManagerWindow.qml
         HeadLA3.qml
+        QML_FILES HeadCP100FX.qml
 )

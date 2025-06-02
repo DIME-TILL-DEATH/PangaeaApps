@@ -29,7 +29,9 @@ protected:
 
     QFile uploadingIrFile;
 
-    system_parameters_t m_systemParameters{0};
+    system_parameters_cp_t m_systemParameters{0};
+
+    quint8 m_outputMode{0};
 
     void initFolders();
 

@@ -104,10 +104,10 @@ qt_add_qml_module(PangaeaBackend
         modules/poweramp.cpp modules/poweramp.h
         modules/preamp.h modules/preamp.cpp
         modules/presence.h modules/presence.cpp
-        modules/presetvolume.h modules/presetvolume.cpp
         modules/reverb.h modules/reverb.cpp
         modules/resonancefilter.h modules/resonancefilter.cpp
         modules/tremolo.h modules/tremolo.cpp
+        modules/volume.h modules/volume.cpp
 )
 
 

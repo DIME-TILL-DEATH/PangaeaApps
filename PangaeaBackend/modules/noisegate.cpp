@@ -15,7 +15,7 @@ NoiseGate::NoiseGate(AbstractDevice *owner, GateType gateType)
 
         m_threshold = new ControlValue(this, "ng_th", "Threshold", "", 0, 127, 0, 127);
         m_attack = new ControlValue(this, "ng_at", "Attack", "ms", 0, 127, 0, 127);
-        m_decay = new ControlValue(this, "ndc", "Decay", "ms", 0, 127, 0, 1500);
+        m_decay = new ControlValue(this, "ng_dc", "Decay", "ms", 0, 127, 0, 1500);
         break;
     }
     case GateType::Classic:
@@ -28,12 +28,11 @@ NoiseGate::NoiseGate(AbstractDevice *owner, GateType gateType)
     }
 }
 
-void NoiseGate::setValues(bool enabled, quint8 threshold, quint8 decay, quint8 attack)
+void NoiseGate::setValues(bool enabled, quint8 threshold, quint8 decay)
 {
     m_moduleEnabled = enabled;
 
     m_threshold->setControlValue(threshold);
-    m_attack->setControlValue(attack);
     m_decay->setControlValue(decay);
 
     emit dataChanged();

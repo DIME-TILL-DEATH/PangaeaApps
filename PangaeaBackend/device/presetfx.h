@@ -26,13 +26,17 @@ public:
     QString presetName() const override {return m_presetName;};
     void setPresetName(const QString &newPresetName) override {m_presetName = newPresetName;};
 
+    QString presetComment() const {return m_presetComment;};
+    void setPresetComment(const QString &newPresetComment) {m_presetComment = newPresetComment;};
+
     QString irName() const override {return "";};
     void setIrName(const QString &newIrName) override {};
 
 private:
     AbstractDevice* m_ownerDevice;
-    QString m_presetName;
 
+    QString m_presetName;
+    QString m_presetComment;
 };
 
 #endif // PRESETFX_H

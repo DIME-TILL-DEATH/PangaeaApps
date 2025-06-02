@@ -83,6 +83,8 @@ void CPModern::initDevice(DeviceType deviceType)
     m_deviceType = deviceType;
     setDeviceType(m_deviceType);
 
+    MV = new Volume(this);
+
     NG = new NoiseGate(this);
     CM = new Compressor(this);
     PR = new Preamp(this);
