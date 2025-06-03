@@ -14,8 +14,8 @@ NoiseGate::NoiseGate(AbstractDevice *owner, GateType gateType)
         m_commandOnOff = "ng_on";
 
         m_threshold = new ControlValue(this, "ng_th", "Threshold", "", 0, 127, 0, 127);
-        m_attack = new ControlValue(this, "ng_at", "Attack", "ms", 0, 127, 0, 127);
-        m_decay = new ControlValue(this, "ng_dc", "Decay", "ms", 0, 127, 0, 1500);
+        m_attack = new ControlValue(this, "ng_at", "Attack", "", 0, 127, 0, 127); //"ms", 0, 127, 0, 127);
+        m_decay = new ControlValue(this, "ng_dc", "Decay", "", 0, 127, 0, 127); //"ms", 0, 127, 0, 1500);
         break;
     }
     case GateType::Classic:

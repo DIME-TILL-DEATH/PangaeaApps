@@ -13,7 +13,6 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
 
 
@@ -71,6 +70,22 @@ BaseModule{
             height: main.dialHeight
 
             controlValue: module.hpf
+        }
+
+        Rectangle{
+            width: 1
+            height: parent.height
+        }
+
+        ParameterSwitch{
+            width: main.dialWidth
+            height: main.dialHeight
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            ctrlValInstance: module.position
+
+            moduleOn: module.moduleEnabled
         }
     }
 }

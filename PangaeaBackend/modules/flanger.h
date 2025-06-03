@@ -23,10 +23,11 @@ class Flanger : public AbstractModule
     Q_PROPERTY(ControlValue* delay READ delay NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* feedback READ feedback NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* hpf READ hpf NOTIFY dataChanged FINAL)
+    Q_PROPERTY(ControlValue* position READ position NOTIFY dataChanged FINAL)
 public:
     Flanger(AbstractDevice *owner);
 
-    void setValues(uint8_t enabled, const flanger_fx_t& flData, uint8_t hpf);
+    void setValues(uint8_t enabled, const flanger_fx_t& flData, uint8_t hpf, uint8_t position);
 
     ControlValue *mix() const {return m_mix;};
     ControlValue *lfo() const {return m_lfo;};
@@ -35,6 +36,7 @@ public:
     ControlValue *delay() const {return m_delay;};
     ControlValue *feedback() const {return m_feedback;};
     ControlValue *hpf() const {return m_hpf;};
+    ControlValue *position() const {return m_position;};
 
 private:
     ControlValue *m_mix = nullptr;
@@ -44,6 +46,7 @@ private:
     ControlValue *m_delay = nullptr;
     ControlValue *m_feedback = nullptr;
     ControlValue *m_hpf = nullptr;
+    ControlValue *m_position = nullptr;
 };
 
 #endif // FLANGER_H

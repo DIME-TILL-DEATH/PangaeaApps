@@ -16,7 +16,6 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
 
 

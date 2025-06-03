@@ -43,8 +43,8 @@ typedef struct
     uint8_t mix;    // volume
     uint8_t rate;
     uint8_t width;
-    uint8_t type;
     uint8_t delay;
+    uint8_t type;
 }chorus_fx_t;
 
 typedef struct
@@ -133,19 +133,20 @@ typedef struct
 typedef struct
 {
     uint8_t mix;
-    uint8_t type;
-    uint8_t mod;
-    uint8_t rate;
+    uint8_t f_type;
+    uint8_t f_mod;
+    uint8_t lfo_rate;
     uint8_t lpf;
     uint8_t hpf;
     uint8_t resonance;
     uint8_t dyn_threshold;
     uint8_t dyn_attack;
     uint8_t dyn_release;
-    uint8_t vo;
+    uint8_t volume;
     uint8_t ext;
 }resonance_filter_fx_t;
 
+#pragma pack(push, 1)
 typedef struct
 {
     switch_fx_t switches;       //+
@@ -160,7 +161,7 @@ typedef struct
 
     uint8_t hpf;
     uint8_t lpf;
-    uint8_t presence;
+    uint8_t presence;               //+
 
     phaser_fx_t phaser;             //+
     chorus_fx_t chorus;             //+
@@ -190,8 +191,8 @@ typedef struct
 
     resonance_filter_fx_t resonance_filter; //+
 
-    uint8_t reverb_type;        //??????
-    uint8_t reverb_diffusion;   //??????
+    uint8_t reverb_type;        //+
+    uint8_t reverb_diffusion;   //?????? error
 
     uint8_t resonance_filter_gen_type;  //+
 
@@ -199,8 +200,9 @@ typedef struct
 
     uint8_t eq_pre_post;
 
-    uint8_t delay_time_hi;  //+ BYTE
-    uint8_t delay_time_lo;  //+ BYTE
+    uint16_t delay_time;
+    //uint8_t delay_time_hi;  //+ BYTE
+    //uint8_t delay_time_lo;  //+ BYTE
 
     uint8_t phaser_pre_post;
     uint8_t flanger_pre_post;
@@ -219,5 +221,6 @@ typedef struct
 
     uint8_t bpm_delay;
 }preset_data_fx_t;
+#pragma pack(pop)
 
 #endif // HARDWAREFXPRESET_H

@@ -10,6 +10,8 @@ Tremolo::Tremolo(AbstractDevice *owner)
     m_rate = new ControlValue(this, "tr_rt", "Rate", "",  0, 127, 0, 127);  // 0,048-14,5 Hz
     m_form = new ControlValue(this, "tr_fm", "Form", "", 0, 127, 0, 127);
 
+    m_lfoMod = new ControlValue(this, "tr_lm", "LFO mod.", "", 0, 127, 0, 127);
+
     m_ms = new ControlValue(this, "tr_ms", "Mono-St.");
     m_tap = new ControlValue(this, "tr_tp", "TAP");
 }
@@ -27,6 +29,11 @@ ControlValue *Tremolo::rate() const
 ControlValue *Tremolo::form() const
 {
     return m_form;
+}
+
+ControlValue *Tremolo::lfoMod() const
+{
+    return m_lfoMod;
 }
 
 ControlValue *Tremolo::ms() const
@@ -56,9 +63,10 @@ void Tremolo::setValues(uint8_t enabled, const tremolo_fx_t &trData, uint8_t tap
 
     m_depth->setControlValue(trData.depth);
     m_rate->setControlValue(trData.rate);
-    m_form->setControlValue(trData.lfo);
+    m_lfoMod->setControlValue(trData.lfo);
     m_ms->setControlValue(trData.ms);
 
+    m_form->setControlValue(form);
     m_tap->setControlValue(tap);
 
     emit dataChanged();

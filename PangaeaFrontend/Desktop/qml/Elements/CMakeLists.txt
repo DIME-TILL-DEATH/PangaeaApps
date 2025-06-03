@@ -10,6 +10,7 @@ qt_add_qml_module(qml_elements
         Dial.qml
         ParameterDial.qml
         ParameterComboBox.qml
+        ParameterSwitch.qml
         EqPoint.qml
         ILDelegate.qml
         ILHighlight.qml

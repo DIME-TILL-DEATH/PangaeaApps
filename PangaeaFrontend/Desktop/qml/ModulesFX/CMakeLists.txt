@@ -10,6 +10,7 @@ qt_add_qml_module(qml_modules_fx
         CM.qml
         PR.qml
         PA.qml
+        EQ.qml
         CH.qml
         DL.qml
         FL.qml

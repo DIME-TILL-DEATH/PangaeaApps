@@ -13,7 +13,6 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
 
 
@@ -29,8 +28,9 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
-            floatDigits: 3
-            step: 0.001
+            name: (module.type.displayValue === 4) ? "Detune" : module.rate.name
+
+            visible: module.type.displayValue !== 5
 
             controlValue: module.rate
         }
@@ -39,8 +39,7 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
-            floatDigits: 1
-            step: 0.5
+            visible: (module.type.displayValue !== 4) & (module.type.displayValue !== 5)
 
             controlValue: module.width
         }
@@ -49,13 +48,14 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
-            floatDigits: 1
-            step: 0.5
+            visible: (module.type.displayValue !== 4)
 
             controlValue: module.delay
         }
 
         ParameterComboBox{
+            id: _comboType
+
             width: main.dialWidth * 2
             height: main.dialHeight
 
@@ -65,7 +65,7 @@ BaseModule{
 
             moduleOn: module.moduleEnabled
 
-            model: ["Chorus", "Chorus S", "Chorus x 3", "Chorus x3 S"]
+            model: ["Chorus", "Chorus S", "Chorus x 3", "Chorus x3 S", "Detune", "MidSide Dub"]
         }
 
         ParameterDial{

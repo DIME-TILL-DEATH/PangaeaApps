@@ -29,7 +29,8 @@ class EqParametric : public AbstractModule
 public:
     enum EqMode{
         Legacy = 0,
-        Modern
+        Modern,
+        Fx
     };
 
     explicit EqParametric(AbstractDevice *owner, EqMode eqMode = EqMode::Legacy, quint8 eqNumber = 0);

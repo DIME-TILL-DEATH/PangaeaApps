@@ -13,7 +13,6 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
 
 
@@ -22,6 +21,8 @@ BaseModule{
             height: main.dialHeight
 
             controlValue: module.depth
+
+            name: "Intensity"
         }
 
 
@@ -32,11 +33,24 @@ BaseModule{
             controlValue: module.rate
         }
 
+        ParameterComboBox{
+            width: main.dialWidth * 2
+            height: main.dialHeight
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            ctrlValInstance: module.form
+
+            moduleOn: module.moduleEnabled
+
+            model: ["Sin", "Square", "Sawtooth"]
+        }
+
         ParameterDial{
             width: main.dialWidth
             height: main.dialHeight
 
-            controlValue: module.form
+            controlValue: module.lfoMod
         }
 
         ParameterComboBox{
@@ -53,7 +67,7 @@ BaseModule{
         }
 
         ParameterComboBox{
-            width: main.dialWidth * 2
+            width: main.dialWidth
             height: main.dialHeight
 
             anchors.verticalCenter: parent.verticalCenter
@@ -62,7 +76,7 @@ BaseModule{
 
             moduleOn: module.moduleEnabled
 
-            model: ["1/1 (4th notes)", "1/1.5 (8th dotted)", "1/2 (8th notes)", "1/3 (16th dotted)", "1/4 (16th notes)"]
+            model: ["1/1", "1/1.5", "1/2", "1/3", "1/4"]
         }
     }
 }

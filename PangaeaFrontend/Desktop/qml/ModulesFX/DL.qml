@@ -13,9 +13,7 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
-
 
         ParameterDial{
             width: main.dialWidth
@@ -24,19 +22,15 @@ BaseModule{
             controlValue: module.mix
         }
 
-
         ParameterDial{
             width: main.dialWidth
             height: main.dialHeight
-
-            // floatDigits: 3
-            // step: 0.001
 
             controlValue: module.time
         }
 
         ParameterComboBox{
-            width: main.dialWidth * 2
+            width: main.dialWidth
             height: main.dialHeight
 
             anchors.verticalCenter: parent.verticalCenter
@@ -45,15 +39,12 @@ BaseModule{
 
             moduleOn: module.moduleEnabled
 
-            model: ["1/1 (4th notes)", "1/1.5 (8th dotted)", "1/2 (8th notes)", "1/3 (16th dotted)", "1/4 (16th notes)"]
+            model: ["1/1", "1/1.5", "1/2", "1/3", "1/4", "2/1"]
         }
 
         ParameterDial{
             width: main.dialWidth
             height: main.dialHeight
-
-            // floatDigits: 1
-            // step: 0.5
 
             controlValue: module.feedback
         }
@@ -61,9 +52,6 @@ BaseModule{
         ParameterDial{
             width: main.dialWidth
             height: main.dialHeight
-
-            floatDigits: 1
-            step: 0.5
 
             controlValue: module.lpf
         }
@@ -127,7 +115,21 @@ BaseModule{
 
             moduleOn: module.moduleEnabled
 
-            model: ["Forward", "Backward"]
+            model: ["Forward", "Reverse"]
+        }
+
+        ParameterSwitch{
+            width: main.dialWidth
+            height: main.dialHeight
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            ctrlValInstance: module.tail
+
+            textLeft: "ON"
+            textRight: "OFF"
+
+            moduleOn: module.moduleEnabled
         }
     }
 }

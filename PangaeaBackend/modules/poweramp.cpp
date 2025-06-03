@@ -15,9 +15,9 @@ PowerAmp::PowerAmp(AbstractDevice *owner, PaType paType)
 
         m_commandOnOff = "pa_on";
 
-        m_volume = new ControlValue(this, "pa_ms", "Master", "", 0, 127, 0, 127); //VOLUME
+        m_volume = new ControlValue(this, "pa_ms", "Volume", "", 0, 127, 0, 127); //VOLUME-Master
         m_presence = new ControlValue(this, "pa_ps", "Presence", "", 0, 127, 0, 127);
-        m_slave = new ControlValue(this, "pa_lv", "Level", "", 0, 127, 0, 127); //SLAVE
+        m_slave = new ControlValue(this, "pa_lv", "Slave", "", 0, 127, 0, 127); //SLAVE-Level
         m_ampType = new ControlValue(this, "pa_tp", "Amp type", "", 0, 127, 0, 127);
         break;
     }
@@ -59,13 +59,15 @@ void PowerAmp::setValues(const pa_cpmodern_t &paData)
     emit dataChanged();
 }
 
-void PowerAmp::setValues(uint8_t enabled, const pa_fx_t &paData)
+void PowerAmp::setValues(uint8_t enabled, const pa_fx_t &paData, uint8_t presence)
 {
     m_moduleEnabled = enabled;
 
     m_volume->setControlValue(paData.master);
     m_slave->setControlValue(paData.level);
     m_ampType->setControlValue(paData.type);
+
+    m_presence->setControlValue(presence);
 
     emit dataChanged();
 }

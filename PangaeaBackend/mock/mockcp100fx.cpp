@@ -21,8 +21,8 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     //--------------------------params handlers----------------------
     setParamsHandler("rf_on", &currentPresetData.switches.resonance_filter);
     setParamsHandler("rf_mx", &currentPresetData.resonance_filter.mix);
-    setParamsHandler("rf_ft", &currentPresetData.resonance_filter.type);
-    setParamsHandler("rf_fm", &currentPresetData.resonance_filter.mod);
+    setParamsHandler("rf_ft", &currentPresetData.resonance_filter.f_type);
+    setParamsHandler("rf_fm", &currentPresetData.resonance_filter.f_mod);
     setParamsHandler("rf_lo", &currentPresetData.resonance_filter_gen_type);
     setParamsHandler("rf_lf", &currentPresetData.resonance_filter.lpf);
     setParamsHandler("rf_hf", &currentPresetData.resonance_filter.hpf);
@@ -30,7 +30,7 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setParamsHandler("rf_dt", &currentPresetData.resonance_filter.dyn_threshold);
     setParamsHandler("rf_da", &currentPresetData.resonance_filter.dyn_attack);
     setParamsHandler("rf_dr", &currentPresetData.resonance_filter.dyn_release);
-    setParamsHandler("rf_vl", &currentPresetData.resonance_filter.vo);
+    setParamsHandler("rf_vl", &currentPresetData.resonance_filter.volume);
 
     setParamsHandler("ng_on", &currentPresetData.switches.gate);
     setParamsHandler("ng_th", &currentPresetData.gate.threshold);
@@ -169,7 +169,7 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     defaultPresetData.compressor.knee = 10;
 
     defaultPresetData.resonance_filter.mix = 127;
-    defaultPresetData.resonance_filter.rate = 47;
+    defaultPresetData.resonance_filter.lfo_rate = 47;
     defaultPresetData.resonance_filter.lpf = 55;
     defaultPresetData.resonance_filter.hpf = 52;
     defaultPresetData.resonance_filter.resonance = 85;

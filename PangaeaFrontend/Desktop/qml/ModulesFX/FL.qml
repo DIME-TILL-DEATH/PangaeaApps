@@ -13,7 +13,6 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
 
 
@@ -25,19 +24,22 @@ BaseModule{
         }
 
 
-        ParameterDial{
-            width: main.dialWidth
+        ParameterComboBox{
+            width: main.dialWidth*2
             height: main.dialHeight
 
-            controlValue: module.lfo
+            anchors.verticalCenter: parent.verticalCenter
+
+            ctrlValInstance: module.lfo
+
+            moduleOn: module.moduleEnabled
+
+            model: ["Triangle", "Sinus"]
         }
 
         ParameterDial{
             width: main.dialWidth
             height: main.dialHeight
-
-            floatDigits: 3
-            step: 0.05
 
             controlValue: module.rate
         }
@@ -68,6 +70,22 @@ BaseModule{
             height: main.dialHeight
 
             controlValue: module.hpf
+        }
+
+        Rectangle{
+            width: 1
+            height: parent.height
+        }
+
+        ParameterSwitch{
+            width: main.dialWidth
+            height: main.dialHeight
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            ctrlValInstance: module.position
+
+            moduleOn: module.moduleEnabled
         }
     }
 }

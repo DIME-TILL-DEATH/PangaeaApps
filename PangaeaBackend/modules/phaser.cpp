@@ -12,18 +12,20 @@ Phaser::Phaser(AbstractDevice *owner, PhaserType phaserType)
         m_mix = new ControlValue(this, "ph_mx", "Mix", "", 0, 63, 0, 63);
         m_rate = new ControlValue(this, "ph_rt", "Rate", "",  0, 127, 0, 127);
         m_center = new ControlValue(this, "ph_cn", "Center", "",  0, 127, 0, 127);
+        m_hpf = new ControlValue(this, "ph_hp", "HPF", "Hz",  0, 255, 20, 2000);
         break;
     case PhaserType::FX:
-        m_mix = new ControlValue(this, "ph_mx", "Mix", "", -63, 64, -63, 64);
-        m_rate = new ControlValue(this, "ph_rt", "Rate", "Hz",  0, 127, 0.048, 4.85); //Range: 0 (0.048 Hz) to 127 (4.85 Hz).
-        m_center = new ControlValue(this, "ph_cn", "Center", "Hz",  0, 127, 80, 12000); //Range: 0 (80 Hz) to 127 (12 kHz).
+        m_mix = new ControlValue(this, "ph_mx", "Mix", "", 0, 127, -63, 64);
+        m_rate = new ControlValue(this, "ph_rt", "Rate", "",  0, 127, 0, 127); //0.048, 4.85); //Range: 0 (0.048 Hz) to 127 (4.85 Hz).
+        m_center = new ControlValue(this, "ph_cn", "Center", "",  0, 127, 0, 127); // "Hz",  0, 127, 80, 12000); //Range: 0 (80 Hz) to 127 (12 kHz).
+        m_hpf = new ControlValue(this, "ph_hp", "HPF", "Hz",  0, 127, 0, 127);
+        m_position = new ControlValue(this, "ph_pp", "Position");
         break;
     }
 
     m_width = new ControlValue(this, "ph_wd", "Width", "",  0, 127, 0, 127);
     m_feedback = new ControlValue(this, "ph_fb", "Feedback", "",  0, 127, 0, 127);
-    m_stages = new ControlValue(this, "ph_st", "Stages", "",  0, 3, 0, 3);
-    m_hpf = new ControlValue(this, "ph_hp", "HPF", "Hz",  0, 255, 20, 2000);
+    m_stages = new ControlValue(this, "ph_st", "Stages");
 }
 
 void Phaser::setValues(const phaser_cpmodern_t &phData)
@@ -41,7 +43,7 @@ void Phaser::setValues(const phaser_cpmodern_t &phData)
     emit dataChanged();
 }
 
-void Phaser::setValues(uint8_t enabled, const phaser_fx_t &phData, uint8_t hpfValue)
+void Phaser::setValues(uint8_t enabled, const phaser_fx_t &phData, uint8_t hpfValue, uint8_t position)
 {
     m_moduleEnabled = enabled;
 
@@ -53,6 +55,8 @@ void Phaser::setValues(uint8_t enabled, const phaser_fx_t &phData, uint8_t hpfVa
     m_stages->setControlValue(phData.type);
 
     m_hpf->setControlValue(hpfValue);
+
+    m_position->setControlValue(position);
 
     emit dataChanged();
 }
@@ -90,4 +94,9 @@ ControlValue *Phaser::stages() const
 ControlValue *Phaser::hpf() const
 {
     return m_hpf;
+}
+
+ControlValue *Phaser::position() const
+{
+    return m_position;
 }

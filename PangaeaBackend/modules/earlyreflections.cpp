@@ -2,14 +2,29 @@
 
 #include "abstractdevice.h"
 
-EarlyReflections::EarlyReflections(AbstractDevice *owner)
+EarlyReflections::EarlyReflections(AbstractDevice *owner, EarlyType earlyType)
     : AbstractModule{owner, ModuleType::ER_MONO, "ER", "eo"}
 {
     m_processingTime = 80; //mono 50
     m_fullModuleName = AbstractModule::tr("Early reflections");
 
-    m_reflectionsVolume = new ControlValue(this, "ev", "Volume");
-    m_reflectionsType = new ControlValue(this, "et", "ER Type");
+    switch(earlyType)
+    {
+    case FX:
+    {
+        m_commandOnOff = "er_on";
+        m_reflectionsVolume = new ControlValue(this, "er_mx", "Mix", "",  0, 127, -63, 64);
+        m_reflectionsType = new ControlValue(this, "er_sz", "Size", "",  0, 127, 0, 127);
+        break;
+    }
+    case Classic:
+    {
+        m_reflectionsVolume = new ControlValue(this, "ev", "Volume");
+        m_reflectionsType = new ControlValue(this, "et", "ER Type");
+        break;
+    }
+    }
+
 }
 
 void EarlyReflections::setValues(bool enabled, quint8 volume, quint8 type)

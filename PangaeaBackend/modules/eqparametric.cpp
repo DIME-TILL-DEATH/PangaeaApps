@@ -15,7 +15,9 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
     m_processingTime = 25;
     m_fullModuleName = AbstractModule::tr("Parametric EQ");
 
-    if(m_eqMode == EqMode::Modern)
+    switch(m_eqMode)
+    {
+    case EqMode::Modern:
     {
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 0, 20, 12000));
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 12000, 1, 20, 12000));
@@ -31,8 +33,21 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
         m_moduleType = (m_eqNumber == 0) ? ModuleType::EQ1 : ModuleType::EQ2;
         m_moduleName += QString::number(eqNumber+1);
         m_fullModuleName += QString::number(eqNumber+1);
+        break;
     }
-    else
+    case EqMode::Fx:
+    {
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 220, 0));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 260, 460, 1));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 600, 1000, 2));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 1000, 3000, 3));
+        m_EqBands.append(new EqBand(this, FilterType::PEAKING, 1000, 11000, 4));
+
+        m_hpf = new EqBand(this, FilterType::LOW_CUT, 20, 1000, 5, 0, 127);
+        m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 127, 0);
+        break;
+    }
+    default:
     {
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 220, 0));
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 260, 460, 1));
@@ -43,8 +58,9 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
         m_hpf = new EqBand(this, FilterType::LOW_CUT, 20, 1000, 5, 0, 255);
         m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 195, 0);
     }
+    }
 
-    if(m_eqMode == EqMode::Modern)
+    if(m_eqMode != EqMode::Legacy)
     {
         m_EqBands.append(m_hpf);
         m_EqBands.append(m_lpf);
@@ -184,7 +200,7 @@ void EqParametric::setEqData(eq_cpmodern_t eqData)
                                  eqData.Q[i]);
     }
 
-    if(m_eqMode == EqMode::Modern)
+    if(m_eqMode != EqMode::Legacy)
     {
         m_hpf->setRawBandParams(FilterType::LOW_CUT, 0, eqData.hp_freq, 1, eqData.hp_on);
         m_lpf->setRawBandParams(FilterType::HIGH_CUT, 0, eqData.lp_freq, 1, eqData.lp_on);

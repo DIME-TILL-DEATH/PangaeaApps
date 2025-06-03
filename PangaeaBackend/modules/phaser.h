@@ -20,6 +20,7 @@ class Phaser : public AbstractModule
     Q_PROPERTY(ControlValue* feedback READ feedback NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* stages READ stages NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* hpf READ hpf NOTIFY dataChanged FINAL)
+    Q_PROPERTY(ControlValue* position READ position NOTIFY dataChanged FINAL)
 public:
     enum PhaserType{
         Classic = 0,
@@ -29,7 +30,7 @@ public:
     Phaser(AbstractDevice *owner, PhaserType phaserType = PhaserType::FX);
 
     void setValues(const phaser_cpmodern_t& phData);
-    void setValues(uint8_t enabled, const phaser_fx_t& phData, uint8_t hpfValue);
+    void setValues(uint8_t enabled, const phaser_fx_t& phData, uint8_t hpfValue, uint8_t position);
 
     ControlValue *mix() const;
     ControlValue *rate() const;
@@ -38,6 +39,7 @@ public:
     ControlValue *feedback() const;
     ControlValue *stages() const;
     ControlValue *hpf() const;
+    ControlValue *position() const;
 
 private:
     ControlValue *m_mix = nullptr;
@@ -47,6 +49,7 @@ private:
     ControlValue *m_feedback = nullptr;
     ControlValue *m_stages = nullptr;
     ControlValue *m_hpf = nullptr;
+    ControlValue *m_position = nullptr;
 };
 
 #endif // PHASER_H

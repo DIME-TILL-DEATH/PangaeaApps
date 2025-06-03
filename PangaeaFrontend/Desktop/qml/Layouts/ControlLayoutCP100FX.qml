@@ -113,7 +113,7 @@ Column
                     case ModuleType.PR: _moduleLoader.source = "../ModulesFX/PR.qml"; break;
                     case ModuleType.PA: _moduleLoader.source = "../ModulesFX/PA.qml"; break;
                     case ModuleType.IR_STEREO: _moduleLoader.source = "../ModulesFX/IR.qml"; break;
-                    case ModuleType.EQ: _moduleLoader.source = "../ModulesFX/EQ.qml"; break;
+                    case ModuleType.EQ1: _moduleLoader.source = "../ModulesFX/EQ.qml"; break;
                     case ModuleType.DELAY: _moduleLoader.source = "../ModulesFX/DL.qml"; break;
                     case ModuleType.PH: _moduleLoader.source = "../ModulesFX/PH.qml"; break;
                     case ModuleType.FL: _moduleLoader.source = "../ModulesFX/FL.qml"; break;

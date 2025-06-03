@@ -24,6 +24,8 @@ class ResonanceFilter : public AbstractModule
     Q_PROPERTY(ControlValue* dynAtt READ dynAtt NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* dynRel READ dynRel NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* volume READ volume NOTIFY dataChanged FINAL)
+
+    Q_PROPERTY(ControlValue* lfoType READ lfoType NOTIFY dataChanged FINAL)
 public:
     explicit ResonanceFilter(AbstractDevice *owner);
 
@@ -39,6 +41,8 @@ public:
     ControlValue *dynRel() {return m_dynRel;};
     ControlValue *volume() {return m_volume;};
 
+    ControlValue *lfoType() {return m_lfoType;};
+
     void setControlValue(uint8_t enabled, resonance_filter_fx_t rfData, uint8_t genType);
 
 private:
@@ -53,6 +57,7 @@ private:
     ControlValue *m_dynAtt = nullptr;
     ControlValue *m_dynRel = nullptr;
     ControlValue *m_volume = nullptr;
+    ControlValue *m_lfoType = nullptr;
 };
 
 #endif // RESONANCEFILTER_H

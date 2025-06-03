@@ -13,7 +13,6 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
 
 
@@ -24,22 +23,11 @@ BaseModule{
             controlValue: module.reflectionsVolume
         }
 
-        ParameterComboBox{
-            width: main.dialWidth * 2
+        ParameterDial{
+            width: main.dialWidth
             height: main.dialHeight
 
-            anchors.verticalCenter: parent.verticalCenter
-
-            ctrlValInstance: module.reflectionsType
-
-            moduleOn: module.moduleEnabled
-
-            model: ["Short M",
-                    "Short S",
-                    "Medium M",
-                    "Medium S",
-                    "Long M",
-                    "Long S"]
+            controlValue: module.reflectionsType
         }
     }
 }

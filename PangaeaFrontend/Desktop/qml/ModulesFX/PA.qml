@@ -12,7 +12,6 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
 
 
@@ -38,7 +37,7 @@ BaseModule{
         }
 
         ParameterComboBox{
-            width: main.dialWidth * 2
+            width: main.dialWidth * 3
             height: main.dialHeight
 
             anchors.verticalCenter: parent.verticalCenter

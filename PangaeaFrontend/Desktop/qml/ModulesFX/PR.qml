@@ -12,17 +12,27 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
-
 
         ParameterDial{
             width: main.dialWidth
             height: main.dialHeight
 
-            controlValue: module.high
+            controlValue: module.gain
         }
 
+
+        Rectangle{
+            width: 1
+            height: parent.height
+        }
+
+        ParameterDial{
+            width: main.dialWidth
+            height: main.dialHeight
+
+            controlValue: module.low
+        }
 
         ParameterDial{
             width: main.dialWidth
@@ -35,7 +45,7 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
-            controlValue: module.low
+            controlValue: module.high
         }
 
         Rectangle{

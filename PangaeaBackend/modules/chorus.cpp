@@ -11,13 +11,12 @@ Chorus::Chorus(AbstractDevice *owner, ChorusType chorusType)
     {
         m_processingTime = 50;
 
-        m_mix = new ControlValue(this, "ch_mx", "Mix", "", 0, 63, 0, 100);
-        m_rate = new ControlValue(this, "ch_rt", "Rate", "Hz",  0, 127, 0.024, 9.6);
-        // TODO правильный пересчёт значений width, delay и rate (если реально вытащить из прошивки)
-        m_width = new ControlValue(this, "ch_wd", "Width", "ms",  0, 127, 0, 21);
-        m_delay = new ControlValue(this, "ch_dl", "Delay", "ms",  0, 127, 0, 21);
+        m_mix = new ControlValue(this, "ch_mx", "Mix", "", 0, 127, -63, 64);
+        m_rate = new ControlValue(this, "ch_rt", "Rate", "", 0, 127, 0, 127);//"Hz",  0, 127, 0.024, 9.6);
+        m_width = new ControlValue(this, "ch_wd", "Width", "", 0, 127, 0, 127); //, "ms",  0, 127, 0, 21);
+        m_delay = new ControlValue(this, "ch_dl", "Delay", "", 0, 127, 0, 127);//, "ms",  0, 127, 0, 21);
         m_type = new ControlValue(this, "ch_tp", "Type");
-        m_hpf = new ControlValue(this, "ch_hp", "HPF", "Hz",  0, 127, 20, 2000);
+        m_hpf = new ControlValue(this, "ch_hp", "HPF", "", 0, 127, 0, 127);//"Hz",  0, 127, 20, 2000);
         break;
     }
     case ChorusType::Classic:
@@ -53,8 +52,8 @@ void Chorus::setValues(uint8_t enabled, const chorus_fx_t &chData, uint8_t hpfVa
     m_rate->setControlValue(chData.rate);
     m_width->setControlValue(chData.width);
 
-    m_type->setControlValue(chData.type);
     m_delay->setControlValue(chData.delay);
+    m_type->setControlValue(chData.type);
 
     m_hpf->setControlValue(hpfValue);
 

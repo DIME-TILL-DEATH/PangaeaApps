@@ -1,18 +1,41 @@
 #include "preamp.h"
 
-Preamp::Preamp(AbstractDevice *owner)
+Preamp::Preamp(AbstractDevice *owner, PreampType preampType)
     : AbstractModule{owner, ModuleType::PR, "PR", "pro"}
 {
-    m_processingTime = 20;
+
     m_fullModuleName = AbstractModule::tr("Preamp");
 
-    // TODO: диапазоны для FX
-    m_gain = new ControlValue(this, "prg", "Gain");
-    m_volume = new ControlValue(this, "prv", "Volume");
+    switch(preampType)
+    {
+    case PreampType::FX:
+    {
+        m_processingTime = 10;
 
-    m_low = new ControlValue(this, "prl", "Low", "", -64, 63, 0, 127);
-    m_mid = new ControlValue(this, "prm", "Mid", "", -64, 63, 0, 127);
-    m_high = new ControlValue(this, "prh", "High", "", -64, 63, 0, 127);
+        m_commandOnOff = "pr_on";
+
+        m_gain = new ControlValue(this, "pr_gn", "Gain", "", 0, 127, 0, 127);
+        m_volume = new ControlValue(this, "pr_vl", "Volume", "", 0, 127, 0, 127);
+
+        m_low = new ControlValue(this, "pr_lo", "Low", "", 0, 127, 0, 127);
+        m_mid = new ControlValue(this, "pr_mi", "Mid", "", 0, 127, 0, 127);
+        m_high = new ControlValue(this, "pr_hi", "High", "", 0, 127, 0, 127);
+
+        break;
+    }
+    case PreampType::Classic:
+    {
+        m_processingTime = 20;
+        m_gain = new ControlValue(this, "prg", "Gain");
+        m_volume = new ControlValue(this, "prv", "Volume");
+
+        m_low = new ControlValue(this, "prl", "Low", "", -64, 63, 0, 127);
+        m_mid = new ControlValue(this, "prm", "Mid", "", -64, 63, 0, 127);
+        m_high = new ControlValue(this, "prh", "High", "", -64, 63, 0, 127);
+
+        break;
+    }
+    }
 }
 
 void Preamp::setValues(bool enabled, quint8 volume, qint8 low, qint8 mid, qint8 high)

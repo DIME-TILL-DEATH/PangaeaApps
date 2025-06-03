@@ -12,7 +12,6 @@ BaseModule{
 
     contentItem: Row
     {
-        id: _column
         anchors.fill: parent
 
 
@@ -29,7 +28,7 @@ BaseModule{
         }
 
         ParameterComboBox{
-            width: main.dialWidth * 2
+            width: main.dialWidth //* 2
             height: main.dialHeight
 
             anchors.verticalCenter: parent.verticalCenter
@@ -87,6 +86,21 @@ BaseModule{
             visible: _modeCombo.isLfoMode
         }
 
+        ParameterComboBox{
+            width: main.dialWidth * 2
+            height: main.dialHeight
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            ctrlValInstance: module.lfoType
+
+            visible: _modeCombo.isLfoMode
+
+            moduleOn: module.moduleEnabled
+
+            model: ["Tri", "Rand", "Rand/2", "Rand/3", "Rand/4", "Rand/6", "Rand/8"]
+        }
+
         ParameterDial{
             width: main.dialWidth
             height: main.dialHeight
@@ -95,6 +109,8 @@ BaseModule{
 
             visible: _modeCombo.isDynMode
         }
+
+
 
         ParameterDial{
             width: main.dialWidth

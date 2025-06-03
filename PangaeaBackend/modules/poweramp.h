@@ -36,7 +36,7 @@ public:
 
     void setValues(bool enabled, quint8 volume, quint8 presence, quint8 slave, quint8 ampType);
     void setValues(const pa_cpmodern_t& paData);
-    void setValues(uint8_t enabled, const pa_fx_t& paData);
+    void setValues(uint8_t enabled, const pa_fx_t& paData, uint8_t presence);
 
 private:
     ControlValue *m_volume = nullptr;

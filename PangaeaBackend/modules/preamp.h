@@ -25,7 +25,12 @@ class Preamp : public AbstractModule
     // FX
     Q_PROPERTY(ControlValue* gain READ gain NOTIFY dataChanged FINAL)
 public:
-    Preamp(AbstractDevice *owner);
+    enum PreampType{
+        Classic = 0,
+        FX
+    };
+
+    explicit Preamp(AbstractDevice *owner, PreampType preampType = Classic);
 
     ControlValue* gain() {return m_gain;};
     ControlValue* volume() {return m_volume;};

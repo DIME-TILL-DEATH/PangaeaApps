@@ -14,10 +14,10 @@ Compressor::Compressor(AbstractDevice *owner, CompressorType compressorType)
 
         m_commandOnOff = "cm_on";
 
-        m_threshold = new ControlValue(this, "cm_th", "Threshold", "dB", 0, 127, 0, -37);
-        m_ratio = new ControlValue(this, "cm_rt", "Ratio", "", 0, 127, 2, 24);
+        m_threshold = new ControlValue(this, "cm_th", "Threshold", "", 0, 127, 0, 127); //"dB", 0, 127, 0, -37);
+        m_ratio = new ControlValue(this, "cm_rt", "Ratio", "", 0, 127, 0, 127); //0, 127, 2, 24);
         m_volume = new ControlValue(this, "cm_vl", "Volume", "", 0, 127, 0, 127);
-        m_attack = new ControlValue(this, "cm_at", "Attack", "ms", 0, 127, 0, 30);
+        m_attack = new ControlValue(this, "cm_at", "Attack", "", 0, 127, 0, 127); //"ms", 0, 127, 0, 30);
         m_knee = new ControlValue(this, "cm_kn", "Knee", "", 0, 127, 0, 127);
         break;
     }

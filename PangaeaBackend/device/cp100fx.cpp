@@ -33,15 +33,15 @@ void Cp100fx::initDevice(DeviceType deviceType)
     RF = new ResonanceFilter(this);
     NG = new NoiseGate(this, NoiseGate::FX);
     CM = new Compressor(this, Compressor::FX);
-    PR = new Preamp(this);
+    PR = new Preamp(this, Preamp::FX);
     PA = new PowerAmp(this, PowerAmp::FX);
     IR = new DualCabSim(this);
-    EQ = new EqParametric(this, EqParametric::EqMode::Modern, 0);
+    EQ = new EqParametric(this, EqParametric::EqMode::Fx, 0);
     DL = new Delay(this, Delay::FX);
     PH = new Phaser(this, Phaser::FX);
     FL = new Flanger(this);
     CH = new Chorus(this, Chorus::FX);
-    ER = new EarlyReflections(this);
+    ER = new EarlyReflections(this, EarlyReflections::FX);
     RV = new Reverb(this);
     TR = new Tremolo(this);
 
@@ -52,10 +52,10 @@ void Cp100fx::initDevice(DeviceType deviceType)
     m_moduleList.append(PA);
     m_moduleList.append(IR);
     m_moduleList.append(EQ);
-    m_moduleList.append(DL);
     m_moduleList.append(PH);
     m_moduleList.append(FL);
     m_moduleList.append(CH);
+    m_moduleList.append(DL);
     m_moduleList.append(ER);
     m_moduleList.append(RV);
     m_moduleList.append(TR);
@@ -297,23 +297,40 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     NG->setValues(presetData.switches.gate, presetData.gate);
     CM->setValues(presetData.switches.compressor, presetData.compressor);
     PR->setValues(presetData.switches.preamp, presetData.preamp);
-    PA->setValues(presetData.switches.amp, presetData.pa);
+    PA->setValues(presetData.switches.amp, presetData.pa, presetData.presence);
 
     // IR->setEnabled(presetData.cab_sim_on);
     // IR->setSendLevel(presetData.ir_send_level);
 
-    // EQ->setEqData(presetData.eq1);
+    eq_cpmodern_t eqData;
+    for(int i=0; i<5; i++)
+    {
+        eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);
+        eqData.gain[i] = presetData.eq_gain[i] - 15;
+        eqData.freq[i] = static_cast<int8_t>(presetData.eq_freq[i]); // treat value as signed when converting in 16 bits
+        eqData.Q[i] = presetData.eq_q[i];
+    }
+    eqData.parametric_on = presetData.switches.eq;
+    eqData.hp_freq = presetData.hpf;
+    eqData.hp_on = presetData.switches.eq;
+    eqData.lp_freq = presetData.lpf;
+    eqData.lp_on = presetData.switches.eq;
+    EQ->setEqData(eqData);
 
-    uint16_t time = presetData.delay_time_hi << 8 || presetData.delay_time_lo;
-    DL->setValues(presetData.switches.delay, presetData.delay, time,
+    //uint16_t time = presetData.delay_time_lo << 8 | presetData.delay_time_hi;
+
+
+    DL->setValues(presetData.switches.delay, presetData.delay, presetData.delay_time,
                   presetData.delay_tap, presetData.delay_tail);
 
-    PH->setValues(presetData.switches.phaser, presetData.phaser, presetData.hpf_phaser);
-    FL->setValues(presetData.switches.flanger, presetData.flanger, presetData.hpf_flanger);
+    PH->setValues(presetData.switches.phaser, presetData.phaser, presetData.hpf_phaser, presetData.phaser_pre_post);
+    FL->setValues(presetData.switches.flanger, presetData.flanger, presetData.hpf_flanger, presetData.flanger_pre_post);
     CH->setValues(presetData.switches.chorus, presetData.chorus, presetData.hpf_chorus);
     ER->setValues(presetData.switches.early_reflections, presetData.early_reflections);
-    RV->setValues(presetData.switches.reverb, presetData.reverb);
+    RV->setValues(presetData);
     TR->setValues(presetData.switches.tremolo, presetData.tremolo, presetData.tremolo_tap, presetData.tremolo_lfo_type);
+
+    qDebug() << "Reverb" << presetData.reverb_diffusion;
 
     emit deviceUpdatingValues();
 
