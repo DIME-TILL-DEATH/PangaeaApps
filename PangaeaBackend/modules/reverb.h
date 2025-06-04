@@ -31,7 +31,7 @@ class Reverb : public AbstractModule
 public:
     Reverb(AbstractDevice *owner);
 
-    void setValues(const preset_data_fx_t &rvData);
+    void setValues(const preset_data_fx_t &rvData) override;
 
     ControlValue *mix() const {return m_mix;};
     ControlValue *type() const {return m_type;};

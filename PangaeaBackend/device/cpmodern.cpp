@@ -783,19 +783,12 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
 
     MV->setValue(presetData.volume);
 
-    NG->setValues(presetData.gate);
-    CM->setValues(presetData.compressor);
-    PR->setValues(presetData.preamp);
-    PA->setValues(presetData.power_amp);
-    EQ1->setEqData(presetData.eq1);
-    EQ2->setEqData(presetData.eq2);
-    IR->setEnabled(presetData.cab_sim_on);
-    IR->setSendLevel(presetData.ir_send_level);
-    TR->setValues(presetData.tremolo);
-    CH->setValues(presetData.chorus);
-    PH->setValues(presetData.phaser);
-    ER->setValues(presetData.reverb);
-    DL->setValues(presetData.delay);
+    foreach (QObject* obj, m_avaliableModulesList)
+    {
+        AbstractModule* module = dynamic_cast<AbstractModule*>(obj);
+        if(module) module->setValues(presetData);
+        else qWarning() << Q_FUNC_INFO << "Object is not module!";
+    }
     emit deviceUpdatingValues();
 
     switch(m_presetManager.currentState())

@@ -132,14 +132,14 @@ bool PresetModern::importData(const QString& filePath, QByteArray& loadedWavData
         {
             m_presetName.clear();
 
-            quint8 rawArr[sizeof(preset_cplegacy_t)];
+            quint8 rawArr[sizeof(preset_data_cplegacy_t)];
             for(int i = 0; i < rawData.size(); i += 2)
             {
                 QString chByte = QString(rawData.at(i)) + QString(rawData.at(i+1));
                 rawArr[i/2] = chByte.toInt(nullptr, 16);
             }
-            preset_cplegacy_t imporetedPresetData;
-            memcpy(&imporetedPresetData, rawArr, sizeof(preset_cplegacy_t));
+            preset_data_cplegacy_t imporetedPresetData;
+            memcpy(&imporetedPresetData, rawArr, sizeof(preset_data_cplegacy_t));
             presetData = HardwarePresetCPModern::convertLegacyToModern(imporetedPresetData);
 
         }

@@ -31,17 +31,16 @@ public:
 
     explicit Compressor(AbstractDevice *owner, CompressorType compressorType = CompressorType::Classic);
 
-    ControlValue *sustain() {return m_sustain;};
-    ControlValue *volume() {return m_volume;};
+    void setValues(const preset_data_cplegacy_t& presetData) override;
+    void setValues(const preset_data_cpmodern_t &cmData) override;
+    void setValues(const preset_data_fx_t &cmData) override;
 
+    ControlValue *sustain() {return m_sustain;};
+    ControlValue *volume() {return m_volume;};    
     ControlValue *attack() {return m_attack;};
     ControlValue *threshold() {return m_threshold;};
     ControlValue *ratio() {return m_ratio;};
     ControlValue *knee() {return m_knee;};
-
-    void setValues(bool enabled, quint8 sustain, quint8 volume);
-    void setValues(const compressor_cpmodern_t &cmData);
-    void setValues(uint8_t enabled, const compressor_fx_t &cmData);
 
 private:
     ControlValue *m_sustain = nullptr;

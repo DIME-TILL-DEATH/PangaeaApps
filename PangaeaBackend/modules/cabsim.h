@@ -19,10 +19,13 @@ public:
     QString impulseName() const;
     void setImpulseName(const QString& impulseName);
 
-    void setEnabled(bool isEnabled);
+    void setEnabled(bool isEnabled) {m_moduleEnabled = isEnabled;};
+
+    void setValues(const preset_data_cplegacy_t& csData) override;
+    void setValues(const preset_data_cpmodern_t& csData) override;
 
     ControlValue *send() const {return m_send;};
-    void setSendLevel(quint8 sendLevel);
+
 
 private:
     QString m_impulseName{"FILENAME.WAV"};

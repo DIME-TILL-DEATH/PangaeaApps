@@ -24,33 +24,32 @@ EarlyReflections::EarlyReflections(AbstractDevice *owner, EarlyType earlyType)
         break;
     }
     }
-
 }
 
-void EarlyReflections::setValues(bool enabled, quint8 volume, quint8 type)
+void EarlyReflections::setValues(const preset_data_cplegacy_t &erData)
 {
-    m_moduleEnabled = enabled;
-    m_reflectionsVolume->setControlValue(volume);
-    m_reflectionsType->setControlValue(type);
+    m_moduleEnabled = erData.early_on;
+    m_reflectionsVolume->setControlValue(erData.early_volume);
+    m_reflectionsType->setControlValue(erData.early_type);
 
     emit dataChanged();
 }
 
-void EarlyReflections::setValues(const early_cpmodern_t &rvData)
+void EarlyReflections::setValues(const preset_data_cpmodern_t &erData)
 {
-    m_moduleEnabled = rvData.on;
-    m_reflectionsVolume->setControlValue(rvData.volume);
-    m_reflectionsType->setControlValue(rvData.type);
+    m_moduleEnabled = erData.reverb.on;
+    m_reflectionsVolume->setControlValue(erData.reverb.volume);
+    m_reflectionsType->setControlValue(erData.reverb.type);
 
     emit dataChanged();
 }
 
-void EarlyReflections::setValues(uint8_t enabled, const early_fx_t &earlyData)
+void EarlyReflections::setValues(const preset_data_fx_t& erData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = erData.switches.early_reflections;
 
-    m_reflectionsVolume->setControlValue(earlyData.volume);
-    m_reflectionsType->setControlValue(earlyData.type);
+    m_reflectionsVolume->setControlValue(erData.early_reflections.volume);
+    m_reflectionsType->setControlValue(erData.early_reflections.type);
 
     emit dataChanged();
 }

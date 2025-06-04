@@ -35,9 +35,9 @@ public:
     ControlValue *reflectionsVolume() {return m_reflectionsVolume;};
     ControlValue *reflectionsType() {return m_reflectionsType;};
 
-    void setValues(bool enabled, quint8 volume, quint8 type);
-    void setValues(const early_cpmodern_t& rvData);
-    void setValues(uint8_t enabled, const early_fx_t& earlyData);
+    void setValues(const preset_data_cplegacy_t& erData) override;
+    void setValues(const preset_data_cpmodern_t& erData) override;
+    void setValues(const preset_data_fx_t &erData) override;
 
     quint16 processingTime() const override;
     quint8 processingTimeMono() {return m_processingTimeMono;};

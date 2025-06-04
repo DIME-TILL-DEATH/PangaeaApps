@@ -28,32 +28,32 @@ NoiseGate::NoiseGate(AbstractDevice *owner, GateType gateType)
     }
 }
 
-void NoiseGate::setValues(bool enabled, quint8 threshold, quint8 decay)
+void NoiseGate::setValues(const preset_data_cplegacy_t &ngData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = ngData.gate_on;
 
-    m_threshold->setControlValue(threshold);
-    m_decay->setControlValue(decay);
+    m_threshold->setControlValue(ngData.gate_threshold);
+    m_decay->setControlValue(ngData.gate_decay);
 
     emit dataChanged();
 }
 
-void NoiseGate::setValues(const gate_cpmodern_t& ngData)
+void NoiseGate::setValues(const preset_data_cpmodern_t &ngData)
 {
-    m_moduleEnabled = ngData.on;
-    m_threshold->setControlValue(ngData.threshold);
-    m_decay->setControlValue(ngData.decay);
+    m_moduleEnabled = ngData.gate.on;
+    m_threshold->setControlValue(ngData.gate.threshold);
+    m_decay->setControlValue(ngData.gate.decay);
 
     emit dataChanged();
 }
 
-void NoiseGate::setValues(uint8_t enabled, const gate_fx_t &ngData)
+void NoiseGate::setValues(const preset_data_fx_t& ngData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = ngData.switches.gate;
 
-    m_threshold->setControlValue(ngData.threshold);
-    m_attack->setControlValue(ngData.attack);
-    m_decay->setControlValue(ngData.decay);
+    m_threshold->setControlValue(ngData.gate.threshold);
+    m_attack->setControlValue(ngData.gate.attack);
+    m_decay->setControlValue(ngData.gate.decay);
 
     emit dataChanged();
 }

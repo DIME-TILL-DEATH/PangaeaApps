@@ -35,39 +35,38 @@ PowerAmp::PowerAmp(AbstractDevice *owner, PaType paType)
     connect(this, &AbstractModule::dataChanged, this, &PowerAmp::slPaEnabledChanged);
 }
 
-void PowerAmp::setValues(bool enabled, quint8 volume, quint8 presence, quint8 slave, quint8 ampType)
+void PowerAmp::setValues(const preset_data_cplegacy_t &paData)
 {
-    m_moduleEnabled = enabled;
-    m_volume->setControlValue(volume);
-    m_presence->setControlValue(presence);
-    m_slave->setControlValue(slave);
-
-    m_ampType->setControlValue(ampType);
-
-    emit dataChanged();
-}
-
-void PowerAmp::setValues(const pa_cpmodern_t &paData)
-{
-    m_moduleEnabled = paData.on;
-    m_volume->setControlValue(paData.volume);
+    m_moduleEnabled = paData.amp_on;
+    m_volume->setControlValue(paData.amp_volume);
     m_presence->setControlValue(paData.presence_vol);
-    m_slave->setControlValue(paData.slave);
-
-    m_ampType->setControlValue(paData.type);
+    m_slave->setControlValue(paData.amp_slave);
+    m_ampType->setControlValue(paData.amp_type);
 
     emit dataChanged();
 }
 
-void PowerAmp::setValues(uint8_t enabled, const pa_fx_t &paData, uint8_t presence)
+void PowerAmp::setValues(const preset_data_cpmodern_t& paData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = paData.power_amp.on;
+    m_volume->setControlValue(paData.power_amp.volume);
+    m_presence->setControlValue(paData.power_amp.presence_vol);
+    m_slave->setControlValue(paData.power_amp.slave);
 
-    m_volume->setControlValue(paData.master);
-    m_slave->setControlValue(paData.level);
-    m_ampType->setControlValue(paData.type);
+    m_ampType->setControlValue(paData.power_amp.type);
 
-    m_presence->setControlValue(presence);
+    emit dataChanged();
+}
+
+void PowerAmp::setValues(const preset_data_fx_t& paData)
+{
+    m_moduleEnabled = paData.switches.amp;
+
+    m_volume->setControlValue(paData.pa.master);
+    m_slave->setControlValue(paData.pa.level);
+    m_ampType->setControlValue(paData.pa.type);
+
+    m_presence->setControlValue(paData.presence);
 
     emit dataChanged();
 }

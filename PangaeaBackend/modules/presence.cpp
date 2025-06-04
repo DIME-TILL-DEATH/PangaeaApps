@@ -7,10 +7,10 @@ Presence::Presence(AbstractDevice *owner)
     m_fullModuleName = AbstractModule::tr("Presence");
 }
 
-void Presence::setValues(bool enabled, quint8 value)
+void Presence::setValues(const preset_data_cplegacy_t& presetData)
 {
-    m_moduleEnabled = enabled;
-    m_presenceVolume->setControlValue(value);
+    m_moduleEnabled = presetData.presence_on;
+    m_presenceVolume->setControlValue(presetData.presence_vol);
 
     emit dataChanged();
 }

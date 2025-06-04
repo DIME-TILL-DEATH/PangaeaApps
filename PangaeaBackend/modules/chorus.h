@@ -29,8 +29,8 @@ public:
 
     explicit Chorus(AbstractDevice *owner, ChorusType chorusType = ChorusType::Classic);
 
-    void setValues(const chorus_cpmodern_t& chData);
-    void setValues(uint8_t enabled, const chorus_fx_t& chData, uint8_t hpfValue);
+    void setValues(const preset_data_cpmodern_t& chData) override;
+    void setValues(const preset_data_fx_t &chData) override;
 
     ControlValue *mix() const;
     ControlValue *rate() const;

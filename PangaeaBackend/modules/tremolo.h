@@ -24,16 +24,15 @@ class Tremolo : public AbstractModule
 public:
     Tremolo(AbstractDevice *owner);
 
+    void setValues(const preset_data_cpmodern_t& trData) override;
+    void setValues(const preset_data_fx_t &trData) override;
+
     ControlValue *depth() const;
     ControlValue *rate() const;
     ControlValue *form() const;
-
     ControlValue *lfoMod() const;
     ControlValue *ms() const;
     ControlValue *tap() const;
-
-    void setValues(const tremolo_cpmodern_t& trData);
-    void setValues(uint8_t enabled, const tremolo_fx_t& trData, uint8_t tap, uint8_t form);
 
 private:
     ControlValue *m_depth = nullptr;

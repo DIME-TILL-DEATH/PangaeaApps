@@ -46,28 +46,28 @@ ControlValue *Tremolo::tap() const
     return m_tap;
 }
 
-void Tremolo::setValues(const tremolo_cpmodern_t &trData)
+void Tremolo::setValues(const preset_data_cpmodern_t &trData)
 {
-    m_moduleEnabled = trData.on;
+    m_moduleEnabled = trData.tremolo.on;
 
-    m_depth->setControlValue(trData.depth);
-    m_rate->setControlValue(trData.rate);
-    m_form->setControlValue(trData.type);
+    m_depth->setControlValue(trData.tremolo.depth);
+    m_rate->setControlValue(trData.tremolo.rate);
+    m_form->setControlValue(trData.tremolo.type);
 
     emit dataChanged();
 }
 
-void Tremolo::setValues(uint8_t enabled, const tremolo_fx_t &trData, uint8_t tap, uint8_t form)
+void Tremolo::setValues(const preset_data_fx_t& trData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = trData.switches.tremolo;
 
-    m_depth->setControlValue(trData.depth);
-    m_rate->setControlValue(trData.rate);
-    m_lfoMod->setControlValue(trData.lfo);
-    m_ms->setControlValue(trData.ms);
+    m_depth->setControlValue(trData.tremolo.depth);
+    m_rate->setControlValue(trData.tremolo.rate);
+    m_lfoMod->setControlValue(trData.tremolo.lfo);
+    m_ms->setControlValue(trData.tremolo.ms);
 
-    m_form->setControlValue(form);
-    m_tap->setControlValue(tap);
+    m_form->setControlValue(trData.tremolo_lfo_type);
+    m_tap->setControlValue(trData.tremolo_tap);
 
     emit dataChanged();
 }

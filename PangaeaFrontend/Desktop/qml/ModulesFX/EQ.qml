@@ -3,6 +3,8 @@ import QtQuick.Controls 2.15
 
 import Elements 1.0
 
+import Layouts 1.0
+
 import CppObjects 1.0
 import PangaeaBackend
 
@@ -10,6 +12,12 @@ BaseModule{
     id: main
 
     property EqParametric module: _moduleLoader.selectedModuleInstance
+
+    EqWindow{
+        id: _eqWindow
+
+        module: main.module
+    }
 
     contentItem: Row
     {
@@ -136,7 +144,13 @@ BaseModule{
             height: dialHeight/2
 
             anchors.verticalCenter: parent.verticalCenter
+
+            onClicked:{
+                _eqWindow.show();
+            }
         }
+
+
 
         Rectangle{
             width: 1
@@ -154,4 +168,5 @@ BaseModule{
             moduleOn: module.moduleEnabled
         }
     }
+
 }

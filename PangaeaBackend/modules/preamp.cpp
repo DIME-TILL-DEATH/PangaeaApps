@@ -38,40 +38,40 @@ Preamp::Preamp(AbstractDevice *owner, PreampType preampType)
     }
 }
 
-void Preamp::setValues(bool enabled, quint8 volume, qint8 low, qint8 mid, qint8 high)
+void Preamp::setValues(const preset_data_cplegacy_t &prData)
 {
-    m_moduleEnabled = enabled;
-    m_volume->setControlValue(volume);
+    m_moduleEnabled = prData.preamp_on;
+    m_volume->setControlValue(prData.preamp_volume);
 
-    m_low->setControlValue(low);
-    m_mid->setControlValue(mid);
-    m_high->setControlValue(high);
+    m_low->setControlValue(static_cast<int8_t>(prData.preamp_low));
+    m_mid->setControlValue(static_cast<int8_t>(prData.preamp_mid));
+    m_high->setControlValue(static_cast<int8_t>(prData.preamp_high));
 
     emit dataChanged();
 }
 
-void Preamp::setValues(const preamp_cpmodern_t &preData)
+void Preamp::setValues(const preset_data_cpmodern_t &preData)
 {
-    m_moduleEnabled = preData.on;
+    m_moduleEnabled = preData.preamp.on;
 
-    m_volume->setControlValue(preData.volume);
+    m_volume->setControlValue(preData.preamp.volume);
 
-    m_low->setControlValue((qint8)preData.low);
-    m_mid->setControlValue((qint8)preData.mid);
-    m_high->setControlValue((qint8)preData.high);
+    m_low->setControlValue((qint8)preData.preamp.low);
+    m_mid->setControlValue((qint8)preData.preamp.mid);
+    m_high->setControlValue((qint8)preData.preamp.high);
 
     emit dataChanged();
 }
 
-void Preamp::setValues(uint8_t enabled, const preamp_fx_t &preampData)
+void Preamp::setValues(const preset_data_fx_t& prData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = prData.switches.preamp;
 
-    m_gain->setControlValue(preampData.gain);
-    m_volume->setControlValue(preampData.volume);
-    m_low->setControlValue((qint8)preampData.low);
-    m_mid->setControlValue((qint8)preampData.mid);
-    m_high->setControlValue((qint8)preampData.high);
+    m_gain->setControlValue(prData.preamp.gain);
+    m_volume->setControlValue(prData.preamp.volume);
+    m_low->setControlValue((qint8)prData.preamp.low);
+    m_mid->setControlValue((qint8)prData.preamp.mid);
+    m_high->setControlValue((qint8)prData.preamp.high);
 
     emit dataChanged();
 }

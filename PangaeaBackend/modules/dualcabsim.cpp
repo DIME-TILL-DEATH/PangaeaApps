@@ -6,3 +6,8 @@ DualCabSim::DualCabSim(AbstractDevice *owner)
     m_processingTime = 100;
     m_fullModuleName = AbstractModule::tr("Cab sim");
 }
+
+void DualCabSim::setValues(const preset_data_fx_t &csData)
+{
+
+}

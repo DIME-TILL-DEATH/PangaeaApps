@@ -21,8 +21,7 @@ public:
 
     ControlValue* lpf() {return m_lpf;};
 
-    void setValues(bool enabled, quint8 value);
-    void setValues(const eq_cpmodern_t& eq);
+    void setValues(const preset_data_cplegacy_t& lpData) override;
 
 private:
     ControlValue* m_lpf;

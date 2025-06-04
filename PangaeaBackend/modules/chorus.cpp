@@ -32,30 +32,30 @@ Chorus::Chorus(AbstractDevice *owner, ChorusType chorusType)
     }
 }
 
-void Chorus::setValues(const chorus_cpmodern_t &chData)
+void Chorus::setValues(const preset_data_cpmodern_t &chData)
 {
-    m_moduleEnabled = chData.on;
+    m_moduleEnabled = chData.chorus.on;
 
-    m_mix->setControlValue(chData.mix);
-    m_rate->setControlValue(chData.rate);
-    m_width->setControlValue(chData.width);
-    m_hpf->setControlValue(chData.hpf);
+    m_mix->setControlValue(chData.chorus.mix);
+    m_rate->setControlValue(chData.chorus.rate);
+    m_width->setControlValue(chData.chorus.width);
+    m_hpf->setControlValue(chData.chorus.hpf);
 
     emit dataChanged();
 }
 
-void Chorus::setValues(uint8_t enabled, const chorus_fx_t &chData, uint8_t hpfValue)
+void Chorus::setValues(const preset_data_fx_t& chData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = chData.switches.chorus;
 
-    m_mix->setControlValue(chData.mix);
-    m_rate->setControlValue(chData.rate);
-    m_width->setControlValue(chData.width);
+    m_mix->setControlValue(chData.chorus.mix);
+    m_rate->setControlValue(chData.chorus.rate);
+    m_width->setControlValue(chData.chorus.width);
 
-    m_delay->setControlValue(chData.delay);
-    m_type->setControlValue(chData.type);
+    m_delay->setControlValue(chData.chorus.delay);
+    m_type->setControlValue(chData.chorus.type);
 
-    m_hpf->setControlValue(hpfValue);
+    m_hpf->setControlValue(chData.hpf_chorus);
 
     emit dataChanged();
 }

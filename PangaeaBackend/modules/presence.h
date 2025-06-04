@@ -22,7 +22,7 @@ public:
 
     ControlValue* presenceVolume() {return m_presenceVolume;};
 
-    void setValues(bool enabled, quint8 value);
+    void setValues(const preset_data_cplegacy_t& presetData) override;
 
 private:
     ControlValue* m_presenceVolume;

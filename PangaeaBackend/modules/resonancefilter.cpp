@@ -20,23 +20,23 @@ ResonanceFilter::ResonanceFilter(AbstractDevice *owner)
     m_lfoType = new ControlValue(this, "rf_lt", "LFO type");
 }
 
-void ResonanceFilter::setControlValue(uint8_t enabled, resonance_filter_fx_t rfData, uint8_t genType)
+void ResonanceFilter::setValues(const preset_data_fx_t& rfData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = rfData.switches.resonance_filter;
 
-    m_mix->setControlValue(rfData.mix);
-    m_fType->setControlValue(rfData.f_type);
-    m_fMod->setControlValue(rfData.f_mod);
-    m_lfo->setControlValue(rfData.lfo_rate);
-    m_loFreq->setControlValue(rfData.lpf);
-    m_hiFreq->setControlValue(rfData.hpf);
-    m_res->setControlValue(rfData.resonance);
-    m_dynTh->setControlValue(rfData.dyn_threshold);
-    m_dynAtt->setControlValue(rfData.dyn_attack);
-    m_dynRel->setControlValue(rfData.dyn_release);
-    m_volume->setControlValue(rfData.volume);
+    m_mix->setControlValue(rfData.resonance_filter.mix);
+    m_fType->setControlValue(rfData.resonance_filter.f_type);
+    m_fMod->setControlValue(rfData.resonance_filter.f_mod);
+    m_lfo->setControlValue(rfData.resonance_filter.lfo_rate);
+    m_loFreq->setControlValue(rfData.resonance_filter.lpf);
+    m_hiFreq->setControlValue(rfData.resonance_filter.hpf);
+    m_res->setControlValue(rfData.resonance_filter.resonance);
+    m_dynTh->setControlValue(rfData.resonance_filter.dyn_threshold);
+    m_dynAtt->setControlValue(rfData.resonance_filter.dyn_attack);
+    m_dynRel->setControlValue(rfData.resonance_filter.dyn_release);
+    m_volume->setControlValue(rfData.resonance_filter.volume);
 
-    m_lfoType->setControlValue(genType);
+    m_lfoType->setControlValue(rfData.resonance_filter_gen_type);
 
     emit dataChanged();
 }

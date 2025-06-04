@@ -21,8 +21,7 @@ public:
 
     ControlValue* hpf() {return m_hpf;};
 
-    void setValues(bool enabled, quint8 value);
-    void setValues(const eq_cpmodern_t& eq);
+    void setValues(const preset_data_cplegacy_t& presetData) override;
 
 private:
     ControlValue* m_hpf;

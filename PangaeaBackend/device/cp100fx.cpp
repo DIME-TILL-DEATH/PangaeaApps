@@ -293,44 +293,10 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     // MV->setValue(presetData.preset_volume);
 
-    RF->setControlValue(presetData.switches.resonance_filter, presetData.resonance_filter, presetData.resonance_filter_gen_type);
-    NG->setValues(presetData.switches.gate, presetData.gate);
-    CM->setValues(presetData.switches.compressor, presetData.compressor);
-    PR->setValues(presetData.switches.preamp, presetData.preamp);
-    PA->setValues(presetData.switches.amp, presetData.pa, presetData.presence);
-
-    // IR->setEnabled(presetData.cab_sim_on);
-    // IR->setSendLevel(presetData.ir_send_level);
-
-    eq_cpmodern_t eqData;
-    for(int i=0; i<5; i++)
+    foreach(AbstractModule* module, m_moduleList)
     {
-        eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);
-        eqData.gain[i] = presetData.eq_gain[i] - 15;
-        eqData.freq[i] = static_cast<int8_t>(presetData.eq_freq[i]); // treat value as signed when converting in 16 bits
-        eqData.Q[i] = presetData.eq_q[i];
+        module->setValues(presetData);
     }
-    eqData.parametric_on = presetData.switches.eq;
-    eqData.hp_freq = presetData.hpf;
-    eqData.hp_on = presetData.switches.eq;
-    eqData.lp_freq = presetData.lpf;
-    eqData.lp_on = presetData.switches.eq;
-    EQ->setEqData(eqData);
-
-    //uint16_t time = presetData.delay_time_lo << 8 | presetData.delay_time_hi;
-
-
-    DL->setValues(presetData.switches.delay, presetData.delay, presetData.delay_time,
-                  presetData.delay_tap, presetData.delay_tail);
-
-    PH->setValues(presetData.switches.phaser, presetData.phaser, presetData.hpf_phaser, presetData.phaser_pre_post);
-    FL->setValues(presetData.switches.flanger, presetData.flanger, presetData.hpf_flanger, presetData.flanger_pre_post);
-    CH->setValues(presetData.switches.chorus, presetData.chorus, presetData.hpf_chorus);
-    ER->setValues(presetData.switches.early_reflections, presetData.early_reflections);
-    RV->setValues(presetData);
-    TR->setValues(presetData.switches.tremolo, presetData.tremolo, presetData.tremolo_tap, presetData.tremolo_lfo_type);
-
-    qDebug() << "Reverb" << presetData.reverb_diffusion;
 
     emit deviceUpdatingValues();
 

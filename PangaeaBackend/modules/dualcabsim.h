@@ -11,6 +11,8 @@ class DualCabSim : public AbstractModule
     QML_UNCREATABLE("")
 public:
     DualCabSim(AbstractDevice *owner);
+
+    void setValues(const preset_data_fx_t &csData) override;
 };
 
 #endif // DUALCABSIM_H

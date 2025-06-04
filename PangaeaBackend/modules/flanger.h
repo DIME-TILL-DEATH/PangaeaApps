@@ -27,7 +27,7 @@ class Flanger : public AbstractModule
 public:
     Flanger(AbstractDevice *owner);
 
-    void setValues(uint8_t enabled, const flanger_fx_t& flData, uint8_t hpf, uint8_t position);
+    void setValues(const preset_data_fx_t &chData) override;
 
     ControlValue *mix() const {return m_mix;};
     ControlValue *lfo() const {return m_lfo;};

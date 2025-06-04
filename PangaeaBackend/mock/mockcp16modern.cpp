@@ -254,8 +254,8 @@ void MockCP16Modern::initFolders()
             {
                 presetFile.open(QIODevice::WriteOnly);
 
-                preset_cplegacy_t defaultData;
-                memset(&defaultData, 0, sizeof(preset_cplegacy_t));
+                preset_data_cplegacy_t defaultData;
+                memset(&defaultData, 0, sizeof(preset_data_cplegacy_t));
 
                 defaultData.preset_volume = 20;
 
@@ -273,10 +273,10 @@ void MockCP16Modern::initFolders()
                 defaultData.amp_slave = 16;
                 defaultData.preamp_volume = 25;
 
-                char rawData[sizeof(preset_cplegacy_t)];
-                memcpy(rawData, &defaultData, sizeof(preset_cplegacy_t));
+                char rawData[sizeof(preset_data_cplegacy_t)];
+                memcpy(rawData, &defaultData, sizeof(preset_data_cplegacy_t));
 
-                presetFile.write(rawData, sizeof(preset_cplegacy_t));
+                presetFile.write(rawData, sizeof(preset_data_cplegacy_t));
                 presetFile.close();
             }
         }
@@ -318,9 +318,9 @@ bool MockCP16Modern::loadPresetData(quint8 prBank, quint8 prPreset, save_data_cp
         QFile presetFile(dirPath + "/preset.pan");
         if(presetFile.open(QIODevice::ReadOnly))
         {
-            preset_cplegacy_t legacydata;
-            QByteArray readedData = presetFile.read(sizeof(preset_cplegacy_t));
-            memcpy(&legacydata, readedData.data(), sizeof(preset_cplegacy_t));
+            preset_data_cplegacy_t legacydata;
+            QByteArray readedData = presetFile.read(sizeof(preset_data_cplegacy_t));
+            memcpy(&legacydata, readedData.data(), sizeof(preset_data_cplegacy_t));
             presetFile.close();
             memset(presetSavedData->name, 0, 64);
             presetSavedData->parametersData = HardwarePresetCPModern::convertLegacyToModern(legacydata);

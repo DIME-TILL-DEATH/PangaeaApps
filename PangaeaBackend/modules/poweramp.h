@@ -29,14 +29,15 @@ public:
 
     explicit PowerAmp(AbstractDevice *owner, PaType paType = PaType::Classic);
 
+    void setValues(const preset_data_cplegacy_t& paData) override;
+    void setValues(const preset_data_cpmodern_t& paData) override;
+    void setValues(const preset_data_fx_t &paData) override;
+
     ControlValue* volume() {return m_volume;};
     ControlValue* presence() {return m_presence;};
     ControlValue* slave() {return m_slave;};
     ControlValue* ampType() {return m_ampType;};
 
-    void setValues(bool enabled, quint8 volume, quint8 presence, quint8 slave, quint8 ampType);
-    void setValues(const pa_cpmodern_t& paData);
-    void setValues(uint8_t enabled, const pa_fx_t& paData, uint8_t presence);
 
 private:
     ControlValue *m_volume = nullptr;

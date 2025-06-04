@@ -44,39 +44,38 @@ Delay::Delay(AbstractDevice *owner, DelayType delayType)
     }
 }
 
-void Delay::setValues(const delay_cpmodern_t &dlData)
+void Delay::setValues(const preset_data_cpmodern_t &dlData)
 {
-    m_moduleEnabled = dlData.on;
+    m_moduleEnabled = dlData.delay.on;
 
-    m_mixFirst->setControlValue(dlData.mix);
-    m_time->setControlValue(dlData.time);
-    m_feedback->setControlValue(dlData.feedback);
-    m_hpf->setControlValue(dlData.hpf);
-    m_lpf->setControlValue(dlData.lpf);
+    m_mixFirst->setControlValue(dlData.delay.mix);
+    m_time->setControlValue(dlData.delay.time);
+    m_feedback->setControlValue(dlData.delay.feedback);
+    m_hpf->setControlValue(dlData.delay.hpf);
+    m_lpf->setControlValue(dlData.delay.lpf);
 
     emit dataChanged();
 }
 
-void Delay::setValues(uint8_t enabled, const delay_fx_t &dlData, uint16_t time, uint8_t tap, uint8_t tail)
+void Delay::setValues(const preset_data_fx_t& dlData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = dlData.switches.delay;
 
-    m_time->setControlValue(time);
-    m_tap->setControlValue(tap);
-    m_tail->setControlValue(tail);
+    m_time->setControlValue(dlData.delay_time);
+    m_tap->setControlValue(dlData.delay_tap);
+    m_tail->setControlValue(dlData.delay_tail);
 
-    m_mixFirst->setControlValue(dlData.volumeFirst);
-    m_mixSecond->setControlValue(dlData.volumeSecond);
-    m_panFirst->setControlValue(dlData.panFirst);
-    m_panSecond->setControlValue(dlData.panSecond);
-    m_feedback->setControlValue(dlData.feedback);
-    m_hpf->setControlValue(dlData.hpf);
-    m_lpf->setControlValue(dlData.lpf);
+    m_mixFirst->setControlValue(dlData.delay.volumeFirst);
+    m_mixSecond->setControlValue(dlData.delay.volumeSecond);
+    m_panFirst->setControlValue(dlData.delay.panSecond);
+    m_feedback->setControlValue(dlData.delay.feedback);
+    m_hpf->setControlValue(dlData.delay.hpf);
+    m_lpf->setControlValue(dlData.delay.lpf);
 
-    m_offset->setControlValue(dlData.offset);
-    m_modulation->setControlValue(dlData.modulation);
-    m_rate->setControlValue(dlData.rate);
-    m_direction->setControlValue(dlData.direction);
+    m_offset->setControlValue(dlData.delay.offset);
+    m_modulation->setControlValue(dlData.delay.modulation);
+    m_rate->setControlValue(dlData.delay.rate);
+    m_direction->setControlValue(dlData.delay.direction);
 
     emit dataChanged();
 }

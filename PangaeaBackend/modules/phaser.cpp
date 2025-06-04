@@ -28,35 +28,35 @@ Phaser::Phaser(AbstractDevice *owner, PhaserType phaserType)
     m_stages = new ControlValue(this, "ph_st", "Stages");
 }
 
-void Phaser::setValues(const phaser_cpmodern_t &phData)
+void Phaser::setValues(const preset_data_cpmodern_t &phData)
 {
-    m_moduleEnabled = phData.on;
+    m_moduleEnabled = phData.phaser.on;
 
-    m_mix->setControlValue(phData.mix);
-    m_rate->setControlValue(phData.rate);
-    m_center->setControlValue(phData.center);
-    m_width->setControlValue(phData.width);
-    m_feedback->setControlValue(phData.feedback);
-    m_stages->setControlValue(phData.stages);
-    m_hpf->setControlValue(phData.hpf);
+    m_mix->setControlValue(phData.phaser.mix);
+    m_rate->setControlValue(phData.phaser.rate);
+    m_center->setControlValue(phData.phaser.center);
+    m_width->setControlValue(phData.phaser.width);
+    m_feedback->setControlValue(phData.phaser.feedback);
+    m_stages->setControlValue(phData.phaser.stages);
+    m_hpf->setControlValue(phData.phaser.hpf);
 
     emit dataChanged();
 }
 
-void Phaser::setValues(uint8_t enabled, const phaser_fx_t &phData, uint8_t hpfValue, uint8_t position)
+void Phaser::setValues(const preset_data_fx_t& phData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = phData.switches.phaser;
 
-    m_mix->setControlValue(phData.mix);
-    m_rate->setControlValue(phData.rate);
-    m_center->setControlValue(phData.center);
-    m_width->setControlValue(phData.width);
-    m_feedback->setControlValue(phData.feedback);
-    m_stages->setControlValue(phData.type);
+    m_mix->setControlValue(phData.phaser.mix);
+    m_rate->setControlValue(phData.phaser.rate);
+    m_center->setControlValue(phData.phaser.center);
+    m_width->setControlValue(phData.phaser.width);
+    m_feedback->setControlValue(phData.phaser.feedback);
+    m_stages->setControlValue(phData.phaser.type);
 
-    m_hpf->setControlValue(hpfValue);
+    m_hpf->setControlValue(phData.hpf_phaser);
 
-    m_position->setControlValue(position);
+    m_position->setControlValue(phData.phaser_pre_post);
 
     emit dataChanged();
 }

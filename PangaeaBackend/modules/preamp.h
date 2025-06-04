@@ -32,15 +32,16 @@ public:
 
     explicit Preamp(AbstractDevice *owner, PreampType preampType = Classic);
 
+    void setValues(const preset_data_cplegacy_t& prData) override;
+    void setValues(const preset_data_cpmodern_t& prData) override;
+    void setValues(const preset_data_fx_t &prData) override;
+
     ControlValue* gain() {return m_gain;};
     ControlValue* volume() {return m_volume;};
     ControlValue* low() {return m_low;};
     ControlValue* mid() {return m_mid;};
     ControlValue* high() {return m_high;};
 
-    void setValues(bool enabled, quint8 volume, qint8 low, qint8 mid, qint8 high);
-    void setValues(const preamp_cpmodern_t& paData);
-    void setValues(uint8_t enabled, const preamp_fx_t& paData);
 private:
     ControlValue* m_gain;
     ControlValue* m_volume;

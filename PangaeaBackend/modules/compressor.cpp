@@ -31,34 +31,34 @@ Compressor::Compressor(AbstractDevice *owner, CompressorType compressorType)
     }
 }
 
-void Compressor::setValues(bool enabled, quint8 sustain, quint8 volume)
+void Compressor::setValues(const preset_data_cplegacy_t& presetData)
 {
-    m_moduleEnabled = enabled;
-    m_sustain->setControlValue(sustain);
-    m_volume->setControlValue(volume);
+    m_moduleEnabled = presetData.compressor_on;
+    m_sustain->setControlValue(presetData.compressor_sustain);
+    m_volume->setControlValue(presetData.compressor_volume);
 
     emit dataChanged();
 }
 
-void Compressor::setValues(const compressor_cpmodern_t &cmData)
+void Compressor::setValues(const preset_data_cpmodern_t &cmData)
 {
-    m_moduleEnabled = cmData.on;
+    m_moduleEnabled = cmData.compressor.on;
 
-    m_sustain->setControlValue(cmData.sustain);
-    m_volume->setControlValue(cmData.volume);
+    m_sustain->setControlValue(cmData.compressor.sustain);
+    m_volume->setControlValue(cmData.compressor.volume);
 
     emit dataChanged();
 }
 
-void Compressor::setValues(uint8_t enabled, const compressor_fx_t &cmData)
+void Compressor::setValues(const preset_data_fx_t& cmData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = cmData.switches.compressor;
 
-    m_threshold->setControlValue(cmData.threshold);
-    m_ratio->setControlValue(cmData.ratio);
-    m_volume->setControlValue(cmData.volume);
-    m_attack->setControlValue(cmData.attack);
-    m_knee->setControlValue(cmData.knee);
+    m_threshold->setControlValue(cmData.compressor.threshold);
+    m_ratio->setControlValue(cmData.compressor.ratio);
+    m_volume->setControlValue(cmData.compressor.volume);
+    m_attack->setControlValue(cmData.compressor.attack);
+    m_knee->setControlValue(cmData.compressor.knee);
 
     emit dataChanged();
 }

@@ -29,6 +29,8 @@ class ResonanceFilter : public AbstractModule
 public:
     explicit ResonanceFilter(AbstractDevice *owner);
 
+    void setValues(const preset_data_fx_t &rfData) override;
+
     ControlValue *mix() {return m_mix;};
     ControlValue *fType() {return m_fType;};
     ControlValue *fMod() {return m_fMod;};
@@ -40,10 +42,7 @@ public:
     ControlValue *dynAtt() {return m_dynAtt;};
     ControlValue *dynRel() {return m_dynRel;};
     ControlValue *volume() {return m_volume;};
-
     ControlValue *lfoType() {return m_lfoType;};
-
-    void setControlValue(uint8_t enabled, resonance_filter_fx_t rfData, uint8_t genType);
 
 private:
     ControlValue *m_mix = nullptr;

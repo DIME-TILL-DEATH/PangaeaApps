@@ -186,8 +186,27 @@ void EqParametric::calcEqResponse()
     emit pointsChanged();
 }
 
-void EqParametric::setEqData(eq_cpmodern_t eqData)
+void EqParametric::setValues(const preset_data_cplegacy_t &eqData)
 {
+    preset_data_cpmodern_t modernData;
+    for(int i=0; i<5; i++)
+    {
+        EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
+
+        eqBand->setRawBandParams(FilterType::PEAKING,
+                                 eqData.eq_band_vol[i],
+                                 static_cast<int8_t>(eqData.eq_freq[i]),
+                                 static_cast<int8_t>(eqData.eq_Q[i]));
+    }
+}
+
+void EqParametric::setValues(const preset_data_cpmodern_t& presetData)
+{
+    eq_cpmodern_t eqData;
+
+    if(m_eqNumber>0) eqData = presetData.eq2;
+    else eqData = presetData.eq1;
+
     m_moduleEnabled = eqData.parametric_on;
 
     for(int i=0; i < 5; i++)
@@ -204,6 +223,29 @@ void EqParametric::setEqData(eq_cpmodern_t eqData)
     {
         m_hpf->setRawBandParams(FilterType::LOW_CUT, 0, eqData.hp_freq, 1, eqData.hp_on);
         m_lpf->setRawBandParams(FilterType::HIGH_CUT, 0, eqData.lp_freq, 1, eqData.lp_on);
+    }
+
+    emit dataChanged();
+}
+
+void EqParametric::setValues(const preset_data_fx_t &eqData)
+{
+    m_moduleEnabled = eqData.switches.eq;
+
+    for(int i=0; i < 5; i++)
+    {
+        EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
+
+        eqBand->setRawBandParams(FilterType::PEAKING,
+                                 eqData.eq_gain[i] - 15,
+                                 static_cast<int8_t>(eqData.eq_freq[i]),
+                                 eqData.eq_q[i]);
+    }
+
+    if(m_eqMode != EqMode::Legacy)
+    {
+        m_hpf->setRawBandParams(FilterType::LOW_CUT, 0, eqData.hpf, 1, m_moduleEnabled);
+        m_lpf->setRawBandParams(FilterType::HIGH_CUT, 0, eqData.lpf, 1, m_moduleEnabled);
     }
 
     emit dataChanged();

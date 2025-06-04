@@ -38,9 +38,8 @@ public:
 
     explicit Delay(AbstractDevice *owner, DelayType delayType = DelayType::Classic);
 
-    void setValues(const delay_cpmodern_t& dlData);
-    void setValues(uint8_t enabled, const delay_fx_t& delayData,
-                   uint16_t time, uint8_t tap, uint8_t tail);
+    void setValues(const preset_data_cpmodern_t& dlData) override;
+    void setValues(const preset_data_fx_t &dlData) override;
 
     ControlValue *mix() const {return m_mixFirst;};
     ControlValue *time() const {return m_time;};

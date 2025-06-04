@@ -690,7 +690,7 @@ void CPLegacy::getOutputModeCommHandler(const QString &command, const QByteArray
 
 void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(data.size() < sizeof(preset_cplegacy_t)*2) return;
+    if(data.size() < sizeof(preset_data_cplegacy_t)*2) return;
 
     QByteArray baPresetData = data;
 
@@ -700,8 +700,8 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
 
     quint8 dataBuffer[256];
 
-    preset_cplegacy_t str;
-    memcpy(&str, baPresetData.data(), sizeof(preset_cplegacy_t));
+    preset_data_cplegacy_t str;
+    memcpy(&str, baPresetData.data(), sizeof(preset_data_cplegacy_t));
 
 
     foreach(QChar val, baPresetData) //quint8
@@ -720,36 +720,26 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         nomByte++;
     }
 
-    preset_cplegacy_t legacyData;
-    memcpy(&legacyData, dataBuffer, sizeof(preset_cplegacy_t));
+    preset_data_cplegacy_t legacyData;
+    memcpy(&legacyData, dataBuffer, sizeof(preset_data_cplegacy_t));
 
     MV->setValue(legacyData.preset_volume);
 
-    NG->setValues(legacyData.gate_on, legacyData.gate_threshold, legacyData.gate_decay);
-    CM->setValues(legacyData.compressor_on, legacyData.compressor_sustain, legacyData.compressor_volume);
-    PR->setValues(legacyData.preamp_on, legacyData.preamp_volume, legacyData.preamp_low, legacyData.preamp_mid, legacyData.preamp_high);
-    PA->setValues(legacyData.amp_on, legacyData.amp_volume, legacyData.presence_vol, legacyData.amp_slave, legacyData.amp_type);
-    PS->setValues(legacyData.presence_on, legacyData.presence_vol);
+    // NG->setValues(legacyData);
+    // CM->setValues(legacyData);
+    // PR->setValues(legacyData);
+    // PA->setValues(legacyData);
+    // PS->setValues(legacyData);
+    // EQ->setValues(legacyData);
+    // HPF->setValues(legacyData);
+    // LPF->setValues(legacyData);
+    // IR->setValues(legacyData);
+    // ER->setValues(legacyData);
 
-    eq_cpmodern_t eqData;
-    for(int i=0; i<5; i++)
+    foreach(AbstractModule* module, m_moduleList)
     {
-        eqData.band_type[i] = static_cast<quint8>(FilterType::PEAKING);
-        eqData.gain[i] = legacyData.eq_band_vol[i];
-        eqData.freq[i] = static_cast<int8_t>(legacyData.eq_freq[i]); // treat value as signed when converting in 16 bits
-        eqData.Q[i] = legacyData.eq_Q[i];
+        module->setValues(legacyData);
     }
-    eqData.parametric_on = legacyData.eq_on;
-    eqData.hp_freq = legacyData.hp_freq;
-    eqData.hp_on = legacyData.hp_on;
-    eqData.lp_freq = legacyData.lp_freq;
-    eqData.lp_on = legacyData.lp_on;
-
-    EQ->setEqData(eqData);
-    HPF->setValues(legacyData.hp_on, legacyData.hp_freq);
-    LPF->setValues(legacyData.lp_on, legacyData.lp_freq);
-    IR->setEnabled(legacyData.cab_on);
-    ER->setValues(legacyData.early_on, legacyData.early_volume, legacyData.early_type);
 
     m_isPreEq = legacyData.eq_pre;
     emit isPreEqChanged();

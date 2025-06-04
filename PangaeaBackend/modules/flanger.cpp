@@ -16,20 +16,20 @@ Flanger::Flanger(AbstractDevice *owner)
     m_position = new ControlValue(this, "fl_pp", "Position");
 }
 
-void Flanger::setValues(uint8_t enabled, const flanger_fx_t &flData, uint8_t hpfValue, uint8_t position)
+void Flanger::setValues(const preset_data_fx_t& flData)
 {
-    m_moduleEnabled = enabled;
+    m_moduleEnabled = flData.switches.flanger;
 
-    m_mix->setControlValue(flData.mix);
-    m_lfo->setControlValue(flData.lfo);
-    m_rate->setControlValue(flData.rate);
-    m_width->setControlValue(flData.width);
-    m_feedback->setControlValue(flData.feedback);
-    m_delay->setControlValue(flData.delay);
+    m_mix->setControlValue(flData.flanger.mix);
+    m_lfo->setControlValue(flData.flanger.lfo);
+    m_rate->setControlValue(flData.flanger.rate);
+    m_width->setControlValue(flData.flanger.width);
+    m_feedback->setControlValue(flData.flanger.feedback);
+    m_delay->setControlValue(flData.flanger.delay);
 
-    m_hpf->setControlValue(hpfValue);
+    m_hpf->setControlValue(flData.hpf_flanger);
 
-    m_position->setControlValue(position);
+    m_position->setControlValue(flData.flanger_pre_post);
 
     emit dataChanged();
 }

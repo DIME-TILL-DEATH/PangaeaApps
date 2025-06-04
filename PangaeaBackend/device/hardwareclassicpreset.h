@@ -49,7 +49,7 @@ typedef struct
 
     uint8_t eq_pre;
 
-}preset_cplegacy_t;
+}preset_data_cplegacy_t;
 
 //=======================New generation=======================
 
@@ -196,7 +196,7 @@ typedef struct
 
 namespace HardwarePresetCPModern
 {
-preset_data_cpmodern_t convertLegacyToModern(const preset_cplegacy_t& legacyData);
+preset_data_cpmodern_t convertLegacyToModern(const preset_data_cplegacy_t& legacyData);
 }
 
 #endif // HARDWARECLASSICPRESET_H
