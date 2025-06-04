@@ -2,7 +2,7 @@
 
 #include "moduletypeenum.h"
 
-preset_data_cpmodern_t HardwarePresetCPModern::convertLegacyToModern(const preset_cplegacy_t& legacyData)
+preset_data_cpmodern_t HardwarePresetCPModern::convertLegacyToModern(const preset_data_cplegacy_t& legacyData)
 {
     qint16 defaultFrequencies[] = {120, 360, 800, 2000, 6000};
     preset_data_cpmodern_t modernData{0};
@@ -70,6 +70,11 @@ preset_data_cpmodern_t HardwarePresetCPModern::convertLegacyToModern(const prese
     modernData.eq1.hp_freq = legacyData.hp_freq * (980.0f / 255.0f) + 20.0f;
     modernData.eq1.lp_on = legacyData.lp_on;
     modernData.eq1.lp_freq = powf(195 - legacyData.lp_freq, 2.0f) * (19000.0f / powf(195.0f, 2.0f)) + 1000.0f;
+
+    modernData.eq2.hp_on = legacyData.hp_on;
+    modernData.eq2.hp_freq = legacyData.hp_freq * (980.0f / 255.0f) + 20.0f;
+    modernData.eq2.lp_on = legacyData.lp_on;
+    modernData.eq2.lp_freq = powf(195 - legacyData.lp_freq, 2.0f) * (19000.0f / powf(195.0f, 2.0f)) + 1000.0f;
 
     modernData.cab_sim_on = legacyData.cab_on;
 
