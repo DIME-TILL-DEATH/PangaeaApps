@@ -137,12 +137,12 @@ BaseModule{
 
         Item{
             width: main.dialWidth * 2
-            height: main.dialHeight
+            height: parent.height
 
             Button{
                 id: _showEqBtn
 
-                text: "Show controls"
+                text: "Controls"
 
                 width: parent.width * 0.75
                 height: dialHeight/2

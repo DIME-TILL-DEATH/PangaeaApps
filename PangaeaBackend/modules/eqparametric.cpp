@@ -244,6 +244,8 @@ void EqParametric::setValues(const preset_data_fx_t &eqData)
                                  eqData.eq_gain[i],
                                  static_cast<int8_t>(eqData.eq_freq[i]),
                                  eqData.eq_q[i]);
+
+        // qDebug() << "Band Q value" << i << static_cast<int8_t>(eqData.eq_q[i]);
     }
 
     if(m_eqMode != EqMode::Legacy)

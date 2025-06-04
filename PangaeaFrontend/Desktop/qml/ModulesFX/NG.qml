@@ -10,10 +10,6 @@ BaseModule{
 
     property NoiseGate module: _moduleLoader.selectedModuleInstance
 
-    // contentItem: Rectangle{
-    //     anchors.fill: parent
-    // }
-
     contentItem: Row
     {
         anchors.fill: parent

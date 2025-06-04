@@ -31,7 +31,7 @@ Item{
                 anchors.fill: parent
 
                 text: ctrlValInstance.name
-                font.pixelSize: 10 * Style.dip
+                font.pixelSize: 5 * Style.dip
                 font.bold: true
 
                 color: Style.textEnabled

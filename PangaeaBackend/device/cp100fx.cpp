@@ -85,7 +85,6 @@ void Cp100fx::pushReadPresetCommands()
     // emit sgPushCommandToQueue("gb");
     // emit sgPushCommandToQueue("ir info");
     // emit sgPushCommandToQueue("pname get");
-    // emit sgPushCommandToQueue("mconfig get");
     emit sgPushCommandToQueue("state get");
 
     // m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_cpmodern_t) * 2;
