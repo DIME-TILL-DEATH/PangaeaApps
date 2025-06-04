@@ -16,13 +16,50 @@ EqBand::EqBand(EqParametric *ownerModule, FilterType bandType, double fStart, do
 {
     if(ownerModule == nullptr) return;
 
-    if(ownerModule->eqMode() == EqParametric::EqMode::Legacy)
+    switch(ownerModule->eqMode())
     {
-        switch(bandType)
+        case EqParametric::EqMode::Legacy:
         {
+            switch(bandType)
+            {
+                case FilterType::LOW_CUT:
+                {
+                    m_Fc = new ControlValue(ownerModule, "hv", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
+                    m_gain = new ControlValue(ownerModule, "");
+                    m_Q = new ControlQLegacy(ownerModule, "");
+                    break;
+                }
+
+                case FilterType::HIGH_CUT:
+                {
+                    m_Fc = new ControlValue(ownerModule, "lv", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
+                    m_gain = new ControlValue(ownerModule, "");
+                    m_Q = new ControlQLegacy(ownerModule, "");
+                    break;
+                }
+                default:
+                {
+                    m_Fc = new ControlValue(ownerModule, "eqf " + QString().setNum(m_bandNum),
+                                            "Central freq.", "Hz",
+                                            fControlStart, fControlStop, m_fStart, m_fStop);
+                    m_gain = new ControlValue(ownerModule, "eqv " + QString().setNum(m_bandNum),
+                                              "Gain", "dB",
+                                              0x0000, 0x001E, -15, 15);
+
+                    m_Q = new ControlQLegacy(ownerModule, "eqq " + QString().setNum(m_bandNum));
+                    break;
+                }
+            }
+            break;
+        }
+
+        case EqParametric::EqMode::Fx:
+        {
+            switch(bandType)
+            {
             case FilterType::LOW_CUT:
             {
-                m_Fc = new ControlValue(ownerModule, "hv", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
+                m_Fc = new ControlValue(ownerModule, "hp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
                 m_gain = new ControlValue(ownerModule, "");
                 m_Q = new ControlQLegacy(ownerModule, "");
                 break;
@@ -30,58 +67,62 @@ EqBand::EqBand(EqParametric *ownerModule, FilterType bandType, double fStart, do
 
             case FilterType::HIGH_CUT:
             {
-                m_Fc = new ControlValue(ownerModule, "lv", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
+                m_Fc = new ControlValue(ownerModule, "lp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
                 m_gain = new ControlValue(ownerModule, "");
                 m_Q = new ControlQLegacy(ownerModule, "");
                 break;
             }
             default:
             {
-                m_Fc = new ControlValue(ownerModule, "eqf " + QString().setNum(m_bandNum),
+                m_Fc = new ControlValue(ownerModule, "eq_f " + QString().setNum(m_bandNum),
                                         "Central freq.", "Hz",
                                         fControlStart, fControlStop, m_fStart, m_fStop);
-                m_gain = new ControlValue(ownerModule, "eqv " + QString().setNum(m_bandNum),
+                m_gain = new ControlValue(ownerModule, "eq_g " + QString().setNum(m_bandNum),
                                           "Gain", "dB",
                                           0x0000, 0x001E, -15, 15);
 
-                m_Q = new ControlQLegacy(ownerModule, "eqq " + QString().setNum(m_bandNum));
+                m_Q = new ControlQLegacy(ownerModule, "eq_q " + QString().setNum(m_bandNum));
                 break;
             }
-        }
-    }
-    else
-    {
-        quint8 eqNumber = ownerModule->eqNumber();
-
-        switch(bandType)
-        {
-        case FilterType::LOW_CUT:
-        {
-            m_Fc = new ControlValue(ownerModule,  "eq" + QString().setNum(eqNumber) + " hp f", "Cut frequency", "Hz", fControlStart, fControlStop, fStart, fStop);
-            m_gain = new ControlValue(ownerModule, "");
-            m_Q = new ControlQLegacy(ownerModule, "");
+            }
             break;
         }
 
-        case FilterType::HIGH_CUT:
+        case EqParametric::EqMode::Modern:
         {
-            m_Fc = new ControlValue(ownerModule,  "eq" + QString().setNum(eqNumber) + " lp f", "Cut frequency", "Hz", fControlStart, fControlStop, fStart, fStop);
-            m_gain = new ControlValue(ownerModule, "");
-            m_Q = new ControlQLegacy(ownerModule, "");
-            break;
-        }
-        default:
-        {
-            m_Fc = new ControlValue(ownerModule,  "eq" + QString().setNum(eqNumber) + " b" + QString().setNum(m_bandNum) + " f",
-                                    "Central freq.", "Hz",
-                                    fControlStart, fControlStop, m_fStart, m_fStop);
-            m_gain = new ControlValue(ownerModule, "eq" + QString().setNum(eqNumber) + " b" + QString().setNum(m_bandNum) + " g",
-                                      "Gain", "dB",
-                                      -15, 15, -15, 15);
+            quint8 eqNumber = ownerModule->eqNumber();
 
-            m_Q = new ControlQLegacy(ownerModule, "eq" + QString().setNum(eqNumber) + " b" + QString().setNum(m_bandNum) + " q");
+            switch(bandType)
+            {
+            case FilterType::LOW_CUT:
+            {
+                m_Fc = new ControlValue(ownerModule,  "eq" + QString().setNum(eqNumber) + " hp f", "Cut frequency", "Hz", fControlStart, fControlStop, fStart, fStop);
+                m_gain = new ControlValue(ownerModule, "");
+                m_Q = new ControlQLegacy(ownerModule, "");
+                break;
+            }
+
+            case FilterType::HIGH_CUT:
+            {
+                m_Fc = new ControlValue(ownerModule,  "eq" + QString().setNum(eqNumber) + " lp f", "Cut frequency", "Hz", fControlStart, fControlStop, fStart, fStop);
+                m_gain = new ControlValue(ownerModule, "");
+                m_Q = new ControlQLegacy(ownerModule, "");
+                break;
+            }
+            default:
+            {
+                m_Fc = new ControlValue(ownerModule,  "eq" + QString().setNum(eqNumber) + " b" + QString().setNum(m_bandNum) + " f",
+                                        "Central freq.", "Hz",
+                                        fControlStart, fControlStop, m_fStart, m_fStop);
+                m_gain = new ControlValue(ownerModule, "eq" + QString().setNum(eqNumber) + " b" + QString().setNum(m_bandNum) + " g",
+                                          "Gain", "dB",
+                                          -15, 15, -15, 15);
+
+                m_Q = new ControlQLegacy(ownerModule, "eq" + QString().setNum(eqNumber) + " b" + QString().setNum(m_bandNum) + " q");
+                break;
+            }
+            }
             break;
-        }
         }
     }
 

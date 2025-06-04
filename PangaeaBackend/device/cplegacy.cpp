@@ -725,17 +725,6 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
 
     MV->setValue(legacyData.preset_volume);
 
-    // NG->setValues(legacyData);
-    // CM->setValues(legacyData);
-    // PR->setValues(legacyData);
-    // PA->setValues(legacyData);
-    // PS->setValues(legacyData);
-    // EQ->setValues(legacyData);
-    // HPF->setValues(legacyData);
-    // LPF->setValues(legacyData);
-    // IR->setValues(legacyData);
-    // ER->setValues(legacyData);
-
     foreach(AbstractModule* module, m_moduleList)
     {
         module->setValues(legacyData);

@@ -135,21 +135,25 @@ BaseModule{
             height: parent.height
         }
 
-        Button{
-            id: _showEqBtn
+        Item{
+            width: main.dialWidth * 2
+            height: main.dialHeight
 
-            text: "Show controls"
+            Button{
+                id: _showEqBtn
 
-            width: dialWidth*2
-            height: dialHeight/2
+                text: "Show controls"
 
-            anchors.verticalCenter: parent.verticalCenter
+                width: parent.width * 0.75
+                height: dialHeight/2
 
-            onClicked:{
-                _eqWindow.show();
+                anchors.centerIn: parent
+
+                onClicked:{
+                    _eqWindow.show();
+                }
             }
         }
-
 
 
         Rectangle{

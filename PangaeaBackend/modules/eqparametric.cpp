@@ -37,6 +37,8 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
     }
     case EqMode::Fx:
     {
+        m_commandOnOff = "eq_on";
+
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 20, 220, 0));
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 260, 460, 1));
         m_EqBands.append(new EqBand(this, FilterType::PEAKING, 600, 1000, 2));
@@ -45,6 +47,8 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
 
         m_hpf = new EqBand(this, FilterType::LOW_CUT, 20, 1000, 5, 0, 127);
         m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 127, 0);
+
+        m_position = new ControlValue(this, "eq_pp", "Position");
         break;
     }
     default:
@@ -237,7 +241,7 @@ void EqParametric::setValues(const preset_data_fx_t &eqData)
         EqBand* eqBand = qobject_cast<EqBand*>(m_EqBands.at(i));
 
         eqBand->setRawBandParams(FilterType::PEAKING,
-                                 eqData.eq_gain[i] - 15,
+                                 eqData.eq_gain[i],
                                  static_cast<int8_t>(eqData.eq_freq[i]),
                                  eqData.eq_q[i]);
     }
@@ -247,6 +251,8 @@ void EqParametric::setValues(const preset_data_fx_t &eqData)
         m_hpf->setRawBandParams(FilterType::LOW_CUT, 0, eqData.hpf, 1, m_moduleEnabled);
         m_lpf->setRawBandParams(FilterType::HIGH_CUT, 0, eqData.lpf, 1, m_moduleEnabled);
     }
+
+    m_position->setControlValue(eqData.eq_pre_post);
 
     emit dataChanged();
 }
