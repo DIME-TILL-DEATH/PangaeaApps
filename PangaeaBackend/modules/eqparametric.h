@@ -26,15 +26,20 @@ class EqParametric : public AbstractModule
 
     Q_PROPERTY(EqBand* lpf READ lpf NOTIFY dataChanged FINAL)
     Q_PROPERTY(EqBand* hpf READ hpf NOTIFY dataChanged FINAL)
+
+    Q_PROPERTY(ControlValue* position READ position NOTIFY dataChanged FINAL) // Для FX, в Legacy внешнее значение(переделать?)
 public:
     enum EqMode{
         Legacy = 0,
-        Modern
+        Modern,
+        Fx
     };
 
     explicit EqParametric(AbstractDevice *owner, EqMode eqMode = EqMode::Legacy, quint8 eqNumber = 0);
 
-    void setEqData(eq_t eqData);
+    void setValues(const preset_data_cplegacy_t& lpData) override;
+    void setValues(const preset_data_cpmodern_t& presetData) override;
+    void setValues(const preset_data_fx_t &eqData) override;
 
     double getEqResponse(double f);
 
@@ -47,6 +52,9 @@ public:
     EqBand* hpf() {return m_hpf;};
 
     Q_INVOKABLE void reset();
+
+    void setPrePost(bool isPre) {m_position->setControlValue(isPre);};
+    ControlValue* position() {return m_position;};
 
     EqMode eqMode() const {return m_eqMode;};
     quint8 eqNumber() const {return m_eqNumber;};
@@ -74,6 +82,8 @@ private:
     // QList<EqBand*> m_EqBands;
     EqBand* m_lpf;
     EqBand* m_hpf;
+
+    ControlValue* m_position;
 
     void calcEqResponse();
 };

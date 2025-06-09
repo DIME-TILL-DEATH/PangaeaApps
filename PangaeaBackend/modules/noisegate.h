@@ -17,17 +17,28 @@ class NoiseGate : public AbstractModule
     Q_PROPERTY(ControlValue* threshold READ threshold NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* decay READ decay NOTIFY dataChanged FINAL)
 
+    // FX and Ultima
+    Q_PROPERTY(ControlValue* attack READ attack NOTIFY dataChanged FINAL)
+
 public:
-    NoiseGate(AbstractDevice *owner);
+    enum GateType{
+        Classic = 0,
+        FX
+    };
+
+    explicit NoiseGate(AbstractDevice *owner, GateType gateType = Classic);
+
+    void setValues(const preset_data_cplegacy_t& ngData) override;
+    void setValues(const preset_data_cpmodern_t& ngData) override;
+    void setValues(const preset_data_fx_t &ngData) override;
 
     ControlValue *threshold() {return m_threshold;};
+    ControlValue *attack() {return m_attack;};
     ControlValue *decay() {return m_decay;};
-
-    void setValues(bool enabled, quint8 threshold, quint8 decay);
-    void setValues(const gate_data_t& ngData);
 
 private:
     ControlValue *m_threshold = nullptr;
+    ControlValue *m_attack = nullptr;
     ControlValue *m_decay = nullptr;
 };
 

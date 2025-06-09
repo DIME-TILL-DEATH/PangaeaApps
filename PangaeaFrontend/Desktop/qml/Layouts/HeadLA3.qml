@@ -5,7 +5,6 @@ import QtQuick.Controls
 
 import Elements
 import StyleSettings
-import Modules
 
 import CppObjects
 import PangaeaBackend
@@ -270,12 +269,12 @@ Item
 
             ParameterDial{
                 id: vlControl
-                property PresetVolume module: UiCore.currentDevice.MV
+                property Volume module: UiCore.currentDevice.MV
 
                 width:  parent.width * 0.9
                 height: parent.height * 0.9
 
-                controlValue: UiCore.currentDevice.MV.presetVolume
+                controlValue: UiCore.currentDevice.MV.volume
 
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter

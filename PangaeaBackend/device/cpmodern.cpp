@@ -86,6 +86,8 @@ void CPModern::initDevice(DeviceType deviceType)
     m_deviceType = deviceType;
     setDeviceType(m_deviceType);
 
+    MV = new Volume(this);
+
     NG = new NoiseGate(this);
     CM = new Compressor(this);
     PR = new Preamp(this);
@@ -183,12 +185,12 @@ void CPModern::pushReadPresetCommands()
     // emit sgPushCommandToQueue("mconfig get");
     emit sgPushCommandToQueue("state get");
 
-    m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_t) * 2;
+    m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_cpmodern_t) * 2;
 }
 
 QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
 {
-    QList<QByteArray> recievedCommAnswers, parseResults;
+    QList<QByteArray> recievedCommAnswers;
 
     recievedCommAnswers += m_parser.parseNewData(baAnswer);
 
@@ -753,7 +755,7 @@ void CPModern::pnameCommHandler(const QString &command, const QByteArray &argume
 
 void CPModern::stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(data.size() < sizeof(preset_data_t)*2) return;
+    if(data.size() < sizeof(preset_data_cpmodern_t)*2) return;
 
     QByteArray baPresetData = data;
 
@@ -761,7 +763,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     quint8 nomByte=0;
     QString curByte;
 
-    quint8 dataBuffer[sizeof(preset_data_t)*2];
+    quint8 dataBuffer[sizeof(preset_data_cpmodern_t)*2];
 
     foreach(QChar val, baPresetData) //quint8
     {
@@ -779,24 +781,17 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
         nomByte++;
     }
 
-    preset_data_t presetData;
-    memcpy(&presetData, dataBuffer, sizeof(preset_data_t));
+    preset_data_cpmodern_t presetData;
+    memcpy(&presetData, dataBuffer, sizeof(preset_data_cpmodern_t));
 
     MV->setValue(presetData.volume);
 
-    NG->setValues(presetData.gate);
-    CM->setValues(presetData.compressor);
-    PR->setValues(presetData.preamp);
-    PA->setValues(presetData.power_amp);
-    EQ1->setEqData(presetData.eq1);
-    EQ2->setEqData(presetData.eq2);
-    IR->setEnabled(presetData.cab_sim_on);
-    IR->setSendLevel(presetData.ir_send_level);
-    TR->setValues(presetData.tremolo);
-    CH->setValues(presetData.chorus);
-    PH->setValues(presetData.phaser);
-    ER->setValues(presetData.reverb);
-    DL->setValues(presetData.delay);
+    foreach (QObject* obj, m_avaliableModulesList)
+    {
+        AbstractModule* module = dynamic_cast<AbstractModule*>(obj);
+        if(module) module->setValues(presetData);
+        else qWarning() << Q_FUNC_INFO << "Object is not module!";
+    }
     emit deviceUpdatingValues();
 
     switch(m_presetManager.currentState())

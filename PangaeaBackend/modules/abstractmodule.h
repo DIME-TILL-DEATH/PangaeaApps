@@ -4,7 +4,8 @@
 #include <QObject>
 
 #include "moduletypeenum.h"
-#include "hardwarepreset.h"
+#include "hardwareclassicpreset.h"
+#include "hardwarefxpreset.h"
 
 #include <QtQml/qqmlregistration.h>
 
@@ -44,6 +45,9 @@ public:
 
     virtual void sendDataToDevice(QByteArray data);
 
+    virtual void setValues(const preset_data_cplegacy_t &prData) {};
+    virtual void setValues(const preset_data_cpmodern_t &prData) {};
+    virtual void setValues(const preset_data_fx_t &prData) {};
 
 signals:
     void dataChanged();

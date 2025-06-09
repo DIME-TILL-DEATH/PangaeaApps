@@ -11,6 +11,7 @@
 #include "cplegacy.h"
 #include "cpmodern.h"
 #include "lapreamp.h"
+#include "cp100fx.h"
 
 Core::Core(QObject *parent) : QObject(parent)
 {
@@ -76,6 +77,7 @@ void Core::parseInputData(QByteArray ba)
         {
         case DeviceType::MODERN_CP: currentDevice = new CPModern(this); break;
         case DeviceType::LA3: currentDevice = new LAPreamp(this); break;
+        case DeviceType::CP100FX: currentDevice = new Cp100fx(this); break;
         default: currentDevice = new CPLegacy(this);
         }
 

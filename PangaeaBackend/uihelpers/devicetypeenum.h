@@ -19,6 +19,8 @@ public:
         LEGACY_CP16PA,
         LEGACY_CP100PA,
 
+        CP100FX,
+
         LEGACY_DEVICES = 15,
         //-------------------------------
         MODERN_CP,

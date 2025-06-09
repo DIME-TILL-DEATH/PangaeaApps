@@ -29,13 +29,18 @@ public:
         CH,
         PH,
         EQ2,
-        //---------
+        //
         NUM_MONO_MODULE_TYPES,
+        //==========Only FX-ultima modules
+        RF,
+        RV,
+        FL,
         //=====================
         // Stereo moduls
         ER_MONO = 64,
         ER_STEREO,
         DELAY,
+        IR_STEREO,
         //====================
         MASTER=128
     };

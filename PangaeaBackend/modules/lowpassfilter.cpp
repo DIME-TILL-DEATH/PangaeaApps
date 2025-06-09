@@ -1,5 +1,7 @@
 #include "lowpassfilter.h"
 
+#include <QDebug>
+
 LowPassFilter::LowPassFilter(AbstractDevice *owner)
     : AbstractModule{owner, ModuleType::LP, "LP", "lo"}
 {
@@ -11,18 +13,10 @@ LowPassFilter::LowPassFilter(AbstractDevice *owner)
                 195, 0, 1000, 20000);
 }
 
-void LowPassFilter::setValues(bool enabled, quint8 value)
+void LowPassFilter::setValues(const preset_data_cplegacy_t& lpData)
 {
-    m_moduleEnabled = enabled;
-    m_lpf->setControlValue(value);
-
-    emit dataChanged();
-}
-
-void LowPassFilter::setValues(const eq_t &eq)
-{
-    m_moduleEnabled = eq.lp_on;
-    m_lpf->setControlValue(eq.lp_freq);
+    m_moduleEnabled = lpData.lp_on;
+    m_lpf->setControlValue(lpData.lp_freq);
 
     emit dataChanged();
 }

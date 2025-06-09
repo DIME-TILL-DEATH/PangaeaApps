@@ -6,7 +6,7 @@
 // for register:
 #include "controlvalue.h"
 
-#include "presetvolume.h"
+#include "volume.h"
 
 #include "compressor.h"
 #include "noisegate.h"

@@ -225,6 +225,12 @@ ApplicationWindow
                 break;
             }
 
+            case DeviceType.CP100FX:{
+                startUi.visible = false;
+                controlLayoutLoader.source = "/Layouts/ControlLayoutCP100FX.qml";
+                break;
+            }
+
             default:{
                 startUi.visible = false;
                 controlLayoutLoader.source = "/Layouts/ControlLayoutLegacy.qml";

@@ -74,20 +74,20 @@ Rectangle{
         }
 
         onWheel: function(wheel){
-            var resultQ = module.EqBands[currentBandIndex].Q.displayValue;
+            var resultQ = module.EqBands[selectedBandIndex].Q.displayValue;
 
             if(wheel.angleDelta.y < 0)
             {
                 resultQ *= 0.9;
-                if(resultQ < module.EqBands[currentBandIndex].Q.minDisplayValue) resultQ = module.EqBands[currentBandIndex].Q.minDisplayValue;
+                if(resultQ < module.EqBands[selectedBandIndex].Q.minDisplayValue) resultQ = module.EqBands[selectedBandIndex].Q.minDisplayValue;
             }
 
             if(wheel.angleDelta.y > 0)
             {
                 resultQ *= 1.1;
-                if(resultQ > module.EqBands[currentBandIndex].Q.maxDisplayValue) resultQ = module.EqBands[currentBandIndex].Q.maxDisplayValue;
+                if(resultQ > module.EqBands[selectedBandIndex].Q.maxDisplayValue) resultQ = module.EqBands[selectedBandIndex].Q.maxDisplayValue;
             }
-            module.EqBands[currentBandIndex].Q.displayValue = resultQ;
+            module.EqBands[selectedBandIndex].Q.displayValue = resultQ;
         }
     }
 

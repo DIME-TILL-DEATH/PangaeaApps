@@ -10,18 +10,10 @@ HiPassFilter::HiPassFilter(AbstractDevice *owner)
                                 0, 255, 20, 1000);
 }
 
-void HiPassFilter::setValues(bool enabled, quint8 value)
+void HiPassFilter::setValues(const preset_data_cplegacy_t& presetData)
 {
-    m_moduleEnabled = enabled;
-    m_hpf->setControlValue(value);
-
-    emit dataChanged();
-}
-
-void HiPassFilter::setValues(const eq_t &eq)
-{
-    m_moduleEnabled = eq.hp_on;
-    m_hpf->setControlValue(eq.hp_freq);
+    m_moduleEnabled = presetData.hp_on;
+    m_hpf->setControlValue(presetData.hp_freq);
 
     emit dataChanged();
 }

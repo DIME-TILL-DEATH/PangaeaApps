@@ -21,13 +21,15 @@ void CabSim::setImpulseName(const QString &impulseName)
     emit dataChanged();
 }
 
-void CabSim::setEnabled(bool isEnabled)
+void CabSim::setValues(const preset_data_cplegacy_t &csData)
 {
-    m_moduleEnabled = isEnabled;
-    emit dataChanged();
+    m_moduleEnabled = csData.cab_on;
 }
 
-void CabSim::setSendLevel(quint8 sendLevel)
+void CabSim::setValues(const preset_data_cpmodern_t &csData)
 {
-    m_send->setControlValue(sendLevel);
+    m_moduleEnabled = csData.cab_sim_on;
+    m_send->setControlValue(csData.ir_send_level);
+
+    emit dataChanged();
 }

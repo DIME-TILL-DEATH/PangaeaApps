@@ -34,18 +34,21 @@ qt_add_library(PangaeaBackend STATIC
 
     device/deviceanswer.cpp device/deviceanswer.h
     device/firmware.cpp device/firmware.h
+    device/presetabstract.h device/presetabstract.cpp
     device/presetlegacy.cpp device/presetlegacy.h
     device/presetmodern.h device/presetmodern.cpp
-    device/presetabstract.h device/presetabstract.cpp
+    device/presetfx.h device/presetfx.cpp
     device/irfile.h device/irfile.cpp
     device/deviceparameter.h device/deviceparameter.cpp
     device/abstractdevice.h device/abstractdevice.cpp
     device/cplegacy.h device/cplegacy.cpp
     device/cpmodern.h device/cpmodern.cpp
     device/lapreamp.h device/lapreamp.cpp
+    device/cp100fx.h device/cp100fx.cpp
 
-    device/hardwarepreset.h
-    device/hardwarepreset.cpp
+    device/hardwareclassicpreset.h
+    device/hardwareclassicpreset.cpp
+    device/hardwarefxpreset.h
 
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
@@ -60,6 +63,7 @@ qt_add_library(PangaeaBackend STATIC
     mock/mockcp16legacy.h mock/mockcp16legacy.cpp
     mock/mockcp16modern.h mock/mockcp16modern.cpp
     mock/mockla3.h mock/mockla3.cpp
+    mock/mockcp100fx.h mock/mockcp100fx.cpp
 
     ${USB_INTERFACE_SOURCES}
     ${PLATFORM_SPECIFIC_SOURCES}
@@ -81,25 +85,29 @@ qt_add_qml_module(PangaeaBackend
 
         interfaces/devicedescription.cpp interfaces/devicedescription.h
 
+        modules/abstractmodule.cpp modules/abstractmodule.h
+        modules/cabsim.h modules/cabsim.cpp
+        modules/chorus.h modules/chorus.cpp
+        modules/compressor.h modules/compressor.cpp
         modules/controlvalue.cpp modules/controlvalue.h
         modules/controlqlegacy.h modules/controlqlegacy.cpp
-        modules/abstractmodule.cpp modules/abstractmodule.h
-        modules/presetvolume.h modules/presetvolume.cpp
-        modules/noisegate.h modules/noisegate.cpp
-        modules/compressor.h modules/compressor.cpp
-        modules/preamp.h modules/preamp.cpp
-        modules/poweramp.cpp modules/poweramp.h
-        modules/presence.h modules/presence.cpp
-        modules/hipassfilter.h modules/hipassfilter.cpp
+        modules/delay.h modules/delay.cpp
+        modules/dualcabsim.h modules/dualcabsim.cpp
+        modules/earlyreflections.h modules/earlyreflections.cpp
         modules/eqband.cpp modules/eqband.h
         modules/eqparametric.cpp modules/eqparametric.h
+        modules/flanger.cpp modules/flanger.h
+        modules/hipassfilter.h modules/hipassfilter.cpp
         modules/lowpassfilter.h modules/lowpassfilter.cpp
-        modules/cabsim.h modules/cabsim.cpp
-        modules/earlyreflections.h modules/earlyreflections.cpp
-        modules/delay.h modules/delay.cpp
-        modules/tremolo.h modules/tremolo.cpp
-        modules/chorus.h modules/chorus.cpp
+        modules/noisegate.h modules/noisegate.cpp
         modules/phaser.h modules/phaser.cpp
+        modules/poweramp.cpp modules/poweramp.h
+        modules/preamp.h modules/preamp.cpp
+        modules/presence.h modules/presence.cpp
+        modules/reverb.h modules/reverb.cpp
+        modules/resonancefilter.h modules/resonancefilter.cpp
+        modules/tremolo.h modules/tremolo.cpp
+        modules/volume.h modules/volume.cpp
 )
 
 

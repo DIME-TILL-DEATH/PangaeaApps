@@ -1,7 +1,7 @@
-qt_add_library(qml_modules STATIC)
+qt_add_library(qml_modules_classic STATIC)
 
-qt_add_qml_module(qml_modules
-    URI "Modules"
+qt_add_qml_module(qml_modules_classic
+    URI "ModulesClassic"
     VERSION 1.0
     QML_FILES
         BaseModule.qml

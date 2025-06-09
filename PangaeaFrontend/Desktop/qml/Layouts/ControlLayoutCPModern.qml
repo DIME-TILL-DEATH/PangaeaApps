@@ -7,7 +7,7 @@ import Qt.labs.platform 1.1 as Labs
 
 import QtQuick.Window 2.15
 
-import Modules 1.0
+import ModulesClassic 1.0
 import StyleSettings 1.0
 import Layouts 1.0
 

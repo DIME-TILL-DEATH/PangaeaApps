@@ -9,7 +9,7 @@
 
 #include "presetlegacy.h"
 
-#include "presetvolume.h"
+#include "volume.h"
 #include "compressor.h"
 #include "noisegate.h"
 #include "preamp.h"
@@ -31,6 +31,8 @@ class CPLegacy : public AbstractDevice
 
     Q_PROPERTY(bool isPaFw READ isPaFw CONSTANT)
     Q_PROPERTY(bool isPreEq READ isPreEq WRITE setIsPreEq NOTIFY isPreEqChanged FINAL)
+
+    Q_PROPERTY(Volume* MV READ getMV CONSTANT)
 public:
     explicit CPLegacy(Core *parent);
     ~CPLegacy();
@@ -60,7 +62,7 @@ public:
 
     quint64 maxIrSize() override {return 984 * 3 + 44;};
 
-    PresetVolume* getMV() {return MV;};
+    Volume* getMV() {return MV;};
 
 
     bool isPaFw() const {return m_isPaFw;};
@@ -70,6 +72,7 @@ public:
     // avaliable modules
     // вынести создание наружу?
     // public для тестов
+    Volume* MV;
     Compressor* CM;
     NoiseGate* NG;
     Preamp* PR;

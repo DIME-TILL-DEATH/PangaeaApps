@@ -15,5 +15,6 @@
         <file>Images/bin.svg</file>
         <file>Images/cp_16m_la3_light.svg</file>
         <file>Images/cp_16m_modern.svg</file>
+        <file>Images/pedal.svg</file>
     </qresource>
 </RCC>

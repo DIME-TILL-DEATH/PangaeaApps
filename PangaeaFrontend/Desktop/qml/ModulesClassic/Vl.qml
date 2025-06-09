@@ -8,7 +8,7 @@ import PangaeaBackend
 BaseModule{
     id: _baseModule
 
-    property PresetVolume module: UiCore.currentDevice.MV
+    property Volume module: UiCore.currentDevice.MV
 
     moduleName: "VL"
 
@@ -33,7 +33,7 @@ BaseModule{
         ParameterDial{
             id: vlControl
 
-            controlValue: UiCore.currentDevice.MV.presetVolume
+            controlValue: UiCore.currentDevice.MV.volume
         }
 
         Item

@@ -4,12 +4,12 @@
 #include "presetlegacy.h"
 
 #include "abstractdevice.h"
-#include "hardwarepreset.h"
+#include "hardwareclassicpreset.h"
 
 PresetLegacy::PresetLegacy(AbstractDevice *owner)
 {
     m_ownerDevice = owner;
-    m_rawData.append(sizeof(preset_data_legacy_t) * 2, '0');
+    m_rawData.append(sizeof(preset_data_cplegacy_t) * 2, '0');
 }
 
 PresetAbstract& PresetLegacy::operator=(const PresetAbstract& preset)

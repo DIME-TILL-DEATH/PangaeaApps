@@ -30,26 +30,26 @@ PresetAbstract& PresetModern::operator=(const PresetAbstract& preset)
     return *this;
 }
 
-preset_data_t PresetModern::charsToPresetData(const QByteArray &ba)
+preset_data_cpmodern_t PresetModern::charsToPresetData(const QByteArray &ba)
 {
-    preset_data_t presetData;
-    quint8 rawArr[sizeof(preset_data_t)];
+    preset_data_cpmodern_t presetData;
+    quint8 rawArr[sizeof(preset_data_cpmodern_t)];
     for(int i = 0; i < ba.size(); i += 2)
     {
         QString chByte = QString(ba.at(i)) + QString(ba.at(i+1));
         rawArr[i/2] = chByte.toInt(nullptr, 16);
     }
-    memcpy(&presetData, rawArr, sizeof(preset_data_t));
+    memcpy(&presetData, rawArr, sizeof(preset_data_cpmodern_t));
     return presetData;
 }
 
-QByteArray PresetModern::presetDataToChars(const preset_data_t &presetData)
+QByteArray PresetModern::presetDataToChars(const preset_data_cpmodern_t &presetData)
 {
-    quint8 buffer[sizeof(preset_data_t)];
-    memcpy(buffer, &presetData, sizeof(preset_data_t));
+    quint8 buffer[sizeof(preset_data_cpmodern_t)];
+    memcpy(buffer, &presetData, sizeof(preset_data_cpmodern_t));
     QByteArray baData;
 
-    for(int i=0; i < sizeof(preset_data_t);  i++)
+    for(int i=0; i < sizeof(preset_data_cpmodern_t);  i++)
     {
         QByteArray tempBa = QString().setNum(buffer[i], 16).toUtf8();
 
@@ -72,15 +72,15 @@ bool PresetModern::exportData(const QString& pathToExport, const QByteArray& wav
         fileData.append(presetHeaderId.versionId.toUtf8());
         fileData.append(presetVersion);
 
-        save_data_t saveData{0};
+        save_data_cpmodern_t saveData{0};
         QByteArray baPresetName = m_presetName.left(32).toUtf8();
         memcpy(&saveData.name, baPresetName.data(), baPresetName.size());
-        memcpy(&saveData.parametersData, &presetData, sizeof(preset_data_t));
+        memcpy(&saveData.parametersData, &presetData, sizeof(preset_data_cpmodern_t));
 
         QByteArray rawData;
-        char buffer[sizeof(save_data_t)];
-        memcpy(buffer, &saveData, sizeof(save_data_t));
-        rawData.append(buffer, sizeof(save_data_t));
+        char buffer[sizeof(save_data_cpmodern_t)];
+        memcpy(buffer, &saveData, sizeof(save_data_cpmodern_t));
+        rawData.append(buffer, sizeof(save_data_cpmodern_t));
 
         writePresetChunk(fileData, presetHeaderId.dataId, rawData);
         writePresetChunk(fileData, presetHeaderId.irNameId, irFile.irName().toUtf8());
@@ -123,24 +123,24 @@ bool PresetModern::importData(const QString& filePath, QByteArray& loadedWavData
         QByteArray rawData = readPresetChunck(fileData, presetHeaderId.dataId);
         if(importedPresetVersion == presetVersion)
         {
-            save_data_t imporetedSaveData;
-            memcpy(&imporetedSaveData, rawData.data(), sizeof(save_data_t));
+            save_data_cpmodern_t imporetedSaveData;
+            memcpy(&imporetedSaveData, rawData.data(), sizeof(save_data_cpmodern_t));
             m_presetName = imporetedSaveData.name;
-            memcpy(&presetData, &imporetedSaveData.parametersData, sizeof(preset_data_t));
+            memcpy(&presetData, &imporetedSaveData.parametersData, sizeof(preset_data_cpmodern_t));
         }
         else
         {
             m_presetName.clear();
 
-            quint8 rawArr[sizeof(preset_data_legacy_t)];
+            quint8 rawArr[sizeof(preset_data_cplegacy_t)];
             for(int i = 0; i < rawData.size(); i += 2)
             {
                 QString chByte = QString(rawData.at(i)) + QString(rawData.at(i+1));
                 rawArr[i/2] = chByte.toInt(nullptr, 16);
             }
-            preset_data_legacy_t imporetedPresetData;
-            memcpy(&imporetedPresetData, rawArr, sizeof(preset_data_legacy_t));
-            presetData = HardwarePreset::convertLegacyToModern(imporetedPresetData);
+            preset_data_cplegacy_t imporetedPresetData;
+            memcpy(&imporetedPresetData, rawArr, sizeof(preset_data_cplegacy_t));
+            presetData = HardwarePresetCPModern::convertLegacyToModern(imporetedPresetData);
 
         }
         irFile.setIrName(readPresetChunck(fileData, presetHeaderId.irNameId));
