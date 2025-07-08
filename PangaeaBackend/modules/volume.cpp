@@ -11,11 +11,11 @@ Volume::Volume(AbstractDevice *owner, VolumeType volumeType)
         break;
     case VolumeType::PresetFx: m_volume = new ControlValue(this, "vl_pr", "Preset volume", "", 0, 127, 0, 127);
         break;
-    case MasterFx: m_volume = new ControlValue(this, "vl_ms", "Master volume", "", 0, 127, 0, 127);
+    case VolumeType::MasterFx: m_volume = new ControlValue(this, "vl_ms", "Master", "", 0, 127, 0, 127);
         break;
-    case PhonesFx: m_volume = new ControlValue(this, "vl_ph", "Phones volume", "", 0, 127, 0, 127);
+    case VolumeType::PhonesFx: m_volume = new ControlValue(this, "vl_ph", "Phones volume", "", 0, 127, 0, 127);
         break;
-    case AttenuatorFx: m_volume = new ControlValue(this, "vl_at", "Attenuator volume", "dB", 0, 127, 0, 127);
+    case VolumeType::AttenuatorFx: m_volume = new ControlValue(this, "vl_at", "Attenuator", "dB", 0, 127, 0, 127);
         break;
     }
 }

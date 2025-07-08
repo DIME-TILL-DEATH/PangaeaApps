@@ -26,13 +26,17 @@ private:
 
     enum ListRoles{
         PresetNameRole = Qt::UserRole + 1,
+        PresetCommentRole,
         BankNumberRole,
         PresetNumberRole,
         PresetDeviceIndexRole,
         PresetMapIndexRole,
         ImpulseEnabledRole,
         ImpulseNameRole,
-        isImpulseEmptyRole
+        isImpulseEmptyRole,
+        Impulse1NameRole,
+        Impulse2nameRole,
+        ActiveModulesRole
     };
 };
 

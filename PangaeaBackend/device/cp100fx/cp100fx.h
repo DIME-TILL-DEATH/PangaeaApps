@@ -20,6 +20,9 @@
 #include "delay.h"
 #include "reverb.h"
 #include "flanger.h"
+#include "mastereq.h"
+
+#include "fswfx.h"
 
 class Cp100fx : public AbstractDevice
 {
@@ -32,11 +35,16 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(Volume* phonesVolume READ phonesVolume CONSTANT)
     Q_PROPERTY(Volume* presetVolume READ presetVolume CONSTANT)
     Q_PROPERTY(Volume* attenuatorVolume READ attenuatorVolume CONSTANT)
+
+    Q_PROPERTY(MasterEq* masterEq READ masterEq CONSTANT)
+
+    Q_PROPERTY(QObjectList fsw READ fswList CONSTANT)
 public:
     Cp100fx(Core *parent);
     ~Cp100fx();
 
     void updateOutputModeNames() override;
+    QStringList strPresetNumbers() override;
 
     quint16 processingUsed() override;
 
@@ -74,6 +82,7 @@ public:
     EarlyReflections* ER;
     Reverb* RV;
     Flanger* FL;
+    MasterEq m_masterEq{this};
 
     Volume m_masterVolume{this, Volume::VolumeType::MasterFx};
     Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
@@ -85,11 +94,15 @@ public:
     Volume* presetVolume() {return &m_presetVolume;};
     Volume* attenuatorVolume() {return &m_attenuatorVolume;};
 
-    QString currentPresetName() const {return m_currentPresetName;};
+    MasterEq* masterEq() {return &m_masterEq;};
+
+    QString currentPresetName() const;
     void setCurrentPresetName(const QString &newCurrentPresetName);
 
-    QString currentPresetComment() const {return m_currentPresetComment;};
+    QString currentPresetComment() const;
     void setCurrentPresetComment(const QString &newCurrentPresetComment);
+
+    QObjectList fswList() {return m_fswList;};
 
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
@@ -97,9 +110,16 @@ public slots:
 signals:
     void currentPresetNameChanged();
     void currentPresetCommentChanged();
+    void systemSettingsChanged();
 
 private:
     QList<PresetAbstract*> m_presetsList;
+
+    QObjectList m_fswList;
+
+    FswFx m_fswDown{0, this};
+    FswFx m_fswConfirm{1, this};
+    FswFx m_fswUp{2, this};
 
     PresetFx actualPreset{this};
     PresetFx savedPreset{this}; // TODO используется из листа
@@ -109,13 +129,18 @@ private:
 
     void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    void sysSettingsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    void ackPresetSavedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void plistCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void pnumCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void pcommentCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
-
-    QString m_currentPresetName;
-    QString m_currentPresetComment;
 };
 
 #endif // CP100FX_H

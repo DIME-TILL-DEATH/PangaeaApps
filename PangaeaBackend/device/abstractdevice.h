@@ -37,6 +37,8 @@ class AbstractDevice : public QObject
     Q_PROPERTY(quint8 maxBankCount READ maxBankCount CONSTANT)
     Q_PROPERTY(quint8 maxPresetCount READ maxPresetCount CONSTANT)
 
+    Q_PROPERTY(QStringList strPresetNumbers READ strPresetNumbers CONSTANT)
+
     Q_PROPERTY(QStringList avaliableOutputModes READ avaliableOutputModes NOTIFY avaliableOutputModesChanged FINAL)
     Q_PROPERTY(quint8 outputMode READ outputMode WRITE setOutputMode NOTIFY outputModeChanged FINAL)
 
@@ -62,6 +64,8 @@ public:
 
     virtual void initDevice(DeviceType deviceType) {};
     virtual void readFullState() {};
+
+    virtual QStringList strPresetNumbers();
 
     DeviceType deviceType() const {return m_deviceType;};
 

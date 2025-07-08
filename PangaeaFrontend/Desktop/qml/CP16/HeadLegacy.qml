@@ -4,6 +4,8 @@ import QtQuick.Controls
 import Elements
 import StyleSettings
 
+import Layouts
+
 import CppObjects
 import PangaeaBackend
 

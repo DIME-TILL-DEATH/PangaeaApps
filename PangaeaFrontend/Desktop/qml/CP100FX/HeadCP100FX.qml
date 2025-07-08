@@ -4,6 +4,8 @@ import QtQuick.Controls
 import Elements
 import StyleSettings
 
+import Layouts
+
 import CppObjects
 import PangaeaBackend
 
@@ -11,6 +13,7 @@ Item
 {
     id: main
 
+    signal selectMenu(menuNum: int)
 
     Row
     {
@@ -79,6 +82,10 @@ Item
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
 
+                        validator: RegularExpressionValidator{
+                            regularExpression: /[\x20-\x7E]{0,14}/
+                        }
+
                         color: palette.text
                         font.bold: true
                         font.family: "Arial Black"
@@ -129,6 +136,10 @@ Item
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
 
+                        validator: RegularExpressionValidator{
+                            regularExpression: /[\x20-\x7E]{0,14}/
+                        }
+
                         color: palette.text
                         font.bold: true
                         font.family: "Arial Black"
@@ -140,45 +151,6 @@ Item
                         }
                     }
                 }
-            }
-        }
-
-        Rectangle{
-            height: parent.height
-            width:  row.widthWithoutSpase/15*1
-
-            color: Style.mainEnabledColor
-
-            ParameterDial{
-                id: vlControl
-                property Volume module: UiCore.currentDevice.masterVolume
-
-                width:  parent.width * 0.9
-                height: parent.height * 0.9
-
-                controlValue: UiCore.currentDevice.masterVolume.volume
-
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-        }
-
-        Rectangle{
-            height: parent.height
-            width:  row.widthWithoutSpase/15*1
-
-            color: Style.mainEnabledColor
-            ParameterDial{
-                id: phonesControl
-                property Volume module: UiCore.currentDevice.phonesVolume
-
-                width:  parent.width * 0.9
-                height: parent.height * 0.9
-
-                controlValue: UiCore.currentDevice.phonesVolume.volume
-
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
 
@@ -199,9 +171,45 @@ Item
                 map.show()
             }
         }
+
+
+        Column{
+            id: _menuColumn
+
+            height: parent.height
+            width:  row.widthWithoutSpase/15*2
+
+            property int selectedMenu: 0
+
+            MButton
+            {
+                width:  parent.width
+                height: parent.height/2
+                text: "PRESET"
+                highlighted: _menuColumn.selectedMenu === 0
+
+                onClicked: {
+                    _menuColumn.selectedMenu = 0
+                    main.selectMenu(_menuColumn.selectedMenu)
+                }
+            }
+
+            MButton
+            {
+                width:  parent.width
+                height: parent.height/2
+                text: "GLOBAL"
+                highlighted: _menuColumn.selectedMenu === 1
+
+                onClicked: {
+                    _menuColumn.selectedMenu = 1
+                    main.selectMenu(_menuColumn.selectedMenu)
+                }
+            }
+        }
     }
 
-    Map{
+    MapFx{
         id: map
 
     }

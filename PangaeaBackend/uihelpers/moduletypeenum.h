@@ -35,6 +35,7 @@ public:
         RF,
         RV,
         FL,
+        MEQ,
         //=====================
         // Stereo moduls
         ER_MONO = 64,

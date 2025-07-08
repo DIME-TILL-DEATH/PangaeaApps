@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21.1)
 
 set(MY_PRODUCT_NUMBER 1)
 set(MY_PRODUCT_VERSION 1)
-set(MY_BUILD_NUMBER 2504)
+set(MY_BUILD_NUMBER 2507)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 

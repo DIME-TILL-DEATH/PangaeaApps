@@ -34,4 +34,5 @@ qt_add_qml_module(qml_elements
         TypePA.qml
         ClipIndicator.qml
         Tutorials.qml
+        QML_FILES MLabel.qml
     )
