@@ -2,6 +2,7 @@
 #define SYSTEMSETTINGSFX_H
 
 #include <QObject>
+#include <QQmlEngine>
 
 enum
 {
@@ -77,19 +78,17 @@ typedef struct
 
     quint8 fswPressType[3];
 
-        /*calibration*/
+    /*calibration*/
     quint8 exprCalMinHi;
     quint8 expCalMinLo;
     quint8 exprCalMaxHi;
     quint8 expCalMaxLo;
 
-    quint8 fsw1PressPreset[4];
-    quint8 fsw2PressPreset[4];
-    quint8 fsw3PressPreset[4];
+    quint8 fswPressPreset[3][4];
 
     quint8 spdifOutType;
 
-        /*num CC to express and foot*/
+    /*num CC to express and foot*/
     quint8 exprCC;
     quint8 fswControlPressCc[3];
 
@@ -100,9 +99,7 @@ typedef struct
     quint8 fswMode[3];
     quint8 fswHoldType[3];
 
-    quint8 fsw1HoldPreset[4];
-    quint8 fsw2HoldPreset[4];
-    quint8 fsw3HoldPreset[4];
+    quint8 fswHoldPreset[3][4];
 
     quint8 fswControlHoldCc[3];
 
@@ -134,5 +131,106 @@ typedef struct
     quint16 masterEqFreq;
 }TSystemSettingsFx;
 
+
+
+class SystemSettingsFx : public QObject
+{
+    Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    Q_PROPERTY(quint8 mode READ mode WRITE setMode NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 midiChannel READ midiChannel WRITE setMidiChannel NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 cabNumber READ cabNumber WRITE setCabNumber NOTIFY settingsChanged FINAL)
+
+    Q_PROPERTY(quint8 exprOn READ exprOn WRITE setExprOn NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 exprType READ exprType WRITE setExprType NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 exprCC READ exprCC WRITE setExprCC NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 exprStoreLevel READ exprStoreLevel WRITE setExprStoreLevel NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 spdif READ spdif WRITE setSpdif NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 tempo READ tempo WRITE setTempo NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 tunerControl READ tunerControl WRITE setTunerControl NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 tunerCC READ tunerCC WRITE setTunerCC NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 timeFormat READ timeFormat WRITE setTimeFormat NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 swapConf READ swapConf WRITE setSwapConf NOTIFY settingsChanged FINAL)
+
+    Q_PROPERTY(quint8 tunerSpeed READ tunerSpeed WRITE setTunerSpeed NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 fswSpeed READ fswSpeed WRITE setFswSpeed NOTIFY settingsChanged FINAL)
+
+    Q_PROPERTY(QList<quint8> midiPcMap READ midiPcMap NOTIFY settingsChanged FINAL)
+public:
+    explicit SystemSettingsFx(QObject *parent);
+
+    void setSettings(TSystemSettingsFx settings);
+
+    quint8 mode() const;
+    void setMode(quint8 newMode);
+
+    quint8 midiChannel() const;
+    void setMidiChannel(quint8 newMidiChannel);
+
+    quint8 cabNumber() const;
+    void setCabNumber(quint8 newCabNumber);
+
+    quint8 exprOn() const;
+    void setExprOn(quint8 newExprOn);
+
+    quint8 exprType() const;
+    void setExprType(quint8 newExprType);
+
+    quint8 exprCC() const;
+    void setExprCC(quint8 newExprCC);
+
+    quint8 exprStoreLevel() const;
+    void setExprStoreLevel(quint8 newExprStoreLevel);
+
+    quint8 spdif() const;
+    void setSpdif(quint8 newSpdif);
+
+    quint8 tempo() const;
+    void setTempo(quint8 newTempo);
+
+    quint8 tunerControl() const;
+    void setTunerControl(quint8 newTunerControl);
+
+    quint8 timeFormat() const;
+    void setTimeFormat(quint8 newTimeFormat);
+
+    quint8 swapConf() const;
+    void setSwapConf(quint8 newSwapConf);
+
+    quint8 tunerSpeed() const;
+    void setTunerSpeed(quint8 newTunerSpeed);
+
+    quint8 fswSpeed() const;
+    void setFswSpeed(quint8 newFswSpeed);
+
+    quint8 tunerCC() const;
+    void setTunerCC(quint8 newTunerCC);
+
+    QList<quint8> midiPcMap() const;
+    void setMidiPcMap(quint8 pcNumber, quint8 presetNumber);
+
+signals:
+    void settingsChanged();
+private:
+    quint8 m_mode;
+    quint8 m_midiChannel;
+    quint8 m_cabNumber;
+    quint8 m_exprOn;
+    quint8 m_exprType;
+    quint8 m_exprCC;
+    quint8 m_exprStoreLevel;
+    quint8 m_spdif;
+    quint8 m_tempo;
+    quint8 m_tunerControl;
+    quint8 m_timeFormat;
+    quint8 m_swapConf;
+    quint8 m_tunerSpeed;
+    quint8 m_fswSpeed;
+    quint8 m_tunerCC;
+
+    QList<quint8> m_midiPcMap;
+};
 
 #endif // SYSTEMSETTINGSFX_H

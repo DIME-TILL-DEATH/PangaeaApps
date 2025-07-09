@@ -11,4 +11,5 @@ qt_add_qml_module(qml_cp100fx
         MapFx.qml
         PresetViewFx.qml
         SystemViewFx.qml
+        FswSystemMenu.qml
 )

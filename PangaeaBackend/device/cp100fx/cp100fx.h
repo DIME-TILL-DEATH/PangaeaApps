@@ -23,6 +23,7 @@
 #include "mastereq.h"
 
 #include "fswfx.h"
+#include "systemsettingsfx.h"
 
 class Cp100fx : public AbstractDevice
 {
@@ -39,14 +40,12 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(MasterEq* masterEq READ masterEq CONSTANT)
 
     Q_PROPERTY(QObjectList fsw READ fswList CONSTANT)
+    Q_PROPERTY(SystemSettingsFx* systemSettings READ systemSettings CONSTANT)
 public:
     Cp100fx(Core *parent);
     ~Cp100fx();
 
-    void updateOutputModeNames() override;
     QStringList strPresetNumbers() override;
-
-    quint16 processingUsed() override;
 
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
@@ -103,6 +102,7 @@ public:
     void setCurrentPresetComment(const QString &newCurrentPresetComment);
 
     QObjectList fswList() {return m_fswList;};
+    SystemSettingsFx* systemSettings() {return &m_systemSettings;};
 
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
@@ -115,6 +115,7 @@ signals:
 private:
     QList<PresetAbstract*> m_presetsList;
 
+    SystemSettingsFx m_systemSettings{this};
     QObjectList m_fswList;
 
     FswFx m_fswDown{0, this};

@@ -18,21 +18,18 @@ import CppObjects
 import PangaeaBackend
 
 Rectangle{
+    id: _main
 
     color: Style.mainEnabledColor
+
+    property int stringHeight: height/16
 
     RowLayout{
         anchors.fill: parent
 
 
         Rectangle{
-            color: "transparent"
-            border.width: 1
-            border.color: Style.borderOn
-        }
-
-        Rectangle{
-            id: _fswMenuRect
+            id: _sysMenu1
 
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: parent.width/4
@@ -41,239 +38,303 @@ Rectangle{
             border.width: 1
             border.color: Style.borderOn
 
-            property int stringHeight: parent.height/8
+            Column{
+                width: parent.width * 0.9
+                height: parent.height * 0.9
+                anchors.centerIn: parent
+
+                spacing: _main.stringHeight
+
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Mode: "
+
+                    currentIndex: UiCore.currentDevice.systemSettings.mode
+                    model: ["CabSim On", "CabSim Off"]
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.mode = currentIndex;
+                    }
+                }
+
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "MIDI channel: "
+
+                    currentIndex: UiCore.currentDevice.systemSettings.midiChannel
+                    model: _midiChannelModel
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.midiChannel = currentIndex;
+                    }
+
+                    ListModel{
+                        id: _midiChannelModel
+
+                        Component.onCompleted: {
+                            for(let i =1; i<16; i++){
+                                append({value: i})
+                            }
+                        }
+                    }
+                }
+
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "S/PDIF: "
+
+                    currentIndex: UiCore.currentDevice.systemSettings.spdif
+                    model: ["Main Output", "Dry Input"]
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.spdif = currentIndex;
+                    }
+                }
+
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Tempo: "
+
+                    currentIndex: UiCore.currentDevice.systemSettings.tempo
+                    model: ["Preset", "Global", "Glob.+MIDI"]
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.tempo = currentIndex;
+                    }
+                }
+
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Time format: "
+
+                    currentIndex: UiCore.currentDevice.systemSettings.timeFormat
+                    model: ["Sec", "BPM"]
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.timeFormat = currentIndex;
+                    }
+                }
+
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Swap UpConf: "
+
+                    currentIndex: UiCore.currentDevice.systemSettings.swapConf
+                    model: ["Off", "On"]
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.swapConf = currentIndex;
+                    }
+                }
+
+
+                MBar{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Tuner speed: "
+
+                    value: UiCore.currentDevice.systemSettings.tunerSpeed
+                }
+            }
+        }
+
+        Rectangle{
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: parent.width/4
+
+            color: "transparent"
+            border.width: 1
+            border.color: Style.borderOn
+            property int stringHeight: parent.height/16
 
             Column{
                 width: parent.width * 0.9
                 height: parent.height * 0.9
                 anchors.centerIn: parent
 
-                MLabel{
-                    height: _fswMenuRect.stringHeight
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: "Footswitch settings:"
+                spacing: _main.stringHeight
 
+                MSwitchHorizontal{
+                    id: _exprSwitch
+
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Expression pedal: "
+
+                    checked: UiCore.currentDevice.systemSettings.exprOn
+
+                    onClicked: {
+                        UiCore.currentDevice.systemSettings.exprOn = checked
+                    }
                 }
 
-                Row{
-                    width: parent.width
-                   height: _fswMenuRect.stringHeight
 
-                    MLabel{
-                        width: parent.width/2
-                        text: "Footswitch: "
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Expr. type: "
+
+                    enabled: _exprSwitch.position
+                    opacity: enabled ? 1 : 0.5
+
+                    currentIndex: UiCore.currentDevice.systemSettings.exprType
+                    model: ["Standart V", "Alternative V", "Standart CC", "Alternative CC"]
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.exprType = currentIndex;
+                    }
+                }
+
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Expr. CC#: "
+
+                    enabled: _exprSwitch.position
+                    opacity: enabled ? 1 : 0.5
+
+                    currentIndex: UiCore.currentDevice.systemSettings.exprCC
+                    model: _exprCCModel
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.exprCC = currentIndex;
                     }
 
-                    ComboBox{
-                        id: _comboFswSelect
+                    ListModel{
+                        id: _exprCCModel
 
-                        width: parent.width/2
-                        currentIndex: 0
-                        model: ["DOWN", "CONFIRM", "UP"]
+                        Component.onCompleted: {
+                            append({value: "Off"})
 
-                        onActivated: (index) => {
-                            currentIndex = index
+                            for(let i=0; i<127; i++){
+                                append({value: String(i)})
+                            }
                         }
                     }
-
                 }
 
-                Row{
+                MComboHorizontal{
                     width: parent.width
-                    height: _fswMenuRect.stringHeight
+                    height: _main.stringHeight
 
-                    MLabel{
-                        width: parent.width/2
-                        text: "Mode: "
-                    }
+                    text: "Store level: "
 
-                    ComboBox{
-                        width: parent.width/2
+                    enabled: _exprSwitch.position
+                    opacity: enabled ? 1 : 0.5
 
-                        currentIndex: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].mode
-                        model: ["SINGLE", "DOUBLE"]
+                    currentIndex: UiCore.currentDevice.systemSettings.exprStoreLevel
+                    model: ["Off", "On"]
 
-                        onActivated: (index) => {
-                            currentIndex = index;
-                            UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].mode = currentIndex;
-                        }
-                    }
+                    onActivated: (index) => {
 
-                }
-
-                Row{
-                    id: _pressType
-
-                    width: parent.width
-                    height: _fswMenuRect.stringHeight
-
-                    MLabel{
-                        width: parent.width/2
-                        text: "Press type: "
-                    }
-
-                    ComboBox{
-                        width: parent.width/2
-
-                        currentIndex: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType
-                        model: ["DEFAULT", "CONTROLLER", "TUNER",
-                                "PRESET MAP 1" , "PRESET MAP 2" , "PRESET MAP 3" , "PRESET MAP 4"]
-
-                        onActivated: (index) => {
-                            currentIndex = index;
-                            UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType = currentIndex;
-                        }
-                    }
-
-                }
-
-                Row{
-                    id: _pressController
-
-                    visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType === FswFx.Controller
-
-                    width: parent.width
-                    height: _fswMenuRect.stringHeight
-
-                    MLabel{
-                        width: parent.width/2
-                        text: "Press CC#: "
-                    }
-
-                    ComboBox{
-                        width: parent.width/2
-
-                        currentIndex: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].controllerPressNum
-                        model: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].ccNames
-                    }
-
-                }
-
-                Row{
-                    id: _pressMap
-
-                    width: parent.width
-                    height: _fswMenuRect.stringHeight
-
-                    visible: (UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap1)
-
-                    MLabel{
-                        width: parent.width/6
-                        text: "Seq.:"
-                    }
-
-                    ComboBox{
-                        width: parent.width/8
-                        model: UiCore.currentDevice.strPresetNumbers
-
-                        indicator: Item{}
-                    }
-
-                    MLabel{
-                        visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap2
-                        width: parent.width/10
-                        horizontalAlignment: Text.AlignHCenter
-                        text: "->"
-                    }
-
-                    ComboBox{
-                        width: parent.width/8
-                        visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap2
-                        model: UiCore.currentDevice.strPresetNumbers
-
-                        indicator: Item{}
-                    }
-
-                    MLabel{
-                        visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap3
-                        width: parent.width/10
-                        horizontalAlignment: Text.AlignHCenter
-                        text: "->"
-                    }
-
-                    ComboBox{
-                        width: parent.width/8
-                        visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap3
-                        model: UiCore.currentDevice.strPresetNumbers
-
-                        indicator: Item{}
-                    }
-
-                    MLabel{
-                        visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType === FswFx.PresetMap4
-                        horizontalAlignment: Text.AlignHCenter
-                        width: parent.width/10
-
-                        text: "->"
-                    }
-
-                    ComboBox{
-                        width: parent.width/8
-                        visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType === FswFx.PresetMap4
-                        model: UiCore.currentDevice.strPresetNumbers
-
-                        indicator: Item{}
+                        UiCore.currentDevice.systemSettings.exprStoreLevel = currentIndex;
                     }
                 }
 
-                Row{
-                    id: _holdType
-
-                    visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].mode === FswFx.Double
-
-                    width: parent.width
-                    height: _fswMenuRect.stringHeight
-
-                    MLabel{
-                        width: parent.width/2
-                        text: "Hold type: "
-                    }
-
-                    ComboBox{
-                        width: parent.width/2
-
-                        currentIndex: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].holdType
-                        model: ["DEFAULT", "CONTROLLER", "TUNER",
-                                "PRESET MAP 1" , "PRESET MAP 2" , "PRESET MAP 3" , "PRESET MAP 4"]
-
-                        onActivated: (index) => {
-                            currentIndex = index;
-                            UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].holdType = currentIndex;
-                        }
-                    }
-
-                }
-
-                Row{
-                    id: _holdController
-
-                    visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].mode === FswFx.Double
-                        && UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].holdType === FswFx.Controller
-
-                    width: parent.width
-                    height: _fswMenuRect.stringHeight
-
-                    MLabel{
-                        width: parent.width/2
-                        text: "Hold CC#: "
-                    }
-
-                    ComboBox{
-                        width: parent.width/2
-
-                        currentIndex: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].controllerHoldNum
-
-                        model: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].ccNames
-                    }
-
-                }
             }
         }
 
+        FswSystemMenu{
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            stringHeight: _main.stringHeight
+        }
+
         Rectangle{
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
             color: "transparent"
             border.width: 1
             border.color: Style.borderOn
+            property int stringHeight: parent.height/16
+
+            Column{
+                width: parent.width * 0.9
+                height: parent.height * 0.9
+                anchors.centerIn: parent
+
+                spacing: _main.stringHeight
+
+                MLabel{
+                    height: _main.stringHeight
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "MIDI PC Map:"
+                }
+
+                RowLayout{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    ComboBox{
+                        id: _comboPcChoice
+
+                        Layout.preferredWidth: parent.width/3
+
+                        model: _midiPcMapModel
+
+                        currentIndex: 0
+
+                        ListModel{
+                            id: _midiPcMapModel
+
+                            Component.onCompleted: {
+                                for(let i=1; i<=128; i++){
+                                    append({value: i})
+                                }
+                            }
+                        }
+                    }
+
+                    MLabel{
+                        Layout.preferredWidth: parent.width/3
+
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        text: "->"
+                    }
+
+                    ComboBox{
+                        id: _comboPresetChoice
+
+                        Layout.fillWidth: true
+
+                        model: UiCore.currentDevice.strPresetNumbers
+
+                        currentIndex: UiCore.currentDevice.systemSettings.midiPcMap[_comboPcChoice.currentIndex]
+
+                        onActivated: {
+                            UiCore.currentDevice.systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
+                        }
+                    }
+                }
+
+            }
         }
     }
 }

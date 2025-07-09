@@ -46,16 +46,6 @@ QStringList Cp100fx::strPresetNumbers()
     return numbers;
 }
 
-void Cp100fx::updateOutputModeNames()
-{
-
-}
-
-quint16 Cp100fx::processingUsed()
-{
-    return 0;
-}
-
 void Cp100fx::initDevice(DeviceType deviceType)
 {
     m_deviceType = deviceType;
@@ -408,6 +398,8 @@ void Cp100fx::sysSettingsCommHandler(const QString &command, const QByteArray &a
 
     TSystemSettingsFx sysSettings;
     memcpy(&sysSettings, dataBuffer, sizeof(TSystemSettingsFx));
+
+    m_systemSettings.setSettings(sysSettings);
 
     m_fswDown.setData(sysSettings);
     m_fswConfirm.setData(sysSettings);

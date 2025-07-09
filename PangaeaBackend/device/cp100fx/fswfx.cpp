@@ -27,12 +27,13 @@ void FswFx::setData(const TSystemSettingsFx &data)
     m_controllerPressNum = data.fswControlPressCc[m_num];
     m_controllerHoldNum = data.fswControlHoldCc[m_num];
 
-    emit paramsChanged();
-}
+    for(int i=0; i<4; i++)
+    {
+        m_pressPreset[i] = data.fswPressPreset[m_num][i];
+        m_holdPreset[i] = data.fswHoldPreset[m_num][i];
+    }
 
-FswMode FswFx::mode() const
-{
-    return m_mode;
+    emit paramsChanged();
 }
 
 void FswFx::setMode(FswMode newMode)
@@ -43,10 +44,6 @@ void FswFx::setMode(FswMode newMode)
     emit paramsChanged();
 }
 
-FswType FswFx::pressType() const
-{
-    return m_pressType;
-}
 
 void FswFx::setPressType(FswType newPressType)
 {
@@ -54,11 +51,6 @@ void FswFx::setPressType(FswType newPressType)
         return;
     m_pressType = newPressType;
     emit paramsChanged();
-}
-
-FswType FswFx::holdType() const
-{
-    return m_holdType;
 }
 
 void FswFx::setHoldType(FswType newHoldType)
@@ -69,11 +61,6 @@ void FswFx::setHoldType(FswType newHoldType)
     emit paramsChanged();
 }
 
-uint8_t FswFx::controllerPressNum() const
-{
-    return m_controllerPressNum;
-}
-
 void FswFx::setControllerPressNum(uint8_t newControllerNum)
 {
     if (m_controllerPressNum == newControllerNum)
@@ -82,15 +69,50 @@ void FswFx::setControllerPressNum(uint8_t newControllerNum)
     emit paramsChanged();
 }
 
-uint8_t FswFx::controllerHoldNum() const
-{
-    return m_controllerHoldNum;
-}
-
 void FswFx::setControllerHoldNum(uint8_t newControllerHoldNum)
 {
     if (m_controllerHoldNum == newControllerHoldNum)
         return;
     m_controllerHoldNum = newControllerHoldNum;
     emit paramsChanged();
+}
+
+void FswFx::setPressPreset1(quint8 presetNum)
+{
+    m_pressPreset[0] = presetNum;
+}
+
+void FswFx::setPressPreset2(quint8 presetNum)
+{
+    m_pressPreset[1] = presetNum;
+}
+
+void FswFx::setPressPreset3(quint8 presetNum)
+{
+    m_pressPreset[2] = presetNum;
+}
+
+void FswFx::setPressPreset4(quint8 presetNum)
+{
+    m_pressPreset[3] = presetNum;
+}
+
+void FswFx::setHoldPreset1(quint8 presetNum)
+{
+    m_holdPreset[0] = presetNum;
+}
+
+void FswFx::setHoldPreset2(quint8 presetNum)
+{
+    m_holdPreset[1] = presetNum;
+}
+
+void FswFx::setHoldPreset3(quint8 presetNum)
+{
+    m_holdPreset[2] = presetNum;
+}
+
+void FswFx::setHoldPreset4(quint8 presetNum)
+{
+    m_holdPreset[3] = presetNum;
 }

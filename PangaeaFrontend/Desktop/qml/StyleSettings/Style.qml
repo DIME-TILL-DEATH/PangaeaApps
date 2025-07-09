@@ -18,4 +18,8 @@ QtObject {
 
     readonly property color borderOn: "white"
     readonly property color borderOff: "grey"
+
+    readonly property color barLow: "grey"
+    readonly property color barHigh: "steelblue"
+    readonly property color barText: "white"
 }
