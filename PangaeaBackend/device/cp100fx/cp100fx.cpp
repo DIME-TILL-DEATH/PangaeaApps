@@ -13,7 +13,7 @@ Cp100fx::Cp100fx(Core *parent)
 
     m_parser.addCommandHandler("psave", std::bind(&Cp100fx::ackPresetSavedCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("sysset", std::bind(&Cp100fx::sysSettingsCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("sys_settings", std::bind(&Cp100fx::sysSettingsCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("state", std::bind(&Cp100fx::stateCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pchange", std::bind(&Cp100fx::ackPresetChangeCommHandler, this, _1, _2, _3));
 
@@ -93,7 +93,7 @@ void Cp100fx::readFullState()
 
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("plist");
-    emit sgPushCommandToQueue("sysset");
+    emit sgPushCommandToQueue("sys_settings");
     // emit sgPushCommandToQueue("ls ir_library");
     // emit sgPushCommandToQueue("gm");
     pushReadPresetCommands();

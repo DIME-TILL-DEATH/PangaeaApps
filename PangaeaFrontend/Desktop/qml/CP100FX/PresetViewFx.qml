@@ -1,9 +1,6 @@
 import QtQuick 2.15
-import QtQuick.Controls.Fusion
-import QtQuick.Dialogs
-import QtCore
-
-import QtQuick.Window 2.15
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import Elements 1.0
 import ModulesFX 1.0
@@ -16,31 +13,50 @@ import CppObjects
 import PangaeaBackend
 
 
-Column
+ColumnLayout
 {
     id: _mainUi
     focus: true
-    // spacing: 2
+    spacing: 0
 
     property alias modulesListView: _modulesListView
 
 
     Rectangle{
-        width: parent.width
-        height: parent.height/4
-        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height/4
 
         color: Style.mainEnabledColor
 
-        Row{
+        RowLayout{
+            id: _row1
+
             anchors.fill: parent
+
+            spacing: 0
+
+            MLabel{
+                text: " Global\nsettings:"
+
+                Layout.preferredWidth: height
+                Layout.fillHeight: true
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Rectangle{
+                Layout.preferredWidth: 2
+                Layout.fillHeight: true
+            }
+
             ParameterComboBox{
                 id: _attenuator
 
-                width: height * 1.5
-                height: parent.height
+                Layout.preferredWidth: height * 1.5
+                Layout.fillHeight: true
 
-                anchors.verticalCenter: parent.verticalCenter
+                // anchors.verticalCenter: parent.verticalCenter
 
                 ctrlValInstance: UiCore.currentDevice.attenuatorVolume.volume
 
@@ -55,54 +71,68 @@ Column
                     "-58 dB", "-59 dB", "-60 dB"]
             }
 
-            Rectangle{
-                width: 1
-                height: parent.height
-            }
-
             MEQ{
-                width: parent.height * 5.1
-                height: parent.height
+                Layout.preferredWidth: parent.height * 5
+                Layout.fillHeight: true
             }
 
             Rectangle{
-                width: 1
-                height: parent.height
+                Layout.preferredWidth: 2
+                Layout.fillHeight: true
             }
 
-            ParameterDial{
-                id: vlControl
-                property Volume module: UiCore.currentDevice.masterVolume
+            Row{
+                Layout.preferredWidth: height*2
+                Layout.fillHeight: true
 
-                width: height
-                height: parent.height
-                anchors.bottomMargin: parent.height/10
-                anchors.topMargin: parent.height/10
+                ParameterDial{
+                    id: vlControl
+                    property Volume module: UiCore.currentDevice.masterVolume
 
-                controlValue: UiCore.currentDevice.masterVolume.volume
-             }
+                    y: parent.height/10
 
-            ParameterDial{
-                id: phonesControl
-                property Volume module: UiCore.currentDevice.phonesVolume
+                    width: height
+                    height: parent.height
 
-                width: height
-                height: parent.height
+                    controlValue: UiCore.currentDevice.masterVolume.volume
+                 }
 
-                controlValue: UiCore.currentDevice.phonesVolume.volume
+
+                ParameterDial{
+                    id: phonesControl
+                    property Volume module: UiCore.currentDevice.phonesVolume
+
+                    y: parent.height/10
+
+                    width: height
+                    height: parent.height
+
+                    controlValue: UiCore.currentDevice.phonesVolume.volume
+                }
             }
 
             Rectangle{
-                width: 1
-                height: parent.height
+                Layout.preferredWidth: 2
+                Layout.fillHeight: true
+            }
+
+            Row{
+                id: _controllersRow
+
+                Layout.fillWidth: true
+                Layout.fillHeight: true
             }
         }
     }
 
     Rectangle{
-        width: parent.width
-        height: parent.height/2
-        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.fillWidth: true
+        Layout.preferredHeight: 2
+    }
+
+    Rectangle{
+        Layout.fillWidth: true
+        Layout.fillHeight: true
 
         color: Style.mainEnabledColor
 
@@ -120,52 +150,64 @@ Column
 
             currentIndex: -1
 
-            delegate: Rectangle{
+            delegate: Item{
                 width: _modulesListView.width/14 - _modulesListView.spacing
-                height: _modulesListView.height //* 0.95
+                height: _modulesListView.height
 
-                color: "transparent"
-                border.width: 2
-                border.color: index === _modulesListView.currentIndex ? "white" : "transparent"
-
-
-                Image
-                {
-                    id: _image
+                Rectangle{
+                    width: parent.width
+                    height: parent.height * 0.95
 
                     anchors.centerIn: parent
-                    width: parent.width
-                    height: parent.height
 
-                    fillMode: Image.PreserveAspectFit
-                    smooth: true
+                    color: "transparent"
+                    border.width: 2
+                    border.color: index === _modulesListView.currentIndex ? "white" : "transparent"
 
-                    source: "qrc:/Images/pedal.svg"
 
-                    opacity: moduleInstance.moduleEnabled ? 1 : 0.35
-                    // sourceSize.width:  width
-                    // sourceSize.height: height
-                }
+                    Image
+                    {
+                        id: _image
 
-                MText{
-                    anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.centerIn: parent
+                        width: parent.width
+                        height: parent.height
 
-                    y: parent.height * 5.5/10
+                        fillMode: Image.PreserveAspectFit
+                        smooth: true
 
-                    color: "black"
+                        source: "qrc:/Images/pedal.svg"
 
-                    text: moduleInstance.moduleName
-                }
+                        opacity: moduleInstance.moduleEnabled ? 1 : 0.35
+                        Behavior on opacity {
+                            PropertyAnimation{}
+                        }
+                    }
 
-                MouseArea{
-                    anchors.fill: parent
+                    MText{
+                        anchors.horizontalCenter: parent.horizontalCenter
 
-                    onClicked: {
-                        if(index !== _modulesListView.currentIndex)
-                        {
-                            _moduleLoader.source = ""
-                            _moduleLoader.selectedModuleInstance = moduleInstance
-                            _modulesListView.currentIndex = index
+                        y: parent.height * 5.5/10
+
+                        color: "black"
+
+                        text: moduleInstance.moduleName
+                    }
+
+                    MouseArea{
+                        anchors.fill: parent
+
+                        onClicked: {
+                            if(index !== _modulesListView.currentIndex)
+                            {
+                                _moduleLoader.source = ""
+                                _moduleLoader.selectedModuleInstance = moduleInstance
+                                _modulesListView.currentIndex = index
+                            }
+                        }
+
+                        onDoubleClicked: {
+                            moduleInstance.moduleEnabled = ! moduleInstance.moduleEnabled
                         }
                     }
                 }
@@ -197,10 +239,16 @@ Column
     Loader{
         id: _moduleLoader
 
-        width:  parent.width
-        height: parent.height/4
+        Layout.fillWidth: true
+        Layout.preferredHeight: parent.height/4
 
         property var selectedModuleInstance
 
+        sourceComponent: Rectangle{
+            width: _moduleLoader.width
+            height: _moduleLoader.height
+
+            color: Style.mainEnabledColor
+        }
     }
 }

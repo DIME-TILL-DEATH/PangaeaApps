@@ -53,7 +53,7 @@ Item
 
                 border.width: 1
 
-                color: "transparent"
+                color: Style.headColor
                 Row{
                     anchors.fill: parent
                     Rectangle{
@@ -62,7 +62,7 @@ Item
                         height: parent.height
                         width: parent.width/5
                         MText{
-                            color: palette.text
+                            color: Style.textMain
 
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
@@ -86,10 +86,10 @@ Item
                             regularExpression: /[\x20-\x7E]{0,14}/
                         }
 
-                        color: palette.text
+                        color: Style.textInverted
                         font.bold: true
                         font.family: "Arial Black"
-                        font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+                        font.pixelSize: Math.min(parent.height/2, parent.width/15)
 
                         onAccepted:{
                             focus = false
@@ -107,7 +107,7 @@ Item
 
                 border.width: 1
 
-                color: "transparent"
+                color: Style.headColor
                 Row{
                     anchors.fill: parent
                     Rectangle{
@@ -116,11 +116,11 @@ Item
                         height: parent.height
                         width: parent.width/5
                         MText{
-                            color: palette.text
+                            color: Style.textMain
 
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
-                            font.pixelSize: Math.min(parent.height/1.5, parent.width/9)
+                            font.pixelSize: Math.min(parent.height/2, parent.width/9)
 
                             text: qsTr(" Preset comment")
                         }
@@ -140,10 +140,10 @@ Item
                             regularExpression: /[\x20-\x7E]{0,14}/
                         }
 
-                        color: palette.text
+                        color: Style.textInverted
                         font.bold: true
                         font.family: "Arial Black"
-                        font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+                        font.pixelSize: Math.min(parent.height/2, parent.width/15)
 
                         onAccepted:{
                             focus = false

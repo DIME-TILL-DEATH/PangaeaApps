@@ -1,9 +1,5 @@
 import QtQuick 2.15
-import QtQuick.Controls.Fusion
-import QtQuick.Dialogs
-import QtCore
-
-import QtQuick.Window 2.15
+import QtQuick.Controls
 
 import Elements 1.0
 import ModulesFX 1.0

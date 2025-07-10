@@ -6,5 +6,5 @@ import StyleSettings
 Label{
     font.bold: true
     font.family: "Arial Black"
-    color: Style.backgroundColor
+    color: Style.textMain
 }

@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QQmlEngine>
 
+#include "abstractdevice.h"
+
 enum
 {
     CAB_SIM_DISABLED,
@@ -47,7 +49,7 @@ enum
     FSW_SPEED,
     TIME_FORMAT,	// Sec, BPM
     TAP_HIGH,           /*global temp hi*/
-    STORE_EXP_LEVEL,    /*save expression level*/
+    EXPR_STORE_LEVEL,    /*save expression level*/
     SWAP_SWITCH,
     TUNER_SPEED,
 
@@ -140,8 +142,8 @@ class SystemSettingsFx : public QObject
     QML_UNCREATABLE("")
 
     Q_PROPERTY(quint8 mode READ mode WRITE setMode NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 midiChannel READ midiChannel WRITE setMidiChannel NOTIFY settingsChanged FINAL)
     Q_PROPERTY(quint8 cabNumber READ cabNumber WRITE setCabNumber NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(quint8 midiChannel READ midiChannel WRITE setMidiChannel NOTIFY settingsChanged FINAL)
 
     Q_PROPERTY(quint8 exprOn READ exprOn WRITE setExprOn NOTIFY settingsChanged FINAL)
     Q_PROPERTY(quint8 exprType READ exprType WRITE setExprType NOTIFY settingsChanged FINAL)
@@ -159,7 +161,7 @@ class SystemSettingsFx : public QObject
 
     Q_PROPERTY(QList<quint8> midiPcMap READ midiPcMap NOTIFY settingsChanged FINAL)
 public:
-    explicit SystemSettingsFx(QObject *parent);
+    explicit SystemSettingsFx(AbstractDevice *owner);
 
     void setSettings(TSystemSettingsFx settings);
 
@@ -209,11 +211,13 @@ public:
     void setTunerCC(quint8 newTunerCC);
 
     QList<quint8> midiPcMap() const;
-    void setMidiPcMap(quint8 pcNumber, quint8 presetNumber);
+    Q_INVOKABLE void setMidiPcMap(quint8 pcNumber, quint8 presetNumber);
 
 signals:
     void settingsChanged();
 private:
+    AbstractDevice* m_owner;
+
     quint8 m_mode;
     quint8 m_midiChannel;
     quint8 m_cabNumber;
@@ -231,6 +235,8 @@ private:
     quint8 m_tunerCC;
 
     QList<quint8> m_midiPcMap;
+
+    void sendData(const QByteArray& data);
 };
 
 #endif // SYSTEMSETTINGSFX_H

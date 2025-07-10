@@ -64,6 +64,21 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
+                    text: "Cab. num: "
+
+                    currentIndex: UiCore.currentDevice.systemSettings.cabNumber
+                    model: ["1 L+R", "1R AP", "2 L+R", "1R A", "1R P", "1 R"]
+
+                    onActivated: (index) => {
+
+                        UiCore.currentDevice.systemSettings.cabNumber = currentIndex;
+                    }
+                }
+
+                MComboHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
                     text: "MIDI channel: "
 
                     currentIndex: UiCore.currentDevice.systemSettings.midiChannel
@@ -140,7 +155,6 @@ Rectangle{
                     model: ["Off", "On"]
 
                     onActivated: (index) => {
-
                         UiCore.currentDevice.systemSettings.swapConf = currentIndex;
                     }
                 }
@@ -153,6 +167,10 @@ Rectangle{
                     text: "Tuner speed: "
 
                     value: UiCore.currentDevice.systemSettings.tunerSpeed
+
+                    onUserChangedValue: {
+                        UiCore.currentDevice.systemSettings.tunerSpeed = value
+                    }
                 }
             }
         }
@@ -241,7 +259,7 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    text: "Store level: "
+                    text: "Expr. store level: "
 
                     enabled: _exprSwitch.position
                     opacity: enabled ? 1 : 0.5
@@ -331,6 +349,38 @@ Rectangle{
                         onActivated: {
                             UiCore.currentDevice.systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
                         }
+                    }
+                }
+
+                MSwitchHorizontal{
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Tuner control: "
+
+                    checked: UiCore.currentDevice.systemSettings.tunerControl
+
+                    onClicked: {
+                        UiCore.currentDevice.systemSettings.tunerControl = checked
+                    }
+                }
+
+                MComboHorizontal{
+
+                    width: parent.width
+                    height: _main.stringHeight
+
+                    text: "Tuner on CC#: "
+
+                    enabled: UiCore.currentDevice.systemSettings.tunerControl
+
+                    model: _midiPcMapModel
+
+                    currentIndex: UiCore.currentDevice.systemSettings.tunerCC
+
+
+                    onActivated: {
+                        UiCore.currentDevice.systemSettings.tunerCC = currentIndex
                     }
                 }
 

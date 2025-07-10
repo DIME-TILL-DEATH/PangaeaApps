@@ -46,6 +46,10 @@ Rectangle{
             text: "FSW speed: "
 
             value: UiCore.currentDevice.systemSettings.fswSpeed
+
+            onUserChangedValue: {
+                UiCore.currentDevice.systemSettings.fswSpeed = value
+            }
         }
 
         MComboHorizontal{
@@ -225,8 +229,8 @@ Rectangle{
         MComboHorizontal{
             id: _holdController
 
-            visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].mode === FswFx.Double
-                && UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].holdType === FswFx.Controller
+            visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].mode === FswFx.Double &&
+                     UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].holdType === FswFx.Controller
 
             width: parent.width
             height: _fswMenuRect.stringHeight
@@ -248,7 +252,8 @@ Rectangle{
             width: parent.width
             height: _fswMenuRect.stringHeight
 
-            visible: (UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].holdType >= FswFx.PresetMap1)
+            visible: (UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].mode === FswFx.Double &&
+                      UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].holdType >= FswFx.PresetMap1)
 
             MLabel{
                 width: parent.width/6

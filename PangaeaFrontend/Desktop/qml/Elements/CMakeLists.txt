@@ -20,7 +20,11 @@ qt_add_qml_module(qml_elements
         MapHeadBank.qml
         MapHeadPreset.qml
         Material.qml
+        MBar.qml
         MButton.qml
+        MComboHorizontal.qml
+        MLabel.qml
+        MSwitchHorizontal.qml
         MText.qml
         PresetSpin.qml
         SignalBar.qml
@@ -34,8 +38,4 @@ qt_add_qml_module(qml_elements
         TypePA.qml
         ClipIndicator.qml
         Tutorials.qml
-        MLabel.qml
-        MComboHorizontal.qml
-        MBar.qml
-        QML_FILES MSwitchHorizontal.qml
     )

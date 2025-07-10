@@ -45,6 +45,8 @@ qt_add_library(PangaeaBackend STATIC
     device/cp/lapreamp.h device/cp/lapreamp.cpp
     device/cp100fx/cp100fx.h device/cp100fx/cp100fx.cpp
     device/cp100fx/presetfx.h device/cp100fx/presetfx.cpp
+    device/cp100fx/fswfx.h device/cp100fx/fswfx.cpp
+    device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
 
     device/cp/hardwareclassicpreset.h
     device/cp/hardwareclassicpreset.cpp
@@ -108,10 +110,7 @@ qt_add_qml_module(PangaeaBackend
         modules/resonancefilter.h modules/resonancefilter.cpp
         modules/tremolo.h modules/tremolo.cpp
         modules/volume.h modules/volume.cpp
-        SOURCES modules/mastereq.h modules/mastereq.cpp
-        SOURCES
-        SOURCES device/cp100fx/fswfx.h device/cp100fx/fswfx.cpp
-        SOURCES device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
+        modules/mastereq.h modules/mastereq.cpp
 )
 
 

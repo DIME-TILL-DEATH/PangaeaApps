@@ -13,6 +13,9 @@ QtObject {
     readonly property color highlightColor: "Salmon"
     readonly property color headColor: "MediumSeaGreen"
 
+    readonly property color textMain: "#EBECEC"
+    readonly property color textInverted: "black"
+
     readonly property color textEnabled: "white"
     readonly property color textDisabled: "black"
 

@@ -1,8 +1,14 @@
 #include "systemsettingsfx.h"
 
-SystemSettingsFx::SystemSettingsFx(QObject *parent)
-    : QObject{parent}
-{}
+SystemSettingsFx::SystemSettingsFx(AbstractDevice *owner)
+    : QObject{owner},
+    m_owner{owner}
+{
+    for(int i=0; i<127; i++)
+    {
+        m_midiPcMap.append(i%98);
+    }
+}
 
 void SystemSettingsFx::setSettings(TSystemSettingsFx settings)
 {
@@ -10,7 +16,7 @@ void SystemSettingsFx::setSettings(TSystemSettingsFx settings)
     m_midiChannel = settings.midiChannel;
     m_cabNumber = settings.cabSimConfig;
     m_exprOn = (settings.expressionType & 0x80) ? 1 : 0;
-    m_exprType = settings.expressionType & 0x7F - 1;
+    m_exprType = settings.expressionType & 0x7F;
     m_exprCC = settings.exprCC;
     m_exprStoreLevel = settings.storeExprLevel;
     m_spdif = settings.spdifOutType;
@@ -42,19 +48,9 @@ void SystemSettingsFx::setMode(quint8 newMode)
         return;
     m_mode = newMode;
     emit settingsChanged();
-}
 
-quint8 SystemSettingsFx::midiChannel() const
-{
-    return m_midiChannel;
-}
 
-void SystemSettingsFx::setMidiChannel(quint8 newMidiChannel)
-{
-    if (m_midiChannel == newMidiChannel)
-        return;
-    m_midiChannel = newMidiChannel;
-    emit settingsChanged();
+    sendData(QByteArray("sys_cab_mode ") + QByteArray::number(m_mode, 16));
 }
 
 quint8 SystemSettingsFx::cabNumber() const
@@ -68,7 +64,25 @@ void SystemSettingsFx::setCabNumber(quint8 newCabNumber)
         return;
     m_cabNumber = newCabNumber;
     emit settingsChanged();
+
+    sendData(QByteArray("sys_cab_num ") + QByteArray::number(m_cabNumber, 16));
 }
+
+quint8 SystemSettingsFx::midiChannel() const
+{
+    return m_midiChannel;
+}
+
+void SystemSettingsFx::setMidiChannel(quint8 newMidiChannel)
+{
+    if (m_midiChannel == newMidiChannel)
+        return;
+    m_midiChannel = newMidiChannel;
+    emit settingsChanged();
+
+    sendData(QByteArray("sys_midi_ch ") + QByteArray::number(m_midiChannel, 16));
+}
+
 
 quint8 SystemSettingsFx::exprOn() const
 {
@@ -81,19 +95,25 @@ void SystemSettingsFx::setExprOn(quint8 newExprOn)
         return;
     m_exprOn = newExprOn;
     emit settingsChanged();
+
+    sendData(QByteArray("sys_expr_on ") + QByteArray::number(m_exprOn));
 }
 
 quint8 SystemSettingsFx::exprType() const
 {
-    return m_exprType;
+    return m_exprType - 1;
 }
 
 void SystemSettingsFx::setExprType(quint8 newExprType)
 {
+    newExprType++;
+
     if (m_exprType == newExprType)
         return;
     m_exprType = newExprType;
     emit settingsChanged();
+
+    sendData(QByteArray("sys_expr_type ") + QByteArray::number(m_exprType, 16));
 }
 
 quint8 SystemSettingsFx::exprCC() const
@@ -107,6 +127,8 @@ void SystemSettingsFx::setExprCC(quint8 newExprCC)
         return;
     m_exprCC = newExprCC;
     emit settingsChanged();
+
+    sendData(QByteArray("sys_expr_cc ") + QByteArray::number(m_exprCC, 16));
 }
 
 quint8 SystemSettingsFx::exprStoreLevel() const
@@ -120,6 +142,8 @@ void SystemSettingsFx::setExprStoreLevel(quint8 newExprStoreLevel)
         return;
     m_exprStoreLevel = newExprStoreLevel;
     emit settingsChanged();
+
+    sendData(QByteArray("sys_expr_slev ") + QByteArray::number(m_exprStoreLevel, 16));
 }
 
 quint8 SystemSettingsFx::spdif() const
@@ -133,6 +157,8 @@ void SystemSettingsFx::setSpdif(quint8 newSpdif)
         return;
     m_spdif = newSpdif;
     emit settingsChanged();
+
+    sendData(QByteArray("sys_spdif ") + QByteArray::number(m_spdif, 16));
 }
 
 quint8 SystemSettingsFx::tempo() const
@@ -146,6 +172,8 @@ void SystemSettingsFx::setTempo(quint8 newTempo)
         return;
     m_tempo = newTempo;
     emit settingsChanged();
+
+    sendData(QByteArray("sys_tempo ") + QByteArray::number(m_tempo, 16));
 }
 
 quint8 SystemSettingsFx::tunerControl() const
@@ -159,32 +187,8 @@ void SystemSettingsFx::setTunerControl(quint8 newTunerControl)
         return;
     m_tunerControl = newTunerControl;
     emit settingsChanged();
-}
 
-quint8 SystemSettingsFx::timeFormat() const
-{
-    return m_timeFormat;
-}
-
-void SystemSettingsFx::setTimeFormat(quint8 newTimeFormat)
-{
-    if (m_timeFormat == newTimeFormat)
-        return;
-    m_timeFormat = newTimeFormat;
-    emit settingsChanged();
-}
-
-quint8 SystemSettingsFx::swapConf() const
-{
-    return m_swapConf;
-}
-
-void SystemSettingsFx::setSwapConf(quint8 newSwapConf)
-{
-    if (m_swapConf == newSwapConf)
-        return;
-    m_swapConf = newSwapConf;
-    emit settingsChanged();
+    sendData(QByteArray("sys_tuner_ctrl ") + QByteArray::number(m_tunerControl, 16));
 }
 
 quint8 SystemSettingsFx::tunerSpeed() const
@@ -198,6 +202,56 @@ void SystemSettingsFx::setTunerSpeed(quint8 newTunerSpeed)
         return;
     m_tunerSpeed = newTunerSpeed;
     emit settingsChanged();
+
+    sendData(QByteArray("sys_tuner_speed ") + QByteArray::number(m_tunerSpeed, 16));
+}
+
+quint8 SystemSettingsFx::tunerCC() const
+{
+    return m_tunerCC - 1;
+}
+
+void SystemSettingsFx::setTunerCC(quint8 newTunerCC)
+{
+    newTunerCC++;
+
+    if (m_tunerCC == newTunerCC)
+        return;
+    m_tunerCC = newTunerCC;
+    emit settingsChanged();
+
+    sendData(QByteArray("sys_tuner_cc ") + QByteArray::number(m_tunerCC, 16));
+}
+
+
+quint8 SystemSettingsFx::timeFormat() const
+{
+    return m_timeFormat;
+}
+
+void SystemSettingsFx::setTimeFormat(quint8 newTimeFormat)
+{
+    if (m_timeFormat == newTimeFormat)
+        return;
+    m_timeFormat = newTimeFormat;
+    emit settingsChanged();
+
+    sendData(QByteArray("sys_time_format ") + QByteArray::number(m_timeFormat, 16));
+}
+
+quint8 SystemSettingsFx::swapConf() const
+{
+    return m_swapConf;
+}
+
+void SystemSettingsFx::setSwapConf(quint8 newSwapConf)
+{
+    if (m_swapConf == newSwapConf)
+        return;
+    m_swapConf = newSwapConf;
+    emit settingsChanged();
+
+    sendData(QByteArray("sys_swap_conf ") + QByteArray::number(m_swapConf, 16));
 }
 
 quint8 SystemSettingsFx::fswSpeed() const
@@ -211,19 +265,8 @@ void SystemSettingsFx::setFswSpeed(quint8 newFswSpeed)
         return;
     m_fswSpeed = newFswSpeed;
     emit settingsChanged();
-}
 
-quint8 SystemSettingsFx::tunerCC() const
-{
-    return m_tunerCC;
-}
-
-void SystemSettingsFx::setTunerCC(quint8 newTunerCC)
-{
-    if (m_tunerCC == newTunerCC)
-        return;
-    m_tunerCC = newTunerCC;
-    emit settingsChanged();
+    sendData(QByteArray("sys_fsw_speed ") + QByteArray::number(m_fswSpeed, 16));
 }
 
 QList<quint8> SystemSettingsFx::midiPcMap() const
@@ -235,4 +278,11 @@ void SystemSettingsFx::setMidiPcMap(quint8 pcNumber, quint8 presetNumber)
 {
     m_midiPcMap.replace(pcNumber, presetNumber);
     emit settingsChanged();
+
+    sendData((QString("midi_map %1 %2").arg(pcNumber, 2, 16).arg(presetNumber, 2, 16)).toUtf8());
+}
+
+void SystemSettingsFx::sendData(const QByteArray &data)
+{
+    if(m_owner) emit m_owner->sgWriteToInterface(data + "\r\n");
 }

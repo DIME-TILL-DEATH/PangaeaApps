@@ -30,7 +30,7 @@ class FswFx : public QObject
 
     Q_PROPERTY(QStringList ccNames READ ccNames CONSTANT)
 public:
-    explicit FswFx(quint8 num, QObject *parent = nullptr);
+    explicit FswFx(quint8 num, AbstractDevice *owner);
 
     enum FswMode
     {
@@ -96,6 +96,7 @@ signals:
 
 private:
     quint8 m_num;
+    AbstractDevice* m_owner;
 
     FswMode m_mode;
     FswType m_pressType;
@@ -106,6 +107,8 @@ private:
 
     quint8 m_pressPreset[4];
     quint8 m_holdPreset[4];
+
+    void sendData(const QByteArray& data);
 };
 
 typedef FswFx::FswMode FswMode;
