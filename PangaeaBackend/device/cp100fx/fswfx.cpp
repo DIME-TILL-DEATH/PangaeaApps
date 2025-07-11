@@ -40,6 +40,7 @@ void FswFx::setData(const TSystemSettingsFx &data)
     }
 
     emit paramsChanged();
+    emit fswTypeChanged();
 }
 
 void FswFx::setMode(FswMode newMode)
@@ -59,6 +60,7 @@ void FswFx::setPressType(FswType newPressType)
         return;
     m_pressType = newPressType;
     emit paramsChanged();
+    emit fswTypeChanged();
 
     sendData((QString("fsw %1 ptype %2").arg(m_num, 2, 16).arg(m_pressType, 2, 16)).toUtf8());
 }
@@ -69,6 +71,7 @@ void FswFx::setHoldType(FswType newHoldType)
         return;
     m_holdType = newHoldType;
     emit paramsChanged();
+    emit fswTypeChanged();
 
     sendData((QString("fsw %1 htype %2").arg(m_num, 2, 16).arg(m_holdType, 2, 16)).toUtf8());
 }

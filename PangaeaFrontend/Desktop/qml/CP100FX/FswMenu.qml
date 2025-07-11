@@ -1,19 +1,11 @@
-import QtQuick 2.15
-import QtQuick.Controls.Fusion
-import QtQuick.Dialogs
-import QtCore
-
-import QtQuick.Window 2.15
-
-import Elements 1.0
-import ModulesFX 1.0
-import StyleSettings 1.0
-import Layouts 1.0
-
-import CP100FX 1.0
-
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts
 
+import Elements
+import StyleSettings
+
+import CP100FX
 import CppObjects
 import PangaeaBackend
 

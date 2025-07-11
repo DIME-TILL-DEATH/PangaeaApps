@@ -41,6 +41,11 @@ class Cp100fx : public AbstractDevice
 
     Q_PROPERTY(QObjectList fsw READ fswList CONSTANT)
     Q_PROPERTY(SystemSettingsFx* systemSettings READ systemSettings CONSTANT)
+    Q_PROPERTY(QObjectList controller READ controller NOTIFY controllersChanged)
+
+    Q_PROPERTY(quint8 cntrlPcOut READ cntrlPcOut WRITE setCntrlPcOut NOTIFY cntrlPcOutChanged FINAL)
+    Q_PROPERTY(quint8 cntrlSet READ cntrlSet WRITE setCntrlSet NOTIFY cntrlSetChanged FINAL)
+    Q_PROPERTY(quint8 presetVolumeControl READ presetVolumeControl WRITE setPresetVolumeControl NOTIFY presetVolumeControlChanged FINAL)
 public:
     Cp100fx(Core *parent);
     ~Cp100fx();
@@ -104,6 +109,17 @@ public:
     QObjectList fswList() {return m_fswList;};
     SystemSettingsFx* systemSettings() {return &m_systemSettings;};
 
+    QObjectList controller() {return m_actualControllersList;};
+
+    quint8 cntrlPcOut() const {return actualPreset.cntrlPcOut();};
+    void setCntrlPcOut(quint8 newCntrlPcOut);
+
+    quint8 cntrlSet() const {return actualPreset.cntrlSet();};
+    void setCntrlSet(quint8 newCntrlSet);
+
+    quint8 presetVolumeControl() const {return actualPreset.presetData.volume_control;};
+    void setPresetVolumeControl(quint8 newPresetVolumeControl);
+
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
 
@@ -111,12 +127,18 @@ signals:
     void currentPresetNameChanged();
     void currentPresetCommentChanged();
     void systemSettingsChanged();
+    void controllersChanged();
+
+    void cntrlPcOutChanged();
+    void cntrlSetChanged();
+    void presetVolumeControlChanged();
 
 private:
     QList<PresetAbstract*> m_presetsList;
 
     SystemSettingsFx m_systemSettings{this};
     QObjectList m_fswList;
+    QObjectList m_actualControllersList;
 
     FswFx m_fswDown{0, this};
     FswFx m_fswConfirm{1, this};
@@ -142,6 +164,9 @@ private:
     void pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pcommentCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void cntrlPcOutCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void cntrlSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 };
 
 #endif // CP100FX_H

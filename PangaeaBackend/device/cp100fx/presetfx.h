@@ -3,6 +3,7 @@
 
 #include <QDebug>
 
+#include "controllerfx.h"
 #include "presetabstract.h"
 #include "hardwarefxpreset.h"
 
@@ -42,13 +43,19 @@ public:
     QList<ModuleType> activeModules() const {return m_activeModules;};
     QStringList strActiveModules() const;
 
-    preset_data_fx_t presetData() const;
+    preset_data_fx_t presetData;
     void setPresetData(const preset_data_fx_t &newPresetData);
+
+    TController controller[ControllerFx::controllersCount];
+
+    quint8 cntrlPcOut() const {return m_cntrlPcOut;};
+    void setCntrlPcOut(quint8 newCntrlPcOut);
+
+    quint8 cntrlSet() const {return m_cntrlSet;};
+    void setCntrlSet(quint8 newCntrlSet);
 
 private:
     AbstractDevice* m_ownerDevice;
-
-    preset_data_fx_t m_presetData;
 
     QString m_presetName;
     QString m_presetComment;
@@ -57,6 +64,9 @@ private:
     QString m_ir2Name;
 
     QList<ModuleType> m_activeModules;
+
+    quint8 m_cntrlPcOut;
+    quint8 m_cntrlSet;
 };
 
 #endif // PRESETFX_H

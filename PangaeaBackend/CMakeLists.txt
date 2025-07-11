@@ -111,6 +111,7 @@ qt_add_qml_module(PangaeaBackend
         modules/tremolo.h modules/tremolo.cpp
         modules/volume.h modules/volume.cpp
         modules/mastereq.h modules/mastereq.cpp
+        SOURCES device/cp100fx/controllerfx.h device/cp100fx/controllerfx.cpp
 )
 
 

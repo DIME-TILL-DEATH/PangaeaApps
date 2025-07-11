@@ -13,8 +13,8 @@ class FswFx : public QObject
     QML_UNCREATABLE("")
 
     Q_PROPERTY(FswMode mode READ mode WRITE setMode NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(FswType pressType READ pressType WRITE setPressType NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(FswType holdType READ holdType WRITE setHoldType NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(FswType pressType READ pressType WRITE setPressType NOTIFY fswTypeChanged FINAL)
+    Q_PROPERTY(FswType holdType READ holdType WRITE setHoldType NOTIFY fswTypeChanged FINAL)
     Q_PROPERTY(uint8_t controllerPressNum READ controllerPressNum WRITE setControllerPressNum NOTIFY paramsChanged FINAL)
     Q_PROPERTY(uint8_t controllerHoldNum READ controllerHoldNum WRITE setControllerHoldNum NOTIFY paramsChanged FINAL)
 
@@ -93,6 +93,7 @@ public:
 signals:
 
     void paramsChanged();
+    void fswTypeChanged();
 
 private:
     quint8 m_num;

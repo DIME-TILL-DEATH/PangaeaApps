@@ -16,7 +16,7 @@ PresetAbstract& PresetFx::operator=(const PresetAbstract& preset)
         {
             m_bankNumber = fxPreset->m_bankNumber;
             m_presetNumber = fxPreset->m_presetNumber;
-            m_presetData = fxPreset->m_presetData;
+            presetData = fxPreset->presetData;
 
             m_ownerDevice = fxPreset->m_ownerDevice;
             m_presetName = fxPreset->m_presetName;
@@ -24,6 +24,11 @@ PresetAbstract& PresetFx::operator=(const PresetAbstract& preset)
 
             m_ir1Name = fxPreset->ir1Name();
             m_ir2Name = fxPreset->ir2Name();
+
+            memcpy(controller, fxPreset->controller, sizeof(TController) * ControllerFx::controllersCount);
+
+            m_cntrlPcOut = fxPreset->cntrlPcOut();
+            m_cntrlSet = fxPreset->cntrlSet();
 
             m_activeModules = fxPreset->activeModules();
         }
@@ -120,14 +125,9 @@ QStringList PresetFx::strActiveModules() const
     return strList;
 }
 
-preset_data_fx_t PresetFx::presetData() const
-{
-    return m_presetData;
-}
-
 void PresetFx::setPresetData(const preset_data_fx_t &newPresetData)
 {
-    m_presetData = newPresetData;
+    presetData = newPresetData;
 
     m_activeModules.clear();
     if(newPresetData.switches.resonance_filter) m_activeModules.append(ModuleType::RF);
@@ -144,4 +144,14 @@ void PresetFx::setPresetData(const preset_data_fx_t &newPresetData)
     if(newPresetData.switches.early_reflections) m_activeModules.append(ModuleType::ER_STEREO);
     if(newPresetData.switches.reverb) m_activeModules.append(ModuleType::RV);
     if(newPresetData.switches.tremolo) m_activeModules.append(ModuleType::TR);
+}
+
+void PresetFx::setCntrlPcOut(quint8 newCntrlPcOut)
+{
+    m_cntrlPcOut = newCntrlPcOut;
+}
+
+void PresetFx::setCntrlSet(quint8 newCntrlSet)
+{
+    m_cntrlSet = newCntrlSet;
 }

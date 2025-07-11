@@ -276,7 +276,7 @@ Rectangle{
             }
         }
 
-        FswSystemMenu{
+        FswMenu{
             Layout.fillWidth: true
             Layout.fillHeight: true
 

@@ -18,16 +18,21 @@ Row{
 
     property int value: 40
 
+    property alias textWidth: _label.width
+    property alias barWidth: _barRect.width
+
     signal userChangedValue();
 
     MLabel{
         id: _label
-        width: parent.width/2
 
+        width: parent.width/2
         anchors.verticalCenter: parent.verticalCenter
     }
 
     Rectangle{
+        id: _barRect
+
         width: parent.width / 2
         height: parent.height
         anchors.verticalCenter: parent.verticalCenter
