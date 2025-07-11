@@ -79,7 +79,7 @@ public:
     EarlyReflections* getER() {return ER;};
     Delay *getDL() {return DL;};
 
-    QString currentPresetName() const;;
+    QString currentPresetName() const;
     void setCurrentPresetName(const QString &newCurrentPresetName);
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;

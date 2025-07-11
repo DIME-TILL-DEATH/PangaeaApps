@@ -20,6 +20,10 @@
 #include "delay.h"
 #include "reverb.h"
 #include "flanger.h"
+#include "mastereq.h"
+
+#include "fswfx.h"
+#include "systemsettingsfx.h"
 
 class Cp100fx : public AbstractDevice
 {
@@ -32,13 +36,21 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(Volume* phonesVolume READ phonesVolume CONSTANT)
     Q_PROPERTY(Volume* presetVolume READ presetVolume CONSTANT)
     Q_PROPERTY(Volume* attenuatorVolume READ attenuatorVolume CONSTANT)
+
+    Q_PROPERTY(MasterEq* masterEq READ masterEq CONSTANT)
+
+    Q_PROPERTY(QObjectList fsw READ fswList CONSTANT)
+    Q_PROPERTY(SystemSettingsFx* systemSettings READ systemSettings CONSTANT)
+    Q_PROPERTY(QObjectList controller READ controller NOTIFY controllersChanged)
+
+    Q_PROPERTY(quint8 cntrlPcOut READ cntrlPcOut WRITE setCntrlPcOut NOTIFY cntrlPcOutChanged FINAL)
+    Q_PROPERTY(quint8 cntrlSet READ cntrlSet WRITE setCntrlSet NOTIFY cntrlSetChanged FINAL)
+    Q_PROPERTY(quint8 presetVolumeControl READ presetVolumeControl WRITE setPresetVolumeControl NOTIFY presetVolumeControlChanged FINAL)
 public:
     Cp100fx(Core *parent);
     ~Cp100fx();
 
-    void updateOutputModeNames() override;
-
-    quint16 processingUsed() override;
+    QStringList strPresetNumbers() override;
 
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
@@ -74,6 +86,7 @@ public:
     EarlyReflections* ER;
     Reverb* RV;
     Flanger* FL;
+    MasterEq m_masterEq{this};
 
     Volume m_masterVolume{this, Volume::VolumeType::MasterFx};
     Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
@@ -85,11 +98,27 @@ public:
     Volume* presetVolume() {return &m_presetVolume;};
     Volume* attenuatorVolume() {return &m_attenuatorVolume;};
 
-    QString currentPresetName() const {return m_currentPresetName;};
+    MasterEq* masterEq() {return &m_masterEq;};
+
+    QString currentPresetName() const;
     void setCurrentPresetName(const QString &newCurrentPresetName);
 
-    QString currentPresetComment() const {return m_currentPresetComment;};
+    QString currentPresetComment() const;
     void setCurrentPresetComment(const QString &newCurrentPresetComment);
+
+    QObjectList fswList() {return m_fswList;};
+    SystemSettingsFx* systemSettings() {return &m_systemSettings;};
+
+    QObjectList controller() {return m_actualControllersList;};
+
+    quint8 cntrlPcOut() const {return actualPreset.cntrlPcOut();};
+    void setCntrlPcOut(quint8 newCntrlPcOut);
+
+    quint8 cntrlSet() const {return actualPreset.cntrlSet();};
+    void setCntrlSet(quint8 newCntrlSet);
+
+    quint8 presetVolumeControl() const {return actualPreset.presetData.volume_control;};
+    void setPresetVolumeControl(quint8 newPresetVolumeControl);
 
 public slots:
     QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
@@ -97,9 +126,23 @@ public slots:
 signals:
     void currentPresetNameChanged();
     void currentPresetCommentChanged();
+    void systemSettingsChanged();
+    void controllersChanged();
+
+    void cntrlPcOutChanged();
+    void cntrlSetChanged();
+    void presetVolumeControlChanged();
 
 private:
     QList<PresetAbstract*> m_presetsList;
+
+    SystemSettingsFx m_systemSettings{this};
+    QObjectList m_fswList;
+    QObjectList m_actualControllersList;
+
+    FswFx m_fswDown{0, this};
+    FswFx m_fswConfirm{1, this};
+    FswFx m_fswUp{2, this};
 
     PresetFx actualPreset{this};
     PresetFx savedPreset{this}; // TODO используется из листа
@@ -109,13 +152,21 @@ private:
 
     void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    void sysSettingsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void getPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    void ackPresetSavedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void plistCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void pnumCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void pcommentCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
-
-    QString m_currentPresetName;
-    QString m_currentPresetComment;
+    void cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void cntrlPcOutCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void cntrlSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 };
 
 #endif // CP100FX_H

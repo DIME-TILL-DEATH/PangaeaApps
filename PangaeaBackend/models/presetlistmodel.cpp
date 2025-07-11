@@ -1,6 +1,7 @@
 #include <QDebug>
 
 #include "presetlistmodel.h"
+#include "presetfx.h"
 
 PresetListModel::PresetListModel(QObject *parent)
     : QAbstractListModel{parent}
@@ -17,6 +18,7 @@ QHash<int, QByteArray> PresetListModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[ListRoles::PresetNameRole] = "presetName";
+    roles[ListRoles::PresetCommentRole] = "presetComment";
     roles[ListRoles::BankNumberRole] = "bankNumber";
     roles[ListRoles::PresetNumberRole] = "presetNumber";
     roles[ListRoles::PresetDeviceIndexRole] = "presetDeviceIndex";
@@ -24,6 +26,7 @@ QHash<int, QByteArray> PresetListModel::roleNames() const
     roles[ListRoles::ImpulseNameRole] = "impulseName";
     roles[ListRoles::isImpulseEmptyRole] = "isImpulseEmpty";
     roles[ListRoles::ImpulseEnabledRole] = "isImpulseEnabled";
+    roles[ListRoles::ActiveModulesRole] = "activeModules";
 
     return roles;
 }
@@ -47,6 +50,14 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
         {
             // return QVariant::fromValue("Preset " + QString().setNum(m_presetList->at(index.row()).presetNumber()) + ": " + m_presetList->at(index.row()).presetName());
             return QVariant::fromValue(m_presetList->at(index.row())->presetName());
+        }
+
+        case ListRoles::PresetCommentRole:
+        {
+            PresetFx* presetFx = dynamic_cast<PresetFx*>(m_presetList->at(index.row()));
+
+            if(presetFx) return QVariant::fromValue(presetFx->presetComment());
+            else return "";
         }
 
         case ListRoles::BankNumberRole:
@@ -78,6 +89,14 @@ QVariant PresetListModel::data(const QModelIndex &index, int role) const
         case ListRoles::ImpulseEnabledRole:
         {
             return QVariant::fromValue(m_presetList->at(index.row())->isIrEnabled());
+        }
+
+        case ListRoles::ActiveModulesRole:
+        {
+            PresetFx* presetFx = dynamic_cast<PresetFx*>(m_presetList->at(index.row()));
+
+            if(presetFx) return presetFx->strActiveModules();
+            else return "";
         }
 
         default:

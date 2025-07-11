@@ -8,23 +8,12 @@ qt_add_qml_module(qml_layouts
         Main.qml
         ConnectionLayout.qml
         CopyPaste.qml
-        HeadLegacy.qml
         MainMenu.qml
         MBusy.qml
         SaveCompare.qml
         StartLayout.qml
-        ControlLayoutLegacy.qml
-        ControlLayoutCPModern.qml
-        ControlLayoutCP100FX.qml
-        ModulesListModern.qml
-        ModulesConfigWindow.qml
-        HeadCPModern.qml
-        Map.qml
         BPeakingShelfControl.qml
         BCutControl.qml
         BPeakingControl.qml
-        IrManagerWindow.qml
-        HeadLA3.qml
-        HeadCP100FX.qml
         EqWindow.qml
 )

@@ -33,6 +33,17 @@ void AbstractDevice::setOutputMode(quint8 newOutputMode)
     emit sgWriteToInterface(QString("gm %1\r\n").arg(m_outputMode, 0, 16).toUtf8());
 }
 
+QStringList AbstractDevice::strPresetNumbers()
+{
+    QStringList numbers;
+
+    for(quint8 i=0; i < m_maxPresetCount; i++)
+    {
+        numbers.append(QString::number(i));
+    }
+    return numbers;
+}
+
 QList<QByteArray> AbstractDevice::parseAnswers(QByteArray &baAnswer)
 {
     QList<QByteArray> args;
