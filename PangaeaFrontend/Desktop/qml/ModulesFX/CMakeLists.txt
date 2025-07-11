@@ -19,4 +19,5 @@ qt_add_qml_module(qml_modules_fx
         ER.qml
         RV.qml
         TR.qml
+        MEQ.qml
     )

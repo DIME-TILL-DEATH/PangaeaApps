@@ -1,8 +1,12 @@
+import QtQuick 2.15
+
 import QtQuick
 import QtQuick.Controls
 
 import Elements
 import StyleSettings
+
+import Layouts
 
 import CppObjects
 import PangaeaBackend
@@ -25,14 +29,6 @@ Item
 
         Logo
         {
-            height: parent.height
-            width:  row.widthWithoutSpase/15*1
-        }
-
-        BankSpin
-        {
-            id: bank
-
             height: parent.height
             width:  row.widthWithoutSpase/15*1
         }
@@ -126,7 +122,6 @@ Item
                         width: parent.width/5
                         MText{
                             color: palette.text
-
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
@@ -145,7 +140,7 @@ Item
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
 
-                        color: palette.text
+                        color: Style.textEnabled
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
@@ -294,6 +289,87 @@ Item
 
             height: parent.height
             width:  row.widthWithoutSpase/15*1
+        }
+
+        Rectangle
+        {
+            color: Style.mainEnabledColor
+
+            height: parent.height
+            width:  row.widthWithoutSpase/15*1
+
+            Grid{
+                id: _laModeSelector
+
+                anchors.fill: parent
+
+                property bool isDeviceUpdatingValues: false
+                columns: 2
+                rows: 2
+
+                MText{
+                    width: parent.width/2
+                    height: parent.height/2
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    text: qsTr("CLN")
+                    color: "lightgreen"
+                }
+
+                ComboBox{
+                    id: clnCombo
+
+                    width: parent.width/2
+                    height: parent.height/2
+
+                    model: UiCore.currentDevice.maxPresetCount
+
+                    onActivated: {
+                        if(!_laModeSelector.isDeviceUpdatingValues){
+                            UiCore.currentDevice.setLa3Mappings(clnCombo.currentIndex, _dstCombo.currentIndex);
+                        }
+                    }
+                }
+
+                MText{
+                    width: parent.width/2
+                    height: parent.height/2
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
+                    text: qsTr("DST")
+                    color: "red"
+                }
+
+                ComboBox{
+                    id: _dstCombo
+                    width: parent.width/2
+                    height: parent.height/2
+
+                    model: UiCore.currentDevice.maxPresetCount
+
+                    onActivated: {
+                        if(!_laModeSelector.isDeviceUpdatingValues){
+                            UiCore.currentDevice.setLa3Mappings(clnCombo.currentIndex, _dstCombo.currentIndex);
+                        }
+                    }
+                }
+
+                Connections{
+                    target: UiCore.currentDevice
+
+                    function onPresetMapChanged()
+                    {
+                        _laModeSelector.isDeviceUpdatingValues = true;
+                        clnCombo.currentIndex = UiCore.currentDevice.clnPresetMap
+                        _dstCombo.currentIndex = UiCore.currentDevice.drvPresetMap
+                        _laModeSelector.isDeviceUpdatingValues = false;
+                    }
+                }
+            }
         }
 
         Button

@@ -7,7 +7,7 @@ Text
 {
    font.bold: true
    font.family: "Arial Black"
+   color: Style.textMain
 
    //renderType: Text.NativeRendering
-   color: Style.backgroundColor
 }

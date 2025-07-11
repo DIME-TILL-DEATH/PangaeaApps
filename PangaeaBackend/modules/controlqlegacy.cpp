@@ -18,7 +18,7 @@ void ControlQLegacy::setDisplayValue(double newDisplayValue)
     emit displayValueChanged();
 
 
-    quint8 controlValue =static_cast<qint8>(100 - powf((m_displayValue-0.225) * powf(200, 3)/5, 1.0/3.0));
+    quint8 controlValue = static_cast<qint8>(100 - powf((m_displayValue-0.225) * powf(200, 3)/5, 1.0/3.0));
 
     QString strValue;
     strValue.setNum(controlValue, 16);
@@ -44,6 +44,18 @@ void ControlQLegacy::setControlValue(qint32 value)
 {
 
     double resultValue = powf((200 - (value+100)), 3) * (5/powf(200, 3)) + 0.225;
+
+    // cp100fx
+    // if(num <= 30)
+    // {
+    //     a = num * 0.01f + 0.701f;
+    //     ksprintf(q_sym , "%2f" , a);
+    //     if(num == 30)ksprintf(q_sym , "%1f" , a);
+    // }
+    // else {
+    //     a = (num - 20) * 0.1f + 0.001f;
+    //     ksprintf(q_sym , "%1f" , a);
+    // }
 
     if(resultValue == m_displayValue) return;
 

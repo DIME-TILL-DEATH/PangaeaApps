@@ -20,12 +20,13 @@ Rectangle {
 
     property Component contentItem
     property int dialWidth: dialHeight
-    property int dialHeight: height
+    property int dialHeight: height //Math.min(height, width/10)
 
     width: parent.width
     height: parent.height
 
-    color: on ? Style.mainEnabledColor : Style.mainDisabledColor
+    // color: on ? Style.mainEnabledColor : Style.mainDisabledColor
+    color: Style.mainEnabledColor
 
     // property int simmetryElementsWidth: width/6
 
@@ -68,15 +69,15 @@ Rectangle {
                     position: _main.on ? 0.0 : 1.0
                     color: Style.mainEnabledColor
 
-                    Behavior on position {NumberAnimation{duration: 100}}
+                    Behavior on position {NumberAnimation{duration: 300}}
                 }
                 GradientStop{position: 1.0; color: Style.mainDisabledColor}
 
             }
 
-            radius: width/25
+            radius: width/10
             border.width: 1
-            border.color: _main.on ? Style.borderOn : Style.borderOff
+            border.color: _main.on ? Style.borderOn : Style.textDisabled
 
             Behavior on color {ColorAnimation{duration: 200}}
 
@@ -123,13 +124,14 @@ Rectangle {
 
             width: parent.width - _headerRect.width - _mainRow.spacing
             height: parent.height
-            color: _main.on ? Style.mainEnabledColor : Style.mainDisabledColor
+            // color: _main.on ? Style.mainEnabledColor : Style.mainDisabledColor
+            color: Style.mainEnabledColor
 
             clip: true
 
-            radius: _headerRect.radius
-            border.width: 1
-            border.color: _main.on ? Style.borderOn : Style.borderOff
+            // radius: _headerRect.radius
+            // border.width: 1
+            // border.color: _main.on ? Style.borderOn : Style.borderOff
 
             Item {
                 id: _contentItem

@@ -20,7 +20,13 @@ qt_add_qml_module(qml_elements
         MapHeadBank.qml
         MapHeadPreset.qml
         Material.qml
+        MBar.qml
         MButton.qml
+        MComboHorizontal.qml
+        MComboVertical.qml
+        MLabel.qml
+        MSwitchHorizontal.qml
+        MSwitchVertical.qml
         MText.qml
         PresetSpin.qml
         SignalBar.qml

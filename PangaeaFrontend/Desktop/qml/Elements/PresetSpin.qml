@@ -44,7 +44,7 @@ Item
                 width: parent.width
                 anchors.centerIn: parent.Center
 
-                model: UiCore.currentDevice.maxPresetCount
+                model: UiCore.currentDevice.strPresetNumbers //maxPresetCount
                 currentIndex: UiCore.currentDevice.preset
 
                 visibleItemCount: 1

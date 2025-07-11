@@ -24,4 +24,6 @@ void DualCabSim::setValues(const preset_data_fx_t &csData)
     m_secondCabVolume->setControlValue(csData.cab2.volume);
     m_secondCabPan->setControlValue(csData.cab2.pan);
     m_secondCabDelay->setControlValue(csData.cab2.delay);
+
+    emit dataChanged();
 }

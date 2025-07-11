@@ -54,13 +54,12 @@ BaseModule{
                 "6. California",
                 "7. British M",
                 "8. British L",
-                /*"Flat",
-                "Califonia modern",
-                "California vintage",
-                "PVH Presence 01",
-                "PVH Presence 02",
-                "PVH Presence 03",
-                "PVH Presence 04"*/]
+                "9. Flat",
+                "10. Califonia modern",
+                "11. California vintage",
+                "12. PVH PR0 RS0",
+                "13. PVH PR5 RS5",
+                "14. PVH PR8 RS7"]
         }
     }
 }

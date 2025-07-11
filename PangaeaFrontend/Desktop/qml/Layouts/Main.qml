@@ -7,6 +7,8 @@ import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 import Layouts 1.0
+import CP100FX 1.0
+import CP16 1.0
 
 import CppObjects
 import PangaeaBackend
@@ -19,10 +21,15 @@ ApplicationWindow
     width: Screen.width * 0.75
     height: width * 0.4
 
-    minimumWidth: width*0.75
-    minimumHeight: height*0.75
-    maximumWidth: width*1.25
-    maximumHeight: height*1.25
+    minimumWidth: Screen.width * 0.75 * 0.75
+    minimumHeight: Screen.width * 0.75 * 0.4 * 0.75
+    maximumWidth: Screen.width * 0.75 * 1.25
+    maximumHeight: Screen.width * 0.75 * 0.4 * 1.25
+
+    // minimumWidth: width*0.75
+    // minimumHeight: height*0.75
+    // maximumWidth: width*1.25
+    // maximumHeight: height*1.25
 
     // palette.highlight: "orange"
 
@@ -208,6 +215,8 @@ ApplicationWindow
             }
         }
 
+
+
         function onCurrentDeviceChanged(){
 
             console.log("Current device changed", UiCore.currentDevice.deviceType)
@@ -221,19 +230,19 @@ ApplicationWindow
             case DeviceType.LA3:
             case DeviceType.MODERN_CP:{
                 startUi.visible = false;
-                controlLayoutLoader.source = "/Layouts/ControlLayoutCPModern.qml";
+                controlLayoutLoader.source = "/CP16/ControlLayoutCPModern.qml";
                 break;
             }
 
             case DeviceType.CP100FX:{
                 startUi.visible = false;
-                controlLayoutLoader.source = "/Layouts/ControlLayoutCP100FX.qml";
+                controlLayoutLoader.source = "/CP100FX/ControlLayoutCP100FX.qml";
                 break;
             }
 
             default:{
                 startUi.visible = false;
-                controlLayoutLoader.source = "/Layouts/ControlLayoutLegacy.qml";
+                controlLayoutLoader.source = "/CP16/ControlLayoutLegacy.qml";
             }
             }
 

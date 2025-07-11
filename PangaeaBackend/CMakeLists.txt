@@ -32,23 +32,25 @@ qt_add_library(PangaeaBackend STATIC
 
     device/defines.h
 
+    device/abstractdevice.h device/abstractdevice.cpp
     device/deviceanswer.cpp device/deviceanswer.h
+    device/deviceparameter.h device/deviceparameter.cpp
     device/firmware.cpp device/firmware.h
     device/presetabstract.h device/presetabstract.cpp
-    device/presetlegacy.cpp device/presetlegacy.h
-    device/presetmodern.h device/presetmodern.cpp
-    device/presetfx.h device/presetfx.cpp
     device/irfile.h device/irfile.cpp
-    device/deviceparameter.h device/deviceparameter.cpp
-    device/abstractdevice.h device/abstractdevice.cpp
-    device/cplegacy.h device/cplegacy.cpp
-    device/cpmodern.h device/cpmodern.cpp
-    device/lapreamp.h device/lapreamp.cpp
-    device/cp100fx.h device/cp100fx.cpp
+    device/cp/presetlegacy.cpp device/cp/presetlegacy.h
+    device/cp/presetmodern.h device/cp/presetmodern.cpp
+    device/cp/cplegacy.h device/cp/cplegacy.cpp
+    device/cp/cpmodern.h device/cp/cpmodern.cpp
+    device/cp/lapreamp.h device/cp/lapreamp.cpp
+    device/cp100fx/cp100fx.h device/cp100fx/cp100fx.cpp
+    device/cp100fx/presetfx.h device/cp100fx/presetfx.cpp
+    device/cp100fx/fswfx.h device/cp100fx/fswfx.cpp
+    device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
 
-    device/hardwareclassicpreset.h
-    device/hardwareclassicpreset.cpp
-    device/hardwarefxpreset.h
+    device/cp/hardwareclassicpreset.h
+    device/cp/hardwareclassicpreset.cpp
+    device/cp100fx/hardwarefxpreset.h
 
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
@@ -108,12 +110,16 @@ qt_add_qml_module(PangaeaBackend
         modules/resonancefilter.h modules/resonancefilter.cpp
         modules/tremolo.h modules/tremolo.cpp
         modules/volume.h modules/volume.cpp
+        modules/mastereq.h modules/mastereq.cpp
+        SOURCES device/cp100fx/controllerfx.h device/cp100fx/controllerfx.cpp
 )
 
 
 target_include_directories(PangaeaBackend PUBLIC
     cores
     device
+    device/cp100fx
+    device/cp
     interfaces
     mock
     modules
