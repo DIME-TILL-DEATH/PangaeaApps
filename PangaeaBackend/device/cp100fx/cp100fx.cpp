@@ -102,11 +102,15 @@ void Cp100fx::readFullState()
     m_presetManager.setCurrentState(PresetState::Changing);
 
     emit sgPushCommandToQueue("amtver");
-    emit sgPushCommandToQueue("plist");
+
+    pushReadPresetCommands();
+
     emit sgPushCommandToQueue("sys_settings");
+    emit sgPushCommandToQueue("plist");
+
     // emit sgPushCommandToQueue("ls ir_library");
     // emit sgPushCommandToQueue("gm");
-    pushReadPresetCommands();
+
 
     emit sgProcessCommands();
 }
@@ -338,7 +342,7 @@ void Cp100fx::plistCommHandler(const QString &command, const QByteArray &argumen
         QString presetName, presetComment, ir1Name, ir2Name;
         quint8 strPnum;
 
-        if(separatedArgs.size()<5)
+        if(separatedArgs.size()<6)
         {
             qWarning() << "incorrect list record format: " << *it;
             delete(currentListPreset);
@@ -356,7 +360,6 @@ void Cp100fx::plistCommHandler(const QString &command, const QByteArray &argumen
         currentListPreset->setPresetComment(presetComment);
         currentListPreset->setIr1Name(ir1Name);
         currentListPreset->setIr2Name(ir2Name);
-
 
         currentListPreset->setActiveModules(separatedArgs.at(5).toUtf8());
 

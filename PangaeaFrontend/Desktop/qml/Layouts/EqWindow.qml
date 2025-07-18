@@ -12,8 +12,15 @@ Window{
     id: main
 
     property EqParametric module
-
     property bool on: module.moduleEnabled
+
+    width: Screen.width * 0.3
+    height: width * 0.5
+
+    minimumWidth: Screen.width * 0.3 * 0.75
+    minimumHeight: Screen.width * 0.3 * 0.5 * 0.75
+    maximumWidth: Screen.width * 0.3 * 1.25
+    maximumHeight: Screen.width * 0.3 * 0.5 * 1.25
 
     Rectangle{
         id: _eqp
