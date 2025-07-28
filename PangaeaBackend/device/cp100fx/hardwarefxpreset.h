@@ -201,26 +201,50 @@ typedef struct
     uint8_t eq_pre_post;
 
     uint16_t delay_time;
-    //uint8_t delay_time_hi;  //+ BYTE
-    //uint8_t delay_time_lo;  //+ BYTE
 
     uint8_t phaser_pre_post;
     uint8_t flanger_pre_post;
 
-    uint8_t reverb_predelay;    //??????
+    uint8_t reverb_predelay;
 
-    uint8_t foot_ind1[3]; // /*foot ind*/fo1,fo2,fo3
-    uint8_t foot_ind2[3]; // /*foot ind*/fo11,fo12,fo13
+    uint8_t foot_ind1[3];
+    uint8_t foot_ind2[3];
 
-    uint8_t tremolo_lfo_type;   //+ ????
+    uint8_t tremolo_lfo_type;
 
-    uint8_t delay_tail;         //+
-    uint8_t reverb_tail;        //????
+    uint8_t delay_tail;
+    uint8_t reverb_tail;
 
     uint8_t dummy2[350];
 
     uint8_t bpm_delay;
+}modules_data_fx_t;
+
+typedef struct
+{
+    uint8_t src;
+    uint8_t dst;
+    uint8_t minVal;
+    uint8_t maxVal;
+}controller_fx_t;
+
+const uint8_t ControllersCount = 32;
+
+typedef struct
+{
+    uint8_t name[15];
+    uint8_t comment[15];
+
+    modules_data_fx_t modules;
+
+    controller_fx_t controller[ControllersCount];
+
+    uint8_t dummyFill[512 - sizeof(controller_fx_t) * ControllersCount - 2];
+
+    uint8_t pcOut;
+    uint8_t set;
 }preset_data_fx_t;
+
 #pragma pack(pop)
 
 #endif // HARDWAREFXPRESET_H

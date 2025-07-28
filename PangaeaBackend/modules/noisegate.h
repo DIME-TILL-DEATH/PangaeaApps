@@ -30,7 +30,7 @@ public:
 
     void setValues(const preset_data_cplegacy_t& ngData) override;
     void setValues(const preset_data_cpmodern_t& ngData) override;
-    void setValues(const preset_data_fx_t &ngData) override;
+    void setValues(const modules_data_fx_t &ngData) override;
 
     ControlValue *threshold() {return m_threshold;};
     ControlValue *attack() {return m_attack;};

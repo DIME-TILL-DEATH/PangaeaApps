@@ -58,7 +58,7 @@ void PowerAmp::setValues(const preset_data_cpmodern_t& paData)
     emit dataChanged();
 }
 
-void PowerAmp::setValues(const preset_data_fx_t& paData)
+void PowerAmp::setValues(const modules_data_fx_t& paData)
 {
     m_moduleEnabled = paData.switches.amp;
 

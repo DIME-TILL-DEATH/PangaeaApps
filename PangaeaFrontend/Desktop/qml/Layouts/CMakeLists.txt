@@ -16,4 +16,6 @@ qt_add_qml_module(qml_layouts
         BCutControl.qml
         BPeakingControl.qml
         EqWindow.qml
+        MapList.qml
+        QML_FILES MapTable.qml
 )

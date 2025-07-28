@@ -30,7 +30,7 @@ public:
     Phaser(AbstractDevice *owner, PhaserType phaserType = PhaserType::FX);
 
     void setValues(const preset_data_cpmodern_t& phData) override;
-    void setValues(const preset_data_fx_t &phData) override;
+    void setValues(const modules_data_fx_t &phData) override;
 
     ControlValue *mix() const;
     ControlValue *rate() const;

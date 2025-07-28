@@ -16,7 +16,7 @@ Flanger::Flanger(AbstractDevice *owner)
     m_position = new ControlValue(this, "fl_pp", "Position");
 }
 
-void Flanger::setValues(const preset_data_fx_t& flData)
+void Flanger::setValues(const modules_data_fx_t& flData)
 {
     m_moduleEnabled = flData.switches.flanger;
 

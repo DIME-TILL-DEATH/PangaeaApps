@@ -50,7 +50,7 @@ void Compressor::setValues(const preset_data_cpmodern_t &cmData)
     emit dataChanged();
 }
 
-void Compressor::setValues(const preset_data_fx_t& cmData)
+void Compressor::setValues(const modules_data_fx_t& cmData)
 {
     m_moduleEnabled = cmData.switches.compressor;
 

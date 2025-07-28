@@ -149,7 +149,7 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    text: "Swap UpConf: "
+                    text: "Swap FSW: "
 
                     currentIndex: UiCore.currentDevice.systemSettings.swapConf
                     model: ["Off", "On"]
@@ -197,7 +197,7 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    text: "Expression pedal: "
+                    text: "Expr. pedal: "
 
                     checked: UiCore.currentDevice.systemSettings.exprOn
 
@@ -309,7 +309,7 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    ComboBox{
+                    MComboHorizontal{
                         id: _comboPcChoice
 
                         Layout.preferredWidth: parent.width/3
@@ -337,7 +337,7 @@ Rectangle{
                         text: "->"
                     }
 
-                    ComboBox{
+                    MComboHorizontal{
                         id: _comboPresetChoice
 
                         Layout.fillWidth: true

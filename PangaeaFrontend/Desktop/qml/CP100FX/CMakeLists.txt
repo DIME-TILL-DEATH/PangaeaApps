@@ -8,7 +8,6 @@ qt_add_qml_module(qml_cp100fx
 
         ControlLayoutCP100FX.qml
         HeadCP100FX.qml
-        MapFx.qml
         PresetViewFx.qml
         SystemViewFx.qml
         FswMenu.qml

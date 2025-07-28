@@ -57,7 +57,7 @@ void Delay::setValues(const preset_data_cpmodern_t &dlData)
     emit dataChanged();
 }
 
-void Delay::setValues(const preset_data_fx_t& dlData)
+void Delay::setValues(const modules_data_fx_t& dlData)
 {
     m_moduleEnabled = dlData.switches.delay;
 

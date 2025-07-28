@@ -37,7 +37,7 @@ public:
 
     void setValues(const preset_data_cplegacy_t& erData) override;
     void setValues(const preset_data_cpmodern_t& erData) override;
-    void setValues(const preset_data_fx_t &erData) override;
+    void setValues(const modules_data_fx_t &erData) override;
 
     quint16 processingTime() const override;
     quint8 processingTimeMono() {return m_processingTimeMono;};

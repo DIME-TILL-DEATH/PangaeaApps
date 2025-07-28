@@ -165,6 +165,8 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
+            anchors.verticalCenter: parent.verticalCenter
+
             text: qsTr("MAP")
 
             onClicked: {
@@ -209,8 +211,87 @@ Item
         }
     }
 
-    MapFx{
+    MapList{
         id: map
 
+        delegate: Rectangle{
+            width: map.width*0.9
+            height: map.height/10
+            radius: height/10
+
+            border.width: index === map.currentIndex ? 4 : 2
+            border.color: index === map.currentIndex ? Style.highlightColor : Style.textEnabled
+
+            color: Style.barLow
+
+            MouseArea{
+                anchors.fill: parent
+                z: 10
+
+                onClicked: {
+                    UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, index);
+                }
+            }
+
+            Row{
+                width: parent.width*0.95
+                height: parent.height*0.95
+                anchors.centerIn: parent
+
+                Column{
+                    height: parent.height
+                    width: parent.width/2
+                    MText{
+                        width: parent.width
+                        height: parent.height/2
+                        text: (presetNumber*1 + 1)  + ". " + presetName
+
+                        elide: Text.ElideMiddle
+                    }
+
+                    MText{
+                        width: parent.width
+                        height: parent.height/2
+                        text: presetComment
+
+                        elide: Text.ElideMiddle
+                    }
+                }
+
+                GridView{
+                    id: _modulesGridView
+
+                    height: parent.height * 0.85
+                    width: parent.width/2
+
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    cellWidth: width/7
+                    cellHeight: height/2
+
+                    model: activeModules
+
+                    delegate: Rectangle{
+                        width: _modulesGridView.cellWidth * 0.9
+                        height: _modulesGridView.cellHeight * 0.9
+
+                        color: "transparent"
+
+                        border.width: 1
+                        border.color: Style.borderOn
+
+                        MText{
+                            anchors.fill: parent
+                            text: modelData
+
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+
+                            font.pixelSize: parent.height/2
+                        }
+                    }
+                }
+            }
+        }
     }
 }

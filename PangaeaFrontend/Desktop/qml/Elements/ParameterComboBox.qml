@@ -13,8 +13,8 @@ Item{
 
     property bool moduleOn
     required property ControlValue ctrlValInstance
-    property alias model: _comboBox.model
-    property alias currentIndex: _comboBox.currentIndex
+    property alias model: _combo.model
+    property alias currentIndex: _combo.currentIndex
 
     Column{
         anchors.fill: parent
@@ -45,7 +45,7 @@ Item{
 
         ComboBox
         {
-            id: _comboBox
+            id: _combo
 
             property bool deviceUpdatingValues: false
 
@@ -64,15 +64,68 @@ Item{
                     ctrlValInstance.displayValue = currentIndex;
             }
 
+            background: Rectangle {
+                 implicitWidth: 120
+                 implicitHeight: 30
+
+                 // y: _combo.height * (1 - 0.8)
+
+                 border.color: Style.borderOn
+                 border.width: _combo.visualFocus ? 2 : 1
+                 radius: 2
+
+                 color: Style.backgroundColor
+             }
+
+            popup: Popup {
+                y: _combo.height
+                width: _combo.width
+                height: Math.min(contentItem.implicitHeight + topMargin + bottomMargin, _combo.Window.height - topMargin - bottomMargin)
+
+                topMargin: 6
+                bottomMargin: 6
+
+                contentItem: ListView {
+                    clip: true
+                    implicitHeight: contentHeight
+                    model: _combo.delegateModel
+                    currentIndex: _combo.highlightedIndex
+
+                    ScrollBar.vertical: ScrollBar {
+                        id: sbControl
+                        // size: 0.3
+                        position: 0.2
+                        active: true
+                        orientation: Qt.Vertical
+
+                        contentItem: Rectangle {
+                            implicitWidth: 6
+                            implicitHeight: 100
+                            radius: width / 2
+                            color: Style.barHigh
+
+                            opacity: sbControl.policy === ScrollBar.AlwaysOn || (sbControl.size < 1.0) ? 1 : 0
+                        }
+                    }
+                }
+
+                background: Rectangle {
+                    border.width: 1
+                    radius: 2
+
+                    color: Style.backgroundColor
+                }
+            }
+
 
             Connections{
                 target: UiCore.currentDevice
 
                 function onDeviceUpdatingValues()
                 {
-                    _comboBox.deviceUpdatingValues = true;
-                    _comboBox.currentIndex = ctrlValInstance.displayValue;
-                    _comboBox.deviceUpdatingValues = false;
+                    _combo.deviceUpdatingValues = true;
+                    _combo.currentIndex = ctrlValInstance.displayValue;
+                    _combo.deviceUpdatingValues = false;
                 }
             }
         }

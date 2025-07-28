@@ -56,22 +56,22 @@ void Preamp::setValues(const preset_data_cpmodern_t &preData)
 
     m_volume->setControlValue(preData.preamp.volume);
 
-    m_low->setControlValue((qint8)preData.preamp.low);
-    m_mid->setControlValue((qint8)preData.preamp.mid);
-    m_high->setControlValue((qint8)preData.preamp.high);
+    m_low->setControlValue(static_cast<int8_t>(preData.preamp.low));
+    m_mid->setControlValue(static_cast<int8_t>(preData.preamp.mid));
+    m_high->setControlValue(static_cast<int8_t>(preData.preamp.high));
 
     emit dataChanged();
 }
 
-void Preamp::setValues(const preset_data_fx_t& prData)
+void Preamp::setValues(const modules_data_fx_t& prData)
 {
     m_moduleEnabled = prData.switches.preamp;
 
     m_gain->setControlValue(prData.preamp.gain);
     m_volume->setControlValue(prData.preamp.volume);
-    m_low->setControlValue((qint8)prData.preamp.low);
-    m_mid->setControlValue((qint8)prData.preamp.mid);
-    m_high->setControlValue((qint8)prData.preamp.high);
+    m_low->setControlValue(static_cast<int8_t>(prData.preamp.low));
+    m_mid->setControlValue(static_cast<int8_t>(prData.preamp.mid));
+    m_high->setControlValue(static_cast<int8_t>(prData.preamp.high));
 
     emit dataChanged();
 }

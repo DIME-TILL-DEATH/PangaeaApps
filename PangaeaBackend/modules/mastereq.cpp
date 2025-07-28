@@ -15,9 +15,9 @@ void MasterEq::setValues(const TSystemSettingsFx &sysSettings)
 {
     m_moduleEnabled = sysSettings.masterEqOn;
 
-    m_lowGain->setControlValue(sysSettings.masterEqLow);
-    m_midGain->setControlValue(sysSettings.masterEqMid);
-    m_highGain->setControlValue(sysSettings.masterEqHigh);
+    m_lowGain->setControlValue(static_cast<int8_t>(sysSettings.masterEqLow));
+    m_midGain->setControlValue(static_cast<int8_t>(sysSettings.masterEqMid));
+    m_highGain->setControlValue(static_cast<int8_t>(sysSettings.masterEqHigh));
 
     m_midFrequency->setControlValue(qFromBigEndian(sysSettings.masterEqFreq));
 

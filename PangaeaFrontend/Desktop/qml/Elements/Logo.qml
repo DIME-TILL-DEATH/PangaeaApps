@@ -28,6 +28,7 @@ Item
                 case DeviceType.LEGACY_CP16PA: return "qrc:/Images/cp_16m_pa.svg";
                 case DeviceType.MODERN_CP: return "qrc:/Images/cp_16m_modern.svg";
                 case DeviceType.LA3: return "qrc:/Images/cp_16m_la3_light.svg";
+                case DeviceType.CP100FX: return "qrc:/Images/cp_100_fx.svg";
                 default: ""
             }
         }

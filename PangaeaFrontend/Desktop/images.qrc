@@ -16,5 +16,7 @@
         <file>Images/cp_16m_la3_light.svg</file>
         <file>Images/cp_16m_modern.svg</file>
         <file>Images/pedal.svg</file>
+        <file>Images/cp_100_fx.svg</file>
+        <file>Images/ultima_u2.svg</file>
     </qresource>
 </RCC>

@@ -14,7 +14,7 @@ DualCabSim::DualCabSim(AbstractDevice *owner)
     m_secondCabDelay = new ControlValue(this, "ir_d2", "Delay", "", 0, 127, 0, 127);
 }
 
-void DualCabSim::setValues(const preset_data_fx_t &csData)
+void DualCabSim::setValues(const modules_data_fx_t &csData)
 {
     m_moduleEnabled = csData.switches.cab;
 

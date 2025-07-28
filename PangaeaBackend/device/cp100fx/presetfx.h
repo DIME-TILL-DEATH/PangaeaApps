@@ -16,8 +16,8 @@ public:
 
     PresetAbstract& operator=(const PresetAbstract& preset) override;
 
-    static preset_data_fx_t charsToPresetData(const QByteArray& ba);
-    static QByteArray presetDataToChars(const preset_data_fx_t& presetData);
+    static modules_data_fx_t charsToPresetData(const QByteArray& ba);
+    static QByteArray presetDataToChars(const modules_data_fx_t& presetData);
 
     quint8 getPresetFlatNumber() const override {return m_presetNumber;};
 
@@ -43,10 +43,10 @@ public:
     QList<ModuleType> activeModules() const {return m_activeModules;};
     QStringList strActiveModules() const;
 
-    preset_data_fx_t presetData;
-    void setPresetData(const preset_data_fx_t &newPresetData);
+    modules_data_fx_t presetData;
+    void setPresetData(const modules_data_fx_t &newPresetData);
 
-    TController controller[ControllerFx::controllersCount];
+    controller_fx_t controller[ControllersCount];
 
     quint8 cntrlPcOut() const {return m_cntrlPcOut;};
     void setCntrlPcOut(quint8 newCntrlPcOut);
@@ -54,8 +54,12 @@ public:
     quint8 cntrlSet() const {return m_cntrlSet;};
     void setCntrlSet(quint8 newCntrlSet);
 
+    static constexpr uint16_t CabinetSize = 4096 * 3;
+
 private:
     AbstractDevice* m_ownerDevice;
+
+    QList<ModuleType> m_activeModules;
 
     QString m_presetName;
     QString m_presetComment;
@@ -63,10 +67,8 @@ private:
     QString m_ir1Name;
     QString m_ir2Name;
 
-    QList<ModuleType> m_activeModules;
-
     quint8 m_cntrlPcOut;
-    quint8 m_cntrlSet;
+    quint8 m_cntrlSet; 
 };
 
 #endif // PRESETFX_H

@@ -44,7 +44,7 @@ void EarlyReflections::setValues(const preset_data_cpmodern_t &erData)
     emit dataChanged();
 }
 
-void EarlyReflections::setValues(const preset_data_fx_t& erData)
+void EarlyReflections::setValues(const modules_data_fx_t& erData)
 {
     m_moduleEnabled = erData.switches.early_reflections;
 

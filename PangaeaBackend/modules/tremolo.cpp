@@ -57,7 +57,7 @@ void Tremolo::setValues(const preset_data_cpmodern_t &trData)
     emit dataChanged();
 }
 
-void Tremolo::setValues(const preset_data_fx_t& trData)
+void Tremolo::setValues(const modules_data_fx_t& trData)
 {
     m_moduleEnabled = trData.switches.tremolo;
 

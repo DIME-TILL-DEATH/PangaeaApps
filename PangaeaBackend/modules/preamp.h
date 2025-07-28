@@ -34,7 +34,7 @@ public:
 
     void setValues(const preset_data_cplegacy_t& prData) override;
     void setValues(const preset_data_cpmodern_t& prData) override;
-    void setValues(const preset_data_fx_t &prData) override;
+    void setValues(const modules_data_fx_t &prData) override;
 
     ControlValue* gain() {return m_gain;};
     ControlValue* volume() {return m_volume;};

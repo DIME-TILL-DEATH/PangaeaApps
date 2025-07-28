@@ -25,7 +25,7 @@ public:
     Tremolo(AbstractDevice *owner);
 
     void setValues(const preset_data_cpmodern_t& trData) override;
-    void setValues(const preset_data_fx_t &trData) override;
+    void setValues(const modules_data_fx_t &trData) override;
 
     ControlValue *depth() const;
     ControlValue *rate() const;

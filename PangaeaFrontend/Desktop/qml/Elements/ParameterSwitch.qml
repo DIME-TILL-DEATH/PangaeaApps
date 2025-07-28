@@ -71,9 +71,9 @@ Item{
 
                 function onDeviceUpdatingValues()
                 {
-                    _comboBox.deviceUpdatingValues = true;
-                    _comboBox.currentIndex = ctrlValInstance.displayValue;
-                    _comboBox.deviceUpdatingValues = false;
+                    _switch.deviceUpdatingValues = true;
+                    _switch.value = ctrlValInstance.displayValue;
+                    _switch.deviceUpdatingValues = false;
                 }
             }
         }

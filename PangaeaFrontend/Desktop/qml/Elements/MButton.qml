@@ -17,10 +17,15 @@ Item
 
     Rectangle
     {
+        id: _rectangle
+
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter:  parent.verticalCenter
         width:  parent.width/1.3
         height: parent.height/1.3 //width/2
+
+        border.width: 1
+        border.color: Style.mainEnabledColor
 
         radius: height/2
         color:  main.highlighted ? highlightColor : Style.backgroundColor
@@ -36,6 +41,9 @@ Item
                 id: colorRect
                 color: "grey"
                 opacity: 0.3
+
+                radius: main.height/2
+
                 transform: Translate
                 {
                     x: -colorRect.width / 2
@@ -47,7 +55,7 @@ Item
             {
                 id: circleAnimation
                 target: colorRect
-                properties: "width,height,radius"
+                properties: "width,height"//",radius"
                 from: 0
                 to: main.width
                 duration: 400

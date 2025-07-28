@@ -385,8 +385,53 @@ Item
         }
     }
 
-    Map{
+    MapList{
         id: map
 
+        delegate: Rectangle{
+            width: map.width * 0.9
+            height: map.height / 10
+            radius: height / 10
+
+            border.width: index === map.currentIndex ? 4 : 2
+            border.color: index === map.currentIndex ? Style.highlightColor : Style.textEnabled
+
+            color: Style.barLow
+
+            MouseArea{
+                anchors.fill: parent
+                z: 10
+
+                onClicked: {
+                    UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, index);
+                }
+            }
+
+            Row{
+                width: parent.width*0.95
+                height: parent.height*0.95
+                anchors.centerIn: parent
+
+                Column{
+                    height: parent.height
+                    width: parent.width/2
+                    MText{
+                        width: parent.width
+                        height: parent.height/2
+                        text: presetNumber  + ". " + presetName
+
+                        elide: Text.ElideMiddle
+                    }
+
+                    MText{
+                        width: parent.width
+                        height: parent.height/2
+                        text: "IR name: " + impulseName
+
+                        elide: Text.ElideMiddle
+                    }
+                }
+            }
+        }
     }
 }

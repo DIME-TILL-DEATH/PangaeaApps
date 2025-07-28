@@ -31,7 +31,7 @@ public:
 
     void setValues(const preset_data_cplegacy_t& paData) override;
     void setValues(const preset_data_cpmodern_t& paData) override;
-    void setValues(const preset_data_fx_t &paData) override;
+    void setValues(const modules_data_fx_t &paData) override;
 
     ControlValue* volume() {return m_volume;};
     ControlValue* presence() {return m_presence;};

@@ -47,7 +47,7 @@ void NoiseGate::setValues(const preset_data_cpmodern_t &ngData)
     emit dataChanged();
 }
 
-void NoiseGate::setValues(const preset_data_fx_t& ngData)
+void NoiseGate::setValues(const modules_data_fx_t& ngData)
 {
     m_moduleEnabled = ngData.switches.gate;
 

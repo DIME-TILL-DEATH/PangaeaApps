@@ -43,7 +43,7 @@ void Phaser::setValues(const preset_data_cpmodern_t &phData)
     emit dataChanged();
 }
 
-void Phaser::setValues(const preset_data_fx_t& phData)
+void Phaser::setValues(const modules_data_fx_t& phData)
 {
     m_moduleEnabled = phData.switches.phaser;
 

@@ -47,7 +47,7 @@ public:
 
     virtual void setValues(const preset_data_cplegacy_t &prData) {};
     virtual void setValues(const preset_data_cpmodern_t &prData) {};
-    virtual void setValues(const preset_data_fx_t &prData) {};
+    virtual void setValues(const modules_data_fx_t &prData) {};
 
 signals:
     void dataChanged();

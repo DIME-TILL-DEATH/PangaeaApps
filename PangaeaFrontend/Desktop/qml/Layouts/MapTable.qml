@@ -16,6 +16,11 @@ Window
 
     property int maxMapRow: Math.max(UiCore.currentDevice.maxBankCount, UiCore.currentDevice.maxPresetCount)
 
+    property alias delegate: _mapGrid.delegate
+    property alias currentIndex: _mapGrid.currentIndex
+    property alias cellWidth: _mapGrid.cellWidth
+    property alias cellHeight: _mapGrid.cellHeight
+
     title: qsTr("Preset map")
 
     Rectangle
@@ -93,14 +98,14 @@ Window
 
                     // model: UiCore.currentDevice.presetListModel
 
-                    delegate: MapDelegate{
-                        id: _root
+                    // delegate: MapDelegate{
+                    //     id: _root
 
-                        width: _mapGrid.cellWidth
-                        height: _mapGrid.cellHeight
+                    //     width: _mapGrid.cellWidth
+                    //     height: _mapGrid.cellHeight
 
-                        currentIndex: _mapGrid.currentIndex
-                    }
+                    //     currentIndex: _mapGrid.currentIndex
+                    // }
                 }
             }
         }

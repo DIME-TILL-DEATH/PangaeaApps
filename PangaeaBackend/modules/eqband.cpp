@@ -62,6 +62,7 @@ EqBand::EqBand(EqParametric *ownerModule, FilterType bandType, double fStart, do
                 m_Fc = new ControlValue(ownerModule, "hp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
                 m_gain = new ControlValue(ownerModule, "");
                 m_Q = new ControlQLegacy(ownerModule, "");
+                m_enabled = true;
                 break;
             }
 
@@ -70,6 +71,7 @@ EqBand::EqBand(EqParametric *ownerModule, FilterType bandType, double fStart, do
                 m_Fc = new ControlValue(ownerModule, "lp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
                 m_gain = new ControlValue(ownerModule, "");
                 m_Q = new ControlQLegacy(ownerModule, "");
+                m_enabled = true;
                 break;
             }
             default:

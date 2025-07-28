@@ -19,7 +19,7 @@ Reverb::Reverb(AbstractDevice *owner)
     m_tail = new ControlValue(this, "rv_tl", "Tail");
 }
 
-void Reverb::setValues(const preset_data_fx_t &rvData)
+void Reverb::setValues(const modules_data_fx_t &rvData)
 {
     m_moduleEnabled = rvData.switches.reverb;
 

@@ -29,7 +29,7 @@ class ResonanceFilter : public AbstractModule
 public:
     explicit ResonanceFilter(AbstractDevice *owner);
 
-    void setValues(const preset_data_fx_t &rfData) override;
+    void setValues(const modules_data_fx_t &rfData) override;
 
     ControlValue *mix() {return m_mix;};
     ControlValue *fType() {return m_fType;};

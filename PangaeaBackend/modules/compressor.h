@@ -33,7 +33,7 @@ public:
 
     void setValues(const preset_data_cplegacy_t& presetData) override;
     void setValues(const preset_data_cpmodern_t &cmData) override;
-    void setValues(const preset_data_fx_t &cmData) override;
+    void setValues(const modules_data_fx_t &cmData) override;
 
     ControlValue *sustain() {return m_sustain;};
     ControlValue *volume() {return m_volume;};    

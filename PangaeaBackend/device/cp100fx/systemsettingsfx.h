@@ -96,7 +96,9 @@ typedef struct
 
     quint8 midiPcInd;
 
-    quint8 reserved1[3];
+    quint8 reserved1[2];
+
+    quint8 lastPresetNum;
 
     quint8 fswMode[3];
     quint8 fswHoldType[3];
@@ -118,10 +120,10 @@ typedef struct
     quint8 reserved2[59];
 
     quint8 masterEqOn;
-    qint8 masterEqLow;
-    qint8 masterEqMid;
+    quint8 masterEqLow;
+    quint8 masterEqMid;
     quint8 dummy;
-    qint8 masterEqHigh;
+    quint8 masterEqHigh;
 
     quint8 phonesVolume;
     quint8 masterVolume;

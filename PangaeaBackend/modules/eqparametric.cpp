@@ -232,7 +232,7 @@ void EqParametric::setValues(const preset_data_cpmodern_t& presetData)
     emit dataChanged();
 }
 
-void EqParametric::setValues(const preset_data_fx_t &eqData)
+void EqParametric::setValues(const modules_data_fx_t &eqData)
 {
     m_moduleEnabled = eqData.switches.eq;
 
@@ -243,16 +243,16 @@ void EqParametric::setValues(const preset_data_fx_t &eqData)
         eqBand->setRawBandParams(FilterType::PEAKING,
                                  eqData.eq_gain[i],
                                  static_cast<int8_t>(eqData.eq_freq[i]),
-                                 eqData.eq_q[i]);
+                                  static_cast<int8_t>(eqData.eq_q[i]));
 
         // qDebug() << "Band Q value" << i << static_cast<int8_t>(eqData.eq_q[i]);
     }
 
-    if(m_eqMode != EqMode::Legacy)
-    {
-        m_hpf->setRawBandParams(FilterType::LOW_CUT, 0, eqData.hpf, 1, m_moduleEnabled);
-        m_lpf->setRawBandParams(FilterType::HIGH_CUT, 0, eqData.lpf, 1, m_moduleEnabled);
-    }
+    // if(m_eqMode != EqMode::Legacy)
+    // {
+        m_hpf->setRawBandParams(FilterType::LOW_CUT, 0, eqData.hpf, 1, true);
+        m_lpf->setRawBandParams(FilterType::HIGH_CUT, 0, eqData.lpf, 1, true);
+    // }
 
     m_position->setControlValue(eqData.eq_pre_post);
 

@@ -30,7 +30,7 @@ public:
     explicit Chorus(AbstractDevice *owner, ChorusType chorusType = ChorusType::Classic);
 
     void setValues(const preset_data_cpmodern_t& chData) override;
-    void setValues(const preset_data_fx_t &chData) override;
+    void setValues(const modules_data_fx_t &chData) override;
 
     ControlValue *mix() const;
     ControlValue *rate() const;

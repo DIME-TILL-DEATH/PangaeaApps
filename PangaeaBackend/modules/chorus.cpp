@@ -44,7 +44,7 @@ void Chorus::setValues(const preset_data_cpmodern_t &chData)
     emit dataChanged();
 }
 
-void Chorus::setValues(const preset_data_fx_t& chData)
+void Chorus::setValues(const modules_data_fx_t& chData)
 {
     m_moduleEnabled = chData.switches.chorus;
 

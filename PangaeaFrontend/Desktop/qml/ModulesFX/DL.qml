@@ -11,9 +11,19 @@ BaseModule{
 
     property Delay module: _moduleLoader.selectedModuleInstance
 
-    contentItem: Row
-    {
+    contentItem: Flickable{
         anchors.fill: parent
+
+        contentWidth: _row.width
+        contentHeight: _row.height
+
+        flickableDirection: Flickable.HorizontalFlick
+        boundsBehavior: Flickable.StopAtBounds
+    Row{
+        id: _row
+        // anchors.fill: parent
+        width: main.dialWidth * 14.5
+        height: main.dialHeight
 
         ParameterDial{
             width: main.dialWidth
@@ -106,7 +116,7 @@ BaseModule{
         }
 
         ParameterComboBox{
-            width: main.dialWidth * 2
+            width: main.dialWidth * 1.5
             height: main.dialHeight
 
             anchors.verticalCenter: parent.verticalCenter
@@ -131,5 +141,6 @@ BaseModule{
 
             moduleOn: module.moduleEnabled
         }
+    }
     }
 }

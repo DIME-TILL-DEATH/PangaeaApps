@@ -12,19 +12,17 @@ Cp100fx::Cp100fx(Core *parent)
 
     m_parser.addCommandHandler("amtver", std::bind(&Cp100fx::amtVerCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("psave", std::bind(&Cp100fx::ackPresetSavedCommHandler, this, _1, _2, _3));
-
     m_parser.addCommandHandler("sys_settings", std::bind(&Cp100fx::sysSettingsCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("state", std::bind(&Cp100fx::stateCommHandler, this, _1, _2, _3));
-    m_parser.addCommandHandler("cntrls", std::bind(&Cp100fx::cntrlsCommHandler, this, _1, _2, _3));
+
+    m_parser.addCommandHandler("psave", std::bind(&Cp100fx::ackPresetSavedCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pchange", std::bind(&Cp100fx::ackPresetChangeCommHandler, this, _1, _2, _3));
-
     m_parser.addCommandHandler("plist", std::bind(&Cp100fx::plistCommHandler, this, _1, _2, _3));
-
     m_parser.addCommandHandler("pnum", std::bind(&Cp100fx::pnumCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pname", std::bind(&Cp100fx::pnameCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pcomment", std::bind(&Cp100fx::pcommentCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("cntrls", std::bind(&Cp100fx::cntrlsCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrl_pc", std::bind(&Cp100fx::cntrlPcOutCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrl_set", std::bind(&Cp100fx::cntrlSetCommHandler, this, _1, _2, _3));
 
@@ -34,7 +32,7 @@ Cp100fx::Cp100fx(Core *parent)
 
     m_maxPresetCount = 100;
 
-    for(quint8 i=0; i<ControllerFx::controllersCount; i++)
+    for(quint8 i=0; i < ControllersCount; i++)
     {
         m_actualControllersList.append(new ControllerFx(&actualPreset.controller[i], i, this));
     }
@@ -103,10 +101,10 @@ void Cp100fx::readFullState()
 
     emit sgPushCommandToQueue("amtver");
 
-    pushReadPresetCommands();
-
     emit sgPushCommandToQueue("sys_settings");
     emit sgPushCommandToQueue("plist");
+
+    pushReadPresetCommands();
 
     // emit sgPushCommandToQueue("ls ir_library");
     // emit sgPushCommandToQueue("gm");
@@ -376,6 +374,7 @@ void Cp100fx::pnumCommHandler(const QString &command, const QByteArray &argument
     bool ok;
     m_preset = data.toInt(&ok, 16);
     actualPreset.setBankPreset(0, m_preset);
+    m_presetListModel.updatePreset(&actualPreset);
 
     emit bankPresetChanged();
 }
@@ -459,7 +458,7 @@ void Cp100fx::sysSettingsCommHandler(const QString &command, const QByteArray &a
 
 void Cp100fx::stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(data.size() < sizeof(preset_data_fx_t)*2) return;
+    if(data.size() < sizeof(modules_data_fx_t)*2) return;
 
     QByteArray baPresetData = data;
 
@@ -467,7 +466,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     quint16 nomByte=0;
     QString curByte;
 
-    quint8 dataBuffer[sizeof(preset_data_fx_t)*2];
+    quint8 dataBuffer[sizeof(modules_data_fx_t)*2];
 
     foreach(QChar val, baPresetData) //quint8
     {
@@ -485,8 +484,8 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         nomByte++;
     }
 
-    preset_data_fx_t presetData;
-    memcpy(&presetData, dataBuffer, sizeof(preset_data_fx_t));
+    modules_data_fx_t presetData;
+    memcpy(&presetData, dataBuffer, sizeof(modules_data_fx_t));
 
     foreach(AbstractModule* module, m_moduleList)
     {
@@ -563,7 +562,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
 void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(data.size() < sizeof(TController) * ControllerFx::controllersCount * 2) return;
+    if(data.size() < sizeof(controller_fx_t) * ControllersCount * 2) return;
 
     QByteArray baPresetData = data;
 
@@ -571,7 +570,7 @@ void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &argume
     quint16 nomByte=0;
     QString curByte;
 
-    quint8 dataBuffer[sizeof(TController) * ControllerFx::controllersCount * 2];
+    quint8 dataBuffer[sizeof(controller_fx_t) * ControllersCount * 2];
 
     foreach(QChar val, baPresetData) //quint8
     {
@@ -589,8 +588,8 @@ void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &argume
         nomByte++;
     }
 
-    TController cntrlsData[32];
-    memcpy(&cntrlsData, dataBuffer, sizeof(TController) * ControllerFx::controllersCount);
+    controller_fx_t cntrlsData[32];
+    memcpy(&cntrlsData, dataBuffer, sizeof(controller_fx_t) * ControllersCount);
 
     for(int i=0; i<32; i++)
     {

@@ -32,6 +32,9 @@ public:
     virtual QString presetName() const = 0;
     virtual void setPresetName(const QString &newPresetName) = 0;
 
+    static QByteArray dataToBa(void* data, quint32 size);
+
+
 protected:
     quint8 m_presetNumber{0};
     quint8 m_bankNumber{0};

@@ -21,9 +21,9 @@ ApplicationWindow
     width: Screen.width * 0.75
     height: width * 0.4
 
-    minimumWidth: Screen.width * 0.75 * 0.75
+    minimumWidth: Screen.width * 0.8 * 0.75
     minimumHeight: Screen.width * 0.75 * 0.4 * 0.75
-    maximumWidth: Screen.width * 0.75 * 1.25
+    maximumWidth: Screen.width * 0.8 * 1.25
     maximumHeight: Screen.width * 0.75 * 0.4 * 1.25
 
     // minimumWidth: width*0.75
@@ -33,7 +33,7 @@ ApplicationWindow
 
     // palette.highlight: "orange"
 
-    // color: Style.backgroundColor
+    color: Style.backgroundColor
 
     property string markEdit: UiCore.currentDevice.deviceParamsModified ? " * ":" "
     property string devName: UiCore.currentDevice.firmwareName

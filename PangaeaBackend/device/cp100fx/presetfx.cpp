@@ -25,7 +25,7 @@ PresetAbstract& PresetFx::operator=(const PresetAbstract& preset)
             m_ir1Name = fxPreset->ir1Name();
             m_ir2Name = fxPreset->ir2Name();
 
-            memcpy(controller, fxPreset->controller, sizeof(TController) * ControllerFx::controllersCount);
+            memcpy(controller, fxPreset->controller, sizeof(controller_fx_t) * ControllersCount);
 
             m_cntrlPcOut = fxPreset->cntrlPcOut();
             m_cntrlSet = fxPreset->cntrlSet();
@@ -36,26 +36,26 @@ PresetAbstract& PresetFx::operator=(const PresetAbstract& preset)
     return *this;
 }
 
-preset_data_fx_t PresetFx::charsToPresetData(const QByteArray &ba)
+modules_data_fx_t PresetFx::charsToPresetData(const QByteArray &ba)
 {
-    preset_data_fx_t presetData;
-    quint8 rawArr[sizeof(preset_data_fx_t)];
+    modules_data_fx_t presetData;
+    quint8 rawArr[sizeof(modules_data_fx_t)];
     for(int i = 0; i < ba.size(); i += 2)
     {
         QString chByte = QString(ba.at(i)) + QString(ba.at(i+1));
         rawArr[i/2] = chByte.toInt(nullptr, 16);
     }
-    memcpy(&presetData, rawArr, sizeof(preset_data_fx_t));
+    memcpy(&presetData, rawArr, sizeof(modules_data_fx_t));
     return presetData;
 }
 
-QByteArray PresetFx::presetDataToChars(const preset_data_fx_t &presetData)
+QByteArray PresetFx::presetDataToChars(const modules_data_fx_t &presetData)
 {
-    quint8 buffer[sizeof(preset_data_fx_t)];
-    memcpy(buffer, &presetData, sizeof(preset_data_fx_t));
+    quint8 buffer[sizeof(modules_data_fx_t)];
+    memcpy(buffer, &presetData, sizeof(modules_data_fx_t));
     QByteArray baData;
 
-    for(int i=0; i < sizeof(preset_data_fx_t);  i++)
+    for(int i=0; i < sizeof(modules_data_fx_t);  i++)
     {
         QByteArray tempBa = QString().setNum(buffer[i], 16).toUtf8();
 
@@ -64,6 +64,7 @@ QByteArray PresetFx::presetDataToChars(const preset_data_fx_t &presetData)
     }
     return baData;
 }
+
 
  void PresetFx::setActiveModules(const QByteArray& ba)
 {
@@ -125,7 +126,7 @@ QStringList PresetFx::strActiveModules() const
     return strList;
 }
 
-void PresetFx::setPresetData(const preset_data_fx_t &newPresetData)
+void PresetFx::setPresetData(const modules_data_fx_t &newPresetData)
 {
     presetData = newPresetData;
 

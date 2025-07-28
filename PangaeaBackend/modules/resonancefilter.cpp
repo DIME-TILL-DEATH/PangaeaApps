@@ -20,7 +20,7 @@ ResonanceFilter::ResonanceFilter(AbstractDevice *owner)
     m_lfoType = new ControlValue(this, "rf_lt", "LFO type");
 }
 
-void ResonanceFilter::setValues(const preset_data_fx_t& rfData)
+void ResonanceFilter::setValues(const modules_data_fx_t& rfData)
 {
     m_moduleEnabled = rfData.switches.resonance_filter;
 

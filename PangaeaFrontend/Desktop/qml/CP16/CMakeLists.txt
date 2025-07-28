@@ -9,7 +9,6 @@ qt_add_qml_module(qml_cp16
         ControlLayoutCPModern.qml
         ModulesListModern.qml
         ModulesConfigWindow.qml
-        Map.qml
         HeadCPModern.qml
         HeadLegacy.qml
         HeadLA3.qml

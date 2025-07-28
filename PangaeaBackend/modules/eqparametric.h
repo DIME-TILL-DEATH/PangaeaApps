@@ -39,7 +39,7 @@ public:
 
     void setValues(const preset_data_cplegacy_t& lpData) override;
     void setValues(const preset_data_cpmodern_t& presetData) override;
-    void setValues(const preset_data_fx_t &eqData) override;
+    void setValues(const modules_data_fx_t &eqData) override;
 
     double getEqResponse(double f);
 

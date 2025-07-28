@@ -22,7 +22,7 @@ class DualCabSim : public AbstractModule
 public:
     DualCabSim(AbstractDevice *owner);
 
-    void setValues(const preset_data_fx_t &csData) override;
+    void setValues(const modules_data_fx_t &csData) override;
 
     ControlValue* firstCabVolume() {return m_firstCabVolume;};
     ControlValue* firstCabPan() {return m_firstCabPan;};

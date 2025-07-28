@@ -94,11 +94,13 @@ Item{
                 x: control.width / 2 - width / 2
                 y: control.height / 2 - height / 2
 
-                width: Math.min(control.width, control.height)
+                // width: Math.min(control.width, control.height)
+                width: control.width
                 height: width
                 radius: width / 2
 
-                color: (module.moduleEnabled) ? "white" : "darkgrey"
+                color: Style.backgroundColor
+                // color: (module.moduleEnabled) ? Style.backgroundColor : "darkgrey"
 
                 border.width: 1
                 border.color: "darkgrey"
@@ -137,7 +139,9 @@ Item{
                 acceptedButtons: Qt.RightButton//Qt.NoButton
 
                 onWheel: wheel => {
-                    var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
+                    var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100;
+                    // if(control.stepSize === 1) step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
+                    // else step = control.stepSize
                     controlValue.displayValue = control.value + wheel.angleDelta.y * step;
                 }
 

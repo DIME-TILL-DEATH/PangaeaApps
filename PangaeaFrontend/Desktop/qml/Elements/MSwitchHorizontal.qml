@@ -43,5 +43,8 @@ Switch{
     contentItem: MLabel{
         text: _exprSwitch.text
         verticalAlignment: Text.AlignVCenter
+
+        width: _exprSwitch.width/2
+        elide: Label.ElideRight
     }
 }

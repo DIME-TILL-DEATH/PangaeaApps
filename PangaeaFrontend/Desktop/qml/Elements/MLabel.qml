@@ -7,4 +7,6 @@ Label{
     font.bold: true
     font.family: "Arial Black"
     color: Style.textMain
+
+    elide: Label.ElideRight
 }

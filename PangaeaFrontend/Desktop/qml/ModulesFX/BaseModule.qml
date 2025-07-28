@@ -20,7 +20,7 @@ Rectangle {
 
     property Component contentItem
     property int dialWidth: dialHeight
-    property int dialHeight: height //Math.min(height, width/10)
+    property int dialHeight: height//Math.min(height, width/10)
 
     width: parent.width
     height: parent.height
