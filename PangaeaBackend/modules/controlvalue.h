@@ -42,6 +42,8 @@ public:
     bool isModified() const {return m_isModified;};
     void setIsModified(bool newIsModified);
 
+    void setValuePointer(void* pointer) {value_ptr = pointer;};
+
     QString name() const {return m_name;};
     QString units() const {return m_units;};
 
@@ -56,6 +58,8 @@ signals:
 
 protected:
     QString m_commandString;
+
+    void* value_ptr{nullptr};
 
     qint16 m_minControlValue;
     qint16 m_maxControlValue;

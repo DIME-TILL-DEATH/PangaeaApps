@@ -14,6 +14,8 @@ Flanger::Flanger(AbstractDevice *owner)
     m_feedback = new ControlValue(this, "fl_fb", "Feedback", "",  0, 127, 0, 127);// "",  0, 127, 0, 21);
     m_hpf = new ControlValue(this, "fl_hp", "HPF",  "",  0, 127, 0, 127);//  "Hz", 0, 127, 20, 2000);
     m_position = new ControlValue(this, "fl_pp", "Position");
+
+    connect(m_position, &ControlValue::userModifiedValue, this, &AbstractModule::positionChanged);
 }
 
 void Flanger::setValues(const modules_data_fx_t& flData)
@@ -32,4 +34,9 @@ void Flanger::setValues(const modules_data_fx_t& flData)
     m_position->setControlValue(flData.flanger_pre_post);
 
     emit dataChanged();
+}
+
+void Flanger::setValuesPointers(modules_data_fx_t *flData)
+{
+    m_position->setValuePointer((qint32*)&flData->flanger_pre_post);
 }

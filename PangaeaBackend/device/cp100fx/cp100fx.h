@@ -150,6 +150,7 @@ private:
 
     void pushReadPresetCommands();
 
+
     void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void sysSettingsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
@@ -167,6 +168,13 @@ private:
     void cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlPcOutCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void setModulePositions();
+private slots:
+    void modulesChangedPosition();
+
+    qint8 getModulePosition(ModuleType moduleType);
+
 };
 
 #endif // CP100FX_H

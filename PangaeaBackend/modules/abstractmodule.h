@@ -52,6 +52,8 @@ public:
 signals:
     void dataChanged();
 
+    void positionChanged();
+
     void usedChanged();
     void userModifiedModuleParameters();
 

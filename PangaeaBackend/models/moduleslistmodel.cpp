@@ -78,6 +78,8 @@ void ModulesListModel::moveModule(int from, int to)
 
     qint32 indexToInModel = to;
     if(to > from) indexToInModel++;
+
+    qDebug() << from << " to " << indexToInModel;
     beginMoveRows(QModelIndex(), from, from, QModelIndex(), indexToInModel);
     m_moduleList->move(from, to);
     endMoveRows();

@@ -3,27 +3,6 @@
 
 #include <QtQuick/QQuickView>
 
-// for register:
-#include "controlvalue.h"
-
-#include "volume.h"
-
-#include "compressor.h"
-#include "noisegate.h"
-#include "preamp.h"
-#include "poweramp.h"
-#include "eqband.h"
-#include "cabsim.h"
-#include "hipassfilter.h"
-#include "eqparametric.h"
-#include "lowpassfilter.h"
-#include "presence.h"
-#include "tremolo.h"
-#include "chorus.h"
-#include "phaser.h"
-#include "earlyreflections.h"
-#include "delay.h"
-
 AbstractModule::AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff)
     : QObject{owner},
     m_owner{owner},

@@ -27,7 +27,8 @@ class Flanger : public AbstractModule
 public:
     Flanger(AbstractDevice *owner);
 
-    void setValues(const modules_data_fx_t &chData) override;
+    void setValues(const modules_data_fx_t &flData) override;
+    void setValuesPointers(modules_data_fx_t* flData);
 
     ControlValue *mix() const {return m_mix;};
     ControlValue *lfo() const {return m_lfo;};

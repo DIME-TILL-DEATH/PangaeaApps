@@ -65,32 +65,24 @@ void Cp100fx::initDevice(DeviceType deviceType)
     PA = new PowerAmp(this, PowerAmp::FX);
     IR = new DualCabSim(this);
     EQ = new EqParametric(this, EqParametric::EqMode::Fx, 0);
-    DL = new Delay(this, Delay::FX);
     PH = new Phaser(this, Phaser::FX);
     FL = new Flanger(this);
     CH = new Chorus(this, Chorus::FX);
+    DL = new Delay(this, Delay::FX);
     ER = new EarlyReflections(this, EarlyReflections::FX);
     RV = new Reverb(this);
     TR = new Tremolo(this);
 
-    m_moduleList.append(RF);
-    m_moduleList.append(NG);
-    m_moduleList.append(CM);
-    m_moduleList.append(PR);
-    m_moduleList.append(PA);
-    m_moduleList.append(IR);
-    m_moduleList.append(EQ);
-    m_moduleList.append(PH);
-    m_moduleList.append(FL);
-    m_moduleList.append(CH);
-    m_moduleList.append(DL);
-    m_moduleList.append(ER);
-    m_moduleList.append(RV);
-    m_moduleList.append(TR);
+    EQ->setValuesPointers(&actualPreset.presetData);
+    PH->setValuesPointers(&actualPreset.presetData);
+    FL->setValuesPointers(&actualPreset.presetData);
 
-    m_modulesListModel.refreshModel(&m_moduleList);
+    connect(EQ, &AbstractModule::positionChanged, this, &Cp100fx::modulesChangedPosition);
+    connect(PH, &AbstractModule::positionChanged, this, &Cp100fx::modulesChangedPosition);
+    connect(FL, &AbstractModule::positionChanged, this, &Cp100fx::modulesChangedPosition);
 
-    emit modulesListModelChanged();
+    setModulePositions();
+
     emit presetListModelChanged();
     emit sgDeviceInstanciated();
 }
@@ -295,6 +287,125 @@ void Cp100fx::setPresetVolumeControl(quint8 newPresetVolumeControl)
 
     emit sgWriteToInterface("vl_pr_cntrl " + QByteArray::number(newPresetVolumeControl) + "\r\n");
 }
+
+void Cp100fx::setModulePositions()
+{
+    qDebug() << "Settling modules position";
+
+    m_moduleList.clear();
+
+    m_moduleList.append(RF);
+    m_moduleList.append(NG);
+    m_moduleList.append(CM);
+    m_moduleList.append(PR);
+    m_moduleList.append(PA);
+    if(actualPreset.presetData.eq_pre_post) m_moduleList.append(EQ);
+    if(actualPreset.presetData.phaser_pre_post) m_moduleList.append(PH);
+    if(actualPreset.presetData.flanger_pre_post) m_moduleList.append(FL);
+    m_moduleList.append(IR);
+    if(!actualPreset.presetData.eq_pre_post) m_moduleList.append(EQ);
+    if(!actualPreset.presetData.phaser_pre_post) m_moduleList.append(PH);
+    if(!actualPreset.presetData.flanger_pre_post) m_moduleList.append(FL);
+    m_moduleList.append(CH);
+    m_moduleList.append(DL);
+    m_moduleList.append(ER);
+    m_moduleList.append(RV);
+    m_moduleList.append(TR);
+
+    m_modulesListModel.refreshModel(&m_moduleList);
+
+    emit modulesListModelChanged();
+}
+
+
+void Cp100fx::modulesChangedPosition()
+{
+    quint8 from, to;
+
+    QObject* senderObj = QObject::sender();
+    AbstractModule* moduleSender;
+    if(senderObj)
+    {
+        moduleSender = qobject_cast<AbstractModule*>(senderObj);
+    }
+    else return;
+
+
+    switch(moduleSender->moduleType())
+    {
+    case ModuleTypeEnum::EQ1:
+    {
+        qDebug() << "Moving EQ";
+        from = getModulePosition(ModuleType::EQ1);
+        if(actualPreset.presetData.eq_pre_post)
+        {
+            to = getModulePosition(ModuleType::IR_STEREO);
+
+            if(actualPreset.presetData.flanger_pre_post)
+                to = getModulePosition(ModuleType::FL);
+
+            if(actualPreset.presetData.phaser_pre_post)
+                to = getModulePosition(ModuleType::PH);
+        }
+        else
+        {
+            to = getModulePosition(ModuleType::IR_STEREO);
+        }
+        break;
+    }
+    case ModuleTypeEnum::PH:
+    {
+        qDebug() << "Moving PH";
+        from = getModulePosition(ModuleType::PH);
+        if(actualPreset.presetData.phaser_pre_post)
+        {
+            to = getModulePosition(ModuleType::IR_STEREO);
+            if(actualPreset.presetData.flanger_pre_post) to = getModulePosition(ModuleType::FL);
+        }
+        else
+        {
+            to = getModulePosition(ModuleType::IR_STEREO);
+            if(!actualPreset.presetData.eq_pre_post) to = getModulePosition(ModuleType::EQ1);
+        }
+        break;
+    }
+
+    case ModuleTypeEnum::FL:
+    {
+        qDebug() << "Moving FL";
+        from = getModulePosition(ModuleType::FL);
+        if(actualPreset.presetData.flanger_pre_post)
+        {
+            to = getModulePosition(ModuleType::IR_STEREO);
+            // if(actualPreset.presetData.phaser_pre_post) to = getModulePosition(ModuleType::PH);
+            // if(actualPreset.presetData.eq_pre_post) to = getModulePosition(ModuleType::EQ1);
+        }
+        else
+        {
+            to = getModulePosition(ModuleType::IR_STEREO);
+            if(!actualPreset.presetData.eq_pre_post) to = getModulePosition(ModuleType::EQ1);
+            if(!actualPreset.presetData.phaser_pre_post) to = getModulePosition(ModuleType::PH);
+        }
+        break;
+    }
+
+    default: return;
+    }
+
+    m_modulesListModel.moveModule(from, to);
+}
+
+qint8 Cp100fx::getModulePosition(ModuleType moduleType)
+{
+    for(int i=0; i< m_moduleList.size(); i++)
+    {
+        if(m_moduleList.at(i)->moduleType() == moduleType)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
 //=======================================================================================
 //                  ***************Comm handlers************
 //=======================================================================================
@@ -487,14 +598,14 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     modules_data_fx_t presetData;
     memcpy(&presetData, dataBuffer, sizeof(modules_data_fx_t));
 
-    foreach(AbstractModule* module, m_moduleList)
-    {
-        module->setValues(presetData);
-    }
+    // foreach(AbstractModule* module, m_moduleList)
+    // {
+    //     module->setValues(presetData);
+    // }
 
-    m_presetVolume.setValue(presetData.preset_volume);
-    actualPreset.presetData.volume_control = presetData.volume_control;
-    emit presetVolumeControlChanged();
+    // actualPreset.presetData.volume_control = presetData.volume_control;
+    // m_presetVolume.setValue(presetData.preset_volume);
+    // emit presetVolumeControlChanged();
 
     emit deviceUpdatingValues();
 
@@ -516,9 +627,19 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         m_deviceParamsModified = false;
         emit deviceParamsModifiedChanged();
 
+        m_presetVolume.setValue(presetData.preset_volume);
+        emit presetVolumeControlChanged();
+
         actualPreset.setPresetData(PresetFx::charsToPresetData(baPresetData));
         savedPreset = actualPreset;
         m_presetListModel.updatePreset(&savedPreset);
+
+        foreach(AbstractModule* module, m_moduleList)
+        {
+            module->setValues(presetData);
+        }
+        setModulePositions();
+
         m_presetManager.returnToPreviousState();
         emit presetSwitched();
         break;
@@ -553,7 +674,15 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     default:
     {
+        m_presetVolume.setValue(presetData.preset_volume);
+        emit presetVolumeControlChanged();
         actualPreset.setPresetData(PresetFx::charsToPresetData(baPresetData));
+
+        foreach(AbstractModule* module, m_moduleList)
+        {
+            module->setValues(presetData);
+        }
+        setModulePositions();
         break;
     }
     }

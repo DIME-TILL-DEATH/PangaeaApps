@@ -95,6 +95,7 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setParamsHandler("ph_fb", &currentPresetData.modules.phaser.feedback);
     setParamsHandler("ph_st", &currentPresetData.modules.phaser.type);
     setParamsHandler("ph_hp", &currentPresetData.modules.hpf_phaser);
+    setParamsHandler("ph_pp", &currentPresetData.modules.phaser_pre_post);
 
     setParamsHandler("fl_on", &currentPresetData.modules.switches.flanger);
     setParamsHandler("fl_mx", &currentPresetData.modules.flanger.mix);
@@ -104,6 +105,7 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setParamsHandler("fl_dl", &currentPresetData.modules.flanger.delay);
     setParamsHandler("fl_fb", &currentPresetData.modules.flanger.feedback);
     setParamsHandler("fl_hp", &currentPresetData.modules.hpf_flanger);
+    setParamsHandler("fl_pp", &currentPresetData.modules.flanger_pre_post);
 
     setParamsHandler("ch_on", &currentPresetData.modules.switches.chorus);
     setParamsHandler("ch_mx", &currentPresetData.modules.chorus.mix);
@@ -322,7 +324,7 @@ void MockCP100fx::initFolders()
         currentSystemData.midiPcInd = 1;
 
         currentSystemData.lastPresetNum = 0;
-        currentSystemData.tunerExternal = 0x80;
+        currentSystemData.tunerExternal = 0x81;
 
         quint16 defaultMidFreq = 1000;
         currentSystemData.masterEqFreq = qToBigEndian<quint16>(defaultMidFreq);

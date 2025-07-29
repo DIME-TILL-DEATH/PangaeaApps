@@ -49,6 +49,8 @@ EqParametric::EqParametric(AbstractDevice *owner, EqMode eqMode, quint8 eqNumber
         m_lpf = new EqBand(this, FilterType::HIGH_CUT, 1000, 20000, 6, 127, 0);
 
         m_position = new ControlValue(this, "eq_pp", "Position");
+
+        connect(m_position, &ControlValue::userModifiedValue, this, &AbstractModule::positionChanged);
         break;
     }
     default:
@@ -257,4 +259,9 @@ void EqParametric::setValues(const modules_data_fx_t &eqData)
     m_position->setControlValue(eqData.eq_pre_post);
 
     emit dataChanged();
+}
+
+void EqParametric::setValuesPointers(modules_data_fx_t *eqData)
+{
+    m_position->setValuePointer((qint32*)&eqData->eq_pre_post);
 }

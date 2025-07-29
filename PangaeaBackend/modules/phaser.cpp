@@ -20,6 +20,8 @@ Phaser::Phaser(AbstractDevice *owner, PhaserType phaserType)
         m_center = new ControlValue(this, "ph_cn", "Center", "",  0, 127, 0, 127); // "Hz",  0, 127, 80, 12000); //Range: 0 (80 Hz) to 127 (12 kHz).
         m_hpf = new ControlValue(this, "ph_hp", "HPF", "Hz",  0, 127, 0, 127);
         m_position = new ControlValue(this, "ph_pp", "Position");
+
+        connect(m_position, &ControlValue::userModifiedValue, this, &AbstractModule::positionChanged);
         break;
     }
 
@@ -59,6 +61,11 @@ void Phaser::setValues(const modules_data_fx_t& phData)
     m_position->setControlValue(phData.phaser_pre_post);
 
     emit dataChanged();
+}
+
+void Phaser::setValuesPointers(modules_data_fx_t *phData)
+{
+    m_position->setValuePointer((qint32*)&phData->phaser_pre_post);
 }
 
 ControlValue *Phaser::mix() const

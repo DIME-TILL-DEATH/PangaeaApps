@@ -32,6 +32,8 @@ public:
     void setValues(const preset_data_cpmodern_t& phData) override;
     void setValues(const modules_data_fx_t &phData) override;
 
+    void setValuesPointers(modules_data_fx_t* phData);
+
     ControlValue *mix() const;
     ControlValue *rate() const;
     ControlValue *center() const;

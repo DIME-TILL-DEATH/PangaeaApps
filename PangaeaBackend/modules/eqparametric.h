@@ -41,6 +41,8 @@ public:
     void setValues(const preset_data_cpmodern_t& presetData) override;
     void setValues(const modules_data_fx_t &eqData) override;
 
+    void setValuesPointers(modules_data_fx_t* eqData);
+
     double getEqResponse(double f);
 
     double minFreq() {return m_minFreq;};

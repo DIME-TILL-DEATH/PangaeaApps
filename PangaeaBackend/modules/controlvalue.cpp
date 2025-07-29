@@ -36,8 +36,6 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     m_displayValue = newDisplayValue;
 
     m_isModified = true;
-    emit isModifiedChanged();
-    emit displayValueChanged();
 
     double k2 = (m_minDisplayValue-m_maxDisplayValue)/(m_minControlValue-m_maxControlValue);
     double k1 = m_minDisplayValue-(m_minControlValue*k2);
@@ -50,6 +48,8 @@ void ControlValue::setDisplayValue(double newDisplayValue)
         strValue.setNum(controlValue, 16);
         if(strValue.size() > 4) strValue = strValue.right(4);
         fullCommand = m_commandString + " " + strValue + "\r\n";
+
+        if(value_ptr) *static_cast<quint16*>(value_ptr) = controlValue;
     }
     else
     {
@@ -57,6 +57,8 @@ void ControlValue::setDisplayValue(double newDisplayValue)
         
         strValue.setNum(controlValue, 16);
         if(strValue.size() > 2) strValue = strValue.right(2);
+
+        if(value_ptr) *static_cast<quint8*>(value_ptr) = controlValue;
     }
     fullCommand = m_commandString + " " + strValue + "\r\n";
 
@@ -74,6 +76,8 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     }
     // if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
 
+    emit isModifiedChanged();
+    emit displayValueChanged();
     emit userModifiedValue();
 }
 
@@ -106,6 +110,8 @@ bool ControlValue::enabled() const
 
 void ControlValue::setControlValue(qint32 value)
 {
+    // if(value_ptr) *value_ptr = value;
+
     if(value > fmax(m_minControlValue, m_maxControlValue)) value = m_maxControlValue;
     if(value < fmin(m_minControlValue, m_maxControlValue)) value = m_minControlValue;
 
