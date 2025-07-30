@@ -23,7 +23,6 @@ ControlQLegacy::ControlQLegacy(AbstractModule *parent, QString commandStr)
         }
         }
     }
-
 }
 
 void ControlQLegacy::setDisplayValue(double newDisplayValue)

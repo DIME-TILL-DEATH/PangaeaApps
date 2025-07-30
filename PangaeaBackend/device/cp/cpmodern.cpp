@@ -185,7 +185,7 @@ void CPModern::pushReadPresetCommands()
     m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_cpmodern_t) * 2;
 }
 
-QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
+QList<QByteArray> CPModern::parseAnswers(QByteArray baAnswer)
 {
     QList<QByteArray> recievedCommAnswers;
 
@@ -199,6 +199,7 @@ QList<QByteArray> CPModern::parseAnswers(QByteArray &baAnswer)
         undefinedCommandCommHandler("", data);
     }
 
+    emit sgCommandsRecieved(recievedCommAnswers);
     return recievedCommAnswers;
 }
 

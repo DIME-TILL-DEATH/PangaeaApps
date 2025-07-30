@@ -44,7 +44,7 @@ QStringList AbstractDevice::strPresetNumbers()
     return numbers;
 }
 
-QList<QByteArray> AbstractDevice::parseAnswers(QByteArray &baAnswer)
+QList<QByteArray> AbstractDevice::parseAnswers(QByteArray baAnswer)
 {
     QList<QByteArray> args;
     if(undefCommParser.getParse(baAnswer, &args))
@@ -54,7 +54,9 @@ QList<QByteArray> AbstractDevice::parseAnswers(QByteArray &baAnswer)
         undefinedCommandCommHandler("", data);
     }
 
-    return m_parser.parseNewData(baAnswer);
+    QList<QByteArray> recievedCommAnswers = m_parser.parseNewData(baAnswer);
+    emit sgCommandsRecieved(recievedCommAnswers);
+    return recievedCommAnswers;
 }
 
 void AbstractDevice::userModifiedModules()

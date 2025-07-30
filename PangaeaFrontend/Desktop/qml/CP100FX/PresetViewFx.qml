@@ -110,15 +110,12 @@ ColumnLayout
 
             anchors.fill: parent
 
-            spacing: 0 //width/500
+            spacing: 0
 
             interactive: false
             orientation: ListView.Horizontal
 
-            // currentIndex: -1
             property var moduleTypeSelected
-
-            // signal moduleTypeSelectedChanged();
 
             delegate: Item{
                 width: _modulesListView.width/14 - _modulesListView.spacing
@@ -132,7 +129,6 @@ ColumnLayout
 
                     color: "transparent"
                     border.width: 2
-                    // border.color: index === _modulesListView.currentIndex ? "white" : "transparent"
                     border.color: _modulesListView.moduleTypeSelected === moduleInstance.moduleType ? "white" : "transparent"
 
                     Image
@@ -168,16 +164,15 @@ ColumnLayout
                         anchors.fill: parent
 
                         onClicked: {
-                            // if(index !== _modulesListView.currentIndex)
-                            // {
                             if(_modulesListView.moduleTypeSelected !== moduleInstance.moduleType)
                             {
-                                _moduleLoader.source = ""
-                                _moduleLoader.selectedModuleInstance = moduleInstance
-
                                 _modulesListView.moduleTypeSelected = moduleInstance.moduleType
+                                _moduleLoader.source = ""
+
+                                _moduleLoader.selectedModuleInstance = moduleInstance
                                 _modulesListView.moduleTypeSelectedChanged();
-                                // _modulesListView.currentIndex = index
+
+                                _modulesListView.currentIndex = index
                             }
                         }
 
@@ -198,6 +193,10 @@ ColumnLayout
 
             displaced: Transition {
                  NumberAnimation { properties: "x"; duration: 250 }
+             }
+
+            populate: Transition {
+                 NumberAnimation { properties: "x"; duration: 200 }
              }
 
             // onCurrentIndexChanged: {

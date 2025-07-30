@@ -203,7 +203,7 @@ void CPLegacy::pushReadPresetCommands()
     emit sgPushCommandToQueue("gs");
 }
 
-QList<QByteArray> CPLegacy::parseAnswers(QByteArray &baAnswer)
+QList<QByteArray> CPLegacy::parseAnswers(QByteArray baAnswer)
 {
     QList<QByteArray> parseResults, recievedCommAnswers;
 
@@ -239,6 +239,7 @@ QList<QByteArray> CPLegacy::parseAnswers(QByteArray &baAnswer)
         undefinedCommandCommHandler("", data);
     }
 
+    emit sgCommandsRecieved(recievedCommAnswers);
     return recievedCommAnswers;
 }
 

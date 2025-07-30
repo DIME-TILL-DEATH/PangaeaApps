@@ -81,7 +81,7 @@ void Cp100fx::initDevice(DeviceType deviceType)
     connect(PH, &AbstractModule::positionChanged, this, &Cp100fx::modulesChangedPosition);
     connect(FL, &AbstractModule::positionChanged, this, &Cp100fx::modulesChangedPosition);
 
-    setModulePositions();
+    // setModulePositions();
 
     emit presetListModelChanged();
     emit sgDeviceInstanciated();
@@ -92,14 +92,12 @@ void Cp100fx::readFullState()
     m_presetManager.setCurrentState(PresetState::Changing);
 
     emit sgPushCommandToQueue("amtver");
-
-    emit sgPushCommandToQueue("sys_settings");
     emit sgPushCommandToQueue("plist");
+    emit sgPushCommandToQueue("sys_settings");
 
     pushReadPresetCommands();
 
     // emit sgPushCommandToQueue("ls ir_library");
-    // emit sgPushCommandToQueue("gm");
 
 
     emit sgProcessCommands();
@@ -206,10 +204,12 @@ void Cp100fx::formatMemory()
 
 }
 
-QList<QByteArray> Cp100fx::parseAnswers(QByteArray &baAnswer)
+QList<QByteArray> Cp100fx::parseAnswers(QByteArray baAnswer)
 {
     QList<QByteArray> recievedCommAnswers;
     recievedCommAnswers += m_parser.parseNewData(baAnswer);
+
+    emit sgCommandsRecieved(recievedCommAnswers);
 
     return recievedCommAnswers;
 }
@@ -290,8 +290,6 @@ void Cp100fx::setPresetVolumeControl(quint8 newPresetVolumeControl)
 
 void Cp100fx::setModulePositions()
 {
-    qDebug() << "Settling modules position";
-
     m_moduleList.clear();
 
     m_moduleList.append(RF);
@@ -317,7 +315,6 @@ void Cp100fx::setModulePositions()
     emit modulesListModelChanged();
 }
 
-
 void Cp100fx::modulesChangedPosition()
 {
     quint8 from, to;
@@ -335,7 +332,6 @@ void Cp100fx::modulesChangedPosition()
     {
     case ModuleTypeEnum::EQ1:
     {
-        qDebug() << "Moving EQ";
         from = getModulePosition(ModuleType::EQ1);
         if(actualPreset.presetData.eq_pre_post)
         {
@@ -355,7 +351,6 @@ void Cp100fx::modulesChangedPosition()
     }
     case ModuleTypeEnum::PH:
     {
-        qDebug() << "Moving PH";
         from = getModulePosition(ModuleType::PH);
         if(actualPreset.presetData.phaser_pre_post)
         {
@@ -372,13 +367,10 @@ void Cp100fx::modulesChangedPosition()
 
     case ModuleTypeEnum::FL:
     {
-        qDebug() << "Moving FL";
         from = getModulePosition(ModuleType::FL);
         if(actualPreset.presetData.flanger_pre_post)
         {
             to = getModulePosition(ModuleType::IR_STEREO);
-            // if(actualPreset.presetData.phaser_pre_post) to = getModulePosition(ModuleType::PH);
-            // if(actualPreset.presetData.eq_pre_post) to = getModulePosition(ModuleType::EQ1);
         }
         else
         {
@@ -634,11 +626,11 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         savedPreset = actualPreset;
         m_presetListModel.updatePreset(&savedPreset);
 
+        setModulePositions();
         foreach(AbstractModule* module, m_moduleList)
         {
             module->setValues(presetData);
         }
-        setModulePositions();
 
         m_presetManager.returnToPreviousState();
         emit presetSwitched();
@@ -678,14 +670,15 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         emit presetVolumeControlChanged();
         actualPreset.setPresetData(PresetFx::charsToPresetData(baPresetData));
 
+        setModulePositions();
         foreach(AbstractModule* module, m_moduleList)
         {
             module->setValues(presetData);
         }
-        setModulePositions();
         break;
     }
     }
+
     m_presetListModel.updatePreset(&actualPreset);
 }
 

@@ -115,7 +115,7 @@ public:
 
 
 public slots:
-    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+    QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
 signals:
 

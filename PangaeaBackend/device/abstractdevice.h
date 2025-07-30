@@ -112,7 +112,7 @@ public:
     bool isMemoryFormatting() {return isFormatting;};
 
 public slots:
-    virtual QList<QByteArray> parseAnswers(QByteArray& baAnswer);
+    virtual QList<QByteArray> parseAnswers(QByteArray baAnswer);
 
     void userModifiedModules();
 
@@ -128,6 +128,8 @@ signals:
 
     void sgDeviceError(DeviceErrorType errorType, QString description = "", QVariantList params = {});
     void sgDeviceMessage(DeviceMessageType msgType, QString description = "", QVariantList params = {});
+
+    void sgCommandsRecieved(QList<QByteArray> commands);
 
     void sgWriteToInterface(QByteArray data, bool logCommand = true);
     void sgPushCommandToQueue(QByteArray command, bool finalize = true);

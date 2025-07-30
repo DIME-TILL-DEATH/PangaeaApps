@@ -121,7 +121,7 @@ public:
     void setPresetVolumeControl(quint8 newPresetVolumeControl);
 
 public slots:
-    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+    QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
 signals:
     void currentPresetNameChanged();

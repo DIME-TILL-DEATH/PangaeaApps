@@ -84,7 +84,7 @@ public:
     Presence* PS;
     EarlyReflections* ER;
 public slots:
-    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+    QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
     void slIrEnabledChanged();
 
