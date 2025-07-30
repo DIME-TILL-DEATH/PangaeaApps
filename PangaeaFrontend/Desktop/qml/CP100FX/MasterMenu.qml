@@ -63,6 +63,8 @@ RowLayout{
 
             y: parent.height/10
 
+            enabled: true
+
             width: height
             height: parent.height
 
@@ -75,6 +77,8 @@ RowLayout{
             property Volume module: UiCore.currentDevice.phonesVolume
 
             y: parent.height/10
+
+            enabled: true
 
             width: height
             height: parent.height

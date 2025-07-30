@@ -12,9 +12,11 @@ Item{
     width:  parent.width
     height: parent.height/1000*165
 
+    enabled: module.moduleEnabled
+
 
     required property ControlValue controlValue
-    opacity: module.moduleEnabled ? 1:0.5
+    opacity: _root.enabled ? 1:0.5
 
     property alias step: control.stepSize
 
@@ -163,7 +165,7 @@ Item{
                 maximumLineCount: 2
                 wrapMode: Text.WordWrap
 
-                color: (module.moduleEnabled) ? "white" : "darkgrey"
+                color: _root.enabled ? "white" : "darkgrey"
                 font.pixelSize: parent.width/8
                 text: _root.units !=="" ? _root.name + ", " + _root.units  : _root.name
             }

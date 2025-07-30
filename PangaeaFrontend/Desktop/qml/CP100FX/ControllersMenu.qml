@@ -184,6 +184,8 @@ RowLayout{
             id: vlControl
             property Volume module: UiCore.currentDevice.presetVolume
 
+            enabled: true
+
             y: parent.height/10
 
             width: height

@@ -166,13 +166,11 @@ ColumnLayout
                         onClicked: {
                             if(_modulesListView.moduleTypeSelected !== moduleInstance.moduleType)
                             {
-                                _modulesListView.moduleTypeSelected = moduleInstance.moduleType
                                 _moduleLoader.source = ""
-
                                 _moduleLoader.selectedModuleInstance = moduleInstance
-                                _modulesListView.moduleTypeSelectedChanged();
+                                _modulesListView.moduleTypeSelected = moduleInstance.moduleType
 
-                                _modulesListView.currentIndex = index
+                                _modulesListView.moduleTypeSelectedChanged();
                             }
                         }
 
@@ -199,7 +197,6 @@ ColumnLayout
                  NumberAnimation { properties: "x"; duration: 200 }
              }
 
-            // onCurrentIndexChanged: {
             onModuleTypeSelectedChanged:{
                 switch(_moduleLoader.selectedModuleInstance.moduleType)
                 {
