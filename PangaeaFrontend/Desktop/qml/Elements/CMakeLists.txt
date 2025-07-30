@@ -19,6 +19,7 @@ qt_add_qml_module(qml_elements
         MapDelegate.qml
         MapHeadBank.qml
         MapHeadPreset.qml
+        MImageButton.qml
         Material.qml
         MBar.qml
         MButton.qml

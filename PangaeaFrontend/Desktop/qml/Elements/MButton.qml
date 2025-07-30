@@ -13,7 +13,10 @@ Item
 
     property bool  highlighted: false
     property color highlightColor: Style.highlightColor
+
     signal clicked();
+
+    property alias radius: _rectangle.radius
 
     Rectangle
     {
@@ -79,13 +82,16 @@ Item
         MText
         {
             anchors.fill:  parent
-            font.pixelSize: parent.height/2*scaleText
+
+            font.pixelSize: Math.min(parent.height/2, parent.width/5) * scaleText
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment:   Text.AlignVCenter
             text: main.text
             color: Style.mainEnabledColor
             opacity: main.enabled?1:0.3
             Behavior on opacity  {NumberAnimation { duration:500 }}
+
+            elide: Text.ElideMiddle
         }
         MouseArea
         {

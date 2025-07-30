@@ -372,17 +372,31 @@ Item
             }
         }
 
-        Button
-        {
+        // Button
+        // {
+        //     height: parent.height
+        //     width:  row.widthWithoutSpase/15*1
+
+        //     text: qsTr("MAP")
+
+        //     onClicked: {
+        //         map.show()
+        //     }
+        // }
+
+        MImageButton{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            text: qsTr("MAP")
+            imageSource: "qrc:/Images/list1.svg";
+            imageColor: Style.mainEnabledColor
 
             onClicked: {
                 map.show()
             }
         }
+
+
     }
 
     MapList{

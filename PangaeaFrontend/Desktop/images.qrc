@@ -18,5 +18,7 @@
         <file>Images/pedal.svg</file>
         <file>Images/cp_100_fx.svg</file>
         <file>Images/ultima_u2.svg</file>
+        <file>Images/list1.svg</file>
+        <file>Images/table1.svg</file>
     </qresource>
 </RCC>

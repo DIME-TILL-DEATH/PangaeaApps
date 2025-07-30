@@ -15,8 +15,6 @@ import PangaeaBackend
 RowLayout{
     id: _row1
 
-    spacing: 0
-
     Rectangle{
         Layout.preferredWidth: 2
         Layout.fillHeight: true

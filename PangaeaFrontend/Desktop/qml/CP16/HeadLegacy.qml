@@ -113,12 +113,12 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Button
-        {
+        MImageButton{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            text: qsTr("MAP")
+            imageSource: "qrc:/Images/table1.svg";
+            imageColor: Style.mainEnabledColor
 
             onClicked: {
                 map.show()

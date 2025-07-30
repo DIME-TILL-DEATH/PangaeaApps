@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import Qt5Compat.GraphicalEffects
+
 import Elements
 import StyleSettings
 
@@ -161,13 +163,12 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Button{
+        MImageButton{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            anchors.verticalCenter: parent.verticalCenter
-
-            text: qsTr("MAP")
+            imageSource: "qrc:/Images/list1.svg";
+            imageColor: Style.mainEnabledColor
 
             onClicked: {
                 map.show()
