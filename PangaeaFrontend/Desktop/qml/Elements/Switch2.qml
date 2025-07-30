@@ -9,6 +9,8 @@ Item
     property int value: 0
     signal chValue(int value)
 
+    property int invertedValue: 0
+
     Rectangle
     {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -25,7 +27,7 @@ Item
             width:  parent.height*0.8
             height: parent.height*0.8
             radius: height
-            anchors.horizontalCenterOffset: (value==0)?(parent.width/-4):(parent.width/4)
+            anchors.horizontalCenterOffset: (value===invertedValue) ? (parent.width/-4) : (parent.width/4)
             Behavior on anchors.horizontalCenterOffset  {NumberAnimation { duration: 200 }}
         }
 
@@ -39,7 +41,7 @@ Item
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                     main.chValue(0);
+                    invertedValue ? main.chValue(1) : main.chValue(0);
                 }
                 // onWheel:   wheelChange(wheel.angleDelta.y);
             }
@@ -50,7 +52,7 @@ Item
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    main.chValue(1);
+                    invertedValue ? main.chValue(0) : main.chValue(1);
                 }
                 // onWheel:   wheelChange(wheel.angleDelta.y);
             }

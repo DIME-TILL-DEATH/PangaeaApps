@@ -372,17 +372,6 @@ Item
             }
         }
 
-        // Button
-        // {
-        //     height: parent.height
-        //     width:  row.widthWithoutSpase/15*1
-
-        //     text: qsTr("MAP")
-
-        //     onClicked: {
-        //         map.show()
-        //     }
-        // }
 
         MImageButton{
             height: parent.height

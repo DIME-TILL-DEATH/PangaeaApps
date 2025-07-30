@@ -32,6 +32,34 @@ Row{
             _root.activated(index);
         }
 
+        // delegate: ItemDelegate {
+        //          id: delegate
+
+        //          required property var model
+        //          required property int index
+
+        //          width: _combo.width
+        //          contentItem: Text {
+        //              text: delegate.model[_combo.textRole]
+        //              color: Style.textInverted
+        //              font: _combo.font
+        //              elide: Text.ElideRight
+        //              verticalAlignment: Text.AlignVCenter
+        //          }
+        //          highlighted: _combo.highlightedIndex === index
+        // }
+
+        contentItem: Text {
+            width: _combo.width - _combo.indicator.width - _combo.spacing
+            leftPadding: width/20
+
+            text: _combo.displayText
+            font: _combo.font
+            color: Style.textInverted
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+         }
+
         background: Rectangle {
              implicitWidth: 120
              implicitHeight: 30

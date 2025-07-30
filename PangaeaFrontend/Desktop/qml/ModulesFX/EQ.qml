@@ -167,6 +167,11 @@ BaseModule{
 
             anchors.verticalCenter: parent.verticalCenter
 
+            invertedValue: 1
+
+            textLeft: "PRE"
+            textRight: "POST"
+
             ctrlValInstance: module.position
 
             moduleOn: module.moduleEnabled

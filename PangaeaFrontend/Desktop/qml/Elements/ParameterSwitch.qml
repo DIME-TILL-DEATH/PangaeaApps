@@ -17,6 +17,8 @@ Item{
     property alias textLeft: _textLeft.text
     property alias textRight: _textRight.text
 
+    property alias invertedValue: _switch.invertedValue
+
     Column{
         anchors.fill: parent
 
@@ -64,18 +66,6 @@ Item{
                 if(!deviceUpdatingValues)
                     ctrlValInstance.displayValue = value;
             }
-
-
-            Connections{
-                target: UiCore.currentDevice
-
-                function onDeviceUpdatingValues()
-                {
-                    _switch.deviceUpdatingValues = true;
-                    _switch.value = ctrlValInstance.displayValue;
-                    _switch.deviceUpdatingValues = false;
-                }
-            }
         }
 
         Item {
@@ -93,7 +83,7 @@ Item{
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
 
-                text: "POST"
+                text: "OFF"
 
                 opacity: moduleOn ? 1.0 : 0.5
                 color: (module.moduleEnabled) ? Style.textEnabled: "darkgrey"
@@ -109,7 +99,7 @@ Item{
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
 
-                text: "PRE"
+                text: "ON"
 
                 opacity: moduleOn ? 1.0 : 0.5
                 color: (module.moduleEnabled) ? Style.textEnabled: "darkgrey"

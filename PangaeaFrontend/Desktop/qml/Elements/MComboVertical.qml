@@ -53,6 +53,19 @@ Column{
             _root.activated(index);
         }
 
+        contentItem: Text {
+
+            width: _combo.width - _combo.indicator.width - _combo.spacing
+            leftPadding: width/20
+
+
+            text: _combo.displayText
+            font: _combo.font
+            color: Style.textInverted
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+         }
+
         background: Rectangle {
              implicitWidth: 120
              implicitHeight: 30

@@ -81,6 +81,11 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
+            invertedValue: 1
+
+            textLeft: "PRE"
+            textRight: "POST"
+
             anchors.verticalCenter: parent.verticalCenter
 
             ctrlValInstance: module.position
