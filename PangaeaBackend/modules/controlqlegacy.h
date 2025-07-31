@@ -12,7 +12,7 @@ class ControlQLegacy : public ControlValue
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    ControlQLegacy(AbstractModule *parent, QString commandStr);
+    ControlQLegacy(AbstractModule *parent, void* pointer, QString commandStr);
 
     virtual void setDisplayValue(double newDisplayValue);
     virtual void setControlValue(qint32 value);

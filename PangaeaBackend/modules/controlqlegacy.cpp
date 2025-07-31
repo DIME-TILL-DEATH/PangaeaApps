@@ -2,8 +2,8 @@
 
 #include "eqparametric.h"
 
-ControlQLegacy::ControlQLegacy(AbstractModule *parent, QString commandStr)
-    : ControlValue{parent, commandStr,"Q-Factor", "", 100, -100, 0.25, 5.2} //-100, 0, 0.1, 10.1);
+ControlQLegacy::ControlQLegacy(AbstractModule *parent, void *pointer, QString commandStr)
+    : ControlValue{parent, pointer, commandStr,"Q-Factor", "", 100, -100, 0.25, 5.2} //-100, 0, 0.1, 10.1);
 {
     EqParametric* ownerEq = qobject_cast<EqParametric*>(parent);
     if(ownerEq)
@@ -113,6 +113,7 @@ void ControlQLegacy::setControlValue(qint32 value)
                 resultValue = (value - 20) * 0.1 + 0.001;
             break;
         }
+        default: resultValue = 0;
         }
     }
 

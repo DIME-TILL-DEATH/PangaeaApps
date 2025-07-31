@@ -18,7 +18,7 @@ class Presence : public AbstractModule
 
     Q_PROPERTY(ControlValue* presenceVolume READ presenceVolume NOTIFY dataChanged FINAL)
 public:
-    Presence(AbstractDevice *owner);
+    Presence(AbstractDevice *owner, preset_data_cplegacy_t* presetData);
 
     ControlValue* presenceVolume() {return m_presenceVolume;};
 

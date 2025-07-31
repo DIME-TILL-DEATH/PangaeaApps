@@ -63,6 +63,11 @@ void AbstractDevice::userModifiedModules()
 {
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
+
+    if(actualPreset)
+    {
+        m_presetListModel.updatePreset(actualPreset);
+    }
 }
 
 void AbstractDevice::undefinedCommandCommHandler(const QString &command, const QByteArray &arguments)

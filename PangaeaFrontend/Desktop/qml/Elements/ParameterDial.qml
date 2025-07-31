@@ -19,6 +19,7 @@ Item{
     opacity: _root.enabled ? 1:0.5
 
     property alias step: control.stepSize
+    property alias font: _txtParamName.font
 
     property int floatDigits: 0
 

@@ -8,6 +8,8 @@
 #include "presetabstract.h"
 #include "devicetypeenum.h"
 
+#include "hardwareclassicpreset.h"
+
 class AbstractDevice;
 
 class PresetLegacy : public PresetAbstract
@@ -16,6 +18,8 @@ public:
     PresetLegacy(AbstractDevice* owner);
 
     PresetAbstract& operator=(const PresetAbstract& preset) override;
+
+    preset_data_cplegacy_t presetData;
 
     bool importData(QString filePath);
     bool exportData();

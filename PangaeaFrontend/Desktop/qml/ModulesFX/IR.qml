@@ -13,11 +13,20 @@ BaseModule{
 
     property DualCabSim module: _moduleLoader.selectedModuleInstance
 
+
     contentItem: Row
     {
         anchors.fill: parent
 
+        onVisibleChanged: {
+            if(UiCore.currentDevice.systemSettings.cabNumber !== 2)
+            {
+                _chooseCabCombo.currentIndex = 0;
+            }
+        }
+
         Column{
+            visible: UiCore.currentDevice.systemSettings.cabNumber === 2
 
             width: main.dialWidth
             height: main.dialHeight
@@ -57,6 +66,7 @@ BaseModule{
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
+
                 currentIndex: 0
             }
         }
@@ -65,6 +75,8 @@ BaseModule{
         Rectangle{
             width: 1
             height: parent.height
+
+            visible: UiCore.currentDevice.systemSettings.cabNumber === 2
         }
 
         ParameterDial{
@@ -79,15 +91,17 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
+            visible: UiCore.currentDevice.systemSettings.cabNumber === 2
+
             controlValue: (_chooseCabCombo.currentIndex === 0) ? module.firstCabPan : module.secondCabPan
         }
 
-        ParameterDial{
-            width: main.dialWidth
-            height: main.dialHeight
+        // ParameterDial{
+        //     width: main.dialWidth
+        //     height: main.dialHeight
 
-            controlValue: (_chooseCabCombo.currentIndex === 0) ? module.firstCabDelay : module.secondCabDelay
-        }
+        //     controlValue: (_chooseCabCombo.currentIndex === 0) ? module.firstCabDelay : module.secondCabDelay
+        // }
 
         Rectangle{
             width: 1

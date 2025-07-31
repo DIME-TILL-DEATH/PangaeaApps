@@ -15,11 +15,13 @@ class CabSim : public AbstractModule
     Q_PROPERTY(QString impulseName READ impulseName NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* send READ send NOTIFY dataChanged FINAL)
 public:
-    CabSim(AbstractDevice *owner);
+    CabSim(AbstractDevice *owner, preset_data_cplegacy_t* csData);
+    CabSim(AbstractDevice *owner, preset_data_cpmodern_t* csData);
+
     QString impulseName() const;
     void setImpulseName(const QString& impulseName);
 
-    void setEnabled(bool isEnabled) {m_moduleEnabled = isEnabled;};
+    void setEnabled(bool isEnabled) {*m_moduleEnabled = isEnabled;};
 
     void setValues(const preset_data_cplegacy_t& csData) override;
     void setValues(const preset_data_cpmodern_t& csData) override;

@@ -1,21 +1,19 @@
 #include "volume.h"
 
-Volume::Volume(AbstractDevice *owner, VolumeType volumeType)
+Volume::Volume(AbstractDevice *owner, VolumeType volumeType, void *pointer)
     : AbstractModule{owner, ModuleType::MASTER, "MASTER", ""}
 {
-    m_moduleEnabled = true;
-
     switch (volumeType)
     {
-    case VolumeType::PresetClassic: m_volume = new ControlValue(this, "mv", "Preset volume");
+    case VolumeType::PresetClassic: m_volume = new ControlValue(this, pointer, "mv", "Preset volume");
         break;
-    case VolumeType::PresetFx: m_volume = new ControlValue(this, "vl_pr", "Preset volume", "", 0, 127, 0, 127);
+    case VolumeType::PresetFx: m_volume = new ControlValue(this, pointer, "vl_pr", "Preset volume", "", 0, 127, 0, 127);
         break;
-    case VolumeType::MasterFx: m_volume = new ControlValue(this, "vl_ms", "Master volume", "", 0, 127, 0, 127);
+    case VolumeType::MasterFx: m_volume = new ControlValue(this, nullptr, "vl_ms", "Master volume", "", 0, 127, 0, 127);
         break;
-    case VolumeType::PhonesFx: m_volume = new ControlValue(this, "vl_ph", "Phones volume", "", 0, 127, 0, 127);
+    case VolumeType::PhonesFx: m_volume = new ControlValue(this, nullptr, "vl_ph", "Phones volume", "", 0, 127, 0, 127);
         break;
-    case VolumeType::AttenuatorFx: m_volume = new ControlValue(this, "vl_at", "Attenuator", "dB", 0, 127, 0, 127);
+    case VolumeType::AttenuatorFx: m_volume = new ControlValue(this, nullptr, "vl_at", "Attenuator", "dB", 0, 127, 0, 127);
         break;
     }
 }

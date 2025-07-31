@@ -74,8 +74,8 @@ Rectangle{
                 value: eqBand.enabled
 
                 onChValue: val => {
-                               eqBand.enabled = !eqBand.enabled
-                           }
+                   eqBand.enabled = !eqBand.enabled
+               }
             }
 
             Row

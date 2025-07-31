@@ -29,7 +29,7 @@ class Reverb : public AbstractModule
     Q_PROPERTY(ControlValue* tail READ tail NOTIFY dataChanged FINAL)
 
 public:
-    Reverb(AbstractDevice *owner);
+    Reverb(AbstractDevice *owner, modules_data_fx_t* rvData);
 
     void setValues(const modules_data_fx_t &rvData) override;
 

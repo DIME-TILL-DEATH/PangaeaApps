@@ -32,15 +32,28 @@ Cp100fx::Cp100fx(Core *parent)
 
     m_maxPresetCount = 100;
 
+    actualPreset = new PresetFx{this};
+    actualPresetFx = dynamic_cast<PresetFx*>(actualPreset);
+
+    savedPreset = new PresetFx{this};
+    savedPresetFx = dynamic_cast<PresetFx*>(savedPreset);
+
+    copiedPreset = new PresetFx{this};
+    copiedPresetFx = dynamic_cast<PresetFx*>(copiedPreset);
+
     for(quint8 i=0; i < ControllersCount; i++)
     {
-        m_actualControllersList.append(new ControllerFx(&actualPreset.controller[i], i, this));
+        m_actualControllersList.append(new ControllerFx(&actualPresetFx->controller[i], i, this));
     }
 }
 
 Cp100fx::~Cp100fx()
 {
     qDeleteAll(m_actualControllersList);
+
+    delete(actualPreset);
+    delete(savedPreset);
+    delete(copiedPreset);
 }
 
 QStringList Cp100fx::strPresetNumbers()
@@ -58,30 +71,24 @@ void Cp100fx::initDevice(DeviceType deviceType)
 {
     m_deviceType = deviceType;
 
-    RF = new ResonanceFilter(this);
-    NG = new NoiseGate(this, NoiseGate::FX);
-    CM = new Compressor(this, Compressor::FX);
-    PR = new Preamp(this, Preamp::FX);
-    PA = new PowerAmp(this, PowerAmp::FX);
-    IR = new DualCabSim(this);
-    EQ = new EqParametric(this, EqParametric::EqMode::Fx, 0);
-    PH = new Phaser(this, Phaser::FX);
-    FL = new Flanger(this);
-    CH = new Chorus(this, Chorus::FX);
-    DL = new Delay(this, Delay::FX);
-    ER = new EarlyReflections(this, EarlyReflections::FX);
-    RV = new Reverb(this);
-    TR = new Tremolo(this);
-
-    EQ->setValuesPointers(&actualPreset.presetData);
-    PH->setValuesPointers(&actualPreset.presetData);
-    FL->setValuesPointers(&actualPreset.presetData);
+    RF = new ResonanceFilter(this, &actualPresetFx->presetData);
+    NG = new NoiseGate(this, &actualPresetFx->presetData);
+    CM = new Compressor(this, &actualPresetFx->presetData);
+    PR = new Preamp(this, &actualPresetFx->presetData);
+    PA = new PowerAmp(this, &actualPresetFx->presetData);
+    IR = new DualCabSim(this, &actualPresetFx->presetData);
+    EQ = new EqParametric(this, &actualPresetFx->presetData);
+    PH = new Phaser(this, &actualPresetFx->presetData);
+    FL = new Flanger(this, &actualPresetFx->presetData);
+    CH = new Chorus(this, &actualPresetFx->presetData);
+    DL = new Delay(this, &actualPresetFx->presetData);
+    ER = new EarlyReflections(this, &actualPresetFx->presetData);
+    RV = new Reverb(this, &actualPresetFx->presetData);
+    TR = new Tremolo(this, &actualPresetFx->presetData);
 
     connect(EQ, &AbstractModule::positionChanged, this, &Cp100fx::modulesChangedPosition);
     connect(PH, &AbstractModule::positionChanged, this, &Cp100fx::modulesChangedPosition);
     connect(FL, &AbstractModule::positionChanged, this, &Cp100fx::modulesChangedPosition);
-
-    // setModulePositions();
 
     emit presetListModelChanged();
     emit sgDeviceInstanciated();
@@ -129,8 +136,8 @@ void Cp100fx::saveChanges()
     emit sgPushCommandToQueue("psave");
     emit sgProcessCommands();
 
-    savedPreset = actualPreset;
-    m_presetListModel.updatePreset(&savedPreset);
+    *savedPresetFx = *actualPresetFx;
+    m_presetListModel.updatePreset(savedPreset);
 
     m_deviceParamsModified = false;
     emit deviceParamsModifiedChanged();
@@ -148,7 +155,7 @@ void Cp100fx::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges)
         comparePreset();
     }
 
-    m_presetListModel.updatePreset(&savedPreset); // Обновить актуальный пресет перед переключением
+    m_presetListModel.updatePreset(savedPreset); // Обновить актуальный пресет перед переключением
 
     emit sgPushCommandToQueue(QString("pchange %2").arg(m_preset, 2, 16, QChar('0')).toUtf8());
     emit sgProcessCommands();
@@ -216,53 +223,53 @@ QList<QByteArray> Cp100fx::parseAnswers(QByteArray baAnswer)
 
 QString Cp100fx::currentPresetName() const
 {
-    if(m_presetManager.currentState() == PresetState::Compare) return savedPreset.presetName();
-    else return actualPreset.presetName();
+    if(m_presetManager.currentState() == PresetState::Compare) return savedPreset->presetName();
+    else return actualPreset->presetName();
 }
 
 void Cp100fx::setCurrentPresetName(const QString &newCurrentPresetName)
 {
-    if (actualPreset.presetName() == newCurrentPresetName)
+    if (actualPreset->presetName() == newCurrentPresetName)
         return;
-    if(newCurrentPresetName.size()>15) actualPreset.setPresetName(newCurrentPresetName.left(15));
-    else actualPreset.setPresetName(newCurrentPresetName);
-    m_presetListModel.updatePreset(&actualPreset);
+    if(newCurrentPresetName.size()>15) actualPreset->setPresetName(newCurrentPresetName.left(15));
+    else actualPreset->setPresetName(newCurrentPresetName);
+    m_presetListModel.updatePreset(actualPreset);
 
     emit currentPresetNameChanged();
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
 
-    emit sgPushCommandToQueue("pname set\r" + actualPreset.presetName().toUtf8() + "\n", false);
+    emit sgPushCommandToQueue("pname set\r" + actualPreset->presetName().toUtf8() + "\n", false);
     emit sgProcessCommands();
 }
 
 QString Cp100fx::currentPresetComment() const
 {
-    if(m_presetManager.currentState() == PresetState::Compare) return savedPreset.presetComment();
-    else return actualPreset.presetComment();
+    if(m_presetManager.currentState() == PresetState::Compare) return savedPresetFx->presetComment();
+    else return actualPresetFx->presetComment();
 }
 
 void Cp100fx::setCurrentPresetComment(const QString &newCurrentPresetComment)
 {
-    if (actualPreset.presetComment() == newCurrentPresetComment)
+    if (actualPresetFx->presetComment() == newCurrentPresetComment)
         return;
-    if(newCurrentPresetComment.size()>15) actualPreset.setPresetComment(newCurrentPresetComment.left(15));
-    else actualPreset.setPresetComment(newCurrentPresetComment);
-    m_presetListModel.updatePreset(&actualPreset);
+    if(newCurrentPresetComment.size()>15) actualPresetFx->setPresetComment(newCurrentPresetComment.left(15));
+    else actualPresetFx->setPresetComment(newCurrentPresetComment);
+    m_presetListModel.updatePreset(actualPreset);
 
     emit currentPresetCommentChanged();
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
 
-    emit sgPushCommandToQueue("pcomment set\r" + actualPreset.presetComment().toUtf8() + "\n", false);
+    emit sgPushCommandToQueue("pcomment set\r" + actualPresetFx->presetComment().toUtf8() + "\n", false);
     emit sgProcessCommands();
 }
 
 void Cp100fx::setCntrlPcOut(quint8 newCntrlPcOut)
 {
-    if (actualPreset.cntrlPcOut() == newCntrlPcOut)
+    if (actualPresetFx->cntrlPcOut() == newCntrlPcOut)
         return;
-    actualPreset.setCntrlPcOut(newCntrlPcOut);
+    actualPresetFx->setCntrlPcOut(newCntrlPcOut);
     emit cntrlPcOutChanged();
 
     emit sgWriteToInterface("cntrl_pc " + QByteArray::number(newCntrlPcOut, 16) + "\r\n");
@@ -270,9 +277,9 @@ void Cp100fx::setCntrlPcOut(quint8 newCntrlPcOut)
 
 void Cp100fx::setCntrlSet(quint8 newCntrlSet)
 {
-    if(actualPreset.cntrlSet() == newCntrlSet)
+    if(actualPresetFx->cntrlSet() == newCntrlSet)
         return;
-    actualPreset.setCntrlSet(newCntrlSet);
+    actualPresetFx->setCntrlSet(newCntrlSet);
     emit cntrlSetChanged();
 
     emit sgWriteToInterface("cntrl_set " + QByteArray::number(newCntrlSet, 16) + "\r\n");
@@ -280,9 +287,9 @@ void Cp100fx::setCntrlSet(quint8 newCntrlSet)
 
 void Cp100fx::setPresetVolumeControl(quint8 newPresetVolumeControl)
 {
-    if (actualPreset.presetData.volume_control == newPresetVolumeControl)
+    if (actualPresetFx->presetData.volume_control == newPresetVolumeControl)
         return;
-    actualPreset.presetData.volume_control = newPresetVolumeControl;
+    actualPresetFx->presetData.volume_control = newPresetVolumeControl;
     emit presetVolumeControlChanged();
 
     emit sgWriteToInterface("vl_pr_cntrl " + QByteArray::number(newPresetVolumeControl) + "\r\n");
@@ -297,13 +304,13 @@ void Cp100fx::setModulePositions()
     m_moduleList.append(CM);
     m_moduleList.append(PR);
     m_moduleList.append(PA);
-    if(actualPreset.presetData.eq_pre_post) m_moduleList.append(EQ);
-    if(actualPreset.presetData.phaser_pre_post) m_moduleList.append(PH);
-    if(actualPreset.presetData.flanger_pre_post) m_moduleList.append(FL);
+    if(actualPresetFx->presetData.eq_pre_post) m_moduleList.append(EQ);
+    if(actualPresetFx->presetData.phaser_pre_post) m_moduleList.append(PH);
+    if(actualPresetFx->presetData.flanger_pre_post) m_moduleList.append(FL);
     m_moduleList.append(IR);
-    if(!actualPreset.presetData.eq_pre_post) m_moduleList.append(EQ);
-    if(!actualPreset.presetData.phaser_pre_post) m_moduleList.append(PH);
-    if(!actualPreset.presetData.flanger_pre_post) m_moduleList.append(FL);
+    if(!actualPresetFx->presetData.eq_pre_post) m_moduleList.append(EQ);
+    if(!actualPresetFx->presetData.phaser_pre_post) m_moduleList.append(PH);
+    if(!actualPresetFx->presetData.flanger_pre_post) m_moduleList.append(FL);
     m_moduleList.append(CH);
     m_moduleList.append(DL);
     m_moduleList.append(ER);
@@ -333,14 +340,14 @@ void Cp100fx::modulesChangedPosition()
     case ModuleTypeEnum::EQ1:
     {
         from = getModulePosition(ModuleType::EQ1);
-        if(actualPreset.presetData.eq_pre_post)
+        if(actualPresetFx->presetData.eq_pre_post)
         {
             to = getModulePosition(ModuleType::IR_STEREO);
 
-            if(actualPreset.presetData.flanger_pre_post)
+            if(actualPresetFx->presetData.flanger_pre_post)
                 to = getModulePosition(ModuleType::FL);
 
-            if(actualPreset.presetData.phaser_pre_post)
+            if(actualPresetFx->presetData.phaser_pre_post)
                 to = getModulePosition(ModuleType::PH);
         }
         else
@@ -352,15 +359,15 @@ void Cp100fx::modulesChangedPosition()
     case ModuleTypeEnum::PH:
     {
         from = getModulePosition(ModuleType::PH);
-        if(actualPreset.presetData.phaser_pre_post)
+        if(actualPresetFx->presetData.phaser_pre_post)
         {
             to = getModulePosition(ModuleType::IR_STEREO);
-            if(actualPreset.presetData.flanger_pre_post) to = getModulePosition(ModuleType::FL);
+            if(actualPresetFx->presetData.flanger_pre_post) to = getModulePosition(ModuleType::FL);
         }
         else
         {
             to = getModulePosition(ModuleType::IR_STEREO);
-            if(!actualPreset.presetData.eq_pre_post) to = getModulePosition(ModuleType::EQ1);
+            if(!actualPresetFx->presetData.eq_pre_post) to = getModulePosition(ModuleType::EQ1);
         }
         break;
     }
@@ -368,15 +375,15 @@ void Cp100fx::modulesChangedPosition()
     case ModuleTypeEnum::FL:
     {
         from = getModulePosition(ModuleType::FL);
-        if(actualPreset.presetData.flanger_pre_post)
+        if(actualPresetFx->presetData.flanger_pre_post)
         {
             to = getModulePosition(ModuleType::IR_STEREO);
         }
         else
         {
             to = getModulePosition(ModuleType::IR_STEREO);
-            if(!actualPreset.presetData.eq_pre_post) to = getModulePosition(ModuleType::EQ1);
-            if(!actualPreset.presetData.phaser_pre_post) to = getModulePosition(ModuleType::PH);
+            if(!actualPresetFx->presetData.eq_pre_post) to = getModulePosition(ModuleType::EQ1);
+            if(!actualPresetFx->presetData.phaser_pre_post) to = getModulePosition(ModuleType::PH);
         }
         break;
     }
@@ -476,8 +483,8 @@ void Cp100fx::pnumCommHandler(const QString &command, const QByteArray &argument
 {
     bool ok;
     m_preset = data.toInt(&ok, 16);
-    actualPreset.setBankPreset(0, m_preset);
-    m_presetListModel.updatePreset(&actualPreset);
+    actualPreset->setBankPreset(0, m_preset);
+    m_presetListModel.updatePreset(actualPreset);
 
     emit bankPresetChanged();
 }
@@ -492,7 +499,7 @@ void Cp100fx::pnameCommHandler(const QString &command, const QByteArray &argumen
     }
     default:
     {
-        actualPreset.setPresetName(data);
+        actualPreset->setPresetName(data);
         emit currentPresetNameChanged();
     }
     }
@@ -508,7 +515,7 @@ void Cp100fx::pcommentCommHandler(const QString &command, const QByteArray &argu
     }
     default:
     {
-        actualPreset.setPresetComment(data);
+        actualPresetFx->setPresetComment(data);
         emit currentPresetCommentChanged();
     }
     }
@@ -590,23 +597,14 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     modules_data_fx_t presetData;
     memcpy(&presetData, dataBuffer, sizeof(modules_data_fx_t));
 
-    // foreach(AbstractModule* module, m_moduleList)
-    // {
-    //     module->setValues(presetData);
-    // }
-
-    // actualPreset.presetData.volume_control = presetData.volume_control;
-    // m_presetVolume.setValue(presetData.preset_volume);
-    // emit presetVolumeControlChanged();
-
     emit deviceUpdatingValues();
 
     switch(m_presetManager.currentState())
     {
     case PresetState::Copying:
     {
-        copiedPreset = actualPreset;
-        copiedPreset.setPresetData(PresetFx::charsToPresetData(baPresetData));
+        *copiedPreset = *actualPreset;
+        copiedPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
         // copiedPreset.irFile.setIrLinkPath("ir_library"); // Скопированные пресеты могут ссылаться только на библиотеку
         m_presetManager.returnToPreviousState();
         emit presetCopied();
@@ -622,9 +620,9 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         m_presetVolume.setValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
 
-        actualPreset.setPresetData(PresetFx::charsToPresetData(baPresetData));
-        savedPreset = actualPreset;
-        m_presetListModel.updatePreset(&savedPreset);
+        actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
+        *savedPresetFx = *actualPresetFx;
+        m_presetListModel.updatePreset(savedPreset);
 
         setModulePositions();
         foreach(AbstractModule* module, m_moduleList)
@@ -639,7 +637,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     case PresetState::SetCompare:
     {
-        actualPreset.setPresetData(PresetFx::charsToPresetData(baPresetData));
+        actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
         // setPresetData(savedPreset);
 
         emit sgPushCommandToQueue("state get");
@@ -659,7 +657,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     case PresetState::Compare:
     {
         // configModules(savedPreset);
-        m_presetListModel.updatePreset(&savedPreset);
+        m_presetListModel.updatePreset(savedPreset);
         // Необходимая заглушка. Не удалять
         break;
     }
@@ -668,7 +666,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     {
         m_presetVolume.setValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
-        actualPreset.setPresetData(PresetFx::charsToPresetData(baPresetData));
+        actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
 
         setModulePositions();
         foreach(AbstractModule* module, m_moduleList)
@@ -679,7 +677,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     }
     }
 
-    m_presetListModel.updatePreset(&actualPreset);
+    m_presetListModel.updatePreset(actualPreset);
 }
 
 void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -715,7 +713,7 @@ void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &argume
 
     for(int i=0; i<32; i++)
     {
-        actualPreset.controller[i] = cntrlsData[i];
+        actualPresetFx->controller[i] = cntrlsData[i];
     }
 
     emit controllersChanged();
@@ -726,7 +724,7 @@ void Cp100fx::cntrlPcOutCommHandler(const QString &command, const QByteArray &ar
     bool ok;
     quint8 value = data.toInt(&ok, 16);
 
-    actualPreset.setCntrlPcOut(value);
+    actualPresetFx->setCntrlPcOut(value);
     emit cntrlPcOutChanged();
 }
 
@@ -735,6 +733,6 @@ void Cp100fx::cntrlSetCommHandler(const QString &command, const QByteArray &argu
     bool ok;
     quint8 value = data.toInt(&ok, 16);
 
-    actualPreset.setCntrlSet(value);
+    actualPresetFx->setCntrlSet(value);
     emit cntrlSetChanged();
 }

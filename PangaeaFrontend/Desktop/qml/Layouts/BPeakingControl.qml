@@ -35,6 +35,8 @@ Rectangle{
             height: parent.height*0.9
             anchors.verticalCenter: parent.verticalCenter
 
+            font.pixelSize: width/16
+
             property EqParametric module: main.module
 
             controlValue: module.EqBands[currentBandIndex].Fc
@@ -45,6 +47,8 @@ Rectangle{
             height: parent.height*0.9
             anchors.verticalCenter: parent.verticalCenter
 
+            font.pixelSize: width/16
+
             property EqParametric module: main.module
 
             controlValue: module.EqBands[currentBandIndex].gain
@@ -54,6 +58,8 @@ Rectangle{
             width: parent.width/4
             height: parent.height*0.9
             anchors.verticalCenter: parent.verticalCenter
+
+            font.pixelSize: width/16
 
             floatDigits: 2
 

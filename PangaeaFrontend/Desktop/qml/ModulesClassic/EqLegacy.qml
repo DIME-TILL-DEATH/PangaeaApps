@@ -61,6 +61,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 0
 
                     onClicked: _eqp.currentBandIndex = 0
@@ -71,6 +73,8 @@ BaseModule{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlighted: _eqp.currentBandIndex === 1
 
@@ -83,6 +87,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 2
 
                     onClicked: _eqp.currentBandIndex = 2
@@ -94,6 +100,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 3
 
                     onClicked: _eqp.currentBandIndex = 3
@@ -104,6 +112,8 @@ BaseModule{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlighted: _eqp.currentBandIndex === 4
 

@@ -23,7 +23,7 @@ public:
         AttenuatorFx
     };
 
-    Volume(AbstractDevice *owner, VolumeType volumeType = VolumeType::PresetClassic);
+    Volume(AbstractDevice *owner, VolumeType volumeType = VolumeType::PresetClassic, void* pointer = nullptr);
 
     ControlValue* volume() const {return m_volume;};
 

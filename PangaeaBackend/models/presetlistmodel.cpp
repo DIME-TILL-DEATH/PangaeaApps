@@ -128,5 +128,6 @@ void PresetListModel::updatePreset(PresetAbstract* newPreset)
     PresetAbstract** listData = m_presetList->data();
     (*listData[index]) = *newPreset;
 
-    emit dataChanged(createIndex(0, 0), createIndex(m_presetList->size(), 0));
+    // emit dataChanged(createIndex(0, 0), createIndex(m_presetList->size(), 0));
+    emit dataChanged(createIndex(index, 0), createIndex(index, 0));
 }

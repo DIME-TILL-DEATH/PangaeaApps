@@ -45,6 +45,15 @@ CPModern::CPModern(Core *parent)
     appSettings = new QSettings();
 #endif
 
+    actualPreset = new PresetModern{this};
+    actualPresetModern = dynamic_cast<PresetModern*>(actualPreset);
+
+    savedPreset = new PresetModern{this};
+    savedPresetModern = dynamic_cast<PresetModern*>(savedPreset);
+
+    copiedPreset = new PresetModern{this};
+    copiedPresetModern = dynamic_cast<PresetModern*>(copiedPreset);
+
     connect(&m_modulesListModel, &ModulesListModel::sgModulesReconfigured, this, &CPModern::setModules);
     connect(&m_modulesListModel, &ModulesListModel::sgModulesReconfigured, this, &AbstractDevice::processingUsedChanged);
 }
@@ -52,6 +61,10 @@ CPModern::CPModern(Core *parent)
 CPModern::~CPModern()
 {
     qDeleteAll(m_presetsList);
+
+    delete(actualPreset);
+    delete(savedPreset);
+    delete(copiedPreset);
 }
 
 void CPModern::updateOutputModeNames()
@@ -83,23 +96,23 @@ void CPModern::initDevice(DeviceType deviceType)
     m_deviceType = deviceType;
     setDeviceType(m_deviceType);
 
-    MV = new Volume(this);
+    MV = new Volume(this, Volume::PresetClassic, &actualPresetModern->presetData.volume);
 
-    NG = new NoiseGate(this);
-    CM = new Compressor(this);
-    PR = new Preamp(this);
-    PA = new PowerAmp(this);
-    IR = new CabSim(this);
+    NG = new NoiseGate(this, &actualPresetModern->presetData);
+    CM = new Compressor(this, &actualPresetModern->presetData);
+    PR = new Preamp(this, &actualPresetModern->presetData);
+    PA = new PowerAmp(this, &actualPresetModern->presetData);
+    IR = new CabSim(this, &actualPresetModern->presetData);
     connect(IR, &CabSim::dataChanged, this, &CPModern::slIrEnabledChanged);
-    EQ1 = new EqParametric(this, EqParametric::EqMode::Modern, 0);
-    EQ2 = new EqParametric(this, EqParametric::EqMode::Modern, 1);
+    EQ1 = new EqParametric(this, &actualPresetModern->presetData, 0);
+    EQ2 = new EqParametric(this, &actualPresetModern->presetData, 1);
 
-    TR = new Tremolo(this);
-    CH = new Chorus(this);
-    PH = new Phaser(this);
+    TR = new Tremolo(this, &actualPresetModern->presetData);
+    CH = new Chorus(this, &actualPresetModern->presetData);
+    PH = new Phaser(this, &actualPresetModern->presetData);
 
-    ER = new EarlyReflections(this);
-    DL = new Delay(this);
+    ER = new EarlyReflections(this, &actualPresetModern->presetData);
+    DL = new Delay(this, &actualPresetModern->presetData);
 
     typeToModuleMap.insert(ModuleType::NG, NG);
     typeToModuleMap.insert(ModuleType::CM, CM);
@@ -215,8 +228,8 @@ void CPModern::saveChanges()
     emit sgPushCommandToQueue("sp");
     emit sgProcessCommands();
 
-    savedPreset = actualPreset;
-    m_presetListModel.updatePreset(&savedPreset);
+    *savedPreset = *actualPreset;
+    m_presetListModel.updatePreset(savedPreset);
 
     m_deviceParamsModified = false;
     emit deviceParamsModifiedChanged();
@@ -235,7 +248,7 @@ void CPModern::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges
         comparePreset();
     }
 
-    m_presetListModel.updatePreset(&savedPreset); // Обновить актуальный пресет перед переключением
+    m_presetListModel.updatePreset(savedPreset); // Обновить актуальный пресет перед переключением
 
     emit sgPushCommandToQueue(QString("pc %2").arg(val, 2, 16, QChar('0')).toUtf8());
     emit sgProcessCommands();
@@ -252,7 +265,7 @@ void CPModern::comparePreset()
     {
         m_presetManager.returnToPreviousState();
         emit currentPresetNameChanged();
-        setPresetData(actualPreset);
+        setPresetData(*actualPresetModern);
         emit sgPushCommandToQueue("state get\r\n");
     }
     emit sgProcessCommands();
@@ -262,19 +275,19 @@ void CPModern::copyPreset()
 {
     m_presetManager.setCurrentState(PresetState::Copying);
 
-    if(actualPreset.irFile.irLinkPath().indexOf("ir_library") == -1)
+    if(actualPresetModern->irFile.irLinkPath().indexOf("ir_library") == -1)
     {
         qDebug() << "IR file not linked to library";
 
-        if(!isFileInLibrary(actualPreset.irFile.irName()))
+        if(!isFileInLibrary(actualPresetModern->irFile.irName()))
         {
             QString pathToIr;
-            if(actualPreset.irFile.irLinkPath().isEmpty())
-                pathToIr = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/" + actualPreset.irFile.irName();
+            if(actualPresetModern->irFile.irLinkPath().isEmpty())
+                pathToIr = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset) + "/" + actualPresetModern->irFile.irName();
             else
-                pathToIr = actualPreset.irFile.irLinkPath() + "/" + actualPreset.irFile.irName();
+                pathToIr = actualPresetModern->irFile.irLinkPath() + "/" + actualPresetModern->irFile.irName();
 
-            QString destPath = "ir_library/" + actualPreset.irFile.irName();
+            QString destPath = "ir_library/" + actualPresetModern->irFile.irName();
             emit sgPushCommandToQueue("copy\r" + pathToIr.toUtf8() + "\r" + destPath.toUtf8() + "\n", false);
         }
     }
@@ -284,13 +297,13 @@ void CPModern::copyPreset()
 
 void CPModern::pastePreset()
 {
-    quint8 currentBankNumber = actualPreset.bankNumber();
-    quint8 currentPresetNumber = actualPreset.presetNumber();
+    quint8 currentBankNumber = actualPreset->bankNumber();
+    quint8 currentPresetNumber = actualPreset->presetNumber();
 
-    actualPreset = copiedPreset;
-    actualPreset.setBankPreset(currentBankNumber, currentPresetNumber);
-    setPresetData(actualPreset);
-    m_presetListModel.updatePreset(&actualPreset);
+    *actualPresetModern = *copiedPresetModern;
+    actualPreset->setBankPreset(currentBankNumber, currentPresetNumber);
+    setPresetData(*actualPresetModern);
+    m_presetListModel.updatePreset(actualPreset);
 
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
@@ -302,7 +315,7 @@ void CPModern::importPreset(QString filePath, QString fileName)
     Q_UNUSED(fileName)
 
     QByteArray importedWavData;
-    if(!actualPreset.importData(filePath, importedWavData))
+    if(!actualPresetModern->importData(filePath, importedWavData))
     {
         emit sgDeviceError(DeviceErrorType::PresetImportUnsuccesfull);
         return;
@@ -311,11 +324,11 @@ void CPModern::importPreset(QString filePath, QString fileName)
     m_presetManager.setCurrentState(PresetState::Importing);
     if(!importedWavData.isEmpty())
     {
-        uploadIrData(actualPreset.irName(), "ir_library/", importedWavData);
+        uploadIrData(actualPreset->irName(), "ir_library/", importedWavData);
     }
     else
     {
-        setPresetData(actualPreset);
+        setPresetData(*actualPresetModern);
         emit sgPushCommandToQueue("state get\r\n");
     }
 
@@ -337,7 +350,7 @@ void CPModern::exportPreset(QString filePath, QString fileName)
         emit sgPushCommandToQueue("state");
 
         emit sgPushCommandToQueue("ir info");
-        QString pathToIr = actualPreset.irFile.irLinkPath() + "/" + actualPreset.irFile.irName();
+        QString pathToIr = actualPresetModern->irFile.irLinkPath() + "/" + actualPresetModern->irFile.irName();
         emit sgPushCommandToQueue("ir download\r" + pathToIr.toUtf8() + "\n", false);
         emit sgProcessCommands();
     }
@@ -348,8 +361,8 @@ void CPModern::restoreValue(QString name)
     //  TODO пока костыль для отмены сохранения пресета!!!!!
     if(name == "bank-preset")
     {
-        m_bank = actualPreset.bankNumber();
-        m_preset = actualPreset.presetNumber();
+        m_bank = actualPreset->bankNumber();
+        m_preset = actualPreset->presetNumber();
         emit bankPresetChanged();
     }
 }
@@ -490,8 +503,8 @@ bool CPModern::isFileInFolder(const QString &fileName)
 
 QString CPModern::currentPresetName() const
 {
-    if(m_presetManager.currentState() == PresetState::Compare) return savedPreset.presetName();
-    else return actualPreset.presetName();
+    if(m_presetManager.currentState() == PresetState::Compare) return savedPreset->presetName();
+    else return actualPreset->presetName();
 }
 
 void CPModern::setPresetData(const PresetModern &preset)
@@ -582,38 +595,38 @@ void CPModern::formatMemory()
 
 void CPModern::slIrEnabledChanged()
 {
-    actualPreset.setIsIrEnabled(IR->moduleEnabled());
-    m_presetListModel.updatePreset(&actualPreset);
+    actualPreset->setIsIrEnabled(IR->moduleEnabled());
+    m_presetListModel.updatePreset(actualPreset);
 }
 
 void CPModern::setCurrentIrFile(const IrFile &newCurrentIrFile)
 {
-    actualPreset.irFile = newCurrentIrFile;
+    actualPresetModern->irFile = newCurrentIrFile;
     emit currentIrFileChanged();
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
 
-    IR->setImpulseName(actualPreset.irFile.irName());
+    IR->setImpulseName(actualPresetModern->irFile.irName());
 
-    emit sgPushCommandToQueue("ir link\r" + actualPreset.irFile.irName().toUtf8() + "\r" +
-                                            actualPreset.irFile.irLinkPath().toUtf8() + "\n", false);
-    m_presetListModel.updatePreset(&actualPreset);
+    emit sgPushCommandToQueue("ir link\r" + actualPresetModern->irFile.irName().toUtf8() + "\r" +
+                                            actualPresetModern->irFile.irLinkPath().toUtf8() + "\n", false);
+    m_presetListModel.updatePreset(actualPreset);
     emit sgProcessCommands();
 }
 
 void CPModern::setCurrentPresetName(const QString &newCurrentPresetName)
 {
-    if (actualPreset.presetName() == newCurrentPresetName)
+    if (actualPreset->presetName() == newCurrentPresetName)
         return;
-    if(newCurrentPresetName.size()>64) actualPreset.setPresetName(newCurrentPresetName.left(64));
-    else actualPreset.setPresetName(newCurrentPresetName);
-    m_presetListModel.updatePreset(&actualPreset);
+    if(newCurrentPresetName.size()>64) actualPreset->setPresetName(newCurrentPresetName.left(64));
+    else actualPreset->setPresetName(newCurrentPresetName);
+    m_presetListModel.updatePreset(actualPreset);
 
     emit currentPresetNameChanged();
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
 
-    emit sgPushCommandToQueue("pname set\r" + actualPreset.presetName().toUtf8() + "\n", false);
+    emit sgPushCommandToQueue("pname set\r" + actualPreset->presetName().toUtf8() + "\n", false);
     emit sgProcessCommands();
 }
 
@@ -657,7 +670,7 @@ void CPModern::getBankPresetCommHandler(const QString &command, const QByteArray
     m_bank = data.left(2).toUInt();
     m_preset  = data.right(2).toUInt();
 
-    actualPreset.setBankPreset(m_bank, m_preset);
+    actualPreset->setBankPreset(m_bank, m_preset);
 
     qInfo() << "bank:" << m_bank << "preset:" << m_preset;
     emit bankPresetChanged();
@@ -744,7 +757,7 @@ void CPModern::pnameCommHandler(const QString &command, const QByteArray &argume
     }
     default:
     {
-        actualPreset.setPresetName(data);
+        actualPreset->setPresetName(data);
         emit currentPresetNameChanged();
     }
     }
@@ -796,9 +809,9 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     {
     case PresetState::Copying:
     {
-        copiedPreset = actualPreset;
-        copiedPreset.presetData = PresetModern::charsToPresetData(baPresetData);
-        copiedPreset.irFile.setIrLinkPath("ir_library"); // Скопированные пресеты могут ссылаться только на библиотеку
+        *copiedPresetModern = *actualPresetModern;
+        copiedPresetModern->presetData = PresetModern::charsToPresetData(baPresetData);
+        copiedPresetModern->irFile.setIrLinkPath("ir_library"); // Скопированные пресеты могут ссылаться только на библиотеку
         m_presetManager.returnToPreviousState();
         emit presetCopied();
         break;
@@ -810,19 +823,19 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
         m_deviceParamsModified = false;
         emit deviceParamsModifiedChanged();
 
-        actualPreset.presetData = PresetModern::charsToPresetData(baPresetData);
-        savedPreset = actualPreset;
-        m_presetListModel.updatePreset(&savedPreset);
+        actualPresetModern->presetData = PresetModern::charsToPresetData(baPresetData);
+        *savedPresetModern = *actualPresetModern;
+        m_presetListModel.updatePreset(savedPreset);
         m_presetManager.returnToPreviousState();
-        configModules(actualPreset);
+        configModules(*actualPresetModern);
         emit presetSwitched();
         break;
     }
 
     case PresetState::SetCompare:
     {
-        actualPreset.presetData = PresetModern::charsToPresetData(baPresetData);
-        setPresetData(savedPreset);
+        actualPresetModern->presetData = PresetModern::charsToPresetData(baPresetData);
+        setPresetData(*savedPresetModern);
 
         emit sgPushCommandToQueue("state get");
         m_presetManager.returnToPreviousState();
@@ -841,18 +854,18 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     case PresetState::Compare:
     {
         // configModules(savedPreset);
-        m_presetListModel.updatePreset(&savedPreset);
+        m_presetListModel.updatePreset(savedPreset);
         // Необходимая заглушка. Не удалять
         break;
     }
 
     default:
     {
-        actualPreset.presetData = PresetModern::charsToPresetData(baPresetData);
+        actualPresetModern->presetData = PresetModern::charsToPresetData(baPresetData);
         break;
     }
     }
-    m_presetListModel.updatePreset(&actualPreset);
+    m_presetListModel.updatePreset(actualPreset);
     // configModules(actualPreset);
 }
 
@@ -891,8 +904,8 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
             QList<QByteArray> dataList = data.split('\r');
             if(dataList.length()==2)
             {
-                actualPreset.irFile.setIrName(dataList.at(0));
-                actualPreset.irFile.setIrLinkPath(dataList.at(1));
+                actualPresetModern->irFile.setIrName(dataList.at(0));
+                actualPresetModern->irFile.setIrLinkPath(dataList.at(1));
             }
         }
         }
@@ -918,7 +931,7 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
             {
             case PresetState::Importing:
             {
-                setPresetData(actualPreset);
+                setPresetData(*actualPresetModern);
                 emit sgPushCommandToQueue("state get\r\n");
                 break;
             }
@@ -972,10 +985,10 @@ void CPModern::recieveIrInfo(const QByteArray &data)
 
         case PresetState::Changing:
         {
-            actualPreset.irFile.setIrName(wavName);
-            actualPreset.irFile.setIrLinkPath(irLinkPath);
+            actualPresetModern->irFile.setIrName(wavName);
+            actualPresetModern->irFile.setIrLinkPath(irLinkPath);
 
-            savedPreset.irFile = actualPreset.irFile;
+            savedPresetModern->irFile = actualPresetModern->irFile;
             IR->setImpulseName(wavName);
         }
 
@@ -985,18 +998,18 @@ void CPModern::recieveIrInfo(const QByteArray &data)
             emit sgDisableTimeoutTimer();
 
             m_symbolsToRecieve = wavSize;
-            actualPreset.setIrName(wavName);
+            actualPreset->setIrName(wavName);
             break;
         }
 
         default:
         {
-            actualPreset.setIrName(wavName);
+            actualPreset->setIrName(wavName);
             IR->setImpulseName(wavName);
         }
     }
     emit currentIrFileChanged();
-    m_presetListModel.updatePreset(&actualPreset);
+    m_presetListModel.updatePreset(actualPreset);
 }
 
 void CPModern::irDownloaded(const QString &irPath, const QByteArray &data)
@@ -1008,7 +1021,7 @@ void CPModern::irDownloaded(const QString &irPath, const QByteArray &data)
         case PresetState::Exporting:
         {
             QUrl url(m_pathToExport);
-            actualPreset.exportData(m_pathToExport, data);
+            actualPresetModern->exportData(m_pathToExport, data);
             emit sgDeviceMessage(DeviceMessageType::PresetExportFinished, url.path());
             m_presetManager.returnToPreviousState();
             break;

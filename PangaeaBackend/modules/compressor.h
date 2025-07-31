@@ -24,14 +24,11 @@ class Compressor : public AbstractModule
     Q_PROPERTY(ControlValue* knee READ knee NOTIFY dataChanged FINAL)
 
 public:
-    enum CompressorType{
-        Classic = 0,
-        FX
-    };
+    Compressor(AbstractDevice *owner, preset_data_cplegacy_t* cmData);
+    Compressor(AbstractDevice *owner, preset_data_cpmodern_t* cmData);
+    Compressor(AbstractDevice *owner, modules_data_fx_t* cmData);
 
-    explicit Compressor(AbstractDevice *owner, CompressorType compressorType = CompressorType::Classic);
-
-    void setValues(const preset_data_cplegacy_t& presetData) override;
+    void setValues(const preset_data_cplegacy_t& cmData) override;
     void setValues(const preset_data_cpmodern_t &cmData) override;
     void setValues(const modules_data_fx_t &cmData) override;
 

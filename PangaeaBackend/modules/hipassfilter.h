@@ -17,7 +17,7 @@ class HiPassFilter : public AbstractModule
 
     Q_PROPERTY(ControlValue* hpf READ hpf NOTIFY dataChanged FINAL)
 public:
-    HiPassFilter(AbstractDevice *owner);
+    HiPassFilter(AbstractDevice *owner, preset_data_cplegacy_t* presetData);
 
     ControlValue* hpf() {return m_hpf;};
 

@@ -183,6 +183,10 @@ protected:
 
     PresetListModel m_presetListModel{this};
 
+    PresetAbstract* actualPreset{nullptr};
+    PresetAbstract* savedPreset{nullptr}; // TODO используется из листа
+    PresetAbstract* copiedPreset{nullptr};
+
     QList<AbstractModule*> m_moduleList;
     QList<QObject*> m_avaliableModulesList;
     ModulesListModel m_modulesListModel{this};

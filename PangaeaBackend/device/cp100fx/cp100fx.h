@@ -90,7 +90,7 @@ public:
 
     Volume m_masterVolume{this, Volume::VolumeType::MasterFx};
     Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
-    Volume m_presetVolume{this, Volume::VolumeType::PresetFx};
+    Volume m_presetVolume{this, Volume::VolumeType::PresetFx}; //, &actualPresetFx->presetData.preset_volume};
     Volume m_attenuatorVolume{this, Volume::VolumeType::AttenuatorFx};
 
     Volume* masterVolume() {return &m_masterVolume;};
@@ -111,13 +111,13 @@ public:
 
     QObjectList controller() {return m_actualControllersList;};
 
-    quint8 cntrlPcOut() const {return actualPreset.cntrlPcOut();};
+    quint8 cntrlPcOut() const {return actualPresetFx->cntrlPcOut();};
     void setCntrlPcOut(quint8 newCntrlPcOut);
 
-    quint8 cntrlSet() const {return actualPreset.cntrlSet();};
+    quint8 cntrlSet() const {return actualPresetFx->cntrlSet();};
     void setCntrlSet(quint8 newCntrlSet);
 
-    quint8 presetVolumeControl() const {return actualPreset.presetData.volume_control;};
+    quint8 presetVolumeControl() const {return actualPresetFx->presetData.volume_control;};
     void setPresetVolumeControl(quint8 newPresetVolumeControl);
 
 public slots:
@@ -144,9 +144,9 @@ private:
     FswFx m_fswConfirm{1, this};
     FswFx m_fswUp{2, this};
 
-    PresetFx actualPreset{this};
-    PresetFx savedPreset{this}; // TODO используется из листа
-    PresetFx copiedPreset{this};
+    PresetFx* actualPresetFx;
+    PresetFx* savedPresetFx;
+    PresetFx* copiedPresetFx;
 
     void pushReadPresetCommands();
 

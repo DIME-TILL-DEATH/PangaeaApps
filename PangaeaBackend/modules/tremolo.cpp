@@ -1,19 +1,35 @@
 #include "tremolo.h"
 
-Tremolo::Tremolo(AbstractDevice *owner)
+
+Tremolo::Tremolo(AbstractDevice *owner, preset_data_cpmodern_t *data)
     : AbstractModule{owner, ModuleType::TR, "TR", "tr_on"}
 {
     m_processingTime = 20;
     m_fullModuleName = AbstractModule::tr("Tremolo");
 
-    m_depth = new ControlValue(this, "tr_dp", "Depth", "", 0, 127, 0, 127);
-    m_rate = new ControlValue(this, "tr_rt", "Rate", "",  0, 127, 0, 127);  // 0,048-14,5 Hz
-    m_form = new ControlValue(this, "tr_fm", "Form", "", 0, 127, 0, 127);
+    m_moduleEnabled = (bool*)&data->tremolo.on;
 
-    m_lfoMod = new ControlValue(this, "tr_lm", "LFO mod.", "", 0, 127, 0, 127);
+    m_depth = new ControlValue(this, &data->tremolo.depth, "tr_dp", "Depth", "", 0, 127, 0, 127);
+    m_rate = new ControlValue(this, &data->tremolo.rate, "tr_rt", "Rate", "",  0, 127, 0, 127);  // 0,048-14,5 Hz
+    m_form = new ControlValue(this, &data->tremolo.type, "tr_fm", "Form", "", 0, 127, 0, 127);
+}
 
-    m_ms = new ControlValue(this, "tr_ms", "Mono-St.");
-    m_tap = new ControlValue(this, "tr_tp", "TAP");
+Tremolo::Tremolo(AbstractDevice *owner, modules_data_fx_t *trData)
+    : AbstractModule{owner, ModuleType::TR, "TR", "tr_on"}
+{
+    m_processingTime = 20;
+    m_fullModuleName = AbstractModule::tr("Tremolo");
+
+    m_depth = new ControlValue(this, &trData->tremolo.depth, "tr_dp", "Depth", "", 0, 127, 0, 127);
+    m_rate = new ControlValue(this, &trData->tremolo.rate, "tr_rt", "Rate", "",  0, 127, 0, 127);  // 0,048-14,5 Hz
+    m_form = new ControlValue(this, &trData->tremolo_lfo_type, "tr_fm", "Form", "", 0, 127, 0, 127);
+
+    m_lfoMod = new ControlValue(this, &trData->tremolo.lfo, "tr_lm", "LFO mod.", "", 0, 127, 0, 127);
+
+    m_ms = new ControlValue(this, &trData->tremolo.ms, "tr_ms", "Mono-St.");
+    m_tap = new ControlValue(this, &trData->tremolo_tap, "tr_tp", "TAP");
+
+    m_moduleEnabled = (bool*)&trData->switches.tremolo;
 }
 
 ControlValue *Tremolo::depth() const
@@ -48,7 +64,7 @@ ControlValue *Tremolo::tap() const
 
 void Tremolo::setValues(const preset_data_cpmodern_t &trData)
 {
-    m_moduleEnabled = trData.tremolo.on;
+    *m_moduleEnabled = trData.tremolo.on;
 
     m_depth->setControlValue(trData.tremolo.depth);
     m_rate->setControlValue(trData.tremolo.rate);
@@ -59,7 +75,7 @@ void Tremolo::setValues(const preset_data_cpmodern_t &trData)
 
 void Tremolo::setValues(const modules_data_fx_t& trData)
 {
-    m_moduleEnabled = trData.switches.tremolo;
+    *m_moduleEnabled = trData.switches.tremolo;
 
     m_depth->setControlValue(trData.tremolo.depth);
     m_rate->setControlValue(trData.tremolo.rate);

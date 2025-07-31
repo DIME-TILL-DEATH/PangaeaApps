@@ -3,7 +3,7 @@
 #include <QDebug>
 
 
-ControlValue::ControlValue(AbstractModule *owner, QString commandName,
+ControlValue::ControlValue(AbstractModule *owner, void *valuePtr, QString commandName,
                            QString name, QString units,
                            qint16 minControlValue, qint16 maxControlValue,
                            double minDisplayValue, double maxDisplayValue)
@@ -18,6 +18,8 @@ ControlValue::ControlValue(AbstractModule *owner, QString commandName,
     m_units{units}
 {
     if(owner) connect(this, &ControlValue::userModifiedValue, owner, &AbstractModule::userModifiedModuleParameters);
+
+    value_ptr = valuePtr;
 
     connect(&frameTimer, &QTimer::timeout, this, &ControlValue::sendFrame);
     frameTimer.start(100);

@@ -24,7 +24,7 @@ class ControlValue : public QObject
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString units READ units CONSTANT)
 public:
-    explicit ControlValue(AbstractModule *parent, QString commandName,
+    explicit ControlValue(AbstractModule *parent, void* valuePtr, QString commandName,
                           QString name = "", QString units ="",
                           qint16 minControlValue = 0, qint16 maxControlValue = 31,
                           double minDisplayValue = 0, double maxDisplayValue = 31);
@@ -41,8 +41,6 @@ public:
 
     bool isModified() const {return m_isModified;};
     void setIsModified(bool newIsModified);
-
-    void setValuePointer(void* pointer) {value_ptr = pointer;};
 
     QString name() const {return m_name;};
     QString units() const {return m_units;};

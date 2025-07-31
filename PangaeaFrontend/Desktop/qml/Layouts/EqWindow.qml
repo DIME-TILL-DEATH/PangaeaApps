@@ -68,6 +68,8 @@ Window{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlightColor: "blue"
                     highlighted: _eqp.currentBandIndex === 5
 
@@ -80,6 +82,8 @@ Window{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 0
 
                     onClicked: _eqp.currentBandIndex = 0
@@ -90,6 +94,8 @@ Window{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlighted: _eqp.currentBandIndex === 1
 
@@ -102,6 +108,8 @@ Window{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 2
 
                     onClicked: _eqp.currentBandIndex = 2
@@ -112,6 +120,8 @@ Window{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlighted: _eqp.currentBandIndex === 3
 
@@ -124,6 +134,8 @@ Window{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 4
 
                     onClicked: _eqp.currentBandIndex = 4
@@ -134,6 +146,8 @@ Window{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlightColor: "green"
                     highlighted: _eqp.currentBandIndex === 6
@@ -262,6 +276,9 @@ Window{
 
                    anchors.fill: parent
                    delegate: EqPoint{
+                       width: Math.min(parent.width/6, parent.height/6)
+                       height: width
+
                        eqBand: main.module.EqBands[index]
                        gainRange: _eqp.gainRange
                        selectedBandIndex: _eqp.currentBandIndex

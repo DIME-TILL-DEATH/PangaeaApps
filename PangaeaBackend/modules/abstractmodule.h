@@ -35,7 +35,7 @@ public:
 
     virtual quint16 processingTime() const {return m_processingTime;};
 
-    bool moduleEnabled() const {return m_moduleEnabled;};
+    bool moduleEnabled();
     virtual void setModuleEnabled(bool newEnabled);
 
     QString moduleName() const {return m_moduleName;};
@@ -64,7 +64,7 @@ protected:
     bool m_used{false};
     quint16 m_processingTime{0};
 
-    bool m_moduleEnabled;
+    bool* m_moduleEnabled{nullptr};
     QString m_moduleName;
     QString m_fullModuleName;
 

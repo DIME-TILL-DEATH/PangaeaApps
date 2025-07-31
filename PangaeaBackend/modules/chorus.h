@@ -22,12 +22,8 @@ class Chorus : public AbstractModule
     Q_PROPERTY(ControlValue* delay READ delay NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* type READ type NOTIFY dataChanged FINAL)
 public:
-    enum ChorusType{
-        Classic = 0,
-        FX
-    };
-
-    explicit Chorus(AbstractDevice *owner, ChorusType chorusType = ChorusType::Classic);
+    Chorus(AbstractDevice *owner, preset_data_cpmodern_t* chData);
+    Chorus(AbstractDevice *owner, modules_data_fx_t* chData);
 
     void setValues(const preset_data_cpmodern_t& chData) override;
     void setValues(const modules_data_fx_t &chData) override;

@@ -27,7 +27,7 @@ class ResonanceFilter : public AbstractModule
 
     Q_PROPERTY(ControlValue* lfoType READ lfoType NOTIFY dataChanged FINAL)
 public:
-    explicit ResonanceFilter(AbstractDevice *owner);
+    ResonanceFilter(AbstractDevice *owner, modules_data_fx_t* rfData);
 
     void setValues(const modules_data_fx_t &rfData) override;
 

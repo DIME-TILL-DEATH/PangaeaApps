@@ -17,7 +17,7 @@ class LowPassFilter : public AbstractModule
 
     Q_PROPERTY(ControlValue* lpf READ lpf NOTIFY dataChanged FINAL)
 public:
-    LowPassFilter(AbstractDevice *owner);
+    LowPassFilter(AbstractDevice *owner, preset_data_cplegacy_t* lpData);
 
     ControlValue* lpf() {return m_lpf;};
 

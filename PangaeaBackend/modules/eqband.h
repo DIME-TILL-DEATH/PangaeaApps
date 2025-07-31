@@ -24,11 +24,22 @@ class EqBand : public QObject
     Q_PROPERTY(ControlValue* gain READ getGain CONSTANT)
 
     Q_PROPERTY(QList<QPointF> bandPoints READ bandPoints NOTIFY bandPointsChanged)
-public:    
+public:
 
-    explicit EqBand(EqParametric* ownerModule, FilterType bandType,
-                    double fStart, double fStop, int bandNum,
-                    qint32 fControlStart = -100, qint32 fControlStop = 100);
+    EqBand(EqParametric* ownerModule, preset_data_cplegacy_t* data,
+        FilterType bandType,
+        double fStart, double fStop, int bandNum,
+        qint32 fControlStart = -100, qint32 fControlStop = 100);
+
+    EqBand(EqParametric* ownerModule, eq_cpmodern_t* data,
+           FilterType bandType,
+           double fStart, double fStop, int bandNum,
+           qint32 fControlStart = -100, qint32 fControlStop = 100);
+
+    EqBand(EqParametric* ownerModule, modules_data_fx_t* data,
+           FilterType bandType,
+           double fStart, double fStop, int bandNum,
+           qint32 fControlStart = -100, qint32 fControlStop = 100);
 
     ~EqBand();
 
@@ -64,7 +75,7 @@ public:
     QList<QPointF> bandPoints() {return m_bandPoints;};
     void setBandPoints(const QList<QPointF>& newBandPoints);
 
-    bool enabled() const {return m_enabled;};
+    bool enabled() const {return *m_enabled;};
     void setEnabled(bool newEnabled);
 
     void setFilterType(FilterType newFilterType);
@@ -83,6 +94,8 @@ signals:
 private:
     FilterType m_filterType;
 
+    EqParametric* m_ownerModule{nullptr};
+
     ControlValue* m_Fc;
     ControlQLegacy* m_Q;
     ControlValue* m_gain;
@@ -96,7 +109,9 @@ private:
 
     void calcFilterCoefs();
     QList<QPointF> m_bandPoints;
-    bool m_enabled{true};
+    bool* m_enabled;
+
+    void makeDefaultConnections();
 };
 
 #endif // EQBAND_H

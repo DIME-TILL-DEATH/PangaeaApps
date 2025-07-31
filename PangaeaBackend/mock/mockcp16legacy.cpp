@@ -578,10 +578,12 @@ void MockCP16Legacy::eqParametersCommHandler(const QString &command, const QByte
     {
         QList<QByteArray> argsList = correctedArgs.split(' ');
         paramPtr = paramsMap.value(command);
-        paramPtr += QString(argsList.at(0)).toInt(); // array address
+        quint8 bandNum = QString(argsList.at(0)).toInt(); // array address
+        paramPtr += bandNum;
         if(argsList.size() > 1) *paramPtr = QString(argsList.at(1)).toInt(nullptr, 16);
 
-        emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r"); // в прошивках до 1.04.04 включительно нет \n в конце команд eq(и ряде других)
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum).toUtf8()
+                         + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r"); // в прошивках до 1.04.04 включительно нет \n в конце команд eq(и ряде других)
     }
 }
 

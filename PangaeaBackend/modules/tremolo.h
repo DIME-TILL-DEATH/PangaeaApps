@@ -22,7 +22,8 @@ class Tremolo : public AbstractModule
     Q_PROPERTY(ControlValue* ms READ ms NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* tap READ tap NOTIFY dataChanged FINAL)
 public:
-    Tremolo(AbstractDevice *owner);
+    Tremolo(AbstractDevice *owner, preset_data_cpmodern_t* data);
+    Tremolo(AbstractDevice *owner, modules_data_fx_t* data);
 
     void setValues(const preset_data_cpmodern_t& trData) override;
     void setValues(const modules_data_fx_t &trData) override;

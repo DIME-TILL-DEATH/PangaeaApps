@@ -40,7 +40,7 @@ public:
     void setIr2Name(const QString &newIrName) {m_ir2Name = newIrName;};
 
     void setActiveModules(const QByteArray& ba);
-    QList<ModuleType> activeModules() const {return m_activeModules;};
+    // QList<ModuleType> activeModules() const {return m_activeModules;};
     QStringList strActiveModules() const;
 
     modules_data_fx_t presetData;
@@ -59,7 +59,7 @@ public:
 private:
     AbstractDevice* m_ownerDevice;
 
-    QList<ModuleType> m_activeModules;
+    // QList<ModuleType> m_activeModules;
 
     QString m_presetName;
     QString m_presetComment;

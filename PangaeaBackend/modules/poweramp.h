@@ -22,12 +22,9 @@ class PowerAmp : public AbstractModule
     Q_PROPERTY(ControlValue* ampType READ ampType NOTIFY dataChanged FINAL)
 
 public:
-    enum PaType{
-        Classic = 0,
-        FX
-    };
-
-    explicit PowerAmp(AbstractDevice *owner, PaType paType = PaType::Classic);
+    PowerAmp(AbstractDevice *owner, preset_data_cplegacy_t* paData);
+    PowerAmp(AbstractDevice *owner, preset_data_cpmodern_t* paData);
+    PowerAmp(AbstractDevice *owner, modules_data_fx_t* paData);
 
     void setValues(const preset_data_cplegacy_t& paData) override;
     void setValues(const preset_data_cpmodern_t& paData) override;
