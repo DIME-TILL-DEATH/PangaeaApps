@@ -53,7 +53,8 @@ Item
                     text: modelData
 
                     color: "Red"
-                    font.pixelSize: parent.height*0.9
+                    font.pixelSize: Math.min(parent.height*0.9, parent.width*0.9)
+
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment:   Text.AlignVCenter
                     font.bold: true

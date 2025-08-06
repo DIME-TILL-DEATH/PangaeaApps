@@ -21,7 +21,8 @@ BaseModule{
 
     contentItem: Row
     {
-        anchors.fill: parent
+        width: main.dialWidth * 5
+        height: main.dialHeight
 
         Rectangle{
             id: canvasBackground

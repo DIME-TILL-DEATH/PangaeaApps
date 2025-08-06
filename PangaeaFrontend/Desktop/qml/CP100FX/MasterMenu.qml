@@ -42,7 +42,7 @@ RowLayout{
     }
 
     MEQ{
-        Layout.preferredWidth: parent.height * 5
+        Layout.fillWidth: true
         Layout.fillHeight: true
     }
 

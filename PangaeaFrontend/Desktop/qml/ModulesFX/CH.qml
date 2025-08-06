@@ -13,8 +13,8 @@ BaseModule{
 
     contentItem: Row
     {
-        anchors.fill: parent
-
+        width: main.dialWidth * 7
+        height: main.dialHeight
 
         ParameterDial{
             width: main.dialWidth
