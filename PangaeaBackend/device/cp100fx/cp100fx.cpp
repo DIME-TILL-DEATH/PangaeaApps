@@ -50,6 +50,7 @@ Cp100fx::Cp100fx(Core *parent)
 Cp100fx::~Cp100fx()
 {
     qDeleteAll(m_actualControllersList);
+    qDeleteAll(m_presetsList);
 
     delete(actualPreset);
     delete(savedPreset);

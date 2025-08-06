@@ -283,7 +283,7 @@ void CPLegacy::saveChanges()
         uploadImpulseData(actualPresetLegacy->waveData(), false, actualPreset->irName());
     }
 
-    savedPreset = actualPreset;
+    *savedPreset = *actualPreset;
     m_presetListModel.updatePreset(savedPreset);
 
     m_deviceParamsModified = false;
@@ -755,7 +755,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
     {
         // copy preview wave data
         if(actualPresetLegacy->wavSize() != 0)
-            copiedPreset = actualPreset;
+            *copiedPreset = *actualPreset;
 
         actualPresetLegacy->setRawData(baPresetData);
         m_presetManager.returnToPreviousState();
@@ -770,7 +770,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         emit deviceUpdatingValues();
 
         actualPresetLegacy->setRawData(baPresetData);
-        savedPreset = actualPreset;
+        *savedPreset = *actualPreset;
         m_presetListModel.updatePreset(savedPreset);
         m_presetManager.returnToPreviousState();
 

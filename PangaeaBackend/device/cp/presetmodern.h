@@ -14,7 +14,7 @@ class PresetModern : public PresetAbstract
 {
 public:
     PresetModern(AbstractDevice* ownerDevice);
-    ~PresetModern() {};
+    ~PresetModern();
 
     PresetAbstract& operator=(const PresetAbstract& preset) override;
 
