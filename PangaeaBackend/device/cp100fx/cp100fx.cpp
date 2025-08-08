@@ -239,6 +239,8 @@ void Cp100fx::selectFsObject(QString name, FileBrowserModel::FsObjectType type, 
 
         case FileBrowserModel::FsObjectType::File:
         {
+            userModifiedModules();
+
             QByteArray command;
             command.append("ir ");
             command.append(QByteArray::number(cabNum));
@@ -494,6 +496,17 @@ void Cp100fx::irCommHandler(const QString &command, const QByteArray &arguments,
 {
 
     QList<QByteArray> argList = arguments.split(' ');
+
+
+    if(argList.size() > 1)
+    {
+        if(argList.at(1) == "error")
+        {
+            qDebug() << __FUNCTION__ << data;
+            emit sgDeviceError(DeviceErrorType::IrFormatNotSupported, data);
+            return;
+        }
+    }
 
     if(argList.size() > 0)
     {

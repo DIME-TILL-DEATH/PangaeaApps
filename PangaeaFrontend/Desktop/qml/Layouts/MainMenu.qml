@@ -278,6 +278,12 @@ MenuBar{
     }
 
     MessageDialog{
+        id: deviceErrorDialog
+
+        title: qsTr("Error")
+    }
+
+    MessageDialog{
         id: disconnectDialog
 
         title: qsTr("Disconnect?")
@@ -344,6 +350,23 @@ MenuBar{
             if(nameParam === "not_fw_file_error")
             {
                 notFwFileDialog.open();
+            }
+        }
+    }
+
+    Connections{
+        target: UiCore.currentDevice
+
+        function onSgDeviceError(errType, errText)
+        {
+            switch(errType)
+            {
+            case DeviceErrorType.IrFormatNotSupported:
+            {
+                deviceErrorDialog.text = errText;
+                deviceErrorDialog.open();
+                break;
+            }
             }
         }
     }
