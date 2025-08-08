@@ -140,10 +140,10 @@ BaseModule{
             width: main.dialWidth * 2
             height: parent.height
 
-            Button{
+            MButton{
                 id: _showEqBtn
 
-                text: "Controls"
+                text: qsTr("Controls")
 
                 width: parent.width * 0.75
                 height: dialHeight/2

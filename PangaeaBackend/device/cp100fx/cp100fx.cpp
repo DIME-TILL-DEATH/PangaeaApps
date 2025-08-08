@@ -15,6 +15,11 @@ Cp100fx::Cp100fx(Core *parent)
     m_parser.addCommandHandler("sys_settings", std::bind(&Cp100fx::sysSettingsCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("state", std::bind(&Cp100fx::stateCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("ls", std::bind(&Cp100fx::lsCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("cd", std::bind(&Cp100fx::cdCommHandler, this, _1, _2, _3));
+
+    m_parser.addCommandHandler("ir", std::bind(&Cp100fx::irCommHandler, this, _1, _2, _3));
+
     m_parser.addCommandHandler("psave", std::bind(&Cp100fx::ackPresetSavedCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pchange", std::bind(&Cp100fx::ackPresetChangeCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("plist", std::bind(&Cp100fx::plistCommHandler, this, _1, _2, _3));
@@ -105,8 +110,8 @@ void Cp100fx::readFullState()
 
     pushReadPresetCommands();
 
-    // emit sgPushCommandToQueue("ls ir_library");
-
+    emit sgPushCommandToQueue("ls");
+    emit sgPushCommandToQueue("cd");
 
     emit sgProcessCommands();
 }
@@ -117,10 +122,15 @@ void Cp100fx::pushReadPresetCommands()
     emit sgPushCommandToQueue("pnum");
     emit sgPushCommandToQueue("pname");
     emit sgPushCommandToQueue("pcomment");
+
     emit sgPushCommandToQueue("state get");
+    emit sgPushCommandToQueue("ir 0");
+    emit sgPushCommandToQueue("ir 1");
+
     emit sgPushCommandToQueue("cntrls");
     emit sgPushCommandToQueue("cntrl_pc");
     emit sgPushCommandToQueue("cntrl_set");
+
 
     // m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_cpmodern_t) * 2;
 }
@@ -210,6 +220,37 @@ void Cp100fx::setFirmware(QString fullFilePath)
 void Cp100fx::formatMemory()
 {
 
+}
+
+void Cp100fx::selectFsObject(QString name, FileBrowserModel::FsObjectType type, quint8 cabNum)
+{
+    switch(type)
+    {
+        case FileBrowserModel::FsObjectType::Dir:
+        {
+            QByteArray command;
+            command.append("cd\r");
+            command.append(name.toUtf8());
+            emit sgPushCommandToQueue(command);
+            emit sgPushCommandToQueue("ls");
+            emit sgProcessCommands();
+            break;
+        }
+
+        case FileBrowserModel::FsObjectType::File:
+        {
+            QByteArray command;
+            command.append("ir ");
+            command.append(QByteArray::number(cabNum));
+            command.append(" set\r");
+            command.append(name.toUtf8());
+            emit sgPushCommandToQueue(command);
+            emit sgProcessCommands();
+            break;
+        }
+
+        default: break;
+    }
 }
 
 QList<QByteArray> Cp100fx::parseAnswers(QByteArray baAnswer)
@@ -422,6 +463,48 @@ void Cp100fx::ackPresetSavedCommHandler(const QString &command, const QByteArray
     emit presetSaved();
 }
 
+void Cp100fx::lsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QList<QByteArray> objList = data.split('|');
+
+    QList<FileBrowserModel::FsObject> fsList;
+    foreach(QByteArray fsRecord, objList)
+    {
+        QList<QByteArray> splitedRecord = fsRecord.split(':');
+        if(splitedRecord.size() == 2)
+        {
+            FileBrowserModel::FsObject fsObject;
+
+            fsObject.type = static_cast<FileBrowserModel::FsObjectType>(splitedRecord.at(0).toInt());
+            fsObject.name = splitedRecord.at(1);
+
+            fsList.append(fsObject);
+        }
+    }
+
+    m_fileBrowser.updateFsObjectsList(fsList);
+}
+
+void Cp100fx::cdCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    m_fileBrowser.setCurrentFolder(data);
+}
+
+void Cp100fx::irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+
+    QList<QByteArray> argList = arguments.split(' ');
+
+    if(argList.size() > 0)
+    {
+        quint8 cabNum = argList.at(0).toInt();
+        if(cabNum == 0) m_ir1Name = data;
+        else m_ir2Name = data;
+
+        emit irNamesChanged();
+    }
+}
+
 void Cp100fx::amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QString firmwareVersion = data;
@@ -565,6 +648,11 @@ void Cp100fx::sysSettingsCommHandler(const QString &command, const QByteArray &a
 
     m_masterEq.setValues(sysSettings);
     emit systemSettingsChanged();
+}
+
+void Cp100fx::getPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+
 }
 
 void Cp100fx::stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

@@ -13,7 +13,7 @@ BaseModule{
 
     contentItem: Row
     {
-        width: main.dialWidth * 12
+        width: main.childrenRect.width
         height: main.dialHeight
 
 

@@ -22,6 +22,8 @@
 #include "flanger.h"
 #include "mastereq.h"
 
+#include "volume.h"
+
 #include "fswfx.h"
 #include "systemsettingsfx.h"
 
@@ -46,6 +48,9 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(quint8 cntrlPcOut READ cntrlPcOut WRITE setCntrlPcOut NOTIFY cntrlPcOutChanged FINAL)
     Q_PROPERTY(quint8 cntrlSet READ cntrlSet WRITE setCntrlSet NOTIFY cntrlSetChanged FINAL)
     Q_PROPERTY(quint8 presetVolumeControl READ presetVolumeControl WRITE setPresetVolumeControl NOTIFY presetVolumeControlChanged FINAL)
+
+    Q_PROPERTY(QString ir1Name READ ir1Name NOTIFY irNamesChanged FINAL)
+    Q_PROPERTY(QString ir2Name READ ir2Name NOTIFY irNamesChanged FINAL)
 public:
     Cp100fx(Core *parent);
     ~Cp100fx();
@@ -71,6 +76,8 @@ public:
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
     Q_INVOKABLE void formatMemory() override;
+
+    Q_INVOKABLE void selectFsObject(QString name, FileBrowserModel::FsObjectType type, quint8 cabNum = 0);
 
     ResonanceFilter* RF;
     Compressor* CM;
@@ -120,6 +127,8 @@ public:
     quint8 presetVolumeControl() const {return actualPresetFx->presetData.volume_control;};
     void setPresetVolumeControl(quint8 newPresetVolumeControl);
 
+    QString ir1Name() {return m_ir1Name;}
+    QString ir2Name() {return m_ir2Name;}
 public slots:
     QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
@@ -132,6 +141,8 @@ signals:
     void cntrlPcOutChanged();
     void cntrlSetChanged();
     void presetVolumeControlChanged();
+
+    void irNamesChanged();
 
 private:
     QList<PresetAbstract*> m_presetsList;
@@ -148,6 +159,9 @@ private:
     PresetFx* savedPresetFx;
     PresetFx* copiedPresetFx;
 
+    QString m_ir1Name;
+    QString m_ir2Name;
+
     void pushReadPresetCommands();
 
 
@@ -158,6 +172,11 @@ private:
     void ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void ackPresetSavedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void lsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void cdCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void plistCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
@@ -170,9 +189,9 @@ private:
     void cntrlSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void setModulePositions();
+
 private slots:
     void modulesChangedPosition();
-
     qint8 getModulePosition(ModuleType moduleType);
 
 };

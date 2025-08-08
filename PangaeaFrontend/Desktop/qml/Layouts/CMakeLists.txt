@@ -5,17 +5,18 @@ qt_add_qml_module(qml_layouts
     VERSION 1.0
     # NO_PLUGIN
     QML_FILES
-        Main.qml
-        ConnectionLayout.qml
-        CopyPaste.qml
-        MainMenu.qml
-        MBusy.qml
-        SaveCompare.qml
-        StartLayout.qml
-        BPeakingShelfControl.qml
+    FileBrowserWindow.qml
         BCutControl.qml
         BPeakingControl.qml
+        BPeakingShelfControl.qml
+        ConnectionLayout.qml
+        CopyPaste.qml
         EqWindow.qml
+        Main.qml
+        MainMenu.qml
+        MBusy.qml
         MapList.qml
-        QML_FILES MapTable.qml
+        MapTable.qml
+        SaveCompare.qml
+        StartLayout.qml
 )

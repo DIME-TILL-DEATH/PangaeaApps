@@ -25,6 +25,8 @@
 #include "earlyreflections.h"
 #include "delay.h"
 
+#include "volume.h"
+
 
 class CPModern : public AbstractDevice
 {

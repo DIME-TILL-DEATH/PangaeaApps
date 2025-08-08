@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 import Elements 1.0
+import Layouts 1.0
 
 import StyleSettings 1.0
 
@@ -13,15 +14,31 @@ BaseModule{
 
     property DualCabSim module: _moduleLoader.selectedModuleInstance
 
+    FileBrowserWindow{
+        id: _fileBrowser
+    }
+
 
     contentItem: Row
     {
+        id: _contentItem
+
+        property alias currentIndex: _chooseCabCombo.currentIndex
+
         anchors.fill: parent
 
         onVisibleChanged: {
             if(UiCore.currentDevice.systemSettings.cabNumber !== 2)
             {
                 _chooseCabCombo.currentIndex = 0;
+            }
+        }
+
+        Connections{
+            target: _fileBrowser
+
+            function onCabNumChanged(index){
+                _chooseCabCombo,currentIndex = index
             }
         }
 
@@ -66,8 +83,11 @@ BaseModule{
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
-
                 currentIndex: 0
+
+                onActivated: {
+                    _fileBrowser.currentCabNum = _chooseCabCombo.currentIndex
+                }
             }
         }
 
@@ -106,6 +126,26 @@ BaseModule{
         Rectangle{
             width: 1
             height: parent.height
+        }
+
+        Item{
+            width: main.dialWidth * 2
+            height: parent.height
+
+            MButton{
+                id: _showBrowser
+
+                text: "Browser"
+
+                width: parent.width * 0.75
+                height: dialHeight/2
+
+                anchors.centerIn: parent
+
+                onClicked:{
+                    _fileBrowser.show();
+                }
+            }
         }
     }
 }
