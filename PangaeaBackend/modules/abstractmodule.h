@@ -28,7 +28,7 @@ class AbstractModule : public QObject
 public:
 
     explicit AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff);
-    ~AbstractModule() { qDebug() << "Module deleted: " << m_moduleName;}
+    // ~AbstractModule() {};
 
     static void registerTypestoQml();
 

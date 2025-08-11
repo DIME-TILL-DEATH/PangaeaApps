@@ -30,18 +30,36 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        SaveCompare
+        Rectangle
         {
             height: parent.height
-            width:  row.widthWithoutSpase/15*1
-        }
+            width:  row.widthWithoutSpase/15*2
+            color: Style.mainEnabledColor
+            Column
+            {
+                anchors.fill: parent
+                MButton
+                {
+                    width:  parent.width
+                    height: parent.height/2
+                    text: "SAVE"
 
-        CopyPaste
-        {
-            height: parent.height
-            width:  row.widthWithoutSpase/15*1
-        }
+                    enabled: UiCore.currentDevice.deviceParamsModified
+                    // enabled: UiCore.currentDevice.deviceParamsModified & (UiCore.currentDevice.presetManager.currentState !== PresetState.Compare)
+                    onClicked: UiCore.currentDevice.saveChanges();
+                }
 
+                MButton
+                {
+                    id: bCopy
+                    width:  parent.width
+                    height: parent.height/2
+                    text: "COPY"
+
+                    onClicked: UiCore.currentDevice.copyPreset();
+                }
+            }
+        }
 
         Column{
             width:  row.widthWithoutSpase/15*8+4

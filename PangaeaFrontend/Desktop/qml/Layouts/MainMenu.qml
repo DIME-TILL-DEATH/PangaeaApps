@@ -10,7 +10,6 @@ import QtCore
 import QtQml
 
 import CppObjects
-
 import PangaeaBackend
 
 MenuBar{
@@ -18,14 +17,19 @@ MenuBar{
 
     property bool presetEdited: UiCore.currentDevice.deviceParamsModified
 
+
     Menu{
         title: qsTr("File")
         MenuItem{
+            id: _importPreset
+
             text: qsTr("Import preset")
 
             onTriggered: importPresetDialog.open();
         }
         MenuItem{
+            id: _exportPreset
+
             text: qsTr("Export preset")
 
             onTriggered:
@@ -102,31 +106,6 @@ MenuBar{
 //            }
         }
 
-        // Menu{
-        //     title: qsTr("Modules direction")
-        //     MenuItem{
-        //         text: qsTr("Left to right")
-        //         checkable: true
-        //         checked: !UiSettings.isModulesRightAligned
-        //         onTriggered: UiSettings.saveSetting("modules_right_aligned", false);
-        //     }
-        //     MenuItem{
-        //         text: qsTr("Right to left")
-        //         checkable: true
-        //         checked: UiSettings.isModulesRightAligned
-        //         onTriggered: UiSettings.saveSetting("modules_right_aligned", true);
-        //     }
-        // }
-
-        // MenuItem{
-        //     id: menuEqClassicView
-
-        //     text: qsTr("Classic EQ view")
-        //     checkable: true
-        //     checked: UiSettings.eqClassicView
-
-        //     onTriggered: UiSettings.saveSetting("eq_classic_view", checked);
-        // }
 
         MenuItem{
             id: menuAutoconnect
@@ -270,12 +249,12 @@ MenuBar{
         }
     }
 
-    MessageDialog{
-        id: notFwFileDialog
+    // MessageDialog{
+    //     id: notFwFileDialog
 
-        title: qsTr("Error")
-        text: qsTr("Not a fiwmare file!")
-    }
+    //     title: qsTr("Error")
+    //     text: qsTr("Not a fiwmare file!")
+    // }
 
     MessageDialog{
         id: disconnectDialog
@@ -298,12 +277,13 @@ MenuBar{
         id: aboutDialog
 
         title: qsTr("About...")
-        text: qsTr("AMT Pangaea CP-16/CP-100")
+        text: qsTr("AMT Pangaea CP-16/CP-100/CP-100FX")
         informativeText: qsTr("Desktop application") + "\n" +
               qsTr("Version: ") + Qt.application.version + "\n"
               + qsTr("(c) 2025")
 
     }
+
 
     Connections{
         target: UiCore
@@ -313,31 +293,51 @@ MenuBar{
             switch (UiCore.currentDevice.deviceType)
             {
                 case DeviceType.UnknownDev:
+                {
                     menuDeviceManual.strManualBaseName = "";
                     menuUpdateFirmware.enabled = false;
                     break;
+                }
                 case DeviceType.LEGACY_CP100:
                 case DeviceType.LEGACY_CP100PA:
+                {
                     menuDeviceManual.strManualBaseName = "pangaea-CP-100-user-manual";
                     menuUpdateFirmware.enabled = false;
+
+                    _importPreset.enabled = true;
+                    _exportPreset.enabled = true;
                     break;
+                }
                 case DeviceType.LEGACY_CP16:
                 case DeviceType.LEGACY_CP16PA:
+                {
                     menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
                     menuUpdateFirmware.enabled = true;
+
+                    _importPreset.enabled = true;
+                    _exportPreset.enabled = true;
                     break;
+                }
                 case DeviceType.MODERN_CP:
                 case DeviceType.LA3:
+                {
                     menuDeviceManual.strManualBaseName = "pangaea-VC-16-user-manual";
                     menuUpdateFirmware.enabled = true;
+
+                    _importPreset.enabled = true;
+                    _exportPreset.enabled = true;
                     break;
+                }
+                case DeviceType.CP100FX:
+                {
+                    menuDeviceManual.strManualBaseName = "pangaea-CP100FX-user-manual";
+
+                    _importPreset.enabled = false;
+                    _exportPreset.enabled = false;
+                    break;
+                }
             }
         }
-
-    }
-
-    Connections{
-        target: UiCore
 
         function onSgSetUIText(nameParam, auxText)
         {

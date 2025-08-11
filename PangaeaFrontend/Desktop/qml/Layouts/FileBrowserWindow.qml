@@ -253,13 +253,6 @@ Window{
 
         onAccepted:
         {
-            // // TODO: переделать cleanPath на QUrl
-            // var cleanPath = _irFileDialog.currentFile.toString();
-            // cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
-            // UiCore.currentDevice.escImpulse();
-            // UiCore.uploadIr(cleanPath, _irManagerWindow.dstIrPath);
-
             UiCore.uploadIr(_irFileDialog.currentFile);
         }
 
@@ -271,12 +264,8 @@ Window{
 
         // onSelectedFileChanged:
         // {
-        //     // TODO: переделать cleanPath на QUrl
-        //     var cleanPath = _irFileDialog.currentFile.toString();
-        //     cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
         //     if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
-        //         UiCore.currentDevice.previewIr(cleanPath);
+        //         UiCore.currentDevice.previewIr(_irFileDialog.currentFile);
         //     }
         // }
 

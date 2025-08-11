@@ -51,6 +51,8 @@ ApplicationWindow
 
 
     header: MainMenu{
+        id: _mainMenu
+
         visible: main.connected
         enabled: !mBusy.visible
     }
@@ -193,10 +195,6 @@ ApplicationWindow
                 _msgVersionInform.visible = true;
             }
         }
-    }
-
-    Connections{
-        target: UiCore
 
         function onSgQmlRequestChangePreset(bank, preset)
         {
@@ -215,11 +213,7 @@ ApplicationWindow
             }
         }
 
-
-
         function onCurrentDeviceChanged(){
-
-            console.log("Current device changed", UiCore.currentDevice.deviceType)
 
             switch(UiCore.currentDevice.deviceType){
             case DeviceType.UNKNOWN_DEVICE:{
