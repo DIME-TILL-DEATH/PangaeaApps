@@ -19,4 +19,5 @@ qt_add_qml_module(qml_layouts
         MapTable.qml
         SaveCompare.qml
         StartLayout.qml
+        QML_FILES DialogTextInput.qml
 )

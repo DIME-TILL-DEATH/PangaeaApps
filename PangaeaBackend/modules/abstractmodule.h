@@ -2,6 +2,7 @@
 #define ABSTRACTMODULE_H
 
 #include <QObject>
+#include <QDebug>
 
 #include "moduletypeenum.h"
 #include "hardwareclassicpreset.h"
@@ -27,6 +28,7 @@ class AbstractModule : public QObject
 public:
 
     explicit AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff);
+    ~AbstractModule() { qDebug() << "Module deleted: " << m_moduleName;}
 
     static void registerTypestoQml();
 

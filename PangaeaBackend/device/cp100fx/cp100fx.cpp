@@ -1,7 +1,10 @@
 #include "cp100fx.h"
 
+#include <QDir>
+
 #include "core.h"
 #include "eqband.h"
+#include "irworker.h"
 #include "systemsettingsfx.h"
 #include "controllerfx.h"
 
@@ -19,6 +22,7 @@ Cp100fx::Cp100fx(Core *parent)
     m_parser.addCommandHandler("cd", std::bind(&Cp100fx::cdCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("ir", std::bind(&Cp100fx::irCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("upload", std::bind(&Cp100fx::uploadCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("psave", std::bind(&Cp100fx::ackPresetSavedCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pchange", std::bind(&Cp100fx::ackPresetChangeCommHandler, this, _1, _2, _3));
@@ -98,6 +102,16 @@ void Cp100fx::initDevice(DeviceType deviceType)
 
     emit presetListModelChanged();
     emit sgDeviceInstanciated();
+}
+
+QList<QByteArray> Cp100fx::parseAnswers(QByteArray baAnswer)
+{
+    QList<QByteArray> recievedCommAnswers;
+    recievedCommAnswers += m_parser.parseNewData(baAnswer);
+
+    emit sgCommandsRecieved(recievedCommAnswers);
+
+    return recievedCommAnswers;
 }
 
 void Cp100fx::readFullState()
@@ -207,11 +221,6 @@ void Cp100fx::previewIr(QString srcFilePath)
 
 }
 
-void Cp100fx::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
-{
-
-}
-
 void Cp100fx::setFirmware(QString fullFilePath)
 {
 
@@ -255,14 +264,71 @@ void Cp100fx::selectFsObject(QString name, FileBrowserModel::FsObjectType type, 
     }
 }
 
-QList<QByteArray> Cp100fx::parseAnswers(QByteArray baAnswer)
+void Cp100fx::createDir(QString dirName)
 {
-    QList<QByteArray> recievedCommAnswers;
-    recievedCommAnswers += m_parser.parseNewData(baAnswer);
+    QByteArray command;
+    command.append("mkdir\r");
+    command.append(dirName.toUtf8());
+    command.append("\n");
+    emit sgPushCommandToQueue(command, false);
+    emit sgPushCommandToQueue("ls");
+    emit sgProcessCommands();
+}
 
-    emit sgCommandsRecieved(recievedCommAnswers);
+void Cp100fx::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
+{
+    QString fileName;
+    QFileInfo fileInfo(srcFilePath);
 
-    return recievedCommAnswers;
+
+    if(fileInfo.isFile())
+    {
+        fileInfo.absoluteDir();
+        fileName = fileInfo.fileName();
+    }
+    else
+    {
+        qWarning() << "Can't find file :" << srcFilePath;
+        emit sgDeviceError(DeviceErrorType::FileNotFound, "", {fileName});
+        return;
+    }
+
+    stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
+
+    if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
+    {
+        qWarning() << __FUNCTION__ << "Not supported wav format";
+        emit sgDeviceError(DeviceErrorType::IrFormatNotSupported, QString().setNum(wavHead.sampleRate)+" Hz/"+
+                                                                      QString().setNum(wavHead.bitsPerSample)+" bits/"+
+                                                                      QString().setNum(wavHead.numChannels)+" channel");
+    }
+    else
+    {
+        irWorker.decodeWav(srcFilePath);
+
+        QByteArray fileData = irWorker.formFileData();
+        if(trimFile)
+        {
+            if(fileData.size() > maxIrSize()) fileData = fileData.left(maxIrSize());
+        }
+
+        uploadIrData(fileName, fileData);
+        m_presetManager.setCurrentState(PresetState::UploadingIr);
+    }
+}
+
+void Cp100fx::uploadIrData(const QString& irName, const QByteArray& irData)
+{
+    emit m_presetManager.currentStateChanged();
+
+    m_rawIrData = irData;
+    QByteArray command = QString("upload start\r").toUtf8() + irName.toUtf8() + "\n";
+
+    qint32 symbolsToSend = command.size() + m_rawIrData.size() + 20 * (m_rawIrData.size() / uploadBlockSize + 1); // header: ir part_upload\r*\n = 16
+    qint32 symbolsToRecieve = 0;
+
+    emit sgSendWithoutConfirmation(command, symbolsToSend, symbolsToRecieve);
+    emit sgProcessCommands();
 }
 
 QString Cp100fx::currentPresetName() const
@@ -502,8 +568,7 @@ void Cp100fx::irCommHandler(const QString &command, const QByteArray &arguments,
     {
         if(argList.at(1) == "error")
         {
-            qDebug() << __FUNCTION__ << data;
-            emit sgDeviceError(DeviceErrorType::IrFormatNotSupported, data);
+            emit sgDeviceError(DeviceErrorType::NotIrFile, data);
             return;
         }
     }
@@ -515,6 +580,45 @@ void Cp100fx::irCommHandler(const QString &command, const QByteArray &arguments,
         else m_ir2Name = data;
 
         emit irNamesChanged();
+    }
+}
+
+void Cp100fx::uploadCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    if(arguments == "request_part")
+    {
+        QByteArray answer;
+        if(m_rawIrData.length() > 0)
+        {
+            QByteArray baTmp = m_rawIrData.left(uploadBlockSize);
+            m_rawIrData.remove(0, baTmp.length());
+
+            answer = "upload part " + QString().setNum(baTmp.length()).toUtf8() + "\r";
+            answer += baTmp;
+            answer += "\n";
+            emit sgSendWithoutConfirmation(answer);
+        }
+        else
+        {
+            emit impulseUploaded();
+            switch(m_presetManager.currentState())
+            {
+            default:
+            {
+                m_presetManager.returnToPreviousState();
+            }
+            }
+
+            emit sgPushCommandToQueue("ls\r\n", false);
+        }
+        emit sgProcessCommands();
+    }
+
+    if(arguments == "error")
+    {
+        emit sgEnableTimeoutTimer();
+        emit sgDeviceError(DeviceErrorType::IrSaveError, data);
+        m_presetManager.returnToPreviousState();
     }
 }
 

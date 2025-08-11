@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "abstractdevice.h"
+#include "irworker.h"
 #include "presetfx.h"
 
 #include "resonancefilter.h"
@@ -57,6 +58,8 @@ public:
 
     QStringList strPresetNumbers() override;
 
+    quint64 maxIrSize() override {return 4096 * 3 * 2 + 44;}
+
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
 
@@ -78,6 +81,9 @@ public:
     Q_INVOKABLE void formatMemory() override;
 
     Q_INVOKABLE void selectFsObject(QString name, FileBrowserModel::FsObjectType type, quint8 cabNum = 0);
+    Q_INVOKABLE void createDir(QString dirName);
+
+    void uploadIrData(const QString& irName, const QByteArray& irData);
 
     ResonanceFilter* RF;
     Compressor* CM;
@@ -145,6 +151,8 @@ signals:
     void irNamesChanged();
 
 private:
+    IRWorker irWorker;
+
     QList<PresetAbstract*> m_presetsList;
 
     SystemSettingsFx m_systemSettings{this};
@@ -162,8 +170,12 @@ private:
     QString m_ir1Name;
     QString m_ir2Name;
 
-    void pushReadPresetCommands();
+    QByteArray m_rawFirmwareData;
+    QByteArray m_rawIrData;
 
+    const uint32_t uploadBlockSize = 100;
+
+    void pushReadPresetCommands();
 
     void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
@@ -177,6 +189,7 @@ private:
     void cdCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void uploadCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void plistCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 

@@ -1,10 +1,13 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Dialogs
+import QtCore
 
 import StyleSettings
 
 import Elements
+import Layouts
 
 import CP100FX
 import CppObjects
@@ -26,6 +29,27 @@ Window{
     property alias currentCabNum: _chooseCabCombo.currentIndex
 
     signal cabNumChanged(var cabNum)
+
+    DialogTextInput{
+        id: _folderNameDialog
+
+        title: qsTr("Folder name")
+
+        anchors.centerIn: Overlay.overlay
+
+        modal: true
+        Overlay.modal: Rectangle {
+            color: "gray"
+            opacity: 0.5
+        }
+
+        width: parent.width/2
+        height: parent.height/3
+
+        onAccepted: {
+            UiCore.currentDevice.createDir(text)
+        }
+    }
 
     ColumnLayout{
         anchors.fill: parent
@@ -146,6 +170,10 @@ Window{
                 height: parent.height
 
                 text: qsTr("Upload IR")
+
+                onClicked: {
+                    _irFileDialog.open();
+                }
             }
 
             Item{
@@ -158,7 +186,148 @@ Window{
                 height: parent.height
 
                 text: qsTr("New folder")
+
+                onClicked: {
+                    _folderNameDialog.open();
+                }
             }
         }
+    }
+
+    MessageDialog{
+        id: msgIncorretIR
+
+        title: qsTr("Incorrect wav format")
+
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes:
+                // TODO: переделать cleanPath на QUrl
+                var cleanPath = _irFileDialog.currentFile.toString();
+                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+                UiCore.convertAndUploadIr(cleanPath);
+                break;
+            }
+        }
+    }
+
+    MessageDialog{
+        id: msgError
+
+        title: qsTr("Error")
+    }
+
+    MessageDialog{
+        id: _msgTrimFileDialog
+
+        title: qsTr("Trim IR file")
+
+        buttons: MessageDialog.Yes | MessageDialog.No
+
+        property string srcPath
+        property string dstPath
+
+        onButtonClicked: function (button, role) {
+            switch(button){
+            case MessageDialog.Yes: {
+                UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
+                break;
+            }
+
+            case MessageDialog.No: {
+                UiCore.currentDevice.startIrUpload(srcPath, dstPath, false);
+                break;
+            }
+            }
+        }
+    }
+
+    FileDialog
+    {
+        id: _irFileDialog
+
+        title: qsTr("Select IR")
+        nameFilters: [ "Wav files (*.wav)" ]
+
+        onAccepted:
+        {
+            // // TODO: переделать cleanPath на QUrl
+            // var cleanPath = _irFileDialog.currentFile.toString();
+            // cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+
+            // UiCore.currentDevice.escImpulse();
+            // UiCore.uploadIr(cleanPath, _irManagerWindow.dstIrPath);
+
+            UiCore.uploadIr(_irFileDialog.currentFile);
+        }
+
+        // onRejected:
+        // {
+        //     if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB)
+        //         UiCore.currentDevice.escImpulse()
+        // }
+
+        // onSelectedFileChanged:
+        // {
+        //     // TODO: переделать cleanPath на QUrl
+        //     var cleanPath = _irFileDialog.currentFile.toString();
+        //     cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
+
+        //     if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
+        //         UiCore.currentDevice.previewIr(cleanPath);
+        //     }
+        // }
+
+        Settings
+        {
+            category: "Current_folder"
+            property alias curFolder: _irFileDialog.currentFolder
+        }
+    }
+
+
+    Connections{
+        target: UiCore.currentDevice
+
+        function onSgDeviceError(type, description, params)
+        {
+            switch(type)
+            {
+                case DeviceErrorType.IrFormatNotSupported:
+                {
+                    msgIncorretIR.text = qsTr("Pangaea doesn't support this wav format:") + "\n" +
+                                         description + "\n" +
+                                         qsTr("Do you want to convert it before upload?")
+                    msgIncorretIR.open();
+                    break;
+                }
+
+                case DeviceErrorType.NotIrFile:
+                {
+                    msgError.text = description;
+                    msgError.open();
+                    break;
+                }
+            }
+        }
+    }
+
+    Connections
+    {
+        target: UiCore
+
+        function onSgUiMessage(type, message, messageParams)
+        {
+            if(type === UiMessageType.PROPOSE_IR_TRIM)
+            {
+                _msgTrimFileDialog.text = qsTr("The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?")
+                _msgTrimFileDialog.srcPath = messageParams[1]
+                _msgTrimFileDialog.dstPath = messageParams[2]
+                _msgTrimFileDialog.open()
+            }
+        }
+
     }
 }
