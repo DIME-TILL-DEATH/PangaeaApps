@@ -56,7 +56,7 @@ Item
                     height: parent.height/2
                     text: "COPY"
 
-                    onClicked: UiCore.currentDevice.copyPreset();
+                    onClicked: _copyWindow.show();
                 }
             }
         }
@@ -228,6 +228,10 @@ Item
                 }
             }
         }
+    }
+
+    CopyToWindow{
+        id: _copyWindow
     }
 
     MapList{

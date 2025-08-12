@@ -186,19 +186,19 @@ void Cp100fx::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges)
     emit sgProcessCommands();
 }
 
-void Cp100fx::comparePreset()
+void Cp100fx::copyPresetTo(quint8 presetNumber, QVariantList selectionMask)
 {
-
-}
-
-void Cp100fx::copyPreset()
-{
-
-}
-
-void Cp100fx::pastePreset()
-{
-
+    QByteArray command;
+    command.append("copy_to ");
+    command.append(QByteArray::number(presetNumber, 16));
+    command.append("\r");
+    foreach(auto selElement, selectionMask)
+    {
+        command.append(selElement.toByteArray());
+    }
+    command.append("\n");
+    emit sgPushCommandToQueue(command, false);
+    emit sgProcessCommands();
 }
 
 void Cp100fx::importPreset(QString filePath, QString fileName)

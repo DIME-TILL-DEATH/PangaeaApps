@@ -66,9 +66,7 @@ public:
     Q_INVOKABLE void saveChanges() override;
     Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) override;
 
-    Q_INVOKABLE void comparePreset() override;
-    Q_INVOKABLE void copyPreset() override;
-    Q_INVOKABLE void pastePreset() override;
+    Q_INVOKABLE void copyPresetTo(quint8 presetNumber, QVariantList selectionMask);
     Q_INVOKABLE void importPreset(QString filePath, QString fileName) override;
     Q_INVOKABLE void exportPreset(QString filePath, QString fileName) override;
 

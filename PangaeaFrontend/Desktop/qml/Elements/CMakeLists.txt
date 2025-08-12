@@ -23,6 +23,7 @@ qt_add_qml_module(qml_elements
         Material.qml
         MBar.qml
         MButton.qml
+        MCheckBox.qml
         MComboHorizontal.qml
         MComboVertical.qml
         MLabel.qml
