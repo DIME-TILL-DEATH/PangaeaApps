@@ -33,7 +33,7 @@ ApplicationWindow
 
     // palette.highlight: "orange"
 
-    color: Style.backgroundColor
+    color: Style.currentTheme.backgroundColor
 
     property string markEdit: UiCore.currentDevice.deviceParamsModified ? " * ":" "
     property string devName: UiCore.currentDevice.firmwareName
@@ -391,6 +391,13 @@ ApplicationWindow
 
         main.x = Screen.width/2 - main.width/2;
         main.y = Screen.height/2 - main.height/2;
+
+        switch(UiSettings.colorTheme){
+            case UiSettings.ClassicBlue: Style.currentTheme = Style.themeClassicBlue; break;
+            case UiSettings.DarkOrange: Style.currentTheme = Style.themeDarkOrange; break;
+            case UiSettings.DarkBlue: Style.currentTheme = Style.themeDarkBlue; break;
+            case UiSettings.DarkGreen: Style.currentTheme = Style.themeDarkGreen; break;
+        }
     }
 
     onClosing: function(close)

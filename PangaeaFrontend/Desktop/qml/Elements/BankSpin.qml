@@ -53,7 +53,7 @@ Item
                 {
                     text: modelData
 
-                    color: "Red"
+                    color: Style.currentTheme.spin
                     font.pixelSize: parent.height*0.9
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment:   Text.AlignVCenter
@@ -143,7 +143,7 @@ Item
             MText
             {
                 anchors.fill:  parent
-                color:  Style.mainEnabledColor
+                color:  Style.currentTheme.mainEnabledColor
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: parent.height/1.1
                 text: qsTr("BANK")

@@ -20,7 +20,7 @@ import PangaeaBackend
 Rectangle{
     id: _main
 
-    color: Style.mainEnabledColor
+    color: Style.currentTheme.mainEnabledColor
 
     property int stringHeight: height/16
 
@@ -36,7 +36,7 @@ Rectangle{
 
             color: "transparent"
             border.width: 1
-            border.color: Style.borderOn
+            border.color: Style.currentTheme.borderOn
 
             Column{
                 width: parent.width * 0.9
@@ -181,7 +181,7 @@ Rectangle{
 
             color: "transparent"
             border.width: 1
-            border.color: Style.borderOn
+            border.color: Style.currentTheme.borderOn
             property int stringHeight: parent.height/16
 
             Column{
@@ -289,7 +289,7 @@ Rectangle{
 
             color: "transparent"
             border.width: 1
-            border.color: Style.borderOn
+            border.color: Style.currentTheme.borderOn
             property int stringHeight: parent.height/16
 
             Column{

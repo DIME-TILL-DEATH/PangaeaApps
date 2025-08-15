@@ -93,10 +93,10 @@ BaseModule{
                         anchors.fill: parent
 
                         text: _stagesCombo.ctrlValInstance.name
-                        font.pixelSize: 5 * Style.dip
+                        font.pixelSize: 5
                         font.bold: true
 
-                        color: Style.textEnabled
+                        color: Style.currentTheme.textEnabled
 
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment: TextInput.AlignVCenter

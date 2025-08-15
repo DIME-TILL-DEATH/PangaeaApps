@@ -49,7 +49,7 @@ Item{
             radius: width/2
 
             border.width: 1
-            border.color: "white"
+            border.color: Style.currentTheme.borderOn
 
 
             property color indicationColor: "red"

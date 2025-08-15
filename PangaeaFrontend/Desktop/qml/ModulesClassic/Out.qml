@@ -9,7 +9,7 @@ import PangaeaBackend
 Rectangle {
     id: root
 
-    color: Style.mainEnabledColor
+    color: Style.currentTheme.mainEnabledColor
 
     Column {
         id: _layout

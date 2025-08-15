@@ -40,7 +40,7 @@ Row{
         color: "transparent"
 
         border.width: 2
-        border.color: Style.borderOn
+        border.color: Style.currentTheme.borderOn
 
         MText{
             anchors.centerIn: parent
@@ -48,7 +48,7 @@ Row{
             z: _bar.z + 1
 
             text: _root.value
-            color: Style.barText
+            color: Style.currentTheme.barText
         }
 
         Rectangle{
@@ -57,8 +57,8 @@ Row{
 
             gradient: Gradient{
                 orientation: Gradient.Horizontal
-                GradientStop{position: 0; color: Style.barLow}
-                GradientStop{position: 1; color: Style.barHigh}
+                GradientStop{position: 0; color: Style.currentTheme.barLow}
+                GradientStop{position: 1; color: Style.currentTheme.barHigh}
             }
 
             x: parent.border.width

@@ -26,7 +26,7 @@ ColumnLayout
         Layout.fillWidth: true
         Layout.preferredHeight: parent.height/4
 
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         Row{
             id: _selection
@@ -101,7 +101,7 @@ ColumnLayout
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         ListView{
             id: _modulesListView
@@ -232,7 +232,7 @@ ColumnLayout
             width: _moduleLoader.width
             height: _moduleLoader.height
 
-            color: Style.mainEnabledColor
+            color: Style.currentTheme.mainEnabledColor
         }
     }
 }

@@ -2,6 +2,8 @@
 #define MOCKCP100_FX_H
 
 #include <QObject>
+#include <QDir>
+
 #include "abstractmockdevice.h"
 
 #include "hardwarefxpreset.h"
@@ -24,12 +26,12 @@ public:
     TSystemSettingsFx currentSystemData;
     // controller_fx_t controller[controllersCount];
 
-    QByteArray cab1Data;
-    QByteArray cab2Data;
+    QString ir1Name;
+    QString ir2Name;
+    QByteArray ir1Data;
+    QByteArray ir2Data;
 private:
-
-    QString m_ir1Name;
-    QString m_ir2Name;
+    QDir m_currentDir;
 
     QString m_lastPath;
 
@@ -65,6 +67,15 @@ private:
 
     void sysSettingsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void stateCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void lsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void cdCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void uploadCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void mkdirCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void renameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void removeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlsPcCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);

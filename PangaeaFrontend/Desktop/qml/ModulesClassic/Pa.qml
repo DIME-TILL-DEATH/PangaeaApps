@@ -28,7 +28,7 @@ BaseModule{
         {
             width:  parent.width
             height: parent.height/1000*(265+90+55)
-            // enabled: main.on
+            enabled: module.moduleEnabled
 
             controlValue: module.ampType
         }

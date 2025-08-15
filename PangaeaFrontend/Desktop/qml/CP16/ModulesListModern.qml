@@ -147,7 +147,7 @@ Flickable{
                             width: parent.width
                             height: parent.height * 0.075
 
-                            color: _delegateLoader.item.module.moduleEnabled ? Style.mainEnabledColor : Style.mainDisabledColor
+                            color: _delegateLoader.item.module.moduleEnabled ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
                             MouseArea {
                                 id: _mouseAreaDrag
@@ -176,7 +176,7 @@ Flickable{
                             ColorOverlay {
                                 anchors.fill: _scanImg
                                 source: _scanImg
-                                color: "white"
+                                color: Style.currentTheme.textEnabled
                             }
 
                         }

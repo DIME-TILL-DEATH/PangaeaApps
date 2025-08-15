@@ -18,10 +18,13 @@ Item
         width: parent.width/1.5
         height: width/2
         radius: height/2
-        color: Style.backgroundColor
+        color: Style.currentTheme.borderOff
+        border.color: Style.currentTheme.borderOn
         Rectangle
         {
-            color: "Black"
+            color: Style.currentTheme.borderOn
+            border.color: Style.currentTheme.borderOff
+
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter:  parent.verticalCenter
             width:  parent.height*0.8
@@ -58,12 +61,4 @@ Item
             }
         }
     }
-    // function wheelChange(angleDelta)
-    // {
-    //     if((angleDelta>0)&&(main.value<1))
-    //         main.value++;
-    //     if((angleDelta<0)&&(main.value>0))
-    //         main.value--;
-    //     main.chValue(main.value)
-    // }
 }

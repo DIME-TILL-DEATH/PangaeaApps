@@ -54,13 +54,6 @@ Item{
 
             snapMode: Dial.SnapAlways
 
-            // MText
-            // {
-            //     anchors.centerIn: parent
-            //     color: Style.mainEnabledColor
-            //     font.pixelSize: parent.width/5
-            //     text: control.value.toFixed(floatDigits)
-            // }
 
             TextInput{
                 id: _txtInput
@@ -68,7 +61,7 @@ Item{
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
 
                 anchors.centerIn: parent
-                color: acceptableInput ? Style.mainEnabledColor : "red"
+                color: acceptableInput ? Style.currentTheme.textInverted : Style.currentTheme.error
 
                 font.bold: true
                 font.family: "Arial Black"
@@ -97,16 +90,14 @@ Item{
                 x: control.width / 2 - width / 2
                 y: control.height / 2 - height / 2
 
-                // width: Math.min(control.width, control.height)
                 width: control.width
                 height: width
                 radius: width / 2
 
-                color: Style.backgroundColor
-                // color: (module.moduleEnabled) ? Style.backgroundColor : "darkgrey"
+                color: Style.currentTheme.backgroundColor
 
                 border.width: 1
-                border.color: "darkgrey"
+                border.color: Style.currentTheme.textInverted
             }
 
             handle: Rectangle {
@@ -119,7 +110,7 @@ Item{
                 height: width
                 radius: width/2
 
-                color: Style.mainDisabledColor
+                color: Style.currentTheme.mainDisabledColor
                 antialiasing: true
                 transform: [
                     Translate {
@@ -166,7 +157,7 @@ Item{
                 maximumLineCount: 2
                 wrapMode: Text.WordWrap
 
-                color: _root.enabled ? "white" : "darkgrey"
+                color: _root.enabled ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
                 font.pixelSize: parent.width/8
                 text: _root.units !=="" ? _root.name + ", " + _root.units  : _root.name
             }

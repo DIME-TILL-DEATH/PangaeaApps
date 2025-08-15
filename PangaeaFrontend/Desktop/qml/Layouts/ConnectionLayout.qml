@@ -3,6 +3,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 
+import QtQuick.Controls.impl 2.15
+
+
 import Elements
 import StyleSettings
 import CppObjects 1.0
@@ -18,7 +21,6 @@ Column{
         width: parent.width
         height: parent.height*12/100
 
-        //color: "blue"
         border.width: 2
         radius: root.radius
 
@@ -26,8 +28,8 @@ Column{
             running: !isConnected
             loops: Animation.Infinite
             alwaysRunToEnd: true
-            ColorAnimation {from: Style.highlightColor; to: Style.mainEnabledColor; duration: 1000}
-            ColorAnimation {from: Style.mainEnabledColor; to: Style.highlightColor; duration: 1000}
+            ColorAnimation {from: Style.currentTheme.highlightColor; to: Style.currentTheme.mainEnabledColor; duration: 1000}
+            ColorAnimation {from: Style.currentTheme.mainEnabledColor; to: Style.currentTheme.highlightColor; duration: 1000}
         }
 
         Item{
@@ -105,7 +107,7 @@ Column{
     }
 
     Rectangle{
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         width: parent.width
         height: parent.height*60/100
@@ -156,6 +158,24 @@ Column{
         }
     }
 
+    // MButton{
+    //     id: connectButton
+
+    //     width: parent.width
+    //     height: parent.height*12/100
+
+    //     enabled: (listView.count > 0)
+
+
+    //     text: qsTr("Click to connect")
+
+
+    //     onClicked: {
+    //         InterfaceManager.connectToDevice(listView.currentItem.data.deviceDescription,)
+    //     }
+
+    // }
+
     Rectangle{
         id: connectButton
 
@@ -169,11 +189,13 @@ Column{
 
         opacity: mA.pressed ? 0.5 : 1
 
-        color: enabled ? Style.mainEnabledColor : "gray"
+        color: enabled ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
         MText{
             anchors.centerIn: parent
             text: qsTr("Click to connect")
+
+            color: parent.enabled ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
         }
 
         MouseArea{
@@ -197,9 +219,9 @@ Column{
         border.width: 2
         radius: root.radius
 
-        opacity: mA.pressed ? 0.5 : 1
+        opacity: mA2.pressed ? 0.5 : 1
 
-        color: enabled ? Style.mainEnabledColor : "gray"
+        color: enabled ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
         MText{
             anchors.centerIn: parent

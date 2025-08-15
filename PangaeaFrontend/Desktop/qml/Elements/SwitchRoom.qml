@@ -8,6 +8,7 @@ Item
     id: main
 
     property ControlValue controlValue
+    property bool enabled
 
     Column
     {
@@ -38,6 +39,7 @@ Item
                 height: parent.height/3
                 text: "SHORT"
                 check: mSwitch.value==0
+                enabled: main.enabled
                 font.pixelSize: height/1.4
                 horizontalAlignment: Text.AlignLeft
 
@@ -50,6 +52,7 @@ Item
                 height: parent.height/3
                 text: "MEDIUM"
                 check: mSwitch.value==1
+                enabled: main.enabled
                 font.pixelSize: height/1.4
 
                 onClicked: controlValue.displayValue = 1
@@ -61,6 +64,7 @@ Item
                 height: parent.height/3
                 text: "LONG"
                 check: mSwitch.value==2
+                enabled: main.enabled
                 font.pixelSize: height/1.4
                 horizontalAlignment: Text.AlignRight
 

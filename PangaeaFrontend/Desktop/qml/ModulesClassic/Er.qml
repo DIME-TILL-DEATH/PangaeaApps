@@ -29,6 +29,8 @@ BaseModule{
             width:  parent.width
             height: parent.height/1000*165
 
+            enabled: module.moduleEnabled
+
             controlValue: module.reflectionsType
         }
 

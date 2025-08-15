@@ -24,7 +24,7 @@ Window{
     maximumWidth: Screen.width * 0.3 * 1
     maximumHeight: Screen.width * 0.3 * 0.5 * 1.75
 
-    color: Style.mainEnabledColor
+    color: Style.currentTheme.mainEnabledColor
 
     Row{
         height: parent.height * 0.85
@@ -44,7 +44,7 @@ Window{
             height: parent.height
 
             border.width: 1
-            border.color: Style.borderOn
+            border.color: Style.currentTheme.borderOn
 
             GridLayout{
                 id: _selectLayout
@@ -205,7 +205,7 @@ Window{
             height: parent.height
 
             border.width: 1
-            border.color: Style.borderOn
+            border.color: Style.currentTheme.borderOn
 
             Column{
                 anchors.fill: parent
@@ -235,7 +235,7 @@ Window{
 
                         text: modelData
 
-                        color: Style.textEnabled
+                        color: Style.currentTheme.textEnabled
                         font.pixelSize: Math.min(parent.height*0.6, parent.width*0.6)
 
                         opacity: 1.0 - Math.abs(Tumbler.displacement) / (_presetTumbler.visibleItemCount / 2)

@@ -24,7 +24,7 @@ BaseModule{
 
         property int gainRange: 40
 
-        color: main.on ? Style.mainEnabledColor : Style.mainDisabledColor
+        color: main.on ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
 
         function update()

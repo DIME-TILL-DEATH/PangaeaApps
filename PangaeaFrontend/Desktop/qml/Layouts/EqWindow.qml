@@ -31,7 +31,7 @@ Window{
 
         property int gainRange: 40
 
-        color: main.on ? Style.mainEnabledColor : Style.mainDisabledColor
+        color: main.on ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
 
         function update()
@@ -322,7 +322,7 @@ Window{
                 color: "transparent"
 
                 border.width: 2
-                border.color: (main.on) ? "white" : "darkgrey"
+                border.color: (main.on) ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
 
                 Row{
                     width: parent.width
@@ -335,7 +335,7 @@ Window{
 
                         MText{
                             anchors.horizontalCenter: parent.horizontalCenter
-                            color: (main.on) ? "white" : "darkgrey"
+                            color: (main.on) ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
                             font.pixelSize: parent.width/6
 
                             text: "BAND " + (_eqp.currentBandIndex + 1) + "\n" +

@@ -6,6 +6,8 @@ Item
 {
     id: main
 
+    property bool enabled
+
     Column
     {
         anchors.fill:  parent
@@ -36,6 +38,7 @@ Item
                 width: parent.width/2
                 height: parent.height
                 text: "Off"
+                enabled: main.enabled
                 check: mSwitch.value==0
                 onClicked: module.moduleEnabled = 0
             }
@@ -45,6 +48,7 @@ Item
                 width: parent.width/2
                 height: parent.height
                 text: "On"
+                enabled: main.enabled
                 check: mSwitch.value==1
                 onClicked: module.moduleEnabled = 1
             }

@@ -7,7 +7,7 @@ import StyleSettings
 
 Rectangle
 {
-    color: Style.headColor
+    color: Style.currentTheme.headColor
     opacity: 0.75
 
     radius: listView.width/75
@@ -37,7 +37,7 @@ Rectangle
             layer {
                 enabled: true
                 effect: ColorOverlay {
-                    color: "white"
+                    color: Style.currentTheme.textEnabled
                 }
             }
         }

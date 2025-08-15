@@ -22,8 +22,8 @@ Switch{
         x: _exprSwitch.width/2
         y: parent.height / 2 - height / 2
         radius: _exprSwitch.height/2
-        color: _exprSwitch.checked ? Style.barHigh : Style.borderOff
-        border.color: Style.borderOn
+        color: _exprSwitch.checked ? Style.currentTheme.barHigh : Style.currentTheme.borderOff
+        border.color: Style.currentTheme.borderOn
 
         Behavior on color{ColorAnimation {duration: 200}}
 
@@ -33,8 +33,8 @@ Switch{
              width: height
              height: _indicator.height - _indicator.border.width*2
              radius: height/2
-             color: Style.borderOn
-             border.color: Style.borderOff
+             color: Style.currentTheme.borderOn
+             border.color: Style.currentTheme.borderOff
 
              Behavior on x{PropertyAnimation{duration: 200}}
          }

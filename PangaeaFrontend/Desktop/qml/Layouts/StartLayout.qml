@@ -26,7 +26,7 @@ RowLayout{
     }
 
     Rectangle{
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         Layout.preferredWidth: parent.width/2
         Layout.margins: 2
@@ -37,31 +37,25 @@ RowLayout{
 
         radius: root.radius
         border.width: 2
-        Column {
+
+        GridLayout {
 
             anchors.centerIn: parent
 
-            width: parent.width*0.7
+            width: parent.width*0.85
             height: parent.height*0.95
 
-            spacing: height/30
+            columns: 2
+
             Item{
-                width: parent.width
-                height: parent.height/20
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
                 MText{
                     anchors.centerIn: parent
                     text: qsTr("Avaliable interfaces:")
                 }
-            }
-
-            Indicator{
-                isOk: true
-                indicatorText: "USB"
-
-                sourceImage: "qrc:/Images/usb-icon.svg"
-
-                width: parent.width
-                height: parent.height/20
             }
 
             Indicator{
@@ -70,124 +64,152 @@ RowLayout{
 
                 sourceImage: "qrc:/Images/bluetooth-icon.svg"
 
-                width: parent.width
-                height: parent.height/20
+                Layout.preferredWidth: parent.width/2
+                Layout.preferredHeight: parent.height/25
+            }
+
+            Indicator{
+                isOk: true
+                indicatorText: "USB"
+
+                sourceImage: "qrc:/Images/usb-icon.svg"
+
+                Layout.preferredWidth: parent.width/2
+                Layout.preferredHeight: parent.height/25
             }
 
             Item{
-                width: parent.width
-                height: parent.height/20
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
                 MText{
                     anchors.centerIn: parent
                     text: qsTr("Services:")
                 }
             }
 
-            Button{
+            MButton{
                 id: control
 
                 text: qsTr("Run IR converter")
-                width: parent.width
-                height: parent.height/15
+
+                Layout.columnSpan: 2
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.height/10
 
                 onClicked: UiCore.runIrConvertor();
             }
 
-            Button{
+            MButton{
                 text: qsTr("AMT electronics web-site")
-                width: parent.width
-                height: parent.height/15
+
+
+                Layout.columnSpan: 2
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.height/10
 
                 onClicked: Qt.openUrlExternally("http://www.amtelectronics.com/");
             }
 
-            Button{
+            MButton{
                 text: qsTr("Pangaea web page")
-                width: parent.width
-                height: parent.height/15
+
+
+                Layout.columnSpan: 2
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.height/10
 
                 onClicked: Qt.openUrlExternally("https://media.amt-sales.com/cat/cab-emulation/pangaea-series/")
             }
 
             Item{
-                width: parent.width
-                height: parent.height/20
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 MText{
                     anchors.centerIn: parent
                     text: qsTr("Settings:")
                 }
             }
 
-            Switch{
+            MComboHorizontal{
+                id: languageCombo
+
+                text: qsTr("Language:")
+
+                Layout.preferredWidth: parent.width/2
+                Layout.preferredHeight: parent.height/10
+
+                property var codesMap: {"en": 0, "ru": 1, "it": 2, "de": 3}
+                model: ["English", "Русский"] //, "Italiano", "Deutsch"]
+
+                currentIndex: codesMap[UiSettings.appLanguageCode]
+
+                onActivated: function activated(index){
+                    var strLanguageCode;
+                    switch(index){
+                        case 0: strLanguageCode = "en"; break;
+                        case 1: strLanguageCode = "ru"; break;
+                        case 2: strLanguageCode = "it"; break;
+                        case 3: strLanguageCode = "de"; break;
+                    }
+                    UiSettings.setLanguage(strLanguageCode);
+                }
+            }
+
+            MSwitchHorizontal{
                 id: swAutoconnect
-                height: parent.height/20
+
                 text: qsTr("Autoconnect")
 
-                checked: UiSettings.autoConnectEnabled
+                Layout.preferredWidth: parent.width/2
+                Layout.preferredHeight: parent.height/15
 
-                contentItem: MText {
-                         text: swAutoconnect.text
-                         verticalAlignment: Text.AlignVCenter
-                         leftPadding: swAutoconnect.indicator.width + swAutoconnect.spacing
-                     }
+                checked: UiSettings.autoConnectEnabled
 
                 onClicked: {
                     UiSettings.saveSetting("autoconnect_enable", swAutoconnect.checked);
                 }
             }
 
-            Switch{
-                id: swCheckUpdates
-                height: parent.height/20
-                text: qsTr("Check updates")
+            MComboHorizontal{
+                id: themeCombo
 
-                checked: UiSettings.checkUpdatesEnabled
+                text: qsTr("Theme:")
 
-                contentItem: MText {
-                         text: swCheckUpdates.text
-                         verticalAlignment: Text.AlignVCenter
-                         leftPadding: swCheckUpdates.indicator.width + swCheckUpdates.spacing
-                     }
+                Layout.preferredWidth: parent.width/2
+                Layout.preferredHeight: parent.height/10
 
-                onClicked: {
-                    UiSettings.saveSetting("check_updates_enable", swCheckUpdates.checked);
+                model: ["Classic blue", "Dark orange", "Dark blue", "Dark green"]
+
+                currentIndex: UiSettings.colorTheme
+
+                onActivated: function activated(index){
+                    UiSettings.colorTheme = index
+
+                    switch(index){
+                        case 0: Style.currentTheme = Style.themeClassicBlue; break;
+                        case 1: Style.currentTheme = Style.themeDarkOrange; break;
+                        case 2: Style.currentTheme = Style.themeDarkBlue; break;
+                        case 3: Style.currentTheme = Style.themeDarkGreen; break;
+                    }
                 }
             }
 
-            Row{
-                height: parent.height/10
-                Item{
-                    width: txt.contentWidth+txt.leftPadding*2
-                    height: parent.height
-                    MText{
-                        id: txt
-                        anchors.fill: parent
-                        leftPadding: 5
-                        text: qsTr("Application language:")
-                        verticalAlignment: Text.AlignVCenter
-                    }
-                }
+            MSwitchHorizontal{
+                id: swCheckUpdates
 
-                ComboBox{
-                    id: languageCombo
+                text: qsTr("Check updates")
 
-                    anchors.verticalCenter: parent.verticalCenter
+                Layout.preferredWidth: parent.width/2
+                Layout.preferredHeight: parent.height/15
 
-                    property var codesMap: {"en": 0, "ru": 1, "it": 2, "de": 3}
-                    model: ["English", "Русский"] //, "Italiano", "Deutsch"]
+                checked: UiSettings.checkUpdatesEnabled
 
-                    currentIndex: codesMap[UiSettings.appLanguageCode]
 
-                    onActivated: function activated(index){
-                        var strLanguageCode;
-                        switch(index){
-                            case 0: strLanguageCode = "en"; break;
-                            case 1: strLanguageCode = "ru"; break;
-                            case 2: strLanguageCode = "it"; break;
-                            case 3: strLanguageCode = "de"; break;
-                        }
-                        UiSettings.setLanguage(strLanguageCode);
-                    }
+                onClicked: {
+                    UiSettings.saveSetting("check_updates_enable", swCheckUpdates.checked);
                 }
             }
         }

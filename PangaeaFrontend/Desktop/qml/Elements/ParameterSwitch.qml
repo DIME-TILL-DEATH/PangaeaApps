@@ -34,10 +34,10 @@ Item{
                 anchors.fill: parent
 
                 text: ctrlValInstance.name
-                font.pixelSize: 10 * Style.dip
+                font.pixelSize: 10 * Style.currentTheme.dip
                 font.bold: true
 
-                color: Style.textEnabled
+                color: Style.currentTheme.textEnabled
 
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
@@ -86,7 +86,7 @@ Item{
                 text: "OFF"
 
                 opacity: moduleOn ? 1.0 : 0.5
-                color: (module.moduleEnabled) ? Style.textEnabled: "darkgrey"
+                color: (module.moduleEnabled) ? Style.currentTheme.textEnabled: Style.currentTheme.textDisabled
                 font.pixelSize: parent.width/8
             }
 
@@ -102,7 +102,7 @@ Item{
                 text: "ON"
 
                 opacity: moduleOn ? 1.0 : 0.5
-                color: (module.moduleEnabled) ? Style.textEnabled: "darkgrey"
+                color: (module.moduleEnabled) ? Style.currentTheme.textEnabled: Style.currentTheme.textDisabled
                 font.pixelSize: parent.width/8
             }
         }

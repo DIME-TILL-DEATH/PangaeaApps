@@ -63,8 +63,8 @@ Item
         font.pixelSize: parent.height/1.8
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment:   Text.AlignVCenter
-        color: EqResponse.moduleEnabled ? Style.highlightColor
-                                        : (main.map ? Style.mainEnabledColor : Style.backgroundColor)
+        color: EqResponse.moduleEnabled ? Style.currentTheme.highlightColor
+                                        : (main.map ? Style.currentTheme.mainEnabledColor : Style.currentTheme.backgroundColor)
         MouseArea
         {
             anchors.fill: parent
@@ -94,7 +94,7 @@ Item
         font.pixelSize: parent.height/1.8
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment:   Text.AlignVCenter
-        color: main.map ? Style.backgroundColor : Style.mainEnabledColor
+        color: main.map ? Style.currentTheme.backgroundColor : Style.currentTheme.mainEnabledColor
         MouseArea
         {
             anchors.fill: parent

@@ -24,7 +24,7 @@ BaseModule{
 
         property int gainRange: 40
 
-        color: main.on ? Style.mainEnabledColor : Style.mainDisabledColor
+        color: main.on ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
 
         function update()
@@ -284,7 +284,7 @@ BaseModule{
                 color: "transparent"
 
                 border.width: 2
-                border.color: (main.on) ? "white" : "darkgrey"
+                border.color: (main.on) ? Style.currentTheme.borderOn : Style.currentTheme.borderOff
 
                 Row{
                     width: parent.width
@@ -297,7 +297,7 @@ BaseModule{
 
                         MText{
                             anchors.horizontalCenter: parent.horizontalCenter
-                            color: (main.on) ? "white" : "darkgrey"
+                            color: (main.on) ? Style.currentTheme.borderOn : Style.currentTheme.borderOff
                             font.pixelSize: parent.width/6
 
                             text: "BAND " + (currentBandIndex + 1) + "\n" +

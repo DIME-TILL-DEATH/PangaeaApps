@@ -29,7 +29,7 @@ Window
     }
 
     Rectangle{
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
         anchors.fill: parent
 
         ListView{
@@ -59,7 +59,7 @@ Window
                     implicitWidth: 6
                     implicitHeight: 100
                     radius: width / 2
-                    color: Style.textEnabled
+                    color: Style.currentTheme.textEnabled
 
                     opacity: sbControl.policy === ScrollBar.AlwaysOn || (sbControl.size < 1.0) ? 1 : 0
                 }

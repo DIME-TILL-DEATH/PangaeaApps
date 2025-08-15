@@ -49,6 +49,6 @@ Rectangle{
 
         anchors.fill: _img
         source: _img
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
     }
 }

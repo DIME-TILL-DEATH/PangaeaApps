@@ -6,7 +6,7 @@ import StyleSettings
 Label{
     font.bold: true
     font.family: "Arial Black"
-    color: Style.textMain
+    color: Style.currentTheme.textMain
 
     elide: Label.ElideRight
 }

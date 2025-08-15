@@ -26,7 +26,7 @@ Window
     Rectangle
     {
         anchors.fill: parent
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         enabled: UiCore.currentDevice.presetManager.currentState === PresetState.Idle
 
@@ -90,8 +90,8 @@ Window
                             running: true
                             loops: Animation.Infinite
                             alwaysRunToEnd: true
-                            ColorAnimation {from: "salmon"; to: "gray"; duration: 1000}
-                            ColorAnimation {from: "gray"; to: "salmon"; duration: 1000}
+                            ColorAnimation {from: Style.currentTheme.highlightColor ; to: Style.currentTheme.barLow; duration: 1000}
+                            ColorAnimation {from: Style.currentTheme.barLow; to: Style.currentTheme.highlightColor; duration: 1000}
                         }
 
                     }

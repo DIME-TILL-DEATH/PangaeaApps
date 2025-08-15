@@ -25,8 +25,8 @@ Switch{
         x: _control.width * 1/3 / 2
         y:  _control.height/3
         radius: height/2
-        color: _control.checked ? Style.barHigh : Style.borderOff
-        border.color: Style.borderOn
+        color: _control.checked ? Style.currentTheme.barHigh : Style.currentTheme.borderOff
+        border.color: Style.currentTheme.borderOn
 
         Behavior on color{ColorAnimation {duration: 200}}
 
@@ -36,8 +36,8 @@ Switch{
              width: height
              height: _indicator.height - _indicator.border.width*2
              radius: height/2
-             color: Style.borderOn
-             border.color: Style.borderOff
+             color: Style.currentTheme.borderOn
+             border.color: Style.currentTheme.borderOff
 
              Behavior on x{PropertyAnimation{duration: 200}}
          }
@@ -49,12 +49,12 @@ Switch{
         text: _control.text
         horizontalAlignment: Text.AlignHCenter
 
-        font.pixelSize: 5 * Style.dip
+        // font.pixelSize: 5
         font.bold: true
 
         elide: Text.ElideMiddle
 
-        color: Style.textEnabled
+        color: Style.currentTheme.textEnabled
 
         width: _control.width
         height: _control.height/3

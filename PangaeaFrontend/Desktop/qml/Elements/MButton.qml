@@ -12,7 +12,7 @@ Item
     property double scaleText: 1
 
     property bool  highlighted: false
-    property color highlightColor: Style.highlightColor
+    property color highlightColor: Style.currentTheme.highlightColor
 
     signal clicked();
 
@@ -28,10 +28,10 @@ Item
         height: parent.height/1.3 //width/2
 
         border.width: 1
-        border.color: Style.mainEnabledColor
+        border.color: Style.currentTheme.borderOff
 
         radius: height/2
-        color:  main.highlighted ? highlightColor : Style.backgroundColor
+        color:  main.highlighted ? highlightColor : Style.currentTheme.backgroundColor
         clip: true
 
         Item
@@ -87,7 +87,7 @@ Item
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment:   Text.AlignVCenter
             text: main.text
-            color: Style.mainEnabledColor
+            color: main.enabled ? Style.currentTheme.textInverted : Style.currentTheme.textDisabled
             opacity: main.enabled?1:0.3
             Behavior on opacity  {NumberAnimation { duration:500 }}
 

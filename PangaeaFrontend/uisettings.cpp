@@ -117,3 +117,16 @@ QString UiSettings::appLanguageCode()
 {
     return appSettings->value("application_language", "autoselect").toString();
 }
+
+ColorTheme UiSettings::colorTheme() const
+{
+    QVariant currentTheme = appSettings->value("Color_theme", ColorTheme::DarkOrange);
+    return currentTheme.value<ColorTheme>();
+}
+
+void UiSettings::setColorTheme(ColorTheme newColorTheme)
+{
+    saveSetting("Color_theme", newColorTheme);
+
+    emit colorThemeChanged();
+}

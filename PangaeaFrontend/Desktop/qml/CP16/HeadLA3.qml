@@ -36,7 +36,7 @@ Item
         Rectangle{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-            color: Style.mainEnabledColor
+            color: Style.currentTheme.mainEnabledColor
 
             Column{
                 anchors.fill: parent
@@ -117,11 +117,11 @@ Item
                     anchors.fill: parent
                     Rectangle{
                         border.width: 1
-                        color: Style.mainEnabledColor
+                        color: Style.currentTheme.mainEnabledColor
                         height: parent.height
                         width: parent.width/5
                         MText{
-                            color: palette.text
+                            color: Style.currentTheme.textInverted
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
@@ -140,7 +140,7 @@ Item
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
 
-                        color: Style.textEnabled
+                        color: Style.currentTheme.textEnabled
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
@@ -163,7 +163,7 @@ Item
 
                 enabled: UiCore.currentDevice.IR.used
 
-                color: enabled ? Style.headColor : "gray"
+                color: enabled ? Style.currentTheme.headColor : Style.currentTheme.borderOff
 
                 border.width: 1
 
@@ -178,14 +178,15 @@ Item
 
                     Rectangle{
                         border.width: 1
-                        color: Style.mainEnabledColor
                         height: parent.height
                         width: impuls.enabled ? parent.width/5 : 0
+                        color: Style.currentTheme.mainEnabledColor
                         MText{
 
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
+                            color: Style.currentTheme.textInverted
 
                             visible: impuls.enabled
 
@@ -211,7 +212,7 @@ Item
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment:   Text.AlignVCenter
 
-                            color: "black"
+                            color: Style.currentTheme.textInverted
 
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
                             elide: Text.ElideMiddle
@@ -240,16 +241,26 @@ Item
                 }
             }
 
-            Item{
+            Rectangle{
                 height: parent.height/3
                 width:  parent.width
 
-                Button{
-                    width: parent.width
-                    height: parent.height
+                opacity: mA.pressed ? 0.5 : 1
 
+                color: Style.currentTheme.mainEnabledColor
+
+                MText{
                     text: qsTr("Add/Remove module")
+                    anchors.fill: parent
 
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                MouseArea{
+                    id: mA
+
+                    anchors.fill: parent
                     onClicked: openModulesConfigWindow();
                 }
             }
@@ -266,7 +277,7 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            color: Style.mainEnabledColor
+            color: Style.currentTheme.mainEnabledColor
 
 
             ParameterDial{
@@ -293,7 +304,7 @@ Item
 
         Rectangle
         {
-            color: Style.mainEnabledColor
+            color: Style.currentTheme.mainEnabledColor
 
             height: parent.height
             width:  row.widthWithoutSpase/15*1
@@ -378,7 +389,7 @@ Item
             width:  row.widthWithoutSpase/15*1
 
             imageSource: "qrc:/Images/list1.svg";
-            imageColor: Style.mainEnabledColor
+            imageColor: Style.currentTheme.mainEnabledColor
 
             onClicked: {
                 map.show()
@@ -397,9 +408,9 @@ Item
             radius: height / 10
 
             border.width: index === map.currentIndex ? 4 : 2
-            border.color: index === map.currentIndex ? Style.highlightColor : Style.textEnabled
+            border.color: index === map.currentIndex ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled
 
-            color: Style.barLow
+            color: Style.currentTheme.mainEnabledColor
 
             MouseArea{
                 anchors.fill: parent

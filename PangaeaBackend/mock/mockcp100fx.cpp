@@ -1,6 +1,6 @@
 #include <QDebug>
 #include <QStandardPaths>
-#include <QDir>
+
 #include <qendian.h>
 
 #include "presetfx.h"
@@ -17,19 +17,30 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     m_parser.addCommandHandler("amtdev", std::bind(&MockCP100fx::amtDevCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("amtver", std::bind(&MockCP100fx::amtVerCommHandler, this, _1, _2, _3));
 
-    m_parser.addCommandHandler("sys_settings", std::bind(&MockCP100fx::sysSettingsCommHandler, this, _1, _2, _3));
-    m_parser.addCommandHandler("state", std::bind(&MockCP100fx::stateCommHandler, this, _1, _2, _3));
-
-    m_parser.addCommandHandler("psave", std::bind(&MockCP100fx::psaveCommHandler, this, _1, _2, _3));
-    m_parser.addCommandHandler("pchange", std::bind(&MockCP100fx::pchangeCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("plist", std::bind(&MockCP100fx::plistCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("sys_settings", std::bind(&MockCP100fx::sysSettingsCommHandler, this, _1, _2, _3));
+
     m_parser.addCommandHandler("pnum", std::bind(&MockCP100fx::pnumCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pname", std::bind(&MockCP100fx::pnameCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pcomment", std::bind(&MockCP100fx::pcommentCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("state", std::bind(&MockCP100fx::stateCommHandler, this, _1, _2, _3));
+
+    m_parser.addCommandHandler("ir", std::bind(&MockCP100fx::irCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("cd", std::bind(&MockCP100fx::cdCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("ls", std::bind(&MockCP100fx::lsCommHandler, this, _1, _2, _3));
+
+    m_parser.addCommandHandler("upload", std::bind(&MockCP100fx::uploadCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("mkdir", std::bind(&MockCP100fx::mkdirCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("rename", std::bind(&MockCP100fx::renameCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("remove", std::bind(&MockCP100fx::removeCommHandler, this, _1, _2, _3));
+
     m_parser.addCommandHandler("cntrls", std::bind(&MockCP100fx::cntrlsCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrl_pc", std::bind(&MockCP100fx::cntrlsPcCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrl_set", std::bind(&MockCP100fx::cntrlsSetCommHandler, this, _1, _2, _3));
+
+    m_parser.addCommandHandler("pchange", std::bind(&MockCP100fx::pchangeCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("psave", std::bind(&MockCP100fx::psaveCommHandler, this, _1, _2, _3));
 
     //--------------------------params handlers----------------------
     setParamsHandler("rf_on", &currentPresetData.modules.switches.resonance_filter);
@@ -330,13 +341,18 @@ void MockCP100fx::initFolders()
         currentSystemData.masterEqFreq = qToBigEndian<quint16>(defaultMidFreq);
     }
 
-    QString presetsFolderPath = m_basePath + "/PRESETS";
+    QString presetsFolderPath = m_basePath + "/FLASH" + "/PRESETS";
     if(!QDir().exists(presetsFolderPath)) QDir().mkpath(presetsFolderPath);
+
+    QString impulsesPath = m_basePath + "/SD/IMPULSE";
+    if(!QDir().exists(impulsesPath)) QDir().mkpath(impulsesPath);
+
+    m_currentDir = impulsesPath;
 }
 
 bool MockCP100fx::loadSysParameters()
 {
-    QFile systemFile(m_basePath + "/system.pan");
+    QFile systemFile(m_basePath + "/FLASH" + "/system.pan");
     if(systemFile.open(QIODevice::ReadOnly))
     {
         QByteArray readedData;
@@ -349,7 +365,7 @@ bool MockCP100fx::loadSysParameters()
 
 bool MockCP100fx::saveSysParameters()
 {
-    QFile systemFile(m_basePath + "/system.pan");
+    QFile systemFile(m_basePath + "/FLASH" + "/system.pan");
 
     if(systemFile.open(QIODevice::WriteOnly))
     {
@@ -371,16 +387,21 @@ void MockCP100fx::loadPresetData(quint8 presetNumber)
 
     if(presetNumber < 10) strPresetNumber.prepend("0");
 
-    QString filePath = m_basePath + "/PRESETS/" + strPresetNumber + "_preset.pan";
+    QString filePath = m_basePath + "/FLASH" + "/PRESETS/" + strPresetNumber + "_preset.pan";
     QFile presetFile(filePath);
+
+    ir1Name.clear();
+    ir2Name.clear();
+    ir1Data.clear();
+    ir2Data.clear();
 
     if(presetFile.open(QIODevice::ReadOnly))
     {
         QByteArray readedData;
         readedData = presetFile.read(sizeof(preset_data_fx_t));
         memcpy(&currentPresetData, readedData.data(), sizeof(preset_data_fx_t));
-
         readedData.clear();
+
         readedData = presetFile.read(2);
         if(readedData.size() >= 2)
         {
@@ -388,58 +409,59 @@ void MockCP100fx::loadPresetData(quint8 presetNumber)
             delayTime = readedData.at(1) << 8;
         }
 
-        cab1Data = presetFile.read(PresetFx::CabinetSize);
+        ir1Name = presetFile.read(64);
+        ir1Data = presetFile.read(PresetFx::CabinetSize);
 
-        if(cab1Data.size() < PresetFx::CabinetSize)
+        if(ir1Data.size() < PresetFx::CabinetSize)
         {
-            cab1Data.clear();
-            cab1Data.append(0xff);
-            cab1Data.append(0xff);
-            cab1Data.append(0x7f);
+            ir1Data.clear();
+            ir1Data.append(0xff);
+            ir1Data.append(0xff);
+            ir1Data.append(0x7f);
 
             for(int i=0; i < PresetFx::CabinetSize - 3; i++)
             {
                 char nil = 0x00;
-                cab1Data.append(nil);
+                ir1Data.append(nil);
             }
         }
 
         if(currentSystemData.cabSimConfig == 2)
         {
-            cab2Data = presetFile.read(PresetFx::CabinetSize);
+            ir2Name = presetFile.read(64);
+            ir2Data = presetFile.read(PresetFx::CabinetSize);
 
-            if(cab2Data.size() < PresetFx::CabinetSize)
+            if(ir2Data.size() < PresetFx::CabinetSize)
             {
-                cab2Data.clear();
-                cab2Data.append(0xff);
-                cab2Data.append(0xff);
-                cab2Data.append(0x7f);
+                ir2Data.clear();
+                ir2Data.append(0xff);
+                ir2Data.append(0xff);
+                ir2Data.append(0x7f);
 
                 for(int i=0; i < PresetFx::CabinetSize - 3; i++)
                 {
                     char nil = 0x00;
-                    cab2Data.append(nil);
+                    ir2Data.append(nil);
                 }
             }
         }
         else
         {
-            // presetFile.seek(sizeof(preset_data_fx_t) + 2 + PresetFx::CabinetSize * 2); //=25632
-            if(presetFile.seek(25760))
+            if(presetFile.seek(sizeof(preset_data_fx_t) + 2 + 64 * 2 + PresetFx::CabinetSize * 2)) //presetFile.seek(25760))
             {
-                cab1Data = presetFile.read(PresetFx::CabinetSize);
+                ir1Data += presetFile.read(PresetFx::CabinetSize);
             }
             else
             {
-                if(cab1Data.size() < PresetFx::CabinetSize * 2)
+                if(ir1Data.size() < PresetFx::CabinetSize * 2)
                 {
                     char nil = 0x00;
-                    cab1Data.append(nil);
+                    ir1Data.append(nil);
                 }
             }
         }
 
-        presetFile.seek(38048);
+        presetFile.seek(sizeof(preset_data_fx_t) + 2 + 64 * 2 + PresetFx::CabinetSize * 3); //38048);
         m_lastPath = presetFile.read(255);
 
         presetFile.close();
@@ -467,22 +489,22 @@ void MockCP100fx::loadPresetData(quint8 presetNumber)
 
         delayTime = 500;
 
-        cab1Data.append(0xff);
-        cab1Data.append(0xff);
-        cab1Data.append(0x7f);
+        ir1Data.append(0xff);
+        ir1Data.append(0xff);
+        ir1Data.append(0x7f);
 
         // if(cab_type == 2)
         // {
-        cab2Data.append(0xff);
-        cab2Data.append(0xff);
-        cab2Data.append(0x7f);
+        ir2Data.append(0xff);
+        ir2Data.append(0xff);
+        ir2Data.append(0x7f);
         // }
 
         for(int i=0; i < PresetFx::CabinetSize - 3; i++)
         {
             char nil = 0x00;
-            cab1Data.append(nil);
-            cab2Data.append(nil);
+            ir1Data.append(nil);
+            ir2Data.append(nil);
         }
     }
 }
@@ -495,7 +517,7 @@ void MockCP100fx::savePresetData(quint8 presetNumber)
 
     if(presetNumber < 10) strPresetNumber.prepend("0");
 
-    QString filePath = m_basePath + "/PRESETS/" + strPresetNumber + "_preset.pan";
+    QString filePath = m_basePath + "/FLASH" + "/PRESETS/" + strPresetNumber + "_preset.pan";
     QFile presetFile(filePath);
     if(presetFile.open(QIODevice::WriteOnly))
     {
@@ -509,12 +531,12 @@ void MockCP100fx::savePresetData(quint8 presetNumber)
         presetFile.write(baDelay);
 
 
-        presetFile.write(cab1Data.left(PresetFx::CabinetSize));
-        presetFile.write(cab2Data);
+        presetFile.write(ir1Data.left(PresetFx::CabinetSize));
+        presetFile.write(ir2Data);
 
         // presetFile.seek(sizeof(preset_data_fx_t) + 2 + PresetFx::CabinetSize * 2); //=25632
         presetFile.seek(25760);
-        presetFile.write(cab1Data.right(PresetFx::CabinetSize));
+        presetFile.write(ir1Data.right(PresetFx::CabinetSize));
 
         presetFile.seek(38048);
         presetFile.write(m_lastPath.toUtf8());
@@ -664,6 +686,90 @@ void MockCP100fx::stateCommHandler(const QString &command, const QByteArray &arg
     emit answerReady(answer);
 }
 
+void MockCP100fx::irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QByteArray answer;
+    answer.append("ir ");
+
+    QList<QByteArray> splittedArgs = arguments.split(' ');
+
+    if(splittedArgs.count() > 0)
+    {
+        quint8 irNumber = splittedArgs.at(0).toInt();
+        answer.append(QByteArray::number(irNumber) + "\r");
+
+        if(irNumber == 0) answer.append(ir1Name.toUtf8() + "\n");
+        else answer.append(ir2Name.toUtf8() + "\n");
+    }
+
+    if(splittedArgs.count() > 2)
+    {
+        if(splittedArgs.at(1) == "set")
+        {
+
+            // TODo set cab and save data from WAV to preset
+        }
+    }
+
+    emit answerReady(answer);
+}
+
+void MockCP100fx::lsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QFileInfoList entryInfoList = m_currentDir.entryInfoList();
+
+    QByteArray answer;
+    answer.append("ls\r");
+
+    qDebug() << m_currentDir.absolutePath();
+    qDebug() << m_basePath + "/SD/";
+
+    foreach (QFileInfo entry, entryInfoList)
+    {
+        if(entry.fileName() == ".") continue;
+
+        if(m_currentDir.absolutePath() == m_basePath + "/SD" && entry.fileName() == "..") continue;
+
+        if(entry.isFile()) answer.append("0:");
+        else answer.append("1:");
+
+        answer.append(entry.fileName().toUtf8() + "|");
+    }
+    answer.append("\n");
+    emit answerReady(answer);
+}
+
+void MockCP100fx::cdCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    m_currentDir.cd(data);
+
+    QString correctedPath = m_currentDir.absolutePath();
+    quint16 pos = correctedPath.indexOf("SD/");
+    correctedPath.remove(0, pos +3);
+
+    emit answerReady("cd\r" + correctedPath.toUtf8() + "\n");
+}
+
+void MockCP100fx::uploadCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+
+}
+
+void MockCP100fx::mkdirCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+
+}
+
+void MockCP100fx::renameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+
+}
+
+void MockCP100fx::removeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+
+}
+
 void MockCP100fx::cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QByteArray answer;
@@ -750,8 +856,8 @@ void MockCP100fx::plistCommHandler(const QString &command, const QByteArray &arg
         answer.append(QString::number(i) + "|");
         answer.append(QString((char*)currentPresetData.name) + "|");
         answer.append(QString((char*)currentPresetData.comment) + "|");
-        answer.append(m_ir1Name + "|");
-        answer.append(m_ir2Name + "|");
+        answer.append(ir1Name + "|");
+        answer.append(ir2Name + "|");
 
         uint8_t enabled[14];
         memcpy(enabled, &currentPresetData.modules.switches, 14);

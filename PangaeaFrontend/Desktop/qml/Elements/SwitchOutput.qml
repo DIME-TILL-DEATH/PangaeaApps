@@ -10,7 +10,7 @@ Item
     Rectangle
     {
         anchors.fill:  parent
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
     }
 
     Column

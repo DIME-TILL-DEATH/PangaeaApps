@@ -52,7 +52,7 @@ Item
                 {
                     text: modelData
 
-                    color: "Red"
+                    color: Style.currentTheme.spin
                     font.pixelSize: Math.min(parent.height*0.9, parent.width*0.9)
 
                     horizontalAlignment: Text.AlignHCenter
@@ -142,7 +142,7 @@ Item
             MText
             {
                 anchors.fill:  parent
-                color:  Style.mainEnabledColor
+                color:  Style.currentTheme.mainEnabledColor
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: parent.height/1.1
                 text: qsTr("PRESET")

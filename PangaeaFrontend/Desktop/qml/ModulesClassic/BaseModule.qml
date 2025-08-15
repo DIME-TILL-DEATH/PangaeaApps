@@ -22,7 +22,7 @@ Rectangle {
     property alias contentProperties: _loader.item
 
     clip: true
-    color: root.on ? Style.mainEnabledColor : Style.mainDisabledColor
+    color: root.on ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
     Material
     {
@@ -47,7 +47,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 font.pixelSize: parent.height/1.7
-                color: root.on ? "salmon" : Style.backgroundColor
+                color: root.on ? Style.currentTheme.highlightColor : Style.currentTheme.textDisabled
                 text: moduleName
 
                 z: _contentContainer.z+1

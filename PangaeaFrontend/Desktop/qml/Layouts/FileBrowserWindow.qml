@@ -24,7 +24,7 @@ Window{
     maximumWidth: Screen.width * 0.3 * 1
     maximumHeight: Screen.width * 0.3 * 0.5 * 2
 
-    color: Style.mainEnabledColor
+    color: Style.currentTheme.mainEnabledColor
 
     property alias currentCabNum: _chooseCabCombo.currentIndex
 
@@ -140,10 +140,12 @@ Window{
 
                     width: parent.width
 
-                    color: type === FileBrowserModel.Dir ? "lightsteelblue"
+                    font.bold: type === FileBrowserModel.Dir
+
+                    color: type === FileBrowserModel.Dir ? Style.currentTheme.textSecondary
                                 : _chooseCabCombo.currentIndex === 0 ?
-                                    (UiCore.currentDevice.ir1Name === name ? Style.highlightColor : Style.textEnabled ) :
-                                    (UiCore.currentDevice.ir2Name === name ? Style.highlightColor : Style.textEnabled )
+                                    (UiCore.currentDevice.ir1Name === name ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled ) :
+                                    (UiCore.currentDevice.ir2Name === name ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled )
                     elide: Text.ElideMiddle
                 }
 

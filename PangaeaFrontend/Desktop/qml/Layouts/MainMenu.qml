@@ -1,12 +1,12 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs //1.3
+import QtCore
 
 import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 import Qt.labs.platform 1.1 as Labs
-import QtCore
 import QtQml
 
 import CppObjects
@@ -84,6 +84,8 @@ MenuBar{
 
                 onTriggered: UiSettings.setLanguage("ru");
             }
+
+
 //            Action{
 //                id: menuIt
 
@@ -105,6 +107,73 @@ MenuBar{
 //                onTriggered: UiSettings.setLanguage("de");
 //            }
         }
+
+       Menu{
+           id: themeMenu
+           title: qsTr("Color theme")
+
+            ActionGroup{
+                id: themeGroup
+            }
+
+
+
+            Action{
+                id: menuClassicLight
+
+                text: "Classic blue"
+                checkable: true
+                checked: UiSettings.colorTheme === UiSettings.ClassicBlue
+                ActionGroup.group: themeGroup
+
+                onTriggered: {
+                    Style.currentTheme = Style.themeClassicBlue
+                    UiSettings.colorTheme = UiSettings.ClassicBlue
+                }
+            }
+
+            Action{
+                id: menuDarkOrange
+
+                text: "Dark orange"
+                checkable: true
+                checked: UiSettings.colorTheme === UiSettings.DarkOrange
+                ActionGroup.group: themeGroup
+
+                onTriggered: {
+                    Style.currentTheme = Style.themeDarkOrange
+                    UiSettings.colorTheme = UiSettings.DarkOrange
+                }
+            }
+
+            Action{
+                id: menuDarkBlue
+
+                text: "Dark blue"
+                checkable: true
+                checked: UiSettings.colorTheme === UiSettings.DarkBlue
+                ActionGroup.group: themeGroup
+
+                onTriggered: {
+                    Style.currentTheme = Style.themeDarkBlue
+                    UiSettings.colorTheme = UiSettings.DarkBlue
+                }
+            }
+
+            Action{
+                id: menuDarkGreen
+
+                text: "Dark green"
+                checkable: true
+                checked: UiSettings.colorTheme === UiSettings.DarkGreen
+                ActionGroup.group: themeGroup
+
+                onTriggered: {
+                    Style.currentTheme = Style.themeDarkGreen
+                    UiSettings.colorTheme = UiSettings.DarkGreen
+                }
+            }
+       }
 
 
         MenuItem{

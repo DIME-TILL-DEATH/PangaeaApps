@@ -65,7 +65,7 @@ BaseModule{
                     font.pixelSize: 5 * Style.dip
                     font.bold: true
 
-                    color: Style.textEnabled
+                    color: Style.currentTheme.textEnabled
 
                     horizontalAlignment: TextInput.AlignHCenter
                     verticalAlignment: TextInput.AlignVCenter

@@ -25,10 +25,7 @@ Rectangle {
     width: parent.width
     height: parent.height
 
-    // color: on ? Style.mainEnabledColor : Style.mainDisabledColor
-    color: Style.mainEnabledColor
-
-    // property int simmetryElementsWidth: width/6
+    color: Style.currentTheme.mainEnabledColor
 
     Rectangle{
         id: _maskCompare
@@ -67,17 +64,17 @@ Rectangle {
             gradient: Gradient{
                 GradientStop{
                     position: _main.on ? 0.0 : 1.0
-                    color: Style.mainEnabledColor
+                    color: Style.currentTheme.mainEnabledColor
 
                     Behavior on position {NumberAnimation{duration: 300}}
                 }
-                GradientStop{position: 1.0; color: Style.mainDisabledColor}
+                GradientStop{position: 1.0; color: Style.currentTheme.mainDisabledColor}
 
             }
 
             radius: width/10
             border.width: 1
-            border.color: _main.on ? Style.borderOn : Style.textDisabled
+            border.color: _main.on ? Style.currentTheme.borderOn : Style.currentTheme.textDisabled
 
             Behavior on color {ColorAnimation{duration: 200}}
 
@@ -104,7 +101,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         text: _main.moduleName
-                        color: _main.on ? Style.textEnabled : Style.textDisabled
+                        color: _main.on ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
                     }
                 }
             }
@@ -143,8 +140,8 @@ Rectangle {
 
             width: parent.width - _headerRect.width - _mainRow.spacing * 3 - _leftBtn.width * 2
             height: parent.height
-            // color: _main.on ? Style.mainEnabledColor : Style.mainDisabledColor
-            color: Style.mainEnabledColor
+
+            color: Style.currentTheme.mainEnabledColor
 
             clip: true
 

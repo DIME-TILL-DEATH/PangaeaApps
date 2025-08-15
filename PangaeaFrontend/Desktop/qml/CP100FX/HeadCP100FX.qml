@@ -34,7 +34,7 @@ Item
         {
             height: parent.height
             width:  row.widthWithoutSpase/15*2
-            color: Style.mainEnabledColor
+            color: Style.currentTheme.mainEnabledColor
             Column
             {
                 anchors.fill: parent
@@ -73,16 +73,16 @@ Item
 
                 border.width: 1
 
-                color: Style.headColor
+                color: Style.currentTheme.headColor
                 Row{
                     anchors.fill: parent
                     Rectangle{
                         border.width: 1
-                        color: Style.mainEnabledColor
+                        color: Style.currentTheme.mainEnabledColor
                         height: parent.height
                         width: parent.width/5
                         MText{
-                            color: Style.textMain
+                            color: Style.currentTheme.textMain
 
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
@@ -106,7 +106,7 @@ Item
                             regularExpression: /[\x20-\x7E]{0,14}/
                         }
 
-                        color: Style.textInverted
+                        color: Style.currentTheme.textInverted
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)
@@ -127,16 +127,16 @@ Item
 
                 border.width: 1
 
-                color: Style.headColor
+                color: Style.currentTheme.headColor
                 Row{
                     anchors.fill: parent
                     Rectangle{
                         border.width: 1
-                        color: Style.mainEnabledColor
+                        color: Style.currentTheme.mainEnabledColor
                         height: parent.height
                         width: parent.width/5
                         MText{
-                            color: Style.textMain
+                            color: Style.currentTheme.textMain
 
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
@@ -160,7 +160,7 @@ Item
                             regularExpression: /[\x20-\x7E]{0,14}/
                         }
 
-                        color: Style.textInverted
+                        color: Style.currentTheme.textInverted
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)
@@ -186,7 +186,7 @@ Item
             width:  row.widthWithoutSpase/15*1
 
             imageSource: "qrc:/Images/list1.svg";
-            imageColor: Style.mainEnabledColor
+            imageColor: Style.currentTheme.mainEnabledColor
 
             onClicked: {
                 map.show()
@@ -243,9 +243,9 @@ Item
             radius: height/10
 
             border.width: index === map.currentIndex ? 4 : 2
-            border.color: index === map.currentIndex ? Style.highlightColor : Style.textEnabled
+            border.color: index === map.currentIndex ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled
 
-            color: Style.barLow
+            color: Style.currentTheme.mainEnabledColor
 
             MouseArea{
                 anchors.fill: parent
@@ -301,7 +301,7 @@ Item
                         color: "transparent"
 
                         border.width: 1
-                        border.color: Style.borderOn
+                        border.color: Style.currentTheme.borderOn
 
                         MText{
                             anchors.fill: parent

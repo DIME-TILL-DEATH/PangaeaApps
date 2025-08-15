@@ -24,13 +24,13 @@ Item
             width:  parent.width/2
             height: parent.height
 
-            color:  Style.backgroundColor
+            color:  Style.currentTheme.backgroundColor
             radius: parent.height
             MText
             {
                 anchors.fill: parent
                 text: "BANK"
-                color: Style.mainEnabledColor
+                color: Style.currentTheme.textInverted
                 rotation: 270
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
@@ -51,11 +51,6 @@ Item
                 {
                     width:  parent.width
                     height: parent.height/UiCore.currentDevice.maxBankCount
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        color: Style.mainEnabledColor
-                    }
 
                     MText
                     {
@@ -63,8 +58,8 @@ Item
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment:   Qt.AlignVCenter
                         text: modelData
-                        color: index===curVal ?  Style.highlightColor
-                                                : Style.backgroundColor
+                        color: index===curVal ?  Style.currentTheme.highlightColor
+                                                : Style.currentTheme.backgroundColor
                         font.pixelSize: parent.width/1.5
                     }
                 }
