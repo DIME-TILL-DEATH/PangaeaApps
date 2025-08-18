@@ -31,6 +31,7 @@ RowLayout{
                 }
             }
         }
+
     }
 
     MComboVertical{
@@ -43,7 +44,8 @@ RowLayout{
 
         model: UiCore.currentDevice.controller[0].avaliableSources
 
-        currentIndex: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source
+        currentIndex: _cntrlsModel.length > 0 ? UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source : 0
+        // currentIndex: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source
 
         onActivated: {
             UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].setSource(_srcCombo.comboText)

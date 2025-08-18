@@ -132,7 +132,7 @@ void Cp100fx::readFullState()
 
 void Cp100fx::pushReadPresetCommands()
 {
-    // emit sgPushCommandToQueue("ir info");
+    emit sgPushCommandToQueue("ir info");
     emit sgPushCommandToQueue("pnum");
     emit sgPushCommandToQueue("pname");
     emit sgPushCommandToQueue("pcomment");
