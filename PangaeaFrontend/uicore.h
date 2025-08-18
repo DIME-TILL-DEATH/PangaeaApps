@@ -30,6 +30,7 @@ public:
     Q_INVOKABLE void disconnectFromDevice();
 
     Q_INVOKABLE void uploadIr(QString srcFilePath, QString dstFilePath = "");
+    Q_INVOKABLE void uploadIr(QUrl srcFilePath, QUrl dstFilePath = QUrl());
     Q_INVOKABLE void convertAndUploadIr(QString srcFilePath, QString dstFilePath = "");
 
     Q_INVOKABLE void exportPreset(QUrl dstPath = QUrl());

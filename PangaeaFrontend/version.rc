@@ -1,9 +1,9 @@
 // version.rc.in
-#define VER_FILEVERSION             1,1,2508,0
-#define VER_FILEVERSION_STR         "1.1.2508.0\0"
+#define VER_FILEVERSION             1,1,2509,0
+#define VER_FILEVERSION_STR         "1.1.2509.0\0"
 
-#define VER_PRODUCTVERSION          1,1,2508,0
-#define VER_PRODUCTVERSION_STR      "1.1.2508\0"
+#define VER_PRODUCTVERSION          1,1,2509,0
+#define VER_PRODUCTVERSION_STR      "1.1.2509\0"
 //
 
 1 VERSIONINFO

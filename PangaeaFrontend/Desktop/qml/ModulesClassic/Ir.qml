@@ -29,6 +29,8 @@ BaseModule{
         {
             id: switchIr
 
+            enabled: module.moduleEnabled
+
             width:  parent.width
             height: parent.height/1000*165
         }

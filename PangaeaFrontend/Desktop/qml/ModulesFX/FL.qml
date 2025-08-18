@@ -13,7 +13,8 @@ BaseModule{
 
     contentItem: Row
     {
-        anchors.fill: parent
+        width: main.dialWidth * 9
+        height: main.dialHeight
 
 
         ParameterDial{
@@ -80,6 +81,11 @@ BaseModule{
         ParameterSwitch{
             width: main.dialWidth
             height: main.dialHeight
+
+            invertedValue: 1
+
+            textLeft: "PRE"
+            textRight: "POST"
 
             anchors.verticalCenter: parent.verticalCenter
 

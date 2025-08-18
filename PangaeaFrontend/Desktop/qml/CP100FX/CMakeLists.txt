@@ -7,11 +7,11 @@ qt_add_qml_module(qml_cp100fx
     QML_FILES
 
         ControlLayoutCP100FX.qml
+        ControllersMenu.qml
+        CopyToWindow.qml
+        FswMenu.qml
         HeadCP100FX.qml
-        MapFx.qml
+        MasterMenu.qml
         PresetViewFx.qml
         SystemViewFx.qml
-        FswMenu.qml
-        ControllersMenu.qml
-        MasterMenu.qml
 )

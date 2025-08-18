@@ -29,9 +29,9 @@ class Reverb : public AbstractModule
     Q_PROPERTY(ControlValue* tail READ tail NOTIFY dataChanged FINAL)
 
 public:
-    Reverb(AbstractDevice *owner);
+    Reverb(AbstractDevice *owner, modules_data_fx_t* rvData);
 
-    void setValues(const preset_data_fx_t &rvData) override;
+    void setValues(const modules_data_fx_t &rvData) override;
 
     ControlValue *mix() const {return m_mix;};
     ControlValue *type() const {return m_type;};

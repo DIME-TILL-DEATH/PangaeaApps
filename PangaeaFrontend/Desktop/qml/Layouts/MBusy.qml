@@ -4,6 +4,8 @@ import QtQuick.Layouts
 
 import Elements
 
+import StyleSettings
+
 import CppObjects 1.0
 import PangaeaBackend
 
@@ -75,7 +77,7 @@ Item
                      width: progressBar.visualPosition * parent.width
                      height: parent.height
                      radius: 3
-                     color: "MediumSeaGreen" //Style.currentTheme.colorModulOn
+                     color: Style.currentTheme.barHigh
                      border.width: 1
                 }
         }

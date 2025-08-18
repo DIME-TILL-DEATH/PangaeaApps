@@ -56,10 +56,11 @@ void Core::parseInputData(QByteArray ba)
 
     updateProgressBar();
 
-    QList<QByteArray> recievedAnswer;
+    // QList<QByteArray> recievedAnswer;
     if(currentDevice)
     {
-        recievedAnswer = currentDevice->parseAnswers(ba);
+        // recievedAnswer = currentDevice->parseAnswers(ba);
+        emit sgReadFromInterface(ba);
     }
 
     QList<QByteArray> parseResult;
@@ -86,8 +87,26 @@ void Core::parseInputData(QByteArray ba)
         timeoutTimer->setInterval(10000);
 
         if(commandsSended.size()>0) commandsSended.removeFirst();
+        processCommands();
     }
 
+    // foreach(QByteArray answer, recievedAnswer)
+    // {
+    //     for(int i=0; i < commandsSended.size(); i++)
+    //     {
+    //         if(commandsSended.at(i).indexOf(answer) == 0)
+    //         {
+    //             // qDebug() << "Answer recieved for command: " << commandsSended.at(i) << " commands waiting answer: " << commandsSended.count();
+    //             commandsSended.remove(i);
+    //         }
+    //     }
+    // }
+
+    // processCommands();
+}
+
+void Core::slCommandsRecieved(QList<QByteArray> recievedAnswer)
+{
     foreach(QByteArray answer, recievedAnswer)
     {
         for(int i=0; i < commandsSended.size(); i++)
@@ -99,16 +118,17 @@ void Core::parseInputData(QByteArray ba)
             }
         }
     }
-
     processCommands();
 }
 
 void Core::slDeviceInstanciated()
 {
-
+    qDebug() << __FUNCTION__;
     currentDevice->moveToThread(QGuiApplication::instance()->thread());
 
     connect(currentDevice, &AbstractDevice::sgWriteToInterface, this, &Core::sgWriteToInterface, Qt::QueuedConnection);
+    connect(currentDevice, &AbstractDevice::sgCommandsRecieved, this, &Core::slCommandsRecieved, Qt::QueuedConnection);
+    connect(this, &Core::sgReadFromInterface, currentDevice, &AbstractDevice::parseAnswers, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgPushCommandToQueue, this, &Core::pushCommandToQueue, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgSendWithoutConfirmation, this, &Core::sendWithoutConfirmation, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgProcessCommands, this, &Core::processCommands, Qt::QueuedConnection);

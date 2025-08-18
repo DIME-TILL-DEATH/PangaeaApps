@@ -35,11 +35,13 @@ public:
         Fx
     };
 
-    explicit EqParametric(AbstractDevice *owner, EqMode eqMode = EqMode::Legacy, quint8 eqNumber = 0);
+    EqParametric(AbstractDevice *owner, preset_data_cplegacy_t* eqData);
+    EqParametric(AbstractDevice *owner, preset_data_cpmodern_t* eqData, quint8 eqNumber = 0);
+    EqParametric(AbstractDevice *owner, modules_data_fx_t* eqData);
 
-    void setValues(const preset_data_cplegacy_t& lpData) override;
+    void setValues(const preset_data_cplegacy_t& eqData) override;
     void setValues(const preset_data_cpmodern_t& presetData) override;
-    void setValues(const preset_data_fx_t &eqData) override;
+    void setValues(const modules_data_fx_t &eqData) override;
 
     double getEqResponse(double f);
 

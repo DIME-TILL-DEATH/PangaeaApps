@@ -20,7 +20,7 @@ Window
     Rectangle
     {
         anchors.fill: parent
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         enabled: UiCore.currentDevice.presetManager.currentState === PresetState.Idle
         opacity: enabled ? 1 : 0.5
@@ -41,7 +41,7 @@ Window
                 MText{
                     text: qsTr("Processing points used ") + UiCore.currentDevice.processingUsed
                                 + qsTr(" of ") + UiCore.currentDevice.processingBudget
-                    color: "white"
+                    color: Style.currentTheme.textEnabled
                     anchors.centerIn: parent
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -84,11 +84,12 @@ Window
                     width: _moduleListView.width
                     height: _moduleListView.height/11
 
-                    color: "steelblue"
+                    color: Style.currentTheme.mainEnabledColor
 
-                    radius: 1
+                    radius: height/10
 
-                    border.width: Drag.active? 5 : 1
+                    border.width: Drag.active? 5 : 2
+                    border.color: Style.currentTheme.borderOn
 
 
                     Row{
@@ -110,7 +111,7 @@ Window
                                 text: modelData.fullModuleName
 
 
-                                color:  modelData.used ? Style.textDisabled : Style.textEnabled
+                                color:  modelData.used ? Style.currentTheme.textDisabled : Style.currentTheme.textEnabled
 
                                 anchors.fill: parent
 
@@ -128,8 +129,8 @@ Window
                                 text: qsTr("cost: ") + modelData.processingTime
 
                                 anchors.centerIn: parent
-                                color: modelData.used ? (Style.textDisabled) :
-                                                        (_delegateRow.isResourcesEnough ? Style.textEnabled : "red")
+                                color: modelData.used ? (Style.currentTheme.textDisabled) :
+                                                        (_delegateRow.isResourcesEnough ? Style.currentTheme.textEnabled : "red")
 
 
                                 elide: Text.ElideMiddle
@@ -139,11 +140,13 @@ Window
                             }
                         }
 
-                        Button{
+                        MButton{
                             text: "?"
 
                             width: parent.width * 2/16
                             height: parent.height
+
+                            scaleText: 2
 
                             onClicked:{
                                 switch(modelData.moduleType)
@@ -168,10 +171,12 @@ Window
                             }
                         }
 
-                        Button{
+                        MButton{
                             id: _ctrlBtn
 
                             text: modelData.used ? "-" : "+"
+
+                            scaleText: 2
 
                             width: parent.width * 2/16
                             height: parent.height
@@ -185,14 +190,6 @@ Window
                                     UiCore.currentDevice.modulesListModel.removeModuleByType(modelData.moduleType)
                             }
 
-                            contentItem: MText{
-                                text: _ctrlBtn.text
-
-                                color: palette.buttonText
-
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                            }
                         }
 
                     }
@@ -208,7 +205,7 @@ Window
 
             property bool deviceUpdatingValues
 
-            ComboBox{
+            MComboVertical{
                 id: _delayCombo
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: _moduleListView.width
@@ -237,7 +234,7 @@ Window
                 }
             }
 
-            ComboBox{
+            MComboVertical{
                 id: _earlyCombo
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: _moduleListView.width

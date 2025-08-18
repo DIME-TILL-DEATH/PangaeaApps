@@ -26,7 +26,7 @@ ColumnLayout
         Layout.fillWidth: true
         Layout.preferredHeight: parent.height/4
 
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         Row{
             id: _selection
@@ -101,7 +101,7 @@ ColumnLayout
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         ListView{
             id: _modulesListView
@@ -110,12 +110,12 @@ ColumnLayout
 
             anchors.fill: parent
 
-            spacing: 0 //width/500
+            spacing: 0
 
             interactive: false
             orientation: ListView.Horizontal
 
-            currentIndex: -1
+            property var moduleTypeSelected
 
             delegate: Item{
                 width: _modulesListView.width/14 - _modulesListView.spacing
@@ -129,8 +129,7 @@ ColumnLayout
 
                     color: "transparent"
                     border.width: 2
-                    border.color: index === _modulesListView.currentIndex ? "white" : "transparent"
-
+                    border.color: _modulesListView.moduleTypeSelected === moduleInstance.moduleType ? "white" : "transparent"
 
                     Image
                     {
@@ -165,11 +164,13 @@ ColumnLayout
                         anchors.fill: parent
 
                         onClicked: {
-                            if(index !== _modulesListView.currentIndex)
+                            if(_modulesListView.moduleTypeSelected !== moduleInstance.moduleType)
                             {
                                 _moduleLoader.source = ""
                                 _moduleLoader.selectedModuleInstance = moduleInstance
-                                _modulesListView.currentIndex = index
+                                _modulesListView.moduleTypeSelected = moduleInstance.moduleType
+
+                                _modulesListView.moduleTypeSelectedChanged();
                             }
                         }
 
@@ -180,7 +181,23 @@ ColumnLayout
                 }
             }
 
-            onCurrentIndexChanged: {
+            add: Transition{
+                NumberAnimation { properties: "x"; duration: 200 }
+            }
+
+            move: Transition {
+                 NumberAnimation { properties: "x"; duration: 250 }
+            }
+
+            displaced: Transition {
+                 NumberAnimation { properties: "x"; duration: 250 }
+             }
+
+            populate: Transition {
+                 NumberAnimation { properties: "x"; duration: 200 }
+             }
+
+            onModuleTypeSelectedChanged:{
                 switch(_moduleLoader.selectedModuleInstance.moduleType)
                 {
                     case ModuleType.RF: _moduleLoader.source = "../ModulesFX/RF.qml"; break;
@@ -215,7 +232,7 @@ ColumnLayout
             width: _moduleLoader.width
             height: _moduleLoader.height
 
-            color: Style.mainEnabledColor
+            color: Style.currentTheme.mainEnabledColor
         }
     }
 }

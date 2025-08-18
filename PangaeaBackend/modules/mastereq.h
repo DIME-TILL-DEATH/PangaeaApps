@@ -21,6 +21,7 @@ class MasterEq : public AbstractModule
     Q_PROPERTY(ControlValue* highGain READ highGain NOTIFY dataChanged FINAL)
 public:
     MasterEq(AbstractDevice *owner);
+    ~MasterEq();
 
     void setValues(const TSystemSettingsFx &sysSettings);
 

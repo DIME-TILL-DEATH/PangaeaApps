@@ -47,6 +47,7 @@ qt_add_library(PangaeaBackend STATIC
     device/cp100fx/presetfx.h device/cp100fx/presetfx.cpp
     device/cp100fx/fswfx.h device/cp100fx/fswfx.cpp
     device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
+    device/cp100fx/controllerfx.h device/cp100fx/controllerfx.cpp
 
     device/cp/hardwareclassicpreset.h
     device/cp/hardwareclassicpreset.cpp
@@ -55,6 +56,7 @@ qt_add_library(PangaeaBackend STATIC
     models/presetlistmodel.cpp models/presetlistmodel.h
     models/deviceslistmodel.cpp models/deviceslistmodel.h
     models/moduleslistmodel.h models/moduleslistmodel.cpp
+    models/filebrowsermodel.h models/filebrowsermodel.cpp
 
     utils/irworker.cpp utils/irworker.h
     utils/presetmanager.cpp utils/presetmanager.h
@@ -77,6 +79,7 @@ qt_add_qml_module(PangaeaBackend
     RESOURCE_PREFIX /
 
     SOURCES
+
         uihelpers/devicetypeenum.h
         uihelpers/deviceerrorenum.h
         uihelpers/devicemessageenum.h
@@ -111,7 +114,6 @@ qt_add_qml_module(PangaeaBackend
         modules/tremolo.h modules/tremolo.cpp
         modules/volume.h modules/volume.cpp
         modules/mastereq.h modules/mastereq.cpp
-        SOURCES device/cp100fx/controllerfx.h device/cp100fx/controllerfx.cpp
 )
 
 

@@ -17,6 +17,7 @@ public:
     {
         UnknownError=0,
         UndefinedCommand,
+        NotIrFile,
         IrFormatNotSupported,
         IrSaveError,
         FileNotFound,

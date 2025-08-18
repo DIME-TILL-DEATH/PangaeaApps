@@ -11,6 +11,11 @@ PresetModern::PresetModern(AbstractDevice *owner)
     presetVersion = 2;
 }
 
+PresetModern::~PresetModern()
+{
+
+}
+
 PresetAbstract& PresetModern::operator=(const PresetAbstract& preset)
 {
     // *this = preset;

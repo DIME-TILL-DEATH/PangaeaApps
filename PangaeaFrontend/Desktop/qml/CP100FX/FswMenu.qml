@@ -14,7 +14,7 @@ Rectangle{
 
     color: "transparent"
     border.width: 1
-    border.color: Style.borderOn
+    border.color: Style.currentTheme.borderOn
 
     property int stringHeight: parent.height/16
 

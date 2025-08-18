@@ -12,7 +12,7 @@ Item
     Rectangle
     {
         anchors.fill:  parent
-        color: main.enabled  ? Style.mainEnabledColor : Style.mainDisabledColor
+        color: main.enabled  ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
     }
 
     Column
@@ -91,7 +91,7 @@ Item
         {
             width: parent.width
             height: parent.height/100*15
-            color: main.enabled ? Style.mainEnabledColor : Style.mainDisabledColor
+            color: main.enabled ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
         }
     }
 }

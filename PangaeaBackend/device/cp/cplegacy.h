@@ -84,7 +84,7 @@ public:
     Presence* PS;
     EarlyReflections* ER;
 public slots:
-    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+    QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
     void slIrEnabledChanged();
 
@@ -97,9 +97,9 @@ private:
     IRWorker irWorker;
 
     QList<PresetAbstract*> m_presetsList;
-    PresetLegacy actualPreset{this};
-    PresetLegacy savedPreset{this}; // TODO используется из листа
-    PresetLegacy copiedPreset{this};
+    PresetLegacy* actualPresetLegacy;
+    PresetLegacy* savedPresetLegacy; // TODO используется из листа
+    PresetLegacy* copiedPresetLegacy;
 
     bool m_isPreEq{false};
     bool m_isPaFw{false};

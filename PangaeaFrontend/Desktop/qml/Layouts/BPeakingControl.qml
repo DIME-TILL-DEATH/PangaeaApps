@@ -18,7 +18,7 @@ Rectangle{
     color: "transparent"
 
     border.width: 2
-    border.color: (main.on) ? "white" : "darkgrey"
+    border.color: (main.on) ? Style.currentTheme.borderOn : Style.currentTheme.borderOff
 
     property EqBand eqBand: module.EqBands[0]
     property bool bandOn: true
@@ -35,6 +35,8 @@ Rectangle{
             height: parent.height*0.9
             anchors.verticalCenter: parent.verticalCenter
 
+            font.pixelSize: width/16
+
             property EqParametric module: main.module
 
             controlValue: module.EqBands[currentBandIndex].Fc
@@ -45,6 +47,8 @@ Rectangle{
             height: parent.height*0.9
             anchors.verticalCenter: parent.verticalCenter
 
+            font.pixelSize: width/16
+
             property EqParametric module: main.module
 
             controlValue: module.EqBands[currentBandIndex].gain
@@ -54,6 +58,8 @@ Rectangle{
             width: parent.width/4
             height: parent.height*0.9
             anchors.verticalCenter: parent.verticalCenter
+
+            font.pixelSize: width/16
 
             floatDigits: 2
 

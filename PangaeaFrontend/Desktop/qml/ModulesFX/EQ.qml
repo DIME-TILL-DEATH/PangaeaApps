@@ -21,7 +21,8 @@ BaseModule{
 
     contentItem: Row
     {
-        anchors.fill: parent
+        width: main.dialWidth * 5
+        height: main.dialHeight
 
         Rectangle{
             id: canvasBackground
@@ -139,10 +140,10 @@ BaseModule{
             width: main.dialWidth * 2
             height: parent.height
 
-            Button{
+            MButton{
                 id: _showEqBtn
 
-                text: "Controls"
+                text: qsTr("Controls")
 
                 width: parent.width * 0.75
                 height: dialHeight/2
@@ -166,6 +167,11 @@ BaseModule{
             height: main.dialHeight
 
             anchors.verticalCenter: parent.verticalCenter
+
+            invertedValue: 1
+
+            textLeft: "PRE"
+            textRight: "POST"
 
             ctrlValInstance: module.position
 

@@ -25,6 +25,8 @@
 #include "earlyreflections.h"
 #include "delay.h"
 
+#include "volume.h"
+
 
 class CPModern : public AbstractDevice
 {
@@ -110,12 +112,12 @@ public:
     QList<IrFile> irsInLibrary() const {return m_irsInLibrary;};
     QList<IrFile> irsInFolder() const {return m_irsInFolder;};
 
-    IrFile currentIrFile() const {return actualPreset.irFile;};
+    IrFile currentIrFile() const {return actualPresetModern->irFile;};
     void setCurrentIrFile(const IrFile &newCurrentIrFile);
 
 
 public slots:
-    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+    QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
 signals:
 
@@ -133,9 +135,9 @@ protected:
     QSettings* appSettings;
 
     QList<PresetAbstract*> m_presetsList;
-    PresetModern actualPreset{this};
-    PresetModern savedPreset{this}; // TODO используется из листа
-    PresetModern copiedPreset{this};
+    PresetModern* actualPresetModern;
+    PresetModern* savedPresetModern; // TODO используется из листа
+    PresetModern* copiedPresetModern;
 
     QList<IrFile> m_irsInLibrary;
     QList<IrFile> m_irsInFolder;

@@ -21,16 +21,13 @@ class NoiseGate : public AbstractModule
     Q_PROPERTY(ControlValue* attack READ attack NOTIFY dataChanged FINAL)
 
 public:
-    enum GateType{
-        Classic = 0,
-        FX
-    };
-
-    explicit NoiseGate(AbstractDevice *owner, GateType gateType = Classic);
+    NoiseGate(AbstractDevice *owner, preset_data_cplegacy_t* ngData);
+    NoiseGate(AbstractDevice *owner, preset_data_cpmodern_t* ngData);
+    NoiseGate(AbstractDevice *owner, modules_data_fx_t* ngData);
 
     void setValues(const preset_data_cplegacy_t& ngData) override;
     void setValues(const preset_data_cpmodern_t& ngData) override;
-    void setValues(const preset_data_fx_t &ngData) override;
+    void setValues(const modules_data_fx_t &ngData) override;
 
     ControlValue *threshold() {return m_threshold;};
     ControlValue *attack() {return m_attack;};

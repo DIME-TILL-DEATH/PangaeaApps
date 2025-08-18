@@ -42,7 +42,7 @@ Item
         Rectangle{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
-            color: Style.mainEnabledColor
+            color: Style.currentTheme.mainEnabledColor
 
             Column{
                 anchors.fill: parent
@@ -123,11 +123,11 @@ Item
                     anchors.fill: parent
                     Rectangle{
                         border.width: 1
-                        color: Style.mainEnabledColor
+                        color: Style.currentTheme.mainEnabledColor
                         height: parent.height
                         width: parent.width/5
                         MText{
-                            color: palette.text
+                            color: Style.currentTheme.textInverted //palette.text
 
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
@@ -147,7 +147,7 @@ Item
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
 
-                        color: palette.text
+                        color: Style.currentTheme.textInverted
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
@@ -170,7 +170,7 @@ Item
 
                 enabled: UiCore.currentDevice.IR.used
 
-                color: enabled ? Style.headColor : "gray"
+                color: enabled ? Style.currentTheme.headColor : Style.currentTheme.borderOff
 
                 border.width: 1
 
@@ -185,7 +185,8 @@ Item
 
                     Rectangle{
                         border.width: 1
-                        color: Style.mainEnabledColor
+                        color: Style.currentTheme.mainEnabledColor
+
                         height: parent.height
                         width: impuls.enabled ? parent.width/5 : 0
                         MText{
@@ -193,6 +194,8 @@ Item
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
+
+                            color: Style.currentTheme.textInverted
 
                             visible: impuls.enabled
 
@@ -218,7 +221,7 @@ Item
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment:   Text.AlignVCenter
 
-                            color: "black"
+                            color: Style.currentTheme.textInverted
 
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
                             elide: Text.ElideMiddle
@@ -247,16 +250,26 @@ Item
                 }
             }
 
-            Item{
+            Rectangle{
                 height: parent.height/3
                 width:  parent.width
 
-                Button{
-                    width: parent.width
-                    height: parent.height
+                opacity: mA.pressed ? 0.5 : 1
 
+                color: Style.currentTheme.mainEnabledColor
+
+                MText{
                     text: qsTr("Add/Remove module")
+                    anchors.fill: parent
 
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                MouseArea{
+                    id: mA
+
+                    anchors.fill: parent
                     onClicked: openModulesConfigWindow();
                 }
             }
@@ -273,7 +286,7 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            color: Style.mainEnabledColor
+            color: Style.currentTheme.mainEnabledColor
 
 
             ParameterDial{
@@ -298,12 +311,12 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Button
-        {
+        MImageButton{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            text: qsTr("MAP")
+            imageSource: "qrc:/Images/table1.svg";
+            imageColor: Style.currentTheme.mainEnabledColor
 
             onClicked: {
                 map.show()
@@ -311,8 +324,60 @@ Item
         }
     }
 
-    Map{
+    MapTable{
         id: map
 
+
+        delegate: Item{
+            id: _root
+
+            width: map.cellWidth
+            height: map.cellHeight
+
+            property int currentIndex: map.currentIndex
+
+            property bool currentImpulseEnabled
+            property string currentImpulseName
+
+            Rectangle{
+                anchors.centerIn: parent
+
+                width: Math.min(parent.width*0.5, parent.height*0.5)
+                height: width
+
+                radius: width/2
+
+                color: isImpulseEmpty ? "transparent" : Style.currentTheme.highlightColor
+
+                opacity: ((currentIndex === presetMapIndex) ? currentImpulseEnabled : isImpulseEnabled) ? 1 : 0.5
+                border.width: Math.max(2, width/20)
+                border.color: currentIndex === presetMapIndex ? Style.currentTheme.highlightColor : Style.currentTheme.backgroundColor
+
+                MouseArea
+                {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+
+                    onClicked: {
+                        UiCore.currentDevice.changePreset(bankNumber, presetNumber);
+                    }
+                    onEntered: tp.visible = (tp.text.length>0)
+                    onExited:  tp.visible = false
+                }
+
+                ToolTip
+                {
+                    id: tp
+
+                    property string shownIrName: currentIndex === presetMapIndex ? currentImpulseName : impulseName
+
+                    text: qsTr("Preset name: ") + presetName + "\n" + qsTr("IR name: ") + shownIrName
+
+                    visible: false
+                    timeout: 0
+                }
+            }
+        }
     }
 }

@@ -17,6 +17,8 @@ Item{
     property alias textLeft: _textLeft.text
     property alias textRight: _textRight.text
 
+    property alias invertedValue: _switch.invertedValue
+
     Column{
         anchors.fill: parent
 
@@ -32,10 +34,10 @@ Item{
                 anchors.fill: parent
 
                 text: ctrlValInstance.name
-                font.pixelSize: 10 * Style.dip
+                font.pixelSize: 10 * Style.currentTheme.dip
                 font.bold: true
 
-                color: Style.textEnabled
+                color: Style.currentTheme.textEnabled
 
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
@@ -64,18 +66,6 @@ Item{
                 if(!deviceUpdatingValues)
                     ctrlValInstance.displayValue = value;
             }
-
-
-            Connections{
-                target: UiCore.currentDevice
-
-                function onDeviceUpdatingValues()
-                {
-                    _comboBox.deviceUpdatingValues = true;
-                    _comboBox.currentIndex = ctrlValInstance.displayValue;
-                    _comboBox.deviceUpdatingValues = false;
-                }
-            }
         }
 
         Item {
@@ -93,10 +83,10 @@ Item{
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
 
-                text: "POST"
+                text: "OFF"
 
                 opacity: moduleOn ? 1.0 : 0.5
-                color: (module.moduleEnabled) ? Style.textEnabled: "darkgrey"
+                color: (module.moduleEnabled) ? Style.currentTheme.textEnabled: Style.currentTheme.textDisabled
                 font.pixelSize: parent.width/8
             }
 
@@ -109,10 +99,10 @@ Item{
                 horizontalAlignment: TextInput.AlignHCenter
                 verticalAlignment: TextInput.AlignVCenter
 
-                text: "PRE"
+                text: "ON"
 
                 opacity: moduleOn ? 1.0 : 0.5
-                color: (module.moduleEnabled) ? Style.textEnabled: "darkgrey"
+                color: (module.moduleEnabled) ? Style.currentTheme.textEnabled: Style.currentTheme.textDisabled
                 font.pixelSize: parent.width/8
             }
         }

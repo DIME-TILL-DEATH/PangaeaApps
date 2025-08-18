@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "abstractdevice.h"
+#include "irworker.h"
 #include "presetfx.h"
 
 #include "resonancefilter.h"
@@ -21,6 +22,8 @@
 #include "reverb.h"
 #include "flanger.h"
 #include "mastereq.h"
+
+#include "volume.h"
 
 #include "fswfx.h"
 #include "systemsettingsfx.h"
@@ -46,11 +49,16 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(quint8 cntrlPcOut READ cntrlPcOut WRITE setCntrlPcOut NOTIFY cntrlPcOutChanged FINAL)
     Q_PROPERTY(quint8 cntrlSet READ cntrlSet WRITE setCntrlSet NOTIFY cntrlSetChanged FINAL)
     Q_PROPERTY(quint8 presetVolumeControl READ presetVolumeControl WRITE setPresetVolumeControl NOTIFY presetVolumeControlChanged FINAL)
+
+    Q_PROPERTY(QString ir1Name READ ir1Name NOTIFY irNamesChanged FINAL)
+    Q_PROPERTY(QString ir2Name READ ir2Name NOTIFY irNamesChanged FINAL)
 public:
     Cp100fx(Core *parent);
     ~Cp100fx();
 
     QStringList strPresetNumbers() override;
+
+    quint64 maxIrSize() override {return 4096 * 3 * 2 + 44;}
 
     void initDevice(DeviceType deviceType) override;
     void readFullState() override;
@@ -58,9 +66,7 @@ public:
     Q_INVOKABLE void saveChanges() override;
     Q_INVOKABLE void changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges = false) override;
 
-    Q_INVOKABLE void comparePreset() override;
-    Q_INVOKABLE void copyPreset() override;
-    Q_INVOKABLE void pastePreset() override;
+    Q_INVOKABLE void copyPresetTo(quint8 presetNumber, QVariantList selectionMask);
     Q_INVOKABLE void importPreset(QString filePath, QString fileName) override;
     Q_INVOKABLE void exportPreset(QString filePath, QString fileName) override;
 
@@ -71,6 +77,11 @@ public:
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
     Q_INVOKABLE void formatMemory() override;
+
+    Q_INVOKABLE void selectFsObject(QString name, FileBrowserModel::FsObjectType type, quint8 cabNum = 0);
+    Q_INVOKABLE void createDir(QString dirName);
+
+    void uploadIrData(const QString& irName, const QByteArray& irData);
 
     ResonanceFilter* RF;
     Compressor* CM;
@@ -90,7 +101,7 @@ public:
 
     Volume m_masterVolume{this, Volume::VolumeType::MasterFx};
     Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
-    Volume m_presetVolume{this, Volume::VolumeType::PresetFx};
+    Volume m_presetVolume{this, Volume::VolumeType::PresetFx}; //, &actualPresetFx->presetData.preset_volume};
     Volume m_attenuatorVolume{this, Volume::VolumeType::AttenuatorFx};
 
     Volume* masterVolume() {return &m_masterVolume;};
@@ -111,17 +122,19 @@ public:
 
     QObjectList controller() {return m_actualControllersList;};
 
-    quint8 cntrlPcOut() const {return actualPreset.cntrlPcOut();};
+    quint8 cntrlPcOut() const {return actualPresetFx->cntrlPcOut();};
     void setCntrlPcOut(quint8 newCntrlPcOut);
 
-    quint8 cntrlSet() const {return actualPreset.cntrlSet();};
+    quint8 cntrlSet() const {return actualPresetFx->cntrlSet();};
     void setCntrlSet(quint8 newCntrlSet);
 
-    quint8 presetVolumeControl() const {return actualPreset.presetData.volume_control;};
+    quint8 presetVolumeControl() const {return actualPresetFx->presetData.volume_control;};
     void setPresetVolumeControl(quint8 newPresetVolumeControl);
 
+    QString ir1Name() {return m_ir1Name;}
+    QString ir2Name() {return m_ir2Name;}
 public slots:
-    QList<QByteArray> parseAnswers(QByteArray& baAnswer) override;
+    QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
 signals:
     void currentPresetNameChanged();
@@ -133,7 +146,11 @@ signals:
     void cntrlSetChanged();
     void presetVolumeControlChanged();
 
+    void irNamesChanged();
+
 private:
+    IRWorker irWorker;
+
     QList<PresetAbstract*> m_presetsList;
 
     SystemSettingsFx m_systemSettings{this};
@@ -144,9 +161,17 @@ private:
     FswFx m_fswConfirm{1, this};
     FswFx m_fswUp{2, this};
 
-    PresetFx actualPreset{this};
-    PresetFx savedPreset{this}; // TODO используется из листа
-    PresetFx copiedPreset{this};
+    PresetFx* actualPresetFx;
+    PresetFx* savedPresetFx;
+    PresetFx* copiedPresetFx;
+
+    QString m_ir1Name;
+    QString m_ir2Name;
+
+    QByteArray m_rawFirmwareData;
+    QByteArray m_rawIrData;
+
+    const uint32_t uploadBlockSize = 100;
 
     void pushReadPresetCommands();
 
@@ -158,6 +183,12 @@ private:
 
     void ackPresetSavedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    void lsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void cdCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void uploadCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
     void plistCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void pnumCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
@@ -167,6 +198,13 @@ private:
     void cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlPcOutCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void setModulePositions();
+
+private slots:
+    void modulesChangedPosition();
+    qint8 getModulePosition(ModuleType moduleType);
+
 };
 
 #endif // CP100FX_H

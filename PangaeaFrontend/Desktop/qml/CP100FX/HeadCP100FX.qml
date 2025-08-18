@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 
+import Qt5Compat.GraphicalEffects
+
 import Elements
 import StyleSettings
 
@@ -28,18 +30,36 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        SaveCompare
+        Rectangle
         {
             height: parent.height
-            width:  row.widthWithoutSpase/15*1
-        }
+            width:  row.widthWithoutSpase/15*2
+            color: Style.currentTheme.mainEnabledColor
+            Column
+            {
+                anchors.fill: parent
+                MButton
+                {
+                    width:  parent.width
+                    height: parent.height/2
+                    text: "SAVE"
 
-        CopyPaste
-        {
-            height: parent.height
-            width:  row.widthWithoutSpase/15*1
-        }
+                    enabled: UiCore.currentDevice.deviceParamsModified
+                    // enabled: UiCore.currentDevice.deviceParamsModified & (UiCore.currentDevice.presetManager.currentState !== PresetState.Compare)
+                    onClicked: UiCore.currentDevice.saveChanges();
+                }
 
+                MButton
+                {
+                    id: bCopy
+                    width:  parent.width
+                    height: parent.height/2
+                    text: "COPY"
+
+                    onClicked: _copyWindow.show();
+                }
+            }
+        }
 
         Column{
             width:  row.widthWithoutSpase/15*8+4
@@ -53,20 +73,23 @@ Item
 
                 border.width: 1
 
-                color: Style.headColor
+                color: Style.currentTheme.headColor
                 Row{
                     anchors.fill: parent
                     Rectangle{
                         border.width: 1
-                        color: Style.mainEnabledColor
+                        color: Style.currentTheme.mainEnabledColor
                         height: parent.height
                         width: parent.width/5
                         MText{
-                            color: Style.textMain
+                            color: Style.currentTheme.textMain
 
-                            anchors.fill: parent
+                            width: parent.width * 0.9
+                            height: parent.height
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/9)
+
+                            elide: Text.ElideRight
 
                             text: qsTr(" Preset name")
                         }
@@ -86,7 +109,7 @@ Item
                             regularExpression: /[\x20-\x7E]{0,14}/
                         }
 
-                        color: Style.textInverted
+                        color: Style.currentTheme.textInverted
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)
@@ -107,16 +130,16 @@ Item
 
                 border.width: 1
 
-                color: Style.headColor
+                color: Style.currentTheme.headColor
                 Row{
                     anchors.fill: parent
                     Rectangle{
                         border.width: 1
-                        color: Style.mainEnabledColor
+                        color: Style.currentTheme.mainEnabledColor
                         height: parent.height
                         width: parent.width/5
                         MText{
-                            color: Style.textMain
+                            color: Style.currentTheme.textMain
 
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
@@ -140,7 +163,7 @@ Item
                             regularExpression: /[\x20-\x7E]{0,14}/
                         }
 
-                        color: Style.textInverted
+                        color: Style.currentTheme.textInverted
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)
@@ -161,11 +184,12 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Button{
+        MImageButton{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            text: qsTr("MAP")
+            imageSource: "qrc:/Images/list1.svg";
+            imageColor: Style.currentTheme.mainEnabledColor
 
             onClicked: {
                 map.show()
@@ -209,8 +233,91 @@ Item
         }
     }
 
-    MapFx{
+    CopyToWindow{
+        id: _copyWindow
+    }
+
+    MapList{
         id: map
 
+        delegate: Rectangle{
+            width: map.width*0.9
+            height: map.height/10
+            radius: height/10
+
+            border.width: index === map.currentIndex ? 4 : 2
+            border.color: index === map.currentIndex ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled
+
+            color: Style.currentTheme.mainEnabledColor
+
+            MouseArea{
+                anchors.fill: parent
+                z: 10
+
+                onClicked: {
+                    UiCore.sgQmlRequestChangePreset(UiCore.currentDevice.bank, index);
+                }
+            }
+
+            Row{
+                width: parent.width*0.95
+                height: parent.height*0.95
+                anchors.centerIn: parent
+
+                Column{
+                    height: parent.height
+                    width: parent.width/2
+                    MText{
+                        width: parent.width
+                        height: parent.height/2
+                        text: (presetNumber*1 + 1)  + ". " + presetName
+
+                        elide: Text.ElideMiddle
+                    }
+
+                    MText{
+                        width: parent.width
+                        height: parent.height/2
+                        text: presetComment
+
+                        elide: Text.ElideMiddle
+                    }
+                }
+
+                GridView{
+                    id: _modulesGridView
+
+                    height: parent.height * 0.85
+                    width: parent.width/2
+
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    cellWidth: width/7
+                    cellHeight: height/2
+
+                    model: activeModules
+
+                    delegate: Rectangle{
+                        width: _modulesGridView.cellWidth * 0.9
+                        height: _modulesGridView.cellHeight * 0.9
+
+                        color: "transparent"
+
+                        border.width: 1
+                        border.color: Style.currentTheme.borderOn
+
+                        MText{
+                            anchors.fill: parent
+                            text: modelData
+
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignHCenter
+
+                            font.pixelSize: parent.height/2
+                        }
+                    }
+                }
+            }
+        }
     }
 }

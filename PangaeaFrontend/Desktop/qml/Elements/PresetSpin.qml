@@ -44,7 +44,7 @@ Item
                 width: parent.width
                 anchors.centerIn: parent.Center
 
-                model: UiCore.currentDevice.strPresetNumbers //maxPresetCount
+                model: UiCore.currentDevice.strPresetNumbers
                 currentIndex: UiCore.currentDevice.preset
 
                 visibleItemCount: 1
@@ -52,8 +52,9 @@ Item
                 {
                     text: modelData
 
-                    color: "Red"
-                    font.pixelSize: parent.height*0.9
+                    color: Style.currentTheme.spin
+                    font.pixelSize: Math.min(parent.height*0.9, parent.width*0.9)
+
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment:   Text.AlignVCenter
                     font.bold: true
@@ -141,7 +142,7 @@ Item
             MText
             {
                 anchors.fill:  parent
-                color:  Style.mainEnabledColor
+                color:  Style.currentTheme.mainEnabledColor
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: parent.height/1.1
                 text: qsTr("PRESET")

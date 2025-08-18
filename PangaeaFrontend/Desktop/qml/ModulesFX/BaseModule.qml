@@ -20,15 +20,12 @@ Rectangle {
 
     property Component contentItem
     property int dialWidth: dialHeight
-    property int dialHeight: height //Math.min(height, width/10)
+    property int dialHeight: height
 
     width: parent.width
     height: parent.height
 
-    // color: on ? Style.mainEnabledColor : Style.mainDisabledColor
-    color: Style.mainEnabledColor
-
-    // property int simmetryElementsWidth: width/6
+    color: Style.currentTheme.mainEnabledColor
 
     Rectangle{
         id: _maskCompare
@@ -67,17 +64,17 @@ Rectangle {
             gradient: Gradient{
                 GradientStop{
                     position: _main.on ? 0.0 : 1.0
-                    color: Style.mainEnabledColor
+                    color: Style.currentTheme.mainEnabledColor
 
                     Behavior on position {NumberAnimation{duration: 300}}
                 }
-                GradientStop{position: 1.0; color: Style.mainDisabledColor}
+                GradientStop{position: 1.0; color: Style.currentTheme.mainDisabledColor}
 
             }
 
             radius: width/10
             border.width: 1
-            border.color: _main.on ? Style.borderOn : Style.textDisabled
+            border.color: _main.on ? Style.currentTheme.borderOn : Style.currentTheme.textDisabled
 
             Behavior on color {ColorAnimation{duration: 200}}
 
@@ -104,7 +101,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
 
                         text: _main.moduleName
-                        color: _main.on ? Style.textEnabled : Style.textDisabled
+                        color: _main.on ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
                     }
                 }
             }
@@ -118,23 +115,45 @@ Rectangle {
             }
         }
 
+        MButton{
+            id: _leftBtn
+
+            visible: _contentItem.contentWidth > _contentItem.width
+
+            width: dialWidth/3
+            height: parent.height
+
+            text: "<"
+            scaleText: 3
+
+            onClicked: {
+                if(_contentItem.contentX > 0)
+                {
+                    _contentItem.contentX = _contentItem.contentX - dialWidth;
+                    _contentItem.returnToBounds();
+                }
+            }
+        }
 
         Rectangle {
             id: _contentRect
 
-            width: parent.width - _headerRect.width - _mainRow.spacing
+            width: parent.width - _headerRect.width - _mainRow.spacing * 3 - _leftBtn.width * 2
             height: parent.height
-            // color: _main.on ? Style.mainEnabledColor : Style.mainDisabledColor
-            color: Style.mainEnabledColor
+
+            color: Style.currentTheme.mainEnabledColor
 
             clip: true
 
-            // radius: _headerRect.radius
-            // border.width: 1
-            // border.color: _main.on ? Style.borderOn : Style.borderOff
 
-            Item {
+            Flickable{
                 id: _contentItem
+
+                contentWidth: _loader.width
+                contentHeight: _loader.height
+
+                flickableDirection: Flickable.HorizontalFlick
+                boundsBehavior: Flickable.StopAtBounds
 
                 anchors.fill: parent
                 anchors.rightMargin: parent.width/100
@@ -142,12 +161,52 @@ Rectangle {
                 anchors.bottomMargin: parent.height/10
                 anchors.topMargin: parent.height/10
 
-                Loader{
+                // ScrollBar.horizontal:            ScrollBar{
+    //                 active: true
+    //                 parent: _contentRect
+    //                 width: parent.width
+    //                 height: parent.height/2
 
-                    width: _contentItem.width
+    //                 anchors.top: _contentItem.bottom
+    //                 // anchors.left: _contentItem.right
+    //                 // anchors.bottom: _contentItem.bottom
+
+    //                 size: 1.0
+    //             }
+
+                Behavior on contentX{
+                    NumberAnimation{
+                        duration: 100
+                    }
+                }
+
+                Loader{
+                    id: _loader
+
+                    // width: _contentItem.width
                     height: _contentItem.height
 
                     sourceComponent: contentItem
+                }
+            }
+        }
+
+        MButton{
+            id: _rightBtn
+
+            visible: _contentItem.contentWidth > _contentItem.width
+
+            width: dialWidth/3
+            height: parent.height
+
+            text: ">"
+            scaleText: 3
+
+            onClicked: {
+                if(_contentItem.contentX < _contentItem.contentWidth - _contentItem.width)
+                {
+                    _contentItem.contentX = _contentItem.contentX + dialWidth
+                    _contentItem.returnToBounds();
                 }
             }
         }

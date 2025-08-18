@@ -21,9 +21,9 @@ ApplicationWindow
     width: Screen.width * 0.75
     height: width * 0.4
 
-    minimumWidth: Screen.width * 0.75 * 0.75
+    minimumWidth: Screen.width * 0.8 * 0.75
     minimumHeight: Screen.width * 0.75 * 0.4 * 0.75
-    maximumWidth: Screen.width * 0.75 * 1.25
+    maximumWidth: Screen.width * 0.8 * 1.25
     maximumHeight: Screen.width * 0.75 * 0.4 * 1.25
 
     // minimumWidth: width*0.75
@@ -33,7 +33,7 @@ ApplicationWindow
 
     // palette.highlight: "orange"
 
-    // color: Style.backgroundColor
+    color: Style.currentTheme.backgroundColor
 
     property string markEdit: UiCore.currentDevice.deviceParamsModified ? " * ":" "
     property string devName: UiCore.currentDevice.firmwareName
@@ -51,6 +51,8 @@ ApplicationWindow
 
 
     header: MainMenu{
+        id: _mainMenu
+
         visible: main.connected
         enabled: !mBusy.visible
     }
@@ -193,10 +195,6 @@ ApplicationWindow
                 _msgVersionInform.visible = true;
             }
         }
-    }
-
-    Connections{
-        target: UiCore
 
         function onSgQmlRequestChangePreset(bank, preset)
         {
@@ -215,11 +213,7 @@ ApplicationWindow
             }
         }
 
-
-
         function onCurrentDeviceChanged(){
-
-            console.log("Current device changed", UiCore.currentDevice.deviceType)
 
             switch(UiCore.currentDevice.deviceType){
             case DeviceType.UNKNOWN_DEVICE:{
@@ -397,6 +391,13 @@ ApplicationWindow
 
         main.x = Screen.width/2 - main.width/2;
         main.y = Screen.height/2 - main.height/2;
+
+        switch(UiSettings.colorTheme){
+            case UiSettings.ClassicBlue: Style.currentTheme = Style.themeClassicBlue; break;
+            case UiSettings.DarkOrange: Style.currentTheme = Style.themeDarkOrange; break;
+            case UiSettings.DarkBlue: Style.currentTheme = Style.themeDarkBlue; break;
+            case UiSettings.DarkGreen: Style.currentTheme = Style.themeDarkGreen; break;
+        }
     }
 
     onClosing: function(close)

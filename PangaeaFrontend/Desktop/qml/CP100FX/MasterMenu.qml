@@ -15,8 +15,6 @@ import PangaeaBackend
 RowLayout{
     id: _row1
 
-    spacing: 0
-
     Rectangle{
         Layout.preferredWidth: 2
         Layout.fillHeight: true
@@ -44,7 +42,7 @@ RowLayout{
     }
 
     MEQ{
-        Layout.preferredWidth: parent.height * 5
+        Layout.fillWidth: true
         Layout.fillHeight: true
     }
 
@@ -63,6 +61,8 @@ RowLayout{
 
             y: parent.height/10
 
+            enabled: true
+
             width: height
             height: parent.height
 
@@ -75,6 +75,8 @@ RowLayout{
             property Volume module: UiCore.currentDevice.phonesVolume
 
             y: parent.height/10
+
+            enabled: true
 
             width: height
             height: parent.height

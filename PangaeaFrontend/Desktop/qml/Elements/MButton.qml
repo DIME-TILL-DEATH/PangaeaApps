@@ -12,18 +12,26 @@ Item
     property double scaleText: 1
 
     property bool  highlighted: false
-    property color highlightColor: Style.highlightColor
+    property color highlightColor: Style.currentTheme.highlightColor
+
     signal clicked();
+
+    property alias radius: _rectangle.radius
 
     Rectangle
     {
+        id: _rectangle
+
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter:  parent.verticalCenter
         width:  parent.width/1.3
         height: parent.height/1.3 //width/2
 
+        border.width: 1
+        border.color: Style.currentTheme.borderOff
+
         radius: height/2
-        color:  main.highlighted ? highlightColor : Style.backgroundColor
+        color:  main.highlighted ? highlightColor : Style.currentTheme.backgroundColor
         clip: true
 
         Item
@@ -36,6 +44,9 @@ Item
                 id: colorRect
                 color: "grey"
                 opacity: 0.3
+
+                radius: main.height/2
+
                 transform: Translate
                 {
                     x: -colorRect.width / 2
@@ -47,7 +58,7 @@ Item
             {
                 id: circleAnimation
                 target: colorRect
-                properties: "width,height,radius"
+                properties: "width,height"//",radius"
                 from: 0
                 to: main.width
                 duration: 400
@@ -71,13 +82,16 @@ Item
         MText
         {
             anchors.fill:  parent
-            font.pixelSize: parent.height/2*scaleText
+
+            font.pixelSize: Math.min(parent.height/2, parent.width/5) * scaleText
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment:   Text.AlignVCenter
             text: main.text
-            color: Style.mainEnabledColor
+            color: main.enabled ? Style.currentTheme.textInverted : Style.currentTheme.textDisabled
             opacity: main.enabled?1:0.3
             Behavior on opacity  {NumberAnimation { duration:500 }}
+
+            elide: Text.ElideMiddle
         }
         MouseArea
         {

@@ -5,14 +5,7 @@
 #include <QQmlEngine>
 
 #include <abstractdevice.h>
-
-typedef struct
-{
-    uint8_t src;
-    uint8_t dst;
-    uint8_t minVal;
-    uint8_t maxVal;
-}TController;
+#include "hardwarefxpreset.h"
 
 class ControllerFx : public QObject
 {
@@ -27,7 +20,7 @@ class ControllerFx : public QObject
 
     Q_PROPERTY(QStringList avaliableSources READ avaliableSourcesList NOTIFY avaliableSourcesChanged)
 public:
-    explicit ControllerFx(TController* controllerData, quint8 num, AbstractDevice* owner);
+    explicit ControllerFx(controller_fx_t* controllerData, quint8 num, AbstractDevice* owner);
 
     quint8 destination() const;
     void setDestination(quint8 newDestination);
@@ -46,15 +39,13 @@ public:
 
     quint8 dataFromSourceName(const QString& source);
 
-    static constexpr quint8 controllersCount = 32;
-
 signals:
     void controllerChanged();
     void avaliableSourcesChanged();
 
 private:
     AbstractDevice* m_owner;
-    TController* m_controllerData;
+    controller_fx_t* m_controllerData;
 
     quint8 m_num;
 

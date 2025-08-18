@@ -25,19 +25,16 @@ class EarlyReflections : public AbstractModule
     Q_PROPERTY(quint8 processingTimeMono READ processingTimeMono CONSTANT)
     Q_PROPERTY(quint8 processingTimeStereo READ processingTimeStereo CONSTANT)
 public:
-    enum EarlyType{
-        Classic = 0,
-        FX
-    };
-
-    EarlyReflections(AbstractDevice *owner, EarlyType earlyType = Classic);
+    EarlyReflections(AbstractDevice *owner, preset_data_cplegacy_t* erData);
+    EarlyReflections(AbstractDevice *owner, preset_data_cpmodern_t* erData);
+    EarlyReflections(AbstractDevice *owner, modules_data_fx_t* erData);
 
     ControlValue *reflectionsVolume() {return m_reflectionsVolume;};
     ControlValue *reflectionsType() {return m_reflectionsType;};
 
     void setValues(const preset_data_cplegacy_t& erData) override;
     void setValues(const preset_data_cpmodern_t& erData) override;
-    void setValues(const preset_data_fx_t &erData) override;
+    void setValues(const modules_data_fx_t &erData) override;
 
     quint16 processingTime() const override;
     quint8 processingTimeMono() {return m_processingTimeMono;};

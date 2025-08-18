@@ -2,6 +2,7 @@
 #define ABSTRACTMODULE_H
 
 #include <QObject>
+#include <QDebug>
 
 #include "moduletypeenum.h"
 #include "hardwareclassicpreset.h"
@@ -27,6 +28,7 @@ class AbstractModule : public QObject
 public:
 
     explicit AbstractModule(AbstractDevice* owner, ModuleType moduleType, QString name, QString commandOnOff);
+    // ~AbstractModule() {};
 
     static void registerTypestoQml();
 
@@ -35,7 +37,7 @@ public:
 
     virtual quint16 processingTime() const {return m_processingTime;};
 
-    bool moduleEnabled() const {return m_moduleEnabled;};
+    bool moduleEnabled();
     virtual void setModuleEnabled(bool newEnabled);
 
     QString moduleName() const {return m_moduleName;};
@@ -47,10 +49,12 @@ public:
 
     virtual void setValues(const preset_data_cplegacy_t &prData) {};
     virtual void setValues(const preset_data_cpmodern_t &prData) {};
-    virtual void setValues(const preset_data_fx_t &prData) {};
+    virtual void setValues(const modules_data_fx_t &prData) {};
 
 signals:
     void dataChanged();
+
+    void positionChanged();
 
     void usedChanged();
     void userModifiedModuleParameters();
@@ -62,7 +66,7 @@ protected:
     bool m_used{false};
     quint16 m_processingTime{0};
 
-    bool m_moduleEnabled;
+    bool* m_moduleEnabled{nullptr};
     QString m_moduleName;
     QString m_fullModuleName;
 

@@ -25,16 +25,13 @@ class Preamp : public AbstractModule
     // FX
     Q_PROPERTY(ControlValue* gain READ gain NOTIFY dataChanged FINAL)
 public:
-    enum PreampType{
-        Classic = 0,
-        FX
-    };
-
-    explicit Preamp(AbstractDevice *owner, PreampType preampType = Classic);
+    Preamp(AbstractDevice *owner, preset_data_cplegacy_t* prData);
+    Preamp(AbstractDevice *owner, preset_data_cpmodern_t* prData);
+    Preamp(AbstractDevice *owner, modules_data_fx_t* prData);
 
     void setValues(const preset_data_cplegacy_t& prData) override;
     void setValues(const preset_data_cpmodern_t& prData) override;
-    void setValues(const preset_data_fx_t &prData) override;
+    void setValues(const modules_data_fx_t &prData) override;
 
     ControlValue* gain() {return m_gain;};
     ControlValue* volume() {return m_volume;};

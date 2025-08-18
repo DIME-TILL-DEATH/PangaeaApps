@@ -20,7 +20,7 @@ import PangaeaBackend
 Rectangle{
     id: _main
 
-    color: Style.mainEnabledColor
+    color: Style.currentTheme.mainEnabledColor
 
     property int stringHeight: height/16
 
@@ -36,7 +36,7 @@ Rectangle{
 
             color: "transparent"
             border.width: 1
-            border.color: Style.borderOn
+            border.color: Style.currentTheme.borderOn
 
             Column{
                 width: parent.width * 0.9
@@ -149,7 +149,7 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    text: "Swap UpConf: "
+                    text: "Swap FSW: "
 
                     currentIndex: UiCore.currentDevice.systemSettings.swapConf
                     model: ["Off", "On"]
@@ -181,7 +181,7 @@ Rectangle{
 
             color: "transparent"
             border.width: 1
-            border.color: Style.borderOn
+            border.color: Style.currentTheme.borderOn
             property int stringHeight: parent.height/16
 
             Column{
@@ -197,7 +197,7 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    text: "Expression pedal: "
+                    text: "Expr. pedal: "
 
                     checked: UiCore.currentDevice.systemSettings.exprOn
 
@@ -289,7 +289,7 @@ Rectangle{
 
             color: "transparent"
             border.width: 1
-            border.color: Style.borderOn
+            border.color: Style.currentTheme.borderOn
             property int stringHeight: parent.height/16
 
             Column{
@@ -309,7 +309,7 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    ComboBox{
+                    MComboHorizontal{
                         id: _comboPcChoice
 
                         Layout.preferredWidth: parent.width/3
@@ -337,7 +337,7 @@ Rectangle{
                         text: "->"
                     }
 
-                    ComboBox{
+                    MComboHorizontal{
                         id: _comboPresetChoice
 
                         Layout.fillWidth: true

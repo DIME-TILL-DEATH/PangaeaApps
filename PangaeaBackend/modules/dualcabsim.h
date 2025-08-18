@@ -20,9 +20,9 @@ class DualCabSim : public AbstractModule
     Q_PROPERTY(ControlValue* secondCabDelay READ secondCabDelay NOTIFY dataChanged FINAL)
 
 public:
-    DualCabSim(AbstractDevice *owner);
+    DualCabSim(AbstractDevice *owner, modules_data_fx_t* csData);
 
-    void setValues(const preset_data_fx_t &csData) override;
+    void setValues(const modules_data_fx_t &csData) override;
 
     ControlValue* firstCabVolume() {return m_firstCabVolume;};
     ControlValue* firstCabPan() {return m_firstCabPan;};

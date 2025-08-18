@@ -176,36 +176,43 @@ RowLayout{
         Layout.fillHeight: true
     }
 
-    Item{
-        Layout.preferredWidth: height
+    Row{
+        Layout.preferredWidth: height * 2
         Layout.fillHeight: true
 
         ParameterDial{
             id: vlControl
             property Volume module: UiCore.currentDevice.presetVolume
 
+            enabled: true
+
             y: parent.height/10
 
             width: height
-            height: parent.height
+            height: parent.height - parent.height/10
 
             controlValue: UiCore.currentDevice.presetVolume.volume
          }
 
-    }
+        MSwitchVertical{
+            id: _volCtrlSwitch
 
-    MSwitchVertical{
-        id: _volCtrlSwitch
+            // Layout.preferredWidth: height
+            // Layout.fillHeight: true
 
-        Layout.preferredWidth: height
-        Layout.fillHeight: true
+            width: height
+            height: parent.height
 
-        text: "Control: "
+            y: parent.height/10
 
-        checked: !UiCore.currentDevice.presetVolumeControl
+            text: "Control: "
 
-        onClicked: {
-            UiCore.currentDevice.presetVolumeControl = !checked
+            checked: !UiCore.currentDevice.presetVolumeControl
+
+            onClicked: {
+                UiCore.currentDevice.presetVolumeControl = !checked
+            }
         }
     }
+
 }

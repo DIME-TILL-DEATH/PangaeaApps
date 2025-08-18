@@ -18,7 +18,7 @@ Rectangle{
     color: "transparent"
 
     border.width: 2
-    border.color: (main.on) ? "white" : "darkgrey"
+    border.color: (main.on) ? Style.currentTheme.borderOn : Style.currentTheme.borderOff
 
     property EqBand eqBand: module.EqBands[0];
     property bool bandOn: true
@@ -74,8 +74,8 @@ Rectangle{
                 value: eqBand.enabled
 
                 onChValue: val => {
-                               eqBand.enabled = !eqBand.enabled
-                           }
+                   eqBand.enabled = !eqBand.enabled
+               }
             }
 
             Row

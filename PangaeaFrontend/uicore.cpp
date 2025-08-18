@@ -104,6 +104,11 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
     m_currentDevice->startIrUpload(m_pickedIrPath, m_dstIrPath, false);
 }
 
+void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
+{
+    uploadIr(srcFilePath.path(), dstFilePath.path());
+}
+
 void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)
 {
     QFileInfo irFileInfo(m_pickedIrPath);

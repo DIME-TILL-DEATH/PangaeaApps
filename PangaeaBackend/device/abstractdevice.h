@@ -15,10 +15,9 @@
 
 #include "moduleslistmodel.h"
 #include "presetlistmodel.h"
+#include "filebrowsermodel.h"
 
 #include "presetmanager.h"
-
-#include "volume.h"
 
 class Core;
 
@@ -49,7 +48,7 @@ class AbstractDevice : public QObject
     Q_PROPERTY(QList<QObject*> avaliableModulesList READ avaliableModulesList CONSTANT)
     Q_PROPERTY(ModulesListModel* modulesListModel READ modulesListModel NOTIFY modulesListModelChanged FINAL)
     Q_PROPERTY(PresetListModel* presetListModel READ presetListModel NOTIFY presetListModelChanged FINAL)
-
+    Q_PROPERTY(FileBrowserModel* fileBrowser READ fileBrowser CONSTANT)
 
 public:
     explicit AbstractDevice(Core *owner);
@@ -105,14 +104,17 @@ public:
     ModulesListModel* modulesListModel() {return &m_modulesListModel;};
     PresetListModel* presetListModel() {return &m_presetListModel;};
     PresetManager* presetManager() {return &m_presetManager;};
+    FileBrowserModel* fileBrowser() {return &m_fileBrowser;};
 
     qint64 symbolsToRecieve() {return m_symbolsToRecieve;};
 
     bool isUpdatingFirmware() {return fwUpdate;};
     bool isMemoryFormatting() {return isFormatting;};
 
+    FileBrowserModel *fileBrowser() const;
+
 public slots:
-    virtual QList<QByteArray> parseAnswers(QByteArray& baAnswer);
+    virtual QList<QByteArray> parseAnswers(QByteArray baAnswer);
 
     void userModifiedModules();
 
@@ -128,6 +130,8 @@ signals:
 
     void sgDeviceError(DeviceErrorType errorType, QString description = "", QVariantList params = {});
     void sgDeviceMessage(DeviceMessageType msgType, QString description = "", QVariantList params = {});
+
+    void sgCommandsRecieved(QList<QByteArray> commands);
 
     void sgWriteToInterface(QByteArray data, bool logCommand = true);
     void sgPushCommandToQueue(QByteArray command, bool finalize = true);
@@ -178,8 +182,12 @@ protected:
     quint8 m_maxPresetCount{4};
 
     PresetManager m_presetManager{this};
-
     PresetListModel m_presetListModel{this};
+    FileBrowserModel m_fileBrowser{this};
+
+    PresetAbstract* actualPreset{nullptr};
+    PresetAbstract* savedPreset{nullptr}; // TODO используется из листа
+    PresetAbstract* copiedPreset{nullptr};
 
     QList<AbstractModule*> m_moduleList;
     QList<QObject*> m_avaliableModulesList;
@@ -194,9 +202,7 @@ protected:
     MaskedParser undefCommParser{"undefind command x\n", "11111111111111111X1"};
 
     void undefinedCommandCommHandler(const QString &command, const QByteArray& arguments);
-    void modulesParamsSetCommHandler(const QString &command, const QByteArray& arguments);
-
+    void modulesParamsSetCommHandler(const QString &command, const QByteArray& arguments); 
 };
-
 
 #endif // ABSTRACTDEVICE_H

@@ -24,7 +24,7 @@ BaseModule{
 
         property int gainRange: 40
 
-        color: main.on ? Style.mainEnabledColor : Style.mainDisabledColor
+        color: main.on ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
 
         function update()
@@ -61,6 +61,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlightColor: "blue"
                     highlighted: _eqp.currentBandIndex === 5
 
@@ -73,6 +75,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 0
 
                     onClicked: bandSelected(0)
@@ -83,6 +87,8 @@ BaseModule{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlighted: _eqp.currentBandIndex === 1
 
@@ -95,6 +101,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 2
 
                     onClicked: bandSelected(2)
@@ -105,6 +113,8 @@ BaseModule{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlighted: _eqp.currentBandIndex === 3
 
@@ -117,6 +127,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 4
 
                     onClicked: bandSelected(4)
@@ -127,6 +139,8 @@ BaseModule{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlightColor: "green"
                     highlighted: _eqp.currentBandIndex === 6

@@ -17,7 +17,7 @@ Item
         radius: topItem.parent.height*3
 
         //TODO: цвет что и у модуля при первом запуске анимации.В итоге эффект не виден
-        color: topItem.on ? Style.mainEnabledColor : Style.mainDisabledColor
+        color: topItem.on ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
 
         transform: Translate
@@ -36,7 +36,7 @@ Item
         to: topItem.parent.height*3
         duration: 300
         onStopped: {
-            topItem.parent.color = topItem.parent.on ? Style.mainEnabledColor : Style.mainDisabledColor
+            topItem.parent.color = topItem.parent.on ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
         }
     }
 

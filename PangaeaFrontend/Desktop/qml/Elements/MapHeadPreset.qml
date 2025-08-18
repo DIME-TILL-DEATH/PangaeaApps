@@ -20,13 +20,13 @@ Item
             width:  parent.width
             height: parent.height / 2
 
-            color: Style.backgroundColor
+            color: Style.currentTheme.backgroundColor
             radius: parent.height
             MText
             {
                 anchors.fill: parent
                 text: "PRESET"
-                color: Style.mainEnabledColor
+                color: Style.currentTheme.textInverted
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 font.pixelSize: parent.height/1.5
@@ -46,18 +46,14 @@ Item
                 {
                     width:  parent.width/UiCore.currentDevice.maxPresetCount
                     height: parent.height
-                    Rectangle
-                    {
-                        anchors.fill: parent
-                        color: Style.mainEnabledColor
-                    }
+
                     MText
                     {
                         anchors.fill: parent
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment:   Qt.AlignVCenter
                         text: modelData
-                        color: index === curVal ? Style.highlightColor : Style.backgroundColor
+                        color: index === curVal ? Style.currentTheme.highlightColor : Style.currentTheme.backgroundColor
                         font.pixelSize: parent.height/1.5
                     }
                 }

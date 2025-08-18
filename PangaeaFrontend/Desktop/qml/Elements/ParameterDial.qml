@@ -12,11 +12,14 @@ Item{
     width:  parent.width
     height: parent.height/1000*165
 
+    enabled: module.moduleEnabled
+
 
     required property ControlValue controlValue
-    opacity: module.moduleEnabled ? 1:0.5
+    opacity: _root.enabled ? 1:0.5
 
     property alias step: control.stepSize
+    property alias font: _txtParamName.font
 
     property int floatDigits: 0
 
@@ -51,13 +54,6 @@ Item{
 
             snapMode: Dial.SnapAlways
 
-            // MText
-            // {
-            //     anchors.centerIn: parent
-            //     color: Style.mainEnabledColor
-            //     font.pixelSize: parent.width/5
-            //     text: control.value.toFixed(floatDigits)
-            // }
 
             TextInput{
                 id: _txtInput
@@ -65,7 +61,7 @@ Item{
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
 
                 anchors.centerIn: parent
-                color: acceptableInput ? Style.mainEnabledColor : "red"
+                color: acceptableInput ? Style.currentTheme.textInverted : Style.currentTheme.error
 
                 font.bold: true
                 font.family: "Arial Black"
@@ -94,14 +90,14 @@ Item{
                 x: control.width / 2 - width / 2
                 y: control.height / 2 - height / 2
 
-                width: Math.min(control.width, control.height)
+                width: control.width
                 height: width
                 radius: width / 2
 
-                color: (module.moduleEnabled) ? "white" : "darkgrey"
+                color: Style.currentTheme.backgroundColor
 
                 border.width: 1
-                border.color: "darkgrey"
+                border.color: Style.currentTheme.textInverted
             }
 
             handle: Rectangle {
@@ -114,7 +110,7 @@ Item{
                 height: width
                 radius: width/2
 
-                color: Style.mainDisabledColor
+                color: Style.currentTheme.mainDisabledColor
                 antialiasing: true
                 transform: [
                     Translate {
@@ -137,7 +133,9 @@ Item{
                 acceptedButtons: Qt.RightButton//Qt.NoButton
 
                 onWheel: wheel => {
-                    var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
+                    var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100;
+                    // if(control.stepSize === 1) step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
+                    // else step = control.stepSize
                     controlValue.displayValue = control.value + wheel.angleDelta.y * step;
                 }
 
@@ -159,7 +157,7 @@ Item{
                 maximumLineCount: 2
                 wrapMode: Text.WordWrap
 
-                color: (module.moduleEnabled) ? "white" : "darkgrey"
+                color: _root.enabled ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
                 font.pixelSize: parent.width/8
                 text: _root.units !=="" ? _root.name + ", " + _root.units  : _root.name
             }

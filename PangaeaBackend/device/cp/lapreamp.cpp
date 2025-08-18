@@ -67,7 +67,7 @@ void LAPreamp::changePreset(quint8 newBank, quint8 newPreset, bool ignoreChanges
         comparePreset();
     }
 
-    m_presetListModel.updatePreset(&savedPreset); // Обновить актуальный пресет перед переключением
+    m_presetListModel.updatePreset(savedPreset); // Обновить актуальный пресет перед переключением
 
     emit sgPushCommandToQueue(QString("pc %2").arg(val, 2, 16, QChar('0')).toUtf8());
     emit sgProcessCommands();
@@ -97,7 +97,7 @@ void LAPreamp::getBankPresetLa3CommHandler(const QString &command, const QByteAr
     m_preset = m_bank * 4 + m_preset;
     m_bank = 0;
 
-    actualPreset.setBankPreset(m_bank, m_preset);
+    actualPreset->setBankPreset(m_bank, m_preset);
 
     qInfo() << "LA3 preset:" << m_preset;
     emit bankPresetChanged();

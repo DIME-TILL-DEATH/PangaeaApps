@@ -57,7 +57,7 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*7+4
 
-            color: Style.headColor
+            color: Style.currentTheme.headColor
 
             opacity: main.irModule.moduleEnabled ? 1:0.3
             Behavior on opacity{
@@ -72,7 +72,7 @@ Item
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
 
-                color: "black"
+                color: Style.currentTheme.textInverted
 
                 font.pixelSize: parent.height/4
                 wrapMode: Text.Wrap
@@ -113,12 +113,12 @@ Item
             width:  row.widthWithoutSpase/15*1
         }
 
-        Button
-        {
+        MImageButton{
             height: parent.height
             width:  row.widthWithoutSpase/15*1
 
-            text: qsTr("MAP")
+            imageSource: "qrc:/Images/table1.svg";
+            imageColor: Style.currentTheme.mainEnabledColor
 
             onClicked: {
                 map.show()
@@ -126,8 +126,59 @@ Item
         }
     }
 
-    Map{
+    MapTable{
         id: map
 
+        delegate: Item{
+            id: _root
+
+            width: map.cellWidth
+            height: map.cellHeight
+
+            property int currentIndex: map.currentIndex
+
+            property bool currentImpulseEnabled
+            property string currentImpulseName
+
+            Rectangle{
+                anchors.centerIn: parent
+
+                width: Math.min(parent.width*0.5, parent.height*0.5)
+                height: width
+
+                radius: width/2
+
+                color: isImpulseEmpty ? "transparent" : Style.currentTheme.highlightColor
+
+                opacity: ((currentIndex === presetMapIndex) ? currentImpulseEnabled : isImpulseEnabled) ? 1 : 0.5
+                border.width: Math.max(2, width/20)
+                border.color: currentIndex === presetMapIndex ? Style.currentTheme.highlightColor : Style.currentTheme.backgroundColor
+
+                MouseArea
+                {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+
+                    onClicked: {
+                        UiCore.currentDevice.changePreset(bankNumber, presetNumber);
+                    }
+                    onEntered: tp.visible = (tp.text.length>0)
+                    onExited:  tp.visible = false
+                }
+
+                ToolTip
+                {
+                    id: tp
+
+                    property string shownIrName: currentIndex === presetMapIndex ? currentImpulseName : impulseName
+
+                    text: qsTr("IR name: ") + shownIrName
+
+                    visible: false
+                    timeout: 0
+                }
+            }
+        }
     }
 }

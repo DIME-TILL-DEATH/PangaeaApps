@@ -3,7 +3,7 @@
 #include "cp100fx.h"
 #include "fswfx.h"
 
-ControllerFx::ControllerFx(TController *controllerData, quint8 num, AbstractDevice* owner)
+ControllerFx::ControllerFx(controller_fx_t *controllerData, quint8 num, AbstractDevice* owner)
     : QObject{owner},
     m_controllerData{controllerData},
     m_num{num},

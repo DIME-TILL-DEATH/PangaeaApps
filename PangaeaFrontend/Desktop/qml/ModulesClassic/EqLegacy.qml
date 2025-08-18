@@ -24,7 +24,7 @@ BaseModule{
 
         property int gainRange: 40
 
-        color: main.on ? Style.mainEnabledColor : Style.mainDisabledColor
+        color: main.on ? Style.currentTheme.mainEnabledColor : Style.currentTheme.mainDisabledColor
 
 
         function update()
@@ -61,6 +61,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 0
 
                     onClicked: _eqp.currentBandIndex = 0
@@ -71,6 +73,8 @@ BaseModule{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlighted: _eqp.currentBandIndex === 1
 
@@ -83,6 +87,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 2
 
                     onClicked: _eqp.currentBandIndex = 2
@@ -94,6 +100,8 @@ BaseModule{
                     width: parent.width * 1/10
                     height: parent.height * 0.9
 
+                    scaleText: 2
+
                     highlighted: _eqp.currentBandIndex === 3
 
                     onClicked: _eqp.currentBandIndex = 3
@@ -104,6 +112,8 @@ BaseModule{
 
                     width: parent.width * 1/10
                     height: parent.height * 0.9
+
+                    scaleText: 2
 
                     highlighted: _eqp.currentBandIndex === 4
 
@@ -274,7 +284,7 @@ BaseModule{
                 color: "transparent"
 
                 border.width: 2
-                border.color: (main.on) ? "white" : "darkgrey"
+                border.color: (main.on) ? Style.currentTheme.borderOn : Style.currentTheme.borderOff
 
                 Row{
                     width: parent.width
@@ -287,7 +297,7 @@ BaseModule{
 
                         MText{
                             anchors.horizontalCenter: parent.horizontalCenter
-                            color: (main.on) ? "white" : "darkgrey"
+                            color: (main.on) ? Style.currentTheme.borderOn : Style.currentTheme.borderOff
                             font.pixelSize: parent.width/6
 
                             text: "BAND " + (currentBandIndex + 1) + "\n" +

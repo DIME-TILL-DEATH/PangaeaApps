@@ -27,7 +27,7 @@ RowLayout{
         ColorOverlay {
             anchors.fill: image
             source: image
-            color: Style.backgroundColor
+            color: Style.currentTheme.textEnabled
         }
     }
 
@@ -38,7 +38,7 @@ RowLayout{
         radius: width
 
         border.width: 2
-        border.color: Style.backgroundColor
+        border.color: Style.currentTheme.backgroundColor
 
         color: root.isOk ? "green" : "red"
     }

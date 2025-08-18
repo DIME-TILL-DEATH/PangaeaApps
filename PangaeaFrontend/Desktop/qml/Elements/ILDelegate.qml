@@ -37,7 +37,7 @@ Item{
             ColorOverlay {
                 anchors.fill: image
                 source: image
-                color: Style.backgroundColor
+                color: Style.currentTheme.textEnabled
             }
         }
         Item{

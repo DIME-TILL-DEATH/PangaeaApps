@@ -25,9 +25,9 @@ class Flanger : public AbstractModule
     Q_PROPERTY(ControlValue* hpf READ hpf NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* position READ position NOTIFY dataChanged FINAL)
 public:
-    Flanger(AbstractDevice *owner);
+    Flanger(AbstractDevice *owner, modules_data_fx_t* flData);
 
-    void setValues(const preset_data_fx_t &chData) override;
+    void setValues(const modules_data_fx_t &flData) override;
 
     ControlValue *mix() const {return m_mix;};
     ControlValue *lfo() const {return m_lfo;};

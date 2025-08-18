@@ -16,12 +16,17 @@ Window
 
     property int maxMapRow: Math.max(UiCore.currentDevice.maxBankCount, UiCore.currentDevice.maxPresetCount)
 
+    property alias delegate: _mapGrid.delegate
+    property alias currentIndex: _mapGrid.currentIndex
+    property alias cellWidth: _mapGrid.cellWidth
+    property alias cellHeight: _mapGrid.cellHeight
+
     title: qsTr("Preset map")
 
     Rectangle
     {
         anchors.fill: parent
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         enabled: UiCore.currentDevice.presetManager.currentState === PresetState.Idle
 
@@ -85,22 +90,22 @@ Window
                             running: true
                             loops: Animation.Infinite
                             alwaysRunToEnd: true
-                            ColorAnimation {from: "salmon"; to: "gray"; duration: 1000}
-                            ColorAnimation {from: "gray"; to: "salmon"; duration: 1000}
+                            ColorAnimation {from: Style.currentTheme.highlightColor ; to: Style.currentTheme.barLow; duration: 1000}
+                            ColorAnimation {from: Style.currentTheme.barLow; to: Style.currentTheme.highlightColor; duration: 1000}
                         }
 
                     }
 
                     // model: UiCore.currentDevice.presetListModel
 
-                    delegate: MapDelegate{
-                        id: _root
+                    // delegate: MapDelegate{
+                    //     id: _root
 
-                        width: _mapGrid.cellWidth
-                        height: _mapGrid.cellHeight
+                    //     width: _mapGrid.cellWidth
+                    //     height: _mapGrid.cellHeight
 
-                        currentIndex: _mapGrid.currentIndex
-                    }
+                    //     currentIndex: _mapGrid.currentIndex
+                    // }
                 }
             }
         }

@@ -24,7 +24,7 @@ class ControlValue : public QObject
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString units READ units CONSTANT)
 public:
-    explicit ControlValue(AbstractModule *parent, QString commandName,
+    explicit ControlValue(AbstractModule *parent, void* valuePtr, QString commandName,
                           QString name = "", QString units ="",
                           qint16 minControlValue = 0, qint16 maxControlValue = 31,
                           double minDisplayValue = 0, double maxDisplayValue = 31);
@@ -56,6 +56,8 @@ signals:
 
 protected:
     QString m_commandString;
+
+    void* value_ptr{nullptr};
 
     qint16 m_minControlValue;
     qint16 m_maxControlValue;

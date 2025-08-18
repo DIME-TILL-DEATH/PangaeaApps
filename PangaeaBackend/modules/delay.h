@@ -31,15 +31,12 @@ class Delay : public AbstractModule
     Q_PROPERTY(ControlValue* tap READ tap NOTIFY dataChanged FINAL)
     Q_PROPERTY(ControlValue* tail READ tail NOTIFY dataChanged FINAL)
 public:
-    enum DelayType{
-        Classic = 0,
-        FX
-    };
 
-    explicit Delay(AbstractDevice *owner, DelayType delayType = DelayType::Classic);
+    Delay(AbstractDevice *owner, preset_data_cpmodern_t* data);
+    Delay(AbstractDevice *owner, modules_data_fx_t* data);
 
     void setValues(const preset_data_cpmodern_t& dlData) override;
-    void setValues(const preset_data_fx_t &dlData) override;
+    void setValues(const modules_data_fx_t &dlData) override;
 
     ControlValue *mix() const {return m_mixFirst;};
     ControlValue *time() const {return m_time;};

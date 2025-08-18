@@ -47,7 +47,7 @@ Item
             {
                 anchors.fill: parent
                 radius: parent.width
-                color: Style.backgroundColor
+                color: Style.currentTheme.backgroundColor
                 Item
                 {
                     height: parent.height
@@ -60,7 +60,7 @@ Item
                         height: Math.min(parent.height, parent.width)
                         width : Math.min(parent.height, parent.width)
                         radius: width
-                        color: Style.mainEnabledColor
+                        color: Style.currentTheme.mainEnabledColor
                     }
                     rotation:  dispAngle
                     Behavior on rotation  {NumberAnimation { duration: 200 }}
@@ -68,7 +68,7 @@ Item
                 MText
                 {
                     anchors.centerIn: parent
-                    color: Style.mainEnabledColor
+                    color: Style.currentTheme.mainEnabledColor
                     font.pixelSize: parent.width/5
                     text: dispValue
                 }
@@ -148,7 +148,8 @@ Item
                 anchors.verticalCenter:   parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenterOffset: -parent.width/30
-                color: main.checkable ? (main.on ? "Salmon"  :"Blue") : Style.backgroundColor
+                color: main.checkable ? (main.on ? Style.currentTheme.highlightColor  : Style.currentTheme.barHigh)
+                                      : Style.currentTheme.backgroundColor
                 font.pixelSize: parent.width/6
                 text: main.name
                 MouseArea

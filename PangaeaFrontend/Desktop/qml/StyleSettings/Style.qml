@@ -2,27 +2,119 @@ pragma Singleton
 
 import QtQuick
 import QtQuick.Controls
+import QtCore
+
+import QtQuick.Controls.Material 2.12
 
 QtObject {
     id: root
 
-    readonly property color backgroundColor: "#EBECEC"
-    readonly property color mainEnabledColor: "#5E5971"
-    readonly property color mainDisabledColor: "#7E7991"
+    property Theme currentTheme : themeDarkBlue
 
-    readonly property color highlightColor: "Salmon"
-    readonly property color headColor: "MediumSeaGreen"
+    property Theme themeClassicBlue: Theme{
+        backgroundColor: "#EBECEC"
+        mainEnabledColor: "#5E5971"
+        mainDisabledColor: "#7E7991"
 
-    readonly property color textMain: "#EBECEC"
-    readonly property color textInverted: "black"
+        highlightColor: "Salmon"
+        headColor: "MediumSeaGreen"
 
-    readonly property color textEnabled: "white"
-    readonly property color textDisabled: "black"
+        textMain: "#EBECEC"
+        textSecondary: "lightsteelblue"
+        textInverted: "black"
 
-    readonly property color borderOn: "white"
-    readonly property color borderOff: "grey"
+        textEnabled: "#EBECEC"
+        textDisabled: "black"
 
-    readonly property color barLow: "grey"
-    readonly property color barHigh: "steelblue"
-    readonly property color barText: "white"
+        borderOn: "white"
+        borderOff: "grey"
+
+        barLow: "grey"
+        barHigh: "steelblue"
+        barText: "white"
+
+        error: "red"
+        spin: "red"
+    }
+
+    property Theme themeDarkOrange: Theme{
+        backgroundColor: "#2B2A29"
+
+        mainEnabledColor: "#5B5B5B"
+        mainDisabledColor: "#404040"
+
+        highlightColor: "darkorange"
+        headColor: "darkolivegreen"
+
+        textMain: "burlywood"
+        textSecondary: "lightsteelblue"
+        textInverted: "burlywood"
+
+        textEnabled: "burlywood"
+        textDisabled: "grey"
+
+        borderOn: "burlywood"
+        borderOff: "darkslategrey"
+
+        barLow: "grey"
+        barHigh: "darkorange"
+        barText: "palegoldenrod"
+
+        error: "red"
+        spin: "orange"
+    }
+
+    property Theme themeDarkBlue: Theme{
+        backgroundColor: "#2B2A29"
+
+        mainEnabledColor: "#5B5B5B"
+        mainDisabledColor: "#404040"
+
+        highlightColor: "darkblue"
+        headColor: "darkcyan"
+
+        textMain: "#EBECEC"
+        textSecondary: "burlywood"
+        textInverted: "deepskyblue"
+
+        textEnabled: "#2a8ada"
+        textDisabled: "grey"
+
+        borderOn: "deepskyblue"
+        borderOff: "darkslategrey"
+
+        barLow: "grey"
+        barHigh: "#769897"
+        barText: "#EBECEC"
+
+        error: "red"
+        spin: "darkblue"
+    }
+
+    property Theme themeDarkGreen: Theme{
+        backgroundColor: "#2B2A29"
+
+        mainEnabledColor: "#5B5B5B"
+        mainDisabledColor: "#404040"
+
+        highlightColor: "orange"
+        headColor: "olive"
+
+        textMain: "#EBECEC"
+        textSecondary: "lightsteelblue"
+        textInverted: "#00D046"
+
+        textEnabled: "#00D046"
+        textDisabled: "grey"
+
+        borderOn: "#FFF005"
+        borderOff: "darkslategrey"
+
+        barLow: "grey"
+        barHigh: "#46A847"
+        barText: "#EBECEC"
+
+        error: "red"
+        spin: "green"
+    }
 }

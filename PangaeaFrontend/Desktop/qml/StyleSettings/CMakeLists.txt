@@ -6,4 +6,5 @@ qt_add_qml_module(qml_style
     VERSION 1.0
     QML_FILES
         Style.qml
+        Theme.qml
 )

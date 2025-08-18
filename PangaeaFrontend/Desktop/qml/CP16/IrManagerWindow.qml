@@ -35,7 +35,7 @@ Window{
         enabled: UiCore.currentDevice.presetManager.currentState === PresetState.Idle
         opacity: enabled ? 1 : 0.5
 
-        color: Style.mainEnabledColor
+        color: Style.currentTheme.mainEnabledColor
 
         Column{
             width: parent.width*0.95
@@ -97,7 +97,7 @@ Window{
 
                         font.pixelSize: _item.height
 
-                        color: isCurrentIr() ? Style.highlightColor : Style.textEnabled
+                        color: isCurrentIr() ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled
 
                         elide: Text.ElideMiddle
 
@@ -160,7 +160,7 @@ Window{
                 height: _root.height * 0.07
 
                 border.width: 1
-                border.color: "white"
+                border.color: Style.currentTheme.borderOn
 
                 color: _dropDelete.containsDrag ? "#60FFFFFF" : "transparent"
 
@@ -175,7 +175,7 @@ Window{
 
                     fillMode: Image.PreserveAspectFit
 
-                    color: "white"
+                    color: Style.currentTheme.borderOn
                 }
 
                 DropArea{
