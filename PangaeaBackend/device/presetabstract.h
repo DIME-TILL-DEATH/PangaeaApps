@@ -32,7 +32,7 @@ public:
     virtual QString presetName() const = 0;
     virtual void setPresetName(const QString &newPresetName) = 0;
 
-    static QByteArray dataToBa(void* data, quint32 size);
+    static QByteArray dataToBa(void* data, const quint32 size);
 
 
 protected:

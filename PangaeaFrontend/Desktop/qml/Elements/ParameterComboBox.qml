@@ -97,7 +97,7 @@ Item{
                 width: _combo.width
                 contentItem: Text {
                     text: delegate.model[_combo.textRole]
-                    color: Style.currentTheme.barText
+                    color: Style.currentTheme.textInverted
 
                     width: parent.width
 

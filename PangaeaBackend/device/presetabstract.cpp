@@ -17,9 +17,9 @@ void PresetAbstract::setBankPreset(quint8 newBankNumber, quint8 newPresetNumber)
     m_presetNumber = newPresetNumber;
 }
 
-QByteArray PresetAbstract::dataToBa(void* data_ptr, quint32 size)
+QByteArray PresetAbstract::dataToBa(void* data_ptr, const quint32 size)
 {
-    quint8 data[size];
+    quint8* data = new quint8[size];
     memcpy(data, data_ptr, size);
 
     QByteArray baData;
@@ -30,6 +30,9 @@ QByteArray PresetAbstract::dataToBa(void* data_ptr, quint32 size)
         if(tempBa.size() == 1) tempBa.push_front("0");
         baData.append(tempBa);
     }
+
+    delete[] data;
+
     return baData;
 }
 

@@ -84,9 +84,12 @@ Item
                         MText{
                             color: Style.currentTheme.textMain
 
-                            anchors.fill: parent
+                            width: parent.width * 0.9
+                            height: parent.height
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/9)
+
+                            elide: Text.ElideRight
 
                             text: qsTr(" Preset name")
                         }

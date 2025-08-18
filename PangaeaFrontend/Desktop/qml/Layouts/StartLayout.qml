@@ -42,7 +42,7 @@ RowLayout{
 
             anchors.centerIn: parent
 
-            width: parent.width*0.85
+            width: parent.width*0.9
             height: parent.height*0.95
 
             columns: 2
@@ -158,7 +158,7 @@ RowLayout{
                 }
             }
 
-            MSwitchHorizontal{
+            MCheckBox{
                 id: swAutoconnect
 
                 text: qsTr("Autoconnect")
@@ -197,7 +197,7 @@ RowLayout{
                 }
             }
 
-            MSwitchHorizontal{
+            MCheckBox{
                 id: swCheckUpdates
 
                 text: qsTr("Check updates")
