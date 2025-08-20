@@ -329,7 +329,7 @@
     <message>
         <location filename="../qml/Layouts/FileBrowserWindow.qml" line="70"/>
         <source>Current folder: </source>
-        <translation>Текущая папка</translation>
+        <translation type="unfinished">Текущая папка: </translation>
     </message>
     <message>
         <location filename="../qml/Layouts/FileBrowserWindow.qml" line="174"/>
@@ -380,12 +380,12 @@
 <context>
     <name>HeadCP100FX</name>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="91"/>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="94"/>
         <source> Preset name</source>
         <translation>Имя пресета</translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="145"/>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="148"/>
         <source> Preset comment</source>
         <translation>Комментарий</translation>
     </message>

@@ -380,12 +380,12 @@
 <context>
     <name>HeadCP100FX</name>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="91"/>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="94"/>
         <source> Preset name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="145"/>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="148"/>
         <source> Preset comment</source>
         <translation type="unfinished"></translation>
     </message>

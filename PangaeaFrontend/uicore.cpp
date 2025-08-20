@@ -101,7 +101,13 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 
 void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
 {
-    uploadIr(srcFilePath.path(), dstFilePath.path());
+    QString filePath =  srcFilePath.path();
+#ifdef Q_OS_WINDOWS
+    filePath.remove(0, 1); // remove first absolute '/' symbol
+#endif
+
+    qDebug() << filePath;
+    uploadIr(filePath, dstFilePath.path());
 }
 
 void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)
