@@ -11,6 +11,7 @@ QtObject {
     property color textMain
     property color textSecondary
     property color textInverted
+    property color textCombo
 
     property color textEnabled
     property color textDisabled

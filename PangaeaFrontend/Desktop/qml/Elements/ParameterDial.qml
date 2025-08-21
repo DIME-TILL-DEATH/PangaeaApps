@@ -61,7 +61,7 @@ Item{
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
 
                 anchors.centerIn: parent
-                color: acceptableInput ? Style.currentTheme.textInverted : Style.currentTheme.error
+                color: acceptableInput ? Style.currentTheme.textCombo : Style.currentTheme.error
 
                 font.bold: true
                 font.family: "Arial Black"
@@ -158,7 +158,7 @@ Item{
                 wrapMode: Text.WordWrap
 
                 color: _root.enabled ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
-                font.pixelSize: parent.width/8
+                font.pixelSize: Math.min(parent.height*0.9, parent.width/8)
                 text: _root.units !=="" ? _root.name + ", " + _root.units  : _root.name
             }
         }

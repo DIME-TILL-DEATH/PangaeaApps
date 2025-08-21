@@ -38,7 +38,7 @@ ColumnLayout
                 id: _menuColumn
 
                 height: parent.height
-                width:  height
+                width:  height * 1.5
 
                 property int selectedMenu: 0
 
@@ -78,6 +78,8 @@ ColumnLayout
                 width: parent.width - _menuColumn.width - 2
                 height: parent.height
 
+                anchors.margins: 4
+
                 visible: !_menuColumn.selectedMenu
             }
 
@@ -109,6 +111,7 @@ ColumnLayout
             model: UiCore.currentDevice.modulesListModel;
 
             anchors.fill: parent
+            anchors.margins: 4
 
             spacing: 0
 
@@ -235,19 +238,18 @@ ColumnLayout
         }
     }
 
-    Loader{
-        id: _moduleLoader
-
+    Rectangle{
         Layout.fillWidth: true
         Layout.preferredHeight: parent.height/4
+        color: Style.currentTheme.mainEnabledColor
 
-        property var selectedModuleInstance
+        Loader{
+            id: _moduleLoader
 
-        sourceComponent: Rectangle{
-            width: _moduleLoader.width
-            height: _moduleLoader.height
+            anchors.fill: parent
+            anchors.margins: 4
 
-            color: Style.currentTheme.mainEnabledColor
+            property var selectedModuleInstance
         }
     }
 }

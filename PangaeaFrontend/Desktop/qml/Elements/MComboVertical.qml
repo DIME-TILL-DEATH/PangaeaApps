@@ -56,12 +56,12 @@ Column{
         contentItem: Text {
             id: _comboText
 
-            width: _combo.width - _combo.indicator.width - _combo.spacing
-            leftPadding: width/20
+            width: _combo.width - _combo.indicator.width - _combo.spacing - leftPadding
+            leftPadding: 4
 
             text: _combo.displayText
 
-            color: Style.currentTheme.textInverted
+            color: Style.currentTheme.textCombo
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
          }
@@ -86,7 +86,7 @@ Column{
             width: _combo.width
             contentItem: Text {
                 text: delegate.model[_combo.textRole]
-                color: Style.currentTheme.textInverted
+                color: Style.currentTheme.textCombo
 
                 width: parent.width
 
@@ -169,7 +169,7 @@ Column{
                 context.lineTo(width, 0);
                 context.lineTo(width / 2, height);
                 context.closePath();
-                context.fillStyle = Style.currentTheme.textInverted
+                context.fillStyle = Style.currentTheme.textCombo
                 context.fill();
             }
         }

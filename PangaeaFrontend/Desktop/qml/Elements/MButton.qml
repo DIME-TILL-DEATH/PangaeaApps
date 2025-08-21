@@ -82,12 +82,15 @@ Item
         MText
         {
             anchors.fill:  parent
+            anchors.leftMargin: 4
+            anchors.rightMargin: 4
 
             font.pixelSize: Math.min(parent.height/2, parent.width/5) * scaleText
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment:   Text.AlignVCenter
             text: main.text
-            color: main.enabled ? Style.currentTheme.textInverted : Style.currentTheme.textDisabled
+            color: main.enabled ? Style.currentTheme.textInverted
+                                : Style.currentTheme.textDisabled
             opacity: main.enabled?1:0.3
             Behavior on opacity  {NumberAnimation { duration:500 }}
 

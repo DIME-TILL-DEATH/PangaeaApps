@@ -14,7 +14,7 @@ RowLayout{
     MComboVertical{
         id: _comboCtrlChoice
 
-        Layout.fillWidth: true
+        Layout.preferredWidth: parent.width/15
         Layout.fillHeight: true
 
         text: "Ctrl."
@@ -37,7 +37,7 @@ RowLayout{
     MComboVertical{
         id: _srcCombo
 
-        Layout.fillWidth: true
+        Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
         text: "Source"
@@ -134,7 +134,7 @@ RowLayout{
     }
 
     MComboVertical{
-        Layout.preferredWidth: parent.width/8
+        Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
         text: "PC Out"
@@ -149,7 +149,7 @@ RowLayout{
     }
 
     MComboVertical{
-        Layout.preferredWidth: parent.width/8
+        Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
         text: "Set"

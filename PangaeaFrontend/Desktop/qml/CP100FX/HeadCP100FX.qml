@@ -80,18 +80,20 @@ Item
                         border.width: 1
                         color: Style.currentTheme.mainEnabledColor
                         height: parent.height
-                        width: parent.width/5
+                        width: parent.width/4
                         MText{
                             color: Style.currentTheme.textMain
 
                             width: parent.width * 0.9
                             height: parent.height
+                            x: 5
+
                             verticalAlignment:   Text.AlignVCenter
-                            font.pixelSize: Math.min(parent.height/1.5, parent.width/9)
+                            font.pixelSize: Math.min(parent.height/2, parent.width/10)
 
                             elide: Text.ElideRight
 
-                            text: qsTr(" Preset name")
+                            text: qsTr("Preset name")
                         }
                     }
 
@@ -100,7 +102,7 @@ Item
                         text: UiCore.currentDevice.currentPresetName
 
                         height: parent.height
-                        width: parent.width*4/5
+                        width: parent.width*3/4
 
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
@@ -109,7 +111,7 @@ Item
                             regularExpression: /[\x20-\x7E]{0,14}/
                         }
 
-                        color: Style.currentTheme.textInverted
+                        color: Style.currentTheme.textMain
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)
@@ -137,15 +139,21 @@ Item
                         border.width: 1
                         color: Style.currentTheme.mainEnabledColor
                         height: parent.height
-                        width: parent.width/5
+                        width: parent.width/4
+
                         MText{
                             color: Style.currentTheme.textMain
 
-                            anchors.fill: parent
-                            verticalAlignment:   Text.AlignVCenter
-                            font.pixelSize: Math.min(parent.height/2, parent.width/9)
+                            width: parent.width * 0.9
+                            height: parent.height
+                            x: 5
 
-                            text: qsTr(" Preset comment")
+                            elide: Text.ElideRight
+
+                            verticalAlignment:   Text.AlignVCenter
+                            font.pixelSize: Math.min(parent.height/2, parent.width/10)
+
+                            text: qsTr("Preset comment")
                         }
                     }
 
@@ -154,7 +162,7 @@ Item
                         text: UiCore.currentDevice.currentPresetComment
 
                         height: parent.height
-                        width: parent.width*4/5
+                        width: parent.width*3/4
 
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
@@ -163,7 +171,7 @@ Item
                             regularExpression: /[\x20-\x7E]{0,14}/
                         }
 
-                        color: Style.currentTheme.textInverted
+                        color: Style.currentTheme.textMain
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)

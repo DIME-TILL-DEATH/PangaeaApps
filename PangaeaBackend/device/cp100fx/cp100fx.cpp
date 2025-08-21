@@ -39,6 +39,7 @@ Cp100fx::Cp100fx(Core *parent)
     m_fswList.append(&m_fswConfirm);
     m_fswList.append(&m_fswUp);
 
+    m_maxBankCount = 0;
     m_maxPresetCount = 100;
 
     actualPreset = new PresetFx{this};

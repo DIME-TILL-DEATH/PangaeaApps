@@ -26,7 +26,7 @@ Item
             {
                 anchors.fill: parent
                 text: "PRESET"
-                color: Style.currentTheme.textInverted
+                color: Style.currentTheme.textCombo
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter
                 font.pixelSize: parent.height/1.5

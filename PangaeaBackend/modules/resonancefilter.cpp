@@ -11,7 +11,7 @@ ResonanceFilter::ResonanceFilter(AbstractDevice *owner, modules_data_fx_t *rfDat
     m_lfo = new ControlValue(this, &rfData->resonance_filter.lfo_rate, "rf_lr", "LFO rate", "", 0, 127, 0, 127);
     m_loFreq = new ControlValue(this, &rfData->resonance_filter.lpf, "rf_lp", "Lo freq", "", 0, 127, 0, 127); //"Hz", 0, 127, 26, 560);
     m_hiFreq = new ControlValue(this, &rfData->resonance_filter.hpf, "rf_hp", "Hi freq", "", 0, 127, 0, 127); //"Hz", 0, 127, 560, 6545);
-    m_res = new ControlValue(this, &rfData->resonance_filter.resonance, "rf_rs", "Resonance", "Hz", 0, 127, 0, 127);
+    m_res = new ControlValue(this, &rfData->resonance_filter.resonance, "rf_rs", "Resonance", "", 0, 127, 0, 127);
     m_dynTh = new ControlValue(this, &rfData->resonance_filter.dyn_threshold, "rf_dt", "Dyn thresh", "", 0, 127, 0, 127);
     m_dynAtt = new ControlValue(this, &rfData->resonance_filter.dyn_attack, "rf_da", "Dyn att.", "", 0, 127, 0, 127);
     m_dynRel = new ControlValue(this, &rfData->resonance_filter.dyn_release, "rf_dr", "Dyn rel.", "", 0, 127, 0, 127);

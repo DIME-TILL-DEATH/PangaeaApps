@@ -118,7 +118,7 @@ Item
 
                 border.width: 1
 
-                color: "transparent"
+                color: Style.currentTheme.barLow//"transparent"
                 Row{
                     anchors.fill: parent
                     Rectangle{
@@ -132,8 +132,11 @@ Item
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
+                            x: 5
 
-                            text: qsTr(" Preset name")
+                            elide: Text.ElideRight
+
+                            text: qsTr("Preset name")
                         }
                     }
 
@@ -147,7 +150,7 @@ Item
                         horizontalAlignment: TextInput.AlignHCenter
                         verticalAlignment:   TextInput.AlignVCenter
 
-                        color: Style.currentTheme.textInverted
+                        color: Style.currentTheme.textMain
                         font.bold: true
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
@@ -174,7 +177,7 @@ Item
 
                 border.width: 1
 
-                opacity: main.irModule.moduleEnabled ? 1:0.3
+                opacity: main.irModule.moduleEnabled ? 1:0.5
 
                 Behavior on opacity{
                     NumberAnimation{duration: 500}
@@ -189,17 +192,21 @@ Item
 
                         height: parent.height
                         width: impuls.enabled ? parent.width/5 : 0
+
                         MText{
 
                             anchors.fill: parent
                             verticalAlignment:   Text.AlignVCenter
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
+                            x: 5
 
-                            color: Style.currentTheme.textInverted
+                            elide: Text.ElideRight
+
+                            color: Style.currentTheme.textMain
 
                             visible: impuls.enabled
 
-                            text: qsTr(" IR name")
+                            text: qsTr("IR name")
                         }
                     }
 
@@ -221,7 +228,7 @@ Item
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment:   Text.AlignVCenter
 
-                            color: Style.currentTheme.textInverted
+                            color: Style.currentTheme.textMain
 
                             font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
                             elide: Text.ElideMiddle
