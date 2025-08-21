@@ -17,14 +17,14 @@ Column
     id: _mainUi
     anchors.fill: parent
     focus: true
-    // spacing: 2
+    spacing: 2
 
     HeadCP100FX
     {
         id: _headCP100FX
 
         width:  parent.width
-        height: parent.height/1000*200 - _mainUi.spacing * 3
+        height: parent.height/1000*200 - _mainUi.spacing
 
         onSelectMenu: (menuNum) =>
         {

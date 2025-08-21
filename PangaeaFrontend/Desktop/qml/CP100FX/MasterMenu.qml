@@ -15,11 +15,6 @@ import PangaeaBackend
 RowLayout{
     id: _row1
 
-    Rectangle{
-        Layout.preferredWidth: 2
-        Layout.fillHeight: true
-    }
-
     ParameterComboBox{
         id: _attenuator
 
@@ -44,6 +39,7 @@ RowLayout{
     MEQ{
         Layout.fillWidth: true
         Layout.fillHeight: true
+        Layout.margins: 4
     }
 
     Rectangle{
@@ -54,6 +50,7 @@ RowLayout{
     Row{
         Layout.preferredWidth: height*2
         Layout.fillHeight: true
+        Layout.margins: 4
 
         ParameterDial{
             id: vlControl

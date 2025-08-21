@@ -39,6 +39,7 @@ Cp100fx::Cp100fx(Core *parent)
     m_fswList.append(&m_fswConfirm);
     m_fswList.append(&m_fswUp);
 
+    m_maxBankCount = 0;
     m_maxPresetCount = 100;
 
     actualPreset = new PresetFx{this};
@@ -132,7 +133,7 @@ void Cp100fx::readFullState()
 
 void Cp100fx::pushReadPresetCommands()
 {
-    // emit sgPushCommandToQueue("ir info");
+    emit sgPushCommandToQueue("ir info");
     emit sgPushCommandToQueue("pnum");
     emit sgPushCommandToQueue("pname");
     emit sgPushCommandToQueue("pcomment");

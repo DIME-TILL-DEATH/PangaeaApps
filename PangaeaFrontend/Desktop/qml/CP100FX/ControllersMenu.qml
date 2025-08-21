@@ -14,7 +14,7 @@ RowLayout{
     MComboVertical{
         id: _comboCtrlChoice
 
-        Layout.fillWidth: true
+        Layout.preferredWidth: parent.width/15
         Layout.fillHeight: true
 
         text: "Ctrl."
@@ -31,19 +31,21 @@ RowLayout{
                 }
             }
         }
+
     }
 
     MComboVertical{
         id: _srcCombo
 
-        Layout.fillWidth: true
+        Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
         text: "Source"
 
         model: UiCore.currentDevice.controller[0].avaliableSources
 
-        currentIndex: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source
+        currentIndex: _cntrlsModel.length > 0 ? UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source : 0
+        // currentIndex: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source
 
         onActivated: {
             UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].setSource(_srcCombo.comboText)
@@ -132,7 +134,7 @@ RowLayout{
     }
 
     MComboVertical{
-        Layout.preferredWidth: parent.width/8
+        Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
         text: "PC Out"
@@ -147,7 +149,7 @@ RowLayout{
     }
 
     MComboVertical{
-        Layout.preferredWidth: parent.width/8
+        Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
         text: "Set"

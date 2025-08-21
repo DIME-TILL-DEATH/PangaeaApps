@@ -38,7 +38,7 @@ ColumnLayout
                 id: _menuColumn
 
                 height: parent.height
-                width:  height
+                width:  height * 1.5
 
                 property int selectedMenu: 0
 
@@ -78,6 +78,8 @@ ColumnLayout
                 width: parent.width - _menuColumn.width - 2
                 height: parent.height
 
+                anchors.margins: 4
+
                 visible: !_menuColumn.selectedMenu
             }
 
@@ -109,6 +111,7 @@ ColumnLayout
             model: UiCore.currentDevice.modulesListModel;
 
             anchors.fill: parent
+            anchors.margins: 4
 
             spacing: 0
 
@@ -150,15 +153,30 @@ ColumnLayout
                         }
                     }
 
+
                     MText{
                         anchors.horizontalCenter: parent.horizontalCenter
 
-                        y: parent.height * 5.5/10
+                        y: parent.height/2 + parent.height * 1/20
 
                         color: "black"
 
                         text: moduleInstance.moduleName
                     }
+
+                    Rectangle{
+                        width: parent.width/10
+                        height: width
+                        radius: width/2
+
+                        x: parent.width/2 + _image.paintedWidth * 2/10
+                        y: parent.height/2 + _image.paintedHeight * 2/10
+
+                        border.width: 1
+
+                        color: moduleInstance.moduleEnabled ? "red" : "grey"
+                    }
+
 
                     MouseArea{
                         anchors.fill: parent
@@ -172,10 +190,10 @@ ColumnLayout
 
                                 _modulesListView.moduleTypeSelectedChanged();
                             }
-                        }
-
-                        onDoubleClicked: {
-                            moduleInstance.moduleEnabled = ! moduleInstance.moduleEnabled
+                            else
+                            {
+                                moduleInstance.moduleEnabled = ! moduleInstance.moduleEnabled
+                            }
                         }
                     }
                 }
@@ -220,19 +238,18 @@ ColumnLayout
         }
     }
 
-    Loader{
-        id: _moduleLoader
-
+    Rectangle{
         Layout.fillWidth: true
         Layout.preferredHeight: parent.height/4
+        color: Style.currentTheme.mainEnabledColor
 
-        property var selectedModuleInstance
+        Loader{
+            id: _moduleLoader
 
-        sourceComponent: Rectangle{
-            width: _moduleLoader.width
-            height: _moduleLoader.height
+            anchors.fill: parent
+            anchors.margins: 4
 
-            color: Style.currentTheme.mainEnabledColor
+            property var selectedModuleInstance
         }
     }
 }

@@ -35,7 +35,7 @@ Item
         Item
         {
             width:  parent.width
-            height: parent.height/100*80
+            height: parent.height/100*75
             Tumbler
             {
                 id: tumb
@@ -53,7 +53,7 @@ Item
                     text: modelData
 
                     color: Style.currentTheme.spin
-                    font.pixelSize: Math.min(parent.height*0.9, parent.width*0.9)
+                    font.pixelSize: Math.min(main.height*0.8, main.width*0.8)
 
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment:   Text.AlignVCenter
@@ -142,9 +142,13 @@ Item
             MText
             {
                 anchors.fill:  parent
-                color:  Style.currentTheme.mainEnabledColor
+                color:  Style.currentTheme.textCombo
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: parent.height/1.1
+                font.pixelSize: Math.min(parent.height, parent.width*0.75)
+
+                width: parent.width
+                elide: Text.ElideMiddle
+
                 text: qsTr("PRESET")
             }
         }

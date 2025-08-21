@@ -17,6 +17,8 @@ Window{
     width: Screen.width * 0.3
     height: width * 0.5
 
+    title: "Parametric EQ"
+
     minimumWidth: Screen.width * 0.3 * 0.75
     minimumHeight: Screen.width * 0.3 * 0.5 * 0.75
     maximumWidth: Screen.width * 0.3 * 1.25
@@ -336,7 +338,7 @@ Window{
                         MText{
                             anchors.horizontalCenter: parent.horizontalCenter
                             color: (main.on) ? Style.currentTheme.textEnabled : Style.currentTheme.textDisabled
-                            font.pixelSize: parent.width/6
+                            font.pixelSize: parent.width/7
 
                             text: "BAND " + (_eqp.currentBandIndex + 1) + "\n" +
                                   module.EqBands[_eqp.currentBandIndex].Fc.minDisplayValue + "Hz\n" +
@@ -347,7 +349,7 @@ Window{
                     ParameterDial{
                         id: dialFreq
                         width: parent.width/3.5
-                        height: parent.height*0.9
+                        height: parent.height*0.85
                         anchors.verticalCenter: parent.verticalCenter
 
                         property EqParametric module: main.module
@@ -357,7 +359,7 @@ Window{
                     ParameterDial{
                         id: dialGain
                         width: parent.width/3.5
-                        height: parent.height*0.9
+                        height: parent.height*0.85
                         anchors.verticalCenter: parent.verticalCenter
 
                         visible: (_eqp.currentBandIndex !== 5) & (_eqp.currentBandIndex !== 6)
@@ -369,7 +371,7 @@ Window{
                     ParameterDial{
                         id: dialQ
                         width: parent.width/3.5
-                        height: parent.height*0.9
+                        height: parent.height*0.85
                         anchors.verticalCenter: parent.verticalCenter
 
                         visible: (_eqp.currentBandIndex !== 5) & (_eqp.currentBandIndex !== 6)

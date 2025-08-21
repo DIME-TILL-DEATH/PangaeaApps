@@ -314,7 +314,7 @@
 <context>
     <name>EqWindow</name>
     <message>
-        <location filename="../qml/Layouts/EqWindow.qml" line="52"/>
+        <location filename="../qml/Layouts/EqWindow.qml" line="54"/>
         <source>RESET</source>
         <translation type="unfinished"></translation>
     </message>
@@ -380,13 +380,13 @@
 <context>
     <name>HeadCP100FX</name>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="91"/>
-        <source> Preset name</source>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="96"/>
+        <source>Preset name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="145"/>
-        <source> Preset comment</source>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="156"/>
+        <source>Preset comment</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

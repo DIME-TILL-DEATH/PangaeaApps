@@ -30,7 +30,7 @@ Item
             {
                 anchors.fill: parent
                 text: "BANK"
-                color: Style.currentTheme.textInverted
+                color: Style.currentTheme.textCombo
                 rotation: 270
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment:   Text.AlignVCenter

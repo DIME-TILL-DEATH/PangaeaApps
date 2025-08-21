@@ -36,7 +36,7 @@ Window
             id: _presetListView
 
             width: parent.width * 0.95
-            height: parent.height
+            height: parent.height - 4 * 2
 
             currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxBankCount + UiCore.currentDevice.preset
 

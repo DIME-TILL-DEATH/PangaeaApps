@@ -314,7 +314,7 @@
 <context>
     <name>EqWindow</name>
     <message>
-        <location filename="../qml/Layouts/EqWindow.qml" line="52"/>
+        <location filename="../qml/Layouts/EqWindow.qml" line="54"/>
         <source>RESET</source>
         <translation>СБРОС</translation>
     </message>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../qml/Layouts/FileBrowserWindow.qml" line="70"/>
         <source>Current folder: </source>
-        <translation>Текущая папка</translation>
+        <translation>Текущая папка: </translation>
     </message>
     <message>
         <location filename="../qml/Layouts/FileBrowserWindow.qml" line="174"/>
@@ -380,13 +380,13 @@
 <context>
     <name>HeadCP100FX</name>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="91"/>
-        <source> Preset name</source>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="96"/>
+        <source>Preset name</source>
         <translation>Имя пресета</translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="145"/>
-        <source> Preset comment</source>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="156"/>
+        <source>Preset comment</source>
         <translation>Комментарий</translation>
     </message>
 </context>

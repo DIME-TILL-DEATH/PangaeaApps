@@ -854,10 +854,20 @@ void MockCP100fx::plistCommHandler(const QString &command, const QByteArray &arg
 
         loadPresetData(i);
         answer.append(QString::number(i) + "|");
-        answer.append(QString((char*)currentPresetData.name) + "|");
-        answer.append(QString((char*)currentPresetData.comment) + "|");
-        answer.append(ir1Name + "|");
-        answer.append(ir2Name + "|");
+
+        QString name((char*)currentPresetData.name);
+        name.remove("//r//n|");
+        answer.append(name + "|");
+
+        QString comment((char*)currentPresetData.comment);
+        comment.remove("//r//n|");
+        answer.append(comment + "|");
+
+        // ir1Name.remove("//r//n|");
+        // ir2Name.remove("//r//n|");
+        // answer.append(ir1Name + "|");
+        // answer.append(ir2Name + "|");
+        answer.append("||");
 
         uint8_t enabled[14];
         memcpy(enabled, &currentPresetData.modules.switches, 14);

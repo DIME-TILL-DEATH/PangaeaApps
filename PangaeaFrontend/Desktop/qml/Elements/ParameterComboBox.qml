@@ -64,7 +64,7 @@ Item{
 
                 text: _combo.displayText
                 font: _combo.font
-                color: Style.currentTheme.textInverted
+                color: Style.currentTheme.textCombo
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
              }
@@ -97,7 +97,7 @@ Item{
                 width: _combo.width
                 contentItem: Text {
                     text: delegate.model[_combo.textRole]
-                    color: Style.currentTheme.textInverted
+                    color: Style.currentTheme.textCombo
 
                     width: parent.width
 
@@ -180,7 +180,7 @@ Item{
                     context.lineTo(width, 0);
                     context.lineTo(width / 2, height);
                     context.closePath();
-                    context.fillStyle = Style.currentTheme.textInverted
+                    context.fillStyle = Style.currentTheme.textCombo
                     context.fill();
                 }
             }

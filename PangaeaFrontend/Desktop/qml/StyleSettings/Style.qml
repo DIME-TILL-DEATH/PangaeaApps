@@ -22,6 +22,7 @@ QtObject {
         textMain: "#EBECEC"
         textSecondary: "lightsteelblue"
         textInverted: "black"
+        textCombo: "black"
 
         textEnabled: "#EBECEC"
         textDisabled: "black"
@@ -43,12 +44,13 @@ QtObject {
         mainEnabledColor: "#5B5B5B"
         mainDisabledColor: "#404040"
 
-        highlightColor: "darkorange"
+        highlightColor: "sienna"
         headColor: "darkolivegreen"
 
         textMain: "burlywood"
         textSecondary: "lightsteelblue"
         textInverted: "burlywood"
+        textCombo: "burlywood"
 
         textEnabled: "burlywood"
         textDisabled: "grey"
@@ -76,6 +78,7 @@ QtObject {
         textMain: "#EBECEC"
         textSecondary: "burlywood"
         textInverted: "deepskyblue"
+        textCombo: "deepskyblue"
 
         textEnabled: "#2a8ada"
         textDisabled: "grey"
@@ -102,7 +105,8 @@ QtObject {
 
         textMain: "#EBECEC"
         textSecondary: "lightsteelblue"
-        textInverted: "#00D046"
+        textInverted: "teal"
+        textCombo: "#00D046"
 
         textEnabled: "#00D046"
         textDisabled: "grey"
