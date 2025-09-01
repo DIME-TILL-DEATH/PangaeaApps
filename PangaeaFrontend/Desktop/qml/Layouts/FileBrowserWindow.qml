@@ -26,6 +26,8 @@ Window{
 
     color: Style.currentTheme.mainEnabledColor
 
+    title: qsTr("Impulse response")
+
     property alias currentCabNum: _chooseCabCombo.currentIndex
 
     signal cabNumChanged(var cabNum)

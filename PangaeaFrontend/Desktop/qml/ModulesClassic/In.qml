@@ -48,6 +48,8 @@ Rectangle {
             Connections{
                 target: UiCore.currentDevice
 
+                ignoreUnknownSignals: true
+
                 function onIoClipped(inClips, outClips){
                     clipInd.setIndicator(inClips);
                 }

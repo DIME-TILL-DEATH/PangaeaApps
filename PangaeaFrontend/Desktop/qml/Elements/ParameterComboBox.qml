@@ -59,15 +59,15 @@ Item{
             currentIndex: ctrlValInstance.displayValue
 
             contentItem: Text {
-                width: _combo.width - _combo.indicator.width - _combo.spacing
-                leftPadding: width/20
+                width: _combo.width - _combo.indicator.width - _combo.spacing - leftPadding
+                leftPadding: 8
 
                 text: _combo.displayText
                 font: _combo.font
                 color: Style.currentTheme.textCombo
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
-             }
+            }
 
             onActivated:
             {
@@ -76,17 +76,17 @@ Item{
             }
 
             background: Rectangle {
-                 implicitWidth: 120
-                 implicitHeight: 30
+                implicitWidth: 120
+                implicitHeight: 30
 
-                 // y: _combo.height * (1 - 0.8)
+                // y: _combo.height * (1 - 0.8)
 
-                 border.color: Style.currentTheme.borderOn
-                 border.width: _combo.visualFocus ? 2 : 1
-                 radius: 2
+                border.color: Style.currentTheme.borderOn
+                border.width: _combo.visualFocus ? 2 : 1
+                radius: 2
 
-                 color: Style.currentTheme.backgroundColor
-             }
+                color: Style.currentTheme.backgroundColor
+            }
 
             delegate: ItemDelegate{
                 id: delegate

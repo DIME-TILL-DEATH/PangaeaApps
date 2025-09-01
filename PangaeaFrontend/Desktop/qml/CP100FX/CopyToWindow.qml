@@ -26,6 +26,8 @@ Window{
 
     color: Style.currentTheme.mainEnabledColor
 
+    title: qsTr("Copy preset")
+
     Row{
         height: parent.height * 0.85
         width: parent.width * 0.9

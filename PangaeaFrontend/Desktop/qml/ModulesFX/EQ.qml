@@ -28,7 +28,7 @@ BaseModule{
             id: canvasBackground
 
             height: parent.height
-            width: parent.width * 2/5 //+ Style.mainSpacing * 2
+            width: parent.width * 3/5 //+ Style.mainSpacing * 2
 
             color: "black"
             Canvas{
@@ -137,7 +137,7 @@ BaseModule{
         }
 
         Item{
-            width: main.dialWidth * 2
+            width: main.dialWidth * 3
             height: parent.height
 
             MButton{

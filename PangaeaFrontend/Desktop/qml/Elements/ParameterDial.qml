@@ -110,7 +110,7 @@ Item{
                 height: width
                 radius: width/2
 
-                color: Style.currentTheme.mainDisabledColor
+                color: Style.currentTheme.textInverted
                 antialiasing: true
                 transform: [
                     Translate {

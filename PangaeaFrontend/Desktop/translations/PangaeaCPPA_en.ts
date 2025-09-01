@@ -172,7 +172,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Elements/BankSpin.qml" line="149"/>
+        <location filename="../qml/Elements/BankSpin.qml" line="152"/>
         <source>BANK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -221,47 +221,52 @@
 <context>
     <name>CopyToWindow</name>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="61"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="29"/>
+        <source>Copy preset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="63"/>
         <source>Select Items to be copied:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="70"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="72"/>
         <source>Preset name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="77"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="79"/>
         <source>Preset comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="84"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="86"/>
         <source>Controllers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="191"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="193"/>
         <source>Preset volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="216"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="218"/>
         <source>Target preset:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="263"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="265"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="278"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="280"/>
         <source>Deselect All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="302"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="304"/>
         <source>COPY ELEMENTS</source>
         <translation type="unfinished"></translation>
     </message>
@@ -413,37 +418,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="136"/>
-        <source> Preset name</source>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="139"/>
+        <source>Preset name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="202"/>
-        <source> IR name</source>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="209"/>
+        <source>IR name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="219"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="226"/>
         <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="220"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="227"/>
         <source>IR module not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="262"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="269"/>
         <source>Add/Remove module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="375"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="382"/>
         <source>Preset name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="375"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="382"/>
         <source>IR name: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1069,7 +1074,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Elements/PresetSpin.qml" line="148"/>
+        <location filename="../qml/Elements/PresetSpin.qml" line="152"/>
         <source>PRESET</source>
         <translation type="unfinished"></translation>
     </message>

@@ -35,8 +35,8 @@ Row{
         }
 
         contentItem: Text {
-            width: _combo.width - _combo.indicator.width - _combo.spacing
-            leftPadding: width/20
+            width: _combo.width - _combo.indicator.width - _combo.spacing - leftPadding
+            leftPadding: 8
 
             text: _combo.displayText
 

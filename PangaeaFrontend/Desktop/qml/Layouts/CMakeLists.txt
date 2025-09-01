@@ -20,4 +20,5 @@ qt_add_qml_module(qml_layouts
         SaveCompare.qml
         StartLayout.qml
         QML_FILES DialogTextInput.qml
+        QML_FILES NativeMessageDialog.qml
 )
