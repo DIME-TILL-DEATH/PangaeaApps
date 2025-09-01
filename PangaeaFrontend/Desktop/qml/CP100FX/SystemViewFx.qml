@@ -169,8 +169,8 @@ Rectangle{
 
                     value: UiCore.currentDevice.systemSettings.tunerSpeed
 
-                    onUserChangedValue: {
-                        UiCore.currentDevice.systemSettings.tunerSpeed = value
+                    onUserChangedValue: calcValue => {
+                        UiCore.currentDevice.systemSettings.tunerSpeed = calcValue
                     }
                 }
             }

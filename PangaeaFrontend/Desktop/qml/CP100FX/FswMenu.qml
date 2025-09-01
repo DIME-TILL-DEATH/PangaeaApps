@@ -39,8 +39,8 @@ Rectangle{
 
             value: UiCore.currentDevice.systemSettings.fswSpeed
 
-            onUserChangedValue: {
-                UiCore.currentDevice.systemSettings.fswSpeed = value
+            onUserChangedValue: calcValue => {
+                UiCore.currentDevice.systemSettings.fswSpeed = calcValue
             }
         }
 
@@ -120,7 +120,7 @@ Rectangle{
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            ComboBox{
+            MComboHorizontal{
                 width: parent.width/8
                 anchors.verticalCenter: parent.verticalCenter
 
@@ -141,7 +141,7 @@ Rectangle{
                 text: "->"
             }
 
-            ComboBox{
+            MComboHorizontal{
                 width: parent.width/8
                 anchors.verticalCenter: parent.verticalCenter
                 visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap2
@@ -162,7 +162,7 @@ Rectangle{
                 text: "->"
             }
 
-            ComboBox{
+            MComboHorizontal{
                 width: parent.width/8
                 anchors.verticalCenter: parent.verticalCenter
                 visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap3
@@ -184,7 +184,7 @@ Rectangle{
                 text: "->"
             }
 
-            ComboBox{
+            MComboHorizontal{
                 width: parent.width/8
                 anchors.verticalCenter: parent.verticalCenter
                 visible: UiCore.currentDevice.fsw[_comboFswSelect.currentIndex].pressType === FswFx.PresetMap4

@@ -11,6 +11,8 @@ Row{
     property alias currentIndex: _combo.currentIndex
     property alias model: _combo.model
 
+    property alias indicator: _combo.indicator
+
     signal activated(index: int)
 
     MLabel{
