@@ -43,6 +43,9 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     m_parser.addCommandHandler("psave", std::bind(&MockCP100fx::psaveCommHandler, this, _1, _2, _3));
 
     //--------------------------params handlers----------------------
+    setParamsHandler("vl_pr", &currentPresetData.modules.preset_volume);
+    setParamsHandler("vl_pr_control", &currentPresetData.modules.volume_control);
+
     setParamsHandler("rf_on", &currentPresetData.modules.switches.resonance_filter);
     setParamsHandler("rf_mx", &currentPresetData.modules.resonance_filter.mix);
     setParamsHandler("rf_ft", &currentPresetData.modules.resonance_filter.f_type);
@@ -172,12 +175,15 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setSysParamsHandler("sys_cab_num", &currentSystemData.cabSimConfig);
     setSysParamsHandler("sys_midi_ch", &currentSystemData.midiChannel);
     // setSysParamsHandler("sys_expr_on", &currentSystemData.cabSimDisabled);
-    //sys_expr_type
+
 
     setSysParamsHandler("sys_expr_cc", &currentSystemData.exprCC);
     setSysParamsHandler("sys_expr_slev", &currentSystemData.storeExprLevel);
     setSysParamsHandler("sys_spdif", &currentSystemData.spdifOutType);
     setSysParamsHandler("sys_tempo", &currentSystemData.tapType);
+
+    // setSysParamsHandler("sys_expr_type", &currentSystemData.expressionType);
+
 
     // m_tunerControl = settings.tunerExternal & 0x80 ? 1 : 0;
     // m_tunerCC = settings.tunerExternal & 0x7F;
@@ -191,6 +197,9 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setSysParamsHandler("meq_lg", &currentSystemData.masterEqLow);
     setSysParamsHandler("meq_mg", &currentSystemData.masterEqMid);
     setSysParamsHandler("meq_hg", &currentSystemData.masterEqHigh);
+
+    setSysParamsHandler("vl_ms", &currentSystemData.masterVolume);
+    setSysParamsHandler("vl_ph", &currentSystemData.phonesVolume);
 
     // "meq_mf"
     // if(count > 0)
@@ -621,7 +630,7 @@ void MockCP100fx::eqgCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_gain[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
     }
 }
 
@@ -634,7 +643,7 @@ void MockCP100fx::eqfCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_freq[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
     }
 }
 
@@ -647,7 +656,7 @@ void MockCP100fx::eqqCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_q[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
     }
 }
 

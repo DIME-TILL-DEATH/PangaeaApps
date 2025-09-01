@@ -17,6 +17,8 @@ ControllerFx::ControllerFx(controller_fx_t *controllerData, quint8 num, Abstract
             FswFx* fsw = dynamic_cast<FswFx*>(object);
             connect(fsw, &FswFx::fswTypeChanged, this, &ControllerFx::avaliableSourcesChanged);
         }
+
+        connect(this, &ControllerFx::controllerChanged, owner, &AbstractDevice::userModifiedModules);
     }
 }
 

@@ -383,6 +383,9 @@ void Cp100fx::setCntrlPcOut(quint8 newCntrlPcOut)
     actualPresetFx->setCntrlPcOut(newCntrlPcOut);
     emit cntrlPcOutChanged();
 
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
     emit sgWriteToInterface("cntrl_pc " + QByteArray::number(newCntrlPcOut, 16) + "\r\n");
 }
 
@@ -393,6 +396,9 @@ void Cp100fx::setCntrlSet(quint8 newCntrlSet)
     actualPresetFx->setCntrlSet(newCntrlSet);
     emit cntrlSetChanged();
 
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
     emit sgWriteToInterface("cntrl_set " + QByteArray::number(newCntrlSet, 16) + "\r\n");
 }
 
@@ -402,6 +408,9 @@ void Cp100fx::setPresetVolumeControl(quint8 newPresetVolumeControl)
         return;
     actualPresetFx->presetData.volume_control = newPresetVolumeControl;
     emit presetVolumeControlChanged();
+
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
 
     emit sgWriteToInterface("vl_pr_cntrl " + QByteArray::number(newPresetVolumeControl) + "\r\n");
 }

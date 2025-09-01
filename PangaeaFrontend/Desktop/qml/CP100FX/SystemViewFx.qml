@@ -374,6 +374,7 @@ Rectangle{
                     text: "Tuner on CC#: "
 
                     enabled: UiCore.currentDevice.systemSettings.tunerControl
+                    opacity: enabled ? 1 : 0.5
 
                     model: _midiPcMapModel
 
