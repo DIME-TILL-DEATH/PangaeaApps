@@ -11,6 +11,8 @@ Rectangle {
 
     color: Style.currentTheme.mainEnabledColor
 
+    property alias fontPixelSize: _text.font.pixelSize
+
     Column {
         id: _layout
 
@@ -69,6 +71,8 @@ Rectangle {
         }
 
         MText {
+            id: _text
+
             horizontalAlignment: Text.AlignHCenter
 
             font.pixelSize: Math.min(root.height/27, root.width/2.75)

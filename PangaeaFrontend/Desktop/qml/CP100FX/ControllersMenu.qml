@@ -31,7 +31,6 @@ RowLayout{
                 }
             }
         }
-
     }
 
     MComboVertical{
@@ -44,8 +43,7 @@ RowLayout{
 
         model: UiCore.currentDevice.controller[0].avaliableSources
 
-        currentIndex: _cntrlsModel.length > 0 ? UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source : 0
-        // currentIndex: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source
+        currentIndex: _cntrlsModel.count > 0 ? UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source : 0
 
         onActivated: {
             UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].setSource(_srcCombo.comboText)
@@ -106,8 +104,8 @@ RowLayout{
 
             value: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].minValue
 
-            onUserChangedValue: {
-                UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].minValue = value
+            onUserChangedValue: calcVal => {
+                UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].minValue = calcVal
             }
         }
         MBar{
@@ -122,8 +120,8 @@ RowLayout{
 
             value: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].maxValue
 
-            onUserChangedValue: {
-                UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].maxValue= value
+            onUserChangedValue: calcVal => {
+                UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].maxValue= calcVal
             }
         }
     }

@@ -114,6 +114,8 @@ ColumnLayout
 
                 Layout.preferredWidth: parent.width/40
                 Layout.fillHeight: true
+
+                fontPixelSize: Math.min(height/15, width/2.75)
             }
 
             ListView{
@@ -254,6 +256,8 @@ ColumnLayout
             Out{
                 Layout.preferredWidth: parent.width/40
                 Layout.fillHeight: true
+
+                fontPixelSize: Math.min(height/15, width/2.75)
             }
         }
     }
