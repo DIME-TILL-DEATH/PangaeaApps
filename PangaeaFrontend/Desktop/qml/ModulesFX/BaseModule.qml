@@ -161,19 +161,6 @@ Rectangle {
                 anchors.bottomMargin: parent.height/10
                 anchors.topMargin: parent.height/10
 
-                // ScrollBar.horizontal:            ScrollBar{
-    //                 active: true
-    //                 parent: _contentRect
-    //                 width: parent.width
-    //                 height: parent.height/2
-
-    //                 anchors.top: _contentItem.bottom
-    //                 // anchors.left: _contentItem.right
-    //                 // anchors.bottom: _contentItem.bottom
-
-    //                 size: 1.0
-    //             }
-
                 Behavior on contentX{
                     NumberAnimation{
                         duration: 100

@@ -53,19 +53,6 @@ BaseModule{
             controlValue: module.feedback
         }
 
-        // ParameterComboBox{
-        //     width: main.dialWidth
-        //     height: main.dialHeight
-
-        //     anchors.verticalCenter: parent.verticalCenter
-
-        //     ctrlValInstance: module.stages
-
-        //     moduleOn: module.moduleEnabled
-
-        //     model: ["4", "6", "8"]
-        // }
-
         // Кастомный из того что значения Stages в устройстве 0, 2, 4
         Item{
             id: _stagesCombo
@@ -137,6 +124,19 @@ BaseModule{
                     {
                         if(!_combo.deviceUpdatingValues)
                             _stagesCombo.ctrlValInstance.displayValue = currentIndex * 2;
+                    }
+
+                    background: Rectangle {
+                        implicitWidth: 120
+                        implicitHeight: 30
+
+                        // y: _combo.height * (1 - 0.8)
+
+                        border.color: Style.currentTheme.borderOn
+                        border.width: _combo.visualFocus ? 2 : 1
+                        radius: 2
+
+                        color: Style.currentTheme.backgroundColor
                     }
 
                     delegate: ItemDelegate{
