@@ -37,7 +37,7 @@ void ControllerFx::setDestination(quint8 newDestination)
     m_controllerData->dst = newDestination;
     emit controllerChanged();
 
-    sendData((QString("cntrl %1 dst %2").arg(m_num, 2, 16).arg(m_controllerData->dst, 2, 16)).toUtf8());
+    sendData((QString("cntrl %1 dst %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerData->dst, 2, 16, QChar('0'))).toUtf8());
 }
 
 quint8 ControllerFx::source()
@@ -67,7 +67,7 @@ void ControllerFx::setSource(const QString &srcName)
     m_controllerData->src = source;
     emit controllerChanged();
 
-    sendData((QString("cntrl %1 src %2").arg(m_num, 2, 16).arg(m_controllerData->src, 2, 16)).toUtf8());
+    sendData((QString("cntrl %1 src %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerData->src, 2, 16, QChar('0'))).toUtf8());
 }
 
 quint8 ControllerFx::minValue() const
@@ -85,7 +85,7 @@ void ControllerFx::setMinValue(quint8 newMinValue)
     m_controllerData->minVal = newMinValue;
     emit controllerChanged();
 
-    sendData((QString("cntrl %1 min %2").arg(m_num, 2, 16).arg(m_controllerData->minVal, 2, 16)).toUtf8());
+    sendData((QString("cntrl %1 min %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerData->minVal, 2, 16, QChar('0'))).toUtf8());
 }
 
 quint8 ControllerFx::maxValue() const
@@ -103,7 +103,7 @@ void ControllerFx::setMaxValue(quint8 newMaxValue)
     m_controllerData->maxVal = newMaxValue;
     emit controllerChanged();
 
-    sendData((QString("cntrl %1 max %2").arg(m_num, 2, 16).arg(m_controllerData->maxVal, 2, 16)).toUtf8());
+    sendData((QString("cntrl %1 max %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerData->maxVal, 2, 16, QChar('0'))).toUtf8());
 }
 
 QStringList ControllerFx::sourcesList()
