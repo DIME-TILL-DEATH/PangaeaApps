@@ -31,6 +31,8 @@ public:
 
     Q_INVOKABLE void uploadIr(QString srcFilePath, QString dstFilePath = "");
     Q_INVOKABLE void uploadIr(QUrl srcFilePath, QUrl dstFilePath = QUrl());
+    Q_INVOKABLE void uploadIr(QList<QUrl> fileList, QUrl dstFilePath = QUrl());
+
     Q_INVOKABLE void convertAndUploadIr(QString srcFilePath, QString dstFilePath = "");
 
     Q_INVOKABLE void exportPreset(QUrl dstPath = QUrl());
@@ -94,6 +96,8 @@ public slots:
 
     void slExportPreset(QString fullFilePath, QString fileName);
     void slImportPreset(QString fullFilePath, QString fileName);
+
+    void slImpulseUploaded();
 #ifdef Q_OS_ANDROID
     void slImpulseFilePicked(QString filePath, QString fileName);
 #endif
@@ -107,6 +111,7 @@ private:
 
     QSettings* appSettings;
 
+    QList<QUrl> m_uploadFileList;
     QMap<QString, QString> pathFromCode
         {
             {"en", ":/translations/pangaea-mobile_en.qm"},

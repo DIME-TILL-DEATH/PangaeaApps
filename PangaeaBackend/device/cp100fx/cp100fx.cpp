@@ -630,7 +630,6 @@ void Cp100fx::uploadCommHandler(const QString &command, const QByteArray &argume
         }
         else
         {
-            emit impulseUploaded();
             switch(m_presetManager.currentState())
             {
             default:
@@ -640,6 +639,8 @@ void Cp100fx::uploadCommHandler(const QString &command, const QByteArray &argume
             }
 
             emit sgPushCommandToQueue("ls\r\n", false);
+
+            emit impulseUploaded();
         }
         emit sgProcessCommands();
     }

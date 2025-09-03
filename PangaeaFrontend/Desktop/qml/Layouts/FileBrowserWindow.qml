@@ -255,23 +255,27 @@ Window{
         title: qsTr("Select IR")
         nameFilters: [ "Wav files (*.wav)" ]
 
+        fileMode: FileDialog.OpenFiles
+
         onAccepted:
         {
-            UiCore.uploadIr(_irFileDialog.currentFile);
+
+            UiCore.uploadIr(selectedFiles);
         }
 
-        // onRejected:
-        // {
-        //     if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB)
-        //         UiCore.currentDevice.escImpulse()
-        // }
+        onRejected:
+        {
+            if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
+                UiCore.currentDevice.restoreIr()
+            }
+        }
 
-        // onSelectedFileChanged:
-        // {
-        //     if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
-        //         UiCore.currentDevice.previewIr(_irFileDialog.currentFile);
-        //     }
-        // }
+        onSelectedFileChanged:
+        {
+            if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
+                UiCore.currentDevice.previewIr(_irFileDialog.currentFile);
+            }
+        }
 
         Settings
         {
