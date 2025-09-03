@@ -4,6 +4,7 @@
 #include <qendian.h>
 #include <qthread.h>
 
+#include "irworker.h"
 #include "presetfx.h"
 
 #include "mockcp100fx.h"
@@ -217,31 +218,8 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setSysParamsHandler("vl_ph", &currentSystemData.phonesVolume);
     setSysParamsHandler("vl_at", &currentSystemData.attenuator);
 
-    // "meq_mf"
-    // if(count > 0)
-    // {
-    //     if (count == 2)
-    //     {
-    //         char *end;
-    //         mstEqMidFreq = kgp_sdk_libc::strtol(args[1], &end, 16);
-    //     }
-
-    //     msg_console("%s\n", args[1]);
-    // }
-
-    // sys_para[System::MASTER_EQ_FREQ_LO] = mstEqMidFreq >> 8;
-    // sys_para[System::MASTER_EQ_FREQ_HI] = mstEqMidFreq & 0xFF;
-
-    // rl->AddCommandHandler("midi_map", midi_map_command_handler);
-    // m_midiPcMap.clear();
-
-    // fsw
-
-    // rl->AddCommandHandler("vl_at", attenuator_command_handler);
-    // rl->AddCommandHandler("vl_ms", master_volume_command_handler);
-    // rl->AddCommandHandler("vl_ph", phones_volume_command_handler);
     //-------------------------default preset data------------------
-    memset(&defaultPresetData, 0, sizeof(modules_data_fx_t));
+    memset(&defaultPresetData, 0, sizeof(preset_data_fx_t));
 
     defaultPresetData.modules.cab1.volume = 82;
     defaultPresetData.modules.cab1.pan = 63;
@@ -639,32 +617,67 @@ void MockCP100fx::stateCommHandler(const QString &command, const QByteArray &arg
 void MockCP100fx::irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QByteArray answer;
-    answer.append("ir ");
+    answer.append(command.toUtf8() + " ");
 
     QList<QByteArray> splittedArgs = arguments.split(' ');
+    QByteArray irNameBa;
 
-    if(splittedArgs.count() > 0)
+    if(splittedArgs.count() == 1)
     {
         quint8 irNumber = splittedArgs.at(0).toInt(nullptr, 16);
         answer.append(QByteArray::number(irNumber) + "\r");
 
-        QByteArray irNameBa;
-
         if(irNumber == 0) irNameBa.append(currentPresetData.ir1Name, 63);
         else irNameBa.append(currentPresetData.ir2Name, 63);
 
-        answer.append(irNameBa + "\n");
     }
 
-    if(splittedArgs.count() > 2)
+    if(splittedArgs.count() == 2)
     {
         if(splittedArgs.at(1) == "set")
         {
+            quint8 irNumber = splittedArgs.at(0).toInt(nullptr, 16);
+            answer.append(QByteArray::number(irNumber) + " set\r");
 
-            // TODo set cab and save data from WAV to preset
+            QString fileName = data;
+            fileName.remove("\r");
+
+            QString srcFilePath = m_currentDir.absolutePath() + "/" + fileName;
+
+            stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
+
+            if((wavHead.sampleRate == 48000) && (wavHead.bitsPerSample == 24) && (wavHead.numChannels == 1))
+            {
+
+                QFile file(srcFilePath);
+                QByteArray fileData;
+                if(file.open(QIODevice::ReadOnly))
+                {
+                    fileData = file.read(4096 * 3 + 44);
+                    fileData = fileData.mid(44, 4096 * 3);
+
+                    file.close();
+                }
+
+                irNameBa = fileName.left(63).toUtf8();
+
+                if(irNumber == 0)
+                {
+                    memcpy(currentPresetData.ir1Name, irNameBa.data(), irNameBa.size());
+                    currentPresetData.ir1NameLength = irNameBa.size();
+                    memcpy(currentPresetData.ir1Data, fileData.data(), fileData.size());
+                }
+                else
+                {
+                    memcpy(currentPresetData.ir2Name, irNameBa.data(), irNameBa.size());
+                    currentPresetData.ir2NameLength = irNameBa.size();
+                    memcpy(currentPresetData.ir2Data, fileData.data(), fileData.size());
+                }
+            }
         }
     }
 
+    answer.append("\r" + irNameBa + "\n");
     emit answerReady(answer);
 }
 
@@ -674,9 +687,6 @@ void MockCP100fx::lsCommHandler(const QString &command, const QByteArray &argume
 
     QByteArray answer;
     answer.append("ls\r");
-
-    // qDebug() << m_currentDir.absolutePath();
-    // qDebug() << m_basePath + "/SD/";
 
     foreach (QFileInfo entry, entryInfoList)
     {
@@ -764,13 +774,42 @@ void MockCP100fx::mkdirCommHandler(const QString &command, const QByteArray &arg
 
 void MockCP100fx::renameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
+    QList<QByteArray> splittedArgs = data.split('\r');
 
+    if(splittedArgs.count() == 2)
+    {
+        QString srcObjPath = m_currentDir.absolutePath() + "/" + splittedArgs.at(0);
+
+        QFile file(srcObjPath);
+
+        file.rename(splittedArgs.at(1));
+
+        emit answerReady(command.toUtf8() + "\r" + splittedArgs.at(0) + "\r" +  splittedArgs.at(1) + "\n");
+    }
+    else
+    {
+        emit answerReady(command.toUtf8() + "\rINCORRECT_ARGUMENTS\n");
+    }
 }
 
 void MockCP100fx::removeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    // m_currentDir.rmdir(data); //only if empty
-    // QThread::yieldCurrentThread();
+    QString objName = data;
+    objName.remove("\r");
+
+    QString objPath = m_currentDir.absolutePath() + "/" + objName;
+    QFileInfo fileInfo(objPath);
+
+    if(fileInfo.isFile())
+    {
+        QFile file(objPath);
+        file.remove(objPath);
+    }
+    else if(fileInfo.isDir())
+    {
+        QDir dir(objPath);
+        dir.removeRecursively();
+    }
     emit answerReady(command.toUtf8() + "\r" + data + "\n");
 }
 

@@ -131,6 +131,12 @@ void Cp100fx::readFullState()
     emit sgProcessCommands();
 }
 
+void Cp100fx::restartDevice()
+{
+    emit sgPushCommandToQueue("reset\r\n");
+    emit sgProcessCommands();
+}
+
 void Cp100fx::pushReadPresetCommands()
 {
     emit sgPushCommandToQueue("ir info");
@@ -212,12 +218,26 @@ void Cp100fx::exportPreset(QString filePath, QString fileName)
 
 }
 
+void Cp100fx::erasePreset()
+{
+    emit sgPushCommandToQueue("erase_preset");
+    emit sgProcessCommands();
+
+    pushReadPresetCommands();
+    emit sgProcessCommands();
+}
+
 void Cp100fx::restoreValue(QString name)
 {
 
 }
 
 void Cp100fx::previewIr(QString srcFilePath)
+{
+
+}
+
+void Cp100fx::restoreIr()
 {
 
 }

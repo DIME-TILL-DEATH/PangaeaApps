@@ -71,6 +71,8 @@ public:
     quint8 outputMode() const {return m_outputMode;};
     void setOutputMode(quint8 newOutputMode);
 
+    Q_INVOKABLE virtual void restartDevice() {};
+
     // TODO: пока умеет только Preset и bank!!!! Дописать
     Q_INVOKABLE virtual void restoreValue(QString name) {};  // restore parameter
 
