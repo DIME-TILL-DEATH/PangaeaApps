@@ -114,8 +114,6 @@ Item
         {
             if(nameParam === ("wait"))
             {
-                console.log("onSgSetUIParameter", inValue)
-
                 rWait.visible = inValue;
 
                 switch(UiCore.currentDevice.presetManager.currentState)
@@ -138,8 +136,6 @@ Item
 
         function onCurrentStateChanged()
         {
-            console.log("PresetManager, onCurrentStateChanged", UiCore.currentDevice.presetManager.currentState)
-
             switch(UiCore.currentDevice.presetManager.currentState)
             {
                 // case PresetState.Changing:

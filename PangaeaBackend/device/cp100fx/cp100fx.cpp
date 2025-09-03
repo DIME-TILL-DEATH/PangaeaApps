@@ -232,22 +232,46 @@ void Cp100fx::restoreValue(QString name)
 
 }
 
-void Cp100fx::previewIr(QString srcFilePath)
+void Cp100fx::previewIr(QUrl srcFilePath, quint8 cabNum)
 {
+    QString filePath =  srcFilePath.path();
+#ifdef Q_OS_WINDOWS
+    filePath.remove(0, 1); // remove first absolute '/' symbol
+#endif
 
+    QFileInfo fileInfo(filePath);
+
+    if(!fileInfo.isFile()) return;
+
+    fileInfo.absoluteDir();
+
+    stWavHeader wavHead = IRWorker::getFormatWav(filePath);
+
+    QByteArray fileData;
+
+    if((wavHead.sampleRate == 48000) && (wavHead.bitsPerSample == 24) && (wavHead.numChannels == 1))
+    {
+        irWorker.decodeWav(filePath);
+        fileData = irWorker.formFileData();
+    }
+    m_previewIrData = fileData.mid(sizeof(stWavHeader), 4096 * 3);
+
+    QByteArray command = QByteArray("ir ") + QByteArray::number(cabNum) + " preview_start\r\n";
+
+    qint32 symbolsToSend = command.size() + m_previewIrData.size() + 20 * (m_previewIrData.size() / uploadBlockSize + 1); // header: ir part_upload\r*\n = 16
+    qint32 symbolsToRecieve = 0;
+
+    emit sgSendWithoutConfirmation(command, symbolsToSend, symbolsToRecieve);
+    emit sgProcessCommands();
 }
 
-void Cp100fx::restoreIr()
+void Cp100fx::restoreIr(quint8 cabNum)
 {
-
+    emit sgPushCommandToQueue("ir " + QByteArray::number(cabNum) + " restore\r\n");
+    emit sgProcessCommands();
 }
 
 void Cp100fx::setFirmware(QString fullFilePath)
-{
-
-}
-
-void Cp100fx::formatMemory()
 {
 
 }
@@ -300,7 +324,6 @@ void Cp100fx::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimF
 {
     QString fileName;
     QFileInfo fileInfo(srcFilePath);
-
 
     if(fileInfo.isFile())
     {
@@ -590,25 +613,54 @@ void Cp100fx::cdCommHandler(const QString &command, const QByteArray &arguments,
 
 void Cp100fx::irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-
     QList<QByteArray> argList = arguments.split(' ');
 
-
-    if(argList.size() > 1)
+    if(argList.size() == 2)
     {
+        if(argList.at(1) == "set")
+        {
+            quint8 cabNum = argList.at(0).toInt();
+            if(cabNum == 0) m_ir1Name = data;
+            else m_ir2Name = data;
+            emit irNamesChanged();
+            return;
+        }
+
         if(argList.at(1) == "error")
         {
             emit sgDeviceError(DeviceErrorType::NotIrFile, data);
             return;
         }
+
+        if(argList.at(1) == "request_part")
+        {
+            QByteArray answer;
+            quint8 cabNum = argList.at(0).toInt();
+
+            if(m_previewIrData.length() > 0)
+            {
+                QByteArray baTmp = m_previewIrData.left(uploadBlockSize);
+                m_previewIrData.remove(0, baTmp.length());
+
+                answer = "ir " + QByteArray::number(cabNum) + " preview_part " + QByteArray::number(baTmp.length()) + "\r";
+                answer += baTmp;
+                answer += "\n";
+                emit sgSendWithoutConfirmation(answer);
+            }
+            else
+            {
+                emit sgPushCommandToQueue("ir " + QByteArray::number(cabNum) + " preview_end" + "\r\n", false);
+            }
+            emit sgProcessCommands();
+            return;
+        }
     }
 
-    if(argList.size() > 0)
+    if(argList.size() == 1)
     {
         quint8 cabNum = argList.at(0).toInt();
         if(cabNum == 0) m_ir1Name = data;
         else m_ir2Name = data;
-
         emit irNamesChanged();
     }
 }

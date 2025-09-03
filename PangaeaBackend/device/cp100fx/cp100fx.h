@@ -75,12 +75,11 @@ public:
 
     Q_INVOKABLE void restoreValue(QString name) override;
 
-    Q_INVOKABLE void previewIr(QString srcFilePath) override;
-    Q_INVOKABLE void restoreIr();
+    Q_INVOKABLE void previewIr(QUrl srcFilePath, quint8 cabNum);
+    Q_INVOKABLE void restoreIr(quint8 cabNum);
     Q_INVOKABLE void startIrUpload(QString srcFilePath, QString dstFilePath = "", bool trimFile = false) override;
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
-    Q_INVOKABLE void formatMemory() override;
 
     Q_INVOKABLE void selectFsObject(QString name, FileBrowserModel::FsObjectType type, quint8 cabNum = 0);
     Q_INVOKABLE void createDir(QString dirName);
@@ -174,6 +173,7 @@ private:
 
     QByteArray m_rawFirmwareData;
     QByteArray m_rawIrData;
+    QByteArray m_previewIrData;
 
     const uint32_t uploadBlockSize = 100;
 

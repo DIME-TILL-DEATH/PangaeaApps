@@ -266,14 +266,14 @@ Window{
         onRejected:
         {
             if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
-                UiCore.currentDevice.restoreIr()
+                UiCore.currentDevice.restoreIr(currentCabNum)
             }
         }
 
         onSelectedFileChanged:
         {
             if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
-                UiCore.currentDevice.previewIr(_irFileDialog.currentFile);
+                UiCore.currentDevice.previewIr(_irFileDialog.currentFile, currentCabNum);
             }
         }
 
