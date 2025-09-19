@@ -22,6 +22,7 @@
 #include "reverb.h"
 #include "flanger.h"
 #include "mastereq.h"
+#include "tuner.h"
 
 #include "volume.h"
 
@@ -41,6 +42,7 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(Volume* attenuatorVolume READ attenuatorVolume CONSTANT)
 
     Q_PROPERTY(MasterEq* masterEq READ masterEq CONSTANT)
+    Q_PROPERTY(Tuner* tuner READ tuner CONSTANT)
 
     Q_PROPERTY(QObjectList fsw READ fswList CONSTANT)
     Q_PROPERTY(SystemSettingsFx* systemSettings READ systemSettings CONSTANT)
@@ -101,6 +103,7 @@ public:
     Reverb* RV;
     Flanger* FL;
     MasterEq m_masterEq{this};
+    Tuner m_tuner{this};
 
     Volume m_masterVolume{this, Volume::VolumeType::MasterFx};
     Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
@@ -113,6 +116,8 @@ public:
     Volume* attenuatorVolume() {return &m_attenuatorVolume;};
 
     MasterEq* masterEq() {return &m_masterEq;};
+
+    Tuner* tuner() {return &m_tuner;};
 
     QString currentPresetName() const;
     void setCurrentPresetName(const QString &newCurrentPresetName);
@@ -202,6 +207,8 @@ private:
     void cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlPcOutCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void tunerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void setModulePositions();
 

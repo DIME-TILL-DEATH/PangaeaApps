@@ -1,5 +1,5 @@
-#ifndef INTERFACECORE_H
-#define INTERFACECORE_H
+#ifndef INTERFACEMANAGER_H
+#define INTERFACEMANAGER_H
 
 #include <QObject>
 #include <QSettings>
@@ -12,16 +12,16 @@
 #endif
 #include "offlineinterface.h"
 
-class InterfaceCore : public QObject
+class InterfaceManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit InterfaceCore(QObject *parent = nullptr);
-    ~InterfaceCore();
+    explicit InterfaceManager(QObject *parent = nullptr);
+    ~InterfaceManager();
 
     bool connectToDevice(DeviceDescription device);
     void disconnectFromDevice();
-    void writeToDevice(QByteArray data, bool logCommand = true);
+    void writeToDevice(QByteArray data);
     void silentWriteToDevice(QByteArray data);
 
     void startScanning(DeviceConnectionType connectionType);
@@ -45,6 +45,8 @@ signals:
 
     void sgRssiReaded(qint16 rssi);
 private:
+    bool m_logCommand{true};
+
     AbstractInterface* m_exchangeInterface{nullptr};
     BleInterface* m_bleInterface{nullptr};
 #ifndef Q_OS_IOS
@@ -65,4 +67,4 @@ private slots:
     void slDeviceListUpdated(DeviceConnectionType connectionType, QList<DeviceDescription> list);
 };
 
-#endif // INTERFACECORE_H
+#endif // INTERFACEMANAGER_H

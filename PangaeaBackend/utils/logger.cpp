@@ -111,9 +111,11 @@ void Logger::messageOutputHandlerImplementation(QtMsgType type, const QMessageLo
         #endif
             std::cout << localMsg.constData() << std::endl << std::flush;
 
-            outLog << QTime::currentTime().toString() << " info: "
-                   << localMsg.constData() << "\n("
-                   << file << ":" << context.line << "," << function << ")\n\n";
+            // outLog << QTime::currentTime().toString() << " info: "
+            //        << localMsg.constData() << "\n("
+            //        << file << ":" << context.line << "," << function << ")\n\n";
+            outLog << QTime::currentTime().toString() << ": "
+                   << localMsg.constData() << "\n\n";
             outLog.flush();
             break;
 

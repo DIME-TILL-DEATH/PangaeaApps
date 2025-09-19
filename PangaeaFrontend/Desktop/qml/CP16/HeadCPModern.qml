@@ -356,7 +356,7 @@ Item
 
                 color: isImpulseEmpty ? "transparent" : Style.currentTheme.highlightColor
 
-                opacity: ((currentIndex === presetMapIndex) ? currentImpulseEnabled : isImpulseEnabled) ? 1 : 0.5
+                opacity: isImpulseEnabled ? 1 : 0.5
                 border.width: Math.max(2, width/20)
                 border.color: currentIndex === presetMapIndex ? Style.currentTheme.highlightColor : Style.currentTheme.backgroundColor
 

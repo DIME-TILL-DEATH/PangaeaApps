@@ -115,7 +115,17 @@ ColumnLayout
                 Layout.preferredWidth: parent.width/40
                 Layout.fillHeight: true
 
+                tunerBtnVisible: true
+
                 fontPixelSize: Math.min(height/15, width/2.75)
+
+                onShowTunerWindow:{
+                    tunerWindow.show()
+                }
+
+                TunerWindow{
+                    id: tunerWindow
+                }
             }
 
             ListView{

@@ -35,6 +35,8 @@ Cp100fx::Cp100fx(Core *parent)
     m_parser.addCommandHandler("cntrl_pc", std::bind(&Cp100fx::cntrlPcOutCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrl_set", std::bind(&Cp100fx::cntrlSetCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("tn", std::bind(&Cp100fx::tunerCommHandler, this, _1, _2, _3));
+
     m_fswList.append(&m_fswDown);
     m_fswList.append(&m_fswConfirm);
     m_fswList.append(&m_fswUp);
@@ -1024,4 +1026,15 @@ void Cp100fx::cntrlSetCommHandler(const QString &command, const QByteArray &argu
 
     actualPresetFx->setCntrlSet(value);
     emit cntrlSetChanged();
+}
+
+void Cp100fx::tunerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    if(arguments == "get")
+    {
+        QList<QByteArray> separatedData = data.split('\r');
+
+        if(separatedData.count() == 2)
+            m_tuner.setTune(separatedData.at(0), separatedData.at(1).toInt());
+    }
 }

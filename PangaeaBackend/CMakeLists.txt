@@ -23,7 +23,7 @@ endif()
 qt_add_library(PangaeaBackend STATIC
     cores/core.cpp cores/core.h
     cores/netcore.cpp cores/netcore.h
-    cores/interfacecore.cpp cores/interfacecore.h
+    cores/interfacemanager.cpp cores/interfacemanager.h
 
     interfaces/abstractinterface.cpp interfaces/abstractinterface.h
     interfaces/bleinterface.cpp interfaces/bleinterface.h
@@ -114,6 +114,7 @@ qt_add_qml_module(PangaeaBackend
         modules/tremolo.h modules/tremolo.cpp
         modules/volume.h modules/volume.cpp
         modules/mastereq.h modules/mastereq.cpp
+        modules/tuner.h modules/tuner.cpp
 )
 
 
