@@ -637,7 +637,7 @@ void MockCP100fx::irCommHandler(const QString &command, const QByteArray &argume
         if(splittedArgs.at(1) == "set")
         {
             quint8 irNumber = splittedArgs.at(0).toInt(nullptr, 16);
-            answer.append(QByteArray::number(irNumber) + " set\r");
+            answer.append(QByteArray::number(irNumber) + " set");
 
             QString fileName = data;
             fileName.remove("\r");

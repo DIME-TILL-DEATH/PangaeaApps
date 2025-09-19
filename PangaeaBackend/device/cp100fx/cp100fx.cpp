@@ -302,7 +302,8 @@ void Cp100fx::selectFsObject(QString name, FileBrowserModel::FsObjectType type, 
             command.append(QByteArray::number(cabNum));
             command.append(" set\r");
             command.append(name.toUtf8());
-            emit sgPushCommandToQueue(command);
+            command.append("\n");
+            emit sgPushCommandToQueue(command, false);
             emit sgProcessCommands();
             break;
         }
