@@ -323,14 +323,28 @@ void Cp100fx::createDir(QString dirName)
     emit sgProcessCommands();
 }
 
-void Cp100fx::renameFsObject(QString name)
+void Cp100fx::renameFsObject(QString srcName, QString dstName)
 {
-
+    QByteArray command;
+    command.append("rename\r");
+    command.append(srcName.toUtf8());
+    command.append("\r");
+    command.append(dstName.toUtf8());
+    command.append("\n");
+    emit sgPushCommandToQueue(command, false);
+    emit sgPushCommandToQueue("ls");
+    emit sgProcessCommands();
 }
 
 void Cp100fx::deleteFsObject(QString name)
 {
-
+    QByteArray command;
+    command.append("remove\r");
+    command.append(name.toUtf8());
+    command.append("\n");
+    emit sgPushCommandToQueue(command, false);
+    emit sgPushCommandToQueue("ls");
+    emit sgProcessCommands();
 }
 
 void Cp100fx::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)

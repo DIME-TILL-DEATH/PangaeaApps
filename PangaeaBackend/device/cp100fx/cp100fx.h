@@ -85,7 +85,7 @@ public:
 
     Q_INVOKABLE void selectFsObject(QString name, FileBrowserModel::FsObjectType type, quint8 cabNum = 0);
     Q_INVOKABLE void createDir(QString dirName);
-    Q_INVOKABLE void renameFsObject(QString name);
+    Q_INVOKABLE void renameFsObject(QString srcName, QString dstName);
     Q_INVOKABLE void deleteFsObject(QString name);
 
     void uploadIrData(const QString& irName, const QByteArray& irData);

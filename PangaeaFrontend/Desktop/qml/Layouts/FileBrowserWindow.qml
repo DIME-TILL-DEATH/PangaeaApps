@@ -53,6 +53,30 @@ Window{
         }
     }
 
+    DialogTextInput{
+        id: _renameDialog
+
+        title: qsTr("New name")
+        label: qsTr("Enter new name")
+
+        anchors.centerIn: Overlay.overlay
+
+        property string oldName
+
+        modal: true
+        Overlay.modal: Rectangle {
+            color: "gray"
+            opacity: 0.5
+        }
+
+        width: parent.width/2
+        height: parent.height/3
+
+        onAccepted: {
+            UiCore.currentDevice.renameFsObject(oldName, text)
+        }
+    }
+
     ColumnLayout{
         anchors.fill: parent
 
@@ -190,14 +214,16 @@ Window{
                 Action{
                     text: qsTr("Rename")
                     onTriggered: {
-
+                        _renameDialog.oldName = _contextMenu.name
+                        _renameDialog.text = _renameDialog.oldName
+                        _renameDialog.open()
                     }
                 }
 
                 Action{
                     text: qsTr("Delete")
                     onTriggered: {
-
+                        UiCore.currentDevice.deleteFsObject(_contextMenu.name);
                     }
                 }
 
@@ -221,6 +247,8 @@ Window{
                      border.color: Style.currentTheme.borderOn
                 }
             }
+
+
         }
 
         Rectangle{
