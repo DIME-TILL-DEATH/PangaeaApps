@@ -20,10 +20,13 @@ public:
     ~Tuner();
 
     Q_INVOKABLE void getSamples(quint16 samplesCount);
+    Q_INVOKABLE void getRefFreq();
     Q_INVOKABLE void increaseRefFreq();
     Q_INVOKABLE void decreaseRefFreq();
 
     void setTune(QString note, qint16 cents);
+    void setRefFrequency(quint16 refFreq);
+
     QString note() const;
     qint16 cents() const;
     quint16 refFreq() const;

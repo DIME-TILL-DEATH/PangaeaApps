@@ -111,7 +111,7 @@ Window{
                 id: _leftBtn
 
                 width: 40
-                height: parent.height
+                height: parent.height/2
 
                 text: "-"
                 scaleText: 4
@@ -123,7 +123,7 @@ Window{
             MLabel{
                 text: qsTr("Ref. freq: ") + UiCore.currentDevice.tuner.refFreq + "Hz"
 
-                height: 30
+                height: parent.height/2
 
                 verticalAlignment: Label.AlignVCenter
             }
@@ -132,7 +132,7 @@ Window{
                 id: _rightBtn
 
                 width: 40
-                height: 30
+                height: parent.height/2
 
                 text: "+"
                 scaleText: 4
@@ -159,6 +159,10 @@ Window{
     onVisibilityChanged: {
         UiCore.currentDevice.tuner.moduleEnabled = visible;
 
-        if(visible) UiCore.currentDevice.tuner.getSamples(64 + UiCore.currentDevice.systemSettings.tunerSpeed);
+        if(visible)
+        {
+            UiCore.currentDevice.tuner.getRefFreq()
+            UiCore.currentDevice.tuner.getSamples(64 + UiCore.currentDevice.systemSettings.tunerSpeed);
+        }
     }
 }

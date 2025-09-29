@@ -25,12 +25,23 @@ void Tuner::getSamples(quint16 samplesCount)
     if(m_owner) emit m_owner->sgWriteToInterface(command, true);
 }
 
+void Tuner::getRefFreq()
+{
+    if(m_owner) emit m_owner->sgWriteToInterface("tn ref\r\n", true);
+}
+
 void Tuner::setTune(QString note, qint16 cents)
 {
     m_note = note;
     m_cents = cents;
 
     emit tuneChanged();
+}
+
+void Tuner::setRefFrequency(quint16 refFreq)
+{
+    m_refFreq = refFreq;
+    emit refFreqChanged();
 }
 
 void Tuner::increaseRefFreq()

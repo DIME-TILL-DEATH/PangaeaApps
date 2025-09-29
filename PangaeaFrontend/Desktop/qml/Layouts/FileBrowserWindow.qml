@@ -132,6 +132,8 @@ Window{
                 }
 
             delegate: Item{
+                id: _delegate
+
                 width: _fsObjectList.width
                 height: _nameText.font.pixelSize * 1.5 //_fsObjectList.height/10
 
@@ -142,7 +144,8 @@ Window{
 
                     width: parent.width
 
-                    font.bold: type === FileBrowserModel.Dir
+                    font.bold: (type === FileBrowserModel.Dir) |
+                               (_chooseCabCombo.currentIndex === 0 ? (UiCore.currentDevice.ir1Name === name) : (UiCore.currentDevice.ir2Name === name))
 
                     color: type === FileBrowserModel.Dir ? Style.currentTheme.textSecondary
                                 : _chooseCabCombo.currentIndex === 0 ?
@@ -154,12 +157,72 @@ Window{
                 MouseArea{
                     anchors.fill: parent
 
-                    onClicked: {
-                        UiCore.currentDevice.selectFsObject(name, type, _chooseCabCombo.currentIndex);
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                    onClicked: (mouse) => {
+                        if(mouse.button === Qt.RightButton)
+                        {
+                            _contextMenu.name = name;
+                            _contextMenu.type = type;
+                            _contextMenu.popup();
+                        }
+                        else
+                        {
+                            UiCore.currentDevice.selectFsObject(name, type, _chooseCabCombo.currentIndex);
+                        }
                     }
                 }
             }
+
+            Menu{
+                id: _contextMenu
+
+                property var name
+                property var type
+
+                Action{
+                    text: qsTr("Select")
+                    onTriggered: {
+                        UiCore.currentDevice.selectFsObject(_contextMenu.name, _contextMenu.type, _chooseCabCombo.currentIndex);
+                    }
+                }
+
+                Action{
+                    text: qsTr("Rename")
+                    onTriggered: {
+
+                    }
+                }
+
+                Action{
+                    text: qsTr("Delete")
+                    onTriggered: {
+
+                    }
+                }
+
+                delegate: MenuItem{
+                    id: menuItem
+
+                    contentItem: Text {
+                        leftPadding: 4
+                        text: menuItem.text
+                        font: menuItem.font
+                        color: menuItem.highlighted ? Style.currentTheme.textMain :Style.currentTheme.textInverted
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
+
+                background: Rectangle{
+                    implicitWidth: 200
+                     implicitHeight: 40
+                     color: Style.currentTheme.backgroundColor
+                     border.color: Style.currentTheme.borderOn
+                }
+            }
         }
+
         Rectangle{
             Layout.fillWidth: true
             Layout.preferredHeight: 2

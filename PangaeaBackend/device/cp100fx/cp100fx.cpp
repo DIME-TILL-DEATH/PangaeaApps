@@ -323,6 +323,16 @@ void Cp100fx::createDir(QString dirName)
     emit sgProcessCommands();
 }
 
+void Cp100fx::renameFsObject(QString name)
+{
+
+}
+
+void Cp100fx::deleteFsObject(QString name)
+{
+
+}
+
 void Cp100fx::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
 {
     QString fileName;
@@ -1037,5 +1047,10 @@ void Cp100fx::tunerCommHandler(const QString &command, const QByteArray &argumen
 
         if(separatedData.count() == 2)
             m_tuner.setTune(separatedData.at(0), separatedData.at(1).toInt());
+    }
+
+    if(arguments == "ref")
+    {
+        m_tuner.setRefFrequency(data.toInt());
     }
 }
