@@ -1,7 +1,7 @@
 #include <QTime>
 
 #include <QDebug>
-
+#include <iostream>
 
 #ifdef Q_OS_ANDROID
 //#include <QtAndroidExtras>

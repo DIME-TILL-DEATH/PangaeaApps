@@ -84,7 +84,6 @@ int main(int argc, char *argv[])
     ThreadController threadController(QThread::currentThread());
     core->moveToThread(threadController.backendThread());
     netCore->moveToThread(threadController.backendThread());
-
     QObject::connect(threadController.backendThread(), &QThread::finished, core, &QObject::deleteLater);
     QObject::connect(threadController.backendThread(), &QThread::finished, netCore, &QObject::deleteLater);
 

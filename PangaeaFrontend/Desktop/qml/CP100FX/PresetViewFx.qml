@@ -20,7 +20,7 @@ ColumnLayout
     focus: true
     spacing: 0
 
-    property alias modulesListView: _modulesListView
+    // property alias modulesListView: _modulesListView
 
 
     Rectangle{
@@ -132,9 +132,6 @@ ColumnLayout
                 id: _modulesListView
 
                 model: UiCore.currentDevice.modulesListModel;
-
-                // anchors.fill: parent
-                // anchors.margins: 4
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true

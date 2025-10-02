@@ -118,15 +118,11 @@ BaseModule{
                 function onPointsChanged()
                 {
                     _canvas.requestPaint();
-
-                    // console.log("points changed")
                 }
 
                 function onModuleEnabledChanged()
                 {
                     _canvas.requestPaint();
-
-                    // console.log("module enabled changed")
                 }
             }
         }

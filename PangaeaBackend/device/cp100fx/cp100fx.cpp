@@ -160,8 +160,6 @@ void Cp100fx::pushReadPresetCommands()
 
 void Cp100fx::saveChanges()
 {
-    qInfo()<<__FUNCTION__;
-
     if(m_presetManager.currentState() == PresetState::Compare)
     {
         comparePreset();

@@ -44,7 +44,12 @@ quint8 ControllerFx::source()
 {
     if(m_controllerData == nullptr) return 0;
 
-    QString sourceName = sourcesList().at(m_controllerData->src);
+    QString sourceName;
+    if(sourcesList().size() > m_controllerData->src)
+        sourceName = sourcesList().at(m_controllerData->src);
+    else
+        sourceName = sourcesList().at(0);
+
     QStringList avaliableSources = avaliableSourcesList();
 
     for(int i=0; i<avaliableSources.count(); i++)

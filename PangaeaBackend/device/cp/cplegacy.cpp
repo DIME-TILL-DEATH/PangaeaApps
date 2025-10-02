@@ -541,14 +541,12 @@ void CPLegacy::setPresetData(const PresetLegacy &preset)
 
 void CPLegacy::setFirmware(QString fullFilePath)
 {
-    qDebug()<< __FUNCTION__ << "fullFilePath" << fullFilePath;
     QUrl url(fullFilePath);
 
     emit sgDeviceMessage(DeviceMessageType::FirmwareFilePath, url.path());
 
     if(!Firmware::isFirmwareFile(fullFilePath))
     {
-        qWarning() << __FUNCTION__ << "Not firmware file";
         emit sgDeviceError(DeviceErrorType::FirmwareFileError, "Not firmware file.");
         return;
     }
@@ -998,10 +996,8 @@ void CPLegacy::fwuFinishedCommHandler(const QString &command, const QByteArray &
 
 void CPLegacy::formatFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    qDebug() << __FUNCTION__;
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryFinished);
     isFormatting = false;
-    // emit sgDisconnect();
 }
 //-------------------------------------acknowledegs------------------------------------------
 void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
