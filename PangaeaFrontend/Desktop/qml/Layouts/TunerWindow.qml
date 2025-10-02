@@ -152,12 +152,14 @@ Window{
         repeat: _root.visible
 
         onTriggered: {
-            // UiCore.currentDevice.tuner.getSamples(64 + UiCore.currentDevice.systemSettings.tunerSpeed);
+            UiCore.currentDevice.tuner.getSamples(64 + UiCore.currentDevice.systemSettings.tunerSpeed);
         }
     }
 
     onVisibilityChanged: {
         UiCore.currentDevice.tuner.moduleEnabled = visible;
+
+        InterfaceManager.logData = !visible;
 
         if(visible)
         {

@@ -210,3 +210,8 @@ void InterfaceManager::slDeviceListUpdated(DeviceConnectionType connectionType, 
         }
     }
 }
+
+void InterfaceManager::setLogEnadled(bool logEnabled)
+{
+    m_logCommand = logEnabled;
+}

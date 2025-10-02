@@ -138,6 +138,7 @@ int main(int argc, char *argv[])
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::startScanning, interfaceManager, &InterfaceManager::startScanning);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceManager::connectToDevice);
     UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgRssiMeasuring, interfaceManager, &InterfaceManager::rssiMeasuring);
+    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::logDataChanged, interfaceManager, &InterfaceManager::setLogEnadled);
 
     QObject::connect(&uiCore, &UiCore::sgModuleNameChanged, interfaceManager, &InterfaceManager::setModuleName);
     QObject::connect(interfaceManager, &InterfaceManager::sgModuleNameUpdated, &uiCore, &UiCore::setModuleName);
