@@ -274,7 +274,7 @@
 <context>
     <name>DialogTextInput</name>
     <message>
-        <location filename="../qml/Layouts/DialogTextInput.qml" line="21"/>
+        <location filename="../qml/Layouts/DialogTextInput.qml" line="24"/>
         <source>Enter folder name</source>
         <translation>Введите название папки</translation>
     </message>
@@ -327,57 +327,90 @@
 <context>
     <name>FileBrowserWindow</name>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="36"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="29"/>
+        <source>Impulse response</source>
+        <translation>Импульс
+</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="38"/>
         <source>Folder name</source>
         <translation>Имя папки</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="70"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="59"/>
+        <source>New name</source>
+        <translation>Новое имя
+</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="60"/>
+        <source>Enter new name</source>
+        <translation>Введите новое имя</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="96"/>
         <source>Current folder: </source>
         <translation>Текущая папка: </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="174"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="208"/>
+        <source>Select</source>
+        <translation>Выбрать
+</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="215"/>
+        <source>Rename</source>
+        <translation>Переименовать</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="224"/>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="267"/>
         <source>Upload IR</source>
         <translation>Загрузить файл</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="190"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="283"/>
         <source>New folder</source>
         <translation>Новая папка</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="202"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="295"/>
         <source>Incorrect wav format</source>
         <translation>Некорректный формат файла</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="221"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="314"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="227"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="320"/>
         <source>Trim IR file</source>
         <translation>Укоротить IR</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="253"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="346"/>
         <source>Select IR</source>
         <translation>Выберите импульс</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="291"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="388"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат wav</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="293"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="390"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Хотите конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="316"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="413"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation>Длительность выбранного импульса больше чем используется при обработке. Желаете обрезвать файл?</translation>
     </message>
@@ -385,12 +418,22 @@
 <context>
     <name>HeadCP100FX</name>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="96"/>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="85"/>
+        <source>Erase preset</source>
+        <translation>Стереть пресет</translation>
+    </message>
+    <message>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="86"/>
+        <source>Do you want to erase preset?</source>
+        <translation>Вы хотите стереть пресет?</translation>
+    </message>
+    <message>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="131"/>
         <source>Preset name</source>
         <translation>Имя пресета</translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="156"/>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="191"/>
         <source>Preset comment</source>
         <translation>Комментарий</translation>
     </message>
@@ -525,9 +568,27 @@
     </message>
 </context>
 <context>
+    <name>IR</name>
+    <message>
+        <location filename="../qml/ModulesFX/IR.qml" line="48"/>
+        <source>Cab num</source>
+        <translation>Номер IR</translation>
+    </message>
+    <message>
+        <location filename="../qml/ModulesFX/IR.qml" line="132"/>
+        <source>Current IR: </source>
+        <translation>Выбранный IR:</translation>
+    </message>
+    <message>
+        <location filename="../qml/ModulesFX/IR.qml" line="132"/>
+        <source>Empty</source>
+        <translation>Пусто</translation>
+    </message>
+</context>
+<context>
     <name>In</name>
     <message>
-        <location filename="../qml/ModulesClassic/In.qml" line="45"/>
+        <location filename="../qml/ModulesClassic/In.qml" line="51"/>
         <source>CLIP</source>
         <translation></translation>
     </message>
@@ -655,38 +716,38 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="42"/>
+        <location filename="../qml/Layouts/Main.qml" line="43"/>
         <source>Connected to </source>
         <translation>Подключено к </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="42"/>
+        <location filename="../qml/Layouts/Main.qml" line="43"/>
         <source>Disconnected</source>
         <translation>Отключено</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="78"/>
+        <location filename="../qml/Layouts/Main.qml" line="79"/>
         <source>Do you want to save changes?</source>
         <translation>Вы хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="79"/>
+        <location filename="../qml/Layouts/Main.qml" line="78"/>
         <source>Save preset</source>
         <translation>Сохранить пресет</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="119"/>
-        <location filename="../qml/Layouts/Main.qml" line="132"/>
-        <location filename="../qml/Layouts/Main.qml" line="263"/>
-        <location filename="../qml/Layouts/Main.qml" line="271"/>
-        <location filename="../qml/Layouts/Main.qml" line="279"/>
-        <location filename="../qml/Layouts/Main.qml" line="300"/>
+        <location filename="../qml/Layouts/Main.qml" line="120"/>
+        <location filename="../qml/Layouts/Main.qml" line="133"/>
+        <location filename="../qml/Layouts/Main.qml" line="262"/>
+        <location filename="../qml/Layouts/Main.qml" line="270"/>
+        <location filename="../qml/Layouts/Main.qml" line="278"/>
+        <location filename="../qml/Layouts/Main.qml" line="299"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="120"/>
-        <location filename="../qml/Layouts/Main.qml" line="133"/>
+        <location filename="../qml/Layouts/Main.qml" line="121"/>
+        <location filename="../qml/Layouts/Main.qml" line="134"/>
         <source>Device is disconnected</source>
         <translation>Устройство отключено</translation>
     </message>
@@ -701,112 +762,112 @@
         <translation>Операция завершена. Пожалуйста, переподключите устройство</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="255"/>
+        <location filename="../qml/Layouts/Main.qml" line="254"/>
         <source>Device parse error</source>
         <translation>Ошибка разбора команнды</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="264"/>
+        <location filename="../qml/Layouts/Main.qml" line="263"/>
         <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation>Ошибка при сохранении IR. Пожалуйста, попробуйте загрузить файл ещё раз.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="272"/>
+        <location filename="../qml/Layouts/Main.qml" line="271"/>
         <source>Not a Pangaea preset file!</source>
         <translation>Файл не является файлом пресета.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="287"/>
+        <location filename="../qml/Layouts/Main.qml" line="286"/>
         <source>Warning</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="288"/>
+        <location filename="../qml/Layouts/Main.qml" line="287"/>
         <source>Version error!</source>
         <translation>Ошибка версии!</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="289"/>
+        <location filename="../qml/Layouts/Main.qml" line="288"/>
         <source>Firmware version of your device is </source>
         <translation>Версия прошивки Вашего устройства </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="180"/>
-        <location filename="../qml/Layouts/Main.qml" line="190"/>
+        <location filename="../qml/Layouts/Main.qml" line="178"/>
+        <location filename="../qml/Layouts/Main.qml" line="188"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="182"/>
+        <location filename="../qml/Layouts/Main.qml" line="180"/>
         <source>New firmware version(v.</source>
         <translation>Новая версия прошивки(v.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="184"/>
-        <location filename="../qml/Layouts/Main.qml" line="194"/>
+        <location filename="../qml/Layouts/Main.qml" line="182"/>
+        <location filename="../qml/Layouts/Main.qml" line="192"/>
         <source>) avaliable on the server</source>
         <translation>) доступна на сервере</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="192"/>
+        <location filename="../qml/Layouts/Main.qml" line="190"/>
         <source>New application version(v.</source>
         <translation>Новая версия приложения(v.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="280"/>
+        <location filename="../qml/Layouts/Main.qml" line="279"/>
         <source>You must save preset before export</source>
         <translation>Необходимо сохранить пресет перед экспортом</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="290"/>
+        <location filename="../qml/Layouts/Main.qml" line="289"/>
         <source>
 Minimum required version is </source>
         <translation>Минимальная версия </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="292"/>
+        <location filename="../qml/Layouts/Main.qml" line="291"/>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
         <translation>Хотите обновить прошивку? ВНИМАНИЕ!!! Обновление прошивки может занять длительное время.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="301"/>
+        <location filename="../qml/Layouts/Main.qml" line="300"/>
         <source>IR file copying error.</source>
         <translation>Ошибка при копировании IR файлаю</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="314"/>
+        <location filename="../qml/Layouts/Main.qml" line="313"/>
         <source>Preset export finished</source>
         <translation>Экспорт пресета завершён</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="334"/>
+        <location filename="../qml/Layouts/Main.qml" line="333"/>
         <source>Device is unavaliable</source>
         <translation>Устройство недоступно</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="341"/>
+        <location filename="../qml/Layouts/Main.qml" line="340"/>
         <source>Command exchange error</source>
         <translation>Ошибка при обмене командами</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="350"/>
+        <location filename="../qml/Layouts/Main.qml" line="349"/>
         <source>USB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="351"/>
+        <location filename="../qml/Layouts/Main.qml" line="350"/>
         <source>BLUETOOTH</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="352"/>
+        <location filename="../qml/Layouts/Main.qml" line="351"/>
         <source>VIRTUAL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="353"/>
+        <location filename="../qml/Layouts/Main.qml" line="352"/>
         <source>Unknown interface</source>
         <translation></translation>
     </message>
@@ -1050,7 +1111,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
 <context>
     <name>Out</name>
     <message>
-        <location filename="../qml/ModulesClassic/Out.qml" line="45"/>
+        <location filename="../qml/ModulesClassic/Out.qml" line="47"/>
         <source>CLIP</source>
         <translation></translation>
     </message>
@@ -1130,6 +1191,37 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <location filename="../qml/Layouts/StartLayout.qml" line="203"/>
         <source>Check updates</source>
         <translation>Проверка обновлений</translation>
+    </message>
+</context>
+<context>
+    <name>SystemViewFx</name>
+    <message>
+        <location filename="../qml/CP100FX/SystemViewFx.qml" line="105"/>
+        <source>Restart device?</source>
+        <translation>Перезагрузить устройство?</translation>
+    </message>
+    <message>
+        <location filename="../qml/CP100FX/SystemViewFx.qml" line="106"/>
+        <source>Changing stereo/mono cab config needs device restart. Do you to do it now?</source>
+        <translation>Изменение конфигурации IR между стерео и моно требует перезагрузки устройства. Хотите произвести её сейчас?</translation>
+    </message>
+</context>
+<context>
+    <name>TunerWindow</name>
+    <message>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="19"/>
+        <source>Tuner</source>
+        <translation>Тюнер</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="46"/>
+        <source>Note: </source>
+        <translation>Нота:</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="124"/>
+        <source>Ref. freq: </source>
+        <translation>Оп.частота:</translation>
     </message>
 </context>
 <context>
