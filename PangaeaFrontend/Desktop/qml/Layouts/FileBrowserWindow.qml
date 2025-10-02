@@ -26,6 +26,8 @@ Window{
 
     color: Style.currentTheme.mainEnabledColor
 
+    title: qsTr("Impulse response")
+
     property alias currentCabNum: _chooseCabCombo.currentIndex
 
     signal cabNumChanged(var cabNum)
@@ -48,6 +50,30 @@ Window{
 
         onAccepted: {
             UiCore.currentDevice.createDir(text)
+        }
+    }
+
+    DialogTextInput{
+        id: _renameDialog
+
+        title: qsTr("New name")
+        label: qsTr("Enter new name")
+
+        anchors.centerIn: Overlay.overlay
+
+        property string oldName
+
+        modal: true
+        Overlay.modal: Rectangle {
+            color: "gray"
+            opacity: 0.5
+        }
+
+        width: parent.width/2
+        height: parent.height/3
+
+        onAccepted: {
+            UiCore.currentDevice.renameFsObject(oldName, text)
         }
     }
 
@@ -130,6 +156,8 @@ Window{
                 }
 
             delegate: Item{
+                id: _delegate
+
                 width: _fsObjectList.width
                 height: _nameText.font.pixelSize * 1.5 //_fsObjectList.height/10
 
@@ -140,7 +168,8 @@ Window{
 
                     width: parent.width
 
-                    font.bold: type === FileBrowserModel.Dir
+                    font.bold: (type === FileBrowserModel.Dir) |
+                               (_chooseCabCombo.currentIndex === 0 ? (UiCore.currentDevice.ir1Name === name) : (UiCore.currentDevice.ir2Name === name))
 
                     color: type === FileBrowserModel.Dir ? Style.currentTheme.textSecondary
                                 : _chooseCabCombo.currentIndex === 0 ?
@@ -152,12 +181,76 @@ Window{
                 MouseArea{
                     anchors.fill: parent
 
-                    onClicked: {
-                        UiCore.currentDevice.selectFsObject(name, type, _chooseCabCombo.currentIndex);
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                    onClicked: (mouse) => {
+                        if(mouse.button === Qt.RightButton)
+                        {
+                            _contextMenu.name = name;
+                            _contextMenu.type = type;
+                            _contextMenu.popup();
+                        }
+                        else
+                        {
+                            UiCore.currentDevice.selectFsObject(name, type, _chooseCabCombo.currentIndex);
+                        }
                     }
                 }
             }
+
+            Menu{
+                id: _contextMenu
+
+                property var name
+                property var type
+
+                Action{
+                    text: qsTr("Select")
+                    onTriggered: {
+                        UiCore.currentDevice.selectFsObject(_contextMenu.name, _contextMenu.type, _chooseCabCombo.currentIndex);
+                    }
+                }
+
+                Action{
+                    text: qsTr("Rename")
+                    onTriggered: {
+                        _renameDialog.oldName = _contextMenu.name
+                        _renameDialog.text = _renameDialog.oldName
+                        _renameDialog.open()
+                    }
+                }
+
+                Action{
+                    text: qsTr("Delete")
+                    onTriggered: {
+                        UiCore.currentDevice.deleteFsObject(_contextMenu.name);
+                    }
+                }
+
+                delegate: MenuItem{
+                    id: menuItem
+
+                    contentItem: Text {
+                        leftPadding: 4
+                        text: menuItem.text
+                        font: menuItem.font
+                        color: menuItem.highlighted ? Style.currentTheme.textMain :Style.currentTheme.textInverted
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+                    }
+                }
+
+                background: Rectangle{
+                    implicitWidth: 200
+                     implicitHeight: 40
+                     color: Style.currentTheme.backgroundColor
+                     border.color: Style.currentTheme.borderOn
+                }
+            }
+
+
         }
+
         Rectangle{
             Layout.fillWidth: true
             Layout.preferredHeight: 2
@@ -253,23 +346,27 @@ Window{
         title: qsTr("Select IR")
         nameFilters: [ "Wav files (*.wav)" ]
 
+        fileMode: FileDialog.OpenFiles
+
         onAccepted:
         {
-            UiCore.uploadIr(_irFileDialog.currentFile);
+
+            UiCore.uploadIr(selectedFiles);
         }
 
-        // onRejected:
-        // {
-        //     if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB)
-        //         UiCore.currentDevice.escImpulse()
-        // }
+        onRejected:
+        {
+            if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
+                UiCore.currentDevice.restoreIr(currentCabNum)
+            }
+        }
 
-        // onSelectedFileChanged:
-        // {
-        //     if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
-        //         UiCore.currentDevice.previewIr(_irFileDialog.currentFile);
-        //     }
-        // }
+        onSelectedFileChanged:
+        {
+            if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
+                UiCore.currentDevice.previewIr(_irFileDialog.currentFile, currentCabNum);
+            }
+        }
 
         Settings
         {

@@ -11,6 +11,8 @@ Row{
     property alias currentIndex: _combo.currentIndex
     property alias model: _combo.model
 
+    property alias indicator: _combo.indicator
+
     signal activated(index: int)
 
     MLabel{
@@ -35,8 +37,8 @@ Row{
         }
 
         contentItem: Text {
-            width: _combo.width - _combo.indicator.width - _combo.spacing
-            leftPadding: width/20
+            width: _combo.width - _combo.indicator.width - _combo.spacing - leftPadding
+            leftPadding: 8
 
             text: _combo.displayText
 

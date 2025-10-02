@@ -28,7 +28,7 @@ BaseModule{
             id: canvasBackground
 
             height: parent.height
-            width: parent.width * 2/5 //+ Style.mainSpacing * 2
+            width: parent.width * 3/5 //+ Style.mainSpacing * 2
 
             color: "black"
             Canvas{
@@ -118,15 +118,11 @@ BaseModule{
                 function onPointsChanged()
                 {
                     _canvas.requestPaint();
-
-                    // console.log("points changed")
                 }
 
                 function onModuleEnabledChanged()
                 {
                     _canvas.requestPaint();
-
-                    // console.log("module enabled changed")
                 }
             }
         }
@@ -137,7 +133,7 @@ BaseModule{
         }
 
         Item{
-            width: main.dialWidth * 2
+            width: main.dialWidth * 3
             height: parent.height
 
             MButton{

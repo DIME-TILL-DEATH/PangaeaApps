@@ -43,7 +43,8 @@ public:
         DELAY,
         IR_STEREO,
         //====================
-        MASTER=128
+        MASTER=128,
+        TUNER
     };
     Q_ENUM(Value)
 };

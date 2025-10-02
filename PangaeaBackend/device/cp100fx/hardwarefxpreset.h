@@ -2,6 +2,7 @@
 #define HARDWAREFXPRESET_H
 
 #include <QObject>
+#include <qendian.h>
 
 typedef struct
 {
@@ -243,6 +244,20 @@ typedef struct
 
     uint8_t pcOut;
     uint8_t set;
+
+    quint16_be delayTime;
+
+    quint8 ir1Data[4096*3];
+    quint8 ir1NameLength;
+    char ir1Name[63];
+
+    quint8 ir2Data[4096*3];
+    quint8 ir2NameLength;
+    char ir2Name[63];
+
+    quint8 irAuxData[4096*3];
+
+    quint8 lastImpulsePath[512];
 }preset_data_fx_t;
 
 #pragma pack(pop)

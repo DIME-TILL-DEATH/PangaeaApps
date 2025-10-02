@@ -26,7 +26,7 @@ Phaser::Phaser(AbstractDevice *owner, modules_data_fx_t *phData)
     m_mix = new ControlValue(this, &phData->phaser.mix, "ph_mx", "Mix", "", 0, 127, -63, 64);
     m_rate = new ControlValue(this, &phData->phaser.rate, "ph_rt", "Rate", "",  0, 127, 0, 127); //0.048, 4.85); //Range: 0 (0.048 Hz) to 127 (4.85 Hz).
     m_center = new ControlValue(this, &phData->phaser.center, "ph_cn", "Center", "",  0, 127, 0, 127); // "Hz",  0, 127, 80, 12000); //Range: 0 (80 Hz) to 127 (12 kHz).
-    m_hpf = new ControlValue(this, &phData->hpf_phaser, "ph_hp", "HPF", "Hz",  0, 127, 0, 127);
+    m_hpf = new ControlValue(this, &phData->hpf_phaser, "ph_hp", "HPF", "",  0, 127, 0, 127);
     m_position = new ControlValue(this, &phData->phaser_pre_post, "ph_pp", "Position");
     m_width = new ControlValue(this, &phData->phaser.width, "ph_wd", "Width", "",  0, 127, 0, 127);
     m_feedback = new ControlValue(this, &phData->phaser.feedback, "ph_fb", "Feedback", "",  0, 127, 0, 127);

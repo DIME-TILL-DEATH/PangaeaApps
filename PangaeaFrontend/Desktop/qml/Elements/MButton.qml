@@ -22,10 +22,16 @@ Item
     {
         id: _rectangle
 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter:  parent.verticalCenter
-        width:  parent.width/1.3
-        height: parent.height/1.3 //width/2
+        // anchors.horizontalCenter: parent.horizontalCenter
+        // anchors.verticalCenter:  parent.verticalCenter
+        // width:  parent.width//1.3
+        // height: parent.height//1.3 //width/2
+
+        anchors.fill: parent
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.topMargin: 4
+        anchors.bottomMargin: 4
 
         border.width: 1
         border.color: Style.currentTheme.borderOff

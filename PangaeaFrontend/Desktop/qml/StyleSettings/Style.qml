@@ -91,7 +91,7 @@ QtObject {
         barText: "#EBECEC"
 
         error: "red"
-        spin: "darkblue"
+        spin: "deepskyblue"
     }
 
     property Theme themeDarkGreen: Theme{

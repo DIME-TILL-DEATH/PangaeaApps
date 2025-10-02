@@ -23,8 +23,6 @@
 
 #include "maskedparser.h"
 
-
-
 class CPLegacy : public AbstractDevice
 {
     Q_OBJECT

@@ -35,6 +35,8 @@ Cp100fx::Cp100fx(Core *parent)
     m_parser.addCommandHandler("cntrl_pc", std::bind(&Cp100fx::cntrlPcOutCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrl_set", std::bind(&Cp100fx::cntrlSetCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("tn", std::bind(&Cp100fx::tunerCommHandler, this, _1, _2, _3));
+
     m_fswList.append(&m_fswDown);
     m_fswList.append(&m_fswConfirm);
     m_fswList.append(&m_fswUp);
@@ -131,6 +133,12 @@ void Cp100fx::readFullState()
     emit sgProcessCommands();
 }
 
+void Cp100fx::restartDevice()
+{
+    emit sgPushCommandToQueue("reset\r\n");
+    emit sgProcessCommands();
+}
+
 void Cp100fx::pushReadPresetCommands()
 {
     emit sgPushCommandToQueue("ir info");
@@ -152,8 +160,6 @@ void Cp100fx::pushReadPresetCommands()
 
 void Cp100fx::saveChanges()
 {
-    qInfo()<<__FUNCTION__;
-
     if(m_presetManager.currentState() == PresetState::Compare)
     {
         comparePreset();
@@ -212,22 +218,60 @@ void Cp100fx::exportPreset(QString filePath, QString fileName)
 
 }
 
+void Cp100fx::erasePreset()
+{
+    emit sgPushCommandToQueue("erase_preset");
+    emit sgProcessCommands();
+
+    pushReadPresetCommands();
+    emit sgProcessCommands();
+}
+
 void Cp100fx::restoreValue(QString name)
 {
 
 }
 
-void Cp100fx::previewIr(QString srcFilePath)
+void Cp100fx::previewIr(QUrl srcFilePath, quint8 cabNum)
 {
+    QString filePath =  srcFilePath.path();
+#ifdef Q_OS_WINDOWS
+    filePath.remove(0, 1); // remove first absolute '/' symbol
+#endif
 
+    QFileInfo fileInfo(filePath);
+
+    if(!fileInfo.isFile()) return;
+
+    fileInfo.absoluteDir();
+
+    stWavHeader wavHead = IRWorker::getFormatWav(filePath);
+
+    QByteArray fileData;
+
+    if((wavHead.sampleRate == 48000) && (wavHead.bitsPerSample == 24) && (wavHead.numChannels == 1))
+    {
+        irWorker.decodeWav(filePath);
+        fileData = irWorker.formFileData();
+    }
+    m_previewIrData = fileData.mid(sizeof(stWavHeader), 4096 * 3);
+
+    QByteArray command = QByteArray("ir ") + QByteArray::number(cabNum) + " preview_start\r\n";
+
+    qint32 symbolsToSend = command.size() + m_previewIrData.size() + 20 * (m_previewIrData.size() / uploadBlockSize + 1); // header: ir part_upload\r*\n = 16
+    qint32 symbolsToRecieve = 0;
+
+    emit sgSendWithoutConfirmation(command, symbolsToSend, symbolsToRecieve);
+    emit sgProcessCommands();
+}
+
+void Cp100fx::restoreIr(quint8 cabNum)
+{
+    emit sgPushCommandToQueue("ir " + QByteArray::number(cabNum) + " restore\r\n");
+    emit sgProcessCommands();
 }
 
 void Cp100fx::setFirmware(QString fullFilePath)
-{
-
-}
-
-void Cp100fx::formatMemory()
 {
 
 }
@@ -256,7 +300,8 @@ void Cp100fx::selectFsObject(QString name, FileBrowserModel::FsObjectType type, 
             command.append(QByteArray::number(cabNum));
             command.append(" set\r");
             command.append(name.toUtf8());
-            emit sgPushCommandToQueue(command);
+            command.append("\n");
+            emit sgPushCommandToQueue(command, false);
             emit sgProcessCommands();
             break;
         }
@@ -276,11 +321,34 @@ void Cp100fx::createDir(QString dirName)
     emit sgProcessCommands();
 }
 
+void Cp100fx::renameFsObject(QString srcName, QString dstName)
+{
+    QByteArray command;
+    command.append("rename\r");
+    command.append(srcName.toUtf8());
+    command.append("\r");
+    command.append(dstName.toUtf8());
+    command.append("\n");
+    emit sgPushCommandToQueue(command, false);
+    emit sgPushCommandToQueue("ls");
+    emit sgProcessCommands();
+}
+
+void Cp100fx::deleteFsObject(QString name)
+{
+    QByteArray command;
+    command.append("remove\r");
+    command.append(name.toUtf8());
+    command.append("\n");
+    emit sgPushCommandToQueue(command, false);
+    emit sgPushCommandToQueue("ls");
+    emit sgProcessCommands();
+}
+
 void Cp100fx::startIrUpload(QString srcFilePath, QString dstFilePath, bool trimFile)
 {
     QString fileName;
     QFileInfo fileInfo(srcFilePath);
-
 
     if(fileInfo.isFile())
     {
@@ -383,6 +451,9 @@ void Cp100fx::setCntrlPcOut(quint8 newCntrlPcOut)
     actualPresetFx->setCntrlPcOut(newCntrlPcOut);
     emit cntrlPcOutChanged();
 
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
     emit sgWriteToInterface("cntrl_pc " + QByteArray::number(newCntrlPcOut, 16) + "\r\n");
 }
 
@@ -393,6 +464,9 @@ void Cp100fx::setCntrlSet(quint8 newCntrlSet)
     actualPresetFx->setCntrlSet(newCntrlSet);
     emit cntrlSetChanged();
 
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
+
     emit sgWriteToInterface("cntrl_set " + QByteArray::number(newCntrlSet, 16) + "\r\n");
 }
 
@@ -402,6 +476,9 @@ void Cp100fx::setPresetVolumeControl(quint8 newPresetVolumeControl)
         return;
     actualPresetFx->presetData.volume_control = newPresetVolumeControl;
     emit presetVolumeControlChanged();
+
+    m_deviceParamsModified = true;
+    emit deviceParamsModifiedChanged();
 
     emit sgWriteToInterface("vl_pr_cntrl " + QByteArray::number(newPresetVolumeControl) + "\r\n");
 }
@@ -561,25 +638,54 @@ void Cp100fx::cdCommHandler(const QString &command, const QByteArray &arguments,
 
 void Cp100fx::irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-
     QList<QByteArray> argList = arguments.split(' ');
 
-
-    if(argList.size() > 1)
+    if(argList.size() == 2)
     {
+        if(argList.at(1) == "set")
+        {
+            quint8 cabNum = argList.at(0).toInt();
+            if(cabNum == 0) m_ir1Name = data;
+            else m_ir2Name = data;
+            emit irNamesChanged();
+            return;
+        }
+
         if(argList.at(1) == "error")
         {
             emit sgDeviceError(DeviceErrorType::NotIrFile, data);
             return;
         }
+
+        if(argList.at(1) == "request_part")
+        {
+            QByteArray answer;
+            quint8 cabNum = argList.at(0).toInt();
+
+            if(m_previewIrData.length() > 0)
+            {
+                QByteArray baTmp = m_previewIrData.left(uploadBlockSize);
+                m_previewIrData.remove(0, baTmp.length());
+
+                answer = "ir " + QByteArray::number(cabNum) + " preview_part " + QByteArray::number(baTmp.length()) + "\r";
+                answer += baTmp;
+                answer += "\n";
+                emit sgSendWithoutConfirmation(answer);
+            }
+            else
+            {
+                emit sgPushCommandToQueue("ir " + QByteArray::number(cabNum) + " preview_end" + "\r\n", false);
+            }
+            emit sgProcessCommands();
+            return;
+        }
     }
 
-    if(argList.size() > 0)
+    if(argList.size() == 1)
     {
         quint8 cabNum = argList.at(0).toInt();
         if(cabNum == 0) m_ir1Name = data;
         else m_ir2Name = data;
-
         emit irNamesChanged();
     }
 }
@@ -601,7 +707,6 @@ void Cp100fx::uploadCommHandler(const QString &command, const QByteArray &argume
         }
         else
         {
-            emit impulseUploaded();
             switch(m_presetManager.currentState())
             {
             default:
@@ -611,6 +716,8 @@ void Cp100fx::uploadCommHandler(const QString &command, const QByteArray &argume
             }
 
             emit sgPushCommandToQueue("ls\r\n", false);
+
+            emit impulseUploaded();
         }
         emit sgProcessCommands();
     }
@@ -942,4 +1049,20 @@ void Cp100fx::cntrlSetCommHandler(const QString &command, const QByteArray &argu
 
     actualPresetFx->setCntrlSet(value);
     emit cntrlSetChanged();
+}
+
+void Cp100fx::tunerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    if(arguments == "get")
+    {
+        QList<QByteArray> separatedData = data.split('\r');
+
+        if(separatedData.count() == 2)
+            m_tuner.setTune(separatedData.at(0), separatedData.at(1).toInt());
+    }
+
+    if(arguments == "ref")
+    {
+        m_tuner.setRefFrequency(data.toInt());
+    }
 }

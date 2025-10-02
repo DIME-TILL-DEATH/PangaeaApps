@@ -57,7 +57,7 @@ Column{
             id: _comboText
 
             width: _combo.width - _combo.indicator.width - _combo.spacing - leftPadding
-            leftPadding: 4
+            leftPadding: 8
 
             text: _combo.displayText
 

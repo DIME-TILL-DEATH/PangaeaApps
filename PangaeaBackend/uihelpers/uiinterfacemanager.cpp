@@ -81,3 +81,16 @@ DeviceDescription UiInterfaceManager::connectedInterface() const
 {
     return m_connectedInterface;
 }
+
+bool UiInterfaceManager::logData() const
+{
+    return m_logData;
+}
+
+void UiInterfaceManager::setLogData(bool newLogData)
+{
+    if (m_logData == newLogData)
+        return;
+    m_logData = newLogData;
+    emit logDataChanged(m_logData);
+}

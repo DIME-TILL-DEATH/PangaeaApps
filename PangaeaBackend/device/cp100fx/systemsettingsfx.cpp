@@ -279,7 +279,7 @@ void SystemSettingsFx::setMidiPcMap(quint8 pcNumber, quint8 presetNumber)
     m_midiPcMap.replace(pcNumber, presetNumber);
     emit settingsChanged();
 
-    sendData((QString("midi_map %1 %2").arg(pcNumber, 2, 16).arg(presetNumber, 2, 16)).toUtf8());
+    sendData((QString("midi_map %1 %2").arg(pcNumber, 2, 16, QChar('0')).arg(presetNumber, 2, 16, QChar('0'))).toUtf8());
 }
 
 void SystemSettingsFx::sendData(const QByteArray &data)

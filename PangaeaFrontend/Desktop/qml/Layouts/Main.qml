@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls.Fusion
 import QtQuick.Dialogs
+import QtQuick.Controls as CTRLS
 import QtCore
 
 import QtQuick.Window 2.15
@@ -68,27 +69,27 @@ ApplicationWindow
         anchors.fill: parent
     }
 
-    MessageDialog
-    {
+    NativeMessageDialog{
         id: msgPresetChangeSave
 
         property int newBank
         property int newPreset
 
-        text: qsTr("Do you want to save changes?")
         title: qsTr("Save preset")
+        text: qsTr("Do you want to save changes?")
 
-        buttons: MessageDialog.Save | MessageDialog.No | MessageDialog.Cancel
-        onButtonClicked: function(button, role){
-            switch(button)
+        buttons: DialogButtonBox.Save | DialogButtonBox.No | DialogButtonBox.Cancel
+
+        onButtonClicked: function(button){
+            switch(button.DialogButtonBox.buttonRole)
             {
-                case MessageDialog.Save:
+                case DialogButtonBox.AcceptRole:
                 {
                     UiCore.currentDevice.saveChanges();
                     if(!main.appClosing) UiCore.currentDevice.changePreset(newBank, newPreset, true);
                     break;
                 }
-                case MessageDialog.No:
+                case DialogButtonBox.NoRole:
                 {
                     if(!main.appClosing)
                     {
@@ -102,7 +103,7 @@ ApplicationWindow
                     }
                     break;
                 }
-                case MessageDialog.Cancel:
+                case DialogButtonBox.RejectRole:
                 {
                     appClosing = false;
                     UiCore.currentDevice.deviceRestoreValues();
@@ -112,7 +113,7 @@ ApplicationWindow
         }
     }
 
-    MessageDialog
+    NativeMessageDialog
     {
         id: msgInfo
 
@@ -125,34 +126,31 @@ ApplicationWindow
         }
     }
 
-    MessageDialog
+    NativeMessageDialog
     {
         id: msgExchangeError
 
         title: qsTr("Error")
         text: qsTr("Device is disconnected")
 
-        modality: Qt.ApplicationModal
         // onAccepted: {
         //     InterfaceManager.disconnectFromDevice();
         // }
     }
 
-    MessageDialog
+    NativeMessageDialog
     {
         id: _msgVersionInform        
     }
 
     // modality works only in Labs
-    MessageDialog
+    NativeMessageDialog
     {
         id: operationCompleteDialog
 
         title: qsTr("Operation complete")
 
         text: qsTr("Operation complete. Please, reconnect to device")
-
-        modality: Qt.ApplicationModal
 
         onAccepted: {
             mBusy.visible = false;
@@ -204,7 +202,8 @@ ApplicationWindow
                 {
                     msgPresetChangeSave.newBank = bank;
                     msgPresetChangeSave.newPreset = preset;
-                    msgPresetChangeSave.open();
+
+                    msgPresetChangeSave.open()
                 }
                 else
                 {

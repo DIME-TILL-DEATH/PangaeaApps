@@ -95,17 +95,6 @@ Window
                         }
 
                     }
-
-                    // model: UiCore.currentDevice.presetListModel
-
-                    // delegate: MapDelegate{
-                    //     id: _root
-
-                    //     width: _mapGrid.cellWidth
-                    //     height: _mapGrid.cellHeight
-
-                    //     currentIndex: _mapGrid.currentIndex
-                    // }
                 }
             }
         }
@@ -115,8 +104,6 @@ Window
         target: UiCore.currentDevice
 
         function onPresetSwitched(){
-            // console.log("preset switched")
-            // console.log(UiCore.currentDevice.presetListModel.rowCount())
             _mapGrid.model = UiCore.currentDevice.presetListModel
         }
     }

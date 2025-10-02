@@ -11,13 +11,15 @@ qt_add_qml_module(qml_layouts
         BPeakingShelfControl.qml
         ConnectionLayout.qml
         CopyPaste.qml
+        DialogTextInput.qml
         EqWindow.qml
         Main.qml
         MainMenu.qml
         MBusy.qml
         MapList.qml
         MapTable.qml
+        NativeMessageDialog.qml
         SaveCompare.qml
         StartLayout.qml
-        QML_FILES DialogTextInput.qml
+        TunerWindow.qml
 )

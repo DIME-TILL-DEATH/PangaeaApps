@@ -2,7 +2,9 @@
 #include <QStandardPaths>
 
 #include <qendian.h>
+#include <qthread.h>
 
+#include "irworker.h"
 #include "presetfx.h"
 
 #include "mockcp100fx.h"
@@ -34,15 +36,31 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     m_parser.addCommandHandler("mkdir", std::bind(&MockCP100fx::mkdirCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("rename", std::bind(&MockCP100fx::renameCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("remove", std::bind(&MockCP100fx::removeCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("copy_to", std::bind(&MockCP100fx::copyToCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("erase_preset", std::bind(&MockCP100fx::erasePresetCommHandler, this, _1, _2, _3));
+
+    m_parser.addCommandHandler("cntrl", std::bind(&MockCP100fx::cntrlCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrls", std::bind(&MockCP100fx::cntrlsCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrl_pc", std::bind(&MockCP100fx::cntrlsPcCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("cntrl_set", std::bind(&MockCP100fx::cntrlsSetCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("sys_tuner_ctrl", std::bind(&MockCP100fx::sysTuner, this, _1, _2, _3));
+    m_parser.addCommandHandler("sys_tuner_cc", std::bind(&MockCP100fx::sysTuner, this, _1, _2, _3));
+
+    m_parser.addCommandHandler("sys_expr_on", std::bind(&MockCP100fx::sysExpr, this, _1, _2, _3));
+    m_parser.addCommandHandler("sys_expr_type", std::bind(&MockCP100fx::sysExpr, this, _1, _2, _3));
+
     m_parser.addCommandHandler("pchange", std::bind(&MockCP100fx::pchangeCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("psave", std::bind(&MockCP100fx::psaveCommHandler, this, _1, _2, _3));
 
+    m_parser.addCommandHandler("midi_map", std::bind(&MockCP100fx::midiMap, this, _1, _2, _3));
+    m_parser.addCommandHandler("fsw", std::bind(&MockCP100fx::fsw, this, _1, _2, _3));
+
     //--------------------------params handlers----------------------
+    setParamsHandler("vl_pr", &currentPresetData.modules.preset_volume);
+    setParamsHandler("vl_pr_control", &currentPresetData.modules.volume_control);
+
     setParamsHandler("rf_on", &currentPresetData.modules.switches.resonance_filter);
     setParamsHandler("rf_mx", &currentPresetData.modules.resonance_filter.mix);
     setParamsHandler("rf_ft", &currentPresetData.modules.resonance_filter.f_type);
@@ -172,12 +190,15 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setSysParamsHandler("sys_cab_num", &currentSystemData.cabSimConfig);
     setSysParamsHandler("sys_midi_ch", &currentSystemData.midiChannel);
     // setSysParamsHandler("sys_expr_on", &currentSystemData.cabSimDisabled);
-    //sys_expr_type
+
 
     setSysParamsHandler("sys_expr_cc", &currentSystemData.exprCC);
     setSysParamsHandler("sys_expr_slev", &currentSystemData.storeExprLevel);
     setSysParamsHandler("sys_spdif", &currentSystemData.spdifOutType);
     setSysParamsHandler("sys_tempo", &currentSystemData.tapType);
+
+    // setSysParamsHandler("sys_expr_type", &currentSystemData.expressionType);
+
 
     // m_tunerControl = settings.tunerExternal & 0x80 ? 1 : 0;
     // m_tunerCC = settings.tunerExternal & 0x7F;
@@ -191,32 +212,14 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setSysParamsHandler("meq_lg", &currentSystemData.masterEqLow);
     setSysParamsHandler("meq_mg", &currentSystemData.masterEqMid);
     setSysParamsHandler("meq_hg", &currentSystemData.masterEqHigh);
+    m_parser.addCommandHandler("meq_mf", std::bind(&MockCP100fx::meqMf, this, _1, _2, _3));
 
-    // "meq_mf"
-    // if(count > 0)
-    // {
-    //     if (count == 2)
-    //     {
-    //         char *end;
-    //         mstEqMidFreq = kgp_sdk_libc::strtol(args[1], &end, 16);
-    //     }
+    setSysParamsHandler("vl_ms", &currentSystemData.masterVolume);
+    setSysParamsHandler("vl_ph", &currentSystemData.phonesVolume);
+    setSysParamsHandler("vl_at", &currentSystemData.attenuator);
 
-    //     msg_console("%s\n", args[1]);
-    // }
-
-    // sys_para[System::MASTER_EQ_FREQ_LO] = mstEqMidFreq >> 8;
-    // sys_para[System::MASTER_EQ_FREQ_HI] = mstEqMidFreq & 0xFF;
-
-    // rl->AddCommandHandler("midi_map", midi_map_command_handler);
-    // m_midiPcMap.clear();
-
-    // fsw
-
-    // rl->AddCommandHandler("vl_at", attenuator_command_handler);
-    // rl->AddCommandHandler("vl_ms", master_volume_command_handler);
-    // rl->AddCommandHandler("vl_ph", phones_volume_command_handler);
     //-------------------------default preset data------------------
-    memset(&defaultPresetData, 0, sizeof(modules_data_fx_t));
+    memset(&defaultPresetData, 0, sizeof(preset_data_fx_t));
 
     defaultPresetData.modules.cab1.volume = 82;
     defaultPresetData.modules.cab1.pan = 63;
@@ -284,7 +287,7 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     defaultPresetData.modules.bpm_delay = 120;
 
     //--------------------Init preset------------------
-    loadPresetData(currentSystemData.lastPresetNum);
+    loadPresetData(currentSystemData.lastPresetNum, currentPresetData);
 }
 
 void MockCP100fx::writeToDevice(const QByteArray &data)
@@ -379,7 +382,7 @@ bool MockCP100fx::saveSysParameters()
     else return false;
 }
 
-void MockCP100fx::loadPresetData(quint8 presetNumber)
+void MockCP100fx::loadPresetData(quint8 presetNumber, preset_data_fx_t &presetData)
 {
     presetNumber++;
 
@@ -390,126 +393,31 @@ void MockCP100fx::loadPresetData(quint8 presetNumber)
     QString filePath = m_basePath + "/FLASH" + "/PRESETS/" + strPresetNumber + "_preset.pan";
     QFile presetFile(filePath);
 
-    ir1Name.clear();
-    ir2Name.clear();
-    ir1Data.clear();
-    ir2Data.clear();
-
     if(presetFile.open(QIODevice::ReadOnly))
     {
+        memset(&presetData, 0, sizeof(preset_data_fx_t));
+        // If ir data in file empty (file size < CabSize * 3)
+        presetData.ir1Data[0] = 0xff;
+        presetData.ir1Data[1] = 0xff;
+        presetData.ir1Data[2] = 0x7f;
+
+        presetData.ir1Data[0] = 0xff;
+        presetData.ir1Data[1] = 0xff;
+        presetData.ir1Data[2] = 0x7f;
+
         QByteArray readedData;
         readedData = presetFile.read(sizeof(preset_data_fx_t));
-        memcpy(&currentPresetData, readedData.data(), sizeof(preset_data_fx_t));
-        readedData.clear();
-
-        readedData = presetFile.read(2);
-        if(readedData.size() >= 2)
-        {
-            delayTime = readedData.at(0);
-            delayTime = readedData.at(1) << 8;
-        }
-
-        ir1Name = presetFile.read(64);
-        ir1Data = presetFile.read(PresetFx::CabinetSize);
-
-        if(ir1Data.size() < PresetFx::CabinetSize)
-        {
-            ir1Data.clear();
-            ir1Data.append(0xff);
-            ir1Data.append(0xff);
-            ir1Data.append(0x7f);
-
-            for(int i=0; i < PresetFx::CabinetSize - 3; i++)
-            {
-                char nil = 0x00;
-                ir1Data.append(nil);
-            }
-        }
-
-        if(currentSystemData.cabSimConfig == 2)
-        {
-            ir2Name = presetFile.read(64);
-            ir2Data = presetFile.read(PresetFx::CabinetSize);
-
-            if(ir2Data.size() < PresetFx::CabinetSize)
-            {
-                ir2Data.clear();
-                ir2Data.append(0xff);
-                ir2Data.append(0xff);
-                ir2Data.append(0x7f);
-
-                for(int i=0; i < PresetFx::CabinetSize - 3; i++)
-                {
-                    char nil = 0x00;
-                    ir2Data.append(nil);
-                }
-            }
-        }
-        else
-        {
-            if(presetFile.seek(sizeof(preset_data_fx_t) + 2 + 64 * 2 + PresetFx::CabinetSize * 2)) //presetFile.seek(25760))
-            {
-                ir1Data += presetFile.read(PresetFx::CabinetSize);
-            }
-            else
-            {
-                if(ir1Data.size() < PresetFx::CabinetSize * 2)
-                {
-                    char nil = 0x00;
-                    ir1Data.append(nil);
-                }
-            }
-        }
-
-        presetFile.seek(sizeof(preset_data_fx_t) + 2 + 64 * 2 + PresetFx::CabinetSize * 3); //38048);
-        m_lastPath = presetFile.read(255);
+        memcpy(&presetData, readedData.data(), sizeof(preset_data_fx_t));
 
         presetFile.close();
     }
     else
     {
-        currentPresetData = defaultPresetData;
-
-        memset(currentPresetData.name, 0, 15);
-        memcpy(currentPresetData.name, "Preset", 6);
-
-        memset(currentPresetData.comment, 0, 15);
-        memcpy(currentPresetData.comment, "Comment", 7);
-
-
-        for(int i =0; i < ControllersCount; i++)
-        {
-            currentPresetData.controller[i].src = 0;
-            currentPresetData.controller[i].dst = 0;
-            currentPresetData.controller[i].minVal = 0;
-            currentPresetData.controller[i].maxVal = 127;
-        }
-
-        currentPresetData.set = presetNumber + 1;
-
-        delayTime = 500;
-
-        ir1Data.append(0xff);
-        ir1Data.append(0xff);
-        ir1Data.append(0x7f);
-
-        // if(cab_type == 2)
-        // {
-        ir2Data.append(0xff);
-        ir2Data.append(0xff);
-        ir2Data.append(0x7f);
-        // }
-
-        for(int i=0; i < PresetFx::CabinetSize - 3; i++)
-        {
-            char nil = 0x00;
-            ir1Data.append(nil);
-            ir2Data.append(nil);
-        }
+        setDefaultPresetData(presetNumber);
     }
 }
 
-void MockCP100fx::savePresetData(quint8 presetNumber)
+void MockCP100fx::savePresetData(quint8 presetNumber, const preset_data_fx_t& presetData)
 {
     presetNumber++;
 
@@ -522,27 +430,47 @@ void MockCP100fx::savePresetData(quint8 presetNumber)
     if(presetFile.open(QIODevice::WriteOnly))
     {
         char rawData[sizeof(preset_data_fx_t)];
-        memcpy(rawData, &currentPresetData, sizeof(preset_data_fx_t));
+        memcpy(rawData, &presetData, sizeof(preset_data_fx_t));
 
         presetFile.write(rawData, sizeof(preset_data_fx_t));
 
-        QByteArray baDelay;
-        baDelay.append(qToBigEndian<quint16>(delayTime));
-        presetFile.write(baDelay);
-
-
-        presetFile.write(ir1Data.left(PresetFx::CabinetSize));
-        presetFile.write(ir2Data);
-
-        // presetFile.seek(sizeof(preset_data_fx_t) + 2 + PresetFx::CabinetSize * 2); //=25632
-        presetFile.seek(25760);
-        presetFile.write(ir1Data.right(PresetFx::CabinetSize));
-
-        presetFile.seek(38048);
-        presetFile.write(m_lastPath.toUtf8());
-
         presetFile.close();
     }
+}
+
+void MockCP100fx::setDefaultPresetData(quint8 presetNumber)
+{
+    memset(&currentPresetData, 0, sizeof(preset_data_fx_t));
+
+    currentPresetData = defaultPresetData;
+
+    memset(currentPresetData.name, 0, 15);
+    memcpy(currentPresetData.name, "Preset", 6);
+
+    memset(currentPresetData.comment, 0, 15);
+    memcpy(currentPresetData.comment, "Comment", 7);
+
+
+    for(int i =0; i < ControllersCount; i++)
+    {
+        currentPresetData.controller[i].src = 0;
+        currentPresetData.controller[i].dst = 0;
+        currentPresetData.controller[i].minVal = 0;
+        currentPresetData.controller[i].maxVal = 127;
+    }
+
+    currentPresetData.set = presetNumber + 1;
+
+    currentPresetData.modules.delay_time = 500;
+
+    currentPresetData.ir1Data[0] = 0xff;
+    currentPresetData.ir1Data[1] = 0xff;
+    currentPresetData.ir1Data[2] = 0x7f;
+
+
+    currentPresetData.ir2Data[0] = 0xff;
+    currentPresetData.ir2Data[1] = 0xff;
+    currentPresetData.ir2Data[2] = 0x7f;
 }
 
 //===========================================================================================
@@ -621,7 +549,7 @@ void MockCP100fx::eqgCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_gain[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
     }
 }
 
@@ -634,7 +562,7 @@ void MockCP100fx::eqfCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_freq[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
     }
 }
 
@@ -647,7 +575,7 @@ void MockCP100fx::eqqCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_q[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
     }
 }
 
@@ -689,28 +617,67 @@ void MockCP100fx::stateCommHandler(const QString &command, const QByteArray &arg
 void MockCP100fx::irCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QByteArray answer;
-    answer.append("ir ");
+    answer.append(command.toUtf8() + " ");
 
     QList<QByteArray> splittedArgs = arguments.split(' ');
+    QByteArray irNameBa;
 
-    if(splittedArgs.count() > 0)
+    if(splittedArgs.count() == 1)
     {
-        quint8 irNumber = splittedArgs.at(0).toInt();
+        quint8 irNumber = splittedArgs.at(0).toInt(nullptr, 16);
         answer.append(QByteArray::number(irNumber) + "\r");
 
-        if(irNumber == 0) answer.append(ir1Name.toUtf8() + "\n");
-        else answer.append(ir2Name.toUtf8() + "\n");
+        if(irNumber == 0) irNameBa.append(currentPresetData.ir1Name, 63);
+        else irNameBa.append(currentPresetData.ir2Name, 63);
+
     }
 
-    if(splittedArgs.count() > 2)
+    if(splittedArgs.count() == 2)
     {
         if(splittedArgs.at(1) == "set")
         {
+            quint8 irNumber = splittedArgs.at(0).toInt(nullptr, 16);
+            answer.append(QByteArray::number(irNumber) + " set");
 
-            // TODo set cab and save data from WAV to preset
+            QString fileName = data;
+            fileName.remove("\r");
+
+            QString srcFilePath = m_currentDir.absolutePath() + "/" + fileName;
+
+            stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
+
+            if((wavHead.sampleRate == 48000) && (wavHead.bitsPerSample == 24) && (wavHead.numChannels == 1))
+            {
+
+                QFile file(srcFilePath);
+                QByteArray fileData;
+                if(file.open(QIODevice::ReadOnly))
+                {
+                    fileData = file.read(4096 * 3 + 44);
+                    fileData = fileData.mid(44, 4096 * 3);
+
+                    file.close();
+                }
+
+                irNameBa = fileName.left(63).toUtf8();
+
+                if(irNumber == 0)
+                {
+                    memcpy(currentPresetData.ir1Name, irNameBa.data(), irNameBa.size());
+                    currentPresetData.ir1NameLength = irNameBa.size();
+                    memcpy(currentPresetData.ir1Data, fileData.data(), fileData.size());
+                }
+                else
+                {
+                    memcpy(currentPresetData.ir2Name, irNameBa.data(), irNameBa.size());
+                    currentPresetData.ir2NameLength = irNameBa.size();
+                    memcpy(currentPresetData.ir2Data, fileData.data(), fileData.size());
+                }
+            }
         }
     }
 
+    answer.append("\r" + irNameBa + "\n");
     emit answerReady(answer);
 }
 
@@ -720,9 +687,6 @@ void MockCP100fx::lsCommHandler(const QString &command, const QByteArray &argume
 
     QByteArray answer;
     answer.append("ls\r");
-
-    qDebug() << m_currentDir.absolutePath();
-    qDebug() << m_basePath + "/SD/";
 
     foreach (QFileInfo entry, entryInfoList)
     {
@@ -752,22 +716,286 @@ void MockCP100fx::cdCommHandler(const QString &command, const QByteArray &argume
 
 void MockCP100fx::uploadCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
+    if(arguments == "start")
+    {
+        QByteArray answer;
 
+        QString fullPath = m_currentDir.path() + "/" + data;
+        uploadingIrFile.setFileName(fullPath);
+
+        if(uploadingIrFile.open(QIODevice::WriteOnly))
+        {
+            uploadingIrFile.close();
+            answer = "upload request_part\r\n";
+        }
+        else
+        {
+            answer = "upload error\rCANNOT_CREATE_FILE\n";
+        }
+
+        emit answerReady(answer);
+    }
+
+    QStringList argsList = QString(arguments).split(" ");
+    if(argsList.size() > 1)
+    {
+        if(argsList.at(0) == "part")
+        {
+            quint16 partSize;
+            if(argsList.size() > 1)
+                partSize = argsList.at(1).toInt();
+
+            while(m_uartBuffer->size() < partSize)
+            {
+                QThread::sleep(100);
+            }
+            QMutexLocker locker(m_mutex);
+
+            QByteArray recievedPart = m_uartBuffer->right(partSize+1);
+            recievedPart.chop(1); // remove \n
+            m_uartBuffer->clear();
+
+            if(uploadingIrFile.open(QIODevice::Append))
+            {
+                uploadingIrFile.write(recievedPart);
+                uploadingIrFile.close();
+                emit answerReady("upload request_part\r\n");
+            }
+        }
+    }
 }
 
 void MockCP100fx::mkdirCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-
+    m_currentDir.mkdir(data);
+    QThread::yieldCurrentThread();
+    emit answerReady(command.toUtf8() + "\r" + data + "\n");
 }
 
 void MockCP100fx::renameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
+    QList<QByteArray> splittedArgs = data.split('\r');
 
+    if(splittedArgs.count() == 2)
+    {
+        QString srcObjPath = m_currentDir.absolutePath() + "/" + splittedArgs.at(0);
+
+        QFile file(srcObjPath);
+
+        file.rename(splittedArgs.at(1));
+
+        emit answerReady(command.toUtf8() + "\r" + splittedArgs.at(0) + "\r" +  splittedArgs.at(1) + "\n");
+    }
+    else
+    {
+        emit answerReady(command.toUtf8() + "\rINCORRECT_ARGUMENTS\n");
+    }
 }
 
 void MockCP100fx::removeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
+    QString objName = data;
+    objName.remove("\r");
 
+    QString objPath = m_currentDir.absolutePath() + "/" + objName;
+    QFileInfo fileInfo(objPath);
+
+    if(fileInfo.isFile())
+    {
+        QFile file(objPath);
+        file.remove(objPath);
+    }
+    else if(fileInfo.isDir())
+    {
+        QDir dir(objPath);
+        dir.removeRecursively();
+    }
+    emit answerReady(command.toUtf8() + "\r" + data + "\n");
+}
+
+void MockCP100fx::copyToCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    quint8 targetPresetNum = arguments.toInt(nullptr, 16);
+
+    qDebug() << data.size();
+
+    if(data.size() < 18) return;
+
+    preset_data_fx_t targetPreset;
+
+    if(data.at(0) == '1') memcpy(targetPreset.name, currentPresetData.name, 15);
+    if(data.at(1) == '1') memcpy(targetPreset.comment, currentPresetData.comment, 15);
+    if(data.at(2) == '1') memcpy(targetPreset.controller, currentPresetData.controller, 32);
+
+    if(data.at(3) == '1')
+    {
+        targetPreset.modules.switches.resonance_filter = currentPresetData.modules.switches.resonance_filter;
+        targetPreset.modules.resonance_filter_gen_type = currentPresetData.modules.resonance_filter_gen_type;
+        memcpy(&targetPreset.modules.resonance_filter, &currentPresetData.modules.resonance_filter, sizeof(resonance_filter_fx_t));
+    }
+
+    if(data.at(4) == '1')
+    {
+        targetPreset.modules.switches.gate = currentPresetData.modules.switches.gate;
+        memcpy(&targetPreset.modules.gate, &currentPresetData.modules.gate, sizeof(gate_fx_t));
+    }
+
+    if(data.at(5) == '1')
+    {
+        targetPreset.modules.switches.compressor = currentPresetData.modules.switches.compressor;
+        memcpy(&targetPreset.modules.compressor, &currentPresetData.modules.compressor, sizeof(compressor_fx_t));
+    }
+
+    if(data.at(6) == '1')
+    {
+        targetPreset.modules.switches.preamp = currentPresetData.modules.switches.preamp;
+        memcpy(&targetPreset.modules.preamp, &currentPresetData.modules.preamp, sizeof(preamp_fx_t));
+    }
+
+    if(data.at(7) == '1')
+    {
+        targetPreset.modules.switches.amp = currentPresetData.modules.switches.amp;
+        targetPreset.modules.presence = currentPresetData.modules.presence;
+        memcpy(&targetPreset.modules.pa, &currentPresetData.modules.pa, sizeof(pa_fx_t));
+    }
+
+    if(data.at(8) == '1')
+    {
+        targetPreset.modules.switches.cab = currentPresetData.modules.switches.cab;
+        memcpy(&targetPreset.modules.cab1, &currentPresetData.modules.cab1, sizeof(cab_fx_t));
+        memcpy(&targetPreset.modules.cab2, &currentPresetData.modules.cab2, sizeof(cab_fx_t));
+
+        memcpy(&targetPreset.ir1Data, currentPresetData.ir1Data, 4096*3);
+        memcpy(&targetPreset.ir2Data, currentPresetData.ir2Data, 4096*3);
+        memcpy(&targetPreset.irAuxData, currentPresetData.irAuxData, 4096*3);
+
+        targetPreset.ir1NameLength = currentPresetData.ir1NameLength;
+        memcpy(&targetPreset.ir1Name, currentPresetData.ir1Name, 63);
+
+        targetPreset.ir2NameLength = currentPresetData.ir2NameLength;
+        memcpy(&targetPreset.ir2Name, currentPresetData.ir2Name, 63);
+
+        targetPreset.ir2NameLength = currentPresetData.ir2NameLength;
+    }
+
+    if(data.at(9) == '1')
+    {
+        targetPreset.modules.switches.eq = currentPresetData.modules.switches.eq;
+        targetPreset.modules.eq_pre_post = currentPresetData.modules.eq_pre_post;
+        memcpy(&targetPreset.modules.eq_freq, &currentPresetData.modules.eq_freq, sizeof(5));
+        memcpy(&targetPreset.modules.eq_gain, &currentPresetData.modules.eq_gain, sizeof(5));
+        memcpy(&targetPreset.modules.eq_q, &currentPresetData.modules.eq_q, sizeof(5));
+    }
+
+    if(data.at(10) == '1')
+    {
+        targetPreset.modules.switches.flanger = currentPresetData.modules.switches.flanger;
+        targetPreset.modules.flanger_pre_post = currentPresetData.modules.flanger_pre_post;
+        targetPreset.modules.hpf_flanger = currentPresetData.modules.hpf_flanger;
+        memcpy(&targetPreset.modules.flanger, &currentPresetData.modules.flanger, sizeof(flanger_fx_t));
+    }
+
+    if(data.at(11) == '1')
+    {
+        targetPreset.modules.switches.phaser = currentPresetData.modules.switches.phaser;
+        targetPreset.modules.phaser_pre_post = currentPresetData.modules.phaser_pre_post;
+        targetPreset.modules.hpf_phaser = currentPresetData.modules.hpf_phaser;
+        memcpy(&targetPreset.modules.phaser, &currentPresetData.modules.phaser, sizeof(phaser_fx_t));
+    }
+
+    if(data.at(12) == '1')
+    {
+        targetPreset.modules.switches.chorus = currentPresetData.modules.switches.chorus;
+        targetPreset.modules.hpf_chorus = currentPresetData.modules.hpf_chorus;
+        memcpy(&targetPreset.modules.chorus, &currentPresetData.modules.chorus, sizeof(chorus_fx_t));
+    }
+
+    if(data.at(13) == '1')
+    {
+        targetPreset.modules.switches.delay = currentPresetData.modules.switches.delay;
+        targetPreset.modules.delay_time = currentPresetData.modules.delay_time;
+        targetPreset.modules.delay_tap = currentPresetData.modules.delay_tap;
+        targetPreset.modules.delay_tail = currentPresetData.modules.delay_tail;
+        memcpy(&targetPreset.modules.delay, &currentPresetData.modules.delay, sizeof(delay_fx_t));
+    }
+
+    if(data.at(14) == '1')
+    {
+        targetPreset.modules.switches.early_reflections = currentPresetData.modules.switches.early_reflections;
+        memcpy(&targetPreset.modules.early_reflections, &currentPresetData.modules.early_reflections, sizeof(early_fx_t));
+    }
+
+    if(data.at(15) == '1')
+    {
+        targetPreset.modules.switches.reverb = currentPresetData.modules.switches.reverb;
+        targetPreset.modules.reverb_diffusion = currentPresetData.modules.reverb_diffusion;
+        targetPreset.modules.reverb_predelay = currentPresetData.modules.reverb_predelay;
+        targetPreset.modules.reverb_tail = currentPresetData.modules.reverb_tail;
+        targetPreset.modules.reverb_type = currentPresetData.modules.reverb_type;
+        memcpy(&targetPreset.modules.reverb, &currentPresetData.modules.reverb, sizeof(reverb_fx_t));
+    }
+
+    if(data.at(16) == '1')
+    {
+        targetPreset.modules.switches.tremolo = currentPresetData.modules.switches.tremolo;
+        targetPreset.modules.tremolo_lfo_type = currentPresetData.modules.tremolo_lfo_type;
+        targetPreset.modules.tremolo_tap = currentPresetData.modules.tremolo_tap;
+        memcpy(&targetPreset.modules.tremolo, &currentPresetData.modules.tremolo, sizeof(tremolo_fx_t));
+    }
+
+    if(data.at(17) == '1') targetPreset.modules.preset_volume = currentPresetData.modules.preset_volume;
+
+    savePresetData(targetPresetNum, targetPreset);
+
+    emit answerReady(command.toUtf8() + "\r\n");
+}
+
+void MockCP100fx::erasePresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    setDefaultPresetData(currentSystemData.lastPresetNum);
+    savePresetData(currentSystemData.lastPresetNum, currentPresetData);
+    emit answerReady(command.toUtf8() + "\r\n");
+}
+
+void MockCP100fx::cntrlCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QList<QByteArray> separatedArgs = arguments.split(' ');
+    QString answer = command + "\r";
+
+    if(separatedArgs.count() > 2)
+    {
+        quint8 cntrlNum = separatedArgs.at(0).toInt(nullptr, 16);
+        QString param = separatedArgs.at(1);
+        quint8 value = separatedArgs.at(2).toInt(nullptr, 16);
+
+        if(param == "dst")
+        {
+            currentPresetData.controller[cntrlNum].dst = value;
+        }
+
+        if(param == "src")
+        {
+            currentPresetData.controller[cntrlNum].src = value;
+        }
+
+        if(param == "min")
+        {
+            currentPresetData.controller[cntrlNum].minVal = value;
+        }
+
+        if(param == "max")
+        {
+            currentPresetData.controller[cntrlNum].maxVal = value;
+        }
+
+        answer.append(QByteArray::number(cntrlNum, 16) + "\r" + param.toUtf8() + "\r" + QByteArray::number(value, 16));
+    }
+    else
+    {
+        answer.append("INCORRECT_ARGS");
+    }
+    answer.append("\n");
+    emit answerReady(answer.toUtf8());
 }
 
 void MockCP100fx::cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -819,9 +1047,47 @@ void MockCP100fx::cntrlsSetCommHandler(const QString &command, const QByteArray 
     emit answerReady(answer.toUtf8());
 }
 
+void MockCP100fx::sysExpr(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    quint8 val = arguments.toInt(nullptr, 16);
+
+    if(command == "sys_expr_on")
+    {
+        if(!val) currentSystemData.expressionType &= 0x7f;
+        else currentSystemData.expressionType |= 0x80;
+    }
+
+    if(command == "sys_expr_type")
+    {
+        currentSystemData.expressionType = (val & 0x7F) | (currentSystemData.expressionType & 0x80);
+    }
+
+    saveSysParameters();
+    emit answerReady(command.toUtf8() + " " + arguments + "\r\n");
+}
+
+void MockCP100fx::sysTuner(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    quint8 val = arguments.toInt(nullptr, 16);
+
+    if(command == "sys_tuner_ctrl")
+    {
+        if(!val) currentSystemData.tunerExternal &= 0x7f;
+        else currentSystemData.tunerExternal |= 0x80;
+    }
+
+    if(command == "sys_tuner_cc")
+    {
+        currentSystemData.tunerExternal = (val & 0x7F) | (currentSystemData.tunerExternal & 0x80);
+    }
+
+    saveSysParameters();
+    emit answerReady(command.toUtf8() + " " + arguments + "\r\n");
+}
+
 void MockCP100fx::psaveCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    savePresetData(currentSystemData.lastPresetNum);
+    savePresetData(currentSystemData.lastPresetNum, currentPresetData);
     emit answerReady(command.toUtf8() + "\r\n");
 }
 
@@ -832,7 +1098,7 @@ void MockCP100fx::pchangeCommHandler(const QString &command, const QByteArray &a
         bool convRes;
         currentSystemData.lastPresetNum = QString(arguments).toInt(&convRes, 16);
         qDebug() << "Change preset: " << currentSystemData.lastPresetNum;
-        loadPresetData(currentSystemData.lastPresetNum);
+        loadPresetData(currentSystemData.lastPresetNum, currentPresetData);
         emit answerReady(command.toUtf8() + "\r\n");
 
         saveSysParameters();
@@ -852,22 +1118,27 @@ void MockCP100fx::plistCommHandler(const QString &command, const QByteArray &arg
     {
         answer.append("\r");
 
-        loadPresetData(i);
+        preset_data_fx_t presetData;
+
+        loadPresetData(i, presetData);
         answer.append(QString::number(i) + "|");
 
-        QString name((char*)currentPresetData.name);
+        QString name((char*)presetData.name);
         name.remove("//r//n|");
         answer.append(name + "|");
 
-        QString comment((char*)currentPresetData.comment);
+        QString comment((char*)presetData.comment);
         comment.remove("//r//n|");
         answer.append(comment + "|");
 
-        // ir1Name.remove("//r//n|");
-        // ir2Name.remove("//r//n|");
-        // answer.append(ir1Name + "|");
-        // answer.append(ir2Name + "|");
-        answer.append("||");
+        QString ir1NameStr(presetData.ir1Name);
+        QString ir2NameStr(presetData.ir2Name);
+
+        ir1NameStr.remove("//r//n|");
+        ir2NameStr.remove("//r//n|");
+        answer.append(ir1NameStr.toUtf8() + "|");
+        answer.append(ir2NameStr.toUtf8() + "|");
+        // answer.append("||");
 
         uint8_t enabled[14];
         memcpy(enabled, &currentPresetData.modules.switches, 14);
@@ -877,7 +1148,7 @@ void MockCP100fx::plistCommHandler(const QString &command, const QByteArray &arg
     answer.append("\n");
     emit answerReady(answer.toUtf8());
 
-    loadPresetData(currentSystemData.lastPresetNum);
+    loadPresetData(currentSystemData.lastPresetNum, currentPresetData);
 }
 
 void MockCP100fx::pnumCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -907,5 +1178,103 @@ void MockCP100fx::pcommentCommHandler(const QString &command, const QByteArray &
         memcpy(currentPresetData.comment, data.data(), data.size());
     }
     QString answer = "pcomment\r" + QString((char*)currentPresetData.comment) + "\n";
+    emit answerReady(answer.toUtf8());
+}
+
+void MockCP100fx::meqMf(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    quint16 val = arguments.toInt(nullptr, 16);
+
+    currentSystemData.masterEqFreq = qToBigEndian(val);
+    saveSysParameters();
+
+    emit answerReady(command.toUtf8() + " " + arguments + "\r\n");
+
+}
+
+void MockCP100fx::midiMap(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QList<QByteArray> separatedArgs = arguments.split(' ');
+
+    if(separatedArgs.count() > 1)
+    {
+        quint8 num = separatedArgs.at(0).toInt(nullptr, 16);
+        quint8 val = separatedArgs.at(1).toInt(nullptr, 16);
+
+        currentSystemData.midiMap[num] = val;
+
+        saveSysParameters();
+
+        emit answerReady((QString("midi_map\r%1\r%2\n").arg(num, 2, 16, QChar('0')).arg(val, 2, 16, QChar('0'))).toUtf8());
+    }
+}
+
+void MockCP100fx::fsw(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QList<QByteArray> separatedArgs = arguments.split(' ');
+    QString answer = command + "\r";
+
+    if(separatedArgs.count() > 2)
+    {
+        quint8 fswNum = separatedArgs.at(0).toInt(nullptr, 16);
+        QString param = separatedArgs.at(1);
+        quint8 value = separatedArgs.at(2).toInt(nullptr, 16);
+
+        answer.append(QByteArray::number(fswNum, 16) + "\r" + param.toUtf8() + "\r" + QByteArray::number(value, 16));
+
+        if(param == "mode")
+        {
+            currentSystemData.fswMode[fswNum] = value;
+        }
+
+        if(param == "ptype")
+        {
+            currentSystemData.fswPressType[fswNum] = value;
+        }
+
+        if(param == "htype")
+        {
+            currentSystemData.fswHoldType[fswNum] = value;
+        }
+
+        if(param == "cpressnum")
+        {
+            currentSystemData.fswControlPressCc[fswNum] = value;
+        }
+
+        if(param == "choldnum")
+        {
+            currentSystemData.fswControlHoldCc[fswNum] = value;
+        }
+
+        if(param == "ppressnum")
+        {
+            if(separatedArgs.count() > 3)
+            {
+                quint8 presetNum = separatedArgs.at(3).toInt(nullptr, 16);
+                currentSystemData.fswPressPreset[fswNum][value] = presetNum;
+
+                answer.append("\r" + QByteArray::number(presetNum, 16));
+            }
+        }
+
+        if(param == "pholdnum")
+        {
+            if(separatedArgs.count() > 3)
+            {
+                quint8 presetNum = separatedArgs.at(3).toInt(nullptr, 16);
+                currentSystemData.fswHoldPreset[fswNum][value] = presetNum;
+
+                answer.append("\r" + QByteArray::number(presetNum, 16));
+            }
+        }
+
+        saveSysParameters();
+    }
+    else
+    {
+        answer.append("INCORRECT_ARGS");
+    }
+    answer.append("\n");
     emit answerReady(answer.toUtf8());
 }

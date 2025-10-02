@@ -21,7 +21,7 @@ Row{
     property alias textWidth: _label.width
     property alias barWidth: _barRect.width
 
-    signal userChangedValue();
+    signal userChangedValue(var calcVal);
 
     MLabel{
         id: _label
@@ -75,9 +75,9 @@ Row{
                 if(calcVal > _root.maxValue) calcVal = _root.maxValue
                 if(calcVal < _root.minValue) calcVal = _root.minValue
 
-                _root.value = calcVal
+                // _root.value = calcVal
 
-                _root.userChangedValue();
+                _root.userChangedValue(calcVal);
             }
 
 

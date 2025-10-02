@@ -115,6 +115,13 @@ void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
     uploadIr(filePath, dstFilePath.path());
 }
 
+void UiCore::uploadIr(QList<QUrl> fileList, QUrl dstFilePath)
+{
+    m_uploadFileList = fileList;
+
+    slImpulseUploaded();
+}
+
 void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)
 {
     QFileInfo irFileInfo(m_pickedIrPath);
@@ -208,6 +215,14 @@ void UiCore::slExportPreset(QString fullFilePath, QString fileName)
 void UiCore::slImportPreset(QString fullFilePath, QString fileName)
 {
     m_currentDevice->importPreset(fullFilePath, fileName);
+}
+
+void UiCore::slImpulseUploaded()
+{
+    if(m_uploadFileList.isEmpty()) return;
+
+    QUrl fileUrl = m_uploadFileList.takeFirst();
+    uploadIr(fileUrl);
 }
 
 void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
@@ -377,10 +392,20 @@ void UiCore::setModuleName(const QString &newModuleName)
 
 void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
 {
+    if(m_currentDevice)
+    {
+        disconnect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::slImpulseUploaded);
+    }
+
     if(newDevice != nullptr)
+    {
         m_currentDevice = newDevice;
+        connect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::slImpulseUploaded);
+    }
     else
+    {
         m_currentDevice = &dummyDevice;
+    }
 
     emit currentDeviceChanged();
 }

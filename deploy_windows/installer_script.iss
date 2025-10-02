@@ -6,7 +6,7 @@
 #define MyAppNameUn "Uninstall AMT Pangaea CP PA"
 
 ;#define MyAppVersionREPLACE
-#define MyAppVersion "1.1.2510.0"
+#define MyAppVersion "1.1.2511.0"
 #define MyAppPublisher "AMT Electronics"
 #define MyAppURL "http://www.amtelectronics.com/"
 #define MyAppExeName "PangaeaCPPA.exe"

@@ -89,20 +89,6 @@ void Core::parseInputData(QByteArray ba)
         if(commandsSended.size()>0) commandsSended.removeFirst();
         processCommands();
     }
-
-    // foreach(QByteArray answer, recievedAnswer)
-    // {
-    //     for(int i=0; i < commandsSended.size(); i++)
-    //     {
-    //         if(commandsSended.at(i).indexOf(answer) == 0)
-    //         {
-    //             // qDebug() << "Answer recieved for command: " << commandsSended.at(i) << " commands waiting answer: " << commandsSended.count();
-    //             commandsSended.remove(i);
-    //         }
-    //     }
-    // }
-
-    // processCommands();
 }
 
 void Core::slCommandsRecieved(QList<QByteArray> recievedAnswer)
@@ -113,7 +99,6 @@ void Core::slCommandsRecieved(QList<QByteArray> recievedAnswer)
         {
             if(commandsSended.at(i).indexOf(answer) == 0)
             {
-                // qDebug() << "Answer recieved for command: " << commandsSended.at(i) << " commands waiting answer: " << commandsSended.count();
                 commandsSended.remove(i);
             }
         }
@@ -123,7 +108,6 @@ void Core::slCommandsRecieved(QList<QByteArray> recievedAnswer)
 
 void Core::slDeviceInstanciated()
 {
-    qDebug() << __FUNCTION__;
     currentDevice->moveToThread(QGuiApplication::instance()->thread());
 
     connect(currentDevice, &AbstractDevice::sgWriteToInterface, this, &Core::sgWriteToInterface, Qt::QueuedConnection);

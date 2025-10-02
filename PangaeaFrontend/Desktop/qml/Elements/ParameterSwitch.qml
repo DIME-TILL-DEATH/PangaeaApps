@@ -61,8 +61,7 @@ Item{
 
             value: ctrlValInstance.displayValue
 
-            onChValue:
-            {
+            onChValue: value => {
                 if(!deviceUpdatingValues)
                     ctrlValInstance.displayValue = value;
             }

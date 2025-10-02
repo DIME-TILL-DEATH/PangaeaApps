@@ -62,6 +62,8 @@ Rectangle{
                 }
 
                 MComboHorizontal{
+                    id: _comboCabConfig
+
                     width: parent.width
                     height: _main.stringHeight
 
@@ -72,7 +74,48 @@ Rectangle{
 
                     onActivated: (index) => {
 
-                        UiCore.currentDevice.systemSettings.cabNumber = currentIndex;
+                        if(UiCore.currentDevice.systemSettings.cabNumber === 2)
+                        {
+                            if(currentIndex !== UiCore.currentDevice.systemSettings.cabNumber)
+                            {
+                                restartDialog.show();
+                            }
+                            else
+                            {
+                                UiCore.currentDevice.systemSettings.cabNumber = currentIndex;
+                            }
+                        }
+                        else
+                        {
+                            if(currentIndex === 2)
+                            {
+                                restartDialog.show();
+                            }
+                            else
+                            {
+                                UiCore.currentDevice.systemSettings.cabNumber = currentIndex;
+                            }
+                        }
+                    }
+
+                    NativeMessageDialog
+                    {
+                        id: restartDialog
+
+                        title: qsTr("Restart device?")
+                        text: qsTr("Changing stereo/mono cab config needs device restart. Do you to do it now?")
+
+                        buttons: DialogButtonBox.Yes | DialogButtonBox.No
+
+                        modality: Qt.ApplicationModal
+                        onAccepted: {
+                            UiCore.currentDevice.systemSettings.cabNumber = _comboCabConfig.currentIndex;
+                            UiCore.currentDevice.restartDevice()
+                        }
+                        onRejected: {
+                            _comboCabConfig.currentIndex = UiCore.currentDevice.systemSettings.cabNumber
+
+                        }
                     }
                 }
 
@@ -169,8 +212,8 @@ Rectangle{
 
                     value: UiCore.currentDevice.systemSettings.tunerSpeed
 
-                    onUserChangedValue: {
-                        UiCore.currentDevice.systemSettings.tunerSpeed = value
+                    onUserChangedValue: calcValue => {
+                        UiCore.currentDevice.systemSettings.tunerSpeed = calcValue
                     }
                 }
             }
@@ -374,6 +417,7 @@ Rectangle{
                     text: "Tuner on CC#: "
 
                     enabled: UiCore.currentDevice.systemSettings.tunerControl
+                    opacity: enabled ? 1 : 0.5
 
                     model: _midiPcMapModel
 

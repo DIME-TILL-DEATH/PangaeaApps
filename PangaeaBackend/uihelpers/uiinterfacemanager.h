@@ -14,6 +14,8 @@ class UiInterfaceManager : public QObject
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
     Q_PROPERTY(qint16 bleRssi READ bleRssi WRITE setRssi NOTIFY bleRssiChanged FINAL)
     Q_PROPERTY(DeviceDescription connectedInterface READ connectedInterface NOTIFY connectedInterfaceChanged FINAL)
+
+    Q_PROPERTY(bool logData READ logData WRITE setLogData NOTIFY logDataChanged FINAL)
 public:
     explicit UiInterfaceManager(QObject *parent = nullptr);
     ~UiInterfaceManager();
@@ -36,6 +38,9 @@ public:
     void setRssi(qint16 newBleRssi);
 
     DeviceDescription connectedInterface() const;
+
+    bool logData() const;
+    void setLogData(bool newLogData);
 
 public slots:
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);
@@ -64,6 +69,8 @@ signals:
 
     void connectedInterfaceChanged();
 
+    void logDataChanged(bool logDataStatus);
+
 private:
     bool m_isBleAvaliable{true};
 
@@ -71,6 +78,7 @@ private:
     QString m_moduleName;
     qint16 m_bleRssi{-50};
     DeviceDescription m_connectedInterface;
+    bool m_logData;
 };
 
 #endif // UIINTERFACEMANAGER_H

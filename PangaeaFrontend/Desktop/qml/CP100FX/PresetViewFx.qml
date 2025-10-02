@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import Elements 1.0
+import ModulesClassic
 import ModulesFX 1.0
 import StyleSettings 1.0
 import Layouts 1.0
@@ -19,7 +20,7 @@ ColumnLayout
     focus: true
     spacing: 0
 
-    property alias modulesListView: _modulesListView
+    // property alias modulesListView: _modulesListView
 
 
     Rectangle{
@@ -105,135 +106,165 @@ ColumnLayout
 
         color: Style.currentTheme.mainEnabledColor
 
-        ListView{
-            id: _modulesListView
-
-            model: UiCore.currentDevice.modulesListModel;
-
+        RowLayout{
             anchors.fill: parent
-            anchors.margins: 4
 
-            spacing: 0
+            In{
+                id: inp
 
-            interactive: false
-            orientation: ListView.Horizontal
+                Layout.preferredWidth: parent.width/40
+                Layout.fillHeight: true
 
-            property var moduleTypeSelected
+                tunerBtnVisible: true
 
-            delegate: Item{
-                width: _modulesListView.width/14 - _modulesListView.spacing
-                height: _modulesListView.height
+                fontPixelSize: Math.min(height/15, width/2.75)
 
-                Rectangle{
-                    width: parent.width
-                    height: parent.height * 0.95
+                onShowTunerWindow:{
+                    tunerWindow.show()
+                }
 
-                    anchors.centerIn: parent
+                TunerWindow{
+                    id: tunerWindow
+                }
+            }
 
-                    color: "transparent"
-                    border.width: 2
-                    border.color: _modulesListView.moduleTypeSelected === moduleInstance.moduleType ? "white" : "transparent"
+            ListView{
+                id: _modulesListView
 
-                    Image
-                    {
-                        id: _image
+                model: UiCore.currentDevice.modulesListModel;
 
-                        anchors.centerIn: parent
-                        width: parent.width
-                        height: parent.height
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                        fillMode: Image.PreserveAspectFit
-                        smooth: true
+                spacing: 0
 
-                        source: "qrc:/Images/pedal.svg"
+                interactive: false
+                orientation: ListView.Horizontal
 
-                        opacity: moduleInstance.moduleEnabled ? 1 : 0.35
-                        Behavior on opacity {
-                            PropertyAnimation{}
-                        }
-                    }
+                property var moduleTypeSelected
 
-
-                    MText{
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        y: parent.height/2 + parent.height * 1/20
-
-                        color: "black"
-
-                        text: moduleInstance.moduleName
-                    }
+                delegate: Item{
+                    width: _modulesListView.width/14 - _modulesListView.spacing
+                    height: _modulesListView.height
 
                     Rectangle{
-                        width: parent.width/10
-                        height: width
-                        radius: width/2
+                        width: parent.width
+                        height: parent.height * 0.95
 
-                        x: parent.width/2 + _image.paintedWidth * 2/10
-                        y: parent.height/2 + _image.paintedHeight * 2/10
+                        anchors.centerIn: parent
 
-                        border.width: 1
+                        color: "transparent"
+                        border.width: 2
+                        border.color: _modulesListView.moduleTypeSelected === moduleInstance.moduleType ? "white" : "transparent"
 
-                        color: moduleInstance.moduleEnabled ? "red" : "grey"
-                    }
+                        Image
+                        {
+                            id: _image
 
+                            anchors.centerIn: parent
+                            width: parent.width
+                            height: parent.height
 
-                    MouseArea{
-                        anchors.fill: parent
+                            fillMode: Image.PreserveAspectFit
+                            smooth: true
 
-                        onClicked: {
-                            if(_modulesListView.moduleTypeSelected !== moduleInstance.moduleType)
-                            {
-                                _moduleLoader.source = ""
-                                _moduleLoader.selectedModuleInstance = moduleInstance
-                                _modulesListView.moduleTypeSelected = moduleInstance.moduleType
+                            source: "qrc:/Images/pedal.svg"
 
-                                _modulesListView.moduleTypeSelectedChanged();
+                            opacity: moduleInstance.moduleEnabled ? 1 : 0.35
+                            Behavior on opacity {
+                                PropertyAnimation{}
                             }
-                            else
-                            {
-                                moduleInstance.moduleEnabled = ! moduleInstance.moduleEnabled
+                        }
+
+
+                        MText{
+                            anchors.horizontalCenter: parent.horizontalCenter
+
+                            y: parent.height/2 + parent.height * 1/20
+
+                            color: "black"
+
+                            text: moduleInstance.moduleName
+                        }
+
+                        Rectangle{
+                            width: parent.width/10
+                            height: width
+                            radius: width/2
+
+                            x: parent.width/2 + _image.paintedWidth * 2/10
+                            y: parent.height/2 + _image.paintedHeight * 2/10
+
+                            border.width: 1
+
+                            color: moduleInstance.moduleEnabled ? "red" : "grey"
+                        }
+
+
+                        MouseArea{
+                            anchors.fill: parent
+
+                            onClicked: {
+                                if(_modulesListView.moduleTypeSelected !== moduleInstance.moduleType)
+                                {
+                                    _moduleLoader.source = ""
+                                    _moduleLoader.selectedModuleInstance = moduleInstance
+                                    _modulesListView.moduleTypeSelected = moduleInstance.moduleType
+
+                                    _modulesListView.moduleTypeSelectedChanged();
+                                }
+                                else
+                                {
+                                    moduleInstance.moduleEnabled = ! moduleInstance.moduleEnabled
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            add: Transition{
-                NumberAnimation { properties: "x"; duration: 200 }
-            }
-
-            move: Transition {
-                 NumberAnimation { properties: "x"; duration: 250 }
-            }
-
-            displaced: Transition {
-                 NumberAnimation { properties: "x"; duration: 250 }
-             }
-
-            populate: Transition {
-                 NumberAnimation { properties: "x"; duration: 200 }
-             }
-
-            onModuleTypeSelectedChanged:{
-                switch(_moduleLoader.selectedModuleInstance.moduleType)
-                {
-                    case ModuleType.RF: _moduleLoader.source = "../ModulesFX/RF.qml"; break;
-                    case ModuleType.NG: _moduleLoader.source = "../ModulesFX/NG.qml"; break;
-                    case ModuleType.CM: _moduleLoader.source = "../ModulesFX/CM.qml"; break;
-                    case ModuleType.PR: _moduleLoader.source = "../ModulesFX/PR.qml"; break;
-                    case ModuleType.PA: _moduleLoader.source = "../ModulesFX/PA.qml"; break;
-                    case ModuleType.IR_STEREO: _moduleLoader.source = "../ModulesFX/IR.qml"; break;
-                    case ModuleType.EQ1: _moduleLoader.source = "../ModulesFX/EQ.qml"; break;
-                    case ModuleType.DELAY: _moduleLoader.source = "../ModulesFX/DL.qml"; break;
-                    case ModuleType.PH: _moduleLoader.source = "../ModulesFX/PH.qml"; break;
-                    case ModuleType.FL: _moduleLoader.source = "../ModulesFX/FL.qml"; break;
-                    case ModuleType.CH: _moduleLoader.source = "../ModulesFX/CH.qml"; break;
-                    case ModuleType.ER_MONO:
-                    case ModuleType.ER_STEREO: _moduleLoader.source = "../ModulesFX/ER.qml"; break;
-                    case ModuleType.RV: _moduleLoader.source = "../ModulesFX/RV.qml"; break;
-                    case ModuleType.TR: _moduleLoader.source = "../ModulesFX/TR.qml"; break;
+                add: Transition{
+                    NumberAnimation { properties: "x"; duration: 200 }
                 }
+
+                move: Transition {
+                     NumberAnimation { properties: "x"; duration: 250 }
+                }
+
+                displaced: Transition {
+                     NumberAnimation { properties: "x"; duration: 250 }
+                 }
+
+                populate: Transition {
+                     NumberAnimation { properties: "x"; duration: 200 }
+                 }
+
+                onModuleTypeSelectedChanged:{
+                    switch(_moduleLoader.selectedModuleInstance.moduleType)
+                    {
+                        case ModuleType.RF: _moduleLoader.source = "../ModulesFX/RF.qml"; break;
+                        case ModuleType.NG: _moduleLoader.source = "../ModulesFX/NG.qml"; break;
+                        case ModuleType.CM: _moduleLoader.source = "../ModulesFX/CM.qml"; break;
+                        case ModuleType.PR: _moduleLoader.source = "../ModulesFX/PR.qml"; break;
+                        case ModuleType.PA: _moduleLoader.source = "../ModulesFX/PA.qml"; break;
+                        case ModuleType.IR_STEREO: _moduleLoader.source = "../ModulesFX/IR.qml"; break;
+                        case ModuleType.EQ1: _moduleLoader.source = "../ModulesFX/EQ.qml"; break;
+                        case ModuleType.DELAY: _moduleLoader.source = "../ModulesFX/DL.qml"; break;
+                        case ModuleType.PH: _moduleLoader.source = "../ModulesFX/PH.qml"; break;
+                        case ModuleType.FL: _moduleLoader.source = "../ModulesFX/FL.qml"; break;
+                        case ModuleType.CH: _moduleLoader.source = "../ModulesFX/CH.qml"; break;
+                        case ModuleType.ER_MONO:
+                        case ModuleType.ER_STEREO: _moduleLoader.source = "../ModulesFX/ER.qml"; break;
+                        case ModuleType.RV: _moduleLoader.source = "../ModulesFX/RV.qml"; break;
+                        case ModuleType.TR: _moduleLoader.source = "../ModulesFX/TR.qml"; break;
+                    }
+                }
+            }
+
+            Out{
+                Layout.preferredWidth: parent.width/40
+                Layout.fillHeight: true
+
+                fontPixelSize: Math.min(height/15, width/2.75)
             }
         }
     }

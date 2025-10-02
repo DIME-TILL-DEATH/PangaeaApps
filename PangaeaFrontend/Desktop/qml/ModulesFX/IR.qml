@@ -38,11 +38,15 @@ BaseModule{
             target: _fileBrowser
 
             function onCabNumChanged(index){
-                _chooseCabCombo,currentIndex = index
+                _chooseCabCombo.currentIndex = index
             }
         }
 
-        Column{
+        MComboVertical{
+            id: _chooseCabCombo
+
+            text: qsTr("Cab num")
+
             visible: UiCore.currentDevice.systemSettings.cabNumber === 2
 
             width: main.dialWidth
@@ -50,44 +54,12 @@ BaseModule{
 
             opacity: module.moduleEnabled ? 1.0 : 0.5
 
-            Item{
-                id: _Text
+            model: ["1", "2"]
 
+            currentIndex: 0
 
-                height: parent.height/3
-                width: parent.width
-
-                Text{
-                    id: textValue
-                    anchors.fill: parent
-
-                    text: "Cab num"
-                    font.pixelSize: 5 * Style.dip
-                    font.bold: true
-
-                    color: Style.currentTheme.textEnabled
-
-                    horizontalAlignment: TextInput.AlignHCenter
-                    verticalAlignment: TextInput.AlignVCenter
-                }
-            }
-
-            ComboBox
-            {
-                id: _chooseCabCombo
-
-                height: parent.height / 3
-                width: parent.width * 0.75
-
-                model: ["1", "2"]
-
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                currentIndex: 0
-
-                onActivated: {
-                    _fileBrowser.currentCabNum = _chooseCabCombo.currentIndex
-                }
+            onActivated: {
+                _fileBrowser.currentCabNum = _chooseCabCombo.currentIndex
             }
         }
 
@@ -116,13 +88,6 @@ BaseModule{
             controlValue: (_chooseCabCombo.currentIndex === 0) ? module.firstCabPan : module.secondCabPan
         }
 
-        // ParameterDial{
-        //     width: main.dialWidth
-        //     height: main.dialHeight
-
-        //     controlValue: (_chooseCabCombo.currentIndex === 0) ? module.firstCabDelay : module.secondCabDelay
-        // }
-
         Rectangle{
             width: 1
             height: parent.height
@@ -145,6 +110,26 @@ BaseModule{
                 onClicked:{
                     _fileBrowser.show();
                 }
+            }
+        }
+
+        Rectangle{
+            width: 1
+            height: parent.height
+        }
+
+        Item{
+            width: parent.width - main.dialWidth * 6
+            height: parent.height
+            MText{
+                anchors.fill: parent
+                anchors.leftMargin: 8
+
+                verticalAlignment: Text.AlignVCenter
+
+                property string currentIrName: _chooseCabCombo.currentIndex === 0 ? UiCore.currentDevice.ir1Name : UiCore.currentDevice.ir2Name
+
+                text: qsTr("Current IR: ") + (currentIrName === qsTr("Empty") ? "" : currentIrName)
             }
         }
     }

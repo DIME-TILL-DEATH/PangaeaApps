@@ -2,9 +2,9 @@
 #include <QThread>
 #include <QStandardPaths>
 
-#include "interfacecore.h"
+#include "interfacemanager.h"
 
-InterfaceCore::InterfaceCore(QObject *parent)
+InterfaceManager::InterfaceManager(QObject *parent)
                 : QObject{parent}
 {
 #ifndef Q_OS_IOS
@@ -13,8 +13,8 @@ InterfaceCore::InterfaceCore(QObject *parent)
     m_bleInterface = new BleInterface(this);
     m_offlineInterface = new OfflineInterface(this);
 
-    connect(this, &InterfaceCore::sgNewData, this, &InterfaceCore::slNewDataArrived);
-    connect(m_bleInterface, &BleInterface::rssiReaded, this, &InterfaceCore::sgRssiReaded);
+    connect(this, &InterfaceManager::sgNewData, this, &InterfaceManager::slNewDataArrived);
+    connect(m_bleInterface, &BleInterface::rssiReaded, this, &InterfaceManager::sgRssiReaded);
 
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
@@ -27,13 +27,13 @@ InterfaceCore::InterfaceCore(QObject *parent)
 #endif
 }
 
-InterfaceCore::~InterfaceCore()
+InterfaceManager::~InterfaceManager()
 {
     if(m_exchangeInterface)
         m_exchangeInterface->disconnectFromDevice();
 }
 
-bool InterfaceCore::connectToDevice(DeviceDescription device)
+bool InterfaceManager::connectToDevice(DeviceDescription device)
 {
     stopScanning();
 
@@ -67,20 +67,20 @@ bool InterfaceCore::connectToDevice(DeviceDescription device)
             return false;
         }
     }
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceCore::sgNewData);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceCore::sgConnectionStarted);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceCore::sgDeviceUnavaliable);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceCore::slInterfaceError);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceCore::sgInterfaceConnected);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceCore::sgInterfaceDisconnected);
-    QObject::connect(m_exchangeInterface, &AbstractInterface::sgModuleNameUpdated, this, &InterfaceCore::sgModuleNameUpdated);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgNewData, this, &InterfaceManager::sgNewData);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgConnectionStarted, this, &InterfaceManager::sgConnectionStarted);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgDeviceUnavaliable, this, &InterfaceManager::sgDeviceUnavaliable);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceError, this, &InterfaceManager::slInterfaceError);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceConnected, this, &InterfaceManager::sgInterfaceConnected);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgInterfaceDisconnected, this, &InterfaceManager::sgInterfaceDisconnected);
+    QObject::connect(m_exchangeInterface, &AbstractInterface::sgModuleNameUpdated, this, &InterfaceManager::sgModuleNameUpdated);
 
     m_connectedDeviceDescription = device;
 
     return m_exchangeInterface->connect(device);
 }
 
-void InterfaceCore::disconnectFromDevice()
+void InterfaceManager::disconnectFromDevice()
 {
     if(m_exchangeInterface != nullptr)
     {
@@ -98,39 +98,44 @@ void InterfaceCore::disconnectFromDevice()
     }
 }
 
-void InterfaceCore::writeToDevice(QByteArray data, bool logCommand)
+void InterfaceManager::writeToDevice(QByteArray data)
 {
     if(m_exchangeInterface)
     {
-        if(logCommand) qInfo() << "<- writeData:" << data << "hex:" << data.toHex() << "lenght:" << data.length();
+        if(m_logCommand) qInfo() << "<- writeData:" << data << "hex:" << data.toHex() << "lenght:" << data.length();
 
         m_exchangeInterface->write(data);
     }
 }
 
-void InterfaceCore::startScanning(DeviceConnectionType connectionType)
+void InterfaceManager::slNewDataArrived(QByteArray data)
+{
+    if(m_logCommand) qInfo() << "->" << __FUNCTION__ << ":" << data;
+}
+
+void InterfaceManager::startScanning(DeviceConnectionType connectionType)
 {
     qDebug() << __FUNCTION__ << "recieve start scanning" << "connection type:" << connectionType;
     switch(connectionType)
     {
     case DeviceConnectionType::BLE:
     {
-        QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
-        QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceCore::slInterfaceUnavaliable, Qt::UniqueConnection);
+        QObject::connect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated, Qt::UniqueConnection);
+        QObject::connect(m_bleInterface, &AbstractInterface::sgInterfaceUnavaliable, this, &InterfaceManager::slInterfaceUnavaliable, Qt::UniqueConnection);
         m_bleInterface->startScan();
         break;
     }
     case DeviceConnectionType::USB:
     {
         #ifndef Q_OS_IOS
-        QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
+        QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated, Qt::UniqueConnection);
         m_usbInterface->startScan();
         #endif
         break;
     }
     case DeviceConnectionType::Offline:
     {
-        QObject::connect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated, Qt::UniqueConnection);
+        QObject::connect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated, Qt::UniqueConnection);
         m_offlineInterface->startScan();
         break;
     }
@@ -138,42 +143,37 @@ void InterfaceCore::startScanning(DeviceConnectionType connectionType)
     }
 }
 
-void InterfaceCore::stopScanning()
+void InterfaceManager::stopScanning()
 {
 #ifndef Q_OS_IOS
-    QObject::disconnect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
+    QObject::disconnect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated);
     m_usbInterface->stopScan();
 #endif
-    QObject::disconnect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
-    QObject::disconnect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceCore::slDeviceListUpdated);
+    QObject::disconnect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated);
+    QObject::disconnect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated);
 
     m_bleInterface->stopScan();
 }
 
-void InterfaceCore::setModuleName(QString name)
+void InterfaceManager::setModuleName(QString name)
 {
     if(m_bleInterface)
         m_bleInterface->setModuleName(name);
 }
 
-void InterfaceCore::rssiMeasuring(bool isEnabled)
+void InterfaceManager::rssiMeasuring(bool isEnabled)
 {
     if(m_bleInterface)
         m_bleInterface->rssiMeasuring(isEnabled);
 }
 
-void InterfaceCore::slNewDataArrived(QByteArray data)
-{
-    qInfo() << "->" << __FUNCTION__ << ":" << data;
-}
-
-void InterfaceCore::slInterfaceError(QString errorDescription)
+void InterfaceManager::slInterfaceError(QString errorDescription)
 {
     emit sgErrorDisconnect();
     emit sgInterfaceError(errorDescription);
 }
 
-void InterfaceCore::slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason)
+void InterfaceManager::slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason)
 {
 #ifndef Q_OS_ANDROID
     AbstractInterface* interface_ptr = dynamic_cast<AbstractInterface*>(QObject::sender());
@@ -191,7 +191,7 @@ void InterfaceCore::slInterfaceUnavaliable(DeviceConnectionType senderType, QStr
     emit sgInterfaceUnavaliable(senderType, reason);
 }
 
-void InterfaceCore::slDeviceListUpdated(DeviceConnectionType connectionType, QList<DeviceDescription> list)
+void InterfaceManager::slDeviceListUpdated(DeviceConnectionType connectionType, QList<DeviceDescription> list)
 {
     emit sgDeviceListUpdated(connectionType, list);
 
@@ -212,4 +212,9 @@ void InterfaceCore::slDeviceListUpdated(DeviceConnectionType connectionType, QLi
             }
         }
     }
+}
+
+void InterfaceManager::setLogEnadled(bool logEnabled)
+{
+    m_logCommand = logEnabled;
 }

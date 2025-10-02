@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import Qt5Compat.GraphicalEffects
 
@@ -35,28 +36,62 @@ Item
             height: parent.height
             width:  row.widthWithoutSpase/15*2
             color: Style.currentTheme.mainEnabledColor
-            Column
+            GridLayout
             {
                 anchors.fill: parent
+                columns: 2
+                rows: 2
+
                 MButton
                 {
-                    width:  parent.width
-                    height: parent.height/2
+                    Layout.columnSpan: 2
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
                     text: "SAVE"
 
                     enabled: UiCore.currentDevice.deviceParamsModified
-                    // enabled: UiCore.currentDevice.deviceParamsModified & (UiCore.currentDevice.presetManager.currentState !== PresetState.Compare)
+
                     onClicked: UiCore.currentDevice.saveChanges();
                 }
 
                 MButton
                 {
                     id: bCopy
-                    width:  parent.width
-                    height: parent.height/2
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
                     text: "COPY"
 
                     onClicked: _copyWindow.show();
+                }
+
+                MButton
+                {
+                    id: bErase
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    text: "ERASE"
+
+                    onClicked: eraseDialog.show();
+
+                    NativeMessageDialog
+                    {
+                        id: eraseDialog
+
+                        title: qsTr("Erase preset")
+                        text: qsTr("Do you want to erase preset?")
+
+                        buttons: DialogButtonBox.Yes | DialogButtonBox.No
+
+                        modality: Qt.ApplicationModal
+                        onAccepted: {
+                            UiCore.currentDevice.erasePreset()
+                        }
+                    }
                 }
             }
         }

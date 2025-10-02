@@ -7,6 +7,7 @@ Dialog {
 
     standardButtons: Dialog.Ok | Dialog.Cancel
 
+    property alias label: _textLabel.text
     property alias text: _textInput.text
 
     header: Item{
@@ -18,6 +19,8 @@ Dialog {
             anchors.centerIn: parent
 
             Text{
+                id: _textLabel
+
                 text: qsTr("Enter folder name")
 
                 horizontalAlignment: Text.AlignHCenter

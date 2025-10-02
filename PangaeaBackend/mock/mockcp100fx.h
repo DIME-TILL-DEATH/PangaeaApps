@@ -24,18 +24,13 @@ public:
     preset_data_fx_t defaultPresetData;
 
     TSystemSettingsFx currentSystemData;
-    // controller_fx_t controller[controllersCount];
 
-    QString ir1Name;
-    QString ir2Name;
-    QByteArray ir1Data;
-    QByteArray ir2Data;
 private:
     QDir m_currentDir;
 
     QString m_lastPath;
 
-    quint32 delayTime;
+    QFile uploadingIrFile;
 
     QMap<QString, quint8*> paramsByteMap;
     QMap<QString, quint16*> paramsWordMap;
@@ -47,8 +42,10 @@ private:
     void initFolders();
     bool loadSysParameters();
     bool saveSysParameters();
-    void loadPresetData(quint8 presetNumber);
-    void savePresetData(quint8 prPreset);
+    void loadPresetData(quint8 presetNumber, preset_data_fx_t &presetData);
+    void savePresetData(quint8 prPreset, const preset_data_fx_t &presetData);
+
+    void setDefaultPresetData(quint8 presetNumber);
 
     void setParamsHandler(QString commStr, quint8 *commPtr);
     void setParamsHandler(QString commStr, quint16 *commPtr);
@@ -76,10 +73,16 @@ private:
     void mkdirCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void renameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void removeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void copyToCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void erasePresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    void cntrlCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlsPcCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void cntrlsSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+
+    void sysExpr(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void sysTuner(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void psaveCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pchangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
@@ -88,7 +91,10 @@ private:
     void pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pcommentCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    void meqMf(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
+    void midiMap(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void fsw(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     static constexpr quint8 stringDataSize = 15;
 };
