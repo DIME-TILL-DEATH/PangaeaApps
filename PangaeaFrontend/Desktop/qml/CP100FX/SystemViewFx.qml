@@ -70,7 +70,7 @@ Rectangle{
                     text: "Cab. num: "
 
                     currentIndex: UiCore.currentDevice.systemSettings.cabNumber
-                    model: ["1 L+R", "1R AP", "2 L+R", "1R A", "1R P", "1 R"]
+                    model: ["1 L+R", "1R Amp, Pres.", "2 L+R", "1R Amp", "1R Pres.", "1R Dry"]
 
                     onActivated: (index) => {
 
