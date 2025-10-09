@@ -143,7 +143,7 @@ Item
                         verticalAlignment:   TextInput.AlignVCenter
 
                         validator: RegularExpressionValidator{
-                            regularExpression: /[\x20-\x7E]{0,14}/
+                            regularExpression: /[\x20-\x7A]{0,14}/
                         }
 
                         color: Style.currentTheme.textMain
@@ -203,7 +203,7 @@ Item
                         verticalAlignment:   TextInput.AlignVCenter
 
                         validator: RegularExpressionValidator{
-                            regularExpression: /[\x20-\x7E]{0,14}/
+                            regularExpression: /[\x20-\x7A]{0,14}/
                         }
 
                         color: Style.currentTheme.textMain
