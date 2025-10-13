@@ -20,7 +20,7 @@ Window{
     height: width * 0.75
 
     minimumWidth: Screen.width * 0.3 * 1
-    minimumHeight: Screen.width * 0.3 * 0.5 * 0.75
+    minimumHeight: Screen.width * 0.3 * 0.5 * 1.25
     maximumWidth: Screen.width * 0.3 * 1
     maximumHeight: Screen.width * 0.3 * 0.5 * 2
 
@@ -304,7 +304,7 @@ Window{
         anchors.centerIn: Overlay.overlay
 
         width: _root.width/2
-        height: _root.height/2
+        height: _root.height/1.5
 
 
         onAccepted: {
@@ -321,7 +321,7 @@ Window{
         anchors.centerIn: Overlay.overlay
 
         width: _root.width/2
-        height: _root.height/2
+        height: _root.height/1.5
 
         property string srcPath
         property string dstPath
@@ -347,7 +347,7 @@ Window{
 
         onAccepted:
         {
-            UiCore.currentDevice.escImpulse();
+            UiCore.currentDevice.restoreIr(currentCabNum)
             UiCore.uploadIr(selectedFiles);
         }
 

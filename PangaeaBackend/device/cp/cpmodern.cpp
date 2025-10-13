@@ -364,7 +364,7 @@ void CPModern::previewIr(QUrl filePath)
 {
     QString srcFilePath =  filePath.path();
 #ifdef Q_OS_WINDOWS
-    filePath.remove(0, 1); // remove first absolute '/' symbol
+    srcFilePath.remove(0, 1); // remove first absolute '/' symbol
 #endif
 
     stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
