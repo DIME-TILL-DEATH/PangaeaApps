@@ -872,7 +872,7 @@ void Cp100fx::sysSettingsCommHandler(const QString &command, const QByteArray &a
     m_fswConfirm.setData(sysSettings);
     m_fswUp.setData(sysSettings);
 
-    m_attenuatorVolume.setValue(sysSettings.attenuator);
+    m_attenuatorVolume.setValue(sysSettings.attenuator, sysSettings.attenuatorMode);
     m_masterVolume.setValue(sysSettings.masterVolume);
     m_phonesVolume.setValue(sysSettings.phonesVolume);
 
@@ -936,8 +936,10 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         m_deviceParamsModified = false;
         emit deviceParamsModifiedChanged();
 
+        m_presetAttenuator.setValue(presetData.attenuator);
         m_presetVolume.setValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
+        emit deviceUpdatingValues(); // for correct update Att. ComboBoxes
 
         actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
         *savedPresetFx = *actualPresetFx;
@@ -983,8 +985,10 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     default:
     {
+        m_presetAttenuator.setValue(presetData.attenuator);
         m_presetVolume.setValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
+        emit deviceUpdatingValues();
         actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
 
         setModulePositions();

@@ -216,7 +216,9 @@ typedef struct
     uint8_t delay_tail;
     uint8_t reverb_tail;
 
-    uint8_t dummy2[350];
+    uint8_t dummy2[349];
+
+    uint8_t attenuator;
 
     uint8_t bpm_delay;
 }modules_data_fx_t;

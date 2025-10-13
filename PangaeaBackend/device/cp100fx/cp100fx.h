@@ -40,6 +40,7 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(Volume* phonesVolume READ phonesVolume CONSTANT)
     Q_PROPERTY(Volume* presetVolume READ presetVolume CONSTANT)
     Q_PROPERTY(Volume* attenuatorVolume READ attenuatorVolume CONSTANT)
+    Q_PROPERTY(Volume* presetAttenuator READ presetAttenuator CONSTANT)
 
     Q_PROPERTY(MasterEq* masterEq READ masterEq CONSTANT)
     Q_PROPERTY(Tuner* tuner READ tuner CONSTANT)
@@ -111,11 +112,13 @@ public:
     Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
     Volume m_presetVolume{this, Volume::VolumeType::PresetFx}; //, &actualPresetFx->presetData.preset_volume};
     Volume m_attenuatorVolume{this, Volume::VolumeType::AttenuatorFx};
+    Volume m_presetAttenuator{this, Volume::VolumeType::AttenuatorFx};
 
     Volume* masterVolume() {return &m_masterVolume;};
     Volume* phonesVolume() {return &m_phonesVolume;};
     Volume* presetVolume() {return &m_presetVolume;};
     Volume* attenuatorVolume() {return &m_attenuatorVolume;};
+    Volume* presetAttenuator() {return &m_presetAttenuator;};
 
     MasterEq* masterEq() {return &m_masterEq;};
 
