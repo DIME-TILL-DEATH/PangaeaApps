@@ -75,6 +75,10 @@ void UiCore::setupApplication()
 
     bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable", false).toBool();
     emit sgSetUIParameter("check_updates_enable", isCheckUpdatesEnabled);
+    if(isCheckUpdatesEnabled)
+    {
+        emit sgCheckAppUpdates();
+    }
 
     bool firstRun = !appSettings->value("first_run", true).toBool();
     emit sgSetUIParameter("first_run", firstRun);

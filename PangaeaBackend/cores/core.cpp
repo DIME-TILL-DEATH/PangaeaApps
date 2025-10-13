@@ -119,6 +119,7 @@ void Core::slDeviceInstanciated()
     connect(currentDevice, &AbstractDevice::sgSendWithoutConfirmation, this, &Core::sendWithoutConfirmation, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgProcessCommands, this, &Core::processCommands, Qt::QueuedConnection);
     connect(currentDevice, &AbstractDevice::sgDisconnect, this, &Core::disconnectFromDevice, Qt::QueuedConnection);
+    connect(currentDevice, &AbstractDevice::sgRequestNewestFirmware, this, &Core::sgRequestNewestFirmware, Qt::QueuedConnection);
 
     if(m_currentConnectionType == DeviceConnectionType::Offline)
     {

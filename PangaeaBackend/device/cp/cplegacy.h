@@ -102,8 +102,6 @@ private:
     bool m_isPreEq{false};
     bool m_isPaFw{false};
 
-    QSettings* appSettings;
-
     void setDeviceType(DeviceType newDeviceType);
 
     void pushReadPresetCommands();

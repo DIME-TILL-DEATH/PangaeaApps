@@ -132,7 +132,6 @@ signals:
 
 protected:
     IRWorker irWorker;
-    QSettings* appSettings;
 
     QList<PresetAbstract*> m_presetsList;
     PresetModern* actualPresetModern;

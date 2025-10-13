@@ -86,6 +86,8 @@ signals:
     void sgTranslatorChanged(QString langauageCode);
     void currentDeviceChanged();
 
+    void sgCheckAppUpdates();
+
 public slots:
     void slFirmwareFilePicked(QString filePath, QString fileName);
 

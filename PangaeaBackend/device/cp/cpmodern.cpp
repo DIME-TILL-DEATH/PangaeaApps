@@ -38,13 +38,6 @@ CPModern::CPModern(Core *parent)
     m_parser.addCommandHandler("copy", std::bind(&CPModern::copyCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("clip", std::bind(&CPModern::clipCommHandler, this, _1, _2, _3));
 
-#ifdef Q_OS_ANDROID
-    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.conf", QSettings::NativeFormat);
-#else
-    appSettings = new QSettings();
-#endif
-
     actualPreset = new PresetModern{this};
     actualPresetModern = dynamic_cast<PresetModern*>(actualPreset);
 
@@ -662,7 +655,7 @@ void CPModern::amtVerCommHandler(const QString &command, const QByteArray &argum
 
         if(isCheckUpdatesEnabled)
         {
-            // emit sgRequestNewestFirmware(deviceFirmware);
+            emit sgRequestNewestFirmware(m_actualFirmware);
         }
     }
     else

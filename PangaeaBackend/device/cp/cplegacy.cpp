@@ -32,12 +32,6 @@ CPLegacy::CPLegacy(Core *parent)
     m_parser.addCommandHandler("FR_OK", std::bind(&CPLegacy::fwuFinishedCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("fsf", std::bind(&CPLegacy::formatFinishedCommHandler, this, _1, _2, _3));
 
-#ifdef Q_OS_ANDROID
-    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.conf", QSettings::NativeFormat);
-#else
-    appSettings = new QSettings();
-#endif
     // cure forn non-\n commands
     m_parser.addCureParser("gm", new MaskedParser("gm x\r", "111X1"));
 
@@ -671,7 +665,7 @@ void CPLegacy::amtVerCommHandler(const QString &command, const QByteArray &argum
 
         if(isCheckUpdatesEnabled)
         {
-            // emit sgRequestNewestFirmware(deviceFirmware);
+            emit sgRequestNewestFirmware(m_actualFirmware);
         }
     }
     else

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QtQmlIntegration/qqmlintegration.h>
+#include <QSettings>
 
 #include "abstractmodule.h"
 #include "devicetypeenum.h"
@@ -130,6 +131,8 @@ signals:
 
     void avaliableOutputModesChanged();
 
+    void sgRequestNewestFirmware(Firmware* actualFirmware);
+
     void sgDeviceError(DeviceErrorType errorType, QString description = "", QVariantList params = {});
     void sgDeviceMessage(DeviceMessageType msgType, QString description = "", QVariantList params = {});
 
@@ -166,6 +169,8 @@ signals:
 
 protected:
     Parser m_parser;
+
+    QSettings* appSettings;
 
     DeviceType m_deviceType{DeviceType::UNKNOWN_DEVICE};
 
