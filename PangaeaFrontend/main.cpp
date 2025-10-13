@@ -120,6 +120,7 @@ int main(int argc, char *argv[])
     QObject::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
     QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
     QObject::connect(&uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
+    QObject::connect(&uiCore, &UiCore::sgCheckAppUpdates, netCore, &NetCore::requestAppUpdates);
     QObject::connect(netCore, &NetCore::sgDownloadProgress, &uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);
 
     Core::connect(interfaceManager, &InterfaceManager::sgNewData, core, &Core::parseInputData, Qt::QueuedConnection);

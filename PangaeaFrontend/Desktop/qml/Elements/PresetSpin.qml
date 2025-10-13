@@ -144,7 +144,7 @@ Item
                 anchors.fill:  parent
                 color:  Style.currentTheme.textCombo
                 horizontalAlignment: Text.AlignHCenter
-                font.pixelSize: Math.min(parent.height, parent.width*0.75)
+                font.pixelSize: Math.min(parent.height * 0.9, parent.width*0.7)
 
                 width: parent.width
                 elide: Text.ElideMiddle

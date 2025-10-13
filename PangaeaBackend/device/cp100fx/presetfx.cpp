@@ -70,6 +70,12 @@ QByteArray PresetFx::presetDataToChars(const modules_data_fx_t &presetData)
      // m_activeModules.clear();
     memset(&presetData, 0, 14);
 
+     if(ba.size() < 14)
+     {
+        qWarning() << __FUNCTION__ << "Switches size to small";
+        return;
+     }
+
      if(ba.at(13) ==  QString("1").toUtf8().front()) presetData.switches.resonance_filter = 1;
      if(ba.at(11) ==  QString("1").toUtf8().front()) presetData.switches.gate = 1;
      if(ba.at(12) ==  QString("1").toUtf8().front()) presetData.switches.compressor = 1;
@@ -84,21 +90,6 @@ QByteArray PresetFx::presetDataToChars(const modules_data_fx_t &presetData)
      if(ba.at(7) ==  QString("1").toUtf8().front()) presetData.switches.early_reflections = 1;
      if(ba.at(8) ==  QString("1").toUtf8().front()) presetData.switches.reverb = 1;
      if(ba.at(9) ==  QString("1").toUtf8().front()) presetData.switches.tremolo = 1;
-
-    // if(ba.at(13) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::RF);
-    // if(ba.at(11) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::NG);
-    // if(ba.at(12) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::CM);
-    // if(ba.at(10) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::PR);
-    // if(ba.at(0) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::PA);
-    // if(ba.at(1) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::IR);
-    // if(ba.at(2) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::EQ1);
-    // if(ba.at(4) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::PH);
-    // if(ba.at(5) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::FL);
-    // if(ba.at(6) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::CH);
-    // if(ba.at(3) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::DELAY);
-    // if(ba.at(7) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::ER_STEREO);
-    // if(ba.at(8) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::RV);
-    // if(ba.at(9) ==  QString("1").toUtf8().front()) m_activeModules.append(ModuleType::TR);
 }
 
 QStringList PresetFx::strActiveModules() const

@@ -14,6 +14,10 @@ class UiSettings : public QObject
 
     Q_PROPERTY(bool autoConnectEnabled READ autoConnectEnabled NOTIFY sgUiSettingsChanged)
     Q_PROPERTY(bool checkUpdatesEnabled READ checkUpdatesEnabled NOTIFY sgUiSettingsChanged)
+
+    Q_PROPERTY(bool autoConvertWav READ autoConvertWav NOTIFY sgUiSettingsChanged FINAL)
+    Q_PROPERTY(bool autoTrimWav READ autoTrimWav NOTIFY sgUiSettingsChanged FINAL)
+
     Q_PROPERTY(bool isModulesRightAligned READ isModulesRightAligned NOTIFY sgUiSettingsChanged)
     Q_PROPERTY(bool eqClassicView READ eqClassicView NOTIFY sgUiSettingsChanged FINAL)
 
@@ -51,6 +55,9 @@ public:
 
     ColorTheme colorTheme() const;
     void setColorTheme(ColorTheme newColorTheme);
+
+    bool autoConvertWav() const;
+    bool autoTrimWav() const;
 
 signals:
     void sgUiSettingsChanged();

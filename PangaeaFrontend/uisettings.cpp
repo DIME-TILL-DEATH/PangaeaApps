@@ -138,3 +138,13 @@ void UiSettings::setColorTheme(ColorTheme newColorTheme)
 
     emit colorThemeChanged();
 }
+
+bool UiSettings::autoConvertWav() const
+{
+    return appSettings->value("auto_convert_wav", false).toBool();
+}
+
+bool UiSettings::autoTrimWav() const
+{
+    return appSettings->value("auto_trim_wav", false).toBool();
+}

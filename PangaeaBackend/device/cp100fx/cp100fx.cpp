@@ -27,6 +27,7 @@ Cp100fx::Cp100fx(Core *parent)
     m_parser.addCommandHandler("psave", std::bind(&Cp100fx::ackPresetSavedCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pchange", std::bind(&Cp100fx::ackPresetChangeCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("plist", std::bind(&Cp100fx::plistCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("pbrief", std::bind(&Cp100fx::pbriefCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pnum", std::bind(&Cp100fx::pnumCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pname", std::bind(&Cp100fx::pnameCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("pcomment", std::bind(&Cp100fx::pcommentCommHandler, this, _1, _2, _3));
@@ -205,6 +206,11 @@ void Cp100fx::copyPresetTo(quint8 presetNumber, QVariantList selectionMask)
     }
     command.append("\n");
     emit sgPushCommandToQueue(command, false);
+
+    command.clear();
+    command.append("pbrief ");
+    command.append(QByteArray::number(presetNumber, 16));
+    emit sgPushCommandToQueue(command);
     emit sgProcessCommands();
 }
 
@@ -220,9 +226,12 @@ void Cp100fx::exportPreset(QString filePath, QString fileName)
 
 void Cp100fx::erasePreset()
 {
+
     emit sgPushCommandToQueue("erase_preset");
     emit sgProcessCommands();
 
+    m_presetManager.returnToPreviousState(); // for correct hardware changing
+    m_presetManager.setCurrentState(PresetState::Changing); // preset changed
     pushReadPresetCommands();
     emit sgProcessCommands();
 }
@@ -249,11 +258,17 @@ void Cp100fx::previewIr(QUrl srcFilePath, quint8 cabNum)
 
     QByteArray fileData;
 
-    if((wavHead.sampleRate == 48000) && (wavHead.bitsPerSample == 24) && (wavHead.numChannels == 1))
+    QString chunkId = QString::fromUtf8((const char*)wavHead.chunkId, 4);
+    if(chunkId != "RIFF") return;
+
+    if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
     {
-        irWorker.decodeWav(filePath);
-        fileData = irWorker.formFileData();
+        filePath = irWorker.convertWav(filePath);
     }
+
+    irWorker.decodeWav(filePath);
+    fileData = irWorker.formFileData();
+
     m_previewIrData = fileData.mid(sizeof(stWavHeader), 4096 * 3);
 
     QByteArray command = QByteArray("ir ") + QByteArray::number(cabNum) + " preview_start\r\n";
@@ -737,6 +752,15 @@ void Cp100fx::amtVerCommHandler(const QString &command, const QByteArray &argume
     m_firmwareName += "CP100FX v." + firmwareVersion;
     emit firmwareNameChanged();
 
+    m_actualFirmware = new Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
+
+    bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
+
+    if(isCheckUpdatesEnabled)
+    {
+        emit sgRequestNewestFirmware(m_actualFirmware);
+    }
+
     qInfo() << __FUNCTION__ << firmwareVersion;
 }
 
@@ -747,7 +771,6 @@ void Cp100fx::plistCommHandler(const QString &command, const QByteArray &argumen
     QStringList separatedList = fullList.split("\r");
 
     m_presetsList.clear();
-
 
     QStringList::const_iterator it = separatedList.constBegin();
     while (it != separatedList.constEnd())
@@ -786,6 +809,26 @@ void Cp100fx::plistCommHandler(const QString &command, const QByteArray &argumen
     }
 
     m_presetListModel.refreshModel(&m_presetsList);
+}
+
+void Cp100fx::pbriefCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QList<QByteArray> separatedArgs = data.split('|');
+
+    if(separatedArgs.size()<6)
+    {
+        qWarning() << "incorrect record format: " << data;
+        return;
+    }
+
+    copiedPresetFx->setBankPreset(0, separatedArgs.at(0).toInt());
+    copiedPresetFx->setPresetName(separatedArgs.at(1));
+    copiedPresetFx->setPresetComment(separatedArgs.at(2));
+    copiedPresetFx->setIr1Name(separatedArgs.at(3));
+    copiedPresetFx->setIr2Name(separatedArgs.at(4));
+    copiedPresetFx->setActiveModules(separatedArgs.at(5));
+
+    m_presetListModel.updatePreset(copiedPresetFx);
 }
 
 void Cp100fx::pnumCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -867,7 +910,7 @@ void Cp100fx::sysSettingsCommHandler(const QString &command, const QByteArray &a
     m_fswConfirm.setData(sysSettings);
     m_fswUp.setData(sysSettings);
 
-    m_attenuatorVolume.setValue(sysSettings.attenuator);
+    m_attenuatorVolume.setValue(sysSettings.attenuator, sysSettings.attenuatorMode);
     m_masterVolume.setValue(sysSettings.masterVolume);
     m_phonesVolume.setValue(sysSettings.phonesVolume);
 
@@ -915,15 +958,6 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     switch(m_presetManager.currentState())
     {
-    case PresetState::Copying:
-    {
-        *copiedPreset = *actualPreset;
-        copiedPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
-        // copiedPreset.irFile.setIrLinkPath("ir_library"); // Скопированные пресеты могут ссылаться только на библиотеку
-        m_presetManager.returnToPreviousState();
-        emit presetCopied();
-        break;
-    }
 
     case PresetState::Changing:
     {
@@ -931,8 +965,10 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         m_deviceParamsModified = false;
         emit deviceParamsModifiedChanged();
 
+        m_presetAttenuator.setValue(presetData.attenuator);
         m_presetVolume.setValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
+        emit deviceUpdatingValues(); // for correct update Att. ComboBoxes
 
         actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
         *savedPresetFx = *actualPresetFx;
@@ -978,8 +1014,10 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     default:
     {
+        m_presetAttenuator.setValue(presetData.attenuator);
         m_presetVolume.setValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
+        emit deviceUpdatingValues();
         actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
 
         setModulePositions();

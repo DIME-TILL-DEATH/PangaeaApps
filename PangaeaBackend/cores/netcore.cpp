@@ -48,6 +48,9 @@ void NetCore::requestNewestFirmware(Firmware *actualFirmware)
         case DeviceType::LEGACY_CP16PA: m_deviceTypeString = "CP16PA"; break;
         case DeviceType::LEGACY_CP100: m_deviceTypeString = "CP100"; break;
         case DeviceType::LEGACY_CP100PA: m_deviceTypeString = "CP100PA"; break;
+        case DeviceType::MODERN_CP: m_deviceTypeString = "CP16MODERN"; break;
+        case DeviceType::LA3: m_deviceTypeString = "LA3"; break;
+        case DeviceType::CP100FX: m_deviceTypeString = "CP100FX"; break;
         default: qDebug() << __FUNCTION__ << "Unknown device"; break;
     }
 
@@ -67,14 +70,19 @@ void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
     qDebug() << "Server answer for firmware json request recieved";
     if(!reply->error())
     {
-        parseFirmwareJsonAnswer(reply);
-
-        qDebug() << "actual: " << deviceFirmware->firmwareVersion() << " avaliable: " << newestFirmware->firmwareVersion();
-
-        if(*newestFirmware > *deviceFirmware)
+        if(parseFirmwareJsonAnswer(reply))
         {
-            qDebug() << "New firmware avaliable on server";
-            emit sgNewFirmwareAvaliable(newestFirmware, deviceFirmware);
+            qDebug() << "actual: " << deviceFirmware->firmwareVersion() << " avaliable: " << newestFirmware->firmwareVersion();
+
+            if(*newestFirmware > *deviceFirmware)
+            {
+                qDebug() << "New firmware avaliable on server";
+                emit sgNewFirmwareAvaliable(newestFirmware, deviceFirmware);
+            }
+        }
+        else
+        {
+            qInfo() << "Firmwares for device does not present on the server";
         }
     }
     else

@@ -8,6 +8,7 @@ import QtCore
 
 import StyleSettings 1.0
 
+import Layouts
 import Elements 1.0
 
 import CppObjects
@@ -218,15 +219,12 @@ Window{
         title: qsTr("Select IR")
         nameFilters: [ "Wav files (*.wav)" ]
 
+        fileMode: FileDialog.OpenFiles
+
         onAccepted:
         {
-            // TODO: переделать cleanPath на QUrl
-            var cleanPath = irFileDialog.currentFile.toString();
-            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
             UiCore.currentDevice.escImpulse();
-            UiCore.uploadIr(cleanPath, _irManagerWindow.dstIrPath);
-
+            UiCore.uploadIr(selectedFiles);
         }
 
         onRejected:
@@ -237,10 +235,6 @@ Window{
 
         onSelectedFileChanged:
         {
-            // TODO: переделать cleanPath на QUrl
-            var cleanPath = irFileDialog.currentFile.toString();
-            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
             if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
                 UiCore.currentDevice.previewIr(cleanPath);
             }
@@ -252,48 +246,43 @@ Window{
             property alias curFolder: irFileDialog.currentFolder
         }
     }
-
-    MessageDialog{
+    DialogCheckBox{
         id: msgIncorretIR
 
-        title: qsTr("Incorrect wav format")
+        chkBoxText: qsTr("Always convert WAV")
 
-        buttons: MessageDialog.Yes | MessageDialog.No
+        anchors.centerIn: Overlay.overlay
 
-        onButtonClicked: function (button, role) {
-            switch(button){
-            case MessageDialog.Yes:
-                // TODO: переделать cleanPath на QUrl
-                var cleanPath = irFileDialog.currentFile.toString();
-                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-                UiCore.convertAndUploadIr(cleanPath, _root.dstIrPath);
-                break;
-            }
+        width: _root.width * 0.9
+        height: _root.height/1.5
+
+
+        onAccepted: {
+            UiCore.convertAndUploadIr();
+            UiSettings.saveSetting("auto_convert_wav", msgIncorretIR.checked)
         }
     }
 
-    MessageDialog{
+    DialogCheckBox{
         id: _msgTrimFileDialog
 
-        title: qsTr("Trim IR file")
+        chkBoxText: qsTr("Always trim WAV")
 
-        buttons: MessageDialog.Yes | MessageDialog.No
+        anchors.centerIn: Overlay.overlay
+
+        width: _root.width * 0.9
+        height: _root.height/1.5
 
         property string srcPath
         property string dstPath
 
-        onButtonClicked: function (button, role) {
-            switch(button){
-            case MessageDialog.Yes: {
-                UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
-                break;
-            }
+        onAccepted: {
+            UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
+            UiSettings.saveSetting("auto_trim_wav", msgIncorretIR.checked)
+        }
 
-            case MessageDialog.No: {
-                UiCore.currentDevice.startIrUpload(srcPath, dstPath, false);
-                break;
-            }
-            }
+        onRejected: {
+            UiCore.currentDevice.startIrUpload(srcPath, dstPath, false);
         }
     }
 

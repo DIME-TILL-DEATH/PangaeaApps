@@ -68,7 +68,7 @@ public:
 
     Q_INVOKABLE void restoreValue(QString name) override;
 
-    Q_INVOKABLE void previewIr(QString srcFilePath) override;
+    Q_INVOKABLE void previewIr(QUrl srcFilePath);
     Q_INVOKABLE void startIrUpload(QString srcFilePath, QString dstFilePath = "", bool trimFile = false) override;
     Q_INVOKABLE void deleteIrFile(const IrFile& irFile);
     Q_INVOKABLE void escImpulse();
@@ -132,7 +132,6 @@ signals:
 
 protected:
     IRWorker irWorker;
-    QSettings* appSettings;
 
     QList<PresetAbstract*> m_presetsList;
     PresetModern* actualPresetModern;

@@ -9,6 +9,13 @@ AbstractDevice::AbstractDevice(Core *owner)
         connect(this, &AbstractDevice::sgEnableTimeoutTimer, owner->timeoutTimer, qOverload<>(&QTimer::start));
         connect(this, &AbstractDevice::sgDisableTimeoutTimer, owner->timeoutTimer, &QTimer::stop);
     }
+
+#ifdef Q_OS_ANDROID
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.conf", QSettings::NativeFormat);
+#else
+    appSettings = new QSettings();
+#endif
 }
 
 AbstractDevice::~AbstractDevice()

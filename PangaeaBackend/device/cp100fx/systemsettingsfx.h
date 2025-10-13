@@ -117,7 +117,12 @@ typedef struct
     quint8 swapSwitch;
     quint8 tunerSpeed;
 
-    quint8 reserved2[59];
+    quint8 tapScreenPopup;
+    quint8 eqSreenMode;
+
+    quint8 attenuatorMode;
+
+    quint8 reserved2[56];
 
     quint8 masterEqOn;
     quint8 masterEqLow;

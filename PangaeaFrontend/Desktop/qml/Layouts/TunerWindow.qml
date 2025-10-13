@@ -4,6 +4,8 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 import QtCore
 
+import Qt5Compat.GraphicalEffects
+
 import StyleSettings
 
 import Elements
@@ -83,10 +85,14 @@ Window{
             }
 
             Rectangle{
+                id: bar
+
                 width: parent.width/75
                 height: parent.height - parent.border.width * 2
 
-                x: parent.border.width + parent.width/2 - width/2  + UiCore.currentDevice.tuner.cents * parent.width/100
+                property bool isBullseye: Math.abs(UiCore.currentDevice.tuner.cents) < 5
+
+                x: parent.border.width + parent.width/2 - width/2  + UiCore.currentDevice.tuner.cents * parent.width/100 * !isBullseye
                 y: parent.border.width
 
                 color: Style.currentTheme.highlightColor
@@ -100,6 +106,19 @@ Window{
                 Behavior on x {
                     NumberAnimation{duration: 100}
                 }
+            }
+
+            RectangularGlow{
+                id: effect
+
+                anchors.fill: bar
+
+                visible: UiCore.currentDevice.tuner.note !== "-" & bar.isBullseye
+
+                glowRadius: 5
+                spread: 0.1
+                color: "green"
+                cornerRadius: bar.radius + glowRadius
             }
         }
 
@@ -139,6 +158,24 @@ Window{
 
                 onClicked: {
                     UiCore.currentDevice.tuner.increaseRefFreq()
+                }
+            }
+
+            Item{
+                width: parent.width/3
+                height: parent.height/2
+            }
+
+            MBar{
+                width: parent.width/3
+                height: parent.height/2
+
+                text: "Tuner speed: "
+
+                value: UiCore.currentDevice.systemSettings.tunerSpeed
+
+                onUserChangedValue: calcValue => {
+                    UiCore.currentDevice.systemSettings.tunerSpeed = calcValue
                 }
             }
         }
