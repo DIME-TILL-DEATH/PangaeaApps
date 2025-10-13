@@ -367,20 +367,27 @@ void CPModern::restoreValue(QString name)
     }
 }
 
-void CPModern::previewIr(QString srcFilePath)
+void CPModern::previewIr(QUrl filePath)
 {
+    QString srcFilePath =  filePath.path();
+#ifdef Q_OS_WINDOWS
+    filePath.remove(0, 1); // remove first absolute '/' symbol
+#endif
+
     stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
+
+    QString chunkId = QString::fromUtf8((const char*)wavHead.chunkId, 4);
+    if(chunkId != "RIFF")
+        return;
 
     QByteArray impulseData;
     if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
     {
-        return;
+        srcFilePath = irWorker.convertWav(srcFilePath);
     }
-    else
-    {
-        irWorker.decodeWav(srcFilePath);
-        impulseData = irWorker.formFileData();
-    }
+
+    irWorker.decodeWav(srcFilePath);
+    impulseData = irWorker.formFileData();
 
     if(impulseData.isEmpty())
         return;

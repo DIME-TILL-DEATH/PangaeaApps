@@ -5,12 +5,13 @@ qt_add_qml_module(qml_layouts
     VERSION 1.0
     # NO_PLUGIN
     QML_FILES
-    FileBrowserWindow.qml
+        FileBrowserWindow.qml
         BCutControl.qml
         BPeakingControl.qml
         BPeakingShelfControl.qml
         ConnectionLayout.qml
         CopyPaste.qml
+        DialogCheckBox.qml
         DialogTextInput.qml
         EqWindow.qml
         Main.qml

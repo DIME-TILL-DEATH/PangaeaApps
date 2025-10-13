@@ -129,6 +129,8 @@ target_include_directories(PangaeaBackend PUBLIC
     models
     uihelpers
     utils
+
+    ../WavConverterLib/
 )
 
 

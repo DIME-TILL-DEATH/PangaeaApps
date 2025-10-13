@@ -249,11 +249,17 @@ void Cp100fx::previewIr(QUrl srcFilePath, quint8 cabNum)
 
     QByteArray fileData;
 
-    if((wavHead.sampleRate == 48000) && (wavHead.bitsPerSample == 24) && (wavHead.numChannels == 1))
+    QString chunkId = QString::fromUtf8((const char*)wavHead.chunkId, 4);
+    if(chunkId != "RIFF") return;
+
+    if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
     {
-        irWorker.decodeWav(filePath);
-        fileData = irWorker.formFileData();
+        filePath = irWorker.convertWav(filePath);
     }
+
+    irWorker.decodeWav(filePath);
+    fileData = irWorker.formFileData();
+
     m_previewIrData = fileData.mid(sizeof(stWavHeader), 4096 * 3);
 
     QByteArray command = QByteArray("ir ") + QByteArray::number(cabNum) + " preview_start\r\n";
@@ -747,7 +753,6 @@ void Cp100fx::plistCommHandler(const QString &command, const QByteArray &argumen
     QStringList separatedList = fullList.split("\r");
 
     m_presetsList.clear();
-
 
     QStringList::const_iterator it = separatedList.constBegin();
     while (it != separatedList.constEnd())

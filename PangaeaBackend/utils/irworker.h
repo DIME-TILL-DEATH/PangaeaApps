@@ -29,6 +29,8 @@ public:
 
     static stWavHeader getFormatWav(QString filePath);
 
+    static QString convertWav(const QString& srcPath);
+
     static QByteArray decode(QByteArray *data, quint8 lenSample, quint8 chanalCount);
     static QByteArray decodeSample(QByteArray data, quint8 lenSample);
     void decodeWav(QString filePath);

@@ -61,6 +61,9 @@ Window{
 
         anchors.centerIn: Overlay.overlay
 
+        width: _root.width/2
+        height: _root.height/3
+
         property string oldName
 
         modal: true
@@ -68,9 +71,6 @@ Window{
             color: "gray"
             opacity: 0.5
         }
-
-        width: parent.width/2
-        height: parent.height/3
 
         onAccepted: {
             UiCore.currentDevice.renameFsObject(oldName, text)
@@ -290,52 +290,49 @@ Window{
     }
 
     MessageDialog{
-        id: msgIncorretIR
-
-        title: qsTr("Incorrect wav format")
-
-        buttons: MessageDialog.Yes | MessageDialog.No
-
-        onButtonClicked: function (button, role) {
-            switch(button){
-            case MessageDialog.Yes:
-                // TODO: переделать cleanPath на QUrl
-                var cleanPath = _irFileDialog.currentFile.toString();
-                cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-                UiCore.convertAndUploadIr(cleanPath);
-                break;
-            }
-        }
-    }
-
-    MessageDialog{
         id: msgError
 
         title: qsTr("Error")
     }
 
-    MessageDialog{
+
+    DialogCheckBox{
+        id: msgIncorretIR
+
+        chkBoxText: qsTr("Always convert WAV")
+
+        anchors.centerIn: Overlay.overlay
+
+        width: _root.width/2
+        height: _root.height/2
+
+
+        onAccepted: {
+            UiCore.convertAndUploadIr();
+            UiSettings.saveSetting("auto_convert_wav", msgIncorretIR.checked)
+        }
+    }
+
+    DialogCheckBox{
         id: _msgTrimFileDialog
 
-        title: qsTr("Trim IR file")
+        chkBoxText: qsTr("Always trim WAV")
 
-        buttons: MessageDialog.Yes | MessageDialog.No
+        anchors.centerIn: Overlay.overlay
+
+        width: _root.width/2
+        height: _root.height/2
 
         property string srcPath
         property string dstPath
 
-        onButtonClicked: function (button, role) {
-            switch(button){
-            case MessageDialog.Yes: {
-                UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
-                break;
-            }
+        onAccepted: {
+            UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
+            UiSettings.saveSetting("auto_trim_wav", msgIncorretIR.checked)
+        }
 
-            case MessageDialog.No: {
-                UiCore.currentDevice.startIrUpload(srcPath, dstPath, false);
-                break;
-            }
-            }
+        onRejected: {
+            UiCore.currentDevice.startIrUpload(srcPath, dstPath, false);
         }
     }
 
@@ -350,7 +347,7 @@ Window{
 
         onAccepted:
         {
-
+            UiCore.currentDevice.escImpulse();
             UiCore.uploadIr(selectedFiles);
         }
 

@@ -185,6 +185,27 @@ MenuBar{
 
             onTriggered: UiSettings.saveSetting("autoconnect_enable", checked);
         }
+
+        MenuItem{
+            id: menuAutoCovert
+
+            text: qsTr("Always convert WAV")
+            checkable: true
+            checked: UiSettings.autoConvertWav
+
+            onTriggered: UiSettings.saveSetting("auto_convert_wav", checked);
+        }
+
+        MenuItem{
+            id: menuAutoTrim
+
+            text: qsTr("Always trim WAV")
+            checkable: true
+            checked: UiSettings.autoTrimWav
+
+            onTriggered: UiSettings.saveSetting("auto_trim_wav", checked);
+        }
+
         MenuItem{
             id: menuCheckUpdates
 

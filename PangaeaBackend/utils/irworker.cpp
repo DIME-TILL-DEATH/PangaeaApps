@@ -1,5 +1,11 @@
 #include <QDebug>
+#include <QFileInfo>
+#include <QDir>
+#include <QStandardPaths>
 
+#include <QSettings>
+
+#include "resampler.h"
 #include "irworker.h"
 
 IRWorker::IRWorker()
@@ -74,6 +80,35 @@ stWavHeader IRWorker::getFormatWav(QString filePath)
         return stWavHeader{0};
     }
 
+}
+
+QString IRWorker::convertWav(const QString &srcPath)
+{
+    QFileInfo irFileInfo(srcPath);
+#ifdef Q_OS_ANDROID
+    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0) +
+                        "/AMT/pangaea_mobile/convertedIR/";
+#else
+    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) +
+                        "/AMT/pangaeaCPPA/convertedIR/";
+#endif
+    QString tmpFilePath = outFolder+"tmp.wav";
+
+    if(!QDir(outFolder).exists())
+    {
+        QDir().mkpath(outFolder);
+    }
+    QString outpuFilePath = outFolder + irFileInfo.fileName();;
+
+    QFile tmpFile;
+    tmpFile.setFileName(srcPath);
+    tmpFile.copy(tmpFilePath);
+
+    Resampler().convertFile(tmpFilePath, outpuFilePath);
+
+    tmpFile.remove(tmpFilePath);
+
+    return outpuFilePath;
 }
 
 QByteArray IRWorker::intToBa(quint32 val)

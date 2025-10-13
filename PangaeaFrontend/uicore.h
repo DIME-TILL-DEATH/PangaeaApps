@@ -24,6 +24,7 @@ class UiCore : public QObject
     Q_PROPERTY(AbstractDevice* currentDevice READ currentDevice NOTIFY currentDeviceChanged FINAL)
 public:
     explicit UiCore(QObject *parent = nullptr);
+    ~UiCore();
 
     Q_INVOKABLE void setupApplication();
 
@@ -33,7 +34,7 @@ public:
     Q_INVOKABLE void uploadIr(QUrl srcFilePath, QUrl dstFilePath = QUrl());
     Q_INVOKABLE void uploadIr(QList<QUrl> fileList, QUrl dstFilePath = QUrl());
 
-    Q_INVOKABLE void convertAndUploadIr(QString srcFilePath, QString dstFilePath = "");
+    Q_INVOKABLE void convertAndUploadIr();
 
     Q_INVOKABLE void exportPreset(QUrl dstPath = QUrl());
     Q_INVOKABLE void importPreset(QString filePath);

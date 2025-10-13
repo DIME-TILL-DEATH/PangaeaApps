@@ -10,7 +10,9 @@
 
 #include <QSettings>
 
-#include "resampler.h"
+// #include "resampler.h"
+
+#include "irworker.h"
 
 #include "uicore.h"
 
@@ -45,6 +47,20 @@ UiCore::UiCore(QObject *parent)
     loadDefaultTranslator();
 }
 
+UiCore::~UiCore()
+{
+#ifdef Q_OS_ANDROID
+    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0) +
+                        "/AMT/pangaea_mobile/convertedIR/";
+#else
+    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) +
+                        "/AMT/pangaeaCPPA/convertedIR/";
+#endif
+
+    QDir tmpDir(outFolder);
+    tmpDir.removeRecursively();
+}
+
 void UiCore::setupApplication()
 {
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();
@@ -73,6 +89,7 @@ void UiCore::disconnectFromDevice()
     emit sgDisconnectFromDevice();
 }
 
+
 void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 {
     m_dstIrPath = dstFilePath;
@@ -88,7 +105,20 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
     QFileInfo fileInfo(m_pickedIrPath);
     QString fileName = fileInfo.fileName();
 
-    if(m_currentDevice->deviceType() > DeviceType::LEGACY_DEVICES)
+    bool autoTrim = appSettings->value("auto_trim_wav", false).toBool();
+    bool autoConvert = appSettings->value("auto_convert_wav", false).toBool();
+
+    if(autoConvert)
+    {
+        stWavHeader wavHead = IRWorker::getFormatWav(srcFilePath);
+
+        if((wavHead.sampleRate != 48000) || (wavHead.bitsPerSample != 24) || (wavHead.numChannels != 1))
+        {
+            m_pickedIrPath = IRWorker::convertWav(m_pickedIrPath);
+        }
+    }
+
+    if((m_currentDevice->deviceType() > DeviceType::LEGACY_DEVICES) && !autoTrim)
     {
         if(fileInfo.size() > m_currentDevice->maxIrSize())
         {
@@ -96,7 +126,8 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
             return;
         }
     }
-    m_currentDevice->startIrUpload(m_pickedIrPath, m_dstIrPath, false);
+
+    m_currentDevice->startIrUpload(m_pickedIrPath, m_dstIrPath, autoTrim);
 }
 
 void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
@@ -117,31 +148,9 @@ void UiCore::uploadIr(QList<QUrl> fileList, QUrl dstFilePath)
     slImpulseUploaded();
 }
 
-void UiCore::convertAndUploadIr(QString srcFilePath, QString dstFilePath)
+void UiCore::convertAndUploadIr()
 {
-    QFileInfo irFileInfo(m_pickedIrPath);
-#ifdef Q_OS_ANDROID
-    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0) +
-                        "/AMT/pangaea_mobile/convertedIR/";
-#else
-    QString outFolder = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) +
-                        "/AMT/pangaeaCPPA/convertedIR/";
-#endif
-    QString tmpFilePath = outFolder+"tmp.wav";
-
-    if(!QDir(outFolder).exists())
-    {
-        QDir().mkpath(outFolder);
-    }
-    QString outpuFilePath = outFolder + irFileInfo.fileName();;
-
-    QFile tmpFile;
-    tmpFile.setFileName(m_pickedIrPath);
-    tmpFile.copy(tmpFilePath);
-
-    Resampler().convertFile(tmpFilePath, outpuFilePath);
-
-    tmpFile.remove(tmpFilePath);
+    QString outpuFilePath = IRWorker::convertWav(m_pickedIrPath);
 
     m_currentDevice->startIrUpload(outpuFilePath, m_dstIrPath);
 }
