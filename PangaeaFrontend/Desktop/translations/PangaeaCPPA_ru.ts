@@ -4,25 +4,25 @@
 <context>
     <name>AbstractDevice</name>
     <message>
-        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="82"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="73"/>
+        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="76"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="66"/>
         <source>Phones</source>
         <translation>Наушники</translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="83"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="74"/>
+        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="77"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="67"/>
         <source>Line</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="84"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="75"/>
+        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="78"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="68"/>
         <source>Balanced</source>
         <translation>Балансный</translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="76"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="69"/>
         <source>L: Processed/R: Monitor</source>
         <translation>Л: Обраб./П: Мон.</translation>
     </message>
@@ -208,12 +208,12 @@
         <translation>Некорректный формат файла</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="214"/>
+        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="211"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат файла</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="216"/>
+        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="213"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Хотите конвертировать файл перед загрузкой?</translation>
     </message>
@@ -282,7 +282,7 @@
 <context>
     <name>EQ</name>
     <message>
-        <location filename="../qml/ModulesFX/EQ.qml" line="146"/>
+        <location filename="../qml/ModulesFX/EQ.qml" line="142"/>
         <source>Controls</source>
         <translation>Управление</translation>
     </message>
@@ -380,37 +380,37 @@
         <translation>Новая папка</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="295"/>
-        <source>Incorrect wav format</source>
-        <translation>Некорректный формат файла</translation>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="302"/>
+        <source>Always convert WAV</source>
+        <translation>Всегда конвертировать WAV</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="314"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="319"/>
+        <source>Always trim WAV</source>
+        <translation>Всегда обрезать WAV</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="295"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="320"/>
-        <source>Trim IR file</source>
-        <translation>Укоротить IR</translation>
-    </message>
-    <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="346"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="343"/>
         <source>Select IR</source>
         <translation>Выберите импульс</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="388"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="385"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат wav</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="390"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="387"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Хотите конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="413"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="410"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation>Длительность выбранного импульса больше чем используется при обработке. Желаете обрезвать файл?</translation>
     </message>
@@ -614,67 +614,67 @@
 <context>
     <name>IrManagerWindow</name>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="28"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="29"/>
         <source>IR management</source>
         <translation>Менеджмент IR</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="54"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="55"/>
         <source>UPLOAD IR</source>
         <translation>ЗАГРУЗИТЬ IR</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="203"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="204"/>
         <source>Library</source>
         <translation>Библиотека</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="208"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="209"/>
         <source>Preset folder</source>
         <translation>Папка пресета</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="218"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="219"/>
         <source>Select IR</source>
         <translation>Выберите импульс</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="259"/>
-        <source>Incorrect wav format</source>
-        <translation>Некорректный формат файла</translation>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="252"/>
+        <source>Always convert WAV</source>
+        <translation>Всегда конвертировать WAV</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="278"/>
-        <source>Trim IR file</source>
-        <translation>Укоротить IR файл?</translation>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="269"/>
+        <source>Always trim WAV</source>
+        <translation>Всегда обрезать WAV</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="304"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="293"/>
         <source>File already on device</source>
         <translation>Файл уже на устройстве</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="316"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="305"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат файла</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="318"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="307"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Хотите конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="325"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="314"/>
         <source>File </source>
         <translation>Файл </translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="325"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="314"/>
         <source> already on device.</source>
         <translation>уже на устройстве.</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="341"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="330"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation>Длительность выбранного импульса больше чем используется при обработке. Желаете обрезвать файл?</translation>
     </message>
@@ -920,103 +920,113 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <translation>Автоподсоединение</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="191"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="192"/>
+        <source>Always convert WAV</source>
+        <translation>Всегда конвертировать WAV</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="202"/>
+        <source>Always trim WAV</source>
+        <translation>Всегда обрезать WAV</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="212"/>
         <source>Check updates</source>
         <translation>Проверка обновлений</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="200"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="221"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="202"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="223"/>
         <source>IR convertor</source>
         <translation>Конвертор импульсов</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="210"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="231"/>
         <source>Update firmware</source>
         <translation>Обновление прошивки</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="218"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="239"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="221"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="242"/>
         <source>AMT web site</source>
         <translation>Веб-сайт AMT</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="227"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="248"/>
         <source>Pangaea web page</source>
         <translation>Веб-страница устройств Pangaea</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="237"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="258"/>
         <source>Device manual</source>
         <translation>Руководство для Pangaea</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="246"/>
-        <location filename="../qml/Layouts/MainMenu.qml" line="348"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="267"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="369"/>
         <source>About...</source>
         <translation>О программе...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="261"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="282"/>
         <source>Import preset file</source>
         <translation>Импорт файла пресета</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="276"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="297"/>
         <source>Export preset file</source>
         <translation>Экспорт файла пресета</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="291"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="312"/>
         <source>Pick firmware file</source>
         <translation>Выберите файл прошивки</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="307"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="328"/>
         <source>Load firmware file</source>
         <translation>Загрузка файла прошивки</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="308"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="329"/>
         <source>Are you sure want to upload firmware file</source>
         <translation>Вы уверены что хотите загрузить следующую прошивку</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="349"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="370"/>
         <source>AMT Pangaea CP-16/CP-100/CP-100FX</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="352"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="373"/>
         <source>(c) 2025</source>
         <translation>© 2025</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="331"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="352"/>
         <source>Disconnect?</source>
         <translation>Отключить?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="332"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="353"/>
         <source>Are you sure want to disconnect?</source>
         <translation>Вы уверены что хотите отключить устройство?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="350"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="371"/>
         <source>Desktop application</source>
         <translation>Стационарное приложение</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="351"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="372"/>
         <source>Version: </source>
         <translation>Версия: </translation>
     </message>
@@ -1209,17 +1219,17 @@ WARNING!!! Updating firmware may take several minutes!</source>
 <context>
     <name>TunerWindow</name>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="19"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="21"/>
         <source>Tuner</source>
         <translation>Тюнер</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="46"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="48"/>
         <source>Note: </source>
         <translation>Нота:</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="124"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="143"/>
         <source>Ref. freq: </source>
         <translation>Оп.частота:</translation>
     </message>
