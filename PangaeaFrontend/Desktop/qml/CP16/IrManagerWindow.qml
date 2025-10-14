@@ -224,7 +224,7 @@ Window{
         onAccepted:
         {
             UiCore.currentDevice.escImpulse();
-            UiCore.uploadIr(selectedFiles);
+            UiCore.uploadIr(selectedFiles, _root.dstIrPath);
         }
 
         onRejected:
@@ -236,7 +236,7 @@ Window{
         onSelectedFileChanged:
         {
             if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
-                UiCore.currentDevice.previewIr(cleanPath);
+                UiCore.currentDevice.previewIr(irFileDialog.currentFile);
             }
         }
 
