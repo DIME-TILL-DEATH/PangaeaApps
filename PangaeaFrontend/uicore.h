@@ -61,7 +61,7 @@ signals:
     void sgQmlRequestChangePreset(quint8 bank, quint8 preset);
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
-    void sgSetUIText(QString nameParam, QString value);
+    void sgSetUIText(QString nameParam, QString value); // в desktop версии больше не испольуется вообще
 
     void sgUiMessage(UiMessageType messageType, QString message = "", QVariantList params = {});
 
@@ -82,6 +82,8 @@ signals:
     void sgModuleNameChanged(QString name);
 
     void sgDoOnlineFirmwareUpdate();
+    void sgNewAppVersionAvaliable(QString appVersion);
+    void sgNewFirmwareAvaliable(QString firmwareVersion);
 
     void sgTranslatorChanged(QString langauageCode);
     void currentDeviceChanged();
@@ -93,7 +95,6 @@ public slots:
 
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
     void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
-    void slNewAppVersionAvaliable(QString appVersion) {}
 
     void slCurrentDeviceChanged(AbstractDevice* newDevice);
 

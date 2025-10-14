@@ -257,8 +257,9 @@ void UiCore::setFirmware(QString fullFilePath)
 
 void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
 {
-    emit sgSetUIText("firmware_local_path", updateFirmware->path());
-    emit sgSetUIText("new_firmware_avaliable", oldFirmware->firmwareVersion() + ',' + updateFirmware->firmwareVersion());
+   // emit sgSetUIText("firmware_local_path", updateFirmware->path()); //path to firmware
+
+    emit sgNewFirmwareAvaliable(updateFirmware->firmwareVersion());
 }
 
 void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware)
