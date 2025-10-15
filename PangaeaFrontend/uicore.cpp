@@ -145,14 +145,17 @@ void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
 #ifdef Q_OS_WINDOWS
     filePath.remove(0, 1); // remove first absolute '/' symbol
 #endif
+    m_dstIrPath = dstFilePath.path();
 
-    qDebug() << filePath;
+    qDebug() << filePath << " to " << m_dstIrPath;
     uploadIr(filePath, dstFilePath.path());
 }
 
 void UiCore::uploadIr(QList<QUrl> fileList, QUrl dstFilePath)
 {
     m_uploadFileList = fileList;
+
+    m_dstIrPath = dstFilePath.path();
 
     slImpulseUploaded();
 }
@@ -235,7 +238,7 @@ void UiCore::slImpulseUploaded()
     if(m_uploadFileList.isEmpty()) return;
 
     QUrl fileUrl = m_uploadFileList.takeFirst();
-    uploadIr(fileUrl);
+    uploadIr(fileUrl, m_dstIrPath);
 }
 
 void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
@@ -261,8 +264,9 @@ void UiCore::setFirmware(QString fullFilePath)
 
 void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
 {
-    emit sgSetUIText("firmware_local_path", updateFirmware->path());
-    emit sgSetUIText("new_firmware_avaliable", oldFirmware->firmwareVersion() + ',' + updateFirmware->firmwareVersion());
+   // emit sgSetUIText("firmware_local_path", updateFirmware->path()); //path to firmware
+
+    emit sgNewFirmwareAvaliable(updateFirmware->firmwareVersion());
 }
 
 void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware)

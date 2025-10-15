@@ -133,9 +133,6 @@ ApplicationWindow
         title: qsTr("Error")
         text: qsTr("Device is disconnected")
 
-        // onAccepted: {
-        //     InterfaceManager.disconnectFromDevice();
-        // }
     }
 
     NativeMessageDialog
@@ -168,30 +165,22 @@ ApplicationWindow
     {
         target: UiCore
 
-        // TODO избавиться от onSgSetUIParameter и onSgSetUIText
-        function onSgSetUIText(nameParam, inString)
+        function onSgNewFirmwareAvaliable(firmwareVersionString)
         {
-            if(nameParam === "new_firmware_avaliable")
-            {
-                versionArray = inString.split(',');
+            _msgVersionInform.title = qsTr("Info")
+            _msgVersionInform.text = qsTr("New firmware version(v.") +
+                    firmwareVersionString +
+                    qsTr(") avaliable on the server")
+            _msgVersionInform.open()
+        }
 
-                _msgVersionInform.title = qsTr("Info")
-                _msgVersionInform.text = ""
-                _msgVersionInform.informativeText = qsTr("New firmware version(v.") +
-                        versionArray[1] +
-                        qsTr(") avaliable on the server")
-                _msgVersionInform.visible = true;
-            }
-
-            if(nameParam === "new_app_version_avaliable")
-            {
-                _msgVersionInform.title = qsTr("Info")
-                _msgVersionInform.text = ""
-                _msgVersionInform.informativeText = qsTr("New application version(v.") +
-                        inString +
-                        qsTr(") avaliable on the server")
-                _msgVersionInform.visible = true;
-            }
+        function onSgNewAppVersionAvaliable(appVersionString)
+        {
+            _msgVersionInform.title = qsTr("Info")
+            _msgVersionInform.text = qsTr("New application version(v.") +
+                    appVersionString +
+                    qsTr(") avaliable on the server")
+            _msgVersionInform.open()
         }
 
         function onSgQmlRequestChangePreset(bank, preset)

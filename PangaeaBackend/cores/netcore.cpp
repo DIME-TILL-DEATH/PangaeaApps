@@ -34,6 +34,22 @@ void NetCore::requestAppUpdates()
     }
 }
 
+void NetCore::slOnApplicationVersionReqResult(QNetworkReply *reply)
+{
+    qInfo() << "Server answer for applications json request recieved";
+    if(!reply->error())
+    {
+        parseApplicationJsonAnswer(reply);
+    }
+    else
+    {
+        QMetaEnum errorString = QMetaEnum::fromType<QNetworkReply::NetworkError>();
+        qInfo() << "Server reply error" << errorString.valueToKey(reply->error());
+    }
+    reply->deleteLater();
+    disconnect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnApplicationVersionReqResult);
+}
+
 void NetCore::requestNewestFirmware(Firmware *actualFirmware)
 {
     if(actualFirmware == nullptr)
@@ -67,16 +83,16 @@ void NetCore::requestNewestFirmware(Firmware *actualFirmware)
 
 void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
 {
-    qDebug() << "Server answer for firmware json request recieved";
+    qInfo() << "Server answer for firmware json request recieved";
     if(!reply->error())
     {
         if(parseFirmwareJsonAnswer(reply))
         {
-            qDebug() << "actual: " << deviceFirmware->firmwareVersion() << " avaliable: " << newestFirmware->firmwareVersion();
+            qInfo() << "actual: " << deviceFirmware->firmwareVersion() << " avaliable: " << newestFirmware->firmwareVersion();
 
             if(*newestFirmware > *deviceFirmware)
             {
-                qDebug() << "New firmware avaliable on server";
+                qInfo() << "New firmware avaliable on server";
                 emit sgNewFirmwareAvaliable(newestFirmware, deviceFirmware);
             }
         }
@@ -88,7 +104,7 @@ void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
     else
     {
         QMetaEnum errorString = QMetaEnum::fromType<QNetworkReply::NetworkError>();
-        qDebug() << "Server reply error" << errorString.valueToKey(reply->error());
+        qWarning() << "Server reply error" << errorString.valueToKey(reply->error());
     }
     reply->deleteLater();
     disconnect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFirmwareVersionReqResult);
@@ -103,29 +119,13 @@ void NetCore::requestFirmwareFile()
 
 void NetCore::slOnFileReqResult(QNetworkReply *reply)
 {
-    qDebug() << "Server answer for firmware file request recieved";
+    qInfo() << "Server answer for firmware file request recieved";
 
     newestFirmware->setRawData(reply->readAll());
     emit sgFirmwareDownloaded(newestFirmware->rawData());
 
     disconnect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFileReqResult);
     disconnect(reply, &QNetworkReply::downloadProgress, this, &NetCore::sgDownloadProgress);
-}
-
-void NetCore::slOnApplicationVersionReqResult(QNetworkReply *reply)
-{
-    qDebug() << "Server answer for applications json request recieved";
-    if(!reply->error())
-    {
-        parseApplicationJsonAnswer(reply);
-    }
-    else
-    {
-        QMetaEnum errorString = QMetaEnum::fromType<QNetworkReply::NetworkError>();
-        qDebug() << "Server reply error" << errorString.valueToKey(reply->error());
-    }
-    reply->deleteLater();
-    disconnect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnApplicationVersionReqResult);
 }
 
 bool NetCore::parseFirmwareJsonAnswer(QNetworkReply* reply)
@@ -172,7 +172,7 @@ bool NetCore::parseApplicationJsonAnswer(QNetworkReply *reply)
     QJsonObject jsonRoot = jsonDocument.object();
 
     QString osName = QSysInfo::productType();
-    qDebug() << "OS name: " << osName;
+    qInfo() << "OS name: " << osName;
 
     if(jsonRoot.contains(osName) && jsonRoot[osName].isObject())
     {
@@ -185,7 +185,7 @@ bool NetCore::parseApplicationJsonAnswer(QNetworkReply *reply)
             QVersionNumber newestVersion = QVersionNumber::fromString(newestApplicationVersionString);
             QVersionNumber currentVersion = QVersionNumber::fromString(QCoreApplication::applicationVersion());
 
-            qDebug() << "App versions, current: " << currentVersion << " newest: " << newestVersion;
+            qInfo() << "App versions, current: " << currentVersion << " newest: " << newestVersion;
 
             if(newestVersion > currentVersion) emit sgNewAppVersionAvaliable(newestApplicationVersionString);
         }

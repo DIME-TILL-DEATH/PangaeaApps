@@ -926,7 +926,6 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
         }
         else
         {
-            emit impulseUploaded();
             switch(m_presetManager.currentState())
             {
             case PresetState::Importing:
@@ -944,6 +943,8 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
             emit sgPushCommandToQueue("ls ir_library\r\n", false);
             QString presetPath = "bank_" + QString().setNum(m_bank) + "/preset_" + QString().setNum(m_preset);
             emit sgPushCommandToQueue("ls " + presetPath.toUtf8() + "\r\n", false);
+
+            emit impulseUploaded();
         }
         emit sgProcessCommands();
     }

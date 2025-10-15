@@ -738,10 +738,10 @@
     <message>
         <location filename="../qml/Layouts/Main.qml" line="120"/>
         <location filename="../qml/Layouts/Main.qml" line="133"/>
-        <location filename="../qml/Layouts/Main.qml" line="262"/>
-        <location filename="../qml/Layouts/Main.qml" line="270"/>
-        <location filename="../qml/Layouts/Main.qml" line="278"/>
-        <location filename="../qml/Layouts/Main.qml" line="299"/>
+        <location filename="../qml/Layouts/Main.qml" line="251"/>
+        <location filename="../qml/Layouts/Main.qml" line="259"/>
+        <location filename="../qml/Layouts/Main.qml" line="267"/>
+        <location filename="../qml/Layouts/Main.qml" line="288"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -752,122 +752,122 @@
         <translation>Устройство отключено</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="151"/>
+        <location filename="../qml/Layouts/Main.qml" line="148"/>
         <source>Operation complete</source>
         <translation>Операция завершена</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="153"/>
+        <location filename="../qml/Layouts/Main.qml" line="150"/>
         <source>Operation complete. Please, reconnect to device</source>
         <translation>Операция завершена. Пожалуйста, переподключите устройство</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="254"/>
+        <location filename="../qml/Layouts/Main.qml" line="243"/>
         <source>Device parse error</source>
         <translation>Ошибка разбора команнды</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="263"/>
+        <location filename="../qml/Layouts/Main.qml" line="252"/>
         <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation>Ошибка при сохранении IR. Пожалуйста, попробуйте загрузить файл ещё раз.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="271"/>
+        <location filename="../qml/Layouts/Main.qml" line="260"/>
         <source>Not a Pangaea preset file!</source>
         <translation>Файл не является файлом пресета.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="286"/>
+        <location filename="../qml/Layouts/Main.qml" line="275"/>
         <source>Warning</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="287"/>
+        <location filename="../qml/Layouts/Main.qml" line="276"/>
         <source>Version error!</source>
         <translation>Ошибка версии!</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="288"/>
+        <location filename="../qml/Layouts/Main.qml" line="277"/>
         <source>Firmware version of your device is </source>
         <translation>Версия прошивки Вашего устройства </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="178"/>
-        <location filename="../qml/Layouts/Main.qml" line="188"/>
+        <location filename="../qml/Layouts/Main.qml" line="170"/>
+        <location filename="../qml/Layouts/Main.qml" line="179"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="180"/>
+        <location filename="../qml/Layouts/Main.qml" line="171"/>
         <source>New firmware version(v.</source>
         <translation>Новая версия прошивки(v.</translation>
     </message>
     <message>
+        <location filename="../qml/Layouts/Main.qml" line="173"/>
         <location filename="../qml/Layouts/Main.qml" line="182"/>
-        <location filename="../qml/Layouts/Main.qml" line="192"/>
         <source>) avaliable on the server</source>
         <translation>) доступна на сервере</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="190"/>
+        <location filename="../qml/Layouts/Main.qml" line="180"/>
         <source>New application version(v.</source>
         <translation>Новая версия приложения(v.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="279"/>
+        <location filename="../qml/Layouts/Main.qml" line="268"/>
         <source>You must save preset before export</source>
         <translation>Необходимо сохранить пресет перед экспортом</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="289"/>
+        <location filename="../qml/Layouts/Main.qml" line="278"/>
         <source>
 Minimum required version is </source>
         <translation>Минимальная версия </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="291"/>
+        <location filename="../qml/Layouts/Main.qml" line="280"/>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
         <translation>Хотите обновить прошивку? ВНИМАНИЕ!!! Обновление прошивки может занять длительное время.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="300"/>
+        <location filename="../qml/Layouts/Main.qml" line="289"/>
         <source>IR file copying error.</source>
         <translation>Ошибка при копировании IR файлаю</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="313"/>
+        <location filename="../qml/Layouts/Main.qml" line="302"/>
         <source>Preset export finished</source>
         <translation>Экспорт пресета завершён</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="333"/>
+        <location filename="../qml/Layouts/Main.qml" line="322"/>
         <source>Device is unavaliable</source>
         <translation>Устройство недоступно</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="340"/>
+        <location filename="../qml/Layouts/Main.qml" line="329"/>
         <source>Command exchange error</source>
         <translation>Ошибка при обмене командами</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="349"/>
+        <location filename="../qml/Layouts/Main.qml" line="338"/>
         <source>USB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="350"/>
+        <location filename="../qml/Layouts/Main.qml" line="339"/>
         <source>BLUETOOTH</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="351"/>
+        <location filename="../qml/Layouts/Main.qml" line="340"/>
         <source>VIRTUAL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="352"/>
+        <location filename="../qml/Layouts/Main.qml" line="341"/>
         <source>Unknown interface</source>
         <translation></translation>
     </message>
