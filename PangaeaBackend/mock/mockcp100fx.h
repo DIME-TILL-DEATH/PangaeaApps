@@ -87,6 +87,7 @@ private:
     void psaveCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pchangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void plistCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
+    void pbriefCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pnumCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pnameCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
     void pcommentCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);

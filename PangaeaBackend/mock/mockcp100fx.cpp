@@ -20,6 +20,7 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     m_parser.addCommandHandler("amtver", std::bind(&MockCP100fx::amtVerCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("plist", std::bind(&MockCP100fx::plistCommHandler, this, _1, _2, _3));
+    m_parser.addCommandHandler("pbrief", std::bind(&MockCP100fx::pbriefCommHandler, this, _1, _2, _3));
     m_parser.addCommandHandler("sys_settings", std::bind(&MockCP100fx::sysSettingsCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("pnum", std::bind(&MockCP100fx::pnumCommHandler, this, _1, _2, _3));
@@ -386,6 +387,8 @@ void MockCP100fx::loadPresetData(quint8 presetNumber, preset_data_fx_t &presetDa
 {
     presetNumber++;
 
+    memset(&presetData, 0, sizeof(preset_data_fx_t));
+
     QString strPresetNumber = QString().setNum(presetNumber);
 
     if(presetNumber < 10) strPresetNumber.prepend("0");
@@ -395,7 +398,6 @@ void MockCP100fx::loadPresetData(quint8 presetNumber, preset_data_fx_t &presetDa
 
     if(presetFile.open(QIODevice::ReadOnly))
     {
-        memset(&presetData, 0, sizeof(preset_data_fx_t));
         // If ir data in file empty (file size < CabSize * 3)
         presetData.ir1Data[0] = 0xff;
         presetData.ir1Data[1] = 0xff;
@@ -414,6 +416,7 @@ void MockCP100fx::loadPresetData(quint8 presetNumber, preset_data_fx_t &presetDa
     else
     {
         setDefaultPresetData(presetNumber);
+        memcpy(&presetData, &currentPresetData, sizeof(preset_data_fx_t));
     }
 }
 
@@ -586,7 +589,7 @@ void MockCP100fx::amtDevCommHandler(const QString &command, const QByteArray &ar
 
 void MockCP100fx::amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    emit answerReady(QString("amtver\r1.10.00\nEND\n").toUtf8());
+    emit answerReady(QString("amtver\r2.01.00\nEND\n").toUtf8());
 }
 
 void MockCP100fx::sysSettingsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -1132,7 +1135,11 @@ void MockCP100fx::plistCommHandler(const QString &command, const QByteArray &arg
         answer.append(comment + "|");
 
         QString ir1NameStr(presetData.ir1Name);
-        QString ir2NameStr(presetData.ir2Name);
+        // QString ir2NameStr(presetData.ir2Name);
+        QString ir2NameStr;
+
+        ir1NameStr = ir1NameStr.left(presetData.ir1NameLength);
+        ir2NameStr = ir2NameStr.left(presetData.ir2NameLength);
 
         ir1NameStr.remove("//r//n|");
         ir2NameStr.remove("//r//n|");
@@ -1141,9 +1148,51 @@ void MockCP100fx::plistCommHandler(const QString &command, const QByteArray &arg
         // answer.append("||");
 
         uint8_t enabled[14];
-        memcpy(enabled, &currentPresetData.modules.switches, 14);
+        memcpy(enabled, &presetData.modules.switches, 14);
         for(uint8_t i=0; i<14; i++) answer.append(QByteArray::number(enabled[i]));
     }
+
+    answer.append("\n");
+    emit answerReady(answer.toUtf8());
+
+    loadPresetData(currentSystemData.lastPresetNum, currentPresetData);
+}
+
+void MockCP100fx::pbriefCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
+{
+    QString answer;
+    answer.append(command.toUtf8());
+
+    quint8 presetNum = arguments.toInt(nullptr, 16);
+
+    answer.append("\r");
+
+    preset_data_fx_t presetData;
+
+    loadPresetData(presetNum, presetData);
+    answer.append(QString::number(presetNum) + "|");
+
+    QString name((char*)presetData.name);
+    name.remove("//r//n|");
+    answer.append(name + "|");
+
+    QString comment((char*)presetData.comment);
+    comment.remove("//r//n|");
+    answer.append(comment + "|");
+
+    QString ir1NameStr(presetData.ir1Name);
+    QString ir2NameStr(presetData.ir2Name);
+
+    ir1NameStr.remove("//r//n|");
+    ir2NameStr.remove("//r//n|");
+    answer.append(ir1NameStr.toUtf8() + "|");
+    answer.append(ir2NameStr.toUtf8() + "|");
+    // answer.append("||");
+
+    uint8_t enabled[14];
+    memcpy(enabled, &currentPresetData.modules.switches, 14);
+    for(uint8_t i=0; i<14; i++) answer.append(QByteArray::number(enabled[i]));
+
 
     answer.append("\n");
     emit answerReady(answer.toUtf8());
