@@ -251,22 +251,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="218"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="202"/>
+        <source>Attenuator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="227"/>
         <source>Target preset:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="265"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="274"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="280"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="289"/>
         <source>Deselect All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="304"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="313"/>
         <source>COPY ELEMENTS</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1226,7 +1231,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="143"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="145"/>
         <source>Ref. freq: </source>
         <translation type="unfinished"></translation>
     </message>

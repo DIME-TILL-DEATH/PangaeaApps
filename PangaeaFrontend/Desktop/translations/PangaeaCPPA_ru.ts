@@ -251,22 +251,27 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="218"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="202"/>
+        <source>Attenuator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="227"/>
         <source>Target preset:</source>
         <translation>Целевой пресет</translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="265"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="274"/>
         <source>Select All</source>
         <translation>Выбрать всё</translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="280"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="289"/>
         <source>Deselect All</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/CopyToWindow.qml" line="304"/>
+        <location filename="../qml/CP100FX/CopyToWindow.qml" line="313"/>
         <source>COPY ELEMENTS</source>
         <translation>КОПИРОВАТЬ</translation>
     </message>
@@ -488,12 +493,12 @@
     <message>
         <location filename="../qml/CP16/HeadCPModern.qml" line="382"/>
         <source>Preset name: </source>
-        <translation>Имя пресета</translation>
+        <translation>Имя пресета: </translation>
     </message>
     <message>
         <location filename="../qml/CP16/HeadCPModern.qml" line="382"/>
         <source>IR name: </source>
-        <translation>Имя IR</translation>
+        <translation>Имя IR: </translation>
     </message>
 </context>
 <context>
@@ -774,7 +779,7 @@
     <message>
         <location filename="../qml/Layouts/Main.qml" line="260"/>
         <source>Not a Pangaea preset file!</source>
-        <translation>Файл не является файлом пресета.</translation>
+        <translation>Файл не является файлом пресета!</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/Main.qml" line="275"/>
@@ -1226,12 +1231,12 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <location filename="../qml/Layouts/TunerWindow.qml" line="48"/>
         <source>Note: </source>
-        <translation>Нота:</translation>
+        <translation>Нота: </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="143"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="145"/>
         <source>Ref. freq: </source>
-        <translation>Оп.частота:</translation>
+        <translation>Оп.частота: </translation>
     </message>
 </context>
 <context>

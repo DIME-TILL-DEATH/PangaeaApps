@@ -123,14 +123,14 @@ Window{
         }
 
         Row{
-            Layout.preferredWidth: parent.width
+            Layout.preferredWidth: _boundRect.width
             Layout.fillHeight: true
 
             MButton{
                 id: _leftBtn
 
                 width: 40
-                height: parent.height/2
+                height: parent.height
 
                 text: "-"
                 scaleText: 4
@@ -140,9 +140,11 @@ Window{
                 }
             }
             MLabel{
+                id: _refFreqLabel
+
                 text: qsTr("Ref. freq: ") + UiCore.currentDevice.tuner.refFreq + "Hz"
 
-                height: parent.height/2
+                height: parent.height
 
                 verticalAlignment: Label.AlignVCenter
             }
@@ -151,7 +153,7 @@ Window{
                 id: _rightBtn
 
                 width: 40
-                height: parent.height/2
+                height: parent.height
 
                 text: "+"
                 scaleText: 4
@@ -162,13 +164,15 @@ Window{
             }
 
             Item{
-                width: parent.width/3
+                width: parent.width - _tunerSpeedBar.width - _leftBtn.width * 2 - _refFreqLabel.width
                 height: parent.height/2
             }
 
             MBar{
-                width: parent.width/3
-                height: parent.height/2
+                id: _tunerSpeedBar
+
+                width: parent.width/2.5
+                height: parent.height
 
                 text: "Tuner speed: "
 

@@ -192,7 +192,16 @@ Window{
                 MCheckBox{
                     text: qsTr("Preset volume")
 
-                    Layout.columnSpan: 2
+                    Layout.columnSpan: 1
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+
+                MCheckBox{
+                    text: qsTr("Attenuator")
+
+                    Layout.columnSpan: 1
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
