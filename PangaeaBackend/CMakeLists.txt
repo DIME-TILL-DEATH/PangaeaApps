@@ -158,5 +158,6 @@ else()
 endif()
 
 if(ANDROID)
+    find_package(Qt6 REQUIRED COMPONENTS CorePrivate)
     target_link_libraries(PangaeaBackend PUBLIC Qt::CorePrivate)
 endif()

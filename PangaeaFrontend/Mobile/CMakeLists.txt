@@ -3,8 +3,9 @@ if(ANDROID)
         android/src/
     )
 
-    target_link_libraries(${PROJECT_NAME} PUBLIC
-        Qt::CorePrivate)
+    # find_package(Qt6 REQUIRED COMPONENTS CorePrivate)
+    # target_link_libraries(${PROJECT_NAME} PRIVATE Qt::CorePrivate)
+
 
     set_target_properties(${PROJECT_NAME} PROPERTIES
         QT_ANDROID_VERSION_NAME ${PROJECT_VERSION}
