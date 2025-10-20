@@ -95,6 +95,7 @@ qt_add_qml_module(PangaeaBackend
         modules/chorus.h modules/chorus.cpp
         modules/compressor.h modules/compressor.cpp
         modules/controlvalue.cpp modules/controlvalue.h
+        modules/controlfcutlegacy.h modules/controlfcutlegacy.cpp
         modules/controlqlegacy.h modules/controlqlegacy.cpp
         modules/delay.h modules/delay.cpp
         modules/dualcabsim.h modules/dualcabsim.cpp
@@ -147,6 +148,7 @@ if(NOT IOS)
     )
 else()
     find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning Concurrent)
+    find_package(Qt6 REQUIRED COMPONENTS Core)
     target_link_libraries(PangaeaBackend PUBLIC
         Qt6::Core
         Qt6::Bluetooth
@@ -159,4 +161,5 @@ endif()
 
 if(ANDROID)
     target_link_libraries(PangaeaBackend PUBLIC Qt::CorePrivate)
+target_link_libraries(PangaeaBackend PRIVATE Qt6::Core)
 endif()

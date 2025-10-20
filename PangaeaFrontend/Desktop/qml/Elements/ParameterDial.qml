@@ -85,6 +85,10 @@ Item{
 
                     focus = false
                 }
+
+                onFocusChanged: {
+                    if(!focus) editingFinished();
+                }
             }
 
             background: Rectangle {

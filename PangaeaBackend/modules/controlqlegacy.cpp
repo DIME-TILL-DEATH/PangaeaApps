@@ -59,18 +59,6 @@ void ControlQLegacy::setDisplayValue(double newDisplayValue)
         }
     }
 
-    // cp100fx
-    // if(num <= 30)
-    // {
-    //     a = num * 0.01f + 0.701f;
-    //     ksprintf(q_sym , "%2f" , a);
-    //     if(num == 30)ksprintf(q_sym , "%1f" , a);
-    // }
-    // else {
-    //     a = (num - 20) * 0.1f + 0.001f;
-    //     ksprintf(q_sym , "%1f" , a);
-    // }
-
     QString strValue;
     strValue.setNum(controlValue, 16);
     if(strValue.size() > 2) strValue = strValue.right(2);
@@ -86,14 +74,13 @@ void ControlQLegacy::setDisplayValue(double newDisplayValue)
         // drop same values
         if(buffer.last() != fullCommand.toUtf8()) buffer.append(fullCommand.toUtf8());
     }
-    // if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
 
     emit userModifiedValue();
 }
 
 void ControlQLegacy::setControlValue(qint32 value)
 {
-    double resultValue;
+    double resultValue = 0;
 
     EqParametric* ownerEq = qobject_cast<EqParametric*>(m_owner);
     if(ownerEq)
@@ -116,19 +103,6 @@ void ControlQLegacy::setControlValue(qint32 value)
         default: resultValue = 0;
         }
     }
-
-
-    // cp100fx
-    // if(num <= 30)
-    // {
-    //     a = num * 0.01f + 0.701f;
-    //     ksprintf(q_sym , "%2f" , a);
-    //     if(num == 30)ksprintf(q_sym , "%1f" , a);
-    // }
-    // else {
-    //     a = (num - 20) * 0.1f + 0.001f;
-    //     ksprintf(q_sym , "%1f" , a);
-    // }
 
     if(resultValue == m_displayValue) return;
 
