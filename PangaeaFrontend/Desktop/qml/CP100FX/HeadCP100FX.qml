@@ -151,7 +151,7 @@ Item
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)
 
-                        onAccepted:{
+                        onEditingFinished:{
                             focus = false
                             UiCore.currentDevice.currentPresetName = _presetNameEdit.text
                         }
@@ -211,7 +211,7 @@ Item
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)
 
-                        onAccepted:{
+                        onEditingFinished:{
                             focus = false
                             UiCore.currentDevice.currentPresetComment = _presetCommentEdit.text
                         }

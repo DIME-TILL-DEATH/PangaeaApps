@@ -14,7 +14,6 @@ Item{
 
     enabled: module.moduleEnabled
 
-
     required property ControlValue controlValue
     opacity: _root.enabled ? 1:0.5
 
@@ -41,6 +40,8 @@ Item{
 
             height: parent.height * 0.7
             width: height
+
+            focusPolicy: Qt.StrongFocus
 
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -131,6 +132,7 @@ Item{
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton//Qt.NoButton
+                focusPolicy: Qt.StrongFocus
 
                 onWheel: wheel => {
                     var step = (_root.controlValue.maxDisplayValue - _root.controlValue.minDisplayValue)/120/100;

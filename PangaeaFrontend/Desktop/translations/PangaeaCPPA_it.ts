@@ -272,7 +272,7 @@
     </message>
     <message>
         <location filename="../qml/CP100FX/CopyToWindow.qml" line="313"/>
-        <source>COPY ELEMENTS</source>
+        <source>COPY TO PRESET</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

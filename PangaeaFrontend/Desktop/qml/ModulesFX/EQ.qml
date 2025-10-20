@@ -31,6 +31,14 @@ BaseModule{
             width: parent.width * 3/5 //+ Style.mainSpacing * 2
 
             color: "black"
+            MouseArea{
+                anchors.fill: parent
+
+                onClicked:{
+                    _eqWindow.show();
+                }
+            }
+
             Canvas{
                 id: _canvas
 

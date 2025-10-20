@@ -253,12 +253,12 @@
     <message>
         <location filename="../qml/CP100FX/CopyToWindow.qml" line="202"/>
         <source>Attenuator</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/CP100FX/CopyToWindow.qml" line="227"/>
         <source>Target preset:</source>
-        <translation>Целевой пресет</translation>
+        <translation>Целевой пресет:</translation>
     </message>
     <message>
         <location filename="../qml/CP100FX/CopyToWindow.qml" line="274"/>
@@ -272,8 +272,8 @@
     </message>
     <message>
         <location filename="../qml/CP100FX/CopyToWindow.qml" line="313"/>
-        <source>COPY ELEMENTS</source>
-        <translation>КОПИРОВАТЬ</translation>
+        <source>COPY TO PRESET</source>
+        <translation>КОПИРОВАТЬ В ПРЕСЕТ</translation>
     </message>
 </context>
 <context>
@@ -839,7 +839,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <location filename="../qml/Layouts/Main.qml" line="289"/>
         <source>IR file copying error.</source>
-        <translation>Ошибка при копировании IR файлаю</translation>
+        <translation>Ошибка при копировании IR файла.</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/Main.qml" line="302"/>
