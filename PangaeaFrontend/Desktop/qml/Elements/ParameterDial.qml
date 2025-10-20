@@ -14,7 +14,6 @@ Item{
 
     enabled: module.moduleEnabled
 
-
     required property ControlValue controlValue
     opacity: _root.enabled ? 1:0.5
 
@@ -42,11 +41,13 @@ Item{
             height: parent.height * 0.7
             width: height
 
+            focusPolicy: Qt.StrongFocus
+
             anchors.horizontalCenter: parent.horizontalCenter
 
-            from: controlValue.minDisplayValue
-            to: controlValue.maxDisplayValue
-            value: controlValue.displayValue
+            from: _root.controlValue.minDisplayValue
+            to: _root.controlValue.maxDisplayValue
+            value: _root.controlValue.displayValue
 
             wheelEnabled: true
 
@@ -66,21 +67,21 @@ Item{
                 font.bold: true
                 font.family: "Arial Black"
                 font.pixelSize: parent.width/5
-                text: control.value.toFixed(floatDigits)
+                text: control.value.toFixed(_root.floatDigits)
 
                 validator: DoubleValidator{
-                    bottom: controlValue.minDisplayValue
-                    top: controlValue.maxDisplayValue
-                    decimals: floatDigits
+                    bottom: _root.controlValue.minDisplayValue
+                    top: _root.controlValue.maxDisplayValue
+                    decimals: _root.floatDigits
 
                     locale: "en"
                 }
 
                 onEditingFinished: {
-                    if(parseFloat(text) > controlValue.maxDisplayValue) text = controlValue.maxDisplayValue
-                    if(parseFloat(text) < controlValue.minDisplayValue) text = controlValue.minDisplayValue
+                    if(parseFloat(text) > _root.controlValue.maxDisplayValue) text = _root.controlValue.maxDisplayValue
+                    if(parseFloat(text) < _root.controlValue.minDisplayValue) text = _root.controlValue.minDisplayValue
 
-                    controlValue.displayValue = text
+                    _root.controlValue.displayValue = text
 
                     focus = false
                 }
@@ -125,18 +126,24 @@ Item{
             }
 
             onMoved: {
-                controlValue.displayValue = control.value
+                _root.controlValue.displayValue = control.value
             }
 
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton//Qt.NoButton
+                focusPolicy: Qt.StrongFocus
 
                 onWheel: wheel => {
-                    var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100;
+                    var step = (_root.controlValue.maxDisplayValue - _root.controlValue.minDisplayValue)/120/100;
                     // if(control.stepSize === 1) step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
                     // else step = control.stepSize
-                    controlValue.displayValue = control.value + wheel.angleDelta.y * step;
+                    var finalValue = control.value + wheel.angleDelta.y * step;
+
+                    if(finalValue > _root.controlValue.maxDisplayValue) finalValue = _root.controlValue.maxDisplayValue;
+                    if(finalValue < _root.controlValue.minDisplayValue) finalValue = _root.controlValue.minDisplayValue;
+
+                    _root.controlValue.displayValue = finalValue;
                 }
 
                 onClicked: mouse => {

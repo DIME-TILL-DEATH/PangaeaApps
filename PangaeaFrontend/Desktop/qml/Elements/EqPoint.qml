@@ -87,7 +87,9 @@ Rectangle{
                 resultQ *= 1.1;
                 if(resultQ > module.EqBands[selectedBandIndex].Q.maxDisplayValue) resultQ = module.EqBands[selectedBandIndex].Q.maxDisplayValue;
             }
-            module.EqBands[selectedBandIndex].Q.displayValue = resultQ;
+
+            if(!(filterType == FilterType.LOW_CUT | filterType == FilterType.HIGH_CUT))
+                module.EqBands[selectedBandIndex].Q.displayValue = resultQ;
         }
     }
 

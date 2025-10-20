@@ -1,4 +1,4 @@
-import QtQuick 2.15
+import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
@@ -203,6 +203,7 @@ ColumnLayout
 
                         MouseArea{
                             anchors.fill: parent
+                            focusPolicy: Qt.StrongFocus
 
                             onClicked: {
                                 if(_modulesListView.moduleTypeSelected !== moduleInstance.moduleType)

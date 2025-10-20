@@ -304,13 +304,13 @@ Window{
     }
 
     MButton{
-        width: parent.width * 0.5
+        width: parent.width * 0.75
         height: parent.height * 0.1
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
 
-        text: qsTr("COPY ELEMENTS")
+        text: qsTr("COPY TO PRESET")
 
         onClicked: {
             const checkBoxes = Array.from(_selectLayout.children).filter(child => child instanceof MCheckBox)

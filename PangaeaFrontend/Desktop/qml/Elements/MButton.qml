@@ -104,10 +104,15 @@ Item
         }
         MouseArea
         {
+            focusPolicy: Qt.StrongFocus
+
             anchors.fill:  parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
-            onClicked: {main.clicked(); material.start(mouseX, mouseY);}
+            onClicked: {
+                main.clicked();
+                material.start(mouseX, mouseY);
+            }
         }
     }
 }

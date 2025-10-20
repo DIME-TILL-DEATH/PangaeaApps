@@ -1,5 +1,5 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 import QtQuick.Layouts 1.11
 
 import Elements 1.0
@@ -108,6 +108,7 @@ Rectangle {
             MouseArea{
                 anchors.fill: parent
                 z: 5
+                focusPolicy: Qt.StrongFocus
 
                 onClicked: {
                     module.moduleEnabled = !module.moduleEnabled
@@ -127,6 +128,8 @@ Rectangle {
             scaleText: 3
 
             onClicked: {
+                focusPolicy: Qt.StrongFocus
+
                 if(_contentItem.contentX > 0)
                 {
                     _contentItem.contentX = _contentItem.contentX - dialWidth;
@@ -182,6 +185,8 @@ Rectangle {
             id: _rightBtn
 
             visible: _contentItem.contentWidth > _contentItem.width
+
+            focusPolicy: Qt.StrongFocus
 
             width: dialWidth/3
             height: parent.height
