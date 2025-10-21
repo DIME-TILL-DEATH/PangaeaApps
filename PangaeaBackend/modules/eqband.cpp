@@ -7,6 +7,8 @@
 #include "eqparametric.h"
 #include "eqband.h"
 
+#include "controlfcutlegacy.h"
+
 EqBand::EqBand(EqParametric *ownerModule, preset_data_cplegacy_t *data, FilterType bandType, double fStart, double fStop, int bandNum, qint32 fControlStart, qint32 fControlStop)
     :QObject{ownerModule},
     m_filterType{bandType},
@@ -109,7 +111,8 @@ EqBand::EqBand(EqParametric *ownerModule, modules_data_fx_t *data, FilterType ba
     {
     case FilterType::LOW_CUT:
     {
-        m_Fc = new ControlValue(ownerModule, &data->hpf, "hp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
+        m_Fc = new ControlFCutLegacy(ownerModule, &data->hpf, bandType);
+        // m_Fc = new ControlValue(ownerModule, &data->hpf, "hp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
         m_gain = new ControlValue(ownerModule, nullptr, "");
         m_Q = new ControlQLegacy(ownerModule, nullptr, "");
         break;
@@ -117,7 +120,8 @@ EqBand::EqBand(EqParametric *ownerModule, modules_data_fx_t *data, FilterType ba
 
     case FilterType::HIGH_CUT:
     {
-        m_Fc = new ControlValue(ownerModule, &data->lpf, "lp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
+        m_Fc = new ControlFCutLegacy(ownerModule, &data->lpf, bandType);
+        // m_Fc = new ControlValue(ownerModule, &data->lpf, "lp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
         m_gain = new ControlValue(ownerModule, nullptr, "");
         m_Q = new ControlQLegacy(ownerModule, nullptr, "");
         break;

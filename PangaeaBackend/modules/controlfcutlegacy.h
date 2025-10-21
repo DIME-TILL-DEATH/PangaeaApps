@@ -13,7 +13,7 @@ class ControlFCutLegacy : public ControlValue
     QML_ELEMENT
     QML_UNCREATABLE("")
 public:
-    ControlFCutLegacy(AbstractModule *parent, void* pointer, QString commandStr);
+    ControlFCutLegacy(AbstractModule *parent, void* pointer, FilterType m_filterType);
 
     void setDisplayValue(double newDisplayValue) override;
     void setControlValue(qint32 value) override;
