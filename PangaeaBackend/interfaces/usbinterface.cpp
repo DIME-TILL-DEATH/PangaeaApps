@@ -80,9 +80,14 @@ void UsbInterface::discoverDevices()
 //            m_discoveredDevices.append(DeviceDescription("AMT pid:" + QString().setNum(info.productIdentifier(), 16) + " " + info.description(),
 //                                                         info.systemLocation(),
 //                                                         DeviceConnectionType::USBAuto));
+        QString systemLocation;
+
+#ifndef Q_OS_ANDROID
+        systemLocation = info.systemLocation();
+#endif
 
             m_discoveredDevices.append(DeviceDescription("AMT " + info.description(),
-                                                         info.systemLocation(),
+                                                         systemLocation,
                                                          DeviceConnectionType::USB));
         }
     }
@@ -99,12 +104,14 @@ bool UsbInterface::connect(DeviceDescription device)
         qDebug() << __FUNCTION__<<__LINE__<<"Port is already opened, trying to close";
     }
 
+#ifndef Q_OS_ANDROID
     m_port->setPortName(device.address());
     m_port->setBaudRate(9600);
     m_port->setDataBits(QSerialPort::Data8);
     m_port->setParity(QSerialPort::NoParity);
     m_port->setStopBits(QSerialPort::OneStop);
     m_port->setFlowControl(QSerialPort::HardwareControl);
+#endif
 
     bool isPortOpened = m_port->open(QIODevice::ReadWrite);
 
@@ -117,8 +124,12 @@ bool UsbInterface::connect(DeviceDescription device)
     }
     else
     {
+#ifndef Q_OS_ANDROID
         QMetaEnum errorDescriptionEnum = QMetaEnum::fromType<QSerialPort::SerialPortError>();
         emit sgInterfaceError(errorDescriptionEnum.valueToKey(m_port->error()));
+#else
+        emit sgInterfaceError("COM port error");
+#endif
         prevState();
     }
     return isPortOpened;

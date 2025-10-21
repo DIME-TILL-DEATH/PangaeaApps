@@ -17,6 +17,8 @@ endif()
 if(ANDROID)
     set(PLATFORM_SPECIFIC_SOURCES
         utils/androidutils.cpp utils/androidutils.h
+        interfaces/android_serial/qserialport.cpp interfaces/android_serial/qserialport.h
+        interfaces/android_serial/qserialportinfo.cpp interfaces/android_serial/qserialportinfo.h
     )
 endif()
 

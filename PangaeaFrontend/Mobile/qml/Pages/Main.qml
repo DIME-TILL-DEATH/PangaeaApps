@@ -212,6 +212,7 @@ ApplicationWindow
     {
         UiCore.setupApplication();
         InterfaceManager.startScanning(DeviceConnectionType.BLE);
+        InterfaceManager.startScanning(DeviceConnectionType.USB)
     }
 
     Connections{
@@ -415,6 +416,7 @@ ApplicationWindow
             _msgBluetoothNotReady.open();
 
             InterfaceManager.startScanning(DeviceConnectionType.BLE);
+            InterfaceManager.startScanning(DeviceConnectionType.USB);
             mBusy.visible = false;
         }
 

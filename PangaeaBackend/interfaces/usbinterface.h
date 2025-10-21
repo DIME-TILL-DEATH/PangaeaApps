@@ -2,8 +2,14 @@
 #define USBINTERFACE_H
 
 #include <QTimer>
+
+#if defined (Q_OS_ANDROID)
+#include "android_serial/qserialport.h"
+#include "android_serial/qserialportinfo.h"
+#else
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#endif
 
 #include <QJsonDocument>
 #include <QJsonObject>
