@@ -51,6 +51,8 @@ private:
     BleInterface* m_bleInterface{nullptr};
 #ifndef Q_OS_IOS
     UsbInterface* m_usbInterface{nullptr};
+#else
+    AbstractInterface* m_usbInterface{nullptr};
 #endif
     OfflineInterface* m_offlineInterface{nullptr};
 

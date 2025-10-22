@@ -148,7 +148,7 @@ void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
     m_dstIrPath = dstFilePath.path();
 
     qDebug() << filePath << " to " << m_dstIrPath;
-    uploadIr(filePath, dstFilePath.path());
+    uploadIr(filePath, m_dstIrPath);
 }
 
 void UiCore::uploadIr(QList<QUrl> fileList, QUrl dstFilePath)

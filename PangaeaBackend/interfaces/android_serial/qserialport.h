@@ -85,6 +85,8 @@ public:
     QByteArray readAll();
     QByteArray readLine();
 
+    static bool deviceHasCapable();
+
     bool isOpen();
     void close();
     bool open(QIODevice::OpenMode mode);

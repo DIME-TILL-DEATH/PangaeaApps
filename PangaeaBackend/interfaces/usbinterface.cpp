@@ -146,6 +146,19 @@ void UsbInterface::write(const QByteArray &data)
     m_port->write(data);
 }
 
+bool UsbInterface::hasCapable()
+{
+#ifndef Q_OS_IOS
+    return false;
+#endif
+
+#ifdef Q_OS_ANDROID
+    return QSerialPort::deviceHasCapable();
+#else
+    return true;
+#endif
+}
+
 QList<DeviceDescription> UsbInterface::discoveredDevicesList()
 {
     return m_discoveredDevices;

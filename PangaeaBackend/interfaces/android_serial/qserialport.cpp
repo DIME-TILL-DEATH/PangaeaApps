@@ -161,6 +161,14 @@ QByteArray QSerialPort::readLine()
     return data;
 }
 
+bool QSerialPort::deviceHasCapable()
+{
+    return QJniObject::callStaticMethod<jboolean>(UsbSerial_jniClassName,
+                                       "hasCapable",
+                                       "(Landroid/app/Activity;)Z",
+                                       QNativeInterface::QAndroidApplication::context().object());
+}
+
 bool QSerialPort::isOpen()
 {
     return isConnected;
@@ -202,7 +210,7 @@ bool QSerialPort::open(QIODeviceBase::OpenMode mode)
                                                                          java_portName.object<jstring>(),
                                                                          (jlong)this);
 
-    qDebug() << "jint result:" << resultL;
+    // qDebug() << "jint result:" << resultL;
     // int resultL = javaSerialPort.callMethod<int>("open", m_portName, (jlong)this);
 
     if(resultL == 127)

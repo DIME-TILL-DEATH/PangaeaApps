@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.pm.PackageManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -60,6 +61,12 @@ public class JniUsbSerial
         //m_instance = this;
         m_usbIoManager = new HashMap<String, SerialInputOutputManager>();
         m_usbSerialPort = new HashMap<String, UsbSerialPort>();
+    }
+
+    public static boolean hasCapable(Activity activity)
+    {
+        PackageManager packageManager = activity.getPackageManager();
+        return packageManager.hasSystemFeature(PackageManager.FEATURE_USB_HOST);
     }
 
     public static void setActivity(Activity activity)

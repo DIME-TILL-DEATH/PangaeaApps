@@ -41,6 +41,8 @@ public:
 
     void write(const QByteArray &data);
 
+    static bool hasCapable();
+
 private slots:
     void slReadyRead();
     void slError(QSerialPort::SerialPortError error);
