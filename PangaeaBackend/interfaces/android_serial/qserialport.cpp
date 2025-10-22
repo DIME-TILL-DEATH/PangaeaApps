@@ -5,7 +5,7 @@
 
 using namespace QtJniTypes;
 
-static char UsbSerial_jniClassName[] {"org/qtproject/jniusbserial/JniUsbSerial"};
+static char UsbSerial_jniClassName[] {"org/jniusbserial/JniUsbSerial"};
 
 static void jniDeviceNewData(JNIEnv *envA, jobject thizA, jlong classPoint, jbyteArray dataA)
 {
@@ -47,7 +47,7 @@ QSerialPort::QSerialPort(QObject *parent)
     m_parity = NoParity;
     m_stopBits = OneStop;
 
-    JNINativeMethod methodsL[] {{"nativeDeviceNewData", "(I[B)V", reinterpret_cast<void *>(jniDeviceNewData)},
+    JNINativeMethod methodsL[] {{"nativeDeviceNewData", "(J[B)V", reinterpret_cast<void *>(jniDeviceNewData)},
                                         {"nativeDeviceException", "(ILjava/lang/String;)V", reinterpret_cast<void *>(jniDeviceException)}};
 
     QJniEnvironment envL;
@@ -115,7 +115,7 @@ void QSerialPort::startReadThread()
     QJniObject java_portName = QJniObject::fromString(m_portName);
     QJniObject::callStaticMethod<void>(UsbSerial_jniClassName,
                                               "startIoManager",
-                                              "(Ljava/lang/String;I)V",
+                                              "(Ljava/lang/String;J)V",
                                               java_portName.object<jstring>(),
                                               (jlong)this);
 }
@@ -189,6 +189,7 @@ void QSerialPort::close()
 bool QSerialPort::open(QIODeviceBase::OpenMode mode)
 {
     Q_UNUSED(mode);
+
     if (m_portName == "")
     {
         return false;
@@ -197,17 +198,14 @@ bool QSerialPort::open(QIODeviceBase::OpenMode mode)
     QJniObject java_portName = QJniObject::fromString(m_portName);
     jint resultL = QJniObject::callStaticMethod<jint>(UsbSerial_jniClassName,
                                                                          "open",
-                                                                         "(Ljava/lang/String;I)I",
+                                                                         "(Ljava/lang/String;J)I",
                                                                          java_portName.object<jstring>(),
                                                                          (jlong)this);
 
+    qDebug() << "jint result:" << resultL;
     // int resultL = javaSerialPort.callMethod<int>("open", m_portName, (jlong)this);
 
-    if (resultL == 0)
-    {
-        return false;
-    }
-    else
+    if(resultL == 127)
     {
         isConnected = true;
         if (!setParameters())
@@ -217,6 +215,8 @@ bool QSerialPort::open(QIODeviceBase::OpenMode mode)
         }
         return true;
     }
+
+    return false;
 }
 
 qint64 QSerialPort::write(const QByteArray &data)

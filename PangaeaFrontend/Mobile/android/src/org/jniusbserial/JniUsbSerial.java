@@ -1,4 +1,4 @@
-package org.qtproject.jniusbserial;
+package org.jniusbserial;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +17,7 @@ import android.widget.Toast;
 import java.nio.charset.StandardCharsets;
 
 import com.hoho.android.usbserial.driver.*;
-import org.qtproject.jniusbserial.SerialInputOutputManager;
-
-//import org.qtproject.qt.android.bindings.QtActivity;
-import org.qtproject.qt.android.QtNative;
+import org.jniusbserial.SerialInputOutputManager;
 
 public class JniUsbSerial
 {
@@ -29,8 +27,33 @@ public class JniUsbSerial
 
     private static Activity m_activity = null;
 
-    private static native void nativeDeviceException(int classPoint, String messageA);
-    private static native void nativeDeviceNewData(int classPoint, byte[] dataA);
+    private static native void nativeDeviceException(long classPoint, String messageA);
+    private static native void nativeDeviceNewData(long classPoint, byte[] dataA);
+
+    private static final String ACTION_USB_PERMISSION = "pangaea-mobile.USB_PERMISSION";
+    private static String m_currentPortName;
+    private static long m_currentClassPoint;
+
+    private static final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                synchronized (this) {
+                    UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                       if(device != null){
+                            //open(m_currentPortName, m_currentClassPoint);
+                       }
+                    }
+                    else {
+                        //Log.d(TAG, "permission denied for device " + device);
+                    }
+                }
+            }
+        }
+    };
 
     public JniUsbSerial()
     {
@@ -42,6 +65,9 @@ public class JniUsbSerial
     public static void setActivity(Activity activity)
     {
         m_activity = activity;
+
+        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+        m_activity.registerReceiver(usbReceiver, filter);
     }
 
     private static boolean getCurrentDevices()
@@ -56,7 +82,6 @@ public class JniUsbSerial
 
     public static String[] availableDevicesInfo()
     {
-        System.out.println("Java devices requested");
         //  GET THE LIST OF CURRENT DEVICES
         if (!getCurrentDevices())
             return null;
@@ -142,7 +167,7 @@ public class JniUsbSerial
         m_usbIoManager.remove(portNameA);
     }
 
-    public static void startIoManager(String portNameA, int classPoint)
+    public static void startIoManager(String portNameA, long classPoint)
     {
         if (m_usbSerialPort.get(portNameA) == null)
             return;
@@ -172,9 +197,11 @@ public class JniUsbSerial
         }
     }
 
-    public static int open(String portNameA, int classPoint)
+    public static int open(String portNameA, long classPoint)
     {
-        //  GET THE LIST OF CURRENT DEVICES
+        m_currentPortName = portNameA;
+        m_currentClassPoint = classPoint;
+
         if (!getCurrentDevices())
             return 0;
 
@@ -201,28 +228,38 @@ public class JniUsbSerial
                 return 0;
             }
 
-            UsbDeviceConnection connectionL = usbManager.openDevice(driverL.getDevice());
-            if (connectionL == null) {
-                return 0;
+            UsbDevice serialDevice = driverL.getDevice();
+
+            if(usbManager.hasPermission(serialDevice))
+            {
+                UsbDeviceConnection connectionL = usbManager.openDevice(serialDevice);
+                if (connectionL == null) {
+                    return 5;
+                }
+
+                UsbSerialPort usbSerialPort = driverL.getPorts().get(0);
+
+                try{
+                    usbSerialPort.open(connectionL);
+                    m_usbSerialPort.put(portNameA, usbSerialPort);
+
+                    startIoManager(portNameA, classPoint);
+                    return 127;
+                }
+                catch (Exception e) {
+                    m_usbSerialPort.remove(portNameA);
+                    stopIoManager(portNameA);
+                    return 0;
+                }
             }
-
-            UsbSerialPort usbSerialPort = driverL.getPorts().get(0);
-
-            try{
-                usbSerialPort.open(connectionL);
-                m_usbSerialPort.put(portNameA ,usbSerialPort);
-
-                startIoManager(portNameA, classPoint);
-
-                return 1;
-            }
-            catch (Exception e) {
-                m_usbSerialPort.remove(portNameA);
-                stopIoManager(portNameA);
-                return 0;
+            else
+            {
+                PendingIntent pi = PendingIntent.getBroadcast(m_activity, 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
+                usbManager.requestPermission(serialDevice, pi);
+                return 7;
             }
         }
-        System.out.println("Java port opened");
+
         return 0;
     }
 
@@ -250,13 +287,13 @@ public class JniUsbSerial
     new SerialInputOutputManager.Listener()
     {
         @Override
-        public void onNewData(byte[] data, int classPoint) {
+        public void onNewData(byte[] data, long classPoint) {
             nativeDeviceNewData(classPoint, data);
             System.out.println("Serial read:" + new String(data, StandardCharsets.UTF_8));
         };
 
         @Override
-        public void onRunError(Exception e, int classPoint) {
+        public void onRunError(Exception e, long classPoint) {
             nativeDeviceException(classPoint, e.getMessage());
         }
     };

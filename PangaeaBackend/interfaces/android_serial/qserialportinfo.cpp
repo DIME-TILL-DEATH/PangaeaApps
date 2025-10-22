@@ -1,6 +1,6 @@
 #include "qserialportinfo.h"
 
-static char UsbSerial_jniClassName[] {"org/qtproject/jniusbserial/JniUsbSerial"};
+static char UsbSerial_jniClassName[] {"org/jniusbserial/JniUsbSerial"};
 
 
 QSerialPortInfo::QSerialPortInfo()
@@ -86,4 +86,9 @@ quint16 QSerialPortInfo::productIdentifier() const
 QString QSerialPortInfo::description() const
 {
     return _description;
+}
+
+QString QSerialPortInfo::device() const
+{
+    return _device;
 }

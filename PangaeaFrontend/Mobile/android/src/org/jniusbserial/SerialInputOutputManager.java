@@ -1,4 +1,4 @@
-package org.qtproject.jniusbserial;
+package org.jniusbserial;
 
 import android.os.Process;
 import android.util.Log;
@@ -43,18 +43,18 @@ public class SerialInputOutputManager implements Runnable {
     private Listener mListener; // Synchronized by 'this'
     private final UsbSerialPort mSerialPort;
 
-    private int mClassPoint;
+    private long mClassPoint;
 
     public interface Listener {
         /**
          * Called when new incoming data is available.
          */
-        void onNewData(byte[] data, int classPoint);
+        void onNewData(byte[] data, long classPoint);
 
         /**
          * Called when {@link SerialInputOutputManager#run()} aborts due to an error.
          */
-        void onRunError(Exception e, int classPoint);
+        void onRunError(Exception e, long classPoint);
     }
 
     public SerialInputOutputManager(UsbSerialPort serialPort) {
@@ -62,7 +62,7 @@ public class SerialInputOutputManager implements Runnable {
         mReadBuffer = ByteBuffer.allocate(serialPort.getReadEndpoint().getMaxPacketSize());
     }
 
-    public SerialInputOutputManager(UsbSerialPort serialPort, Listener listener, int classPoint) {
+    public SerialInputOutputManager(UsbSerialPort serialPort, Listener listener, long classPoint) {
         mSerialPort = serialPort;
         mListener = listener;
         mClassPoint = classPoint;

@@ -31,6 +31,7 @@ public:
     quint16 vendorIdentifier() const;
     quint16 productIdentifier() const;
     QString description() const;
+    QString device() const;
 };
 
 #endif // QSERIALPORTINFO_H

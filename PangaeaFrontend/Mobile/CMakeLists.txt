@@ -25,8 +25,8 @@ if(ANDROID)
             "/"
         FILES
             android/src/JavaFile.java
-            android/src/org/qtproject/jniusbserial/JniUsbSerial.java
-            android/src/org/qtproject/jniusbserial/SerialInputOutputManager.java
+            android/src/org/jniusbserial/JniUsbSerial.java
+            android/src/org/jniusbserial/SerialInputOutputManager.java
 
             android/AndroidManifest.xml
             android/build.gradle

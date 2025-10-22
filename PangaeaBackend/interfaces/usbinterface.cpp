@@ -26,7 +26,7 @@ UsbInterface::UsbInterface(QObject *parent)
 
 void UsbInterface::startScan()
 {
-    if(state() != InterfaceState::Scanning)
+    if(state() != InterfaceState::Scanning | state() != InterfaceState::Connecting)
     {
         qDebug() << "Start USB scanning";
         m_timer->start();
@@ -80,13 +80,18 @@ void UsbInterface::discoverDevices()
 //            m_discoveredDevices.append(DeviceDescription("AMT pid:" + QString().setNum(info.productIdentifier(), 16) + " " + info.description(),
 //                                                         info.systemLocation(),
 //                                                         DeviceConnectionType::USBAuto));
-        QString systemLocation;
+            QString systemLocation;
+            QString description;
+    #ifndef Q_OS_ANDROID
+            systemLocation = info.systemLocation();
+            description = info.description();
+    #else
+            systemLocation = info.portName();
+            description = info.device();
+            m_port->setPortName(info.portName());
+    #endif
 
-#ifndef Q_OS_ANDROID
-        systemLocation = info.systemLocation();
-#endif
-
-            m_discoveredDevices.append(DeviceDescription("AMT " + info.description(),
+            m_discoveredDevices.append(DeviceDescription("AMT " + description,
                                                          systemLocation,
                                                          DeviceConnectionType::USB));
         }
