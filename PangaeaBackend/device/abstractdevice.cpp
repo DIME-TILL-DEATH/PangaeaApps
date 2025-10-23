@@ -1,6 +1,7 @@
 #include "abstractdevice.h"
 
 #include "core.h"
+#include <QStandardPaths>
 
 AbstractDevice::AbstractDevice(Core *owner)
 {

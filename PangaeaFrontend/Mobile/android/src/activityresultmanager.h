@@ -20,19 +20,6 @@ enum ActivityType
 class ActivityResultManager : public QObject, public QAndroidActivityResultReceiver
 {
     Q_OBJECT
-//public:
-//    ActivityResultManager();
-//    void handleActivityResult(int receiverRequestCode, int resultCode, const QAndroidJniObject &data) override;
-
-//    static QString getFileNameFromUri(QString uri);
-//    static void takeReadUriPermission(QAndroidJniObject uriObject);
-//    static void takeWriteUriPermission(QAndroidJniObject uriObject);
-//private:
-//    QString m_fileName;
-//    QString m_filePath;
-
-//    void processUri(QAndroidJniObject uriObject);
-
 public:
     ActivityResultManager();
     void handleActivityResult(int receiverRequestCode, int resultCode, const QJniObject &data) override;

@@ -148,7 +148,7 @@ void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
     m_dstIrPath = dstFilePath.path();
 
     qDebug() << filePath << " to " << m_dstIrPath;
-    uploadIr(filePath, dstFilePath.path());
+    uploadIr(filePath, m_dstIrPath);
 }
 
 void UiCore::uploadIr(QList<QUrl> fileList, QUrl dstFilePath)
@@ -238,7 +238,11 @@ void UiCore::slImpulseUploaded()
     if(m_uploadFileList.isEmpty()) return;
 
     QUrl fileUrl = m_uploadFileList.takeFirst();
+#ifdef Q_OS_ANDROID
+
+#else
     uploadIr(fileUrl, m_dstIrPath);
+#endif
 }
 
 void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
@@ -458,6 +462,7 @@ void UiCore::pickFile(ActivityType fileType, QString filter)
 
     jint FLAG_READ_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
     jint FLAG_PERSISTABLE_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
+    QJniObject EXTRA_ALLOW_MULTIPLE =  QJniObject::getStaticField<jstring>("android/content/Intent", "EXTRA_ALLOW_MULTIPLE");
 
     QJniObject intent("android/content/Intent");
     if (ACTION_OPEN_DOCUMENT.isValid() && intent.isValid())
@@ -465,6 +470,8 @@ void UiCore::pickFile(ActivityType fileType, QString filter)
         intent.callObjectMethod("setAction", "(Ljava/lang/String;)Landroid/content/Intent;", ACTION_OPEN_DOCUMENT.object<jstring>());
         intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString(filter).object<jstring>());
 
+        // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.callObjectMethod("putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", EXTRA_ALLOW_MULTIPLE.object<jstring>(), true);
         intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_READ_PERMISSION);
         intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_PERSISTABLE_PERMISSION);
 

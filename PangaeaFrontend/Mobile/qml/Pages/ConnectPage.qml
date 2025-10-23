@@ -336,6 +336,7 @@ Item
         {
             isConnected = false;
             InterfaceManager.startScanning(DeviceConnectionType.BLE);
+            InterfaceManager.startScanning(DeviceConnectionType.USB);
         }
     }
 }

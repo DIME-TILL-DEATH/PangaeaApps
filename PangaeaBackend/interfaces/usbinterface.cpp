@@ -26,7 +26,7 @@ UsbInterface::UsbInterface(QObject *parent)
 
 void UsbInterface::startScan()
 {
-    if(state() != InterfaceState::Scanning)
+    if(state() != InterfaceState::Scanning | state() != InterfaceState::Connecting)
     {
         qDebug() << "Start USB scanning";
         m_timer->start();
@@ -80,9 +80,19 @@ void UsbInterface::discoverDevices()
 //            m_discoveredDevices.append(DeviceDescription("AMT pid:" + QString().setNum(info.productIdentifier(), 16) + " " + info.description(),
 //                                                         info.systemLocation(),
 //                                                         DeviceConnectionType::USBAuto));
+            QString systemLocation;
+            QString description;
+    #ifndef Q_OS_ANDROID
+            systemLocation = info.systemLocation();
+            description = info.description();
+    #else
+            systemLocation = info.portName();
+            description = info.device();
+            m_port->setPortName(info.portName());
+    #endif
 
-            m_discoveredDevices.append(DeviceDescription("AMT " + info.description(),
-                                                         info.systemLocation(),
+            m_discoveredDevices.append(DeviceDescription("AMT " + description,
+                                                         systemLocation,
                                                          DeviceConnectionType::USB));
         }
     }
@@ -99,12 +109,14 @@ bool UsbInterface::connect(DeviceDescription device)
         qDebug() << __FUNCTION__<<__LINE__<<"Port is already opened, trying to close";
     }
 
+#ifndef Q_OS_ANDROID
     m_port->setPortName(device.address());
     m_port->setBaudRate(9600);
     m_port->setDataBits(QSerialPort::Data8);
     m_port->setParity(QSerialPort::NoParity);
     m_port->setStopBits(QSerialPort::OneStop);
     m_port->setFlowControl(QSerialPort::HardwareControl);
+#endif
 
     bool isPortOpened = m_port->open(QIODevice::ReadWrite);
 
@@ -117,8 +129,12 @@ bool UsbInterface::connect(DeviceDescription device)
     }
     else
     {
+#ifndef Q_OS_ANDROID
         QMetaEnum errorDescriptionEnum = QMetaEnum::fromType<QSerialPort::SerialPortError>();
         emit sgInterfaceError(errorDescriptionEnum.valueToKey(m_port->error()));
+#else
+        emit sgInterfaceError("COM port error");
+#endif
         prevState();
     }
     return isPortOpened;
@@ -128,6 +144,19 @@ void UsbInterface::write(const QByteArray &data)
 {
     m_port->readAll();
     m_port->write(data);
+}
+
+bool UsbInterface::hasCapable()
+{
+#ifndef Q_OS_IOS
+    return false;
+#endif
+
+#ifdef Q_OS_ANDROID
+    return QSerialPort::deviceHasCapable();
+#else
+    return true;
+#endif
 }
 
 QList<DeviceDescription> UsbInterface::discoveredDevicesList()
