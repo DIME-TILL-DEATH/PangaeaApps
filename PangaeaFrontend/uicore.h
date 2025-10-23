@@ -102,9 +102,9 @@ public slots:
     void slImportPreset(QString fullFilePath, QString fileName);
 
     void slImpulseUploaded();
-#ifdef Q_OS_ANDROID
-    void slImpulseFilePicked(QString filePath, QString fileName);
-#endif
+// #ifdef Q_OS_ANDROID
+//     void slImpulseFilePicked(QString filePath, QString fileName);
+// #endif
 
 private:
     QQmlApplicationEngine* m_qmlEngine;

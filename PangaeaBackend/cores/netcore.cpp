@@ -90,7 +90,8 @@ void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
         {
             qInfo() << "actual: " << deviceFirmware->firmwareVersion() << " avaliable: " << newestFirmware->firmwareVersion();
 
-            if(*newestFirmware > *deviceFirmware)
+            //TODO Срабатывает если версии равны. Проверить исправление
+            if(!(*newestFirmware < *deviceFirmware))
             {
                 qInfo() << "New firmware avaliable on server";
                 emit sgNewFirmwareAvaliable(newestFirmware, deviceFirmware);
