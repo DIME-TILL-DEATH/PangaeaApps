@@ -14,6 +14,9 @@
 
 #include "activityresultmanager.h"
 
+using namespace QtJniTypes;
+Q_DECLARE_JNI_CLASS(JClipData, "android/content/ClipData")
+Q_DECLARE_JNI_CLASS(JUri, "android/net/Uri")
 
 ActivityResultManager::ActivityResultManager()
 {
@@ -31,13 +34,24 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
             case ActivityType::PICK_IR:
             {
                 QJniObject uriObject = data.callObjectMethod("getData", "()Landroid/net/Uri;");
-                takeReadUriPermission(uriObject);
-                processUri(uriObject);
 
-                qDebug() << "IR file path: " << m_filePath;
-                qDebug() << "IR file name: " << m_fileName;
+                if(!uriObject.isValid())
+                {
+                    JClipData clipData = data.callMethod<JClipData>("getClipData", "()Landroid/content/ClipData;");
+                    quint32 itemsCount = clipData.callMethod<int>("getItemCount");
 
-                emit sgIrFilePicked(m_filePath, m_fileName);
+                    qDebug() << "Uri empty, multiple, count: " << itemsCount;
+                }
+                else
+                {
+                    takeReadUriPermission(uriObject);
+                    processUri(uriObject);
+
+                    qDebug() << "IR file path: " << m_filePath;
+                    qDebug() << "IR file name: " << m_fileName;
+
+                    emit sgIrFilePicked(m_filePath, m_fileName);
+                }
                 break;
             }
 
@@ -114,7 +128,7 @@ void ActivityResultManager::takeReadUriPermission(QJniObject uriObject)
     if(!result)
     {
         qDebug() << "READ_EXTERNAL_STORAGE permission denied, trying to request";
-         AndroidUtils::requestPermission("android.permission.READ_EXTERNAL_STORAGE");
+        AndroidUtils::requestPermission("android.permission.READ_EXTERNAL_STORAGE");
     }
 
     QJniObject::callStaticMethod<void>(
