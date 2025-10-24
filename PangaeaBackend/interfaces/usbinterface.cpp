@@ -148,7 +148,7 @@ void UsbInterface::write(const QByteArray &data)
 
 bool UsbInterface::hasCapable()
 {
-#ifndef Q_OS_IOS
+#ifdef Q_OS_IOS
     return false;
 #endif
 
