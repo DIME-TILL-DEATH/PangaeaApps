@@ -35,11 +35,13 @@ BaseModule{
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
 
+            property url dummyUrl
+
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
                     if(Qt.platform.os === "android")
-                        UiCore.uploadIr("", "");
+                        UiCore.uploadIr(_impulseName.dummyUrl, _impulseName.dummyUrl);
                     else
                         _iosFileDialog.open();
                 }

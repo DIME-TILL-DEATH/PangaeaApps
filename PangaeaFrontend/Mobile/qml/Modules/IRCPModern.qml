@@ -64,7 +64,8 @@ BaseModule
                         }
                         default:
                         {
-                            UiCore.uploadIr("");
+                            // url src, dst
+                            // UiCore.uploadIr(src, dst);
                             break;
                         }
                     }
