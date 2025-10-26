@@ -30,7 +30,6 @@ public:
 
     Q_INVOKABLE void disconnectFromDevice();
 
-    Q_INVOKABLE void uploadIr(QString srcFilePath, QString dstFilePath = "");
     Q_INVOKABLE void uploadIr(QUrl srcFilePath, QUrl dstFilePath = QUrl());
     Q_INVOKABLE void uploadIr(QList<QUrl> fileList, QUrl dstFilePath = QUrl());
 
@@ -132,6 +131,7 @@ private:
     void loadTranslator(QString languageCode);
     void loadDefaultTranslator();
 
+    void uploadIr(QString srcFilePath, QString dstFilePath = "");
 #ifdef Q_OS_ANDROID
     void pickFile(ActivityType fileType, QString filter);
 #endif

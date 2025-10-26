@@ -36,7 +36,8 @@ UiCore::UiCore(QObject *parent)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
     
-    connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, &UiCore::slImpulseFilePicked);
+    connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, qOverload<QString, QString>(&UiCore::uploadIr));
+    connect(&activityResultHandler, &ActivityResultManager::sgIrFileListPicked, this, qOverload<QList<QUrl>, QUrl>(&UiCore::uploadIr));
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::slImportPreset);
     connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UiCore::slFirmwareFilePicked);
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::slExportPreset);
@@ -101,12 +102,18 @@ void UiCore::disconnectFromDevice()
 
 void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 {
+    qDebug() << __FUNCTION__ << "QString, QString";
+
+#ifndef Q_OS_ANDROID
     m_dstIrPath = dstFilePath;
-#ifdef Q_OS_ANDROID
-    Q_UNUSED(srcFilePath)
-    pickFile(ActivityType::PICK_IR, "audio/*");
-    return;
-#elif defined(Q_OS_IOS)
+#endif
+// #ifdef Q_OS_ANDROID
+//     Q_UNUSED(srcFilePath)
+//     pickFile(ActivityType::PICK_IR, "audio/*");
+//     return;
+// #endif
+
+#ifdef Q_OS_IOS
     IosUtils::copyFileToTmp(srcFilePath, m_pickedIrPath);
 #else
     m_pickedIrPath = srcFilePath;
@@ -141,6 +148,12 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 
 void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
 {
+#ifdef Q_OS_ANDROID
+    m_dstIrPath = dstFilePath.path();
+    pickFile(ActivityType::PICK_IR, "audio/*");
+    return;
+#else
+
     QString filePath =  srcFilePath.path();
 #ifdef Q_OS_WINDOWS
     filePath.remove(0, 1); // remove first absolute '/' symbol
@@ -149,14 +162,16 @@ void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
 
     qDebug() << filePath << " to " << m_dstIrPath;
     uploadIr(filePath, m_dstIrPath);
+#endif
 }
 
 void UiCore::uploadIr(QList<QUrl> fileList, QUrl dstFilePath)
 {
     m_uploadFileList = fileList;
 
+#ifndef Q_OS_ANDROID
     m_dstIrPath = dstFilePath.path();
-
+#endif
     slImpulseUploaded();
 }
 
@@ -239,7 +254,7 @@ void UiCore::slImpulseUploaded()
 
     QUrl fileUrl = m_uploadFileList.takeFirst();
 #ifdef Q_OS_ANDROID
-
+    uploadIr(fileUrl.path(), m_dstIrPath);
 #else
     uploadIr(fileUrl, m_dstIrPath);
 #endif
@@ -435,25 +450,6 @@ void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
 void UiCore::pickFirmwareFile()
 {
     pickFile(ActivityType::PICK_FIRMWARE, "*/*");
-}
-
-void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
-{
-    m_pickedIrPath = filePath;
-    QFileInfo fileInfo(filePath);
-    qDebug() << "Impulse picked" << fileName
-             << "size:" << fileInfo.size() << "ir effective:" << m_currentDevice->maxIrSize();
-
-    if(m_currentDevice->deviceType() > DeviceType::LEGACY_DEVICES)
-    {
-        if(fileInfo.size() > m_currentDevice->maxIrSize())
-        {
-            emit sgUiMessage(UiMessageType::PROPOSE_IR_TRIM, "File is bigger than processing IR", {fileName, m_pickedIrPath, m_dstIrPath});
-            return;
-        }
-    }
-
-    m_currentDevice->startIrUpload(filePath, m_dstIrPath, false);
 }
 
 void UiCore::pickFile(ActivityType fileType, QString filter)
