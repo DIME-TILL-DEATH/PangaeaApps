@@ -1,5 +1,6 @@
 #include <qdebug.h>
 #include <QFile>
+#include <QUrl>
 #include <QStandardPaths>
 
 #include <QCoreApplication>
@@ -15,8 +16,6 @@
 #include "activityresultmanager.h"
 
 using namespace QtJniTypes;
-Q_DECLARE_JNI_CLASS(JClipData, "android/content/ClipData")
-Q_DECLARE_JNI_CLASS(JUri, "android/net/Uri")
 
 ActivityResultManager::ActivityResultManager()
 {
@@ -40,7 +39,18 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
                     JClipData clipData = data.callMethod<JClipData>("getClipData", "()Landroid/content/ClipData;");
                     quint32 itemsCount = clipData.callMethod<int>("getItemCount");
 
-                    qDebug() << "Uri empty, multiple, count: " << itemsCount;
+                    QList<QUrl> fileList;
+                    for(int i=0; i<itemsCount; i++)
+                    {
+                        JUri uri = clipData.callMethod<JUri>("getClipAt", i);
+                        takeReadUriPermission(uri);
+                        processUri(uri);
+
+                        qDebug() << m_filePath;
+                        fileList.append(m_filePath);
+                    }
+
+                    emit sgIrFileListPicked(fileList);
                 }
                 else
                 {
@@ -107,12 +117,9 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
     }
 }
 
-void ActivityResultManager::processUri(QJniObject uriObject)
+void ActivityResultManager::processUri(JUri uriObject)
 {
-
     m_filePath = uriObject.toString();
-//    m_filePath.replace("%2F", "/");
-//    m_filePath.replace("%3A", ":");
 
     QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
     m_fileName= QJniObject::callStaticObjectMethod(
@@ -122,7 +129,7 @@ void ActivityResultManager::processUri(QJniObject uriObject)
             androidContext.object()).toString();
 }
 
-void ActivityResultManager::takeReadUriPermission(QJniObject uriObject)
+void ActivityResultManager::takeReadUriPermission(JUri uriObject)
 {
     bool result = AndroidUtils::checkPermission("android.permission.READ_EXTERNAL_STORAGE");
     if(!result)
@@ -146,7 +153,7 @@ void ActivityResultManager::takeReadUriPermission(QJniObject uriObject)
     qDebug() << "Read URI permission taken";
 }
 
-void ActivityResultManager::takeWriteUriPermission(QJniObject uriObject)
+void ActivityResultManager::takeWriteUriPermission(JUri uriObject)
 {
     bool result = AndroidUtils::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
     if(!result)

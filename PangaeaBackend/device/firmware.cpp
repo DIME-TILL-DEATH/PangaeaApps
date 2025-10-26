@@ -56,7 +56,17 @@ bool Firmware::operator>(const Firmware &compareFirmware)
     if(compareFirmware.deviceType() != m_deviceType)
         qWarning() << "Comparing firmwares different device types!";
 
-    return compareVersion(compareFirmware.m_firmwareVersion, m_firmwareVersion);
+    // return compareVersion(compareFirmware.m_firmwareVersion, m_firmwareVersion);
+    if(compareFirmware.m_firmwareVersion.global > m_firmwareVersion.global) return false;
+    if(compareFirmware.m_firmwareVersion.global < m_firmwareVersion.global) return true;
+
+    if(compareFirmware.m_firmwareVersion.major > m_firmwareVersion.major) return false;
+    if(compareFirmware.m_firmwareVersion.major < m_firmwareVersion.major) return true;
+
+    if(compareFirmware.m_firmwareVersion.minor > m_firmwareVersion.minor) return false;
+    if(compareFirmware.m_firmwareVersion.minor < m_firmwareVersion.minor) return true;
+
+    return false;
 }
 
 bool Firmware::compareVersion(strVersion requestedVesrion, strVersion devVersion)
