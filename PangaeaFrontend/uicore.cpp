@@ -254,7 +254,7 @@ void UiCore::slImpulseUploaded()
 
     QUrl fileUrl = m_uploadFileList.takeFirst();
 #ifdef Q_OS_ANDROID
-    uploadIr(fileUrl.path(), m_dstIrPath);
+    uploadIr(fileUrl.toString(QUrl::FullyEncoded), m_dstIrPath);
 #else
     uploadIr(fileUrl, m_dstIrPath);
 #endif
