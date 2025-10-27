@@ -151,6 +151,11 @@ BaseModule
         headerText: qsTr("IR file exists")
 
         buttons: Dialog.Ok
+
+        onAccepted:
+        {
+            UiCore.impulseUploaded()    // upload next in queue
+        }
     }
 
     Connections

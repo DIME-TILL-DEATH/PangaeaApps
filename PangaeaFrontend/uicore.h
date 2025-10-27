@@ -100,7 +100,7 @@ public slots:
     void slExportPreset(QString fullFilePath, QString fileName);
     void slImportPreset(QString fullFilePath, QString fileName);
 
-    void slImpulseUploaded();
+    Q_INVOKABLE void impulseUploaded();
 // #ifdef Q_OS_ANDROID
 //     void slImpulseFilePicked(QString filePath, QString fileName);
 // #endif
