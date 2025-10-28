@@ -266,7 +266,7 @@ else()
 
         # make tarball archive
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" "${DEPLOY_PATH}/app/")
+                COMMAND cd "${DEPLOY_PATH}/app/" "&&" tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" ".")
 
         # make .deb package
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
