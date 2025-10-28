@@ -3,9 +3,9 @@ if(ANDROID)
         android/src/
     )
 
-    # find_package(Qt6 REQUIRED COMPONENTS CorePrivate)
-    # target_link_libraries(${PROJECT_NAME} PRIVATE Qt::CorePrivate)
+    add_android_openssl_libraries(${PROJECT_NAME})
 
+    target_link_libraries(${PROJECT_NAME} PUBLIC omp)
 
     set_target_properties(${PROJECT_NAME} PROPERTIES
         QT_ANDROID_VERSION_NAME ${PROJECT_VERSION}
@@ -13,9 +13,9 @@ if(ANDROID)
         QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
     )
     set_property(TARGET ${PROJECT_NAME} PROPERTY QT_ANDROID_EXTRA_LIBS
-       ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/${CMAKE_ANDROID_ARCH_ABI}/libcrypto_1_1.so
-       ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/${CMAKE_ANDROID_ARCH_ABI}/libssl_1_1.so
-       ${CMAKE_CURRENT_SOURCE_DIR}/android_openmp_libs/${CMAKE_ANDROID_ARCH_ABI}/libomp.so #needed for android sox lib
+       # ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/${CMAKE_ANDROID_ARCH_ABI}/libcrypto_1_1.so
+       # ${CMAKE_CURRENT_SOURCE_DIR}/android_ssl_libs/${CMAKE_ANDROID_ARCH_ABI}/libssl_1_1.so
+      # ${CMAKE_CURRENT_SOURCE_DIR}/android_openmp_libs/${CMAKE_ANDROID_ARCH_ABI}/libomp.so #needed for android sox lib
 
        ${CMAKE_CURRENT_SOURCE_DIR}/../../sox_lib/lib.android/${CMAKE_ANDROID_ARCH_ABI}/libsox.so
     )

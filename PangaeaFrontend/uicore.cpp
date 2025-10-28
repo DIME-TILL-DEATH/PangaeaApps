@@ -172,7 +172,7 @@ void UiCore::uploadIr(QList<QUrl> fileList, QUrl dstFilePath)
 #ifndef Q_OS_ANDROID
     m_dstIrPath = dstFilePath.path();
 #endif
-    slImpulseUploaded();
+    impulseUploaded();
 }
 
 void UiCore::convertAndUploadIr()
@@ -248,13 +248,13 @@ void UiCore::slImportPreset(QString fullFilePath, QString fileName)
     m_currentDevice->importPreset(fullFilePath, fileName);
 }
 
-void UiCore::slImpulseUploaded()
+void UiCore::impulseUploaded()
 {
     if(m_uploadFileList.isEmpty()) return;
 
     QUrl fileUrl = m_uploadFileList.takeFirst();
 #ifdef Q_OS_ANDROID
-    uploadIr(fileUrl.path(), m_dstIrPath);
+    uploadIr(fileUrl.toString(QUrl::FullyEncoded), m_dstIrPath);
 #else
     uploadIr(fileUrl, m_dstIrPath);
 #endif
@@ -430,13 +430,13 @@ void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
 {
     if(m_currentDevice)
     {
-        disconnect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::slImpulseUploaded);
+        disconnect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::impulseUploaded);
     }
 
     if(newDevice != nullptr)
     {
         m_currentDevice = newDevice;
-        connect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::slImpulseUploaded);
+        connect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::impulseUploaded);
     }
     else
     {

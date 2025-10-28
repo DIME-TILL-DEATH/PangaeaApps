@@ -68,7 +68,11 @@ BaseModule{
 
         buttons: Dialog.Yes | Dialog.No
 
+        checkBoxVisible: true
+        checkBoxText: qsTr("Always convert")
+
         onAccepted:{
+            UiSettings.saveSetting("auto_convert_wav", _msgNotSupportedIrFormat.checkBoxChecked);
             UiCore.convertAndUploadIr("", "");
         }
     }
@@ -85,8 +89,12 @@ BaseModule{
         property string srcPath
         property string dstPath
 
+        checkBoxVisible: true
+        checkBoxText: qsTr("Always trim")
+
         onAccepted:{
             UiCore.currentDevice.startIrUpload(srcPath, dstPath, true);
+            UiSettings.saveSetting("auto_trim_wav", _msgTrimFileDialog.checkBoxChecked);
         }
 
         onRejected:{

@@ -6,13 +6,13 @@ set(MY_BUILD_NUMBER 2515)
 
 set(MOBILE_VERSION_MAJOR 1)
 set(MOBILE_VERSION_MINOR 2)
-set(MOBILE_VERSION_BUILD 5)
+set(MOBILE_VERSION_BUILD 7)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
-    set(VERSION_CODE 44)
+    set(VERSION_CODE 47)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -25,6 +25,16 @@ if(ANDROID)
         "docs.qrc"
         "firmwares.qrc"
     )
+
+    # open ssl support
+    include(FetchContent)
+    FetchContent_Declare(
+        android_openssl
+        DOWNLOAD_EXTRACT_TIMESTAMP true
+        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
+    )
+    FetchContent_MakeAvailable(android_openssl)
+    include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
 elseif(IOS)    
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
 

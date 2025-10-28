@@ -40,14 +40,18 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
                     quint32 itemsCount = clipData.callMethod<int>("getItemCount");
 
                     QList<QUrl> fileList;
+
                     for(int i=0; i<itemsCount; i++)
                     {
-                        JUri uri = clipData.callMethod<JUri>("getClipAt", i);
+                        JItem item = clipData.callMethod<JItem>("getItemAt", i);
+                        JUri uri = item.callMethod<JUri>("getUri");
                         takeReadUriPermission(uri);
-                        processUri(uri);
+                        // processUri(uri);
 
-                        qDebug() << m_filePath;
-                        fileList.append(m_filePath);
+                        QString stringUri = uri.callMethod<QString>("toString");
+
+                        qDebug() << stringUri;
+                        fileList.append(stringUri);
                     }
 
                     emit sgIrFileListPicked(fileList);

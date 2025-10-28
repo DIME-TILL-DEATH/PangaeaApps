@@ -90,7 +90,7 @@ Item {
 
         Rectangle{
             width: parent.width*0.98
-            height: parent.height*0.4
+            height: parent.height*0.3
             border.color: Style.currentTheme.colorBorderOn
             radius: Style.baseRadius
 
@@ -166,7 +166,7 @@ Item {
             id: _boxCheckUpdates
 
             width: parent.width*0.98
-            height: parent.height*0.12
+            height: parent.height*0.25
             border.color: Style.currentTheme.colorBorderOn
             radius: Style.baseRadius
 
@@ -175,24 +175,64 @@ Item {
                 GradientStop{position: 1.0; color: Style.currentTheme.colorModulOff}
             }
 
-            CheckBox{
-                id: _checkBoxUpdates
+            Column{
+                anchors.fill: parent
 
-                x: _boxCheckUpdates.width/2 - _contentText.contentWidth - _checkBoxUpdates.indicator.width/2
+                CheckBox{
+                    id: _checkBoxConvert
 
-                anchors.verticalCenter: parent.verticalCenter
+                    checked: UiSettings.autoConvertWav
+                    text: qsTr("Auto convert WAV")
 
-                contentItem: MText{
-                    id: _contentText
+                    contentItem: MText{
+                        text: _checkBoxConvert.text
 
-                    color: Style.colorText
-                    text: qsTr("Auto check updates")
-                    anchors.left: _checkBoxUpdates.indicator.right
-                    verticalAlignment: Text.AlignVCenter
-                    leftPadding: _checkBoxUpdates.indicator.width/5
+                        color: Style.colorText
+                        anchors.left: _checkBoxConvert.indicator.right
+                    //     verticalAlignment: Text.AlignVCenter
+                        leftPadding: _checkBoxConvert.indicator.width/5
+                    }
+                    onCheckStateChanged: {
+                        UiCore.saveSetting("auto_convert_wav", _checkBoxConvert.checked);
+                    }
                 }
-                onCheckStateChanged: {
-                    UiCore.saveSetting("check_updates_enable", _checkBoxUpdates.checked);
+
+                CheckBox{
+                    id: _checkBoxTrim
+
+                    checked: UiSettings.autoTrimWav
+
+                    text: qsTr("Auto trim WAV")
+                    contentItem: MText{
+                        text: _checkBoxTrim.text
+
+                        color: Style.colorText
+                        anchors.left: _checkBoxTrim.indicator.right
+                        // verticalAlignment: Text.AlignVCenter
+                        leftPadding: _checkBoxTrim.indicator.width/5
+                    }
+                    onCheckStateChanged: {
+                        UiCore.saveSetting("auto_trim_wav", _checkBoxTrim.checked);
+                    }
+                }
+
+                CheckBox{
+                    id: _checkBoxUpdates
+
+                    checked: UiSettings.checkUpdatesEnabled
+
+                    text: qsTr("Auto check updates")
+                    contentItem: MText{
+                        text: _checkBoxUpdates.text
+
+                        color: Style.colorText
+                        anchors.left: _checkBoxUpdates.indicator.right
+                        // verticalAlignment: Text.AlignVCenter
+                        leftPadding: _checkBoxUpdates.indicator.width/5
+                    }
+                    onCheckStateChanged: {
+                        UiCore.saveSetting("check_updates_enable", _checkBoxUpdates.checked);
+                    }
                 }
             }
         }
@@ -201,7 +241,7 @@ Item {
             id: _btnBack
 
             width: parent.width*0.5
-            height: parent.height*0.1
+            height: parent.height*0.075
             anchors.horizontalCenter: parent.horizontalCenter
 
             //: Back to the previous page
@@ -220,13 +260,6 @@ Item {
     {
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam === "check_updates_enable")
-            {
-                _checkBoxUpdates.checked = inValue;
-            }
-        }
 
         function onSgSetUIText(nameParam, inText)
         {

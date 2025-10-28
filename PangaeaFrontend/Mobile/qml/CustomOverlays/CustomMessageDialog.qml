@@ -20,6 +20,10 @@ Dialog
 
     property alias buttons: _dialogButtonBox.standardButtons
 
+    property alias checkBoxText: _checkBox.text
+    property alias checkBoxChecked: _checkBox.checked
+    property alias checkBoxVisible: _checkBox.visible
+
     modal: true
     closePolicy: Popup.NoAutoClose
 
@@ -73,7 +77,7 @@ Dialog
         }
 
 
-    contentItem:  Item {
+    contentItem:  Column {
            id: _textLabel
 
            width: _root.width
@@ -88,8 +92,26 @@ Dialog
                padding: 5
 
                color: Style.colorText
-               anchors.verticalCenter: parent.verticalCenter
 
+           }
+
+           CheckBox{
+               id: _checkBox
+               anchors.horizontalCenter: parent.horizontalCenter
+
+               visible: false
+               checked: true
+
+               contentItem: MText{
+                   id: _checkBoxText
+
+                   text: _checkBox.text
+
+                   color: Style.colorText
+                   anchors.left: _checkBox.indicator.right
+                   verticalAlignment: Text.AlignVCenter
+                   leftPadding: _checkBox.indicator.width/5
+               }
            }
         }
 

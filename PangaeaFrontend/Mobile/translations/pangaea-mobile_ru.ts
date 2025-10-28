@@ -4,25 +4,25 @@
 <context>
     <name>AbstractDevice</name>
     <message>
-        <location filename="../../../PangaeaBackend/device/cplegacy.cpp" line="73"/>
-        <location filename="../../../PangaeaBackend/device/cpmodern.cpp" line="63"/>
+        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="76"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="66"/>
         <source>Phones</source>
         <translation>Наушники</translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/device/cplegacy.cpp" line="74"/>
-        <location filename="../../../PangaeaBackend/device/cpmodern.cpp" line="64"/>
+        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="77"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="67"/>
         <source>Line</source>
         <translation>Линейный</translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/device/cplegacy.cpp" line="75"/>
-        <location filename="../../../PangaeaBackend/device/cpmodern.cpp" line="65"/>
+        <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="78"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="68"/>
         <source>Balanced</source>
         <translation>Балансный</translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/device/cpmodern.cpp" line="66"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="69"/>
         <source>L: Processed/R: Monitor</source>
         <translation>L: Обраб./R: Мониторн.</translation>
     </message>
@@ -31,31 +31,40 @@
     <name>AbstractModule</name>
     <message>
         <location filename="../../../PangaeaBackend/modules/cabsim.cpp" line="6"/>
+        <location filename="../../../PangaeaBackend/modules/cabsim.cpp" line="14"/>
         <source>Cab. sim.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/chorus.cpp" line="7"/>
+        <location filename="../../../PangaeaBackend/modules/chorus.cpp" line="6"/>
+        <location filename="../../../PangaeaBackend/modules/chorus.cpp" line="21"/>
         <source>Chorus</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/compressor.cpp" line="7"/>
+        <location filename="../../../PangaeaBackend/modules/compressor.cpp" line="6"/>
+        <location filename="../../../PangaeaBackend/modules/compressor.cpp" line="18"/>
+        <location filename="../../../PangaeaBackend/modules/compressor.cpp" line="30"/>
         <source>Compressor</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/delay.cpp" line="9"/>
+        <location filename="../../../PangaeaBackend/modules/delay.cpp" line="8"/>
+        <location filename="../../../PangaeaBackend/modules/delay.cpp" line="23"/>
         <source>Delay</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/earlyreflections.cpp" line="9"/>
+        <location filename="../../../PangaeaBackend/modules/earlyreflections.cpp" line="10"/>
+        <location filename="../../../PangaeaBackend/modules/earlyreflections.cpp" line="22"/>
+        <location filename="../../../PangaeaBackend/modules/earlyreflections.cpp" line="34"/>
         <source>Early reflections</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/eqparametric.cpp" line="16"/>
+        <location filename="../../../PangaeaBackend/modules/eqparametric.cpp" line="14"/>
+        <location filename="../../../PangaeaBackend/modules/eqparametric.cpp" line="49"/>
+        <location filename="../../../PangaeaBackend/modules/eqparametric.cpp" line="109"/>
         <source>Parametric EQ</source>
         <translation></translation>
     </message>
@@ -65,27 +74,34 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/lowpassfilter.cpp" line="7"/>
+        <location filename="../../../PangaeaBackend/modules/lowpassfilter.cpp" line="9"/>
         <source>Low pass filter</source>
         <translation>Low-pass filter</translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/noisegate.cpp" line="7"/>
+        <location filename="../../../PangaeaBackend/modules/noisegate.cpp" line="6"/>
+        <location filename="../../../PangaeaBackend/modules/noisegate.cpp" line="17"/>
+        <location filename="../../../PangaeaBackend/modules/noisegate.cpp" line="29"/>
         <source>Noise gate</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../../PangaeaBackend/modules/phaser.cpp" line="7"/>
+        <location filename="../../../PangaeaBackend/modules/phaser.cpp" line="24"/>
         <source>Phaser</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/poweramp.cpp" line="7"/>
+        <location filename="../../../PangaeaBackend/modules/poweramp.cpp" line="6"/>
+        <location filename="../../../PangaeaBackend/modules/poweramp.cpp" line="23"/>
+        <location filename="../../../PangaeaBackend/modules/poweramp.cpp" line="38"/>
         <source>Power amp</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../../PangaeaBackend/modules/preamp.cpp" line="7"/>
+        <location filename="../../../PangaeaBackend/modules/preamp.cpp" line="22"/>
+        <location filename="../../../PangaeaBackend/modules/preamp.cpp" line="37"/>
         <source>Preamp</source>
         <translation></translation>
     </message>
@@ -95,8 +111,29 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/modules/tremolo.cpp" line="7"/>
+        <location filename="../../../PangaeaBackend/modules/tremolo.cpp" line="8"/>
+        <location filename="../../../PangaeaBackend/modules/tremolo.cpp" line="21"/>
         <source>Tremolo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../PangaeaBackend/modules/dualcabsim.cpp" line="7"/>
+        <source>Cab sim</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../PangaeaBackend/modules/flanger.cpp" line="7"/>
+        <source>Flanger</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../PangaeaBackend/modules/resonancefilter.cpp" line="6"/>
+        <source>Resonance filter</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../PangaeaBackend/modules/reverb.cpp" line="8"/>
+        <source>Reverb</source>
         <translation></translation>
     </message>
 </context>
@@ -579,42 +616,52 @@
         <translation>пусто</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="65"/>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="67"/>
         <source>Not supported format</source>
         <translation>Неподдерживаемый формат</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="79"/>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="72"/>
+        <source>Always convert</source>
+        <translation>Всегда конвертировать</translation>
+    </message>
+    <message>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="85"/>
         <source>Trim IR file</source>
         <translation>Редактирование импульса</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="100"/>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="93"/>
+        <source>Always trim</source>
+        <translation>Всегда укорачивать</translation>
+    </message>
+    <message>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="110"/>
         <source>IR file exists</source>
         <translation>Импульс уже загружен</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="116"/>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="126"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат:</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="118"/>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="128"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="125"/>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="135"/>
         <source>File </source>
         <translation>Файл </translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="125"/>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="135"/>
         <source> already on device.</source>
         <translation> уже загружен на устройство.</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="141"/>
+        <location filename="../qml/Modules/IRCPLegacy.qml" line="151"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation>Длительность выбранного файла больше чем длительность, используемая при обработке. Желаете ли Вы укоротить файл для ускорения загрузки и экономии памяти в устройстве?</translation>
     </message>
@@ -627,42 +674,52 @@
         <translation>пусто</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="102"/>
+        <location filename="../qml/Modules/IRCPModern.qml" line="103"/>
         <source>Not supported format</source>
         <translation>Неподдерживаемый формат</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="119"/>
+        <location filename="../qml/Modules/IRCPModern.qml" line="108"/>
+        <source>Always convert</source>
+        <translation>Всегда конвертировать</translation>
+    </message>
+    <message>
+        <location filename="../qml/Modules/IRCPModern.qml" line="124"/>
         <source>Trim IR file</source>
         <translation>Редактирование импульса</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="142"/>
+        <location filename="../qml/Modules/IRCPModern.qml" line="132"/>
+        <source>Always trim</source>
+        <translation>Всегда укорачивать</translation>
+    </message>
+    <message>
+        <location filename="../qml/Modules/IRCPModern.qml" line="151"/>
         <source>IR file exists</source>
         <translation>Импульс уже загружен</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="160"/>
+        <location filename="../qml/Modules/IRCPModern.qml" line="166"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат:</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="162"/>
+        <location filename="../qml/Modules/IRCPModern.qml" line="168"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="169"/>
+        <location filename="../qml/Modules/IRCPModern.qml" line="175"/>
         <source>File </source>
         <translation>Файл </translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="169"/>
+        <location filename="../qml/Modules/IRCPModern.qml" line="175"/>
         <source> already on device.</source>
         <translation> уже загружен на устройство.</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="185"/>
+        <location filename="../qml/Modules/IRCPModern.qml" line="191"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation>Длительность выбранного файла больше чем длительность, используемая при обработке. Желаете ли Вы укоротить файл для ускорения загрузки и экономии памяти в устройстве?</translation>
     </message>
@@ -783,8 +840,8 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     <message>
         <location filename="../qml/Pages/Main.qml" line="161"/>
         <location filename="../qml/Pages/Main.qml" line="201"/>
-        <location filename="../qml/Pages/Main.qml" line="304"/>
-        <location filename="../qml/Pages/Main.qml" line="312"/>
+        <location filename="../qml/Pages/Main.qml" line="305"/>
+        <location filename="../qml/Pages/Main.qml" line="313"/>
         <source>Warning</source>
         <translation>ВНИМАНИЕ</translation>
     </message>
@@ -805,27 +862,27 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
     </message>
     <message>
         <location filename="../qml/Pages/Main.qml" line="202"/>
-        <location filename="../qml/Pages/Main.qml" line="374"/>
+        <location filename="../qml/Pages/Main.qml" line="375"/>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
         <translation>Модуль Bluetooth выключен! Пожалуйста, включите модуль Bluetooth на Вашем мобильном устройстве и нажмите ОК</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="258"/>
-        <location filename="../qml/Pages/Main.qml" line="320"/>
+        <location filename="../qml/Pages/Main.qml" line="259"/>
+        <location filename="../qml/Pages/Main.qml" line="321"/>
         <source>Firmware version of your device is </source>
         <translation>Текущая версия прошивки Вашего устройства </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="259"/>
-        <location filename="../qml/Pages/Main.qml" line="321"/>
+        <location filename="../qml/Pages/Main.qml" line="260"/>
+        <location filename="../qml/Pages/Main.qml" line="322"/>
         <source>
 Minimum required version is </source>
         <translation>
 Минимальная требуемая версия </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="261"/>
-        <location filename="../qml/Pages/Main.qml" line="323"/>
+        <location filename="../qml/Pages/Main.qml" line="262"/>
+        <location filename="../qml/Pages/Main.qml" line="324"/>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
@@ -834,21 +891,21 @@ WARNING!!! Updating firmware may take several minutes!</source>
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="269"/>
+        <location filename="../qml/Pages/Main.qml" line="270"/>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
         <translation>Новая прошивка доступна на сервере.
 Текущая версия прошивки Вашего устройства: </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="270"/>
+        <location filename="../qml/Pages/Main.qml" line="271"/>
         <source>
 New firmware version is: </source>
         <translation>
 Новая версия прошивки: </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="272"/>
+        <location filename="../qml/Pages/Main.qml" line="273"/>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
@@ -857,64 +914,64 @@ WARNING!!! Updating firmware may take several minutes!</source>
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="288"/>
+        <location filename="../qml/Pages/Main.qml" line="289"/>
         <source>Device parse error</source>
         <translation>Ошибка разбора команды</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="296"/>
-        <location filename="../qml/Pages/Main.qml" line="331"/>
+        <location filename="../qml/Pages/Main.qml" line="297"/>
+        <location filename="../qml/Pages/Main.qml" line="332"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="297"/>
+        <location filename="../qml/Pages/Main.qml" line="298"/>
         <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation>Ошибка при сохранении импульса. Пожалуйста, попробуйте пересохранить импульс.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="305"/>
+        <location filename="../qml/Pages/Main.qml" line="306"/>
         <source>Preset import error!</source>
         <translation>Ошибка импорта пресета!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="313"/>
+        <location filename="../qml/Pages/Main.qml" line="314"/>
         <source>You must save preset before export</source>
         <translation>Вы должны схранить пресет перед экспортом</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="332"/>
+        <location filename="../qml/Pages/Main.qml" line="333"/>
         <source>IR file copying error.</source>
         <translation>Ошибка копирования файла импульса.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="345"/>
+        <location filename="../qml/Pages/Main.qml" line="346"/>
         <source>Preset export finished</source>
         <translation>Экспорт пресета завершён</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="378"/>
+        <location filename="../qml/Pages/Main.qml" line="379"/>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
         <translation>ОС Android требуется Геолокация для возможности поиска устройств Bluetooth LE. Пожалуйста, включите модуль Геолокации на Вашем мобильном устройстве и нажмите кнопку ОК</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="382"/>
+        <location filename="../qml/Pages/Main.qml" line="383"/>
         <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
         <translation>Приложению требуется разрешение на использование геолокации для поиска устройств Bluetooth LE. Пожалуйста, предоставьте приложению требуемые разрешения и нажмите ОК</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="386"/>
-        <location filename="../qml/Pages/Main.qml" line="402"/>
+        <location filename="../qml/Pages/Main.qml" line="387"/>
+        <location filename="../qml/Pages/Main.qml" line="403"/>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
         <translation>Произошла неизвестная ошибка Bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="398"/>
+        <location filename="../qml/Pages/Main.qml" line="399"/>
         <source>Device is unavaliable</source>
         <translation>Устройство недоступно</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="414"/>
+        <location filename="../qml/Pages/Main.qml" line="415"/>
         <source>Device disconnected. 
 </source>
         <translation>Устройство отключено. 
@@ -948,7 +1005,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <translation type="vanished">Укажите имя для пресета:</translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/MapCPModern.qml" line="245"/>
+        <location filename="../qml/ControlGroups/MapCPModern.qml" line="247"/>
         <source>Delay/Reverb</source>
         <translation>Модули Дилея/Реверберации</translation>
     </message>
@@ -1406,12 +1463,22 @@ Version: </source>
         <translation>Автовыбор</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="189"/>
+        <location filename="../qml/Pages/SettingsPage.qml" line="185"/>
+        <source>Auto convert WAV</source>
+        <translation>Всегда конвертировать WAV</translation>
+    </message>
+    <message>
+        <location filename="../qml/Pages/SettingsPage.qml" line="205"/>
+        <source>Auto trim WAV</source>
+        <translation>Всегда укорачивать WAV</translation>
+    </message>
+    <message>
+        <location filename="../qml/Pages/SettingsPage.qml" line="224"/>
         <source>Auto check updates</source>
         <translation>Автопроверка обновлений</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="208"/>
+        <location filename="../qml/Pages/SettingsPage.qml" line="248"/>
         <source>Back</source>
         <extracomment>Back to the previous page</extracomment>
         <translation>Вернуться</translation>
