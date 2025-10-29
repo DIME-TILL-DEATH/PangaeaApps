@@ -212,6 +212,7 @@ ApplicationWindow
     {
         UiCore.setupApplication();
         InterfaceManager.startScanning(DeviceConnectionType.BLE);
+        InterfaceManager.startScanning(DeviceConnectionType.USB)
     }
 
     Connections{
@@ -411,10 +412,11 @@ ApplicationWindow
         {
             _main.connected = false;
             _main.openConnectPage();
-            _msgBluetoothNotReady.text = qsTr("Device disconnected\n") + errorDescription
+            _msgBluetoothNotReady.text = qsTr("Device disconnected. \n") + errorDescription
             _msgBluetoothNotReady.open();
 
             InterfaceManager.startScanning(DeviceConnectionType.BLE);
+            InterfaceManager.startScanning(DeviceConnectionType.USB);
             mBusy.visible = false;
         }
 

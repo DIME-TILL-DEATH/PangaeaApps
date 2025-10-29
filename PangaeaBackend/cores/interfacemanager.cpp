@@ -8,8 +8,9 @@ InterfaceManager::InterfaceManager(QObject *parent)
                 : QObject{parent}
 {
 #ifndef Q_OS_IOS
-    m_usbInterface = new UsbInterface(this);
+    if(UsbInterface::hasCapable()) m_usbInterface = new UsbInterface(this);
 #endif
+
     m_bleInterface = new BleInterface(this);
     m_offlineInterface = new OfflineInterface(this);
 
@@ -19,6 +20,9 @@ InterfaceManager::InterfaceManager(QObject *parent)
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                                     + "/settings.conf", QSettings::NativeFormat);
+#elif defined(Q_OS_IOS)
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                           + "/settings.plist", QSettings::NativeFormat);
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
@@ -48,7 +52,7 @@ bool InterfaceManager::connectToDevice(DeviceDescription device)
         {
             #ifndef Q_OS_IOS
             qDebug() << "Settling USB interface";
-            m_exchangeInterface = m_usbInterface;
+            if(m_usbInterface) m_exchangeInterface = m_usbInterface;
             #endif
             break;
         }
@@ -125,8 +129,11 @@ void InterfaceManager::startScanning(DeviceConnectionType connectionType)
     case DeviceConnectionType::USB:
     {
         #ifndef Q_OS_IOS
-        QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated, Qt::UniqueConnection);
-        m_usbInterface->startScan();
+        if(m_usbInterface)
+        {
+            QObject::connect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated, Qt::UniqueConnection);
+            m_usbInterface->startScan();
+        }
         #endif
         break;
     }
@@ -142,10 +149,12 @@ void InterfaceManager::startScanning(DeviceConnectionType connectionType)
 
 void InterfaceManager::stopScanning()
 {
-#ifndef Q_OS_IOS
-    QObject::disconnect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated);
-    m_usbInterface->stopScan();
-#endif
+    if(m_usbInterface)
+    {
+        m_usbInterface->stopScan();
+        QObject::disconnect(m_usbInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated);
+    }
+
     QObject::disconnect(m_bleInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated);
     QObject::disconnect(m_offlineInterface, &AbstractInterface::sgDeviceListUpdated, this, &InterfaceManager::slDeviceListUpdated);
 

@@ -24,7 +24,7 @@ ActivityResultManager activityResultHandler;
 #endif
 
 #ifdef Q_OS_IOS
-#include "Mobile/ios/src/iosfileutils.hpp"
+#include "Mobile/ios/src/iosutils.hpp"
 #endif
 
 UiCore::UiCore(QObject *parent)
@@ -32,14 +32,20 @@ UiCore::UiCore(QObject *parent)
 {
     m_currentDevice = &dummyDevice;
 
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
     
-    connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, &UiCore::slImpulseFilePicked);
+    connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, qOverload<QString, QString>(&UiCore::uploadIr));
+    connect(&activityResultHandler, &ActivityResultManager::sgIrFileListPicked, this, qOverload<QList<QUrl>, QUrl>(&UiCore::uploadIr));
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::slImportPreset);
     connect(&activityResultHandler, &ActivityResultManager::sgFirmwareFilePicked, this, &UiCore::slFirmwareFilePicked);
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::slExportPreset);
+#elif defined(Q_OS_IOS)
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.plist", QSettings::NativeFormat);
+
+    IosUtils::wakeLockDisable();
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
@@ -96,13 +102,19 @@ void UiCore::disconnectFromDevice()
 
 void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 {
+    qDebug() << __FUNCTION__ << "QString, QString";
+
+#ifndef Q_OS_ANDROID
     m_dstIrPath = dstFilePath;
-#ifdef Q_OS_ANDROID
-    Q_UNUSED(srcFilePath)
-    pickFile(ActivityType::PICK_IR, "audio/*");
-    return;
-#elif defined(Q_OS_IOS)
-    IosFileUtils::copyFileToTmp(srcFilePath, m_pickedIrPath);
+#endif
+// #ifdef Q_OS_ANDROID
+//     Q_UNUSED(srcFilePath)
+//     pickFile(ActivityType::PICK_IR, "audio/*");
+//     return;
+// #endif
+
+#ifdef Q_OS_IOS
+    IosUtils::copyFileToTmp(srcFilePath, m_pickedIrPath);
 #else
     m_pickedIrPath = srcFilePath;
 #endif
@@ -136,6 +148,12 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 
 void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
 {
+#ifdef Q_OS_ANDROID
+    m_dstIrPath = dstFilePath.path();
+    pickFile(ActivityType::PICK_IR, "audio/*");
+    return;
+#else
+
     QString filePath =  srcFilePath.path();
 #ifdef Q_OS_WINDOWS
     filePath.remove(0, 1); // remove first absolute '/' symbol
@@ -143,16 +161,18 @@ void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
     m_dstIrPath = dstFilePath.path();
 
     qDebug() << filePath << " to " << m_dstIrPath;
-    uploadIr(filePath, dstFilePath.path());
+    uploadIr(filePath, m_dstIrPath);
+#endif
 }
 
 void UiCore::uploadIr(QList<QUrl> fileList, QUrl dstFilePath)
 {
     m_uploadFileList = fileList;
 
+#ifndef Q_OS_ANDROID
     m_dstIrPath = dstFilePath.path();
-
-    slImpulseUploaded();
+#endif
+    impulseUploaded();
 }
 
 void UiCore::convertAndUploadIr()
@@ -192,6 +212,8 @@ void UiCore::exportPreset(QUrl dstPath)
 
         QtAndroidPrivate::startActivity(intent, ActivityType::CREATE_PRESET, &activityResultHandler);
     }
+// #elif defined(Q_OS_IOS)
+
 #else
     QString filePath = dstPath.path();
     #ifdef Q_OS_WIN
@@ -209,7 +231,7 @@ void UiCore::importPreset(QString filePath)
     pickFile(ActivityType::PICK_PRESET, "*/*");
 #elif defined(Q_OS_IOS)
     QString tmpFilePath;
-    IosFileUtils::copyFileToTmp(filePath, tmpFilePath);
+    IosUtils::copyFileToTmp(filePath, tmpFilePath);
     slImportPreset(tmpFilePath, "");
 #else
     slImportPreset(filePath, "");
@@ -226,19 +248,23 @@ void UiCore::slImportPreset(QString fullFilePath, QString fileName)
     m_currentDevice->importPreset(fullFilePath, fileName);
 }
 
-void UiCore::slImpulseUploaded()
+void UiCore::impulseUploaded()
 {
     if(m_uploadFileList.isEmpty()) return;
 
     QUrl fileUrl = m_uploadFileList.takeFirst();
+#ifdef Q_OS_ANDROID
+    uploadIr(fileUrl.toString(QUrl::FullyEncoded), m_dstIrPath);
+#else
     uploadIr(fileUrl, m_dstIrPath);
+#endif
 }
 
 void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
 {
 #ifdef Q_OS_IOS
     QString tmpFilePath;
-    IosFileUtils::copyFileToTmp(filePath, tmpFilePath);
+    IosUtils::copyFileToTmp(filePath, tmpFilePath);
 
     filePath = tmpFilePath;
 
@@ -404,13 +430,13 @@ void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
 {
     if(m_currentDevice)
     {
-        disconnect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::slImpulseUploaded);
+        disconnect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::impulseUploaded);
     }
 
     if(newDevice != nullptr)
     {
         m_currentDevice = newDevice;
-        connect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::slImpulseUploaded);
+        connect(m_currentDevice, &AbstractDevice::impulseUploaded, this, &UiCore::impulseUploaded);
     }
     else
     {
@@ -426,31 +452,13 @@ void UiCore::pickFirmwareFile()
     pickFile(ActivityType::PICK_FIRMWARE, "*/*");
 }
 
-void UiCore::slImpulseFilePicked(QString filePath, QString fileName)
-{
-    m_pickedIrPath = filePath;
-    QFileInfo fileInfo(filePath);
-    qDebug() << "Impulse picked" << fileName
-             << "size:" << fileInfo.size() << "ir effective:" << m_currentDevice->maxIrSize();
-
-    if(m_currentDevice->deviceType() > DeviceType::LEGACY_DEVICES)
-    {
-        if(fileInfo.size() > m_currentDevice->maxIrSize())
-        {
-            emit sgUiMessage(UiMessageType::PROPOSE_IR_TRIM, "File is bigger than processing IR", {fileName, m_pickedIrPath, m_dstIrPath});
-            return;
-        }
-    }
-
-    m_currentDevice->startIrUpload(filePath, m_dstIrPath, false);
-}
-
 void UiCore::pickFile(ActivityType fileType, QString filter)
 {
     QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "ACTION_OPEN_DOCUMENT");
 
     jint FLAG_READ_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
     jint FLAG_PERSISTABLE_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
+    QJniObject EXTRA_ALLOW_MULTIPLE =  QJniObject::getStaticField<jstring>("android/content/Intent", "EXTRA_ALLOW_MULTIPLE");
 
     QJniObject intent("android/content/Intent");
     if (ACTION_OPEN_DOCUMENT.isValid() && intent.isValid())
@@ -458,6 +466,8 @@ void UiCore::pickFile(ActivityType fileType, QString filter)
         intent.callObjectMethod("setAction", "(Ljava/lang/String;)Landroid/content/Intent;", ACTION_OPEN_DOCUMENT.object<jstring>());
         intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString(filter).object<jstring>());
 
+        // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.callObjectMethod("putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", EXTRA_ALLOW_MULTIPLE.object<jstring>(), true);
         intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_READ_PERMISSION);
         intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_PERSISTABLE_PERMISSION);
 

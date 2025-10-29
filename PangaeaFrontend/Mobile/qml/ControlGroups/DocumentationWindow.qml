@@ -109,6 +109,8 @@ CustomMessageDialog {
             Layout.preferredHeight: parent.height*3/20
             Layout.alignment: Qt.AlignHCenter
 
+            visible: Qt.platform.os === "android"
+
             //: Button text. Format device
             textButton: qsTr("Application manual")
             onMbPressed:
@@ -122,6 +124,8 @@ CustomMessageDialog {
             Layout.preferredWidth: parent.width*2/3
             Layout.preferredHeight: parent.height*3/20
             Layout.alignment: Qt.AlignHCenter
+
+            visible: Qt.platform.os === "android"
 
             //: Button text. Format device
             textButton: qsTr("Device manual")

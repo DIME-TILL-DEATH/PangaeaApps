@@ -17,6 +17,8 @@ endif()
 if(ANDROID)
     set(PLATFORM_SPECIFIC_SOURCES
         utils/androidutils.cpp utils/androidutils.h
+        interfaces/android_serial/qserialport.cpp interfaces/android_serial/qserialport.h
+        interfaces/android_serial/qserialportinfo.cpp interfaces/android_serial/qserialportinfo.h
     )
 endif()
 
@@ -160,6 +162,7 @@ else()
 endif()
 
 if(ANDROID)
+    find_package(Qt6 REQUIRED COMPONENTS CorePrivate)
     target_link_libraries(PangaeaBackend PUBLIC Qt::CorePrivate)
 target_link_libraries(PangaeaBackend PRIVATE Qt6::Core)
 endif()

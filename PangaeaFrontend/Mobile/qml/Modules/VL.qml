@@ -51,7 +51,7 @@ Item
 
                 moduleOn: true
 
-                ctrlValInstance: UiCore.currentDevice.MV.presetVolume
+                ctrlValInstance: UiCore.currentDevice.MV.volume
             }
         }
     }

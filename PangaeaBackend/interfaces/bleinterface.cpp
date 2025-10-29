@@ -2,8 +2,10 @@
 #include <QStandardPaths>
 #include <QPermission>
 
-#include <QCoreApplication>
+#include <QGuiApplication>
 #include <QGeoPositionInfoSource>
+
+#include <QThread>
 
 
 #ifdef Q_OS_ANDROID
@@ -18,18 +20,19 @@ BleInterface::BleInterface(QObject *parent)
     m_control{nullptr},
     m_service{nullptr}
 {
-    QCoreApplication *app = QCoreApplication::instance();
+    QCoreApplication *app = QGuiApplication::instance();
     if(app)
     {
-       app->requestPermission(QBluetoothPermission{}, [](const QPermission &permission)
-       {
-           if(permission.status() == Qt::PermissionStatus::Granted){
-               qDebug() << "Bluetooth permission granted";
-           }
-           else{
-               qWarning() << "Bluetooth permission not granted!";
-           }
-       });
+        app->requestPermission(QBluetoothPermission{}, [this](const QPermission &permission)
+        {
+            if(permission.status() == Qt::PermissionStatus::Granted){
+                qDebug() << "Bluetooth permission granted";
+                startScan();
+            }
+            else{
+                qWarning() << "Bluetooth permission not granted!";
+            }
+        });
     }
 
 #ifdef Q_OS_ANDROID
@@ -51,13 +54,31 @@ BleInterface::BleInterface(QObject *parent)
             m_moduleUniqueNames.insert(MACAddress, name);
         }
         appSettings->endArray();
+#elif defined(Q_OS_IOS)
+    appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                    + "/settings.plist", QSettings::NativeFormat);
+
+    appSettings->setFallbacksEnabled(false);
+    appSettings->beginGroup("AutoconnectSettings");
+    appSettings->endGroup();
+
+    int size = appSettings->beginReadArray("Unique module names");
+    for(int i=0; i<size; ++i)
+    {
+        appSettings->setArrayIndex(i);
+
+        QString MACAddress = appSettings->value("MAC address").toString();
+        QString name = appSettings->value("Name").toString();
+        m_moduleUniqueNames.insert(MACAddress, name);
+    }
+    appSettings->endArray();
 #else
     appSettings = new QSettings(QSettings::UserScope, this);
 #endif
 
-    qDebug() << "BLE thread" << thread();
+    // qDebug() << "BLE thread" << thread();
     m_deviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent(); // parent = this: Main COM uninit tried from another thread
-    qDebug() << "Discovery agent thread" << m_deviceDiscoveryAgent->thread();
+    // qDebug() << "Discovery agent thread" << m_deviceDiscoveryAgent->thread();
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
             this, &BleInterface::addDevice);
@@ -75,7 +96,7 @@ BleInterface::BleInterface(QObject *parent)
     m_connectionType = DeviceConnectionType::BLE;
 
     rssiUpdateTimer = new QTimer(this);
-    qDebug() << "rssi Timer thread" << rssiUpdateTimer->thread();
+    // qDebug() << "rssi Timer thread" << rssiUpdateTimer->thread();
     rssiUpdateTimer->setInterval(1000);
     QObject::connect(rssiUpdateTimer, &QTimer::timeout, this, &BleInterface::requestRssi);
 }
@@ -123,6 +144,7 @@ void BleInterface::startDiscovering()
         return;
     }
 
+#ifdef Q_OS_ANDROID
     QGeoPositionInfoSource* geoSource =  QGeoPositionInfoSource::createDefaultSource(this);
     if(geoSource == nullptr)
     {
@@ -141,6 +163,7 @@ void BleInterface::startDiscovering()
             return;
         }
     }
+#endif
 
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
     {
@@ -194,32 +217,12 @@ void BleInterface::addDevice(const QBluetoothDeviceInfo &device)
     address = device.address().toString();
 #endif
 
-//    if (device.coreConfigurations() & QBluetoothDeviceInfo::LowEnergyCoreConfiguration)
-//    {
-//        qInfo() << "Discovered LE Device name: " << device.name() << " Address: "
-//                   << address;
-//    }
-
-//    bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
-
     if(device.name().indexOf("AMT PANGAEA") == 0 )
     {
         if(!m_avaliableDevices.contains(device))
         {
             qInfo() << "Finded BLE Device name: " << device.name() << " Address: " << address;
             m_avaliableDevices.append(device);
-//            if(isAutoconnectEnabled & (state() == InterfaceState::Scanning))
-//            {
-//              if(address.indexOf(m_autoconnectDevicetMAC) == 0)
-//              {
-//                  qDebug() << "Autoconnecting";
-//                  m_connectedDevice = DeviceDescription(device.name(), address, DeviceConnectionType::BLE);
-//                  setState(InterfaceState::Connecting);
-
-//                  slStartConnect(address);
-//                  emit sgConnectionStarted();
-//              }
-//            }
             updateBLEDevicesList();
         }
     }
@@ -384,7 +387,7 @@ void BleInterface::slStartConnect(QString address)
 void BleInterface::deviceConnected()
 {
     QLowEnergyConnectionParameters connectionParams;
-    connectionParams.setIntervalRange(10, 25);
+    connectionParams.setIntervalRange(20, 75);  //10, 25
     m_control->requestConnectionUpdate(connectionParams);
     QObject::connect(m_control, &QLowEnergyController::connectionUpdated, this, &BleInterface::connectionParametersUpdated);
 
@@ -393,9 +396,8 @@ void BleInterface::deviceConnected()
     QObject::connect(m_control, &QLowEnergyController::rssiRead, this, &BleInterface::rssiReaded);
 #endif
 
+    dataToWrite.clear();
 
-    // mtu = m_control->mtu();
-    // qDebug() << "MTU: " << mtu;
     setState(Connected);
     m_control->discoverServices();
 }
@@ -433,7 +435,9 @@ void BleInterface::serviceScanDone()
     QBluetoothDeviceDiscoveryAgent::connect(m_service, &QLowEnergyService::descriptorWritten,
             this, &BleInterface::confirmedDescriptorWrite);
     QBluetoothDeviceDiscoveryAgent::connect(m_service, &QLowEnergyService::errorOccurred,
-                                            this, &BleInterface::serviceError);
+            this, &BleInterface::serviceError);
+    QBluetoothDeviceDiscoveryAgent::connect(m_service, &QLowEnergyService::characteristicWritten,
+            this, &BleInterface::characteristicWritten);
 
     m_service->discoverDetails();
     setState(ServiceFound);
@@ -446,6 +450,7 @@ void BleInterface::deviceDisconnected()
 
     rssiUpdateTimer->stop();
     emit sgInterfaceDisconnected(m_connectedDevice);
+    emit sgInterfaceError("Remote device disconnected");
 }
 
 void BleInterface::controllerError(QLowEnergyController::Error error)
@@ -515,19 +520,32 @@ void BleInterface::connectionParametersUpdated(const QLowEnergyConnectionParamet
 
 void BleInterface::write(const QByteArray &data)
 {
-    const QLowEnergyCharacteristic  RxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
+#if defined(Q_OS_IOS)
+    if(dataToWrite.empty()){
+        const QLowEnergyCharacteristic rxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
+        m_service->writeCharacteristic(rxChar, data, QLowEnergyService::WriteWithResponse);
+    }
 
-    QByteArray Data;
-    Data.append(data);
+    dataToWrite.enqueue(data);
 
-    // if(data.size() > 48)
-    // {
-    //     QLowEnergyConnectionParameters connectionParams;
-    //     connectionParams.setIntervalRange(10, 25);
-    //     m_control->requestConnectionUpdate(connectionParams);
-    // }
+    if(data.size() >= 100) QThread::msleep(150);
+#else
+    const QLowEnergyCharacteristic rxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
+    m_service->writeCharacteristic(rxChar, data, QLowEnergyService::WriteWithResponse);
+#endif
+}
 
-    m_service->writeCharacteristic(RxChar, Data, QLowEnergyService::WriteWithResponse);
+void BleInterface::characteristicWritten(const QLowEnergyCharacteristic &characteristic, const QByteArray &newValue)
+{
+#if defined(Q_OS_IOS)
+    if(!dataToWrite.empty()) dataToWrite.dequeue();
+
+    if(!dataToWrite.empty()){
+        // qInfo() << "dataToWrite not empty" << dataToWrite.size();
+        const QLowEnergyCharacteristic rxChar = m_service->characteristic(QBluetoothUuid(QUuid(RXUUID)));
+        m_service->writeCharacteristic(rxChar, dataToWrite.head(), QLowEnergyService::WriteWithResponse);
+    }
+#endif
 }
 
 void BleInterface::serviceError(QLowEnergyService::ServiceError newError)
@@ -580,9 +598,12 @@ void BleInterface::setModuleName(QString name)
 
         m_moduleUniqueNames.insert(m_currentDeviceAddress, m_moduleName);
 
-#ifdef Q_OS_ANDROID
+#if  defined(Q_OS_ANDROID)
         QSettings settings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                            + "/settings.conf", QSettings::NativeFormat);
+#elif defined(Q_OS_IOS)
+        QSettings settings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+                                        + "/settings.plist", QSettings::NativeFormat);
 #else
         QSettings settings(QSettings::UserScope);
 #endif

@@ -21,8 +21,6 @@ Core::Core(QObject *parent) : QObject(parent)
 
 void Core::disconnectFromDevice()
 {
-    qDebug() << Q_FUNC_INFO << "disconnected";
-
     timeoutTimer->stop();
 
     commandsPending.clear();

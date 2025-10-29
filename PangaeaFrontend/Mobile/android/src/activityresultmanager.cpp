@@ -1,5 +1,6 @@
 #include <qdebug.h>
 #include <QFile>
+#include <QUrl>
 #include <QStandardPaths>
 
 #include <QCoreApplication>
@@ -14,6 +15,7 @@
 
 #include "activityresultmanager.h"
 
+using namespace QtJniTypes;
 
 ActivityResultManager::ActivityResultManager()
 {
@@ -31,13 +33,39 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
             case ActivityType::PICK_IR:
             {
                 QJniObject uriObject = data.callObjectMethod("getData", "()Landroid/net/Uri;");
-                takeReadUriPermission(uriObject);
-                processUri(uriObject);
 
-                qDebug() << "IR file path: " << m_filePath;
-                qDebug() << "IR file name: " << m_fileName;
+                if(!uriObject.isValid())
+                {
+                    JClipData clipData = data.callMethod<JClipData>("getClipData", "()Landroid/content/ClipData;");
+                    quint32 itemsCount = clipData.callMethod<int>("getItemCount");
 
-                emit sgIrFilePicked(m_filePath, m_fileName);
+                    QList<QUrl> fileList;
+
+                    for(int i=0; i<itemsCount; i++)
+                    {
+                        JItem item = clipData.callMethod<JItem>("getItemAt", i);
+                        JUri uri = item.callMethod<JUri>("getUri");
+                        takeReadUriPermission(uri);
+                        // processUri(uri);
+
+                        QString stringUri = uri.callMethod<QString>("toString");
+
+                        qDebug() << stringUri;
+                        fileList.append(stringUri);
+                    }
+
+                    emit sgIrFileListPicked(fileList);
+                }
+                else
+                {
+                    takeReadUriPermission(uriObject);
+                    processUri(uriObject);
+
+                    qDebug() << "IR file path: " << m_filePath;
+                    qDebug() << "IR file name: " << m_fileName;
+
+                    emit sgIrFilePicked(m_filePath, m_fileName);
+                }
                 break;
             }
 
@@ -93,12 +121,9 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
     }
 }
 
-void ActivityResultManager::processUri(QJniObject uriObject)
+void ActivityResultManager::processUri(JUri uriObject)
 {
-
     m_filePath = uriObject.toString();
-//    m_filePath.replace("%2F", "/");
-//    m_filePath.replace("%3A", ":");
 
     QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
     m_fileName= QJniObject::callStaticObjectMethod(
@@ -108,13 +133,13 @@ void ActivityResultManager::processUri(QJniObject uriObject)
             androidContext.object()).toString();
 }
 
-void ActivityResultManager::takeReadUriPermission(QJniObject uriObject)
+void ActivityResultManager::takeReadUriPermission(JUri uriObject)
 {
     bool result = AndroidUtils::checkPermission("android.permission.READ_EXTERNAL_STORAGE");
     if(!result)
     {
         qDebug() << "READ_EXTERNAL_STORAGE permission denied, trying to request";
-         AndroidUtils::requestPermission("android.permission.READ_EXTERNAL_STORAGE");
+        AndroidUtils::requestPermission("android.permission.READ_EXTERNAL_STORAGE");
     }
 
     QJniObject::callStaticMethod<void>(
@@ -132,7 +157,7 @@ void ActivityResultManager::takeReadUriPermission(QJniObject uriObject)
     qDebug() << "Read URI permission taken";
 }
 
-void ActivityResultManager::takeWriteUriPermission(QJniObject uriObject)
+void ActivityResultManager::takeWriteUriPermission(JUri uriObject)
 {
     bool result = AndroidUtils::checkPermission("android.permission.WRITE_EXTERNAL_STORAGE");
     if(!result)

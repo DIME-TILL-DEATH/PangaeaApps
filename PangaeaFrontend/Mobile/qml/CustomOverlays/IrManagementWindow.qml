@@ -21,7 +21,7 @@ Item{
 
     z: parent.z+10
 
-    property string dstIrPath: (_bar.currentIndex === 0) ? "ir_library/"
+    property url dstIrPath: (_bar.currentIndex === 0) ? "ir_library/"
                                                          : "bank_" + UiCore.currentDevice.bank + "/preset_" + UiCore.currentDevice.preset+ "/"
 
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Serial converters -->
+    <!-- 0x0483 / 0x5740: CP100 -->
+    <usb-device vendor-id="1155" product-id="22336" />
+	<!-- 0x0483 / 0xA24B: CP16 -->
+    <usb-device vendor-id="1155" product-id="41547" />
+	<!-- 0xFF00 / 0x0009: CP100FX -->
+    <usb-device vendor-id="65280" product-id="9" />
+    <!-- … more devices … -->
+</resources>

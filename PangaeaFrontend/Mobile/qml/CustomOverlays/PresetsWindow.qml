@@ -81,7 +81,7 @@ CustomMessageDialog {
         id: _presetListView
 
         width: _root.width *0.95
-        height: _root.height-_root.headerHeight*2-_root.footerHeight
+        height: _root.height-_root.headerHeight*2-_dialogButtonBox.height //_root.footerHeight
 
         currentIndex: UiCore.currentDevice.bank * UiCore.currentDevice.maxBankCount + UiCore.currentDevice.preset
 

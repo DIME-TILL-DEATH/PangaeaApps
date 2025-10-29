@@ -4,11 +4,15 @@ set(MY_PRODUCT_NUMBER 1)
 set(MY_PRODUCT_VERSION 1)
 set(MY_BUILD_NUMBER 2515)
 
+set(MOBILE_VERSION_MAJOR 1)
+set(MOBILE_VERSION_MINOR 2)
+set(MOBILE_VERSION_BUILD 7)
+
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
-    project(Pangaea-mobile VERSION 1.1.1 LANGUAGES CXX)
-    set(VERSION_CODE 44)
+    project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
+    set(VERSION_CODE 47)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -21,12 +25,22 @@ if(ANDROID)
         "docs.qrc"
         "firmwares.qrc"
     )
-elseif(IOS)
-    project(Pangaea-mobile VERSION 1.1.1 LANGUAGES CXX)
+
+    # open ssl support
+    include(FetchContent)
+    FetchContent_Declare(
+        android_openssl
+        DOWNLOAD_EXTRACT_TIMESTAMP true
+        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
+    )
+    FetchContent_MakeAvailable(android_openssl)
+    include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
+elseif(IOS)    
+    project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
-        Mobile/ios/src/iosfileutils.hpp
-        Mobile/ios/src/iosfileutils.mm)
+        Mobile/ios/src/iosutils.hpp
+        Mobile/ios/src/iosutils.mm)
 
     qt6_add_resources(RCC_FILES
         "Mobile/qml.qrc"
@@ -144,18 +158,14 @@ if(ANDROID OR IOS)
 
     if(IOS)
         set_target_properties(${PROJECT_NAME} PROPERTIES
-        #    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appTableControl
             MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}"
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist"
             QT_IOS_LAUNCH_SCREEN "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/LaunchScreen.storyboard"
             XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon
             MACOSX_BUNDLE TRUE
             WIN32_EXECUTABLE TRUE
         )
-
-        # set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist")
-        # set_target_properties(${PROJECT_NAME} PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon)
 
         set(asset_catalog_path "Mobile/ios/Assets.xcassets")
 
@@ -172,7 +182,6 @@ if(ANDROID OR IOS)
                 Mobile/ios/Assets.xcassets
         )
     endif()
-
 else()
     add_subdirectory(Desktop)
 
@@ -267,7 +276,7 @@ else()
 
         # make tarball archive
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" "${DEPLOY_PATH}/app/")
+                COMMAND cd "${DEPLOY_PATH}/app/" "&&" tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" ".")
 
         # make .deb package
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

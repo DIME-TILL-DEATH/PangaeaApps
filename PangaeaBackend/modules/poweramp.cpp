@@ -24,12 +24,10 @@ PowerAmp::PowerAmp(AbstractDevice *owner, preset_data_cpmodern_t *paData)
 
     m_processingTime = 100;
 
-    m_commandOnOff = "pa_on";
-
-    m_volume = new ControlValue(this, &paData->power_amp.volume, "pa_ms", "Volume", "", 0, 127, 0, 127); //VOLUME-Master
-    m_presence = new ControlValue(this, &paData->power_amp.presence_vol, "pa_ps", "Presence", "", 0, 127, 0, 127);
-    m_slave = new ControlValue(this, &paData->power_amp.slave, "pa_lv", "Slave", "", 0, 127, 0, 127); //SLAVE-Level
-    m_ampType = new ControlValue(this, &paData->power_amp.type, "pa_tp", "Amp type", "", 0, 127, 0, 127);
+    m_volume = new ControlValue(this, &paData->power_amp.volume, "av", "Master"); //VOLUME
+    m_presence = new ControlValue(this, &paData->power_amp.presence_vol, "pv", "Presence");
+    m_slave = new ControlValue(this, &paData->power_amp.slave, "as", "Level"); //SLAVE
+    m_ampType = new ControlValue(this, &paData->power_amp.type, "at", "Amp type");
 
     m_moduleEnabled = (bool*)&paData->power_amp.on;
 }
