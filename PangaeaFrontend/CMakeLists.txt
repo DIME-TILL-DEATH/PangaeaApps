@@ -146,8 +146,10 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 )
 
 
+if(QT_VERSION_MINOR VERSION_GREATER 6.5)
 qt_policy(SET QTP0001 OLD)
 qt_policy(SET QTP0002 OLD)
+endif()
 
 set(QT_QML_GENERATE_QMLLS_INI ON)
 set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/qml)
