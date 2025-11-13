@@ -15,6 +15,7 @@ ApplicationWindow
     id: _main
 
     visible: true
+    // visibility: Window.FullScreen
 
     color: "#EBECEC"
 
