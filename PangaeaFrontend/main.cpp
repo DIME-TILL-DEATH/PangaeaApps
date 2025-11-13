@@ -187,6 +187,24 @@ int main(int argc, char *argv[])
                 {
                     const int FLAG_KEEP_SCREEN_ON = 128;
                     window.callMethod<void>("addFlags", "(I)V", FLAG_KEEP_SCREEN_ON);
+
+                    // deprecated in API level 30
+                    // https://developer.android.com/develop/ui/views/layout/immersive
+                    const int SYSTEM_UI_FLAG_HIDE_NAVIGATION = 0x00000002;
+                    const int SYSTEM_UI_FLAG_FULLSCREEN = 0x00000004;
+                    const int SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION = 0x00000200;
+                    const int SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN = 0x00000400;
+                    const int SYSTEM_UI_FLAG_LAYOUT_STABLE = 0x00000100;
+                    const int SYSTEM_UI_FLAG_IMMERSIVE_STICKY = 0x00001000;
+
+                    int flags = SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                                SYSTEM_UI_FLAG_FULLSCREEN |
+                                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                                SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                                SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+                    QJniObject decorView = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
+                    decorView.callMethod<void>("setSystemUiVisibility", "(I)V", flags);
                 }
 
                 QJniEnvironment env;

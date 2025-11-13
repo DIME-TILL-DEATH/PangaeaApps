@@ -47,13 +47,6 @@ android {
 
     // Extract native libraries from the APK
     //packagingOptions.jniLibs.useLegacyPackaging true
-	android {
-    packagingOptions {
-        jniLibs {
-            useLegacyPackaging = true
-        }
-    }
-}
 
     sourceSets {
         main {
@@ -90,6 +83,15 @@ android {
         resConfig "en"
         minSdkVersion qtMinSdkVersion
         targetSdkVersion qtTargetSdkVersion
-        ndk.abiFilters = qtTargetAbiList.split(",")       
+        ndk.abiFilters = qtTargetAbiList.split(",")
+
+        // 16 kB pages
+        externalNativeBuild {
+              // For ndk-build, instead use the ndkBuild block.
+              cmake {
+                // Passes optional arguments to CMake.
+                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+              }
+        }
     }
 }
