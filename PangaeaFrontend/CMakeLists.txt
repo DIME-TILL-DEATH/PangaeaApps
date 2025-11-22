@@ -248,54 +248,56 @@ else()
     endif()
 
     if(LINUX)
-        set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_linux/)
+        if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+            set(DEPLOY_PATH ${PROJECT_SOURCE_DIR}/../deploy_linux/)
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA"
-            "${DEPLOY_PATH}/app/bin/PangaeaCPPA")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA"
+                "${DEPLOY_PATH}/app/bin/PangaeaCPPA")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${PROJECT_SOURCE_DIR}/docs"
-            "${DEPLOY_PATH}/app/docs/")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${PROJECT_SOURCE_DIR}/docs"
+                "${DEPLOY_PATH}/app/docs/")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${DEPLOY_PATH}/libxcb-cursor.so.0"
-            "${DEPLOY_PATH}/app/lib/libxcb-cursor.so.0")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${DEPLOY_PATH}/libxcb-cursor.so.0"
+                "${DEPLOY_PATH}/app/lib/libxcb-cursor.so.0")
 
 
-        # using cqtdeployer, installed from snap
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/PangaeaCPPA"
-                                -targetDir "${DEPLOY_PATH}/app/"
-                                -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
-                                -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
-                                -qmake "~/Qt/6.8.1/gcc_64/bin/qmake")
+            # using cqtdeployer, installed from snap
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/PangaeaCPPA"
+                                    -targetDir "${DEPLOY_PATH}/app/"
+                                    -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
+                                    -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
+                                    -qmake "~/Qt/6.8.1/gcc_64/bin/qmake")
 
-        # make tarball archive
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" "${DEPLOY_PATH}/app/")
+            # make tarball archive
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" "${DEPLOY_PATH}/app/")
 
-        # make .deb package
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${DEPLOY_PATH}/app/"
-            "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/")
+            # make .deb package
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${DEPLOY_PATH}/app/"
+                "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/")
 
-        configure_file(
-            ${DEPLOY_PATH}/DEBIAN/control
-            ${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/DEBIAN/control
-            @ONLY)
+            configure_file(
+                ${DEPLOY_PATH}/DEBIAN/control
+                ${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/DEBIAN/control
+                @ONLY)
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            "${DEPLOY_PATH}/usr/"
-            "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${DEPLOY_PATH}/usr/"
+                "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/")
 
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/")
+        endif()
     endif()
 
 endif()
