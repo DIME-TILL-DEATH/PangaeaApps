@@ -76,9 +76,7 @@ BleInterface::BleInterface(QObject *parent)
     appSettings = new QSettings(QSettings::UserScope, this);
 #endif
 
-    // qDebug() << "BLE thread" << thread();
     m_deviceDiscoveryAgent = new QBluetoothDeviceDiscoveryAgent(); // parent = this: Main COM uninit tried from another thread
-    // qDebug() << "Discovery agent thread" << m_deviceDiscoveryAgent->thread();
 
     QBluetoothDeviceDiscoveryAgent::connect(m_deviceDiscoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered,
             this, &BleInterface::addDevice);
@@ -96,7 +94,6 @@ BleInterface::BleInterface(QObject *parent)
     m_connectionType = DeviceConnectionType::BLE;
 
     rssiUpdateTimer = new QTimer(this);
-    // qDebug() << "rssi Timer thread" << rssiUpdateTimer->thread();
     rssiUpdateTimer->setInterval(1000);
     QObject::connect(rssiUpdateTimer, &QTimer::timeout, this, &BleInterface::requestRssi);
 }
@@ -143,27 +140,6 @@ void BleInterface::startDiscovering()
         prevState();
         return;
     }
-
-#ifdef Q_OS_ANDROID
-    QGeoPositionInfoSource* geoSource =  QGeoPositionInfoSource::createDefaultSource(this);
-    if(geoSource == nullptr)
-    {
-        qWarning() << "Geo backend unavaliable!";
-        return;
-    }
-    else
-    {
-        geoSource->requestUpdate(0);
-
-        if(geoSource->error() == QGeoPositionInfoSource::ClosedError)
-        {
-            qWarning() << "Geolocation is off!";
-            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "GeolocationIsOff");
-            delete(geoSource);
-            return;
-        }
-    }
-#endif
 
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
     {

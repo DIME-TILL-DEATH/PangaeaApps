@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(IrConverter VERSION 1.0.0 LANGUAGES CXX)
+project(WavConverter VERSION 1.0.0 LANGUAGES CXX)
 
 if(WIN32)
     add_compile_definitions(WAVCONVERTERLIB_LIBRARY)
@@ -44,19 +44,23 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 )
 
 if(WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.exe"
-            "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe")
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.exe"
+                "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe")
 
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${WINDEPLOYQT_EXECUTABLE} "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe"
-                                --qmldir "${PROJECT_SOURCE_DIR}/")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${WINDEPLOYQT_EXECUTABLE} "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe"
+                                    --qmldir "${PROJECT_SOURCE_DIR}/")
+        endif()
 endif()
 
 if(LINUX)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter"
-            "${PROJECT_SOURCE_DIR}/../deploy_linux/app/bin/IrConverter")
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter"
+                "${PROJECT_SOURCE_DIR}/../deploy_linux/app/bin/IrConverter")
+    endif()
 endif()
