@@ -796,6 +796,8 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     memcpy(&presetData, dataBuffer, sizeof(preset_data_cpmodern_t));
 
     MV->setValue(presetData.volume);
+    ER->setValues(presetData);
+    DL->setValues(presetData);
 
     foreach (QObject* obj, m_avaliableModulesList)
     {
