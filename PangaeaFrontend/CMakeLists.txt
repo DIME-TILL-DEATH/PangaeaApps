@@ -2,17 +2,17 @@ cmake_minimum_required(VERSION 3.21.1)
 
 set(MY_PRODUCT_NUMBER 1)
 set(MY_PRODUCT_VERSION 1)
-set(MY_BUILD_NUMBER 2515)
+set(MY_BUILD_NUMBER 2516)
 
 set(MOBILE_VERSION_MAJOR 1)
 set(MOBILE_VERSION_MINOR 2)
-set(MOBILE_VERSION_BUILD 10)
+set(MOBILE_VERSION_BUILD 11)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
-    set(VERSION_CODE 50)
+    set(VERSION_CODE 51)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
