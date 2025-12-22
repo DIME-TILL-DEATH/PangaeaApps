@@ -68,7 +68,7 @@ elseif(WIN32)
         "firmwares.qrc"
     )
 elseif(APPLE) # MacOS
-    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
+    project(pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -219,31 +219,64 @@ else()
             MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
 
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-            set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.app)
+            set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/Pangaea-desktop.app)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy_directory
                     "${PROJECT_SOURCE_DIR}/docs"
-                    "${RELEASE_APP_PATH}/Contents/MacOS/docs")
+                    "${RELEASE_APP_PATH}/Contents/Resources/docs")
 
-            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy
-                    "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
-                    "${RELEASE_APP_PATH}/Contents/MacOS/")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
                                         "-qmldir=${PROJECT_SOURCE_DIR}/Desktop/qml"
-                                        "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/")
+                                        "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/"
+                                        "-appstore-compliant")
 
-            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    "${RELEASE_APP_PATH}"
-                    "${PROJECT_SOURCE_DIR}/../deploy_mac/dmg_content/PangaeaCPPA.app")
+            add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
+                COMMAND ditto #cp "-a"
+                "${CMAKE_BINARY_DIR}/WavConverterShell/irconverter.app"
+                "${RELEASE_APP_PATH}/Contents/MacOS/irconverter.app")
 
+
+            set(DEPLOY_PATH /Applications/)
+            add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
+                COMMAND ditto #cp "-a"
+                "${RELEASE_APP_PATH}"
+                "${DEPLOY_PATH}/Pangaea-desktop.app")
+
+    #         set(APPLE_CERTIFICATE_APP_STORE "Apple Distribution: AMT corporation S.R.L. (4PGXCAZDT5)")
+    #         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    #                 COMMAND codesign "-f" "--deep" "-s" "${APPLE_CERTIFICATE_APP_STORE}"
+    #                 "--entitlements" "${PROJECT_SOURCE_DIR}/../deploy_mac/entitlements.xml"
+    #                 "${DEPLOY_PATH}/EgoGIG.app"
+    #                 VERBATIM)
+
+    #         set(APPLE_CERTIFICATE_APP_STORE_PKG "3rd Party Mac Developer Installer: AMT corporation S.R.L. (4PGXCAZDT5)")
+    #         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    #                 COMMAND productbuild "--sign"
+    #                 "${APPLE_CERTIFICATE_APP_STORE_PKG}"
+    #                 "--component" "${DEPLOY_PATH}/Pangaea-desktop.app"
+    #                 "${PROJECT_SOURCE_DIR}/../deploy_mac/AppStore/Pangaea-desktop.pkg"
+    #                 VERBATIM)
+
+
+            set(APPLE_CERTIFICATE_STANDALONE "Developer ID Application: AMT corporation S.R.L. (4PGXCAZDT5)")
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"
-                    COMMAND sh "package_script.sh")
+                    COMMAND codesign "-f" "--deep" "-s" "${APPLE_CERTIFICATE_STANDALONE}"
+                    "--options=runtime"
+                    "--timestamp"
+                    "--entitlements" "${PROJECT_SOURCE_DIR}/../deploy_mac/entitlements.xml"
+                    "${DEPLOY_PATH}/EgoGIG.app"
+                    VERBATIM)
+
+            set(APPLE_CERTIFICATE_STANDALONE_PKG "Developer ID Installer: AMT corporation S.R.L. (4PGXCAZDT5)")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND productbuild "--sign"
+                "${APPLE_CERTIFICATE_STANDALONE_PKG}"
+                "--component" "${DEPLOY_PATH}/Pangaea-desktop.app"
+                "${PROJECT_SOURCE_DIR}/../deploy_mac/Standalone/Pangaea-desktop.pkg"
+                VERBATIM)
         endif()
     endif()
 

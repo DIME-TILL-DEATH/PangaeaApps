@@ -6,14 +6,24 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(WavConverter VERSION 1.0.0 LANGUAGES CXX)
 
 if(WIN32)
+    project(WavConverter VERSION 1.0.0 LANGUAGES CXX)
+
     add_compile_definitions(WAVCONVERTERLIB_LIBRARY)
 
     set(PLATFORM_SPECIFIC_SOURCES
         resources.rc
     )
+elseif(APPLE)
+    project(irconverter VERSION 1.0.0 LANGUAGES CXX)
+
+    set(PLATFORM_SPECIFIC_SOURCES
+       "${PROJECT_SOURCE_DIR}/icons/spirit.icns")
+
+    set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+
 endif()
 
 qt6_add_resources(RCC_FILES
@@ -43,6 +53,14 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     converter-lib
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER com.amtelectronics.irconverter
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
 if(WIN32)
     if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -54,6 +72,21 @@ if(WIN32)
                 COMMAND ${WINDEPLOYQT_EXECUTABLE} "${PROJECT_SOURCE_DIR}/../deploy_windows/release/IrConverter.exe"
                                     --qmldir "${PROJECT_SOURCE_DIR}/")
         endif()
+endif()
+
+if(APPLE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/MacOS/Info.plist")
+
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
+        set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/WavConverterShell/irconverter.app)
+
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
+                    "-qmldir=${PROJECT_SOURCE_DIR}/"
+                    "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/"
+                    "-appstore-compliant")
+    endif()
 endif()
 
 if(LINUX)

@@ -2,41 +2,37 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-        <key>CFBundleInfoDictionaryVersion</key>
+	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleDisplayName</key>
-	<string>Pangaea-desktop</string>
+	<string>IrConverter</string>
 	<key>CFBundleName</key>
-	<string>AMT Pangaea-desktop</string>
+	<string>AMT irconverter</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.AMT.pangaea-desktop</string>
+	<string>com.amtelectronics.irconverter</string>
 	<key>CFBundleExecutable</key>
-	<string>pangaea-desktop</string>
+	<string>irconverter</string>
 	<key>CFBundleVersion</key>
-	<string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
+	<string>1.0.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
+	<string>1.0</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>12</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>AMT Electronics</string>
 	<key>CFBundleIconFile</key>
-	<string>pangaea.icns</string>
+	<string>spirit.icns</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>ru</string>
+	<string>en</string>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>LSApplicationCategoryType</key>
-	<string>public.app-category.utilities</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>For connecttion to devices</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>For connecttion to devices</string>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.utilities</string>
 </dict>
 </plist>
