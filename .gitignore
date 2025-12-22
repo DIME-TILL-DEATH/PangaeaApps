@@ -2,12 +2,14 @@
 build/*
 PangaeaBackend/build/*
 PangaeaFrontend/build/*
+PangaeaFrontend/version.rc
 shared_libs/*
 deploy_android/*
 deploy_linux/debian_deploy/*
 deploy_linux/app/*
 deploy_linux/PangaeaCPPA.tar.gz
 deploy_windows/release/*
+deploy_windows/installer_script.iss
 deploy_mac/dmg_content/*
 WavConverterShell/output_bin/*
 *.exe

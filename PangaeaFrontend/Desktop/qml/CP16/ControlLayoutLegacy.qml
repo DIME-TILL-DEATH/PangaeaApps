@@ -161,13 +161,9 @@ Column
 
         onSelectedFileChanged:
         {
-
-            var cleanPath = irFileDialog.currentFile.toString();
-            cleanPath = (Qt.platform.os==="windows")?decodeURIComponent(cleanPath.replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"")):decodeURIComponent(cleanPath.replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,""));
-
-            if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB){
-                // TODO: переделать cleanPath на QUrl
-                UiCore.uploadIr(cleanPath);
+            if(InterfaceManager.connectedInterface.connectionType === DeviceConnectionType.USB)
+            {
+                UiCore.uploadIr(irFileDialog.currentFile);
             }
         }
         Settings
