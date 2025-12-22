@@ -377,9 +377,7 @@ Item
                 {
                     id: tp
 
-                    property string shownIrName: currentIndex === presetMapIndex ? currentImpulseName : impulseName
-
-                    text: qsTr("Preset name: ") + presetName + "\n" + qsTr("IR name: ") + shownIrName
+                    text: qsTr("Preset name: ") + presetName + "\n" + qsTr("IR name: ") + impulseName
 
                     visible: false
                     timeout: 0
