@@ -10,7 +10,6 @@ Core::Core(QObject *parent)
 {
 
 #ifdef Q_OS_MACOS
-#elif defined(Q_OS_MACOS)
     QString folderPath = QDir::homePath() + "/Documents" + "/AMT/Pangaea-desktop/convertedIR/";
 #else
     QString folderPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0)+"/AMT/Pangaea-desktop/convertedIR";

@@ -89,7 +89,7 @@ QString IRWorker::convertWav(const QString &srcPath)
     QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0) +
                         "/AMT/pangaea_mobile/convertedIR/";
 #elif defined(Q_OS_MACOS)
-    outFolder = QDir::homePath() + "/Documents" + "/AMT/Pangaea-desktop/convertedIR/";
+    QString outFolder = QDir::homePath() + "/Documents" + "/AMT/Pangaea-desktop/convertedIR/";
 #else
     QString outFolder = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) +
                         "/AMT/Pangaea-desktop/convertedIR/";
