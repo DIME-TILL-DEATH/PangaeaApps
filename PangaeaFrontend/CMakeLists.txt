@@ -216,10 +216,11 @@ else()
     if(APPLE)
         set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
-            MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
+            MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${MY_PRODUCT_VERSION})
 
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-            set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/Pangaea-desktop.app)
+            set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/pangaea-desktop.app)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -245,20 +246,20 @@ else()
                 "${RELEASE_APP_PATH}"
                 "${DEPLOY_PATH}/Pangaea-desktop.app")
 
-    #         set(APPLE_CERTIFICATE_APP_STORE "Apple Distribution: AMT corporation S.R.L. (4PGXCAZDT5)")
-    #         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    #                 COMMAND codesign "-f" "--deep" "-s" "${APPLE_CERTIFICATE_APP_STORE}"
-    #                 "--entitlements" "${PROJECT_SOURCE_DIR}/../deploy_mac/entitlements.xml"
-    #                 "${DEPLOY_PATH}/EgoGIG.app"
-    #                 VERBATIM)
+            set(APPLE_CERTIFICATE_APP_STORE "Apple Distribution: AMT corporation S.R.L. (4PGXCAZDT5)")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND codesign "-f" "--deep" "-s" "${APPLE_CERTIFICATE_APP_STORE}"
+                    "--entitlements" "${PROJECT_SOURCE_DIR}/../deploy_mac/entitlements.xml"
+                    "${DEPLOY_PATH}/Pangaea-desktop.app"
+                    VERBATIM)
 
-    #         set(APPLE_CERTIFICATE_APP_STORE_PKG "3rd Party Mac Developer Installer: AMT corporation S.R.L. (4PGXCAZDT5)")
-    #         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    #                 COMMAND productbuild "--sign"
-    #                 "${APPLE_CERTIFICATE_APP_STORE_PKG}"
-    #                 "--component" "${DEPLOY_PATH}/Pangaea-desktop.app"
-    #                 "${PROJECT_SOURCE_DIR}/../deploy_mac/AppStore/Pangaea-desktop.pkg"
-    #                 VERBATIM)
+            set(APPLE_CERTIFICATE_APP_STORE_PKG "3rd Party Mac Developer Installer: AMT corporation S.R.L. (4PGXCAZDT5)")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND productbuild "--sign"
+                    "${APPLE_CERTIFICATE_APP_STORE_PKG}"
+                    "--component" "${DEPLOY_PATH}/Pangaea-desktop.app"
+                    "${PROJECT_SOURCE_DIR}/../deploy_mac/AppStore/Pangaea-desktop.pkg"
+                    VERBATIM)
 
 
             set(APPLE_CERTIFICATE_STANDALONE "Developer ID Application: AMT corporation S.R.L. (4PGXCAZDT5)")
@@ -267,7 +268,7 @@ else()
                     "--options=runtime"
                     "--timestamp"
                     "--entitlements" "${PROJECT_SOURCE_DIR}/../deploy_mac/entitlements.xml"
-                    "${DEPLOY_PATH}/EgoGIG.app"
+                    "${DEPLOY_PATH}/Pangaea-desktop.app"
                     VERBATIM)
 
             set(APPLE_CERTIFICATE_STANDALONE_PKG "Developer ID Installer: AMT corporation S.R.L. (4PGXCAZDT5)")

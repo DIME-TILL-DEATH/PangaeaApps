@@ -6,8 +6,6 @@
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleDisplayName</key>
-	<string>IrConverter</string>
 	<key>CFBundleName</key>
 	<string>AMT irconverter</string>
 	<key>CFBundleIdentifier</key>
