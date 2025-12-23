@@ -267,7 +267,6 @@ else()
                     COMMAND codesign "-f" "--deep" "-s" "${APPLE_CERTIFICATE_STANDALONE}"
                     "--options=runtime"
                     "--timestamp"
-                    "--entitlements" "${PROJECT_SOURCE_DIR}/../deploy_mac/entitlements.xml"
                     "${DEPLOY_PATH}/Pangaea-desktop.app"
                     VERBATIM)
 
