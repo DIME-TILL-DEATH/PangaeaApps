@@ -27,13 +27,6 @@ ApplicationWindow
     maximumWidth: Screen.width * 0.8 * 1.25
     maximumHeight: Screen.width * 0.75 * 0.4 * 1.25
 
-    // minimumWidth: width*0.75
-    // minimumHeight: height*0.75
-    // maximumWidth: width*1.25
-    // maximumHeight: height*1.25
-
-    // palette.highlight: "orange"
-
     color: Style.currentTheme.backgroundColor
 
     property string markEdit: UiCore.currentDevice.deviceParamsModified ? " * ":" "
@@ -46,9 +39,9 @@ ApplicationWindow
     property bool connected: false
     property bool appClosing: false
 
-    title: connected ? "AMT PangaeaCPPA " +  " v." + Qt.application.version + " "
+    title: connected ? Qt.application.name +  " v." + Qt.application.version + " "
                 + markConnect + devName + " (" + interfaceType + ")" + markEdit
-                : "AMT PangaeaCPPA " + " v." + Qt.application.version + " " + markConnect
+                : Qt.application.name + " v." + Qt.application.version + " " + markConnect
 
 
     header: MainMenu{

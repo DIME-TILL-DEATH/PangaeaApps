@@ -54,7 +54,7 @@ elseif(WIN32)
       ${CMAKE_CURRENT_SOURCE_DIR}/version.rc
       @ONLY)
 
-    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.1 LANGUAGES CXX)
+    project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.1 LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Desktop/icons/icon.rc
@@ -82,7 +82,7 @@ elseif(APPLE) # MacOS
 
    set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 elseif(LINUX)
-    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
+    project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -191,8 +191,8 @@ else()
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy
-                    "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.exe"
-                    "${DEPLOY_PATH}/release/PangaeaCPPA.exe")
+                    "${CMAKE_BINARY_DIR}/PangaeaFrontend/Pangaea-desktop.exe"
+                    "${DEPLOY_PATH}/release/Pangaea-desktop.exe")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -205,7 +205,7 @@ else()
               @ONLY)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${WINDEPLOYQT_EXECUTABLE} "${DEPLOY_PATH}/release/PangaeaCPPA.exe"
+                    COMMAND ${WINDEPLOYQT_EXECUTABLE} "${DEPLOY_PATH}/release/Pangaea-desktop.exe"
                                         --qmldir "${PROJECT_SOURCE_DIR}/Desktop/qml")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -287,8 +287,8 @@ else()
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
-                "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA"
-                "${DEPLOY_PATH}/app/bin/PangaeaCPPA")
+                "${CMAKE_BINARY_DIR}/PangaeaFrontend/Pangaea-desktop"
+                "${DEPLOY_PATH}/app/bin/Pangaea-desktop")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -303,7 +303,7 @@ else()
 
             # using cqtdeployer, installed from snap
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/PangaeaCPPA"
+                COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/Pangaea-desktop"
                                     -targetDir "${DEPLOY_PATH}/app/"
                                     -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
                                     -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
@@ -311,26 +311,26 @@ else()
 
             # make tarball archive
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" "${DEPLOY_PATH}/app/")
+                    COMMAND tar -czvf "${DEPLOY_PATH}/Pangaea-desktop.tar.gz" "${DEPLOY_PATH}/app/")
 
             # make .deb package
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                 "${DEPLOY_PATH}/app/"
-                "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/")
+                "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/usr/local/Pangaea-desktop/")
 
             configure_file(
                 ${DEPLOY_PATH}/DEBIAN/control
-                ${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/DEBIAN/control
+                ${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/DEBIAN/control
                 @ONLY)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                 "${DEPLOY_PATH}/usr/"
-                "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/")
+                "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/usr/")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/")
+                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/")
         endif()
     endif()
 

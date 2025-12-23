@@ -64,7 +64,12 @@ int main(int argc, char *argv[])
 
     app.setOrganizationName("AMT");
     app.setOrganizationDomain("amtelectronics.com");
-    app.setApplicationName("pangaea mobile");
+
+#if defined(Q_OS_IOS) | defined(Q_OS_ANDROID)
+    app.setApplicationName("Pangaea-mobile");
+#else
+    app.setApplicationName("Pangaea-desktop");
+#endif
 
 #if defined(Q_OS_LINUX) & !defined(Q_OS_ANDROID)
     QGuiApplication::setWindowIcon(QIcon("qrc:/Images/AMT.svg"));
