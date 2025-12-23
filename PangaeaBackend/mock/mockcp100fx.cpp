@@ -316,7 +316,7 @@ void MockCP100fx::initFolders()
 #ifdef Q_OS_ANDROID
     m_basePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
 #elif defined(Q_OS_MACOS)
-    m_basePath = QDir::homePath() + "/Documents";
+    m_basePath = QDir::homePath() + "/Documents/AMT/Pangaea-desktop/";
 #else
     m_basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/";
 #ifndef Q_OS_IOS
