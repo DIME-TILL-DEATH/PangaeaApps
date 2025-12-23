@@ -281,7 +281,7 @@ MenuBar{
 
         title: qsTr("Import preset file")
 
-        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "AMT/Pangaea-desktop/"
 
         onAccepted: {
             // TODO: переделать cleanPath на QUrl
@@ -297,7 +297,7 @@ MenuBar{
         title: qsTr("Export preset file")
         nameFilters: [ "Pangaea preset files (*.pst)" ]
 
-        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "AMT/Pangaea-desktop/"
 
         fileMode: FileDialog.SaveFile
 
@@ -313,7 +313,7 @@ MenuBar{
 
         property string cleanPath
 
-        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "/AMT/pangaeaCPPA/"
+        currentFolder: Labs.StandardPaths.writableLocation(Labs.StandardPaths.DocumentsLocation) + "AMT/Pangaea-desktop/"
 
         onAccepted: {
             cleanPath = currentFile.toString();

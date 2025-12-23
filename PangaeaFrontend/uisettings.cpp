@@ -82,7 +82,7 @@ void UiSettings::loadTranslator(QString languageCode)
 
 void UiSettings::loadDefaultTranslator()
 {
-    if (m_translator.load(QLocale(), QLatin1String("PangaeaCPPA"),
+    if (m_translator.load(QLocale(), QLatin1String("Pangaea-desktop"),
                         QLatin1String("_"), ":/translations/"))
     {
         qDebug() << "Default ranslator loaded. Locale: " << QLocale();

@@ -9,13 +9,17 @@ Core::Core(QObject *parent)
     : QObject{parent}
 {
 
-    QString folderPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0)+"/AMT/pangaeaCPPA/convertedIR";
+#ifdef Q_OS_MACOS
+#elif defined(Q_OS_MACOS)
+    QString folderPath = QDir::homePath() + "/Documents" + "/AMT/Pangaea-desktop/convertedIR/";
+#else
+    QString folderPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0)+"/AMT/Pangaea-desktop/convertedIR";
+#endif
 
     if(!QDir(folderPath).exists())
     {
         QDir().mkpath(folderPath);
     }
-
 }
 
 void Core::setOutputFormat(QVariant sampleRate, QVariant bitsDepth, QVariant channels, QVariant maxFileSize)
