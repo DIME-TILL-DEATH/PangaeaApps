@@ -277,6 +277,10 @@ else()
                 "--component" "${DEPLOY_PATH}/Pangaea-desktop.app"
                 "${PROJECT_SOURCE_DIR}/../deploy_mac/Standalone/Pangaea-desktop.pkg"
                 VERBATIM)
+
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND rm -r
+                    "${DEPLOY_PATH}/Pangaea-desktop.app")
         endif()
     endif()
 
