@@ -14,6 +14,8 @@ deploy_mac/dmg_content/*
 WavConverterShell/output_bin/*
 *.exe
 *.zip
+*.tar.gz
+*.pkg
 
 *.qmlls.ini
 **/.qmlls.ini

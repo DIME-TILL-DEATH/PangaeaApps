@@ -1,0 +1,20 @@
+
+Step 1:
+xcrun notarytool submit Pangaea-desktop.pkg --keychain-profile "xtxf-uant-kdvf-scdw" --wait
+
+Step 2:
+xcrun stapler staple Pangaea-desktop.pkg
+
+Step error:
+xcrun notarytool log ***id*** --keychain-profile "xtxf-uant-kdvf-scdw" developer_log.json
+
+
+Check notarisation:
+stapler validate Pangaea-desktop.pkg 
+
+
+Check pkg sign: 
+pkgutil --check-signature Pangaea-desktop.pkg
+
+Check app sign:
+codesign -dv --verbose=4 /Applications/Pangaea-desktop.app

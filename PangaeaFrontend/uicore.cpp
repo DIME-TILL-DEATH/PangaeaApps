@@ -58,9 +58,11 @@ UiCore::~UiCore()
 #ifdef Q_OS_ANDROID
     QString outFolder = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0) +
                         "/AMT/pangaea_mobile/convertedIR/";
+#elif defined(Q_OS_MACOS)
+    QString outFolder = QDir::homePath() + "/Documents" + "/AMT/Pangaea-desktop/convertedIR/";
 #else
     QString outFolder = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) +
-                        "/AMT/pangaeaCPPA/convertedIR/";
+                        "/AMT/Pangaea-desktop/convertedIR/";
 #endif
 
     QDir tmpDir(outFolder);
@@ -412,6 +414,10 @@ void UiCore::openManualExternally(QString fileName)
         proc.setProgram("evince");
         proc.setArguments(QStringList(filePath));
         proc.startDetached();
+#elif defined(Q_OS_MACOS)
+    QString filePath =  QCoreApplication::applicationDirPath() + "/../Resources/docs/" + fullFileName;
+    qInfo() << __FUNCTION__ << filePath;
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 #else
     QString filePath =  QCoreApplication::applicationDirPath() + "/docs/" + fullFileName;
     QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
@@ -488,7 +494,7 @@ void UiCore::runIrConvertor()
 
 #ifdef Q_OS_MACOS
     QProcess irConvertorProcess;
-    qDebug() << "Run converter" << irConvertorProcess.startDetached(QCoreApplication::applicationDirPath() + "/IrConverter");
+    qInfo() << "Run converter" << irConvertorProcess.startDetached(QCoreApplication::applicationDirPath() + "/IrConverter.app");
 #endif
 
 #ifdef Q_OS_LINUX

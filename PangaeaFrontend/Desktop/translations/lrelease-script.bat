@@ -1,5 +1,5 @@
-lrelease PangaeaCPPA_de.ts
-lrelease PangaeaCPPA_en.ts
-lrelease PangaeaCPPA_it.ts
-lrelease PangaeaCPPA_ru.ts
+lrelease Pangaea-desktop_de.ts
+lrelease Pangaea-desktop_en.ts
+lrelease Pangaea-desktop_it.ts
+lrelease Pangaea-desktop_ru.ts
 pause

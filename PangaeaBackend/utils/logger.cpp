@@ -44,9 +44,14 @@ Logger::Logger(QObject* parent)
 
 #else
 
+#ifdef Q_OS_MACOS
+    QString folderPath = QDir::homePath() + "/Documents/";
+#else
     QString folderPath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/";
+#endif
+
 #ifndef Q_OS_IOS
-    folderPath += "AMT/pangaeaCPPA/";
+    folderPath += "AMT/Pangaea-desktop/";
 #endif
 
     if(!QDir(folderPath).exists())

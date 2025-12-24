@@ -77,10 +77,10 @@ private:
     // TODO only CPPA, not mobile!
     QMap<QString, QString> pathFromCode
     {
-        {"en", ":/translations/PangaeaCPPA_en.qm"},
-        {"ru", ":/translations/PangaeaCPPA_ru.qm"},
-        {"it", ":/translations/PangaeaCPPA_it.qm"},
-        {"de", ":/translations/PangaeaCPPA_de.qm"}
+        {"en", ":/translations/Pangaea-desktop_en.qm"},
+        {"ru", ":/translations/Pangaea-desktop_ru.qm"},
+        {"it", ":/translations/Pangaea-desktop_it.qm"},
+        {"de", ":/translations/Pangaea-desktop_de.qm"}
     };
     void loadTranslator(QString languageCode);
     void loadDefaultTranslator();

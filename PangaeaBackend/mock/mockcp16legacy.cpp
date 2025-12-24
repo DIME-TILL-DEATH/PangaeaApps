@@ -166,10 +166,13 @@ void MockCP16Legacy::initFolders()
 {
 #ifdef Q_OS_ANDROID
     m_basePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).at(0)+"/AMT/pangaea_mobile/";
+#elif defined(Q_OS_MACOS)
+    m_basePath = QDir::homePath() + "/Documents/AMT/Pangaea-desktop/";
 #else
     m_basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/";
+
 #ifndef Q_OS_IOS
-    m_basePath += "AMT/pangaeaCPPA/";
+    m_basePath += "AMT/AMT/Pangaea-desktop/";
 #endif
 #endif
     m_basePath += "virtual_CP16Legacy";

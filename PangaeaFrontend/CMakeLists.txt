@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21.1)
 
 set(MY_PRODUCT_NUMBER 1)
 set(MY_PRODUCT_VERSION 1)
-set(MY_BUILD_NUMBER 2516)
+set(MY_BUILD_NUMBER 2517)
 
 set(MOBILE_VERSION_MAJOR 1)
 set(MOBILE_VERSION_MINOR 2)
@@ -54,7 +54,7 @@ elseif(WIN32)
       ${CMAKE_CURRENT_SOURCE_DIR}/version.rc
       @ONLY)
 
-    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.1 LANGUAGES CXX)
+    project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.1 LANGUAGES CXX)
 
     set(PLATFORM_SPECIFIC_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Desktop/icons/icon.rc
@@ -68,7 +68,7 @@ elseif(WIN32)
         "firmwares.qrc"
     )
 elseif(APPLE) # MacOS
-    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
+    project(pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -82,7 +82,7 @@ elseif(APPLE) # MacOS
 
    set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 elseif(LINUX)
-    project(PangaeaCPPA VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
+    project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -193,8 +193,8 @@ else()
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy
-                    "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.exe"
-                    "${DEPLOY_PATH}/release/PangaeaCPPA.exe")
+                    "${CMAKE_BINARY_DIR}/PangaeaFrontend/Pangaea-desktop.exe"
+                    "${DEPLOY_PATH}/release/Pangaea-desktop.exe")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -207,7 +207,7 @@ else()
               @ONLY)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${WINDEPLOYQT_EXECUTABLE} "${DEPLOY_PATH}/release/PangaeaCPPA.exe"
+                    COMMAND ${WINDEPLOYQT_EXECUTABLE} "${DEPLOY_PATH}/release/Pangaea-desktop.exe"
                                         --qmldir "${PROJECT_SOURCE_DIR}/Desktop/qml")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -218,34 +218,67 @@ else()
     if(APPLE)
         set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
-            MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}")
+            MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${MY_PRODUCT_VERSION})
 
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-            set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA.app)
+            set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/pangaea-desktop.app)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E copy_directory
                     "${PROJECT_SOURCE_DIR}/docs"
-                    "${RELEASE_APP_PATH}/Contents/MacOS/docs")
+                    "${RELEASE_APP_PATH}/Contents/Resources/docs")
 
-            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy
-                    "${CMAKE_BINARY_DIR}/WavConverterShell/IrConverter.app/Contents/MacOS/IrConverter"
-                    "${RELEASE_APP_PATH}/Contents/MacOS/")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
                                         "-qmldir=${PROJECT_SOURCE_DIR}/Desktop/qml"
-                                        "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/")
+                                        "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/"
+                                        "-appstore-compliant")
 
-            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    "${RELEASE_APP_PATH}"
-                    "${PROJECT_SOURCE_DIR}/../deploy_mac/dmg_content/PangaeaCPPA.app")
+            add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
+                COMMAND ditto #cp "-a"
+                "${CMAKE_BINARY_DIR}/WavConverterShell/irconverter.app"
+                "${RELEASE_APP_PATH}/Contents/MacOS/irconverter.app")
 
+
+            set(DEPLOY_PATH /Applications/)
+            add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
+                COMMAND ditto #cp "-a"
+                "${RELEASE_APP_PATH}"
+                "${DEPLOY_PATH}/Pangaea-desktop.app")
+
+            set(APPLE_CERTIFICATE_APP_STORE "Apple Distribution: AMT corporation S.R.L. (4PGXCAZDT5)")
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND cd "${PROJECT_SOURCE_DIR}/../deploy_mac"
-                    COMMAND sh "package_script.sh")
+                    COMMAND codesign "-f" "--deep" "-s" "${APPLE_CERTIFICATE_APP_STORE}"
+                    "--entitlements" "${PROJECT_SOURCE_DIR}/../deploy_mac/entitlements.xml"
+                    "${DEPLOY_PATH}/Pangaea-desktop.app"
+                    VERBATIM)
+
+            set(APPLE_CERTIFICATE_APP_STORE_PKG "3rd Party Mac Developer Installer: AMT corporation S.R.L. (4PGXCAZDT5)")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND productbuild "--sign"
+                    "${APPLE_CERTIFICATE_APP_STORE_PKG}"
+                    "--component" "${DEPLOY_PATH}/Pangaea-desktop.app"
+                    "${PROJECT_SOURCE_DIR}/../deploy_mac/AppStore/Pangaea-desktop.pkg"
+                    VERBATIM)
+
+
+            set(APPLE_CERTIFICATE_STANDALONE "Developer ID Application: AMT corporation S.R.L. (4PGXCAZDT5)")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND codesign "-f" "--deep" "-s" "${APPLE_CERTIFICATE_STANDALONE}"
+                    "--options=runtime"
+                    "--timestamp"
+                    "${DEPLOY_PATH}/Pangaea-desktop.app"
+                    VERBATIM)
+
+            set(APPLE_CERTIFICATE_STANDALONE_PKG "Developer ID Installer: AMT corporation S.R.L. (4PGXCAZDT5)")
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND productbuild "--sign"
+                "${APPLE_CERTIFICATE_STANDALONE_PKG}"
+                "--component" "${DEPLOY_PATH}/Pangaea-desktop.app"
+                "${PROJECT_SOURCE_DIR}/../deploy_mac/Standalone/Pangaea-desktop.pkg"
+                VERBATIM)
         endif()
     endif()
 
@@ -255,8 +288,8 @@ else()
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
-                "${CMAKE_BINARY_DIR}/PangaeaFrontend/PangaeaCPPA"
-                "${DEPLOY_PATH}/app/bin/PangaeaCPPA")
+                "${CMAKE_BINARY_DIR}/PangaeaFrontend/Pangaea-desktop"
+                "${DEPLOY_PATH}/app/bin/Pangaea-desktop")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -271,34 +304,34 @@ else()
 
             # using cqtdeployer, installed from snap
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/PangaeaCPPA"
+                COMMAND cqtdeployer -bin "${DEPLOY_PATH}/app/bin/Pangaea-desktop"
                                     -targetDir "${DEPLOY_PATH}/app/"
                                     -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
                                     -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
                                     -qmake "~/Qt/6.8.1/gcc_64/bin/qmake")
 
-        # make tarball archive
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND cd "${DEPLOY_PATH}/app/" "&&" tar -czvf "${DEPLOY_PATH}/PangaeaCPPA.tar.gz" ".")
+            # make tarball archive
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND tar -czvf "${DEPLOY_PATH}/Pangaea-desktop.tar.gz" "${DEPLOY_PATH}/app/")
 
             # make .deb package
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                 "${DEPLOY_PATH}/app/"
-                "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/local/PangaeaCPPA/")
+                "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/usr/local/Pangaea-desktop/")
 
             configure_file(
                 ${DEPLOY_PATH}/DEBIAN/control
-                ${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/DEBIAN/control
+                ${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/DEBIAN/control
                 @ONLY)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                 "${DEPLOY_PATH}/usr/"
-                "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/usr/")
+                "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/usr/")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/PangaeaCPPA/")
+                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/")
         endif()
     endif()
 
