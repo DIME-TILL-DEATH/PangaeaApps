@@ -253,7 +253,7 @@
     <message>
         <location filename="../qml/CP100FX/CopyToWindow.qml" line="202"/>
         <source>Attenuator</source>
-        <translation type="unfinished"></translation>
+        <translation>Аттенюатора</translation>
     </message>
     <message>
         <location filename="../qml/CP100FX/CopyToWindow.qml" line="227"/>
@@ -1190,7 +1190,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
     <message>
         <location filename="../qml/Layouts/StartLayout.qml" line="164"/>
         <source>Autoconnect</source>
-        <translation>Автоподсоединение</translation>
+        <translation>Автоподключение</translation>
     </message>
     <message>
         <location filename="../qml/Layouts/StartLayout.qml" line="179"/>
