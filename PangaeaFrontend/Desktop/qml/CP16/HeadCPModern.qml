@@ -129,10 +129,12 @@ Item
                         MText{
                             color: Style.currentTheme.textInverted //palette.text
 
-                            anchors.fill: parent
-                            verticalAlignment:   Text.AlignVCenter
-                            font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
+                            width: parent.width * 0.9
+                            height: parent.height
                             x: 5
+
+                            verticalAlignment:   Text.AlignVCenter
+                            font.pixelSize: Math.min(parent.height/2, parent.width/7.5)
 
                             elide: Text.ElideRight
 
@@ -153,7 +155,7 @@ Item
                         color: Style.currentTheme.textMain
                         font.bold: true
                         font.family: "Arial Black"
-                        font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+                        font.pixelSize: Math.min(parent.height/2, parent.width/15)
 
                         onAccepted:{
                             focus = false
@@ -194,11 +196,12 @@ Item
                         width: impuls.enabled ? parent.width/5 : 0
 
                         MText{
-
-                            anchors.fill: parent
-                            verticalAlignment:   Text.AlignVCenter
-                            font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
+                            width: parent.width * 0.9
+                            height: parent.height
                             x: 5
+
+                            verticalAlignment:   Text.AlignVCenter
+                            font.pixelSize: Math.min(parent.height/2, parent.width/7.5)
 
                             elide: Text.ElideRight
 
@@ -230,7 +233,7 @@ Item
 
                             color: Style.currentTheme.textMain
 
-                            font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+                            font.pixelSize: Math.min(parent.height/2, parent.width/15)
                             elide: Text.ElideMiddle
 
                             MouseArea
