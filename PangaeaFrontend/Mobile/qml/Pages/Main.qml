@@ -16,7 +16,7 @@ ApplicationWindow
     id: _main
 
     visible: true
-    visibility: Qt.platform.os === "android" ? Window.FullScreen : Window.AutomaticVisibility
+    visibility: (Qt.platform.os === "android" & UiCore.apiVersion > 34) ? Window.FullScreen : Window.AutomaticVisibility
 
     color: "#EBECEC"
 
@@ -40,8 +40,7 @@ ApplicationWindow
         UiCore.setupApplication();
 
         if (Qt.platform.os === "android") {
-            console.log("Android os")
-            _main.visibility = Window.FullScreen
+            console.log("Android os version", UiCore.apiVersion)
         }
 
         InterfaceManager.startScanning(DeviceConnectionType.BLE);

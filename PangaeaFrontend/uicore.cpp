@@ -503,3 +503,13 @@ void UiCore::runIrConvertor()
     qDebug() << "Run converter, path" << path << "result:" << irConvertorProcess.startDetached(path);
 #endif
 }
+
+quint16 UiCore::apiVersion()
+{
+#ifdef Q_OS_ANDROID
+    jint version = QJniObject::getStaticField<jint>("android/os/Build$VERSION", "SDK_INT");
+    return version;
+#else
+    return 1;
+#endif
+}
