@@ -1,4 +1,4 @@
-Package: PangaeaCPPA
+Package: Pangaea-desktop
 Version: @MY_PRODUCT_NUMBER@.@MY_PRODUCT_VERSION@.@MY_BUILD_NUMBER@
 Maintainer: AMT electronics
 Architecture: all

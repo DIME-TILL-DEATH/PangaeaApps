@@ -122,11 +122,15 @@ Item
                         width: parent.width/5
                         MText{
                             color: Style.currentTheme.textInverted
-                            anchors.fill: parent
-                            verticalAlignment:   Text.AlignVCenter
-                            font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
 
-                            text: qsTr(" Preset name")
+                            width: parent.width * 0.9
+                            height: parent.height
+                            x: 5
+
+                            verticalAlignment:   Text.AlignVCenter
+                            font.pixelSize: Math.min(parent.height/2, parent.width/7.5)
+
+                            text: qsTr("Preset name")
                         }
                     }
 
@@ -182,15 +186,18 @@ Item
                         width: impuls.enabled ? parent.width/5 : 0
                         color: Style.currentTheme.mainEnabledColor
                         MText{
-
-                            anchors.fill: parent
-                            verticalAlignment:   Text.AlignVCenter
-                            font.pixelSize: Math.min(parent.height/1.5, parent.width/7.5)
                             color: Style.currentTheme.textInverted
+
+                            width: parent.width * 0.9
+                            height: parent.height
+                            x: 5
+
+                            verticalAlignment:   Text.AlignVCenter
+                            font.pixelSize: Math.min(parent.height/2, parent.width/7.5)
 
                             visible: impuls.enabled
 
-                            text: qsTr(" IR name")
+                            text: qsTr("IR name")
                         }
                     }
 
@@ -214,7 +221,7 @@ Item
 
                             color: Style.currentTheme.textInverted
 
-                            font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
+                            font.pixelSize: Math.min(parent.height/2, parent.width/15)
                             elide: Text.ElideMiddle
 
                             MouseArea

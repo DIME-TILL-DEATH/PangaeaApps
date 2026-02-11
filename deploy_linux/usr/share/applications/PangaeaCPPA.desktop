@@ -1,8 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=PangaeaCPPA
-Icon=PangaeaCPPA
-Exec=/usr/local/PangaeaCPPA/PangaeaCPPA.sh
-Comment=Control application for PANGAEA devices
-Terminal=false

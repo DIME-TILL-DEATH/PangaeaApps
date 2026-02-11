@@ -463,37 +463,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="139"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="141"/>
         <source>Preset name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="209"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="212"/>
         <source>IR name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="226"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="229"/>
         <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="227"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="230"/>
         <source>IR module not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="269"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="272"/>
         <source>Add/Remove module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="380"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="383"/>
         <source>Preset name: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="380"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="383"/>
         <source>IR name: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -521,37 +521,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="129"/>
-        <source> Preset name</source>
+        <location filename="../qml/CP16/HeadLA3.qml" line="133"/>
+        <source>Preset name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="193"/>
-        <source> IR name</source>
+        <location filename="../qml/CP16/HeadLA3.qml" line="200"/>
+        <source>IR name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="210"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="217"/>
         <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="211"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="218"/>
         <source>IR module not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="253"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="260"/>
         <source>Add/Remove module</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="328"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="335"/>
         <source>CLN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="354"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="361"/>
         <source>DST</source>
         <translation type="unfinished"></translation>
     </message>
