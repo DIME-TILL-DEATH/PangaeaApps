@@ -97,8 +97,10 @@ QList<QByteArray> Parser::parseNewData(const QByteArray &newData)
 
         recievedCommands.append(command.toUtf8());
         std::function<void (const QString& command, const QByteArray &, const QByteArray&)> callback = m_callbacks.value(command);
-
         if(callback) callback(command, arguments, data);
+
+        std::function<void (qint32)> setter = m_setters.value(command);
+        if(setter) setter(data.toInt(nullptr, 16));
     }while(lineSepPos != -1);
 
     return recievedCommands;
@@ -108,6 +110,11 @@ void Parser::addCommandHandler(const QString &command,  std::function<void (cons
 {
 
     m_callbacks.insert(command, callback);
+}
+
+void Parser::addSetterHandler(const QString &command, std::function<void (qint32)> callback)
+{
+    m_setters.insert(command, callback);
 }
 
 void Parser::addCureParser(QString comm, MaskedParser *parser)

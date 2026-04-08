@@ -45,6 +45,8 @@ public:
 
     ModuleType moduleType() const {return m_moduleType;};
 
+    AbstractDevice* owner() { return m_owner; };
+
     virtual void sendDataToDevice(QByteArray data);
 
     virtual void setValues(const preset_data_cplegacy_t &prData) {};

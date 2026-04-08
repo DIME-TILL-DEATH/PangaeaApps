@@ -116,6 +116,8 @@ public:
 
     FileBrowserModel *fileBrowser() const;
 
+    Parser* dataInParser() { return &m_parser; }
+
 public slots:
     virtual QList<QByteArray> parseAnswers(QByteArray baAnswer);
 

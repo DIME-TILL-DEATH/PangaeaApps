@@ -1,7 +1,7 @@
 #include "controlvalue.h"
 
-#include <QDebug>
-
+#include "parser.h"
+#include "abstractdevice.h"
 
 ControlValue::ControlValue(AbstractModule *owner, void *valuePtr, QString commandName,
                            QString name, QString units,
@@ -17,7 +17,14 @@ ControlValue::ControlValue(AbstractModule *owner, void *valuePtr, QString comman
     m_name{name},
     m_units{units}
 {
-    if(owner) connect(this, &ControlValue::userModifiedValue, owner, &AbstractModule::userModifiedModuleParameters);
+    if(owner)
+    {
+        using namespace std::placeholders;
+        connect(this, &ControlValue::userModifiedValue, owner, &AbstractModule::userModifiedModuleParameters);
+        AbstractDevice* ownerDevice = m_owner->owner();
+        Parser* parser = ownerDevice->dataInParser();
+        parser->addSetterHandler(commandName, std::bind(&ControlValue::setControlValue, this, _1));
+    }
 
     value_ptr = valuePtr;
 
