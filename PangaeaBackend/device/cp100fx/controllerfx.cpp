@@ -120,11 +120,28 @@ QStringList ControllerFx::sourcesList()
     srcList.append("FSW Confirm");
     srcList.append("FSW Down");
 
-    for(quint8 i=0; i<127; i++)
+    for(quint8 i=0; i<128; i++)
     {
         srcList.append("CC# " + QString::number(i));
     }
 
+    const char* note_list[12] =
+        { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+
+    int8_t noteNum;
+
+    for(quint8 i=0; i<120; i++)
+    {
+        if(i < 12)
+            noteNum = -2;
+        else if(i >= 12 && i < 24)
+            noteNum = -1;
+        else
+            noteNum = i / 12 - 2;
+
+        const char* noteChar = note_list[i % 12];
+        srcList.append("Note " + QString(noteChar) + QString::number(noteNum));
+    }
     return srcList;
 }
 

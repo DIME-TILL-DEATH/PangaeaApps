@@ -261,7 +261,7 @@ Rectangle{
                     opacity: enabled ? 1 : 0.5
 
                     currentIndex: UiCore.currentDevice.systemSettings.exprType
-                    model: ["Standart V", "Alternative V", "Standart CC", "Alternative CC"]
+                    model: ["Std. Volume", "Alt. Volume", "Std. CC", "Alt.CC"]
 
                     onActivated: (index) => {
 

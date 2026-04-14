@@ -20,6 +20,8 @@ public:
     void addSetterHandler(const QString& command, std::function<void (qint32)> callback);
     void addCureParser(QString comm, MaskedParser* parser);
 
+    void clearSetterHandlers();
+
     // Костыль для старого формата rns
     void enableFullEndMode() {fullEndModeEnabled=true;};
     void disableFullEndMode() {fullEndModeEnabled=false;};

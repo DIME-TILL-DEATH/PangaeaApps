@@ -196,6 +196,15 @@ Item{
                     _combo.deviceUpdatingValues = false;
                 }
             }
+
+            Connections{
+                target: ctrlValInstance
+
+                function onDisplayValueChanged()
+                {
+                    _combo.currentIndex = ctrlValInstance.displayValue;
+                }
+            }
         }
     }
 }

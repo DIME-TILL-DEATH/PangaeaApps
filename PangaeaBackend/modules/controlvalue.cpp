@@ -119,8 +119,6 @@ bool ControlValue::enabled() const
 
 void ControlValue::setControlValue(qint32 value)
 {
-    // if(value_ptr) *value_ptr = value;
-
     if(value > fmax(m_minControlValue, m_maxControlValue)) value = m_maxControlValue;
     if(value < fmin(m_minControlValue, m_maxControlValue)) value = m_minControlValue;
 

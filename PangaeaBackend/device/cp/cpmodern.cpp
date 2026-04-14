@@ -132,6 +132,12 @@ void CPModern::initDevice(DeviceType deviceType)
     m_avaliableModulesList.append(CH);
     m_avaliableModulesList.append(PH);
 
+    if(deviceType == DeviceType::LEGACY_CP16 || deviceType == DeviceType::LEGACY_CP16PA ||
+        deviceType == DeviceType::MODERN_CP || deviceType == DeviceType::LA3)
+    {
+        m_parser.clearSetterHandlers(); // устройства не имеют графического интерфейса, обрабатывать нечего
+    }
+
     emit modulesListModelChanged();
     emit presetListModelChanged();
     emit sgDeviceInstanciated();

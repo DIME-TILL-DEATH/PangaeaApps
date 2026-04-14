@@ -26,6 +26,15 @@ RowLayout{
         moduleOn: true
 
         model: ["Global", "Preset"]
+
+        Connections{
+            target: UiCore.currentDevice.attenuatorVolume.source
+
+            function onDisplayValueChanged()
+            {
+                console.log("Display value changed")
+            }
+        }
     }
 
     ParameterComboBox{
