@@ -5,6 +5,8 @@
 #include <QQmlEngine>
 
 #include "abstractdevice.h"
+#include "abstractmodule.h"
+#include "controlvalue.h"
 
 enum
 {
@@ -142,7 +144,7 @@ typedef struct
 
 
 
-class SystemSettingsFx : public QObject
+class SystemSettingsFx : public AbstractModule
 {
     Q_OBJECT
     QML_ELEMENT
@@ -163,7 +165,7 @@ class SystemSettingsFx : public QObject
     Q_PROPERTY(quint8 timeFormat READ timeFormat WRITE setTimeFormat NOTIFY settingsChanged FINAL)
     Q_PROPERTY(quint8 swapConf READ swapConf WRITE setSwapConf NOTIFY settingsChanged FINAL)
 
-    Q_PROPERTY(quint8 tunerSpeed READ tunerSpeed WRITE setTunerSpeed NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* tunerSpeed READ tunerSpeed NOTIFY settingsChanged FINAL)
     Q_PROPERTY(quint8 fswSpeed READ fswSpeed WRITE setFswSpeed NOTIFY settingsChanged FINAL)
 
     Q_PROPERTY(QList<quint8> midiPcMap READ midiPcMap NOTIFY settingsChanged FINAL)
@@ -208,8 +210,7 @@ public:
     quint8 swapConf() const;
     void setSwapConf(quint8 newSwapConf);
 
-    quint8 tunerSpeed() const;
-    void setTunerSpeed(quint8 newTunerSpeed);
+    ControlValue* tunerSpeed() const;
 
     quint8 fswSpeed() const;
     void setFswSpeed(quint8 newFswSpeed);
@@ -237,7 +238,7 @@ private:
     quint8 m_tunerControl;
     quint8 m_timeFormat;
     quint8 m_swapConf;
-    quint8 m_tunerSpeed;
+    ControlValue* m_tunerSpeed = nullptr;
     quint8 m_fswSpeed;
     quint8 m_tunerCC;
 

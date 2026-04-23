@@ -44,7 +44,8 @@ public:
         IR_STEREO,
         //====================
         MASTER=128,
-        TUNER
+        TUNER,
+        SYSTEM
     };
     Q_ENUM(Value)
 };

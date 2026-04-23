@@ -1,9 +1,11 @@
 #include "systemsettingsfx.h"
 
 SystemSettingsFx::SystemSettingsFx(AbstractDevice *owner)
-    : QObject{owner},
+    : AbstractModule(owner, ModuleType::SYSTEM, "System settings", ""),
     m_owner{owner}
 {
+    m_tunerSpeed = new ControlValue(this, nullptr, "sys_tuner_speed", "Tuner speed");
+
     for(int i=0; i<127; i++)
     {
         m_midiPcMap.append(i%98);
@@ -25,7 +27,7 @@ void SystemSettingsFx::setSettings(TSystemSettingsFx settings)
     m_tunerCC = settings.tunerExternal & 0x7F;
     m_timeFormat = settings.timeFormat;
     m_swapConf = settings.swapSwitch;
-    m_tunerSpeed = settings.tunerSpeed;
+    m_tunerSpeed->setControlValue(settings.tunerSpeed);
     m_fswSpeed = settings.fswSpeed;
 
     m_midiPcMap.clear();
@@ -191,20 +193,20 @@ void SystemSettingsFx::setTunerControl(quint8 newTunerControl)
     sendData(QByteArray("sys_tuner_ctrl ") + QByteArray::number(m_tunerControl, 16));
 }
 
-quint8 SystemSettingsFx::tunerSpeed() const
+ControlValue* SystemSettingsFx::tunerSpeed() const
 {
     return m_tunerSpeed;
 }
 
-void SystemSettingsFx::setTunerSpeed(quint8 newTunerSpeed)
-{
-    if (m_tunerSpeed == newTunerSpeed)
-        return;
-    m_tunerSpeed = newTunerSpeed;
-    emit settingsChanged();
+// void SystemSettingsFx::setTunerSpeed(quint8 newTunerSpeed)
+// {
+//     if (m_tunerSpeed == newTunerSpeed)
+//         return;
+//     m_tunerSpeed = newTunerSpeed;
+//     emit settingsChanged();
 
-    sendData(QByteArray("sys_tuner_speed ") + QByteArray::number(m_tunerSpeed, 16));
-}
+//     sendData(QByteArray("sys_tuner_speed ") + QByteArray::number(m_tunerSpeed, 16));
+// }
 
 quint8 SystemSettingsFx::tunerCC() const
 {

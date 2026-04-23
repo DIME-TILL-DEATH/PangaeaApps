@@ -124,6 +124,7 @@ void Cp100fx::readFullState()
 
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("plist");
+
     emit sgPushCommandToQueue("sys_settings");
 
     pushReadPresetCommands();
@@ -770,6 +771,7 @@ void Cp100fx::plistCommHandler(const QString &command, const QByteArray &argumen
 
     QStringList separatedList = fullList.split("\r");
 
+    qDeleteAll(m_presetsList);
     m_presetsList.clear();
 
     QStringList::const_iterator it = separatedList.constBegin();
