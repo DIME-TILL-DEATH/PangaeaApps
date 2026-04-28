@@ -139,22 +139,24 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     PangaeaBackendplugin
     converter-lib
 
-    # qml_layoutsplugin
-    # qml_elementsplugin
-    # qml_modulesplugin
-    # qml_styleplugin
+    qml_cp16plugin
+    qml_cp100fxplugin
+    qml_elementsplugin
+    qml_layoutsplugin
+    qml_modules_classicplugin
+    qml_modules_fxplugin
+    qml_styleplugin
 )
 
-
-qt_policy(SET QTP0001 OLD)
-qt_policy(SET QTP0002 OLD)
-
-set(QT_QML_GENERATE_QMLLS_INI ON)
-set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/qml)
-set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0002 NEW)
 
 if(ANDROID OR IOS)
     add_subdirectory(Mobile)
+
+    set(QT_QML_GENERATE_QMLLS_INI ON)
+    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Mobile/qml)
+    set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
 
     if(IOS)
         set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -184,6 +186,10 @@ if(ANDROID OR IOS)
     endif()
 else()
     add_subdirectory(Desktop)
+
+    set(QT_QML_GENERATE_QMLLS_INI ON)
+    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
+    set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
 
     if(WIN32)
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")

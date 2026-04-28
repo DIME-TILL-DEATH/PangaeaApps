@@ -62,6 +62,44 @@ ApplicationWindow
         anchors.fill: parent
     }
 
+    function loadLayoutComponent() {
+        if(UiCore.currentDevice.deviceType === DeviceType.UNKNOWN_DEVICE) {
+            controlLayoutLoader.sourceComponent = null;
+            return;
+        }
+
+        startUi.visible = false;
+        
+        var component;
+        switch(UiCore.currentDevice.deviceType){
+            case DeviceType.LA3:
+            case DeviceType.MODERN_CP:
+                component = controlLayoutCPModernComponent;
+                break;
+            case DeviceType.CP100FX:
+                component = controlLayoutCP100FXComponent;
+                break;
+            default:
+                component = controlLayoutLegacyComponent;
+        }
+        controlLayoutLoader.sourceComponent = component;
+    }
+
+    Component {
+        id: controlLayoutCPModernComponent
+        ControlLayoutCPModern {}
+    }
+
+    Component {
+        id: controlLayoutLegacyComponent
+        ControlLayoutLegacy {}
+    }
+
+    Component {
+        id: controlLayoutCP100FXComponent
+        ControlLayoutCP100FX {}
+    }
+
     NativeMessageDialog{
         id: msgPresetChangeSave
 
@@ -195,32 +233,7 @@ ApplicationWindow
         }
 
         function onCurrentDeviceChanged(){
-
-            switch(UiCore.currentDevice.deviceType){
-            case DeviceType.UNKNOWN_DEVICE:{
-                controlLayoutLoader.source = "";
-                break;
-            }
-
-            case DeviceType.LA3:
-            case DeviceType.MODERN_CP:{
-                startUi.visible = false;
-                controlLayoutLoader.source = "/CP16/ControlLayoutCPModern.qml";
-                break;
-            }
-
-            case DeviceType.CP100FX:{
-                startUi.visible = false;
-                controlLayoutLoader.source = "/CP100FX/ControlLayoutCP100FX.qml";
-                break;
-            }
-
-            default:{
-                startUi.visible = false;
-                controlLayoutLoader.source = "/CP16/ControlLayoutLegacy.qml";
-            }
-            }
-
+            loadLayoutComponent();
         }
     }
 
@@ -318,7 +331,7 @@ ApplicationWindow
 
         function onSgExchangeError()
         {
-            controlLayoutLoader.source = "";
+            controlLayoutLoader.sourceComponent = null;
             msgExchangeError.text = qsTr("Command exchange error")
             msgExchangeError.open();
         }

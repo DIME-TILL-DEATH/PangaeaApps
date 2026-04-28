@@ -23,7 +23,6 @@ Rectangle{
     color: Style.currentTheme.mainEnabledColor
 
     property int stringHeight: height/16
-    property SystemSettingsFx systemSettings: UiCore.currentDevice.systemSettings
 
     RowLayout{
         anchors.fill: parent
@@ -55,8 +54,6 @@ Rectangle{
 
                     ctrlValInstance: UiCore.currentDevice.systemSettings.mode
 
-                    // moduleOn: true
-
                     model: ["CabSim On", "CabSim Off"]
                 }
 
@@ -68,7 +65,7 @@ Rectangle{
 
                     text: UiCore.currentDevice.systemSettings.cabNumber.name
 
-                    currentIndex: _main.systemSettings.cabNumber.displayValue
+                    currentIndex: UiCore.currentDevice.systemSettings.cabNumber.displayValue
                     model: ["1 L+R", "1R Amp, Pres.", "2 L+R", "1R Amp", "1R Pres.", "1R Dry"]
 
                     onActivated: (index) => {
@@ -179,7 +176,7 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    controlValue: systemSettings.tunerSpeed
+                    controlValue: UiCore.currentDevice.systemSettings.tunerSpeed
                 }
             }
         }
@@ -205,7 +202,7 @@ Rectangle{
 
                     width: parent.width
 
-                    ctrlValInstance: _main.systemSettings.exprOn
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.exprOn
 
                     moduleOn: true
                     isHorizontal: true
@@ -329,10 +326,10 @@ Rectangle{
 
                         model: UiCore.currentDevice.strPresetNumbers
 
-                        currentIndex: systemSettings.midiPcMap[_comboPcChoice.currentIndex]
+                        currentIndex: UiCore.currentDevice.systemSettings.midiPcMap[_comboPcChoice.currentIndex]
 
                         onActivated: {
-                            systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
+                            UiCore.currentDevice.systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
                         }
                     }
                 }
