@@ -48,7 +48,7 @@ qt_add_library(PangaeaBackend STATIC
     device/cp100fx/cp100fx.h device/cp100fx/cp100fx.cpp
     device/cp100fx/presetfx.h device/cp100fx/presetfx.cpp
     device/cp100fx/fswfx.h device/cp100fx/fswfx.cpp
-    device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
+    # device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
     device/cp100fx/controllerfx.h device/cp100fx/controllerfx.cpp
 
     device/cp/hardwareclassicpreset.h
@@ -91,6 +91,8 @@ qt_add_qml_module(PangaeaBackend
         uihelpers/uimessagetype.h
 
         interfaces/devicedescription.cpp interfaces/devicedescription.h
+
+        device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
 
         modules/abstractmodule.cpp modules/abstractmodule.h
         modules/cabsim.h modules/cabsim.cpp

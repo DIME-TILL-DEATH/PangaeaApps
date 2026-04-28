@@ -23,6 +23,7 @@ Rectangle{
     color: Style.currentTheme.mainEnabledColor
 
     property int stringHeight: height/16
+    property SystemSettingsFx systemSettings: UiCore.currentDevice.systemSettings
 
     RowLayout{
         anchors.fill: parent
@@ -46,19 +47,17 @@ Rectangle{
 
                 spacing: _main.stringHeight
 
-                MComboHorizontal{
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
 
-                    text: "Mode: "
+                    isHorizontal: true
 
-                    currentIndex: UiCore.currentDevice.systemSettings.mode
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.mode
+
+                    // moduleOn: true
+
                     model: ["CabSim On", "CabSim Off"]
-
-                    onActivated: (index) => {
-
-                        UiCore.currentDevice.systemSettings.mode = currentIndex;
-                    }
                 }
 
                 MComboHorizontal{
@@ -67,33 +66,33 @@ Rectangle{
                     width: parent.width
                     height: _main.stringHeight
 
-                    text: "Cab. num: "
+                    text: UiCore.currentDevice.systemSettings.cabNumber.name
 
-                    currentIndex: UiCore.currentDevice.systemSettings.cabNumber
+                    currentIndex: _main.systemSettings.cabNumber.displayValue
                     model: ["1 L+R", "1R Amp, Pres.", "2 L+R", "1R Amp", "1R Pres.", "1R Dry"]
 
                     onActivated: (index) => {
 
-                        if(UiCore.currentDevice.systemSettings.cabNumber === 2)
+                        if(UiCore.currentDevice.systemSettings.cabNumber.displayValue === 2)
                         {
-                            if(currentIndex !== UiCore.currentDevice.systemSettings.cabNumber)
+                            if(_comboCabConfig.currentIndex !== UiCore.currentDevice.systemSettings.cabNumber.displayValue)
                             {
                                 restartDialog.show();
                             }
                             else
                             {
-                                UiCore.currentDevice.systemSettings.cabNumber = currentIndex;
+                                UiCore.currentDevice.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
                             }
                         }
                         else
                         {
-                            if(currentIndex === 2)
+                            if(_comboCabConfig.currentIndex === 2)
                             {
                                 restartDialog.show();
                             }
                             else
                             {
-                                UiCore.currentDevice.systemSettings.cabNumber = currentIndex;
+                                UiCore.currentDevice.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
                             }
                         }
                     }
@@ -109,29 +108,24 @@ Rectangle{
 
                         modality: Qt.ApplicationModal
                         onAccepted: {
-                            UiCore.currentDevice.systemSettings.cabNumber = _comboCabConfig.currentIndex;
+                            UiCore.currentDevice.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
                             UiCore.currentDevice.restartDevice()
                         }
                         onRejected: {
-                            _comboCabConfig.currentIndex = UiCore.currentDevice.systemSettings.cabNumber
+                            _comboCabConfig.currentIndex = _main.systemSettings.cabNumber.displayValue
 
                         }
                     }
                 }
 
-                MComboHorizontal{
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
+                    isHorizontal: true
 
-                    text: "MIDI channel: "
-
-                    currentIndex: UiCore.currentDevice.systemSettings.midiChannel
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.midiChannel
                     model: _midiChannelModel
 
-                    onActivated: (index) => {
-
-                        UiCore.currentDevice.systemSettings.midiChannel = currentIndex;
-                    }
 
                     ListModel{
                         id: _midiChannelModel
@@ -144,77 +138,48 @@ Rectangle{
                     }
                 }
 
-                MComboHorizontal{
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
+                    isHorizontal: true
 
-                    text: "S/PDIF: "
-
-                    currentIndex: UiCore.currentDevice.systemSettings.spdif
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.spdif
                     model: ["Main Output", "Dry Input"]
-
-                    onActivated: (index) => {
-
-                        UiCore.currentDevice.systemSettings.spdif = currentIndex;
-                    }
                 }
 
-                MComboHorizontal{
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
+                    isHorizontal: true
 
-                    text: "Tempo: "
-
-                    currentIndex: UiCore.currentDevice.systemSettings.tempo
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.tempo
                     model: ["Preset", "Global", "Glob.+MIDI"]
-
-                    onActivated: (index) => {
-
-                        UiCore.currentDevice.systemSettings.tempo = currentIndex;
-                    }
                 }
 
-                MComboHorizontal{
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
+                    isHorizontal: true
 
-                    text: "Time format: "
-
-                    currentIndex: UiCore.currentDevice.systemSettings.timeFormat
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.timeFormat
                     model: ["Sec", "BPM"]
-
-                    onActivated: (index) => {
-
-                        UiCore.currentDevice.systemSettings.timeFormat = currentIndex;
-                    }
                 }
 
-                MComboHorizontal{
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
+                    isHorizontal: true
 
-                    text: "Swap FSW: "
-
-                    currentIndex: UiCore.currentDevice.systemSettings.swapConf
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.swapConf
                     model: ["Off", "On"]
-
-                    onActivated: (index) => {
-                        UiCore.currentDevice.systemSettings.swapConf = currentIndex;
-                    }
                 }
 
 
-                MBar{
+                ParameterBar{
                     width: parent.width
                     height: _main.stringHeight
 
-                    text: "Tuner speed: "
-
-                    value: UiCore.currentDevice.systemSettings.tunerSpeed
-
-                    onUserChangedValue: calcValue => {
-                        UiCore.currentDevice.systemSettings.tunerSpeed = calcValue
-                    }
+                    controlValue: systemSettings.tunerSpeed
                 }
             }
         }
@@ -235,56 +200,40 @@ Rectangle{
 
                 spacing: _main.stringHeight
 
-                MSwitchHorizontal{
+                ParameterSwitch{
                     id: _exprSwitch
 
                     width: parent.width
-                    height: _main.stringHeight
 
-                    text: "Expr. pedal: "
+                    ctrlValInstance: _main.systemSettings.exprOn
 
-                    checked: UiCore.currentDevice.systemSettings.exprOn
-
-                    onClicked: {
-                        UiCore.currentDevice.systemSettings.exprOn = checked
-                    }
+                    moduleOn: true
+                    isHorizontal: true
                 }
 
 
-                MComboHorizontal{
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
-
-                    text: "Expr. type: "
+                    isHorizontal: true
 
                     enabled: _exprSwitch.position
                     opacity: enabled ? 1 : 0.5
 
-                    currentIndex: UiCore.currentDevice.systemSettings.exprType
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.exprType
                     model: ["Std. Volume", "Alt. Volume", "Std. CC", "Alt.CC"]
-
-                    onActivated: (index) => {
-
-                        UiCore.currentDevice.systemSettings.exprType = currentIndex;
-                    }
                 }
 
-                MComboHorizontal{
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
-
-                    text: "Expr. CC#: "
+                    isHorizontal: true
 
                     enabled: _exprSwitch.position
                     opacity: enabled ? 1 : 0.5
 
-                    currentIndex: UiCore.currentDevice.systemSettings.exprCC
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.exprCC
                     model: _exprCCModel
-
-                    onActivated: (index) => {
-
-                        UiCore.currentDevice.systemSettings.exprCC = currentIndex;
-                    }
 
                     ListModel{
                         id: _exprCCModel
@@ -299,22 +248,14 @@ Rectangle{
                     }
                 }
 
-                MComboHorizontal{
+                ParameterSwitch{
                     width: parent.width
-                    height: _main.stringHeight
+                    // height: _main.stringHeight
 
-                    text: "Expr. store level: "
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.exprStoreLevel
 
-                    enabled: _exprSwitch.position
-                    opacity: enabled ? 1 : 0.5
-
-                    currentIndex: UiCore.currentDevice.systemSettings.exprStoreLevel
-                    model: ["Off", "On"]
-
-                    onActivated: (index) => {
-
-                        UiCore.currentDevice.systemSettings.exprStoreLevel = currentIndex;
-                    }
+                    moduleOn: true
+                    isHorizontal: true
                 }
 
             }
@@ -388,10 +329,10 @@ Rectangle{
 
                         model: UiCore.currentDevice.strPresetNumbers
 
-                        currentIndex: UiCore.currentDevice.systemSettings.midiPcMap[_comboPcChoice.currentIndex]
+                        currentIndex: systemSettings.midiPcMap[_comboPcChoice.currentIndex]
 
                         onActivated: {
-                            UiCore.currentDevice.systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
+                            systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
                         }
                     }
                 }
@@ -405,28 +346,21 @@ Rectangle{
                     checked: UiCore.currentDevice.systemSettings.tunerControl
 
                     onClicked: {
-                        UiCore.currentDevice.systemSettings.tunerControl = checked
+                        systemSettings.tunerControl = checked
                     }
                 }
 
-                MComboHorizontal{
-
+                ParameterComboBox{
                     width: parent.width
                     height: _main.stringHeight
-
-                    text: "Tuner on CC#: "
+                    isHorizontal: true
 
                     enabled: UiCore.currentDevice.systemSettings.tunerControl
                     opacity: enabled ? 1 : 0.5
 
                     model: _midiPcMapModel
 
-                    currentIndex: UiCore.currentDevice.systemSettings.tunerCC
-
-
-                    onActivated: {
-                        UiCore.currentDevice.systemSettings.tunerCC = currentIndex
-                    }
+                    ctrlValInstance: UiCore.currentDevice.systemSettings.tunerCC
                 }
 
             }

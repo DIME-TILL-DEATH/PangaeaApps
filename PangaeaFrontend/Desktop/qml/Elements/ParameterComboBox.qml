@@ -1,5 +1,8 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 2.15
 
 import StyleSettings 1.0
 import Elements 1.0
@@ -7,41 +10,44 @@ import Elements 1.0
 import CppObjects
 import PangaeaBackend
 
-Item{
+Grid{
+    id: _root
+
     height: 50
     width: 200
 
-    property bool moduleOn
+    property bool moduleOn: true
     required property ControlValue ctrlValInstance
     property alias model: _combo.model
     property alias currentIndex: _combo.currentIndex
 
-    Column{
-        anchors.fill: parent
+    property bool isHorizontal: false
 
-        Item{
-            id: _editValueItem
+    columns: _root.isHorizontal ? 2 : 1
+    rows: _root.isHorizontal ? 1 : 2
 
+    Item{
+        id: _editValueItem
 
-            height: parent.height/3
-            width: parent.width
+        height: _root.isHorizontal ? parent.height : parent.height/3
+        width: _root.isHorizontal ? parent.width * 0.5 : parent.width
 
-            Text{
-                id: textValue
-                anchors.fill: parent
+        MLabel{
+            id: textValue
+            anchors.fill: parent
 
-                text: ctrlValInstance.name
-                // font.pixelSize: 5
-                font.bold: true
+            text: _root.ctrlValInstance.name
 
-                color: Style.currentTheme.textEnabled
+            horizontalAlignment: _root.isHorizontal ? undefined : Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
 
-                horizontalAlignment: TextInput.AlignHCenter
-                verticalAlignment: TextInput.AlignVCenter
-
-                opacity: moduleOn ? 1.0 : 0.5
-            }
+            opacity: moduleOn ? 1.0 : 0.5
         }
+    }
+
+    Item{
+        height:  _root.isHorizontal ? parent.height : parent.height * 2/3
+        width: _root.isHorizontal ? parent.width * 0.5 : parent.width
 
         ComboBox
         {
@@ -51,12 +57,13 @@ Item{
 
             opacity: moduleOn ? 1.0 : 0.5
 
-            height: parent.height / 3
-            width: parent.width * 0.9
+            height: _root.isHorizontal ? parent.height : parent.height * 0.5
+            width: _root.isHorizontal ? parent.width : parent.width * 0.9
 
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.horizontalCenter: _root.isHorizontal ? undefined : parent.horizontalCenter
+            // anchors.verticalCenter: _root.isHorizontal ? parent.verticalCenterv : undefined
 
-            currentIndex: ctrlValInstance.displayValue
+            currentIndex: _root.ctrlValInstance.displayValue
 
             contentItem: Text {
                 width: _combo.width - _combo.indicator.width - _combo.spacing - leftPadding
@@ -72,7 +79,7 @@ Item{
             onActivated:
             {
                 if(!deviceUpdatingValues)
-                    ctrlValInstance.displayValue = currentIndex;
+                    _root.ctrlValInstance.displayValue = currentIndex;
             }
 
             background: Rectangle {
@@ -101,7 +108,7 @@ Item{
 
                     width: parent.width
 
-                    font.bold: _combo.currentIndex == index
+                    font.bold: _combo.currentIndex == delegate.index
 
                     elide: Text.ElideRight
                     verticalAlignment: Text.AlignVCenter
@@ -192,17 +199,17 @@ Item{
                 function onDeviceUpdatingValues()
                 {
                     _combo.deviceUpdatingValues = true;
-                    _combo.currentIndex = ctrlValInstance.displayValue;
+                    _combo.currentIndex = _root.ctrlValInstance.displayValue;
                     _combo.deviceUpdatingValues = false;
                 }
             }
 
             Connections{
-                target: ctrlValInstance
+                target: _root.ctrlValInstance
 
                 function onDisplayValueChanged()
                 {
-                    _combo.currentIndex = ctrlValInstance.displayValue;
+                    _combo.currentIndex = _root.ctrlValInstance.displayValue;
                 }
             }
         }
