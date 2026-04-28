@@ -11,7 +11,7 @@ import ModulesClassic 1.0
 import StyleSettings 1.0
 import Layouts 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Column

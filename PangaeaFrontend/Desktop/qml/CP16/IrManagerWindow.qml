@@ -11,7 +11,7 @@ import StyleSettings 1.0
 import Layouts
 import Elements 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Window{

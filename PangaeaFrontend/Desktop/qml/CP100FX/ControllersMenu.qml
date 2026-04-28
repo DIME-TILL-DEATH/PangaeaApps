@@ -6,7 +6,7 @@ import Elements
 import StyleSettings
 
 import CP100FX
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 RowLayout{

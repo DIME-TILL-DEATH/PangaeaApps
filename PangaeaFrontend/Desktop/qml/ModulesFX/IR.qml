@@ -6,7 +6,7 @@ import Layouts 1.0
 
 import StyleSettings 1.0
 
-import CppObjects 1.0
+import PangaeaFrontend 1.0
 import PangaeaBackend
 
 BaseModule{

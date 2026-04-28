@@ -14,7 +14,7 @@ import CP100FX 1.0
 
 import QtQuick.Layouts
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Rectangle{

@@ -101,7 +101,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 qt_add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
     main.cpp
-    uicore.cpp uicore.h
+    # uicore.cpp uicore.h
     uisettings.cpp uisettings.h
 
     ../PangaeaBackend/threadcontroller.cpp ../PangaeaBackend/threadcontroller.h
@@ -124,7 +124,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
     ../WavConverterLib/
 )
-
 
 find_package(Qt6 REQUIRED COMPONENTS Qml Gui Network Positioning
     Quick LinguistTools Svg Concurrent)
@@ -158,6 +157,42 @@ if(ANDROID OR IOS)
     set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Mobile/qml)
     set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
 
+    qt_add_library(qml_pangaeafrontend STATIC)
+    qt_add_qml_module(qml_pangaeafrontend
+        URI PangaeaFrontend
+        VERSION 1.0
+        RESOURCE_PREFIX /
+
+        QML_FILES
+            Mobile/qml/Main.qml
+
+        SOURCES
+            uicore.cpp uicore.h
+    )
+
+    target_include_directories(qml_pangaeafrontend PUBLIC
+        ../PangaeaBackend/modules
+        ../PangaeaBackend/device
+        ../PangaeaBackend/device/cp
+        ../PangaeaBackend/device/cp100fx
+        ../PangaeaBackend/interfaces/
+        ../PangaeaBackend/utils
+        ../PangaeaBackend/qmlEnums
+        ../PangaeaBackend/models/
+        ../PangaeaBackend/uihelpers/
+    )
+
+    target_link_libraries(qml_pangaeafrontend PUBLIC
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Quick
+        Qt6::Svg
+        Qt6::Qml
+
+        PangaeaBackend
+        converter-lib
+    )
+
     if(IOS)
         set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
@@ -190,6 +225,17 @@ else()
     set(QT_QML_GENERATE_QMLLS_INI ON)
     set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
     set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
+
+    qt_add_qml_module(${PROJECT_NAME}
+        URI "PangaeaFrontend"
+        VERSION 1.0
+
+        QML_FILES
+            Desktop/qml/Main.qml
+
+        SOURCES
+            uicore.cpp uicore.h
+    )
 
     if(WIN32)
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")

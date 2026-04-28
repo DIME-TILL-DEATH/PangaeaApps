@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.11
 import Elements 1.0
 import StyleSettings 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Rectangle {

@@ -26,6 +26,8 @@
 class CPLegacy : public AbstractDevice
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(bool isPaFw READ isPaFw CONSTANT)
     Q_PROPERTY(bool isPreEq READ isPreEq WRITE setIsPreEq NOTIFY isPreEqChanged FINAL)

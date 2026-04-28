@@ -7,7 +7,7 @@ import QtQml.Models
 import ModulesClassic 1.0
 import StyleSettings
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Flickable{
