@@ -96,6 +96,8 @@ int main(int argc, char *argv[])
     // UI creation
     //----------------------------------------------------------------
     UiCore uiCore;
+    UiCore::instance = &uiCore;
+
     UiSettings uiSettings;
     UiInterfaceManager uiInterfaceManager;
 
@@ -105,9 +107,9 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/firmwares");
     engine.addImportPath(":/translations");
 
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiCore", &uiCore);
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "UiSettings", &uiSettings);
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "InterfaceManager", &uiInterfaceManager);
+    qmlRegisterSingletonType<UiCore>("PangaeaFrontend", 1, 0, "UiCore", &UiCore::singletonProvider);
+    qmlRegisterSingletonInstance("PangaeaFrontend", 1, 0, "UiSettings", &uiSettings);
+    qmlRegisterSingletonInstance("PangaeaFrontend", 1, 0, "InterfaceManager", &uiInterfaceManager);
 
     //-------------------------------------------------------------------------------
     // connections
@@ -160,12 +162,8 @@ int main(int argc, char *argv[])
     QObject::connect(interfaceManager, &InterfaceManager::sgRssiReaded, &uiInterfaceManager, &UiInterfaceManager::setRssi);
     //----------------------------------------------------------------
 
-    QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreationFailed,
-        &app,
-        []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
+        &app, []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
 
 #ifdef Q_OS_IOS
     engine.addImportPath(":/");
@@ -173,8 +171,9 @@ int main(int argc, char *argv[])
 #elif defined(Q_OS_ANDROID)
     engine.loadFromModule("Pages", "Main");
 #else
-    engine.addImportPath(":/");
-    engine.loadFromModule("Layouts", "Main");
+    // engine.addImportPath(":/");
+    // engine.loadFromModule("Layouts", "Main");
+    engine.loadFromModule("PangaeaFrontend", "Main");
 #endif
 
 #ifdef Q_OS_ANDROID

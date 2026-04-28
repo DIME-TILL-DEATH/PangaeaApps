@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 import StyleSettings
 
-import CppObjects
+import PangaeaFrontend
 
 Item
 {

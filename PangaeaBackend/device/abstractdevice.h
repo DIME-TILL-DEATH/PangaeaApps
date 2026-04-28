@@ -25,6 +25,8 @@ class Core;
 class AbstractDevice : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(DeviceType deviceType READ deviceType CONSTANT)
     Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)

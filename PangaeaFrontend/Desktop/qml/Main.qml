@@ -11,7 +11,8 @@ import Layouts 1.0
 import CP100FX 1.0
 import CP16 1.0
 
-import CppObjects
+import PangaeaFrontend
+import PangaeaFrontend
 import PangaeaBackend
 
 ApplicationWindow

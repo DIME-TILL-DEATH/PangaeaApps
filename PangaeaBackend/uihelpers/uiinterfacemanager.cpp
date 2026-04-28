@@ -5,7 +5,7 @@
 UiInterfaceManager::UiInterfaceManager(QObject *parent)
     : QObject{parent}
 {
-    qmlRegisterSingletonInstance("CppObjects", 1, 0, "DevicesListModel", &m_devicesListModel);
+    qmlRegisterSingletonInstance("PangaeaFrontend", 1, 0, "DevicesListModel", &m_devicesListModel);
 }
 
 UiInterfaceManager::~UiInterfaceManager()

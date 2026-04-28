@@ -4,7 +4,7 @@ import Qt5Compat.GraphicalEffects
 import Elements
 import StyleSettings
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Rectangle {

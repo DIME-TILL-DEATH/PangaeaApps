@@ -5,7 +5,7 @@ import StyleSettings
 
 import Elements
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Window{

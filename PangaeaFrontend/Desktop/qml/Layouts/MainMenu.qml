@@ -9,8 +9,8 @@ import StyleSettings 1.0
 import Qt.labs.platform 1.1 as Labs
 import QtQml
 
-import CppObjects
-import PangaeaBackend
+import PangaeaFrontend 1.0
+import PangaeaBackend 1.0
 
 MenuBar{
     id: mainMenu

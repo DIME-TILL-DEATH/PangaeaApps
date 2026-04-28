@@ -6,7 +6,7 @@ import StyleSettings
 
 import Layouts
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Item

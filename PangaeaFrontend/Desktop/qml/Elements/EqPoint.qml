@@ -1,6 +1,6 @@
 import QtQuick
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Rectangle{

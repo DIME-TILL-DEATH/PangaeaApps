@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Item

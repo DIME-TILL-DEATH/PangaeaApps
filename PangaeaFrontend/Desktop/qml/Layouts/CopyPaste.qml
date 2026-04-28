@@ -3,7 +3,7 @@ import QtQuick
 import Elements
 import StyleSettings
 
-import CppObjects 1.0
+import PangaeaFrontend 1.0
 import PangaeaBackend
 
 Item

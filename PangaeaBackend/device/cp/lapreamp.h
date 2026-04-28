@@ -6,6 +6,9 @@
 class LAPreamp : public CPModern
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
     Q_PROPERTY(quint8 clnPresetMap READ clnPresetMap WRITE setClnPresetMap NOTIFY presetMapChanged FINAL)
     Q_PROPERTY(quint8 drvPresetMap READ drvPresetMap WRITE setDrvPresetMap NOTIFY presetMapChanged FINAL)
     Q_PROPERTY(quint8 la3Channel READ la3Channel WRITE setLa3Channel NOTIFY la3ChannelChanged FINAL)
