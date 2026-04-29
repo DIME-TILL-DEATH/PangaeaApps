@@ -99,7 +99,10 @@ int main(int argc, char *argv[])
     UiCore::instance = &uiCore;
 
     UiSettings uiSettings;
+    UiSettings::instance = &uiSettings;
+
     UiInterfaceManager uiInterfaceManager;
+    UiInterfaceManager::instance = &uiInterfaceManager;
 
     QQmlApplicationEngine engine;
 
@@ -108,8 +111,8 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/translations");
 
     qmlRegisterSingletonType<UiCore>("PangaeaFrontend", 1, 0, "UiCore", &UiCore::singletonProvider);
-    qmlRegisterSingletonInstance("PangaeaFrontend", 1, 0, "UiSettings", &uiSettings);
-    qmlRegisterSingletonInstance("PangaeaFrontend", 1, 0, "InterfaceManager", &uiInterfaceManager);
+    qmlRegisterSingletonType<UiSettings>("PangaeaFrontend", 1, 0, "UiSettings", &UiSettings::singletonProvider);
+    qmlRegisterSingletonType<UiInterfaceManager>("PangaeaFrontend", 1, 0, "InterfaceManager", &UiInterfaceManager::singletonProvider);
 
     //-------------------------------------------------------------------------------
     // connections
@@ -171,8 +174,6 @@ int main(int argc, char *argv[])
 #elif defined(Q_OS_ANDROID)
     engine.loadFromModule("Pages", "Main");
 #else
-    // engine.addImportPath(":/");
-    // engine.loadFromModule("Layouts", "Main");
     engine.loadFromModule("PangaeaFrontend", "Main");
 #endif
 

@@ -23,6 +23,10 @@ if(ANDROID)
 endif()
 
 qt_add_library(PangaeaBackend STATIC
+    threadcontroller.cpp threadcontroller.h
+
+    utils/logger.cpp utils/logger.h
+
     cores/core.cpp cores/core.h
     cores/netcore.cpp cores/netcore.h
     cores/interfacemanager.cpp cores/interfacemanager.h

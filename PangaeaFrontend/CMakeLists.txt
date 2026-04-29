@@ -19,6 +19,9 @@ if(ANDROID)
         Mobile/android/src/androidutils.cpp Mobile/android/src/androidutils.h
     )
 
+    set(QML_START_PAGE "Mobile/qml/Main.qml")
+    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Mobile/qml)
+
     qt6_add_resources(RCC_FILES
         "Mobile/qml.qrc"
         "Mobile/translations.qrc"
@@ -38,6 +41,9 @@ if(ANDROID)
 elseif(IOS)    
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
 
+    set(QML_START_PAGE "Mobile/qml/Main.qml")
+    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Mobile/qml)
+
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/ios/src/iosutils.hpp
         Mobile/ios/src/iosutils.mm)
@@ -56,6 +62,9 @@ elseif(WIN32)
 
     project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.1 LANGUAGES CXX)
 
+    set(QML_START_PAGE "Desktop/qml/Main.qml")
+    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
+
     set(PLATFORM_SPECIFIC_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Desktop/icons/icon.rc
         ${CMAKE_CURRENT_SOURCE_DIR}/version.rc
@@ -70,6 +79,9 @@ elseif(WIN32)
 elseif(APPLE) # MacOS
     project(pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
+    set(QML_START_PAGE "Desktop/qml/Main.qml")
+    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
+
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
         "Desktop/translations.qrc"
@@ -83,6 +95,9 @@ elseif(APPLE) # MacOS
    set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 elseif(LINUX)
     project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
+
+    set(QML_START_PAGE "Desktop/qml/Main.qml")
+    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -101,12 +116,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 qt_add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
     main.cpp
-    # uicore.cpp uicore.h
-    uisettings.cpp uisettings.h
-
-    ../PangaeaBackend/threadcontroller.cpp ../PangaeaBackend/threadcontroller.h
-    ../PangaeaBackend/uihelpers/uiinterfacemanager.cpp ../PangaeaBackend/uihelpers/uiinterfacemanager.h
-    ../PangaeaBackend/utils/logger.cpp ../PangaeaBackend/utils/logger.h
 
     ${PLATFORM_SPECIFIC_SOURCES}
     ${RCC_FILES}
@@ -147,51 +156,28 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     qml_styleplugin
 )
 
+
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0002 NEW)
 
+set(QT_QML_GENERATE_QMLLS_INI ON)
+set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
+
+qt_add_qml_module(${PROJECT_NAME}
+    URI "PangaeaFrontend"
+    VERSION 1.0
+
+    QML_FILES
+        ${QML_START_PAGE}
+
+    SOURCES
+        uicore.cpp uicore.h
+        uisettings.cpp uisettings.h
+        uiinterfacemanager.cpp uiinterfacemanager.h
+)
+
 if(ANDROID OR IOS)
     add_subdirectory(Mobile)
-
-    set(QT_QML_GENERATE_QMLLS_INI ON)
-    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Mobile/qml)
-    set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
-
-    qt_add_library(qml_pangaeafrontend STATIC)
-    qt_add_qml_module(qml_pangaeafrontend
-        URI PangaeaFrontend
-        VERSION 1.0
-        RESOURCE_PREFIX /
-
-        QML_FILES
-            Mobile/qml/Main.qml
-
-        SOURCES
-            uicore.cpp uicore.h
-    )
-
-    target_include_directories(qml_pangaeafrontend PUBLIC
-        ../PangaeaBackend/modules
-        ../PangaeaBackend/device
-        ../PangaeaBackend/device/cp
-        ../PangaeaBackend/device/cp100fx
-        ../PangaeaBackend/interfaces/
-        ../PangaeaBackend/utils
-        ../PangaeaBackend/qmlEnums
-        ../PangaeaBackend/models/
-        ../PangaeaBackend/uihelpers/
-    )
-
-    target_link_libraries(qml_pangaeafrontend PUBLIC
-        Qt6::Core
-        Qt6::Gui
-        Qt6::Quick
-        Qt6::Svg
-        Qt6::Qml
-
-        PangaeaBackend
-        converter-lib
-    )
 
     if(IOS)
         set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -221,21 +207,6 @@ if(ANDROID OR IOS)
     endif()
 else()
     add_subdirectory(Desktop)
-
-    set(QT_QML_GENERATE_QMLLS_INI ON)
-    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
-    set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
-
-    qt_add_qml_module(${PROJECT_NAME}
-        URI "PangaeaFrontend"
-        VERSION 1.0
-
-        QML_FILES
-            Desktop/qml/Main.qml
-
-        SOURCES
-            uicore.cpp uicore.h
-    )
 
     if(WIN32)
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
