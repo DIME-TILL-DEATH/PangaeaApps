@@ -93,16 +93,16 @@ int main(int argc, char *argv[])
     QObject::connect(threadController.backendThread(), &QThread::finished, netCore, &QObject::deleteLater);
 
     //-----------------------------------------------------------------
-    // UI creation
+    // UI creation - allocate in heap for proper QML engine lifecycle
     //----------------------------------------------------------------
-    UiCore uiCore;
-    UiCore::instance = &uiCore;
+    UiCore* uiCore = new UiCore();
+    UiCore::instance = uiCore;
 
-    UiSettings uiSettings;
-    UiSettings::instance = &uiSettings;
+    UiSettings* uiSettings = new UiSettings();
+    UiSettings::instance = uiSettings;
 
-    UiInterfaceManager uiInterfaceManager;
-    UiInterfaceManager::instance = &uiInterfaceManager;
+    UiInterfaceManager* uiInterfaceManager = new UiInterfaceManager();
+    UiInterfaceManager::instance = uiInterfaceManager;
 
     QQmlApplicationEngine engine;
 
@@ -120,49 +120,49 @@ int main(int argc, char *argv[])
     // QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
     // QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
 
-    UiCore::connect(&uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
-    UiSettings::connect(&uiSettings, &UiSettings::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
+    UiCore::connect(uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
+    UiSettings::connect(uiSettings, &UiSettings::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    QObject::connect(core, &Core::sgSetUIParameter, &uiCore, &UiCore::sgSetUIParameter, Qt::QueuedConnection);
-    QObject::connect(core, &Core::sgCurrentDeviceChanged, &uiCore, &UiCore::slCurrentDeviceChanged, Qt::QueuedConnection);
-    QObject::connect(core, &Core::sgSetProgress, &uiCore, &UiCore::sgSetProgress, Qt::QueuedConnection);
+    QObject::connect(core, &Core::sgSetUIParameter, uiCore, &UiCore::sgSetUIParameter, Qt::QueuedConnection);
+    QObject::connect(core, &Core::sgCurrentDeviceChanged, uiCore, &UiCore::slCurrentDeviceChanged, Qt::QueuedConnection);
+    QObject::connect(core, &Core::sgSetProgress, uiCore, &UiCore::sgSetProgress, Qt::QueuedConnection);
 
     QObject::connect(core, &Core::sgRequestNewestFirmware, netCore, &NetCore::requestNewestFirmware);
-    QObject::connect(netCore, &NetCore::sgNewAppVersionAvaliable, &uiCore, &UiCore::sgNewAppVersionAvaliable);
-    QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, &uiCore, &UiCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
-    QObject::connect(&uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
-    QObject::connect(&uiCore, &UiCore::sgCheckAppUpdates, netCore, &NetCore::requestAppUpdates);
-    QObject::connect(netCore, &NetCore::sgDownloadProgress, &uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);
+    QObject::connect(netCore, &NetCore::sgNewAppVersionAvaliable, uiCore, &UiCore::sgNewAppVersionAvaliable);
+    QObject::connect(netCore, &NetCore::sgNewFirmwareAvaliable, uiCore, &UiCore::slProposeNetFirmwareUpdate, Qt::QueuedConnection);
+    QObject::connect(uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
+    QObject::connect(uiCore, &UiCore::sgCheckAppUpdates, netCore, &NetCore::requestAppUpdates);
+    QObject::connect(netCore, &NetCore::sgDownloadProgress, uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);
 
     Core::connect(interfaceManager, &InterfaceManager::sgNewData, core, &Core::parseInputData, Qt::QueuedConnection);
     Core::connect(interfaceManager, &InterfaceManager::sgInterfaceConnected, core, &Core::slInterfaceConnected, Qt::QueuedConnection);
 
     // disconnect
-    QObject::connect(&uiCore, &UiCore::sgDisconnectFromDevice, core, &Core::disconnectFromDevice, Qt::QueuedConnection);
+    QObject::connect(uiCore, &UiCore::sgDisconnectFromDevice, core, &Core::disconnectFromDevice, Qt::QueuedConnection);
     Core::connect(core, &Core::sgReadyToDisconnect, interfaceManager, &InterfaceManager::disconnectFromDevice, Qt::QueuedConnection);
 
-    QObject::connect(interfaceManager, &InterfaceManager::sgErrorDisconnect, &uiCore, &UiCore::disconnectFromDevice);
-    Core::connect(core, &Core::sgExchangeError, &uiInterfaceManager, &UiInterfaceManager::sgExchangeError, Qt::QueuedConnection);
+    QObject::connect(interfaceManager, &InterfaceManager::sgErrorDisconnect, uiCore, &UiCore::disconnectFromDevice);
+    Core::connect(core, &Core::sgExchangeError, uiInterfaceManager, &UiInterfaceManager::sgExchangeError, Qt::QueuedConnection);
 
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceManager::writeToDevice, Qt::QueuedConnection);
 
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::startScanning, interfaceManager, &InterfaceManager::startScanning);
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceManager::connectToDevice);
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::sgRssiMeasuring, interfaceManager, &InterfaceManager::rssiMeasuring);
-    UiInterfaceManager::connect(&uiInterfaceManager, &UiInterfaceManager::logDataChanged, interfaceManager, &InterfaceManager::setLogEnadled);
+    UiInterfaceManager::connect(uiInterfaceManager, &UiInterfaceManager::startScanning, interfaceManager, &InterfaceManager::startScanning);
+    UiInterfaceManager::connect(uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceManager::connectToDevice);
+    UiInterfaceManager::connect(uiInterfaceManager, &UiInterfaceManager::sgRssiMeasuring, interfaceManager, &InterfaceManager::rssiMeasuring);
+    UiInterfaceManager::connect(uiInterfaceManager, &UiInterfaceManager::logDataChanged, interfaceManager, &InterfaceManager::setLogEnadled);
 
-    QObject::connect(&uiCore, &UiCore::sgModuleNameChanged, interfaceManager, &InterfaceManager::setModuleName);
-    QObject::connect(interfaceManager, &InterfaceManager::sgModuleNameUpdated, &uiCore, &UiCore::setModuleName);
+    QObject::connect(uiCore, &UiCore::sgModuleNameChanged, interfaceManager, &InterfaceManager::setModuleName);
+    QObject::connect(interfaceManager, &InterfaceManager::sgModuleNameUpdated, uiCore, &UiCore::setModuleName);
 
     // TODO InterfaceCore теперь в UI thread. Нужен ли отдельный объект?
-    QObject::connect(interfaceManager, &InterfaceManager::sgDeviceListUpdated, &uiInterfaceManager, &UiInterfaceManager::updateDevicesList);
-    QObject::connect(interfaceManager, &InterfaceManager::sgConnectionStarted, &uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted);
-    QObject::connect(interfaceManager, &InterfaceManager::sgInterfaceConnected, &uiInterfaceManager, &UiInterfaceManager::slInterfaceConnected);
-    QObject::connect(interfaceManager, &InterfaceManager::sgInterfaceError, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceError);
-    QObject::connect(interfaceManager, &InterfaceManager::sgInterfaceUnavaliable, &uiInterfaceManager, &UiInterfaceManager::slInterfaceUnavaliable);
-    QObject::connect(interfaceManager, &InterfaceManager::sgDeviceUnavaliable, &uiInterfaceManager, &UiInterfaceManager::sgDeviceUnavaliable);
-    QObject::connect(interfaceManager, &InterfaceManager::sgInterfaceDisconnected, &uiInterfaceManager, &UiInterfaceManager::sgInterfaceDisconnected);
-    QObject::connect(interfaceManager, &InterfaceManager::sgRssiReaded, &uiInterfaceManager, &UiInterfaceManager::setRssi);
+    QObject::connect(interfaceManager, &InterfaceManager::sgDeviceListUpdated, uiInterfaceManager, &UiInterfaceManager::updateDevicesList);
+    QObject::connect(interfaceManager, &InterfaceManager::sgConnectionStarted, uiInterfaceManager, &UiInterfaceManager::sgConnectionStarted);
+    QObject::connect(interfaceManager, &InterfaceManager::sgInterfaceConnected, uiInterfaceManager, &UiInterfaceManager::slInterfaceConnected);
+    QObject::connect(interfaceManager, &InterfaceManager::sgInterfaceError, uiInterfaceManager, &UiInterfaceManager::sgInterfaceError);
+    QObject::connect(interfaceManager, &InterfaceManager::sgInterfaceUnavaliable, uiInterfaceManager, &UiInterfaceManager::slInterfaceUnavaliable);
+    QObject::connect(interfaceManager, &InterfaceManager::sgDeviceUnavaliable, uiInterfaceManager, &UiInterfaceManager::sgDeviceUnavaliable);
+    QObject::connect(interfaceManager, &InterfaceManager::sgInterfaceDisconnected, uiInterfaceManager, &UiInterfaceManager::sgInterfaceDisconnected);
+    QObject::connect(interfaceManager, &InterfaceManager::sgRssiReaded, uiInterfaceManager, &UiInterfaceManager::setRssi);
     //----------------------------------------------------------------
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
