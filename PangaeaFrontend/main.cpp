@@ -51,8 +51,6 @@ QVariant();});
 #endif
 
 void manageSegFailure(int signalCode);
-Logger* Logger::currentHandler = nullptr;
-Logger* appLogger_ptr;
 
 int main(int argc, char *argv[])
 {
@@ -78,7 +76,6 @@ int main(int argc, char *argv[])
 
     Logger log;
     log.setAsMessageHandlerForApp();
-    appLogger_ptr = &log;
 
     qInfo() << "App version: " << app.applicationVersion();
 
@@ -227,7 +224,7 @@ int main(int argc, char *argv[])
 void manageSegFailure(int signalCode)
 {
     qWarning() << "Critical fault! Code:" << signalCode;
-    appLogger_ptr->~Logger();
+    Logger::currentHandler->~Logger();
 
     signal(signalCode, SIG_DFL);
     QGuiApplication::exit(3);
