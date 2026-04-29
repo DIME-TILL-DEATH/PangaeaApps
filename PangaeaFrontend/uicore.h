@@ -2,9 +2,7 @@
 #define UICORE_H
 
 #include <QQmlApplicationEngine>
-// #include <QtQml>
 
-#include <QObject>
 #include <QTimer>
 #include <QSettings>
 #include <QTranslator>

@@ -2,6 +2,8 @@
 
 #include "uiinterfacemanager.h"
 
+UiInterfaceManager* UiInterfaceManager::instance = nullptr;
+
 UiInterfaceManager::UiInterfaceManager(QObject *parent)
     : QObject{parent}
 {

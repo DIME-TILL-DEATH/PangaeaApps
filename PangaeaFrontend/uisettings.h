@@ -59,6 +59,13 @@ public:
     bool autoConvertWav() const;
     bool autoTrimWav() const;
 
+    static UiSettings* instance;
+    static QObject* singletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        return instance;
+    }
+
 signals:
     void sgUiSettingsChanged();
     void sgApplicationStarted();

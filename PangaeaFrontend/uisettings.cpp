@@ -9,6 +9,8 @@
 
 #include "uisettings.h"
 
+UiSettings* UiSettings::instance = nullptr;
+
 UiSettings::UiSettings(QObject *parent)
     : QObject{parent}
 {
