@@ -20,7 +20,6 @@ if(ANDROID)
     )
 
     set(QML_START_PAGE "Mobile/qml/Main.qml")
-    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Mobile/qml)
 
     qt6_add_resources(RCC_FILES
         "Mobile/qml.qrc"
@@ -42,7 +41,6 @@ elseif(IOS)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
 
     set(QML_START_PAGE "Mobile/qml/Main.qml")
-    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Mobile/qml)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/ios/src/iosutils.hpp
@@ -63,7 +61,6 @@ elseif(WIN32)
     project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.1 LANGUAGES CXX)
 
     set(QML_START_PAGE "Desktop/qml/Main.qml")
-    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
 
     set(PLATFORM_SPECIFIC_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Desktop/icons/icon.rc
@@ -80,7 +77,6 @@ elseif(APPLE) # MacOS
     project(pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
     set(QML_START_PAGE "Desktop/qml/Main.qml")
-    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -97,7 +93,6 @@ elseif(LINUX)
     project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
     set(QML_START_PAGE "Desktop/qml/Main.qml")
-    set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/Desktop/qml)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -176,7 +171,7 @@ qt_add_qml_module(${PROJECT_NAME}
         uiinterfacemanager.cpp uiinterfacemanager.h
 
     DEPENDENCIES
-        PangaeaBackendplugin
+        PangaeaBackend
 )
 
 if(ANDROID OR IOS)

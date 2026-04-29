@@ -71,6 +71,7 @@ qt_add_library(PangaeaBackend STATIC
     ${PLATFORM_SPECIFIC_SOURCES}
 )
 
+set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
 qt_add_qml_module(PangaeaBackend
     URI "PangaeaBackend"
     VERSION 1.0
