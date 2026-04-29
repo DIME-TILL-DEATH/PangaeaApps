@@ -174,6 +174,9 @@ qt_add_qml_module(${PROJECT_NAME}
         uicore.cpp uicore.h
         uisettings.cpp uisettings.h
         uiinterfacemanager.cpp uiinterfacemanager.h
+
+    DEPENDENCIES
+        PangaeaBackendplugin
 )
 
 if(ANDROID OR IOS)

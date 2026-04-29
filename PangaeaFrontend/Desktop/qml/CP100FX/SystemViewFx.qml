@@ -1,12 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Controls.Fusion
-import QtQuick.Dialogs
-import QtCore
 
 import QtQuick.Window 2.15
 
 import Elements 1.0
-import ModulesFX 1.0
 import StyleSettings 1.0
 import Layouts 1.0
 
@@ -18,11 +15,13 @@ import PangaeaFrontend
 import PangaeaBackend
 
 Rectangle{
-    id: _main
+    id: root
 
     color: Style.currentTheme.mainEnabledColor
 
     property int stringHeight: height/16
+
+    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
 
     RowLayout{
         anchors.fill: parent
@@ -44,15 +43,15 @@ Rectangle{
                 height: parent.height * 0.9
                 anchors.centerIn: parent
 
-                spacing: _main.stringHeight
+                spacing: root.stringHeight
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
 
                     isHorizontal: true
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.mode
+                    ctrlValInstance: root.cp100fx.systemSettings.mode
 
                     model: ["CabSim On", "CabSim Off"]
                 }
@@ -61,24 +60,24 @@ Rectangle{
                     id: _comboCabConfig
 
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
 
-                    text: UiCore.currentDevice.systemSettings.cabNumber.name
+                    text: root.cp100fx.systemSettings.cabNumber.name
 
-                    currentIndex: UiCore.currentDevice.systemSettings.cabNumber.displayValue
+                    currentIndex: root.cp100fx.systemSettings.cabNumber.displayValue
                     model: ["1 L+R", "1R Amp, Pres.", "2 L+R", "1R Amp", "1R Pres.", "1R Dry"]
 
                     onActivated: (index) => {
 
-                        if(UiCore.currentDevice.systemSettings.cabNumber.displayValue === 2)
+                        if(root.cp100fx.systemSettings.cabNumber.displayValue === 2)
                         {
-                            if(_comboCabConfig.currentIndex !== UiCore.currentDevice.systemSettings.cabNumber.displayValue)
+                            if(_comboCabConfig.currentIndex !== root.cp100fx.systemSettings.cabNumber.displayValue)
                             {
                                 restartDialog.show();
                             }
                             else
                             {
-                                UiCore.currentDevice.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
+                                root.cp100fx.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
                             }
                         }
                         else
@@ -89,7 +88,7 @@ Rectangle{
                             }
                             else
                             {
-                                UiCore.currentDevice.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
+                                root.cp100fx.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
                             }
                         }
                     }
@@ -105,11 +104,11 @@ Rectangle{
 
                         modality: Qt.ApplicationModal
                         onAccepted: {
-                            UiCore.currentDevice.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
-                            UiCore.currentDevice.restartDevice()
+                            root.cp100fx.systemSettings.cabNumber.displayValue = _comboCabConfig.currentIndex;
+                            root.cp100fx.restartDevice()
                         }
                         onRejected: {
-                            _comboCabConfig.currentIndex = _main.systemSettings.cabNumber.displayValue
+                            _comboCabConfig.currentIndex = root.cp100fx.systemSettings.cabNumber.displayValue
 
                         }
                     }
@@ -117,10 +116,10 @@ Rectangle{
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     isHorizontal: true
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.midiChannel
+                    ctrlValInstance: root.cp100fx.systemSettings.midiChannel
                     model: _midiChannelModel
 
 
@@ -137,46 +136,46 @@ Rectangle{
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     isHorizontal: true
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.spdif
+                    ctrlValInstance: root.cp100fx.systemSettings.spdif
                     model: ["Main Output", "Dry Input"]
                 }
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     isHorizontal: true
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.tempo
+                    ctrlValInstance: root.cp100fx.systemSettings.tempo
                     model: ["Preset", "Global", "Glob.+MIDI"]
                 }
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     isHorizontal: true
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.timeFormat
+                    ctrlValInstance: root.cp100fx.systemSettings.timeFormat
                     model: ["Sec", "BPM"]
                 }
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     isHorizontal: true
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.swapConf
+                    ctrlValInstance: root.cp100fx.systemSettings.swapConf
                     model: ["Off", "On"]
                 }
 
 
                 ParameterBar{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
 
-                    controlValue: UiCore.currentDevice.systemSettings.tunerSpeed
+                    controlValue: root.cp100fx.systemSettings.tunerSpeed
                 }
             }
         }
@@ -195,14 +194,14 @@ Rectangle{
                 height: parent.height * 0.9
                 anchors.centerIn: parent
 
-                spacing: _main.stringHeight
+                spacing: root.stringHeight
 
                 ParameterSwitch{
                     id: _exprSwitch
 
                     width: parent.width
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.exprOn
+                    ctrlValInstance: root.cp100fx.systemSettings.exprOn
 
                     moduleOn: true
                     isHorizontal: true
@@ -211,25 +210,25 @@ Rectangle{
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     isHorizontal: true
 
                     enabled: _exprSwitch.position
                     opacity: enabled ? 1 : 0.5
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.exprType
+                    ctrlValInstance: root.cp100fx.systemSettings.exprType
                     model: ["Std. Volume", "Alt. Volume", "Std. CC", "Alt.CC"]
                 }
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     isHorizontal: true
 
                     enabled: _exprSwitch.position
                     opacity: enabled ? 1 : 0.5
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.exprCC
+                    ctrlValInstance: root.cp100fx.systemSettings.exprCC
                     model: _exprCCModel
 
                     ListModel{
@@ -247,9 +246,9 @@ Rectangle{
 
                 ParameterSwitch{
                     width: parent.width
-                    // height: _main.stringHeight
+                    // height: root.stringHeight
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.exprStoreLevel
+                    ctrlValInstance: root.cp100fx.systemSettings.exprStoreLevel
 
                     moduleOn: true
                     isHorizontal: true
@@ -262,7 +261,7 @@ Rectangle{
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            stringHeight: _main.stringHeight
+            stringHeight: root.stringHeight
         }
 
         Rectangle{
@@ -279,17 +278,17 @@ Rectangle{
                 height: parent.height * 0.9
                 anchors.centerIn: parent
 
-                spacing: _main.stringHeight
+                spacing: root.stringHeight
 
                 MLabel{
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: "MIDI PC Map:"
                 }
 
                 RowLayout{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
 
                     MComboHorizontal{
                         id: _comboPcChoice
@@ -324,40 +323,40 @@ Rectangle{
 
                         Layout.fillWidth: true
 
-                        model: UiCore.currentDevice.strPresetNumbers
+                        model: root.cp100fx.strPresetNumbers
 
-                        currentIndex: UiCore.currentDevice.systemSettings.midiPcMap[_comboPcChoice.currentIndex]
+                        currentIndex: root.cp100fx.systemSettings.midiPcMap[_comboPcChoice.currentIndex]
 
                         onActivated: {
-                            UiCore.currentDevice.systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
+                            root.cp100fx.systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
                         }
                     }
                 }
 
                 MSwitchHorizontal{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
 
                     text: "Tuner control: "
 
-                    checked: UiCore.currentDevice.systemSettings.tunerControl
+                    checked: root.cp100fx.systemSettings.tunerControl
 
                     onClicked: {
-                        systemSettings.tunerControl = checked
+                        root.cp100fx.systemSettings.tunerControl.displayValue = checked
                     }
                 }
 
                 ParameterComboBox{
                     width: parent.width
-                    height: _main.stringHeight
+                    height: root.stringHeight
                     isHorizontal: true
 
-                    enabled: UiCore.currentDevice.systemSettings.tunerControl
+                    enabled: root.cp100fx.systemSettings.tunerControl
                     opacity: enabled ? 1 : 0.5
 
                     model: _midiPcMapModel
 
-                    ctrlValInstance: UiCore.currentDevice.systemSettings.tunerCC
+                    ctrlValInstance: root.cp100fx.systemSettings.tunerCC
                 }
 
             }

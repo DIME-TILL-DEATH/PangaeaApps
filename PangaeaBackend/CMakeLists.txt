@@ -74,8 +74,6 @@ qt_add_library(PangaeaBackend STATIC
 qt_add_qml_module(PangaeaBackend
     URI "PangaeaBackend"
     VERSION 1.0
-    RESOURCE_PREFIX /
-
     SOURCES
 
         uihelpers/devicetypeenum.h
