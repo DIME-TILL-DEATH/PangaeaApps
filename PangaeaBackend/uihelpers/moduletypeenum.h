@@ -44,6 +44,7 @@ public:
         IR_STEREO,
         //====================
         MASTER=128,
+        ATTENUATOR,
         TUNER,
         SYSTEM
     };

@@ -217,6 +217,9 @@ private:
     QList<quint8> m_midiPcMap;
 
     void sendData(const QByteArray& data);
+
+    void exprOnControlSetter(qint32 value);
+    void exprTypeControlSetter(qint32 value);
 };
 
 #endif // SYSTEMSETTINGSFX_H

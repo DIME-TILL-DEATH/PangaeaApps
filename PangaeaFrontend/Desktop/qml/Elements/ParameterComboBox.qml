@@ -108,7 +108,7 @@ Grid{
 
                     width: parent.width
 
-                    font.bold: _combo.currentIndex == delegate.index
+                    font.bold: _combo.currentIndex === delegate.index
 
                     elide: Text.ElideRight
                     verticalAlignment: Text.AlignVCenter
@@ -210,6 +210,8 @@ Grid{
                 function onDisplayValueChanged()
                 {
                     _combo.currentIndex = _root.ctrlValInstance.displayValue;
+                    console.log("combo updating")
+                    console.log(_root.ctrlValInstance.name, _root.ctrlValInstance.displayValue)
                 }
             }
         }
