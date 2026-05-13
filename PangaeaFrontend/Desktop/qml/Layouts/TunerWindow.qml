@@ -168,19 +168,15 @@ Window{
                 height: parent.height/2
             }
 
-            MBar{
+            ParameterBar{
                 id: _tunerSpeedBar
 
                 width: parent.width/2.5
                 height: parent.height
 
-                text: "Tuner speed: "
+                property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
 
-                value: UiCore.currentDevice.systemSettings.tunerSpeed
-
-                onUserChangedValue: calcValue => {
-                    UiCore.currentDevice.systemSettings.tunerSpeed = calcValue
-                }
+                controlValue: cp100fx.systemSettings.tunerSpeed
             }
         }
 

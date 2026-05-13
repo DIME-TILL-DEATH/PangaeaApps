@@ -120,6 +120,7 @@ qt_add_qml_module(PangaeaBackend
         modules/volume.h modules/volume.cpp
         modules/mastereq.h modules/mastereq.cpp
         modules/tuner.h modules/tuner.cpp
+        SOURCES modules/attenuator.h modules/attenuator.cpp
 )
 
 

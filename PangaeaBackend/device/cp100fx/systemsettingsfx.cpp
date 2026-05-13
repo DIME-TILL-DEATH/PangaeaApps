@@ -7,8 +7,13 @@ SystemSettingsFx::SystemSettingsFx(AbstractDevice *owner)
     m_mode = new ControlValue(this, nullptr, "sys_cab_mode", "Mode: ");
     m_cabNumber = new ControlValue(this, nullptr, "sys_cab_num", "Cab. num: ");
     m_midiChannel = new ControlValue(this, nullptr, "sys_midi_ch", "MIDI channel: ");
+
     m_exprOn = new ControlValue(this, nullptr, "sys_expr_on", "Expr. pedal: ");
-    m_exprType = new ControlValue(this, nullptr, "sys_expr_type", "Expr. type: ");
+    m_exprOn->setControlSetter(std::bind(&SystemSettingsFx::exprOnControlSetter, this, std::placeholders::_1));
+
+    m_exprType = new ControlValue(this, nullptr, "sys_expr_type", "Expr. type: ", "", 1, 4, 0, 3);
+    m_exprType->setControlSetter(std::bind(&SystemSettingsFx::exprTypeControlSetter, this, std::placeholders::_1));
+
     m_exprCC = new ControlValue(this, nullptr, "sys_expr_cc", "Expr. CC#: ");
     m_exprStoreLevel = new ControlValue(this, nullptr, "sys_expr_slev", "Expr. store level: ");
     m_spdif = new ControlValue(this, nullptr, "sys_spdif", "S/PDIF: ");
@@ -31,8 +36,8 @@ void SystemSettingsFx::setSettings(TSystemSettingsFx settings)
     m_mode->setControlValue(settings.cabSimDisabled);
     m_midiChannel->setControlValue(settings.midiChannel);
     m_cabNumber->setControlValue(settings.cabSimConfig);
-    m_exprOn->setControlValue((settings.expressionType & 0x80) ? 1 : 0);
-    m_exprType->setControlValue(settings.expressionType & 0x7F);
+    m_exprOn->setControlValue(settings.expressionType);
+    m_exprType->setControlValue(settings.expressionType);
     m_exprCC->setControlValue(settings.exprCC);
     m_exprStoreLevel->setControlValue(settings.storeExprLevel);
     m_spdif->setControlValue(settings.spdifOutType);
@@ -144,4 +149,15 @@ void SystemSettingsFx::setMidiPcMap(quint8 pcNumber, quint8 presetNumber)
 void SystemSettingsFx::sendData(const QByteArray &data)
 {
     if(m_owner) emit m_owner->sgWriteToInterface(data + "\r\n");
+}
+
+void SystemSettingsFx::exprOnControlSetter(qint32 value)
+{
+    m_exprOn->modifyDisplayValue((value & 0x80) ? 1 : 0);
+}
+
+void SystemSettingsFx::exprTypeControlSetter(qint32 value)
+{
+    m_exprType->modifyDisplayValue((value & 0x7F) - 1);
+    qDebug() << "Expr type setter" << m_exprType->displayValue();
 }

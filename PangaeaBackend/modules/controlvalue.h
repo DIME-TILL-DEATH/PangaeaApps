@@ -32,6 +32,7 @@ public:
     ~ControlValue();
 
     virtual void setDisplayValue(double newDisplayValue);
+    void modifyDisplayValue(double newDisplayValue);
     double displayValue() const {return m_displayValue;};
 
     double minDisplayValue() const {return m_minDisplayValue;};
@@ -46,6 +47,11 @@ public:
     QString units() const {return m_units;};
 
     bool enabled() const;
+
+    void setControlSetter(std::function<void (qint32)> setter);
+    void setDisplaySetter(std::function<void (qint32)> setter);
+
+    QString commandString() const;
 
 signals:
     void displayValueChanged();
@@ -74,6 +80,9 @@ protected:
 
     QList<QByteArray> buffer;
     QTimer frameTimer{this};
+
+    std::function<void (qint32)> m_customControlSetter;
+    std::function<void (float)> m_customDisplaySetter;
 
 private slots:
     void sendFrame();

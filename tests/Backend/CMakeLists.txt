@@ -10,7 +10,7 @@ enable_testing()
 
 add_subdirectory(cores)
 add_subdirectory(device)
-# add_subdirectory(modules)
+add_subdirectory(modules)
 # add_subdirectory(models)
 # add_subdirectory(utils)
 

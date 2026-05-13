@@ -25,6 +25,7 @@
 #include "tuner.h"
 
 #include "volume.h"
+#include "attenuator.h"
 
 #include "fswfx.h"
 #include "systemsettingsfx.h"
@@ -41,8 +42,7 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(Volume* masterVolume READ masterVolume CONSTANT)
     Q_PROPERTY(Volume* phonesVolume READ phonesVolume CONSTANT)
     Q_PROPERTY(Volume* presetVolume READ presetVolume CONSTANT)
-    Q_PROPERTY(Volume* attenuatorVolume READ attenuatorVolume CONSTANT)
-    Q_PROPERTY(Volume* presetAttenuator READ presetAttenuator CONSTANT)
+    Q_PROPERTY(Attenuator* attenuator READ attenuator CONSTANT)
 
     Q_PROPERTY(MasterEq* masterEq READ masterEq CONSTANT)
     Q_PROPERTY(Tuner* tuner READ tuner CONSTANT)
@@ -113,16 +113,17 @@ public:
     Volume m_masterVolume{this, Volume::VolumeType::MasterFx};
     Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
     Volume m_presetVolume{this, Volume::VolumeType::PresetFx}; //, &actualPresetFx->presetData.preset_volume};
-    Volume m_attenuatorVolume{this, Volume::VolumeType::AttenuatorFx};
-    Volume m_presetAttenuator{this, Volume::VolumeType::AttenuatorFx};
+    Attenuator m_attenuator{this};
+
 
     Volume* masterVolume() {return &m_masterVolume;};
     Volume* phonesVolume() {return &m_phonesVolume;};
     Volume* presetVolume() {return &m_presetVolume;};
-    Volume* attenuatorVolume() {return &m_attenuatorVolume;};
-    Volume* presetAttenuator() {return &m_presetAttenuator;};
+    Attenuator* attenuator() {return &m_attenuator;};
 
     MasterEq* masterEq() {return &m_masterEq;};
+
+    SystemSettingsFx* systemSettings() {return &m_systemSettings;};
 
     Tuner* tuner() {return &m_tuner;};
 
@@ -133,7 +134,6 @@ public:
     void setCurrentPresetComment(const QString &newCurrentPresetComment);
 
     QObjectList fswList() {return m_fswList;};
-    SystemSettingsFx* systemSettings() {return &m_systemSettings;};
 
     QObjectList controller() {return m_actualControllersList;};
 
