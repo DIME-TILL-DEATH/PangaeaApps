@@ -10,6 +10,7 @@ SystemSettingsFx::SystemSettingsFx(AbstractDevice *owner)
 
     m_exprOn = new ControlValue(this, nullptr, "sys_expr_on", "Expr. pedal: ");
     m_exprOn->setControlSetter(std::bind(&SystemSettingsFx::exprOnControlSetter, this, std::placeholders::_1));
+    m_exprOn->setDisplaySetter(std::bind(&SystemSettingsFx::exprOnDisplaySetter, this, std::placeholders::_1));
 
     m_exprType = new ControlValue(this, nullptr, "sys_expr_type", "Expr. type: ", "", 1, 4, 0, 3);
     m_exprType->setControlSetter(std::bind(&SystemSettingsFx::exprTypeControlSetter, this, std::placeholders::_1));
@@ -18,12 +19,18 @@ SystemSettingsFx::SystemSettingsFx(AbstractDevice *owner)
     m_exprStoreLevel = new ControlValue(this, nullptr, "sys_expr_slev", "Expr. store level: ");
     m_spdif = new ControlValue(this, nullptr, "sys_spdif", "S/PDIF: ");
     m_tempo = new ControlValue(this, nullptr, "sys_tempo", "Tempo: ");
+
     m_tunerControl = new ControlValue(this, nullptr, "sys_tuner_ctrl", "Tuner control: ");
+    m_tunerControl->setControlSetter(std::bind(&SystemSettingsFx::tunerCtrlValueSetter, this, std::placeholders::_1));
+    m_tunerControl->setDisplaySetter(std::bind(&SystemSettingsFx::tunerCtrlDisplaySetter, this, std::placeholders::_1));
+
     m_tunerCC = new ControlValue(this, nullptr, "sys_tuner_cc", "Tuner on CC#: ");
+    m_tunerCC->setControlSetter(std::bind(&SystemSettingsFx::tunerCcSetter, this, std::placeholders::_1));
+
     m_timeFormat = new ControlValue(this, nullptr, "sys_time_format", "Time format: ");
     m_swapConf = new ControlValue(this, nullptr, "sys_swap_conf", "Swap FSW: ");
-    m_tunerSpeed = new ControlValue(this, nullptr, "sys_tuner_speed", "Tuner speed: ");
-    m_fswSpeed = new ControlValue(this, nullptr, "sys_fsw_speed", "FSW speed");
+    m_tunerSpeed = new ControlValue(this, nullptr, "sys_tuner_speed", "Tuner speed: ", "", 0, 127, 0, 127);
+    m_fswSpeed = new ControlValue(this, nullptr, "sys_fsw_speed", "FSW speed", "", 0, 127, 0, 127);
 
     for(int i=0; i<127; i++)
     {
@@ -42,8 +49,8 @@ void SystemSettingsFx::setSettings(TSystemSettingsFx settings)
     m_exprStoreLevel->setControlValue(settings.storeExprLevel);
     m_spdif->setControlValue(settings.spdifOutType);
     m_tempo->setControlValue(settings.tapType);
-    m_tunerControl->setControlValue(settings.tunerExternal & 0x80 ? 1 : 0);
-    m_tunerCC->setControlValue(settings.tunerExternal & 0x7F);
+    m_tunerControl->setControlValue(settings.tunerExternal);
+    m_tunerCC->setControlValue(settings.tunerExternal);
     m_timeFormat->setControlValue(settings.timeFormat);
     m_swapConf->setControlValue(settings.swapSwitch);
     m_tunerSpeed->setControlValue(settings.tunerSpeed);
@@ -154,10 +161,41 @@ void SystemSettingsFx::sendData(const QByteArray &data)
 void SystemSettingsFx::exprOnControlSetter(qint32 value)
 {
     m_exprOn->modifyDisplayValue((value & 0x80) ? 1 : 0);
+    emit m_exprOn->displayValueChanged();
+}
+
+void SystemSettingsFx::exprOnDisplaySetter(double value)
+{
+    m_exprOn->modifyDisplayValue(value);
+    emit m_exprOn->displayValueChanged();
+
+    sendData(QByteArray(m_exprOn->commandString().toUtf8() + " " + (value ? "80" : "00")));
 }
 
 void SystemSettingsFx::exprTypeControlSetter(qint32 value)
 {
     m_exprType->modifyDisplayValue((value & 0x7F) - 1);
-    qDebug() << "Expr type setter" << m_exprType->displayValue();
+    emit m_exprType->displayValueChanged();
+}
+
+void SystemSettingsFx::tunerCtrlValueSetter(qint32 value)
+{
+    m_tunerControl->modifyDisplayValue((value & 0x80) ? 1 : 0);
+    emit m_tunerControl->displayValueChanged();
+
+    qDebug() << "Tuner control setter" << value << ((value & 0x80) ? 1 : 0);
+}
+
+void SystemSettingsFx::tunerCtrlDisplaySetter(double value)
+{
+    m_tunerControl->modifyDisplayValue(value);
+    emit m_tunerControl->displayValueChanged();
+
+    sendData(QByteArray(m_tunerControl->commandString().toUtf8() + " " + (value ? "80" : "00")));
+}
+
+void SystemSettingsFx::tunerCcSetter(qint32 value)
+{
+    m_tunerCC->modifyDisplayValue((value & 0x7F));
+    emit m_tunerCC->displayValueChanged();
 }

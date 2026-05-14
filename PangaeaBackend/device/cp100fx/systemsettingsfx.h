@@ -219,7 +219,12 @@ private:
     void sendData(const QByteArray& data);
 
     void exprOnControlSetter(qint32 value);
+    void exprOnDisplaySetter(double value);
     void exprTypeControlSetter(qint32 value);
+
+    void tunerCtrlValueSetter(qint32 value);
+    void tunerCtrlDisplaySetter(double value);
+    void tunerCcSetter(qint32 value);
 };
 
 #endif // SYSTEMSETTINGSFX_H

@@ -210,8 +210,8 @@ Grid{
                 function onDisplayValueChanged()
                 {
                     _combo.currentIndex = _root.ctrlValInstance.displayValue;
-                    console.log("combo updating")
-                    console.log(_root.ctrlValInstance.name, _root.ctrlValInstance.displayValue)
+                    // console.log("combo updating")
+                    // console.log(_root.ctrlValInstance.name, _root.ctrlValInstance.displayValue)
                 }
             }
         }

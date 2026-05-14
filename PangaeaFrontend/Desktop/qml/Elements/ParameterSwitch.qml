@@ -13,7 +13,7 @@ Item{
     height: 50
     width: 200
 
-    property bool moduleOn
+    property bool moduleOn: true
     required property ControlValue ctrlValInstance
 
     property alias textLeft: _textLeft.text

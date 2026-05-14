@@ -200,13 +200,10 @@ Rectangle{
                     id: _exprSwitch
 
                     width: parent.width
+                    isHorizontal: true
 
                     ctrlValInstance: root.cp100fx.systemSettings.exprOn
-
-                    moduleOn: true
-                    isHorizontal: true
                 }
-
 
                 ParameterComboBox{
                     width: parent.width
@@ -246,7 +243,6 @@ Rectangle{
 
                 ParameterSwitch{
                     width: parent.width
-                    // height: root.stringHeight
 
                     ctrlValInstance: root.cp100fx.systemSettings.exprStoreLevel
 
@@ -303,7 +299,7 @@ Rectangle{
                             id: _midiPcMapModel
 
                             Component.onCompleted: {
-                                for(let i=1; i<=128; i++){
+                                for(let i=0; i<=127; i++){
                                     append({value: i})
                                 }
                             }
@@ -333,17 +329,11 @@ Rectangle{
                     }
                 }
 
-                MSwitchHorizontal{
+                ParameterSwitch{
                     width: parent.width
-                    height: root.stringHeight
+                    isHorizontal: true
 
-                    text: "Tuner control: "
-
-                    checked: root.cp100fx.systemSettings.tunerControl
-
-                    onClicked: {
-                        root.cp100fx.systemSettings.tunerControl.displayValue = checked
-                    }
+                    ctrlValInstance: root.cp100fx.systemSettings.tunerControl
                 }
 
                 ParameterComboBox{
