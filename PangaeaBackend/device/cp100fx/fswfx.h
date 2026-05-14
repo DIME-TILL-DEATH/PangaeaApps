@@ -4,29 +4,32 @@
 #include <QObject>
 #include <QQmlEngine>
 
+#include "abstractdevice.h"
+#include "abstractmodule.h"
+#include "controlvalue.h"
 #include "systemsettingsfx.h"
 
-class FswFx : public QObject
+class FswFx : public AbstractModule
 {
     Q_OBJECT
     QML_ELEMENT
     QML_UNCREATABLE("")
 
-    Q_PROPERTY(FswMode mode READ mode WRITE setMode NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(FswType pressType READ pressType WRITE setPressType NOTIFY fswTypeChanged FINAL)
-    Q_PROPERTY(FswType holdType READ holdType WRITE setHoldType NOTIFY fswTypeChanged FINAL)
-    Q_PROPERTY(uint8_t controllerPressNum READ controllerPressNum WRITE setControllerPressNum NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(uint8_t controllerHoldNum READ controllerHoldNum WRITE setControllerHoldNum NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* mode READ mode NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* pressType READ pressType NOTIFY fswTypeChanged FINAL)
+    Q_PROPERTY(ControlValue* holdType READ holdType NOTIFY fswTypeChanged FINAL)
+    Q_PROPERTY(ControlValue* controllerPressNum READ controllerPressNum NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* controllerHoldNum READ controllerHoldNum NOTIFY paramsChanged FINAL)
 
-    Q_PROPERTY(quint8 pressPreset1 READ pressPreset1 WRITE setPressPreset1 NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(quint8 pressPreset2 READ pressPreset2 WRITE setPressPreset2 NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(quint8 pressPreset3 READ pressPreset3 WRITE setPressPreset3 NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(quint8 pressPreset4 READ pressPreset4 WRITE setPressPreset4 NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* pressPreset1 READ pressPreset1 NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* pressPreset2 READ pressPreset2 NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* pressPreset3 READ pressPreset3 NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* pressPreset4 READ pressPreset4 NOTIFY paramsChanged FINAL)
 
-    Q_PROPERTY(quint8 holdPreset1 READ holdPreset1 WRITE setHoldPreset1 NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(quint8 holdPreset2 READ holdPreset2 WRITE setHoldPreset2  NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(quint8 holdPreset3 READ holdPreset3 WRITE setHoldPreset3  NOTIFY paramsChanged FINAL)
-    Q_PROPERTY(quint8 holdPreset4 READ holdPreset4 WRITE setHoldPreset4  NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* holdPreset1 READ holdPreset1 NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* holdPreset2 READ holdPreset2 NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* holdPreset3 READ holdPreset3 NOTIFY paramsChanged FINAL)
+    Q_PROPERTY(ControlValue* holdPreset4 READ holdPreset4 NOTIFY paramsChanged FINAL)
 
     Q_PROPERTY(QStringList ccNames READ ccNames CONSTANT)
 public:
@@ -51,47 +54,27 @@ public:
     };
     Q_ENUM(FswType)
 
+
     void setData(const TSystemSettingsFx& data);
 
-    FswMode mode() const {return m_mode;};
-    void setMode(FswMode newMode);
-
-    FswType pressType() const {return m_pressType;};
-    void setPressType(FswType newPressType);
-
-    FswType holdType() const {return m_holdType;};
-    void setHoldType(FswType newHoldType);
-
-    uint8_t controllerPressNum() const {return m_controllerPressNum;};
-    void setControllerPressNum(uint8_t newControllerNum);
-
-    uint8_t controllerHoldNum() const {return m_controllerHoldNum;};
-    void setControllerHoldNum(uint8_t newControllerHoldNum);
-
-    quint8 pressPreset1() const {return m_pressPreset[0];};
-    quint8 pressPreset2() const {return m_pressPreset[1];};
-    quint8 pressPreset3() const {return m_pressPreset[2];};
-    quint8 pressPreset4() const {return m_pressPreset[3];};
-
-    void setPressPreset1(quint8 presetNum);
-    void setPressPreset2(quint8 presetNum);
-    void setPressPreset3(quint8 presetNum);
-    void setPressPreset4(quint8 presetNum);
-
-    quint8 holdPreset1() const {return m_holdPreset[0];};
-    quint8 holdPreset2() const {return m_holdPreset[1];};
-    quint8 holdPreset3() const {return m_holdPreset[2];};
-    quint8 holdPreset4() const {return m_holdPreset[3];};
-
-    void setHoldPreset1(quint8 presetNum);
-    void setHoldPreset2(quint8 presetNum);
-    void setHoldPreset3(quint8 presetNum);
-    void setHoldPreset4(quint8 presetNum);
+    // ControlValue* геттеры
+    ControlValue* mode() const;
+    ControlValue* pressType() const;
+    ControlValue* holdType() const;
+    ControlValue* controllerPressNum() const;
+    ControlValue* controllerHoldNum() const;
+    ControlValue* pressPreset1() const;
+    ControlValue* pressPreset2() const;
+    ControlValue* pressPreset3() const;
+    ControlValue* pressPreset4() const;
+    ControlValue* holdPreset1() const;
+    ControlValue* holdPreset2() const;
+    ControlValue* holdPreset3() const;
+    ControlValue* holdPreset4() const;
 
     static QStringList ccNames();
 
 signals:
-
     void paramsChanged();
     void fswTypeChanged();
 
@@ -99,17 +82,28 @@ private:
     quint8 m_num;
     AbstractDevice* m_owner;
 
+    // ControlValue* поля
+    ControlValue* m_mode = nullptr;
+    ControlValue* m_pressType = nullptr;
+    ControlValue* m_holdType = nullptr;
+    ControlValue* m_controllerPressNum = nullptr;
+    ControlValue* m_controllerHoldNum = nullptr;
+    ControlValue* m_pressPreset[4] = {nullptr, nullptr, nullptr, nullptr};
+    ControlValue* m_holdPreset[4] = {nullptr, nullptr, nullptr, nullptr};
+
+    // Старые поля (оставлены закомментированными)
+    /*
     FswMode m_mode;
     FswType m_pressType;
     FswType m_holdType;
-
     quint8 m_controllerPressNum;
     quint8 m_controllerHoldNum;
-
     quint8 m_pressPreset[4];
     quint8 m_holdPreset[4];
+    */
 
     void sendData(const QByteArray& data);
+    // Методы-сеттеры ControlValue будут реализованы в cpp
 };
 
 typedef FswFx::FswMode FswMode;
