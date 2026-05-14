@@ -46,7 +46,8 @@ public:
         MASTER=128,
         ATTENUATOR,
         TUNER,
-        SYSTEM
+        SYSTEM,
+        FOOTSWITCH
     };
     Q_ENUM(Value)
 };

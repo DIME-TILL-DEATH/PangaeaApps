@@ -58,22 +58,32 @@ Rectangle{
             model: ["SINGLE", "DOUBLE"]
         }
 
-        MComboHorizontal{
-            id: _pressType
-
+        ParameterComboBox{
             width: parent.width
             height: root.stringHeight
+            isHorizontal: true
 
-            text: "Press type: "
-
-            currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType
+            ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType
             model: ["DEFAULT", "CONTROLLER", "TUNER",
                     "PRESET SELECT" , "PRESET SEQ 2" , "PRESET SEQ 3" , "PRESET SEQ 4"]
-
-            onActivated: (index) => {
-                root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType = currentIndex;
-            }
         }
+
+        // MComboHorizontal{
+        //     id: _pressType
+
+        //     width: parent.width
+        //     height: root.stringHeight
+
+        //     text: "Press type: "
+
+        //     currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType
+        //     model: ["DEFAULT", "CONTROLLER", "TUNER",
+        //             "PRESET SELECT" , "PRESET SEQ 2" , "PRESET SEQ 3" , "PRESET SEQ 4"]
+
+        //     onActivated: (index) => {
+        //         root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType = currentIndex;
+        //     }
+        // }
 
         MComboHorizontal{
             id: _pressController

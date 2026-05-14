@@ -154,13 +154,16 @@ QStringList ControllerFx::avaliableSourcesList()
     {
         FswFx* fsw;
         fsw = dynamic_cast<FswFx*>(device->fswList().at(0));
-        if(fsw->pressType() != FswFx::Controller && fsw->holdType() != FswFx::Controller) srcList.removeAll("FSW Down");
+        if(static_cast<FswFx::FswType>(fsw->pressType()->displayValue()) != FswFx::Controller
+            && static_cast<FswFx::FswType>(fsw->holdType()->displayValue()) != FswFx::Controller) srcList.removeAll("FSW Down");
 
         fsw = dynamic_cast<FswFx*>(device->fswList().at(1));
-        if(fsw->pressType() != FswFx::Controller && fsw->holdType() != FswFx::Controller) srcList.removeAll("FSW Confirm");
+        if(static_cast<FswFx::FswType>(fsw->pressType()->displayValue()) != FswFx::Controller
+            && static_cast<FswFx::FswType>(fsw->holdType()->displayValue()) != FswFx::Controller) srcList.removeAll("FSW Confirm");
 
         fsw = dynamic_cast<FswFx*>(device->fswList().at(2));
-        if(fsw->pressType() != FswFx::Controller && fsw->holdType() != FswFx::Controller) srcList.removeAll("FSW Up");
+        if(static_cast<FswFx::FswType>(fsw->pressType()->displayValue()) != FswFx::Controller
+            && static_cast<FswFx::FswType>(fsw->holdType()->displayValue()) != FswFx::Controller) srcList.removeAll("FSW Up");
     }
     return srcList;
 }
