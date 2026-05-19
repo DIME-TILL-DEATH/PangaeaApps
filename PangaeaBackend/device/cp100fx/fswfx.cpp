@@ -7,54 +7,20 @@ FswFx::FswFx(quint8 num, AbstractDevice *owner)
     m_num{num},
     m_owner{owner}
 {
-    // ControlValue* инициализация
-    // mode
     m_mode = new ControlValue(this, nullptr, QString("fsw %1 mode").arg(m_num), "Mode");
-    // m_mode->setControlSetter([this](qint32 value){
-    //     sendData((QString("fsw %1 mode %2").arg(m_num, 2, 16, QChar('0')).arg(value, 2, 16, QChar('0'))).toUtf8());
-    //     emit paramsChanged();
-    // });
-    // pressType
+
     m_pressType = new ControlValue(this, nullptr, QString("fsw %1 ptype").arg(m_num), "Press type:");
-    // m_pressType->setControlSetter([this](qint32 value){
-    //     sendData((QString("fsw %1 ptype %2").arg(m_num, 2, 16, QChar('0')).arg(value, 2, 16, QChar('0'))).toUtf8());
-    //     emit paramsChanged();
-    //     emit fswTypeChanged();
-    // });
-    // holdType
     m_holdType = new ControlValue(this, nullptr, QString("fsw %1 htype").arg(m_num), "Hold type:");
-    // m_holdType->setControlSetter([this](qint32 value){
-    //     sendData((QString("fsw %1 htype %2").arg(m_num, 2, 16, QChar('0')).arg(value, 2, 16, QChar('0'))).toUtf8());
-    //     emit paramsChanged();
-    //     emit fswTypeChanged();
-    // });
-    // controllerPressNum
-    m_controllerPressNum = new ControlValue(this, nullptr, QString("fsw %1 cpressnum").arg(m_num), "Press CC#:");
-    // m_controllerPressNum->setControlSetter([this](qint32 value){
-    //     sendData((QString("fsw %1 cpressnum %2").arg(m_num, 2, 16, QChar('0')).arg(value, 2, 16, QChar('0'))).toUtf8());
-    //     emit paramsChanged();
-    // });
-    // controllerHoldNum
-    m_controllerHoldNum = new ControlValue(this, nullptr, QString("fsw %1 choldnum").arg(m_num), "Hold CC#:");
-    // m_controllerHoldNum->setControlSetter([this](qint32 value){
-    //     sendData((QString("fsw %1 choldnum %2").arg(m_num, 2, 16, QChar('0')).arg(value, 2, 16, QChar('0'))).toUtf8());
-    //     emit paramsChanged();
-    // });
-    // pressPreset1-4
+
+    m_controllerPressNum = new ControlValue(this, nullptr, QString("fsw %1 cpressnum").arg(m_num), "Press CC#:", "", 0, 127, 0, 127);
+    m_controllerHoldNum = new ControlValue(this, nullptr, QString("fsw %1 choldnum").arg(m_num), "Hold CC#:", "", 0, 127, 0, 127);
+
     for(int i=0; i<4; ++i) {
-        m_pressPreset[i] = new ControlValue(this, nullptr, QString("fsw %1 ppressnum %2").arg(m_num).arg(i), "");
-        // m_pressPreset[i]->setControlSetter([this,i](qint32 value){
-        //     sendData((QString("fsw %1 ppressnum %2 %3").arg(m_num, 2, 16, QChar('0')).arg(i, 2, 16, QChar('0')).arg(value, 2, 16, QChar('0'))).toUtf8());
-        //     emit paramsChanged();
-        // });
+        m_pressPreset[i] = new ControlValue(this, nullptr, QString("fsw %1 ppressnum %2").arg(m_num).arg(i), "", "", 0, 98, 0, 98);
     }
     // holdPreset1-4
     for(int i=0; i<4; ++i) {
-        m_holdPreset[i] = new ControlValue(this, nullptr, QString("fsw %1 pholdnum %2").arg(m_num).arg(i), "");
-        // m_holdPreset[i]->setControlSetter([this,i](qint32 value){
-        //     sendData((QString("fsw %1 pholdnum %2 %3").arg(m_num, 2, 16, QChar('0')).arg(i, 2, 16, QChar('0')).arg(value, 2, 16, QChar('0'))).toUtf8());
-        //     emit paramsChanged();
-        // });
+        m_holdPreset[i] = new ControlValue(this, nullptr, QString("fsw %1 pholdnum %2").arg(m_num).arg(i), "", "", 0, 98, 0, 98);
     }
 }
 

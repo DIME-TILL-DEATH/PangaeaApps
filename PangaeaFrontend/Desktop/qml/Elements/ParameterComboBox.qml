@@ -20,6 +20,7 @@ Grid{
     required property ControlValue ctrlValInstance
     property alias model: _combo.model
     property alias currentIndex: _combo.currentIndex
+    property alias indicator: _combo.indicator
 
     property bool isHorizontal: false
 
@@ -29,8 +30,10 @@ Grid{
     Item{
         id: _editValueItem
 
-        height: _root.isHorizontal ? parent.height : parent.height/3
-        width: _root.isHorizontal ? parent.width * 0.5 : parent.width
+        visible: _root.ctrlValInstance.name !== ""
+
+        height: (_root.isHorizontal ? parent.height : parent.height/3) * visible
+        width: (_root.isHorizontal ? parent.width * 0.5 : parent.width) * visible
 
         MLabel{
             id: textValue
@@ -46,8 +49,8 @@ Grid{
     }
 
     Item{
-        height:  _root.isHorizontal ? parent.height : parent.height * 2/3
-        width: _root.isHorizontal ? parent.width * 0.5 : parent.width
+        height:  _root.isHorizontal ? parent.height : parent.height - _editValueItem.height
+        width: _root.isHorizontal ? parent.width - _editValueItem.width : parent.width
 
         ComboBox
         {
@@ -192,7 +195,6 @@ Grid{
                 }
             }
 
-
             Connections{
                 target: UiCore.currentDevice
 
@@ -210,10 +212,12 @@ Grid{
                 function onDisplayValueChanged()
                 {
                     _combo.currentIndex = _root.ctrlValInstance.displayValue;
-                    // console.log("combo updating")
-                    // console.log(_root.ctrlValInstance.name, _root.ctrlValInstance.displayValue)
                 }
             }
         }
+    }
+
+    onCtrlValInstanceChanged: {
+        _combo.currentIndex = _root.ctrlValInstance.displayValue;
     }
 }
