@@ -34,7 +34,7 @@ SystemSettingsFx::SystemSettingsFx(AbstractDevice *owner)
 
     for(int i=0; i<127; i++)
     {
-        m_midiPcMap.append(i%98);
+        m_midiPcMap.append(new ControlValue(this, nullptr, QString("midi_map %1").arg(QString::number(i, 16)), "", "", 0, 98, 0, 98));
     }
 }
 
@@ -56,11 +56,9 @@ void SystemSettingsFx::setSettings(TSystemSettingsFx settings)
     m_tunerSpeed->setControlValue(settings.tunerSpeed);
     m_fswSpeed->setControlValue(settings.fswSpeed);
 
-    m_midiPcMap.clear();
-
     for(int i=0; i<127; i++)
     {
-        m_midiPcMap.append(settings.midiMap[i]);
+        m_midiPcMap.at(i)->setControlValue(settings.midiMap[i]);
     }
     emit settingsChanged();
 }
@@ -140,17 +138,9 @@ ControlValue* SystemSettingsFx::fswSpeed() const
     return m_fswSpeed;
 }
 
-QList<quint8> SystemSettingsFx::midiPcMap() const
+QList<ControlValue*> SystemSettingsFx::midiPcMap() const
 {
     return m_midiPcMap;
-}
-
-void SystemSettingsFx::setMidiPcMap(quint8 pcNumber, quint8 presetNumber)
-{
-    m_midiPcMap.replace(pcNumber, presetNumber);
-    emit settingsChanged();
-
-    sendData((QString("midi_map %1 %2").arg(pcNumber, 2, 16, QChar('0')).arg(presetNumber, 2, 16, QChar('0'))).toUtf8());
 }
 
 void SystemSettingsFx::sendData(const QByteArray &data)
@@ -182,8 +172,6 @@ void SystemSettingsFx::tunerCtrlValueSetter(qint32 value)
 {
     m_tunerControl->modifyDisplayValue((value & 0x80) ? 1 : 0);
     emit m_tunerControl->displayValueChanged();
-
-    qDebug() << "Tuner control setter" << value << ((value & 0x80) ? 1 : 0);
 }
 
 void SystemSettingsFx::tunerCtrlDisplaySetter(double value)

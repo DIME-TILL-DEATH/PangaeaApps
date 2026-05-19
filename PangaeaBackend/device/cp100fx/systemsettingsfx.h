@@ -168,7 +168,7 @@ class SystemSettingsFx : public AbstractModule
     Q_PROPERTY(ControlValue* tunerSpeed READ tunerSpeed NOTIFY settingsChanged FINAL)
     Q_PROPERTY(ControlValue* fswSpeed READ fswSpeed NOTIFY settingsChanged FINAL)
 
-    Q_PROPERTY(QList<quint8> midiPcMap READ midiPcMap NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(QList<ControlValue*> midiPcMap READ midiPcMap NOTIFY settingsChanged FINAL)
 public:
     explicit SystemSettingsFx(AbstractDevice *owner);
 
@@ -190,9 +190,7 @@ public:
     ControlValue* fswSpeed() const;
     ControlValue* tunerCC() const;
 
-    QList<quint8> midiPcMap() const;
-    Q_INVOKABLE void setMidiPcMap(quint8 pcNumber, quint8 presetNumber);
-
+    QList<ControlValue *> midiPcMap() const;
 signals:
     void settingsChanged();
 private:
@@ -214,7 +212,7 @@ private:
     ControlValue* m_fswSpeed = nullptr;
     ControlValue* m_tunerCC = nullptr;
 
-    QList<quint8> m_midiPcMap;
+    QList<ControlValue*> m_midiPcMap;
 
     void sendData(const QByteArray& data);
 

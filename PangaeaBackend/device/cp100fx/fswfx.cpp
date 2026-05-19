@@ -15,11 +15,13 @@ FswFx::FswFx(quint8 num, AbstractDevice *owner)
     m_controllerPressNum = new ControlValue(this, nullptr, QString("fsw %1 cpressnum").arg(m_num), "Press CC#:", "", 0, 127, 0, 127);
     m_controllerHoldNum = new ControlValue(this, nullptr, QString("fsw %1 choldnum").arg(m_num), "Hold CC#:", "", 0, 127, 0, 127);
 
-    for(int i=0; i<4; ++i) {
+    for(int i=0; i<4; ++i)
+    {
         m_pressPreset[i] = new ControlValue(this, nullptr, QString("fsw %1 ppressnum %2").arg(m_num).arg(i), "", "", 0, 98, 0, 98);
     }
-    // holdPreset1-4
-    for(int i=0; i<4; ++i) {
+
+    for(int i=0; i<4; ++i)
+    {
         m_holdPreset[i] = new ControlValue(this, nullptr, QString("fsw %1 pholdnum %2").arg(m_num).arg(i), "", "", 0, 98, 0, 98);
     }
 }
