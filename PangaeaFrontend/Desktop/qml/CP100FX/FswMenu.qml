@@ -68,39 +68,17 @@ Rectangle{
                     "PRESET SELECT" , "PRESET SEQ 2" , "PRESET SEQ 3" , "PRESET SEQ 4"]
         }
 
-        // MComboHorizontal{
-        //     id: _pressType
-
-        //     width: parent.width
-        //     height: root.stringHeight
-
-        //     text: "Press type: "
-
-        //     currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType
-        //     model: ["DEFAULT", "CONTROLLER", "TUNER",
-        //             "PRESET SELECT" , "PRESET SEQ 2" , "PRESET SEQ 3" , "PRESET SEQ 4"]
-
-        //     onActivated: (index) => {
-        //         root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType = currentIndex;
-        //     }
-        // }
-
-        MComboHorizontal{
+        ParameterComboBox{
             id: _pressController
 
-            visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType === FswFx.Controller
+            visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue === FswFx.Controller
 
             width: parent.width
             height: root.stringHeight
+            isHorizontal: true
 
-            text: "Press CC#: "
-
-            currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].controllerPressNum
+            ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].controllerPressNum
             model: root.cp100fx.fsw[_comboFswSelect.currentIndex].ccNames
-
-            onActivated: (index) => {
-                root.cp100fx.fsw[_comboFswSelect.currentIndex].controllerPressNum = currentIndex;
-            }
         }
 
         Row{
@@ -109,72 +87,73 @@ Rectangle{
             width: parent.width
             height: root.stringHeight
 
-            visible: (root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap1)
+            visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue >= FswFx.PresetMap1
 
             MLabel{
                 width: parent.width/6
-                text: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType === FswFx.PresetMap1 ? "Pres.:" : "Seq.:"
+                text: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue === FswFx.PresetMap1 ? "Pres.:" : "Seq.:"
 
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            MComboHorizontal{
+            ParameterComboBox{
                 width: parent.width/8
-                anchors.verticalCenter: parent.verticalCenter
+                height: root.stringHeight
+                isHorizontal: true
+
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue >= FswFx.PresetMap1
 
                 model: root.cp100fx.strPresetNumbers
 
-                currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset1
+                ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset1
 
                 indicator: Item{}
-
-                onActivated: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset1 = currentIndex
             }
 
             MLabel{
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap2
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue >= FswFx.PresetMap2
                 width: parent.width/10
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: "->"
             }
 
-            MComboHorizontal{
+            ParameterComboBox{
                 width: parent.width/8
-                anchors.verticalCenter: parent.verticalCenter
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap2
+                height: root.stringHeight
+                isHorizontal: true
+
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue >= FswFx.PresetMap2
                 model: root.cp100fx.strPresetNumbers
 
-                currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset2
+                ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset2
 
                 indicator: Item{}
-
-                onActivated: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset2 = currentIndex
             }
 
             MLabel{
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap3
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue >= FswFx.PresetMap3
                 width: parent.width/10
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: "->"
             }
 
-            MComboHorizontal{
+            ParameterComboBox{
                 width: parent.width/8
-                anchors.verticalCenter: parent.verticalCenter
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType >= FswFx.PresetMap3
+                height: root.stringHeight
+                isHorizontal: true
+
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue >= FswFx.PresetMap3
                 model: root.cp100fx.strPresetNumbers
 
-                currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset3
+                ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset3
 
                 indicator: Item{}
-
-                onActivated: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset3 = currentIndex
             }
 
             MLabel{
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType === FswFx.PresetMap4
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue === FswFx.PresetMap4
                 horizontalAlignment: Text.AlignHCenter
                 width: parent.width/10
                 anchors.verticalCenter: parent.verticalCenter
@@ -182,58 +161,49 @@ Rectangle{
                 text: "->"
             }
 
-            MComboHorizontal{
+            ParameterComboBox{
                 width: parent.width/8
-                anchors.verticalCenter: parent.verticalCenter
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType === FswFx.PresetMap4
+                height: root.stringHeight
+                isHorizontal: true
+
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressType.displayValue === FswFx.PresetMap4
                 model: root.cp100fx.strPresetNumbers
 
-                currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset4
+                ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset4
 
                 indicator: Item{}
-
-                onActivated: root.cp100fx.fsw[_comboFswSelect.currentIndex].pressPreset4 = currentIndex
             }
         }
 
-        MComboHorizontal{
+        ParameterComboBox{
             id: _holdType
 
-            visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].mode === FswFx.Double
+            visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].mode.displayValue === FswFx.Double
 
             width: parent.width
             height: root.stringHeight
+            isHorizontal: true
 
-            text: "Hold type: "
-
-            currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType
+            ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType
             model: ["DEFAULT", "CONTROLLER", "TUNER",
                     "PRESET SELECT" , "PRESET SEQ 2" , "PRESET SEQ 3" , "PRESET SEQ 4"]
 
-            onActivated: (index) => {
-                currentIndex = index;
-                root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType = currentIndex;
-            }
         }
 
-        MComboHorizontal{
+        ParameterComboBox{
             id: _holdController
 
-            visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].mode === FswFx.Double &&
-                     root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType === FswFx.Controller
+            visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].mode.displayValue === FswFx.Double &&
+                     root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType.displayValue === FswFx.Controller
 
             width: parent.width
             height: root.stringHeight
+            isHorizontal: true
 
-            text: "Hold CC#: "
-
-            currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].controllerHoldNum
+            ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].controllerHoldNum
 
             model: root.cp100fx.fsw[_comboFswSelect.currentIndex].ccNames
 
-            onActivated: (index) => {
-                root.cp100fx.fsw[_comboFswSelect.currentIndex].controllerHoldNum = currentIndex;
-            }
         }
 
         Row{
@@ -242,8 +212,8 @@ Rectangle{
             width: parent.width
             height: root.stringHeight
 
-            visible: (root.cp100fx.fsw[_comboFswSelect.currentIndex].mode === FswFx.Double &&
-                      root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType >= FswFx.PresetMap1)
+            visible: (root.cp100fx.fsw[_comboFswSelect.currentIndex].mode.displayValue === FswFx.Double &&
+                      root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType.displayValue >= FswFx.PresetMap1)
 
             MLabel{
                 width: parent.width/6
@@ -251,62 +221,63 @@ Rectangle{
                 text: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType === FswFx.PresetMap1 ? "Pres.:" : "Seq.:"
             }
 
-            ComboBox{
+            ParameterComboBox{
                 width: parent.width/8
-                anchors.verticalCenter: parent.verticalCenter
+                height: root.stringHeight
+                isHorizontal: true
+
                 model: root.cp100fx.strPresetNumbers
 
-                currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset1
+                ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset1
 
                 indicator: Item{}
-
-                onActivated: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset1 = currentIndex
             }
 
             MLabel{
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType >= FswFx.PresetMap2
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType.displayValue  >= FswFx.PresetMap2
                 width: parent.width/10
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: "->"
             }
 
-            ComboBox{
+            ParameterComboBox{
                 width: parent.width/8
-                anchors.verticalCenter: parent.verticalCenter
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType >= FswFx.PresetMap2
+                height: root.stringHeight
+                isHorizontal: true
+
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType.displayValue >= FswFx.PresetMap2
+
                 model: root.cp100fx.strPresetNumbers
 
-                currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset2
+                ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset2
 
                 indicator: Item{}
-
-                onActivated: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset2 = currentIndex
             }
 
             MLabel{
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType >= FswFx.PresetMap3
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType.displayValue >= FswFx.PresetMap3
                 width: parent.width/10
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: "->"
             }
 
-            ComboBox{
+            ParameterComboBox{
                 width: parent.width/8
-                anchors.verticalCenter: parent.verticalCenter
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType >= FswFx.PresetMap3
+                height: root.stringHeight
+                isHorizontal: true
+
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType.displayValue >= FswFx.PresetMap3
                 model: root.cp100fx.strPresetNumbers
 
-                currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset3
+                ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset3
 
                 indicator: Item{}
-
-                onActivated: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset3 = currentIndex
             }
 
             MLabel{
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType === FswFx.PresetMap4
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType.displayValue === FswFx.PresetMap4
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width/10
@@ -314,17 +285,17 @@ Rectangle{
                 text: "->"
             }
 
-            ComboBox{
+            ParameterComboBox{
                 width: parent.width/8
-                anchors.verticalCenter: parent.verticalCenter
-                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType === FswFx.PresetMap4
+                height: root.stringHeight
+                isHorizontal: true
+
+                visible: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdType.displayValue === FswFx.PresetMap4
                 model: root.cp100fx.strPresetNumbers
 
-                currentIndex: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset4
+                ctrlValInstance: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset4
 
                 indicator: Item{}
-
-                onActivated: root.cp100fx.fsw[_comboFswSelect.currentIndex].holdPreset4 = currentIndex
             }
         }
     }

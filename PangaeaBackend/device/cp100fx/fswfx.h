@@ -16,8 +16,10 @@ class FswFx : public AbstractModule
     QML_UNCREATABLE("")
 
     Q_PROPERTY(ControlValue* mode READ mode NOTIFY paramsChanged FINAL)
+
     Q_PROPERTY(ControlValue* pressType READ pressType NOTIFY fswTypeChanged FINAL)
     Q_PROPERTY(ControlValue* holdType READ holdType NOTIFY fswTypeChanged FINAL)
+
     Q_PROPERTY(ControlValue* controllerPressNum READ controllerPressNum NOTIFY paramsChanged FINAL)
     Q_PROPERTY(ControlValue* controllerHoldNum READ controllerHoldNum NOTIFY paramsChanged FINAL)
 
