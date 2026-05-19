@@ -290,6 +290,7 @@ Rectangle{
                         id: _comboPcChoice
 
                         Layout.preferredWidth: parent.width/3
+                        Layout.preferredHeight: parent.height
 
                         model: _midiPcMapModel
 
@@ -299,7 +300,7 @@ Rectangle{
                             id: _midiPcMapModel
 
                             Component.onCompleted: {
-                                for(let i=0; i<=127; i++){
+                                for(let i=1; i<=128; i++){
                                     append({value: i})
                                 }
                             }
@@ -314,18 +315,17 @@ Rectangle{
                         text: "->"
                     }
 
-                    MComboHorizontal{
+                    ParameterComboBox{
                         id: _comboPresetChoice
 
+                        Layout.preferredHeight: parent.height
+
                         Layout.fillWidth: true
+                        isHorizontal: true
 
                         model: root.cp100fx.strPresetNumbers
 
-                        currentIndex: root.cp100fx.systemSettings.midiPcMap[_comboPcChoice.currentIndex]
-
-                        onActivated: {
-                            root.cp100fx.systemSettings.setMidiPcMap(_comboPcChoice.currentIndex, _comboPresetChoice.currentIndex)
-                        }
+                        ctrlValInstance: root.cp100fx.systemSettings.midiPcMap[_comboPcChoice.currentIndex]
                     }
                 }
 
@@ -341,12 +341,22 @@ Rectangle{
                     height: root.stringHeight
                     isHorizontal: true
 
-                    enabled: root.cp100fx.systemSettings.tunerControl
+                    enabled: root.cp100fx.systemSettings.tunerControl.displayValue
                     opacity: enabled ? 1 : 0.5
 
-                    model: _midiPcMapModel
+                    model: _midiCcMapModel
 
                     ctrlValInstance: root.cp100fx.systemSettings.tunerCC
+
+                    ListModel{
+                        id: _midiCcMapModel
+
+                        Component.onCompleted: {
+                            for(let i=0; i<=127; i++){
+                                append({value: i})
+                            }
+                        }
+                    }
                 }
 
             }
