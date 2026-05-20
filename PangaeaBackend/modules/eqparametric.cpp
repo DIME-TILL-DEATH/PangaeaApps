@@ -124,7 +124,7 @@ EqParametric::EqParametric(AbstractDevice *owner, modules_data_fx_t *eqData)
     m_EqBands.append(m_lpf);
 
     m_position = new ControlValue(this, &eqData->eq_pre_post, "eq_pp", "Position");
-    connect(m_position, &ControlValue::userModifiedValue, this, &AbstractModule::positionChanged);
+    connect(m_position, &ControlValue::displayValueChanged, this, &AbstractModule::positionChanged);
 
     calcEqResponse();
 

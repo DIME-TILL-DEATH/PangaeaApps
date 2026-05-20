@@ -489,6 +489,7 @@ void Cp100fx::setModulePositions()
 
 void Cp100fx::modulesChangedPosition()
 {
+
     quint8 from, to;
 
     QObject* senderObj = QObject::sender();
@@ -498,7 +499,6 @@ void Cp100fx::modulesChangedPosition()
         moduleSender = qobject_cast<AbstractModule*>(senderObj);
     }
     else return;
-
 
     switch(moduleSender->moduleType())
     {
