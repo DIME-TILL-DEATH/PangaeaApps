@@ -40,7 +40,6 @@ public:
     void setIr2Name(const QString &newIrName) {m_ir2Name = newIrName;};
 
     void setActiveModules(const QByteArray& ba);
-    // QList<ModuleType> activeModules() const {return m_activeModules;};
     QStringList strActiveModules() const;
 
     modules_data_fx_t presetData;
@@ -48,27 +47,16 @@ public:
 
     controller_fx_t controller[ControllersCount];
 
-    quint8 cntrlPcOut() const {return m_cntrlPcOut;};
-    void setCntrlPcOut(quint8 newCntrlPcOut);
-
-    quint8 cntrlSet() const {return m_cntrlSet;};
-    void setCntrlSet(quint8 newCntrlSet);
-
     static constexpr uint16_t CabinetSize = 4096 * 3;
 
 private:
     AbstractDevice* m_ownerDevice;
-
-    // QList<ModuleType> m_activeModules;
 
     QString m_presetName;
     QString m_presetComment;
 
     QString m_ir1Name;
     QString m_ir2Name;
-
-    quint8 m_cntrlPcOut;
-    quint8 m_cntrlSet; 
 };
 
 #endif // PRESETFX_H

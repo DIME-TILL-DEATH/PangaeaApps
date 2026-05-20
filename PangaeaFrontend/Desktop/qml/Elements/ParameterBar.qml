@@ -37,12 +37,12 @@ Row {
         // textWidth: 0
         barWidth: parent.width * 0.5
 
-        minValue: controlValue.minDisplayValue
-        maxValue: controlValue.maxDisplayValue
-        value: controlValue.displayValue
+        minValue: _root.controlValue.minDisplayValue
+        maxValue: _root.controlValue.maxDisplayValue
+        value: _root.controlValue.displayValue
 
         onUserChangedValue: (calcVal) => {
-            controlValue.displayValue = calcVal
+            _root.controlValue.displayValue = calcVal
             _root.moved()
         }
     }

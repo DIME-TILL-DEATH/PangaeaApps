@@ -1,10 +1,9 @@
 #ifndef VOLUME_H
 #define VOLUME_H
 
-#include "abstractmodule.h"
-
 #include <QtQml/qqmlregistration.h>
 
+#include "abstractmodule.h"
 #include "controlvalue.h"
 
 class Volume : public AbstractModule

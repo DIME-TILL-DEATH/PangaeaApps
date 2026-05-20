@@ -56,7 +56,7 @@ Cp100fx::Cp100fx(Core *parent)
 
     for(quint8 i=0; i < ControllersCount; i++)
     {
-        m_actualControllersList.append(new ControllerFx(&actualPresetFx->controller[i], i, this));
+        m_actualControllersList.append(new ControllerFx(this, i));
     }
 }
 
@@ -458,45 +458,6 @@ void Cp100fx::setCurrentPresetComment(const QString &newCurrentPresetComment)
 
     emit sgPushCommandToQueue("pcomment set\r" + actualPresetFx->presetComment().toUtf8() + "\n", false);
     emit sgProcessCommands();
-}
-
-void Cp100fx::setCntrlPcOut(quint8 newCntrlPcOut)
-{
-    if (actualPresetFx->cntrlPcOut() == newCntrlPcOut)
-        return;
-    actualPresetFx->setCntrlPcOut(newCntrlPcOut);
-    emit cntrlPcOutChanged();
-
-    m_deviceParamsModified = true;
-    emit deviceParamsModifiedChanged();
-
-    emit sgWriteToInterface("cntrl_pc " + QByteArray::number(newCntrlPcOut, 16) + "\r\n");
-}
-
-void Cp100fx::setCntrlSet(quint8 newCntrlSet)
-{
-    if(actualPresetFx->cntrlSet() == newCntrlSet)
-        return;
-    actualPresetFx->setCntrlSet(newCntrlSet);
-    emit cntrlSetChanged();
-
-    m_deviceParamsModified = true;
-    emit deviceParamsModifiedChanged();
-
-    emit sgWriteToInterface("cntrl_set " + QByteArray::number(newCntrlSet, 16) + "\r\n");
-}
-
-void Cp100fx::setPresetVolumeControl(quint8 newPresetVolumeControl)
-{
-    if (actualPresetFx->presetData.volume_control == newPresetVolumeControl)
-        return;
-    actualPresetFx->presetData.volume_control = newPresetVolumeControl;
-    emit presetVolumeControlChanged();
-
-    m_deviceParamsModified = true;
-    emit deviceParamsModifiedChanged();
-
-    emit sgWriteToInterface("vl_pr_cntrl " + QByteArray::number(newPresetVolumeControl) + "\r\n");
 }
 
 void Cp100fx::setModulePositions()
@@ -914,8 +875,7 @@ void Cp100fx::sysSettingsCommHandler(const QString &command, const QByteArray &a
 
     m_attenuator.setSource(sysSettings.attenuatorMode);
     m_attenuator.setGlobalValue(sysSettings.attenuator);
-    m_masterVolume.setValue(sysSettings.masterVolume);
-    m_phonesVolume.setValue(sysSettings.phonesVolume);
+    m_controlsPresetfx.setMasterValues(sysSettings.masterVolume, sysSettings.phonesVolume);
 
     m_masterEq.setValues(sysSettings);
     emit systemSettingsChanged();
@@ -969,7 +929,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         emit deviceParamsModifiedChanged();
 
         m_attenuator.setPresetValue(presetData.attenuator);
-        m_presetVolume.setValue(presetData.preset_volume);
+        m_controlsPresetfx.presetVolume()->setControlValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
         emit deviceUpdatingValues(); // for correct update Att. ComboBoxes
 
@@ -1018,7 +978,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     default:
     {
         m_attenuator.setPresetValue(presetData.attenuator);
-        m_presetVolume.setValue(presetData.preset_volume);
+        m_controlsPresetfx.presetVolume()->setControlValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
         emit deviceUpdatingValues();
         actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
@@ -1066,9 +1026,10 @@ void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &argume
     controller_fx_t cntrlsData[32];
     memcpy(&cntrlsData, dataBuffer, sizeof(controller_fx_t) * ControllersCount);
 
-    for(int i=0; i<32; i++)
+    for(int i=0; i < ControllersCount; i++)
     {
         actualPresetFx->controller[i] = cntrlsData[i];
+        m_actualControllersList.at(i)->setData(cntrlsData[i]);
     }
 
     emit controllersChanged();
@@ -1076,20 +1037,14 @@ void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &argume
 
 void Cp100fx::cntrlPcOutCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    bool ok;
-    quint8 value = data.toInt(&ok, 16);
-
-    actualPresetFx->setCntrlPcOut(value);
-    emit cntrlPcOutChanged();
+    quint8 value = data.toInt(nullptr, 16);
+    m_controlsPresetfx.cntrlPcOut()->setControlValue(value);
 }
 
 void Cp100fx::cntrlSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    bool ok;
-    quint8 value = data.toInt(&ok, 16);
-
-    actualPresetFx->setCntrlSet(value);
-    emit cntrlSetChanged();
+    quint8 value = data.toInt(nullptr, 16);
+    m_controlsPresetfx.cntrlSet()->setControlValue(value);
 }
 
 void Cp100fx::tunerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

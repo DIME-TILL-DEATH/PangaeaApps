@@ -5,51 +5,52 @@
 #include <QQmlEngine>
 
 #include <abstractdevice.h>
+#include <abstractmodule.h>
 #include "hardwarefxpreset.h"
+#include "controlvalue.h"
 
-class ControllerFx : public QObject
+class ControlValue;
+
+class ControllerFx : public AbstractModule
 {
     Q_OBJECT
     QML_ELEMENT
     QML_UNCREATABLE("")
 
-    Q_PROPERTY(quint8 destination READ destination WRITE setDestination NOTIFY controllerChanged FINAL)
-    Q_PROPERTY(quint8 source READ source NOTIFY controllerChanged FINAL)
-    Q_PROPERTY(quint8 minValue READ minValue WRITE setMinValue NOTIFY controllerChanged FINAL)
-    Q_PROPERTY(quint8 maxValue READ maxValue WRITE setMaxValue NOTIFY controllerChanged FINAL)
+    Q_PROPERTY(ControlValue* destination READ destination NOTIFY dataChanged FINAL)
+    Q_PROPERTY(ControlValue* source READ source NOTIFY dataChanged FINAL)
+    Q_PROPERTY(ControlValue* minValue READ minValue NOTIFY dataChanged FINAL)
+    Q_PROPERTY(ControlValue* maxValue READ maxValue NOTIFY dataChanged FINAL)
 
     Q_PROPERTY(QStringList avaliableSources READ avaliableSourcesList NOTIFY avaliableSourcesChanged)
 public:
-    explicit ControllerFx(controller_fx_t* controllerData, quint8 num, AbstractDevice* owner);
+    explicit ControllerFx(AbstractDevice* owner, quint8 num);
 
-    quint8 destination() const;
-    void setDestination(quint8 newDestination);
-
-    quint8 source();
-    Q_INVOKABLE void setSource(const QString& srcName);
-
-    quint8 minValue() const;
-    void setMinValue(quint8 newMinValue);
-
-    quint8 maxValue() const;
-    void setMaxValue(quint8 newMaxValue);
+    ControlValue* destination() const {return m_destination;}
+    ControlValue* source() const {return m_source;}
+    ControlValue* minValue() const {return m_minValue;}
+    ControlValue* maxValue() const {return m_maxValue;}
 
     QStringList sourcesList();
     QStringList avaliableSourcesList();
 
     quint8 dataFromSourceName(const QString& source);
 
+    void setData(const controller_fx_t& m_controllerData);
+
 signals:
-    void controllerChanged();
     void avaliableSourcesChanged();
 
 private:
-    AbstractDevice* m_owner;
-    controller_fx_t* m_controllerData;
-
     quint8 m_num;
 
-    void sendData(const QByteArray& data);
+    ControlValue* m_destination;
+    ControlValue* m_source;
+    ControlValue* m_minValue;
+    ControlValue* m_maxValue;
+
+    void srcControlValueSetter(qint32 value);
+    void srcDisplaySetter(double value);
 };
 
 #endif // CONTROLLERFX_H

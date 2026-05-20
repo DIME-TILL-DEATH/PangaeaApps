@@ -47,7 +47,8 @@ public:
         ATTENUATOR,
         TUNER,
         SYSTEM,
-        FOOTSWITCH
+        FOOTSWITCH,
+        CONTROLLER
     };
     Q_ENUM(Value)
 };

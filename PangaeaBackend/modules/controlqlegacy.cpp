@@ -5,6 +5,7 @@
 ControlQLegacy::ControlQLegacy(AbstractModule *parent, void *pointer, QString commandStr)
     : ControlValue{parent, pointer, commandStr,"Q-Factor", "", 100, -100, 0.25, 5.2} //-100, 0, 0.1, 10.1);
 {
+    // TODO refactorvto custom setters
     EqParametric* ownerEq = qobject_cast<EqParametric*>(parent);
     if(ownerEq)
     {

@@ -64,7 +64,6 @@ RowLayout{
 
         ParameterDial{
             id: vlControl
-            property Volume module: root.cp100fx.masterVolume
 
             y: parent.height/10
 
@@ -73,13 +72,12 @@ RowLayout{
             width: height
             height: parent.height
 
-            controlValue: root.cp100fx.masterVolume.volume
+            controlValue: root.cp100fx.controlsPresetFx.masterVolume
          }
 
 
         ParameterDial{
             id: phonesControl
-            property Volume module: root.cp100fx.phonesVolume
 
             y: parent.height/10
 
@@ -88,7 +86,7 @@ RowLayout{
             width: height
             height: parent.height
 
-            controlValue: root.cp100fx.phonesVolume.volume
+            controlValue: root.cp100fx.controlsPresetFx.phonesVolume
         }
     }
 
