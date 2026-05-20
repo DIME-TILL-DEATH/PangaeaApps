@@ -115,6 +115,18 @@ void ControlValue::setControlValue(qint32 value)
         if(resultValue == m_displayValue) return;
 
         m_displayValue = resultValue;
+
+        if(value_ptr)
+        {
+            if(m_maxControlValue>0xFF)
+            {
+                if(value_ptr) *static_cast<quint16*>(value_ptr) = value;
+            }
+            else
+            {
+                if(value_ptr) *static_cast<quint8*>(value_ptr) = value;
+            }
+        }
     }
 
     emit displayValueChanged();

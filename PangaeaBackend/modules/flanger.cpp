@@ -17,7 +17,7 @@ Flanger::Flanger(AbstractDevice *owner, modules_data_fx_t *flData)
 
     m_moduleEnabled = (bool*)&flData->switches.flanger;
 
-    connect(m_position, &ControlValue::userModifiedValue, this, &AbstractModule::positionChanged);
+    connect(m_position, &ControlValue::displayValueChanged, this, &AbstractModule::positionChanged);
 }
 
 void Flanger::setValues(const modules_data_fx_t& flData)

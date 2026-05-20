@@ -34,7 +34,7 @@ Phaser::Phaser(AbstractDevice *owner, modules_data_fx_t *phData)
 
     m_moduleEnabled = (bool*)&phData->switches.phaser;
 
-    connect(m_position, &ControlValue::userModifiedValue, this, &AbstractModule::positionChanged);
+    connect(m_position, &ControlValue::displayValueChanged, this, &AbstractModule::positionChanged);
 }
 
 void Phaser::setValues(const preset_data_cpmodern_t &phData)
