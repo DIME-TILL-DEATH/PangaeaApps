@@ -121,6 +121,7 @@ qt_add_qml_module(PangaeaBackend
         modules/mastereq.h modules/mastereq.cpp
         modules/tuner.h modules/tuner.cpp
         SOURCES modules/attenuator.h modules/attenuator.cpp
+        SOURCES modules/controlspresetfx.h modules/controlspresetfx.cpp
 )
 
 

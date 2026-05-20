@@ -143,11 +143,6 @@ QList<ControlValue*> SystemSettingsFx::midiPcMap() const
     return m_midiPcMap;
 }
 
-void SystemSettingsFx::sendData(const QByteArray &data)
-{
-    if(m_owner) emit m_owner->sgWriteToInterface(data + "\r\n");
-}
-
 void SystemSettingsFx::exprOnControlSetter(qint32 value)
 {
     m_exprOn->modifyDisplayValue((value & 0x80) ? 1 : 0);
@@ -159,7 +154,7 @@ void SystemSettingsFx::exprOnDisplaySetter(double value)
     m_exprOn->modifyDisplayValue(value);
     emit m_exprOn->displayValueChanged();
 
-    sendData(QByteArray(m_exprOn->commandString().toUtf8() + " " + (value ? "80" : "00")));
+    sendDataToDevice(QByteArray(m_exprOn->commandString().toUtf8() + " " + (value ? "80" : "00")));
 }
 
 void SystemSettingsFx::exprTypeControlSetter(qint32 value)
@@ -179,7 +174,7 @@ void SystemSettingsFx::tunerCtrlDisplaySetter(double value)
     m_tunerControl->modifyDisplayValue(value);
     emit m_tunerControl->displayValueChanged();
 
-    sendData(QByteArray(m_tunerControl->commandString().toUtf8() + " " + (value ? "80" : "00")));
+    sendDataToDevice(QByteArray(m_tunerControl->commandString().toUtf8() + " " + (value ? "80" : "00")));
 }
 
 void SystemSettingsFx::tunerCcSetter(qint32 value)

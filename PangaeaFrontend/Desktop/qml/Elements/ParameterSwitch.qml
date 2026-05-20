@@ -1,10 +1,8 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import StyleSettings 1.0
 import Elements 1.0
 
-import PangaeaFrontend
 import PangaeaBackend
 
 Item{

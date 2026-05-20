@@ -1,15 +1,15 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import Elements
-import StyleSettings
 
-import CP100FX
 import PangaeaFrontend
 import PangaeaBackend
 
 RowLayout{
+    id: root
+
+    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
 
     MComboVertical{
         id: _comboCtrlChoice
@@ -33,29 +33,20 @@ RowLayout{
         }
     }
 
-    MComboVertical{
+    ParameterComboBox{
         id: _srcCombo
 
         Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
-        text: "Source"
+        model: root.cp100fx.controller[0].avaliableSources
 
-        model: UiCore.currentDevice.controller[0].avaliableSources
-
-        currentIndex: _cntrlsModel.count > 0 ? UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source : 0
-
-        onActivated: {
-            UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].setSource(_srcCombo.comboText)
-        }
+        ctrlValInstance: root.cp100fx.controller[_comboCtrlChoice.currentIndex].source
     }
 
-
-    MComboVertical{
+    ParameterComboBox{
         Layout.fillWidth: true
         Layout.fillHeight: true
-
-        text: "Dest."
 
         model: [
             /*0*/"PR On Off    ",
@@ -80,11 +71,7 @@ RowLayout{
             /*44*/"PR Gain      ", "PR Volume    ", "PR Low       ", "PR Mid       ", "PR High      ",
             /*49*/"EQ Band1 Lev ", "EQ Band2 Lev ", "EQ Band3 Lev ", "EQ Band4 Lev ", "EQ Band5 Lev ",
             /*54*/"RV Type      "]
-        currentIndex: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].destination
-
-        onActivated: {
-            UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].destination = currentIndex
-        }
+        ctrlValInstance: root.cp100fx.controller[_comboCtrlChoice.currentIndex].destination
     }
 
     ColumnLayout{
@@ -93,37 +80,19 @@ RowLayout{
 
         spacing: parent.height/7
 
-        MBar{
+        ParameterBar{
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: parent.height * 2/7
             Layout.topMargin: parent.height * 1/7
 
-            textWidth: width*1/4
-            barWidth: width*3/4
-
-            text: "Min:"
-
-            value: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].minValue
-
-            onUserChangedValue: calcVal => {
-                UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].minValue = calcVal
-            }
+            controlValue:root.cp100fx.controller[_comboCtrlChoice.currentIndex].minValue
         }
-        MBar{
+        ParameterBar{
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: parent.height * 2/7
             Layout.bottomMargin: parent.height * 1/7
 
-            textWidth: width*1/4
-            barWidth: width*3/4
-
-            text: "Max "
-
-            value: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].maxValue
-
-            onUserChangedValue: calcVal => {
-                UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].maxValue= calcVal
-            }
+            controlValue: root.cp100fx.controller[_comboCtrlChoice.currentIndex].maxValue
         }
     }
 
@@ -132,34 +101,22 @@ RowLayout{
         Layout.fillHeight: true
     }
 
-    MComboVertical{
+    ParameterComboBox{
         Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
-
-        text: "PC Out"
 
         model: ["MIDI IN", "MAP", "SET"]
 
-        currentIndex: UiCore.currentDevice.cntrlPcOut
-
-        onActivated: {
-            UiCore.currentDevice.cntrlPcOut = currentIndex
-        }
+        ctrlValInstance: root.cp100fx.controlsPresetFx.cntrlPcOut
     }
 
-    MComboVertical{
+    ParameterComboBox{
         Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
-        text: "Set"
-
         model: _setModel
 
-        currentIndex: UiCore.currentDevice.cntrlSet
-
-        onActivated: {
-            UiCore.currentDevice.cntrlSet = currentIndex
-        }
+        ctrlValInstance: root.cp100fx.controlsPresetFx.cntrlSet
 
         ListModel{
             id: _setModel
@@ -183,36 +140,28 @@ RowLayout{
 
         ParameterDial{
             id: vlControl
-            property Volume module: UiCore.currentDevice.presetVolume
-
-            enabled: true
 
             y: parent.height/10
+
+            enabled: true
 
             width: height
             height: parent.height - parent.height/10
 
-            controlValue: UiCore.currentDevice.presetVolume.volume
+            controlValue: root.cp100fx.controlsPresetFx.presetVolume
          }
 
-        MSwitchVertical{
+        ParameterSwitch{
             id: _volCtrlSwitch
-
-            // Layout.preferredWidth: height
-            // Layout.fillHeight: true
 
             width: height
             height: parent.height
 
+            invertedValue: 1
+
             y: parent.height/10
 
-            text: "Control: "
-
-            checked: !UiCore.currentDevice.presetVolumeControl
-
-            onClicked: {
-                UiCore.currentDevice.presetVolumeControl = !checked
-            }
+            ctrlValInstance: root.cp100fx.controlsPresetFx.presetCtrlVolume
         }
     }
 

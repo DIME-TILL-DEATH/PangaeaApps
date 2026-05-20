@@ -39,27 +39,8 @@ QStringList FswFx::ccNames()
     return names;
 }
 
-void FswFx::sendData(const QByteArray &data)
-{
-    if(m_owner) emit m_owner->sgWriteToInterface(data + "\r\n");
-}
-
 void FswFx::setData(const TSystemSettingsFx &data)
 {
-    // Старый код:
-    /*
-    m_mode = static_cast<FswMode>(data.fswMode[m_num]);
-    m_pressType = static_cast<FswType>(data.fswPressType[m_num]);
-    m_holdType = static_cast<FswType>(data.fswHoldType[m_num]);
-    m_controllerPressNum = data.fswControlPressCc[m_num];
-    m_controllerHoldNum = data.fswControlHoldCc[m_num];
-    for(int i=0; i<4; i++)
-    {
-        m_pressPreset[i] = data.fswPressPreset[m_num][i];
-        m_holdPreset[i] = data.fswHoldPreset[m_num][i];
-    }
-    */
-    // Новый код:
     m_mode->setControlValue(data.fswMode[m_num]);
     m_pressType->setControlValue(data.fswPressType[m_num]);
     m_holdType->setControlValue(data.fswHoldType[m_num]);
@@ -73,9 +54,6 @@ void FswFx::setData(const TSystemSettingsFx &data)
     emit fswTypeChanged();
 }
 
-// Все старые set* методы закомментированы выше
-
-// ControlValue* геттеры
 ControlValue* FswFx::mode() const { return m_mode; }
 ControlValue* FswFx::pressType() const { return m_pressType; }
 ControlValue* FswFx::holdType() const { return m_holdType; }

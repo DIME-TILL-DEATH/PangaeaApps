@@ -84,7 +84,6 @@ private:
     quint8 m_num;
     AbstractDevice* m_owner;
 
-    // ControlValue* поля
     ControlValue* m_mode = nullptr;
     ControlValue* m_pressType = nullptr;
     ControlValue* m_holdType = nullptr;
@@ -92,20 +91,6 @@ private:
     ControlValue* m_controllerHoldNum = nullptr;
     ControlValue* m_pressPreset[4] = {nullptr, nullptr, nullptr, nullptr};
     ControlValue* m_holdPreset[4] = {nullptr, nullptr, nullptr, nullptr};
-
-    // Старые поля (оставлены закомментированными)
-    /*
-    FswMode m_mode;
-    FswType m_pressType;
-    FswType m_holdType;
-    quint8 m_controllerPressNum;
-    quint8 m_controllerHoldNum;
-    quint8 m_pressPreset[4];
-    quint8 m_holdPreset[4];
-    */
-
-    void sendData(const QByteArray& data);
-    // Методы-сеттеры ControlValue будут реализованы в cpp
 };
 
 typedef FswFx::FswMode FswMode;
