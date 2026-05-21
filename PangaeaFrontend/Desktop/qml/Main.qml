@@ -12,12 +12,14 @@ import CP100FX 1.0
 import CP16 1.0
 
 import PangaeaFrontend
-import PangaeaFrontend
 import PangaeaBackend
 
 ApplicationWindow
 {
     id: main
+
+
+
     visible: true
 
     width: Screen.width * 0.75
@@ -29,6 +31,9 @@ ApplicationWindow
     maximumHeight: Screen.width * 0.75 * 0.4 * 1.25
 
     color: Style.currentTheme.backgroundColor
+
+    property var globalRoot: main
+    signal globalClick(var mouse);
 
     property string markEdit: UiCore.currentDevice.deviceParamsModified ? " * ":" "
     property string devName: UiCore.currentDevice.firmwareName
@@ -43,7 +48,6 @@ ApplicationWindow
     title: connected ? Qt.application.name +  " v." + Qt.application.version + " "
                 + markConnect + devName + " (" + interfaceType + ")" + markEdit
                 : Qt.application.name + " v." + Qt.application.version + " " + markConnect
-
 
     header: MainMenu{
         id: _mainMenu

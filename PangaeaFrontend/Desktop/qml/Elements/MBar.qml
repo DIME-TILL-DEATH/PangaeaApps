@@ -82,6 +82,7 @@ Row{
 
 
             onPressed: (event) => {
+                _bar.focus = true
                 changeValue(event.x);
             }
 

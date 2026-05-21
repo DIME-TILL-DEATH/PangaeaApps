@@ -124,7 +124,25 @@ void Core::slDeviceInstanciated()
         // Подождать пока прогрузится интерфейс, тк MOCK устройства отвечают слишком быстро в том же потоке
         // TODO возможно нужны сигналы подтверждения от loader
         QThread::msleep(100);
+
+        ControlValue::delayedSend = false;
     }
+    switch(m_currentConnectionType)
+    {
+    case DeviceConnectionTypeEnum::USB:
+    {
+        ControlValue::delayedSend = false;
+        break;
+    }
+    case DeviceConnectionTypeEnum::Offline:
+    {
+        QThread::msleep(100);
+        ControlValue::delayedSend = false;
+        break;
+    }
+    default: ControlValue::delayedSend = false;
+    }
+
     currentDevice->readFullState();
 
     emit sgCurrentDeviceChanged(currentDevice);

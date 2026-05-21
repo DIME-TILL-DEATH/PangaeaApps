@@ -149,9 +149,13 @@ Item
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/1.5, parent.width/15)
 
-                        onAccepted:{
+                        onEditingFinished:{
                             focus = false
                             UiCore.currentDevice.currentPresetName = _presetNameEdit.text
+                        }
+
+                        onTextEdited: {
+                            UiCore.currentDevice.userModifiedModules();
                         }
                     }
                 }
