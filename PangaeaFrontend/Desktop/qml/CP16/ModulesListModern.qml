@@ -115,7 +115,7 @@ Flickable{
                     }
 
                     onDropped: function (drag) {
-                        var from = modelIndex;
+                        var from = (drag.source as Item).dragParent.modelIndex;
                         var to = (drag.source as Item).visualIndex;
                         UiCore.currentDevice.modulesListModel.moveModule(from, to);
                     }
@@ -176,7 +176,7 @@ Flickable{
                                 // drag.minimumX: 0//_listViewModules.x
                                 // drag.maximumX: _listViewModules.x + _listViewModules.width
 
-                                onPressed: _delegateRoot.modelIndex = visualIndex
+                                onPressed: _delegateRoot.modelIndex = _thing.visualIndex
                                 onReleased: _thing.Drag.drop()
                             }
 

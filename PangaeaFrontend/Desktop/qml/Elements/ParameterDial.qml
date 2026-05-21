@@ -133,10 +133,11 @@ Item{
                 acceptedButtons: Qt.RightButton//Qt.NoButton
 
                 onWheel: wheel => {
+                    _txtInput.focus = true;
                     var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100;
-                    // if(control.stepSize === 1) step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
-                    // else step = control.stepSize
-                    controlValue.displayValue = control.value + wheel.angleDelta.y * step;
+                    var resultValue = control.value + wheel.angleDelta.y * step;
+
+                    controlValue.displayValue = resultValue;
                 }
 
                 onClicked: mouse => {

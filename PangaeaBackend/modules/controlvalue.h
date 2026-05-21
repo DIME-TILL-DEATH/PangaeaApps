@@ -53,6 +53,8 @@ public:
 
     QString commandString() const;
 
+    static bool delayedSend;
+
 signals:
     void displayValueChanged();
     void isModifiedChanged();

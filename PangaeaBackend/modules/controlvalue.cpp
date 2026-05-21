@@ -3,6 +3,8 @@
 #include "parser.h"
 #include "abstractdevice.h"
 
+bool ControlValue::delayedSend = true;
+
 ControlValue::ControlValue(AbstractModule *owner, void *valuePtr, QString commandName,
                            QString name, QString units,
                            qint16 minControlValue, qint16 maxControlValue,
@@ -42,6 +44,9 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     if (qFuzzyCompare(m_displayValue, newDisplayValue))
         return;
 
+    if(newDisplayValue > m_maxDisplayValue) newDisplayValue = m_maxDisplayValue;
+    if(newDisplayValue < m_minDisplayValue) newDisplayValue = m_minDisplayValue;
+
     if(m_customDisplaySetter)
     {
         m_customDisplaySetter(newDisplayValue);
@@ -77,19 +82,25 @@ void ControlValue::setDisplayValue(double newDisplayValue)
         }
         fullCommand = m_commandString + " " + strValue + "\r\n";
 
-        if(buffer.isEmpty())
+        if(delayedSend)
         {
-            buffer.append(fullCommand.toUtf8());
-        }
-        else
-        {
-            // drop same values
-            if(buffer.last().indexOf(fullCommand.toUtf8()) == -1)
+            if(buffer.isEmpty())
             {
                 buffer.append(fullCommand.toUtf8());
             }
+            else
+            {
+                // drop same values
+                if(buffer.last().indexOf(fullCommand.toUtf8()) == -1)
+                {
+                    buffer.append(fullCommand.toUtf8());
+                }
+            }
         }
-        // if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
+        else
+        {
+            if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
+        }
     }
 
     emit isModifiedChanged();

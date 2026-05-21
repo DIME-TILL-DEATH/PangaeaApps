@@ -155,6 +155,10 @@ Item
                             focus = false
                             UiCore.currentDevice.currentPresetName = _presetNameEdit.text
                         }
+
+                        onTextEdited: {
+                            UiCore.currentDevice.userModifiedModules();
+                        }
                     }
                 }
             }
@@ -214,6 +218,10 @@ Item
                         onEditingFinished:{
                             focus = false
                             UiCore.currentDevice.currentPresetComment = _presetCommentEdit.text
+                        }
+
+                        onTextEdited: {
+                            UiCore.currentDevice.userModifiedModules();
                         }
                     }
                 }
