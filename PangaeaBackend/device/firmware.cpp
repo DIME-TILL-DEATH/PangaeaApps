@@ -48,7 +48,33 @@ bool Firmware::operator<(const Firmware &compareFirmware)
     if(compareFirmware.deviceType() != m_deviceType)
         qWarning() << "Comparing firmwares different device types!";
 
-    return compareVersion(m_firmwareVersion, compareFirmware.m_firmwareVersion);
+    if(compareFirmware.m_firmwareVersion.global > m_firmwareVersion.global) return true;
+    if(compareFirmware.m_firmwareVersion.global < m_firmwareVersion.global) return false;
+
+    if(compareFirmware.m_firmwareVersion.major > m_firmwareVersion.major) return true;
+    if(compareFirmware.m_firmwareVersion.major < m_firmwareVersion.major) return false;
+
+    if(compareFirmware.m_firmwareVersion.minor > m_firmwareVersion.minor) return true;
+    if(compareFirmware.m_firmwareVersion.minor < m_firmwareVersion.minor) return false;
+
+    return false;
+}
+
+bool Firmware::operator<=(const Firmware &compareFirmware)
+{
+    if(compareFirmware.deviceType() != m_deviceType)
+        qWarning() << "Comparing firmwares different device types!";
+
+    if(compareFirmware.m_firmwareVersion.global > m_firmwareVersion.global) return true;
+    if(compareFirmware.m_firmwareVersion.global < m_firmwareVersion.global) return false;
+
+    if(compareFirmware.m_firmwareVersion.major > m_firmwareVersion.major) return true;
+    if(compareFirmware.m_firmwareVersion.major < m_firmwareVersion.major) return false;
+
+    if(compareFirmware.m_firmwareVersion.minor > m_firmwareVersion.minor) return true;
+    if(compareFirmware.m_firmwareVersion.minor < m_firmwareVersion.minor) return false;
+
+    return true;
 }
 
 Firmware &Firmware::operator=(const Firmware &other)
@@ -83,19 +109,37 @@ bool Firmware::operator>(const Firmware &compareFirmware)
     return false;
 }
 
-bool Firmware::compareVersion(strVersion requestedVesrion, strVersion devVersion)
+bool Firmware::operator>=(const Firmware &compareFirmware)
 {
-    if(requestedVesrion.global > devVersion.global) return false;
-    if(requestedVesrion.global < devVersion.global) return true;
+    if(compareFirmware.deviceType() != m_deviceType)
+        qWarning() << "Comparing firmwares different device types!";
 
-    if(requestedVesrion.major > devVersion.major) return false;
-    if(requestedVesrion.major < devVersion.major) return true;
+    // return compareVersion(compareFirmware.m_firmwareVersion, m_firmwareVersion);
+    if(compareFirmware.m_firmwareVersion.global > m_firmwareVersion.global) return false;
+    if(compareFirmware.m_firmwareVersion.global < m_firmwareVersion.global) return true;
 
-    if(requestedVesrion.minor > devVersion.minor) return false;
-    if(requestedVesrion.minor < devVersion.minor) return true;
+    if(compareFirmware.m_firmwareVersion.major > m_firmwareVersion.major) return false;
+    if(compareFirmware.m_firmwareVersion.major < m_firmwareVersion.major) return true;
+
+    if(compareFirmware.m_firmwareVersion.minor > m_firmwareVersion.minor) return false;
+    if(compareFirmware.m_firmwareVersion.minor < m_firmwareVersion.minor) return true;
 
     return true;
 }
+
+// bool Firmware::compareVersion(strVersion requestedVesrion, strVersion devVersion)
+// {
+//     if(requestedVesrion.global > devVersion.global) return false;
+//     if(requestedVesrion.global < devVersion.global) return true;
+
+//     if(requestedVesrion.major > devVersion.major) return false;
+//     if(requestedVesrion.major < devVersion.major) return true;
+
+//     if(requestedVesrion.minor > devVersion.minor) return false;
+//     if(requestedVesrion.minor < devVersion.minor) return true;
+
+//     return true;
+// }
 
 QString Firmware::firmwareVersion() const
 {
