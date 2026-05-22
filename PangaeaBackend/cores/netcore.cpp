@@ -28,7 +28,8 @@ void NetCore::requestAppUpdates()
 {
     if(appSettings->value("check_updates_enable", false).toBool())
     {
-        jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_applications.json"));
+        // jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_applications.json"));
+        jsonDataRequest.setUrl(QUrl("https://amtelectronics.ru/pangaea-app/actual_applications.json"));
         m_networkManager->get(jsonDataRequest);
         connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnApplicationVersionReqResult);
     }
@@ -75,7 +76,7 @@ void NetCore::requestNewestFirmware(Firmware *actualFirmware)
     if(appSettings->value("check_updates_enable", false).toBool())
     {
         qInfo() << "Checking updates...";
-        jsonDataRequest.setUrl(QUrl("https://amtelectronics.com/new/pangaea-app-mob/actual_firmwares.json"));
+        jsonDataRequest.setUrl(QUrl("https://amtelectronics.ru/pangaea-app/actual_firmwares.json"));
         m_networkManager->get(jsonDataRequest);
         connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFirmwareVersionReqResult);
     }
@@ -90,8 +91,7 @@ void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
         {
             qInfo() << "actual: " << deviceFirmware->firmwareVersion() << " avaliable: " << newestFirmware->firmwareVersion();
 
-            //TODO Срабатывает если версии равны. Проверить исправление
-            if(!(*newestFirmware < *deviceFirmware))
+            if(*newestFirmware > *deviceFirmware)
             {
                 qInfo() << "New firmware avaliable on server";
                 emit sgNewFirmwareAvaliable(newestFirmware, deviceFirmware);

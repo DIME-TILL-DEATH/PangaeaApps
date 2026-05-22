@@ -285,10 +285,10 @@ ApplicationWindow
                 {
                     _msgVersionInform.title = qsTr("Warning")
                     _msgVersionInform.text = qsTr("Version error!")
-                    _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0]
-                            + qsTr("\nMinimum required version is ")
-                            + params[1]
-                            + qsTr("\nWithout updating the firmware, some features may not work properly")
+                    _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0] + "\n"
+                            + qsTr("Minimum required version is ")
+                            + params[1] + "\n"
+                            + qsTr("Without updating the firmware, some features may not work properly")
 
                     _msgVersionInform.visible = true;
                     break;

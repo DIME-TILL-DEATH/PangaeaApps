@@ -40,7 +40,9 @@ public:
     QString firmwareVersion() const;
 
     bool operator>(const Firmware& compareFirmware);
+    bool operator>=(const Firmware& compareFirmware);
     bool operator<(const Firmware& compareFirmware);
+    bool operator<=(const Firmware& compareFirmware);
     Firmware &operator=(const Firmware& other);
 
     FirmwareType firmwareType() const;
@@ -63,7 +65,7 @@ private:
 
     QByteArray m_rawData;
 
-    bool compareVersion(strVersion requestedVesrion, strVersion devVersion);
+    // bool compareVersion(strVersion requestedVesrion, strVersion devVersion);
     strVersion extractVerFromString(QString versionString);
 };
 

@@ -13,7 +13,7 @@ Cp100fx::Cp100fx(Core *parent)
 {
     using namespace std::placeholders;
 
-    m_minimalFirmware = Firmware("2.01.05", DeviceType::CP100FX, FirmwareType::DeviceInternal, "");
+    m_minimalFirmware = Firmware("2.01.04", DeviceType::CP100FX, FirmwareType::DeviceInternal, "");
 
     m_parser.addCommandHandler("amtver", std::bind(&Cp100fx::amtVerCommHandler, this, _1, _2, _3));
 
@@ -718,7 +718,7 @@ void Cp100fx::amtVerCommHandler(const QString &command, const QByteArray &argume
 
     m_actualFirmware = Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
 
-    if(m_actualFirmware > m_minimalFirmware)
+    if(m_actualFirmware >= m_minimalFirmware)
     {
         bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
 

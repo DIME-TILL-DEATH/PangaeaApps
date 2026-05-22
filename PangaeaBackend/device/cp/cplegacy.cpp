@@ -653,7 +653,7 @@ void CPLegacy::amtVerCommHandler(const QString &command, const QByteArray &argum
             << ", version control, minimal: " << m_minimalFirmware.firmwareVersion()
             << " actual: " << m_actualFirmware.firmwareVersion();
 
-    if(m_actualFirmware > m_minimalFirmware)
+    if(m_actualFirmware >= m_minimalFirmware)
     {
         bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
 
