@@ -13,6 +13,8 @@ Cp100fx::Cp100fx(Core *parent)
 {
     using namespace std::placeholders;
 
+    m_minimalFirmware = Firmware("2.01.05", DeviceType::CP100FX, FirmwareType::DeviceInternal, "");
+
     m_parser.addCommandHandler("amtver", std::bind(&Cp100fx::amtVerCommHandler, this, _1, _2, _3));
 
     m_parser.addCommandHandler("sys_settings", std::bind(&Cp100fx::sysSettingsCommHandler, this, _1, _2, _3));
@@ -714,15 +716,22 @@ void Cp100fx::amtVerCommHandler(const QString &command, const QByteArray &argume
     m_firmwareName += "CP100FX v." + firmwareVersion;
     emit firmwareNameChanged();
 
-    m_actualFirmware = new Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
+    m_actualFirmware = Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
 
-    bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
-
-    if(isCheckUpdatesEnabled)
+    if(m_actualFirmware > m_minimalFirmware)
     {
-        emit sgRequestNewestFirmware(m_actualFirmware);
-    }
+        bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
 
+        if(isCheckUpdatesEnabled)
+        {
+            emit sgRequestNewestFirmware(&m_actualFirmware);
+        }
+    }
+    else
+    {
+        qWarning() << "firmware insufficient!";
+        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion()});
+    }
     qInfo() << __FUNCTION__ << firmwareVersion;
 }
 

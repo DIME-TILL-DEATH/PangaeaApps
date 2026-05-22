@@ -147,16 +147,10 @@ void CPModern::setDeviceType(DeviceType newDeviceType)
 {
     m_deviceType = newDeviceType;
 
-    if(m_minimalFirmware != nullptr)
-    {
-        delete(m_minimalFirmware);
-        m_minimalFirmware = nullptr;
-    }
-
     switch(m_deviceType)
     {
     case DeviceType::MODERN_CP:
-        m_minimalFirmware = new Firmware("2.00.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16Modern.ble");
+        m_minimalFirmware = Firmware("2.00.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16Modern.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP16 Modern";
@@ -164,7 +158,7 @@ void CPModern::setDeviceType(DeviceType newDeviceType)
     default:
         qWarning() << __FUNCTION__ << "Unknown device type";
 
-        m_minimalFirmware = new Firmware("2.00.01", newDeviceType, FirmwareType::DeviceInternal, "");
+        m_minimalFirmware = Firmware("2.00.01", newDeviceType, FirmwareType::DeviceInternal, "");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "Unknown CP device";
@@ -649,25 +643,25 @@ void CPModern::amtVerCommHandler(const QString &command, const QByteArray &argum
 
     qInfo() << __FUNCTION__ << firmwareVersion;
 
-    m_actualFirmware = new Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
+    m_actualFirmware = Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
 
     qInfo() << "Firmware name: " << m_firmwareName
-            << ", version control, minimal: " << m_minimalFirmware->firmwareVersion()
-            << " actual: " << m_actualFirmware->firmwareVersion();
+            << ", version control, minimal: " << m_minimalFirmware.firmwareVersion()
+            << " actual: " << m_actualFirmware.firmwareVersion();
 
-    if(*m_actualFirmware > *m_minimalFirmware)
+    if(m_actualFirmware > m_minimalFirmware)
     {
         bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
 
         if(isCheckUpdatesEnabled)
         {
-            emit sgRequestNewestFirmware(m_actualFirmware);
+            emit sgRequestNewestFirmware(&m_actualFirmware);
         }
     }
     else
     {
         qWarning() << "firmware insufficient!";
-        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware->firmwareVersion(), m_minimalFirmware->firmwareVersion()});
+        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion()});
     }
 }
 

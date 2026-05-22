@@ -51,6 +51,20 @@ bool Firmware::operator<(const Firmware &compareFirmware)
     return compareVersion(m_firmwareVersion, compareFirmware.m_firmwareVersion);
 }
 
+Firmware &Firmware::operator=(const Firmware &other)
+{
+    if(this != &other)
+    {
+        m_firmwareVersionString = other.m_firmwareVersionString;
+        m_deviceType = other.m_deviceType;
+        m_firmwareType = other.m_firmwareType;
+        m_path = other.m_path;
+        m_firmwareVersion = other.m_firmwareVersion;
+        m_rawData = other.m_rawData;
+    }
+    return *this;
+}
+
 bool Firmware::operator>(const Firmware &compareFirmware)
 {
     if(compareFirmware.deviceType() != m_deviceType)
