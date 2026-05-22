@@ -16,7 +16,9 @@ public:
         Connecting,
         Connected,
         ServiceFound,
-        AcquireData
+        AcquireData,
+        Unavaliable,
+        PowerOff
     };
     Q_ENUM(InterfaceState)
 

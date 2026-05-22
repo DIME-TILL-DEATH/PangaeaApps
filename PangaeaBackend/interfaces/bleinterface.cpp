@@ -127,21 +127,32 @@ void BleInterface::startScan()
     {
         app->requestPermission(QBluetoothPermission{}, [this](const QPermission &permission)
         {
-            if(permission.status() == Qt::PermissionStatus::Granted){
-               qDebug() << "Bluetooth permission granted";
+            if(permission.status() == Qt::PermissionStatus::Granted)
+            {
+                // qDebug() << "Bluetooth permission granted";
                 if(state() == InterfaceState::Idle)
                 {
                     startDiscovering();
                 }
+
+                if(state() == InterfaceState::PowerOff)
+                {
+                    QBluetoothLocalDevice device;
+                    if(device.hostMode() != QBluetoothLocalDevice::HostPoweredOff)
+                    {
+                        startDiscovering();
+                    }
+                    else
+                    {
+                        QTimer::singleShot(2500, this, &BleInterface::startScan);
+                    }
+                }
             }
-            else{
+            else
+            {
                qWarning() << "Bluetooth permission not granted!";
             }
         });
-    }
-    if(state() == InterfaceState::Idle)
-    {
-        startDiscovering();
     }
 #endif
 }
@@ -164,19 +175,27 @@ void BleInterface::startDiscovering()
     {
         qInfo() << "Bluetooth is not valid";
         emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "Device is unavaliable");
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+        setState(InterfaceState::Unavaliable);
+#else
         prevState();
+#endif
         return;
     }
 
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
     {
-        prevState();
         isAvaliable = false;
-
         m_qlFoundDevices.clear();
         emit sgDeviceListUpdated(DeviceConnectionType::BLE, m_qlFoundDevices);
         emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+        setState(InterfaceState::PowerOff);
+#else
         device.powerOn();
+        prevState();
+#endif
         return;
     }
 #endif
