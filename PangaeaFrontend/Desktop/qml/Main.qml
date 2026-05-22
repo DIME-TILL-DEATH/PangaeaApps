@@ -288,7 +288,7 @@ ApplicationWindow
                     _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0]
                             + qsTr("\nMinimum required version is ")
                             + params[1]
-                            + qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
+                            + qsTr("\nWithout updating the firmware, some features may not work properly")
 
                     _msgVersionInform.visible = true;
                     break;

@@ -131,37 +131,31 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
 {
     m_deviceType = newDeviceType;
 
-    if(m_minimalFirmware != nullptr)
-    {
-        delete(m_minimalFirmware);
-        m_minimalFirmware = nullptr;
-    }
-
     switch(m_deviceType)
     {
     case DeviceType::LEGACY_CP16:
-        m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
+        m_minimalFirmware = Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP-16M Blue";
         m_isPaFw = false;
         break;
     case DeviceType::LEGACY_CP16PA:
-        m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
+        m_minimalFirmware = Firmware("1.04.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16PA.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP-16M-PA Green";
         m_isPaFw = true;
         break;
     case DeviceType::LEGACY_CP100:
-        m_minimalFirmware = new Firmware("2.08.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
+        m_minimalFirmware = Firmware("2.08.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100.ble");
         m_maxBankCount = 10;
         m_maxPresetCount = 10;
         m_firmwareName = "CP-100";
         m_isPaFw = false;
         break;
     case DeviceType::LEGACY_CP100PA:
-        m_minimalFirmware = new Firmware("6.08.04", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
+        m_minimalFirmware = Firmware("6.08.04", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP100PA.ble");
         m_maxBankCount = 10;
         m_maxPresetCount = 10;
         m_firmwareName = "CP-100PA";
@@ -177,7 +171,7 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
     default:
         qWarning() << __FUNCTION__ << "Unknown device type";
 
-        m_minimalFirmware = new Firmware("1.04.03", newDeviceType, FirmwareType::DeviceInternal, "");
+        m_minimalFirmware = Firmware("1.04.03", newDeviceType, FirmwareType::DeviceInternal, "");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "Unknown CP device";
@@ -653,25 +647,25 @@ void CPLegacy::amtVerCommHandler(const QString &command, const QByteArray &argum
 
     qInfo() << __FUNCTION__ << firmwareVersion;
 
-    m_actualFirmware = new Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
+    m_actualFirmware = Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
 
     qInfo() << "Firmware name: " << m_firmwareName
-            << ", version control, minimal: " << m_minimalFirmware->firmwareVersion()
-            << " actual: " << m_actualFirmware->firmwareVersion();
+            << ", version control, minimal: " << m_minimalFirmware.firmwareVersion()
+            << " actual: " << m_actualFirmware.firmwareVersion();
 
-    if(*m_actualFirmware > *m_minimalFirmware)
+    if(m_actualFirmware > m_minimalFirmware)
     {
         bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
 
         if(isCheckUpdatesEnabled)
         {
-            emit sgRequestNewestFirmware(m_actualFirmware);
+            emit sgRequestNewestFirmware(&m_actualFirmware);
         }
     }
     else
     {
         qWarning() << "firmware insufficient!";
-        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware->firmwareVersion(), m_minimalFirmware->firmwareVersion()});
+        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion()});
     }
 
     m_parser.enableFullEndMode(); // next comm rns

@@ -180,8 +180,8 @@ protected:
 
     quint16 m_processingBudget{0};
 
-    Firmware* m_actualFirmware{nullptr};
-    Firmware* m_minimalFirmware{nullptr}; 
+    Firmware m_actualFirmware;
+    Firmware m_minimalFirmware;
     QString m_firmwareName;
 
     QStringList m_avaliableOutputModes;
