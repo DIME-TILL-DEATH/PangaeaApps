@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 if(WIN32)
-    project(WavConverter VERSION 1.0.0 LANGUAGES CXX)
+    project(IrConverter VERSION 1.0.0 LANGUAGES CXX)
 
     add_compile_definitions(WAVCONVERTERLIB_LIBRARY)
 
