@@ -92,10 +92,11 @@ qt_add_qml_module(PangaeaBackend
         device/cp/cpmodern.h device/cp/cpmodern.cpp
         device/cp/lapreamp.h device/cp/lapreamp.cpp
         device/cp100fx/cp100fx.h device/cp100fx/cp100fx.cpp
-
+        device/cp100fx/controlspresetfx.h device/cp100fx/controlspresetfx.cpp
         device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
 
         modules/abstractmodule.cpp modules/abstractmodule.h
+        modules/attenuator.h modules/attenuator.cpp
         modules/cabsim.h modules/cabsim.cpp
         modules/chorus.h modules/chorus.cpp
         modules/compressor.h modules/compressor.cpp
@@ -120,8 +121,6 @@ qt_add_qml_module(PangaeaBackend
         modules/volume.h modules/volume.cpp
         modules/mastereq.h modules/mastereq.cpp
         modules/tuner.h modules/tuner.cpp
-        SOURCES modules/attenuator.h modules/attenuator.cpp
-        SOURCES modules/controlspresetfx.h modules/controlspresetfx.cpp
 )
 
 
