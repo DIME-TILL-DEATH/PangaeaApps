@@ -33,6 +33,8 @@ Window{
     maximumWidth: Screen.width * 0.4 * 1
     maximumHeight: Screen.width * 0.3 * 0.5 * 0.75
 
+    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
+
     ColumnLayout{
         anchors.fill: parent
 
@@ -50,7 +52,7 @@ Window{
             }
 
             MLabel{
-                text: UiCore.currentDevice.tuner.note
+                text: _root.cp100fx.tuner.note
 
             }
         }
@@ -90,14 +92,14 @@ Window{
                 width: parent.width/75
                 height: parent.height - parent.border.width * 2
 
-                property bool isBullseye: Math.abs(UiCore.currentDevice.tuner.cents) < 5
+                property bool isBullseye: Math.abs(_root.cp100fx.tuner.cents) < 5
 
-                x: parent.border.width + parent.width/2 - width/2  + UiCore.currentDevice.tuner.cents * parent.width/100 * !isBullseye
+                x: parent.border.width + parent.width/2 - width/2  + _root.cp100fx.tuner.cents * parent.width/100 * !isBullseye
                 y: parent.border.width
 
                 color: Style.currentTheme.highlightColor
 
-                visible: UiCore.currentDevice.tuner.note !== "-"
+                visible: _root.cp100fx.tuner.note !== "-"
 
                 anchors.verticalCenter: parent.verticalCenter
 
@@ -113,7 +115,7 @@ Window{
 
                 anchors.fill: bar
 
-                visible: UiCore.currentDevice.tuner.note !== "-" & bar.isBullseye
+                visible: _root.cp100fx.tuner.note !== "-" & bar.isBullseye
 
                 glowRadius: 5
                 spread: 0.1
@@ -136,13 +138,13 @@ Window{
                 scaleText: 4
 
                 onClicked: {
-                    UiCore.currentDevice.tuner.decreaseRefFreq()
+                    _root.cp100fx.tuner.decreaseRefFreq()
                 }
             }
             MLabel{
                 id: _refFreqLabel
 
-                text: qsTr("Ref. freq: ") + UiCore.currentDevice.tuner.refFreq + "Hz"
+                text: qsTr("Ref. freq: ") + _root.cp100fx.tuner.refFreq + "Hz"
 
                 height: parent.height
 
@@ -174,9 +176,9 @@ Window{
                 width: parent.width/2.5
                 height: parent.height
 
-                property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
 
-                controlValue: cp100fx.systemSettings.tunerSpeed
+
+                controlValue: _root.cp100fx.systemSettings.tunerSpeed
             }
         }
 
@@ -189,7 +191,7 @@ Window{
         repeat: _root.visible
 
         onTriggered: {
-            UiCore.currentDevice.tuner.getSamples(64 + UiCore.currentDevice.systemSettings.tunerSpeed);
+            _root.cp100fx.tuner.getSamples(64 + _root.cp100fx.systemSettings.tunerSpeed.displayValue);
         }
     }
 
@@ -200,8 +202,8 @@ Window{
 
         if(visible)
         {
-            UiCore.currentDevice.tuner.getRefFreq()
-            UiCore.currentDevice.tuner.getSamples(64 + UiCore.currentDevice.systemSettings.tunerSpeed);
+            _root.cp100fx.tuner.getRefFreq()
+            _root.cp100fx.tuner.getSamples(64 + _root.cp100fx.systemSettings.tunerSpeed.displayValue);
         }
     }
 }
