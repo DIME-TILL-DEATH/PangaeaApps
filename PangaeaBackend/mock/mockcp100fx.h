@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QDir>
 
+#include "cp100fx.h"
+
 #include "abstractmockdevice.h"
 
 #include "hardwarefxpreset.h"
@@ -13,7 +15,7 @@ class MockCP100fx : public AbstractMockDevice
 {
     Q_OBJECT
 public:
-    explicit MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent = nullptr);
+    explicit MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, Cp100fx::Modification modification, QObject *parent = nullptr);
 
     void writeToDevice(const QByteArray& data) override;
     void newDataRecieved() override;
@@ -38,6 +40,8 @@ private:
     QMap<QString, quint8*> sysParamsByteMap;
 
     QByteArray intToBa(quint8 val);
+
+    Cp100fx::Modification m_modification{Cp100fx::MONO_MOD};
 
     void initFolders();
     bool loadSysParameters();

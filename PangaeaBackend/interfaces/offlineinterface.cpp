@@ -23,6 +23,7 @@ void OfflineInterface::startScan()
     m_discoveredDevicesList.append({DeviceDescription(MockLa3::mockName(), "virtual", DeviceConnectionType::Offline)});
 #ifndef Q_OS_ANDROID
     m_discoveredDevicesList.append({DeviceDescription(MockCP100fx::mockName(), "virtual", DeviceConnectionType::Offline)});
+m_discoveredDevicesList.append({DeviceDescription(MockCP100fx::mockName() + "-S", "virtual", DeviceConnectionType::Offline)});
 #endif
     emit sgDeviceListUpdated(DeviceConnectionType::Offline, m_discoveredDevicesList);
 }
@@ -52,7 +53,11 @@ bool OfflineInterface::connect(DeviceDescription device)
     }
     else if(device.name() == MockCP100fx::mockName())
     {
-        m_mockDevice = new MockCP100fx(&mutex, &m_uartBuffer);
+        m_mockDevice = new MockCP100fx(&mutex, &m_uartBuffer, Cp100fx::MONO_MOD);
+    }
+    else if(device.name() == MockCP100fx::mockName() + "-S")
+    {
+        m_mockDevice = new MockCP100fx(&mutex, &m_uartBuffer, Cp100fx::STEREO_MOD);
     }
     else
     {

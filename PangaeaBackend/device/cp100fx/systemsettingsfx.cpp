@@ -154,7 +154,7 @@ void SystemSettingsFx::exprOnDisplaySetter(double value)
     m_exprOn->modifyDisplayValue(value);
     emit m_exprOn->displayValueChanged();
 
-    sendDataToDevice(QByteArray(m_exprOn->commandString().toUtf8() + " " + (value ? "80" : "00")));
+    sendDataToDevice(QByteArray(m_exprOn->commandString().toUtf8() + " " + (value ? "80" : "00")) + "\r\n");
 }
 
 void SystemSettingsFx::exprTypeControlSetter(qint32 value)
@@ -174,7 +174,7 @@ void SystemSettingsFx::tunerCtrlDisplaySetter(double value)
     m_tunerControl->modifyDisplayValue(value);
     emit m_tunerControl->displayValueChanged();
 
-    sendDataToDevice(QByteArray(m_tunerControl->commandString().toUtf8() + " " + (value ? "80" : "00")));
+    sendDataToDevice(QByteArray(m_tunerControl->commandString().toUtf8() + " " + (value ? "80" : "00")) + "\r\n");
 }
 
 void SystemSettingsFx::tunerCcSetter(qint32 value)

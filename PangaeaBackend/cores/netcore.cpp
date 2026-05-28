@@ -68,6 +68,7 @@ void NetCore::requestNewestFirmware(Firmware *actualFirmware)
         case DeviceType::MODERN_CP: m_deviceTypeString = "CP16MODERN"; break;
         case DeviceType::LA3: m_deviceTypeString = "LA3"; break;
         case DeviceType::CP100FX: m_deviceTypeString = "CP100FX"; break;
+        case DeviceType::CP100FX_S: m_deviceTypeString = "CP100FX-S"; break;
         default: qDebug() << __FUNCTION__ << "Unknown device"; break;
     }
 
