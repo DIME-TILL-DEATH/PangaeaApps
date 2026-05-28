@@ -239,7 +239,7 @@ else()
                 "${CMAKE_BINARY_DIR}/WavConverterShell/irconverter.app"
                 "${RELEASE_APP_PATH}/Contents/MacOS/irconverter.app")
 
-
+            ################ App store #####################
             set(DEPLOY_PATH /Applications/)
             add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
                 COMMAND ditto #cp "-a"
@@ -261,26 +261,47 @@ else()
                     "${PROJECT_SOURCE_DIR}/../deploy_mac/AppStore/Pangaea-desktop.pkg"
                     VERBATIM)
 
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                    COMMAND rm -r
+                    "${DEPLOY_PATH}/Pangaea-desktop.app")
+
+            ####################### Standalone ########################
+            set(DEPLOY_PATH_STANDALONE ${PROJECT_SOURCE_DIR}/../deploy_mac/Standalone/)
+            add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
+                COMMAND ditto #cp "-a"
+                "${RELEASE_APP_PATH}"
+                "${DEPLOY_PATH_STANDALONE}/Payload/Pangaea-desktop.app")
 
             set(APPLE_CERTIFICATE_STANDALONE "Developer ID Application: AMT corporation S.R.L. (4PGXCAZDT5)")
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND codesign "-f" "--deep" "-s" "${APPLE_CERTIFICATE_STANDALONE}"
                     "--options=runtime"
                     "--timestamp"
-                    "${DEPLOY_PATH}/Pangaea-desktop.app"
+                    "${DEPLOY_PATH_STANDALONE}/Payload/Pangaea-desktop.app"
                     VERBATIM)
+
+            add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                COMMAND pkgbuild
+                "--identifier" "com.amtelectronics.pangaea-desktop"
+                "--root" "${DEPLOY_PATH_STANDALONE}/Payload/"
+                "--component-plist" "${DEPLOY_PATH_STANDALONE}/pkg.plist"
+                "--install-location" "/Applications"
+                "${DEPLOY_PATH_STANDALONE}/Pangaea-desktop-unsigned.pkg"
+                VERBATIM)
 
             set(APPLE_CERTIFICATE_STANDALONE_PKG "Developer ID Installer: AMT corporation S.R.L. (4PGXCAZDT5)")
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                 COMMAND productbuild "--sign"
                 "${APPLE_CERTIFICATE_STANDALONE_PKG}"
-                "--component" "${DEPLOY_PATH}/Pangaea-desktop.app"
-                "${PROJECT_SOURCE_DIR}/../deploy_mac/Standalone/Pangaea-desktop.pkg"
+                "--package" "${DEPLOY_PATH_STANDALONE}/Pangaea-desktop-unsigned.pkg"
+                "${DEPLOY_PATH_STANDALONE}/Pangaea-desktop.pkg"
                 VERBATIM)
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
                     COMMAND rm -r
-                    "${DEPLOY_PATH}/Pangaea-desktop.app")
+                    "${DEPLOY_PATH_STANDALONE}/Payload")
+
+
         endif()
     endif()
 
