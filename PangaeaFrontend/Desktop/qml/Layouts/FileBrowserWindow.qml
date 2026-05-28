@@ -237,8 +237,6 @@ Window{
                 target: _root.cp100fx.fileBrowser
                 function onModelReset() {
                     _fsObjectList.updateIrIndexes()
-                    // var posAt = (_chooseCabCombo.currentIndex === 0 ) ? _fsObjectList.indexIr1 : _fsObjectList.indexIr2
-                    // _fsObjectList.positionViewAtIndex(posAt, ListView.Contain)
                 }
             }
 
