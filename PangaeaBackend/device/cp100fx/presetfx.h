@@ -3,7 +3,6 @@
 
 #include <QDebug>
 
-#include "controllerfx.h"
 #include "presetabstract.h"
 #include "hardwarefxpreset.h"
 

@@ -82,6 +82,7 @@ ApplicationWindow
                 component = controlLayoutCPModernComponent;
                 break;
             case DeviceType.CP100FX:
+            case DeviceType.CP100FX_S:
                 component = controlLayoutCP100FXComponent;
                 break;
             default:

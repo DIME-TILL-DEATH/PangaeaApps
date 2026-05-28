@@ -20,6 +20,8 @@ RowLayout{
     ParameterComboBox{
         id: _attenuatorSrc
 
+        visible: root.cp100fx.modification === Cp100fx.MONO_MOD
+
         Layout.preferredWidth: height
         Layout.fillHeight: true
 
@@ -34,6 +36,8 @@ RowLayout{
         Layout.preferredWidth: height
         Layout.fillHeight: true
 
+        visible: root.cp100fx.modification === Cp100fx.MONO_MOD
+
         ctrlValInstance: root.cp100fx.attenuator.value
 
         model: [" +4 dB", " +3 dB", " +2 dB", " +1 dB", "  0 dB", " -1 dB", " -2 dB", " -3 dB",
@@ -43,6 +47,50 @@ RowLayout{
             "-40 dB", "-41 dB", "-42 dB", "-43 dB", "-44 dB", "-45 dB", "-46 dB", "-47 dB", "-48 dB",
             "-49 dB", "-50 dB", "-51 dB", "-52 dB", "-53 dB", "-54 dB", "-55 dB", "-56 dB", "-57 dB",
             "-58 dB", "-59 dB", "-60 dB"]
+    }
+
+    Row{
+        Layout.preferredWidth: height*4
+        Layout.fillHeight: true
+        Layout.margins: 4
+
+        visible: root.cp100fx.modification === Cp100fx.STEREO_MOD
+
+        ParameterSwitch{
+            width: height
+            height: parent.height
+            y: parent.height/10
+
+            invertedValue: 1
+
+            ctrlValInstance: root.cp100fx.stereoInputFx.inlEnable
+        }
+
+        ParameterDial{
+            width: height
+            height: parent.height
+            y: parent.height/10
+
+            controlValue: root.cp100fx.stereoInputFx.inlPan
+        }
+
+        ParameterSwitch{
+            width: height
+            height: parent.height
+            y: parent.height/10
+
+            invertedValue: 1
+
+            ctrlValInstance: root.cp100fx.stereoInputFx.inrEnable
+        }
+
+        ParameterDial{
+            width: height
+            height: parent.height
+            y: parent.height/10
+
+            controlValue: root.cp100fx.stereoInputFx.inrPan
+        }
     }
 
     MEQ{

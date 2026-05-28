@@ -30,6 +30,7 @@
 #include "fswfx.h"
 #include "systemsettingsfx.h"
 #include "controlspresetfx.h"
+#include "stereoinputfx.h"
 
 class Cp100fx : public AbstractDevice
 {
@@ -48,11 +49,20 @@ class Cp100fx : public AbstractDevice
     Q_PROPERTY(QList<ControllerFx*> controller READ controller NOTIFY controllersChanged)
     Q_PROPERTY(SystemSettingsFx* systemSettings READ systemSettings CONSTANT)
     Q_PROPERTY(ControlsPresetFx* controlsPresetFx READ controlsPresetFx CONSTANT)
+    Q_PROPERTY(StereoInputFx* stereoInputFx READ stereoInputFx CONSTANT)
 
     Q_PROPERTY(QString ir1Name READ ir1Name NOTIFY irNamesChanged FINAL)
     Q_PROPERTY(QString ir2Name READ ir2Name NOTIFY irNamesChanged FINAL)
+
+    Q_PROPERTY(Modification modification READ modification CONSTANT FINAL)
 public:
-    Cp100fx(Core *parent);
+    enum Modification{
+        MONO_MOD,
+        STEREO_MOD
+    };
+    Q_ENUM(Modification)
+
+    Cp100fx(Core *parent, Modification modification);
     ~Cp100fx();
 
     QStringList strPresetNumbers() override;
@@ -110,6 +120,7 @@ public:
     MasterEq* masterEq() {return &m_masterEq;};
     SystemSettingsFx* systemSettings() {return &m_systemSettings;};
     ControlsPresetFx* controlsPresetFx() {return &m_controlsPresetfx;};
+    StereoInputFx* stereoInputFx() {return &m_stereoInputFx;};
     Tuner* tuner() {return &m_tuner;};
 
     QString currentPresetName() const;
@@ -124,6 +135,8 @@ public:
 
     QString ir1Name() {return m_ir1Name;}
     QString ir2Name() {return m_ir2Name;}
+    Modification modification() const {return m_modification;}
+
 public slots:
     QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
@@ -152,6 +165,7 @@ private:
     FswFx m_fswDown{0, this};
     FswFx m_fswConfirm{1, this};
     FswFx m_fswUp{2, this};
+    StereoInputFx m_stereoInputFx{this};
 
     PresetFx* actualPresetFx;
     PresetFx* savedPresetFx;
@@ -165,6 +179,8 @@ private:
     QByteArray m_previewIrData;
 
     const uint32_t uploadBlockSize = 100;
+
+    Modification m_modification{MONO_MOD};
 
     void pushReadPresetCommands();
 
@@ -196,6 +212,8 @@ private:
     void tunerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void setModulePositions();
+
+
 
 private slots:
     void modulesChangedPosition();

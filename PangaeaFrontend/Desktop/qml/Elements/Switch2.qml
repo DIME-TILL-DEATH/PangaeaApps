@@ -23,7 +23,8 @@ Item
 
         radius: height/2
 
-        color: main.value ? Style.currentTheme.barHigh : Style.currentTheme.borderOff
+        color: invertedValue ? (main.value ? Style.currentTheme.borderOff : Style.currentTheme.barHigh)
+                             : (main.value  ? Style.currentTheme.barHigh : Style.currentTheme.borderOff)
         border.color: Style.currentTheme.borderOn
 
         Behavior on color{ColorAnimation {duration: 200}}

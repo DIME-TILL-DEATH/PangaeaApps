@@ -78,7 +78,8 @@ void Core::parseInputData(QByteArray ba)
         {
         case DeviceType::MODERN_CP: currentDevice = new CPModern(this); break;
         case DeviceType::LA3: currentDevice = new LAPreamp(this); break;
-        case DeviceType::CP100FX: currentDevice = new Cp100fx(this); break;
+        case DeviceType::CP100FX: currentDevice = new Cp100fx(this, Cp100fx::MONO_MOD); break;
+        case DeviceType::CP100FX_S: currentDevice = new Cp100fx(this, Cp100fx::STEREO_MOD); break;
         default: currentDevice = new CPLegacy(this);
         }
 

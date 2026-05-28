@@ -48,7 +48,8 @@ public:
         TUNER,
         SYSTEM,
         FOOTSWITCH,
-        CONTROLLER
+        CONTROLLER,
+        STEREO_INPUT
     };
     Q_ENUM(Value)
 };

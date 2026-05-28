@@ -117,8 +117,7 @@ BaseModule{
 
             ctrlValInstance: module.tail
 
-            textLeft: "ON"
-            textRight: "OFF"
+            invertedValue: 1
 
             moduleOn: module.moduleEnabled
         }

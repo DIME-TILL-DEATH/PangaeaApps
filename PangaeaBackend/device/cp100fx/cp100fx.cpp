@@ -8,12 +8,17 @@
 #include "systemsettingsfx.h"
 #include "controllerfx.h"
 
-Cp100fx::Cp100fx(Core *parent)
-    : AbstractDevice{parent}
+Cp100fx::Cp100fx(Core *parent, Modification modification)
+    : AbstractDevice{parent},
+    m_modification{modification}
 {
     using namespace std::placeholders;
 
-    m_minimalFirmware = Firmware("2.01.04", DeviceType::CP100FX, FirmwareType::DeviceInternal, "");
+    switch(m_modification)
+    {
+        case MONO_MOD: m_minimalFirmware = Firmware("2.01.05", DeviceType::CP100FX, FirmwareType::DeviceInternal, ""); break;
+        case STEREO_MOD: m_minimalFirmware = Firmware("2.01.05", DeviceType::CP100FX_S, FirmwareType::DeviceInternal, ""); break;
+    }
 
     m_parser.addCommandHandler("amtver", std::bind(&Cp100fx::amtVerCommHandler, this, _1, _2, _3));
 
@@ -713,7 +718,14 @@ void Cp100fx::amtVerCommHandler(const QString &command, const QByteArray &argume
 {
     QString firmwareVersion = data;
 
-    m_firmwareName += "CP100FX v." + firmwareVersion;
+    QString deviceName;
+    switch(m_modification)
+    {
+        case MONO_MOD: deviceName = "CP100FX"; break;
+        case STEREO_MOD: deviceName = "CP100FX-S"; break;
+    }
+
+    m_firmwareName = deviceName + " v." + firmwareVersion;
     emit firmwareNameChanged();
 
     m_actualFirmware = Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
@@ -939,6 +951,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
         m_attenuator.setPresetValue(presetData.attenuator);
         m_controlsPresetfx.presetVolume()->setControlValue(presetData.preset_volume);
+        m_stereoInputFx.setValues(presetData);
         emit presetVolumeControlChanged();
         emit deviceUpdatingValues(); // for correct update Att. ComboBoxes
 
@@ -987,6 +1000,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     default:
     {
         m_attenuator.setPresetValue(presetData.attenuator);
+        m_stereoInputFx.setValues(presetData);
         m_controlsPresetfx.presetVolume()->setControlValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
         emit deviceUpdatingValues();

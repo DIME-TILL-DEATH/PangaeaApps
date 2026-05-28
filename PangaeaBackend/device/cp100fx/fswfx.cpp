@@ -4,8 +4,7 @@
 
 FswFx::FswFx(quint8 num, AbstractDevice *owner)
     : AbstractModule(owner, ModuleType::SYSTEM, QString("Footswitch %1").arg(num), ""),
-    m_num{num},
-    m_owner{owner}
+    m_num{num}
 {
     m_mode = new ControlValue(this, nullptr, QString("fsw %1 mode").arg(m_num), "Mode");
 
@@ -50,7 +49,7 @@ void FswFx::setData(const TSystemSettingsFx &data)
         m_pressPreset[i]->setControlValue(data.fswPressPreset[m_num][i]);
         m_holdPreset[i]->setControlValue(data.fswHoldPreset[m_num][i]);
     }
-    emit paramsChanged();
+    emit dataChanged();
     emit fswTypeChanged();
 }
 

@@ -57,7 +57,6 @@ Item{
         anchors.verticalCenter: _root.isHorizontal ? parent.verticalCenter : undefined
         anchors.left: _root.isHorizontal ? _editValueItem.right : undefined
 
-
         isHorizontal: _root.isHorizontal
 
         value: ctrlValInstance.displayValue

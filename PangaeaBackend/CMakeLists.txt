@@ -121,6 +121,7 @@ qt_add_qml_module(PangaeaBackend
         modules/volume.h modules/volume.cpp
         modules/mastereq.h modules/mastereq.cpp
         modules/tuner.h modules/tuner.cpp
+        SOURCES device/cp100fx/stereoinputfx.h device/cp100fx/stereoinputfx.cpp
 )
 
 
