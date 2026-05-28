@@ -241,13 +241,13 @@ MenuBar{
         MenuItem{
             text: qsTr("AMT web site")
 
-            onTriggered: Qt.openUrlExternally("http://www.amtelectronics.com/");
+            onTriggered: Qt.openUrlExternally("https://amt-sales.ru//");
         }
 
         MenuItem{
             text: qsTr("Pangaea web page")
 
-            onTriggered: Qt.openUrlExternally("https://media.amt-sales.com/cat/cab-emulation/pangaea-series/")
+            onTriggered: Qt.openUrlExternally("https://media.amtelectronics.ru/cat/cab-emulation/pangaea-series/")
         }
 
         MenuItem{
@@ -421,6 +421,14 @@ MenuBar{
                 case DeviceType.CP100FX:
                 {
                     menuDeviceManual.strManualBaseName = "pangaea-CP100FX-user-manual";
+
+                    _importPreset.enabled = false;
+                    _exportPreset.enabled = false;
+                    break;
+                }
+                case DeviceType.CP100FX_S:
+                {
+                    menuDeviceManual.strManualBaseName = "pangaea-CP100FX-S-user-manual";
 
                     _importPreset.enabled = false;
                     _exportPreset.enabled = false;

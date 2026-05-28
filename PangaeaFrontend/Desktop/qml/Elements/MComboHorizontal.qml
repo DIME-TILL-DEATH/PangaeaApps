@@ -12,6 +12,7 @@ Row{
     property alias model: _combo.model
 
     property alias indicator: _combo.indicator
+    property alias focusPolicy: _combo.focusPolicy
 
     signal activated(index: int)
 

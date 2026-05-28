@@ -30,6 +30,8 @@ Window{
 
     property alias currentCabNum: _chooseCabCombo.currentIndex
 
+    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
+
     signal cabNumChanged(var cabNum)
 
     DialogTextInput{
@@ -115,19 +117,24 @@ Window{
         MComboHorizontal{
             id: _chooseCabCombo
 
-            visible: UiCore.currentDevice.systemSettings.cabNumber === 2
+            visible: _root.cp100fx.modification === Cp100fx.MONO_MOD ? _root.cp100fx.systemSettings.cabNumber === 2
+                                                                     : true
 
             Layout.preferredHeight: parent.height/14
             Layout.preferredWidth: parent.width/3
             Layout.leftMargin: width/10
             Layout.rightMargin: width/20
 
+            focusPolicy: Qt.NoFocus
+
             text: "Cab num:"
 
-            model: ["1", "2"]
+            model: (_root.cp100fx.modification === Cp100fx.MONO_MOD) ? ["1", "2"] : ["R", "L"]
 
             onActivated: {
                 _root.cabNumChanged(_chooseCabCombo.currentIndex)
+                _fsObjectList.positionViewAtIndex((_chooseCabCombo.currentIndex === 0 ) ? _fsObjectList.indexIr1 : _fsObjectList.indexIr2,
+                                                  ListView.Center)
             }
         }
 
@@ -139,6 +146,7 @@ Window{
         ListView{
             id: _fsObjectList
 
+            focus: true
 
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillWidth: true
@@ -155,11 +163,17 @@ Window{
                             ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
                 }
 
+            property int indexIr1: -1
+            property int indexIr2: -1
+
             delegate: Item{
                 id: _delegate
 
                 width: _fsObjectList.width
                 height: _nameText.font.pixelSize * 1.5 //_fsObjectList.height/10
+
+                property bool isCurrentImpulse: _chooseCabCombo.currentIndex === 0 ? UiCore.currentDevice.ir1Name === name
+                                                                                   : UiCore.currentDevice.ir2Name === name
 
                 MText{
                     id: _nameText
@@ -172,9 +186,7 @@ Window{
                                (_chooseCabCombo.currentIndex === 0 ? (UiCore.currentDevice.ir1Name === name) : (UiCore.currentDevice.ir2Name === name))
 
                     color: type === FileBrowserModel.Dir ? Style.currentTheme.textSecondary
-                                : _chooseCabCombo.currentIndex === 0 ?
-                                    (UiCore.currentDevice.ir1Name === name ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled ) :
-                                    (UiCore.currentDevice.ir2Name === name ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled )
+                                                          : (_delegate.isCurrentImpulse ? Style.currentTheme.highlightColor : Style.currentTheme.textEnabled)
                     elide: Text.ElideMiddle
                 }
 
@@ -194,6 +206,90 @@ Window{
                         {
                             UiCore.currentDevice.selectFsObject(name, type, _chooseCabCombo.currentIndex);
                         }
+                    }
+                }
+            }
+
+            function updateIrIndexes(){
+                _fsObjectList.indexIr1 = -1
+                _fsObjectList.indexIr2 = -1
+
+                for(var i=0; i<_fsObjectList.model.rowCount(); i++){
+                    var index = _fsObjectList.model.index(i, 0)
+                    var itemData = model.data(index, Qt.UserRole + 1)
+
+                    if(itemData === _root.cp100fx.ir1Name) _fsObjectList.indexIr1 = i
+                    if(itemData === _root.cp100fx.ir2Name) _fsObjectList.indexIr2 = i
+                }
+
+                _fsObjectList.positionViewAtIndex((_chooseCabCombo.currentIndex === 0 ) ? _fsObjectList.indexIr1 : _fsObjectList.indexIr2,
+                                                  ListView.Contain)
+            }
+
+            Connections{
+                target: _root.cp100fx
+                function onIrNamesChanged() {
+                    _fsObjectList.updateIrIndexes()
+                }
+            }
+
+            Connections{
+                target: _root.cp100fx.fileBrowser
+                function onModelReset() {
+                    _fsObjectList.updateIrIndexes()
+                    // var posAt = (_chooseCabCombo.currentIndex === 0 ) ? _fsObjectList.indexIr1 : _fsObjectList.indexIr2
+                    // _fsObjectList.positionViewAtIndex(posAt, ListView.Contain)
+                }
+            }
+
+            onModelChanged: _fsObjectList.updateIrIndexes()
+
+            Shortcut {
+                sequence: "Up"
+                onActivated: {
+                    var workIndex = (_chooseCabCombo.currentIndex === 0 ) ? _fsObjectList.indexIr1 : _fsObjectList.indexIr2
+
+                    if(workIndex !== -1 && workIndex > 0){
+                        workIndex--;
+                        var index = _fsObjectList.model.index(workIndex, 0)
+                        var itemName = _fsObjectList.model.data(index, Qt.UserRole + 1)
+                        var itemType = _fsObjectList.model.data(index, Qt.UserRole + 2)
+
+                        if(itemType !== FileBrowserModel.File)
+                            workIndex++;
+                        else
+                        {
+                            _root.cp100fx.selectFsObject(itemName, itemType, _chooseCabCombo.currentIndex);
+                            // _fsObjectList.positionViewAtIndex(workIndex, ListView.Center)
+                        }
+
+                        if(_chooseCabCombo.currentIndex === 0) _fsObjectList.indexIr1 = workIndex
+                        else _fsObjectList.indexIr2 = workIndex
+                    }
+                }
+            }
+
+            Shortcut {
+                sequence: "Down"
+                onActivated: {
+                    var workIndex = (_chooseCabCombo.currentIndex === 0 ) ? _fsObjectList.indexIr1 : _fsObjectList.indexIr2
+
+                    if(workIndex !== -1 && workIndex < _fsObjectList.count - 1){
+                        workIndex++;
+                        var index = _fsObjectList.model.index(workIndex, 0)
+                        var itemName = _fsObjectList.model.data(index, Qt.UserRole + 1)
+                        var itemType = _fsObjectList.model.data(index, Qt.UserRole + 2)
+
+                        if(itemType !== FileBrowserModel.File)
+                            workIndex--;
+                        else
+                        {
+                            _root.cp100fx.selectFsObject(itemName, itemType, _chooseCabCombo.currentIndex);
+                            // _fsObjectList.positionViewAtIndex(workIndex, ListView.Center)
+                        }
+
+                        if(_chooseCabCombo.currentIndex === 0) _fsObjectList.indexIr1 = workIndex
+                        else _fsObjectList.indexIr2 = workIndex
                     }
                 }
             }
@@ -247,8 +343,6 @@ Window{
                      border.color: Style.currentTheme.borderOn
                 }
             }
-
-
         }
 
         Rectangle{
