@@ -78,7 +78,8 @@ void Core::parseInputData(QByteArray ba)
         {
         case DeviceType::MODERN_CP: currentDevice = new CPModern(this); break;
         case DeviceType::LA3: currentDevice = new LAPreamp(this); break;
-        case DeviceType::CP100FX: currentDevice = new Cp100fx(this); break;
+        case DeviceType::CP100FX: currentDevice = new Cp100fx(this, Cp100fx::MONO_MOD); break;
+        case DeviceType::CP100FX_S: currentDevice = new Cp100fx(this, Cp100fx::STEREO_MOD); break;
         default: currentDevice = new CPLegacy(this);
         }
 
@@ -124,7 +125,25 @@ void Core::slDeviceInstanciated()
         // Подождать пока прогрузится интерфейс, тк MOCK устройства отвечают слишком быстро в том же потоке
         // TODO возможно нужны сигналы подтверждения от loader
         QThread::msleep(100);
+
+        ControlValue::delayedSend = false;
     }
+    switch(m_currentConnectionType)
+    {
+    case DeviceConnectionTypeEnum::USB:
+    {
+        ControlValue::delayedSend = false;
+        break;
+    }
+    case DeviceConnectionTypeEnum::Offline:
+    {
+        QThread::msleep(100);
+        ControlValue::delayedSend = false;
+        break;
+    }
+    default: ControlValue::delayedSend = false;
+    }
+
     currentDevice->readFullState();
 
     emit sgCurrentDeviceChanged(currentDevice);

@@ -20,6 +20,7 @@ public:
         LEGACY_CP100PA,
 
         CP100FX,
+        CP100FX_S,
 
         LEGACY_DEVICES = 15,
         //-------------------------------

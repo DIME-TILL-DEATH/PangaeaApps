@@ -117,7 +117,6 @@ bool UsbInterface::connect(DeviceDescription device)
     m_port->setStopBits(QSerialPort::OneStop);
     m_port->setFlowControl(QSerialPort::HardwareControl);
 #endif
-
     bool isPortOpened = m_port->open(QIODevice::ReadWrite);
 
     if(isPortOpened)

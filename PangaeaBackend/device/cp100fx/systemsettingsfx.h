@@ -5,6 +5,8 @@
 #include <QQmlEngine>
 
 #include "abstractdevice.h"
+#include "abstractmodule.h"
+#include "controlvalue.h"
 
 enum
 {
@@ -142,108 +144,83 @@ typedef struct
 
 
 
-class SystemSettingsFx : public QObject
+class SystemSettingsFx : public AbstractModule
 {
     Q_OBJECT
     QML_ELEMENT
     QML_UNCREATABLE("")
 
-    Q_PROPERTY(quint8 mode READ mode WRITE setMode NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 cabNumber READ cabNumber WRITE setCabNumber NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 midiChannel READ midiChannel WRITE setMidiChannel NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* mode READ mode NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* cabNumber READ cabNumber NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* midiChannel READ midiChannel NOTIFY settingsChanged FINAL)
 
-    Q_PROPERTY(quint8 exprOn READ exprOn WRITE setExprOn NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 exprType READ exprType WRITE setExprType NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 exprCC READ exprCC WRITE setExprCC NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 exprStoreLevel READ exprStoreLevel WRITE setExprStoreLevel NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 spdif READ spdif WRITE setSpdif NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 tempo READ tempo WRITE setTempo NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 tunerControl READ tunerControl WRITE setTunerControl NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 tunerCC READ tunerCC WRITE setTunerCC NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 timeFormat READ timeFormat WRITE setTimeFormat NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 swapConf READ swapConf WRITE setSwapConf NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* exprOn READ exprOn NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* exprType READ exprType NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* exprCC READ exprCC NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* exprStoreLevel READ exprStoreLevel NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* spdif READ spdif NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* tempo READ tempo NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* tunerControl READ tunerControl NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* tunerCC READ tunerCC NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* timeFormat READ timeFormat NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* swapConf READ swapConf NOTIFY settingsChanged FINAL)
 
-    Q_PROPERTY(quint8 tunerSpeed READ tunerSpeed WRITE setTunerSpeed NOTIFY settingsChanged FINAL)
-    Q_PROPERTY(quint8 fswSpeed READ fswSpeed WRITE setFswSpeed NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* tunerSpeed READ tunerSpeed NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(ControlValue* fswSpeed READ fswSpeed NOTIFY settingsChanged FINAL)
 
-    Q_PROPERTY(QList<quint8> midiPcMap READ midiPcMap NOTIFY settingsChanged FINAL)
+    Q_PROPERTY(QList<ControlValue*> midiPcMap READ midiPcMap NOTIFY settingsChanged FINAL)
 public:
     explicit SystemSettingsFx(AbstractDevice *owner);
 
     void setSettings(TSystemSettingsFx settings);
 
-    quint8 mode() const;
-    void setMode(quint8 newMode);
+    ControlValue* mode() const;
+    ControlValue* midiChannel() const;
+    ControlValue* cabNumber() const;
+    ControlValue* exprOn() const;
+    ControlValue* exprType() const;
+    ControlValue* exprCC() const;
+    ControlValue* exprStoreLevel() const;
+    ControlValue* spdif() const;
+    ControlValue* tempo() const;
+    ControlValue* tunerControl() const;
+    ControlValue* timeFormat() const;
+    ControlValue* swapConf() const;
+    ControlValue* tunerSpeed() const;
+    ControlValue* fswSpeed() const;
+    ControlValue* tunerCC() const;
 
-    quint8 midiChannel() const;
-    void setMidiChannel(quint8 newMidiChannel);
-
-    quint8 cabNumber() const;
-    void setCabNumber(quint8 newCabNumber);
-
-    quint8 exprOn() const;
-    void setExprOn(quint8 newExprOn);
-
-    quint8 exprType() const;
-    void setExprType(quint8 newExprType);
-
-    quint8 exprCC() const;
-    void setExprCC(quint8 newExprCC);
-
-    quint8 exprStoreLevel() const;
-    void setExprStoreLevel(quint8 newExprStoreLevel);
-
-    quint8 spdif() const;
-    void setSpdif(quint8 newSpdif);
-
-    quint8 tempo() const;
-    void setTempo(quint8 newTempo);
-
-    quint8 tunerControl() const;
-    void setTunerControl(quint8 newTunerControl);
-
-    quint8 timeFormat() const;
-    void setTimeFormat(quint8 newTimeFormat);
-
-    quint8 swapConf() const;
-    void setSwapConf(quint8 newSwapConf);
-
-    quint8 tunerSpeed() const;
-    void setTunerSpeed(quint8 newTunerSpeed);
-
-    quint8 fswSpeed() const;
-    void setFswSpeed(quint8 newFswSpeed);
-
-    quint8 tunerCC() const;
-    void setTunerCC(quint8 newTunerCC);
-
-    QList<quint8> midiPcMap() const;
-    Q_INVOKABLE void setMidiPcMap(quint8 pcNumber, quint8 presetNumber);
-
+    QList<ControlValue *> midiPcMap() const;
 signals:
     void settingsChanged();
 private:
     AbstractDevice* m_owner;
 
-    quint8 m_mode;
-    quint8 m_midiChannel;
-    quint8 m_cabNumber;
-    quint8 m_exprOn;
-    quint8 m_exprType;
-    quint8 m_exprCC;
-    quint8 m_exprStoreLevel;
-    quint8 m_spdif;
-    quint8 m_tempo;
-    quint8 m_tunerControl;
-    quint8 m_timeFormat;
-    quint8 m_swapConf;
-    quint8 m_tunerSpeed;
-    quint8 m_fswSpeed;
-    quint8 m_tunerCC;
+    ControlValue* m_mode = nullptr;
+    ControlValue* m_midiChannel = nullptr;
+    ControlValue* m_cabNumber = nullptr;
+    ControlValue* m_exprOn = nullptr;
+    ControlValue* m_exprType = nullptr;
+    ControlValue* m_exprCC = nullptr;
+    ControlValue* m_exprStoreLevel = nullptr;
+    ControlValue* m_spdif = nullptr;
+    ControlValue* m_tempo = nullptr;
+    ControlValue* m_tunerControl = nullptr;
+    ControlValue* m_timeFormat = nullptr;
+    ControlValue* m_swapConf = nullptr;
+    ControlValue* m_tunerSpeed = nullptr;
+    ControlValue* m_fswSpeed = nullptr;
+    ControlValue* m_tunerCC = nullptr;
 
-    QList<quint8> m_midiPcMap;
+    QList<ControlValue*> m_midiPcMap;
 
-    void sendData(const QByteArray& data);
+    void exprOnControlSetter(qint32 value);
+    void exprOnDisplaySetter(double value);
+    void exprTypeControlSetter(qint32 value);
+
+    void tunerCtrlValueSetter(qint32 value);
+    void tunerCtrlDisplaySetter(double value);
+    void tunerCcSetter(qint32 value);
 };
 
 #endif // SYSTEMSETTINGSFX_H

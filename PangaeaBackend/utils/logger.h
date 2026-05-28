@@ -17,11 +17,12 @@ public:
     static void messageOutputHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
     void setAsMessageHandlerForApp();
 
+    static Logger* currentHandler;
+
 private:
     QFile logFile;
     QTextStream outLog;
 
-    static Logger* currentHandler;
     void messageOutputHandlerImplementation(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 };
 

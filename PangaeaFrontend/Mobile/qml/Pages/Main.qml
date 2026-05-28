@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls.Material
+import QtCore
 
 import CustomOverlays 1.0
 import Elements 1.0
@@ -15,7 +16,7 @@ ApplicationWindow
     id: _main
 
     visible: true
-    // visibility: Window.FullScreen
+    visibility: (Qt.platform.os === "android" & UiCore.apiVersion > 34) ? Window.FullScreen : Window.AutomaticVisibility
 
     color: "#EBECEC"
 
@@ -32,6 +33,14 @@ ApplicationWindow
 
     function openConnectPage()    {
         _swipeView.currentIndex=0
+    }
+
+    Component.onCompleted:
+    {
+        UiCore.setupApplication();
+
+        InterfaceManager.startScanning(DeviceConnectionType.BLE);
+        InterfaceManager.startScanning(DeviceConnectionType.USB)
     }
 
     header: ApplicationHeader
@@ -207,13 +216,6 @@ ApplicationWindow
         {
             InterfaceManager.startScanning(DeviceConnectionType.BLE)
         }
-    }
-
-    Component.onCompleted:
-    {
-        UiCore.setupApplication();
-        InterfaceManager.startScanning(DeviceConnectionType.BLE);
-        InterfaceManager.startScanning(DeviceConnectionType.USB)
     }
 
     Connections{

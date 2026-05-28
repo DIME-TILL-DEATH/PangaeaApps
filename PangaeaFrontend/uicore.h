@@ -2,9 +2,7 @@
 #define UICORE_H
 
 #include <QQmlApplicationEngine>
-#include <QtQml>
 
-#include <QObject>
 #include <QTimer>
 #include <QSettings>
 #include <QTranslator>
@@ -20,8 +18,13 @@
 class UiCore : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
+
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged FINAL)
     Q_PROPERTY(AbstractDevice* currentDevice READ currentDevice NOTIFY currentDeviceChanged FINAL)
+
+    Q_PROPERTY(quint16 apiVersion READ apiVersion CONSTANT)
 public:
     explicit UiCore(QObject *parent = nullptr);
     ~UiCore();
@@ -54,6 +57,15 @@ public:
     void setModuleName(const QString &newModuleName);
 
     AbstractDevice *currentDevice() const {return m_currentDevice;};
+
+    quint16 apiVersion();
+
+    static UiCore* instance;
+    static QObject* singletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        return instance;
+    }
 
 signals:
 
@@ -106,6 +118,7 @@ public slots:
 // #endif
 
 private:
+
     QQmlApplicationEngine* m_qmlEngine;
 
     QTranslator m_translator;

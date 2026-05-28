@@ -213,10 +213,15 @@ typedef struct
 
     uint8_t tremolo_lfo_type;
 
+    uint8_t in_left_en;
+    uint8_t in_right_en;
+    uint8_t in_left_pan;
+    uint8_t in_right_pan;
+
     uint8_t delay_tail;
     uint8_t reverb_tail;
 
-    uint8_t dummy2[349];
+    uint8_t dummy2[345];
 
     uint8_t attenuator;
 

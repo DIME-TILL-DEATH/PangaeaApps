@@ -1,6 +1,6 @@
 import QtQuick
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Rectangle{
@@ -74,20 +74,23 @@ Rectangle{
         }
 
         onWheel: function(wheel){
-            var resultQ = module.EqBands[selectedBandIndex].Q.displayValue;
-
-            if(wheel.angleDelta.y < 0)
+            if(filterType !== FilterType.LOW_CUT && filterType !== FilterType.HIGH_CUT)
             {
-                resultQ *= 0.9;
-                if(resultQ < module.EqBands[selectedBandIndex].Q.minDisplayValue) resultQ = module.EqBands[selectedBandIndex].Q.minDisplayValue;
-            }
+                var resultQ = module.EqBands[selectedBandIndex].Q.displayValue;
 
-            if(wheel.angleDelta.y > 0)
-            {
-                resultQ *= 1.1;
-                if(resultQ > module.EqBands[selectedBandIndex].Q.maxDisplayValue) resultQ = module.EqBands[selectedBandIndex].Q.maxDisplayValue;
+                if(wheel.angleDelta.y < 0)
+                {
+                    resultQ *= 0.9;
+                    if(resultQ < module.EqBands[selectedBandIndex].Q.minDisplayValue) resultQ = module.EqBands[selectedBandIndex].Q.minDisplayValue;
+                }
+
+                if(wheel.angleDelta.y > 0)
+                {
+                    resultQ *= 1.1;
+                    if(resultQ > module.EqBands[selectedBandIndex].Q.maxDisplayValue) resultQ = module.EqBands[selectedBandIndex].Q.maxDisplayValue;
+                }
+                module.EqBands[selectedBandIndex].Q.displayValue = resultQ;
             }
-            module.EqBands[selectedBandIndex].Q.displayValue = resultQ;
         }
     }
 

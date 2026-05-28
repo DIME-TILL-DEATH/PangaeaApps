@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 import Elements
 
-import CppObjects
+import PangaeaFrontend
 
 Rectangle {
     id: root

@@ -23,18 +23,21 @@ if(ANDROID)
 endif()
 
 qt_add_library(PangaeaBackend STATIC
+    threadcontroller.cpp threadcontroller.h
+
+    utils/logger.cpp utils/logger.h
+
     cores/core.cpp cores/core.h
     cores/netcore.cpp cores/netcore.h
     cores/interfacemanager.cpp cores/interfacemanager.h
 
     interfaces/abstractinterface.cpp interfaces/abstractinterface.h
     interfaces/bleinterface.cpp interfaces/bleinterface.h
-    # interfaces/usbinterface.cpp interfaces/usbinterface.h
     interfaces/offlineinterface.h interfaces/offlineinterface.cpp
+    ${USB_INTERFACE_SOURCES}
 
     device/defines.h
 
-    device/abstractdevice.h device/abstractdevice.cpp
     device/deviceanswer.cpp device/deviceanswer.h
     device/deviceparameter.h device/deviceparameter.cpp
     device/firmware.cpp device/firmware.h
@@ -42,17 +45,11 @@ qt_add_library(PangaeaBackend STATIC
     device/irfile.h device/irfile.cpp
     device/cp/presetlegacy.cpp device/cp/presetlegacy.h
     device/cp/presetmodern.h device/cp/presetmodern.cpp
-    device/cp/cplegacy.h device/cp/cplegacy.cpp
-    device/cp/cpmodern.h device/cp/cpmodern.cpp
-    device/cp/lapreamp.h device/cp/lapreamp.cpp
-    device/cp100fx/cp100fx.h device/cp100fx/cp100fx.cpp
     device/cp100fx/presetfx.h device/cp100fx/presetfx.cpp
     device/cp100fx/fswfx.h device/cp100fx/fswfx.cpp
-    device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
     device/cp100fx/controllerfx.h device/cp100fx/controllerfx.cpp
 
-    device/cp/hardwareclassicpreset.h
-    device/cp/hardwareclassicpreset.cpp
+    device/cp/hardwareclassicpreset.h device/cp/hardwareclassicpreset.cpp
     device/cp100fx/hardwarefxpreset.h
 
     models/presetlistmodel.cpp models/presetlistmodel.h
@@ -71,15 +68,13 @@ qt_add_library(PangaeaBackend STATIC
     mock/mockla3.h mock/mockla3.cpp
     mock/mockcp100fx.h mock/mockcp100fx.cpp
 
-    ${USB_INTERFACE_SOURCES}
     ${PLATFORM_SPECIFIC_SOURCES}
 )
 
+set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
 qt_add_qml_module(PangaeaBackend
-    URI PangaeaBackend
+    URI "PangaeaBackend"
     VERSION 1.0
-    RESOURCE_PREFIX /
-
     SOURCES
 
         uihelpers/devicetypeenum.h
@@ -92,7 +87,16 @@ qt_add_qml_module(PangaeaBackend
 
         interfaces/devicedescription.cpp interfaces/devicedescription.h
 
+        device/abstractdevice.h device/abstractdevice.cpp
+        device/cp/cplegacy.h device/cp/cplegacy.cpp
+        device/cp/cpmodern.h device/cp/cpmodern.cpp
+        device/cp/lapreamp.h device/cp/lapreamp.cpp
+        device/cp100fx/cp100fx.h device/cp100fx/cp100fx.cpp
+        device/cp100fx/controlspresetfx.h device/cp100fx/controlspresetfx.cpp
+        device/cp100fx/systemsettingsfx.h device/cp100fx/systemsettingsfx.cpp
+
         modules/abstractmodule.cpp modules/abstractmodule.h
+        modules/attenuator.h modules/attenuator.cpp
         modules/cabsim.h modules/cabsim.cpp
         modules/chorus.h modules/chorus.cpp
         modules/compressor.h modules/compressor.cpp
@@ -117,6 +121,7 @@ qt_add_qml_module(PangaeaBackend
         modules/volume.h modules/volume.cpp
         modules/mastereq.h modules/mastereq.cpp
         modules/tuner.h modules/tuner.cpp
+        SOURCES device/cp100fx/stereoinputfx.h device/cp100fx/stereoinputfx.cpp
 )
 
 

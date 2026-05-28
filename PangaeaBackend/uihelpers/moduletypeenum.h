@@ -44,7 +44,12 @@ public:
         IR_STEREO,
         //====================
         MASTER=128,
-        TUNER
+        ATTENUATOR,
+        TUNER,
+        SYSTEM,
+        FOOTSWITCH,
+        CONTROLLER,
+        STEREO_INPUT
     };
     Q_ENUM(Value)
 };

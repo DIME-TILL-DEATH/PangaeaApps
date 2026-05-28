@@ -10,8 +10,18 @@ AbstractModule::AbstractModule(AbstractDevice* owner, ModuleType moduleType, QSt
     m_moduleName{name},
     m_commandOnOff{commandOnOff}
 {
-    if(owner) connect(this, &AbstractModule::userModifiedModuleParameters, owner, &AbstractDevice::userModifiedModules);
+    if(owner)
+    {
+        connect(this, &AbstractModule::userModifiedModuleParameters, owner, &AbstractDevice::userModifiedModules);
 
+        if(!commandOnOff.isEmpty())
+        {
+            using namespace std::placeholders;
+            Parser* parser = owner->dataInParser();
+            parser->addSetterHandler(commandOnOff,
+                                     std::bind(static_cast<void(AbstractModule::*)(qint32)>(&AbstractModule::setModuleEnabled), this, _1));
+        }
+    }
 }
 
 void AbstractModule::registerTypestoQml()
@@ -51,6 +61,11 @@ void AbstractModule::setModuleEnabled(bool newEnabled)
 
     emit dataChanged();
     emit userModifiedModuleParameters();
+}
+
+void AbstractModule::setModuleEnabled(qint32 newEnabled)
+{
+    setModuleEnabled(static_cast<bool>(newEnabled));
 }
 
 void AbstractModule::sendDataToDevice(QByteArray data)

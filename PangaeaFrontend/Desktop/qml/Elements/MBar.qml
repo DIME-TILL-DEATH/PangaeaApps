@@ -5,7 +5,7 @@ import Elements 1.0
 
 import StyleSettings 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Row{
@@ -82,6 +82,7 @@ Row{
 
 
             onPressed: (event) => {
+                _bar.focus = true
                 changeValue(event.x);
             }
 

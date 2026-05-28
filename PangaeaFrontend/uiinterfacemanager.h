@@ -1,7 +1,7 @@
 #ifndef UIINTERFACEMANAGER_H
 #define UIINTERFACEMANAGER_H
 
-#include <QObject>
+#include <QQmlApplicationEngine>
 
 #include "deviceslistmodel.h"
 #include "devicedescription.h"
@@ -9,6 +9,8 @@
 class UiInterfaceManager : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_SINGLETON
 
     Q_PROPERTY(bool isBleAvaliable READ isBleAvaliable NOTIFY isBleAvaliableChanged)
     Q_PROPERTY(QString moduleName READ moduleName WRITE setModuleName NOTIFY sgModuleNameChanged)
@@ -41,6 +43,13 @@ public:
 
     bool logData() const;
     void setLogData(bool newLogData);
+
+    static UiInterfaceManager* instance;
+    static QObject* singletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine) {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+        return instance;
+    }
 
 public slots:
     void slInterfaceUnavaliable(DeviceConnectionType senderType, QString reason);

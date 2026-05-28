@@ -2,22 +2,24 @@ cmake_minimum_required(VERSION 3.21.1)
 
 set(MY_PRODUCT_NUMBER 1)
 set(MY_PRODUCT_VERSION 1)
-set(MY_BUILD_NUMBER 2517)
+set(MY_BUILD_NUMBER 2605)
 
 set(MOBILE_VERSION_MAJOR 1)
 set(MOBILE_VERSION_MINOR 2)
-set(MOBILE_VERSION_BUILD 11)
+set(MOBILE_VERSION_BUILD 12)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
-    set(VERSION_CODE 51)
+    set(VERSION_CODE 52)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
         Mobile/android/src/androidutils.cpp Mobile/android/src/androidutils.h
     )
+
+    set(QML_START_PAGE "Mobile/qml/Main.qml")
 
     qt6_add_resources(RCC_FILES
         "Mobile/qml.qrc"
@@ -38,6 +40,8 @@ if(ANDROID)
 elseif(IOS)    
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
 
+    set(QML_START_PAGE "Mobile/qml/Main.qml")
+
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/ios/src/iosutils.hpp
         Mobile/ios/src/iosutils.mm)
@@ -56,6 +60,8 @@ elseif(WIN32)
 
     project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}.1 LANGUAGES CXX)
 
+    set(QML_START_PAGE "Desktop/qml/Main.qml")
+
     set(PLATFORM_SPECIFIC_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/Desktop/icons/icon.rc
         ${CMAKE_CURRENT_SOURCE_DIR}/version.rc
@@ -70,6 +76,8 @@ elseif(WIN32)
 elseif(APPLE) # MacOS
     project(pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
+    set(QML_START_PAGE "Desktop/qml/Main.qml")
+
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
         "Desktop/translations.qrc"
@@ -83,6 +91,8 @@ elseif(APPLE) # MacOS
    set_source_files_properties(${PLATFORM_SPECIFIC_SOURCES} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 elseif(LINUX)
     project(Pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
+
+    set(QML_START_PAGE "Desktop/qml/Main.qml")
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -101,12 +111,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 qt_add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
     main.cpp
-    uicore.cpp uicore.h
-    uisettings.cpp uisettings.h
-
-    ../PangaeaBackend/threadcontroller.cpp ../PangaeaBackend/threadcontroller.h
-    ../PangaeaBackend/uihelpers/uiinterfacemanager.cpp ../PangaeaBackend/uihelpers/uiinterfacemanager.h
-    ../PangaeaBackend/utils/logger.cpp ../PangaeaBackend/utils/logger.h
 
     ${PLATFORM_SPECIFIC_SOURCES}
     ${RCC_FILES}
@@ -125,7 +129,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ../WavConverterLib/
 )
 
-
 find_package(Qt6 REQUIRED COMPONENTS Qml Gui Network Positioning
     Quick LinguistTools Svg Concurrent)
 target_link_libraries(${PROJECT_NAME} PUBLIC
@@ -139,19 +142,37 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     PangaeaBackendplugin
     converter-lib
 
-    # qml_layoutsplugin
-    # qml_elementsplugin
-    # qml_modulesplugin
-    # qml_styleplugin
+    qml_cp16plugin
+    qml_cp100fxplugin
+    qml_elementsplugin
+    qml_layoutsplugin
+    qml_modules_classicplugin
+    qml_modules_fxplugin
+    qml_styleplugin
 )
 
 
-qt_policy(SET QTP0001 OLD)
-qt_policy(SET QTP0002 OLD)
+qt_policy(SET QTP0001 NEW)
+qt_policy(SET QTP0002 NEW)
 
 set(QT_QML_GENERATE_QMLLS_INI ON)
-set(QT_QML_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/PangaeaFrontend/qml)
 set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)
+
+qt_add_qml_module(${PROJECT_NAME}
+    URI "PangaeaFrontend"
+    VERSION 1.0
+
+    QML_FILES
+        ${QML_START_PAGE}
+
+    SOURCES
+        uicore.cpp uicore.h
+        uisettings.cpp uisettings.h
+        uiinterfacemanager.cpp uiinterfacemanager.h
+
+    DEPENDENCIES
+        PangaeaBackend
+)
 
 if(ANDROID OR IOS)
     add_subdirectory(Mobile)

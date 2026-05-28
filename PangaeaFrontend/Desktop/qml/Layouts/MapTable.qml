@@ -4,7 +4,7 @@ import QtQuick.Controls
 import Elements
 import StyleSettings
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Window

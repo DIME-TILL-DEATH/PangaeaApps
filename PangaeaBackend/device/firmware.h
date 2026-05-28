@@ -32,14 +32,18 @@ enum class FirmwareUpdateMode
 class Firmware
 {
 public:
-    Firmware(QString version, DeviceType deviceType, FirmwareType type, QString path);
+    Firmware() {};
+    Firmware(QString version, DeviceType deviceType, FirmwareType type, QString path = "");
 
     DeviceType deviceType() const;
 
     QString firmwareVersion() const;
 
     bool operator>(const Firmware& compareFirmware);
+    bool operator>=(const Firmware& compareFirmware);
     bool operator<(const Firmware& compareFirmware);
+    bool operator<=(const Firmware& compareFirmware);
+    Firmware &operator=(const Firmware& other);
 
     FirmwareType firmwareType() const;
 
@@ -50,17 +54,18 @@ public:
 
     static bool isFirmwareFile(QString filePath);
 
+
 private:
     QString m_firmwareVersionString{""};
-    DeviceType m_deviceType;
+    DeviceType m_deviceType{DeviceType::UNKNOWN_DEVICE};
     FirmwareType m_firmwareType{FirmwareType::Unknown};
     QString m_path;
 
-    strVersion m_firmwareVersion;
+    strVersion m_firmwareVersion{0, 0, 0, false};
 
     QByteArray m_rawData;
 
-    bool compareVersion(strVersion requestedVesrion, strVersion devVersion);
+    // bool compareVersion(strVersion requestedVesrion, strVersion devVersion);
     strVersion extractVerFromString(QString versionString);
 };
 

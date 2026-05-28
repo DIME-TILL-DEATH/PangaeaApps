@@ -27,6 +27,8 @@ ActivityResultManager activityResultHandler;
 #include "Mobile/ios/src/iosutils.hpp"
 #endif
 
+UiCore* UiCore::instance = nullptr;
+
 UiCore::UiCore(QObject *parent)
     : QObject{parent}
 {
@@ -501,5 +503,15 @@ void UiCore::runIrConvertor()
     QProcess irConvertorProcess;
     QString path = QCoreApplication::applicationDirPath() + "/IrConverter";
     qDebug() << "Run converter, path" << path << "result:" << irConvertorProcess.startDetached(path);
+#endif
+}
+
+quint16 UiCore::apiVersion()
+{
+#ifdef Q_OS_ANDROID
+    jint version = QJniObject::getStaticField<jint>("android/os/Build$VERSION", "SDK_INT");
+    return version;
+#else
+    return 1;
 #endif
 }

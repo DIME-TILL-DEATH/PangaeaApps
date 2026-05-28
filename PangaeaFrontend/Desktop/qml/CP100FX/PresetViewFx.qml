@@ -10,7 +10,7 @@ import Layouts 1.0
 
 import CP100FX 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 
@@ -20,7 +20,42 @@ ColumnLayout
     focus: true
     spacing: 0
 
-    // property alias modulesListView: _modulesListView
+    function getModuleComponent(moduleType) {
+        switch(moduleType) {
+            case ModuleType.RF: return rfComponent;
+            case ModuleType.NG: return ngComponent;
+            case ModuleType.CM: return cmComponent;
+            case ModuleType.PR: return prComponent;
+            case ModuleType.PA: return paComponent;
+            case ModuleType.IR_STEREO: return irComponent;
+            case ModuleType.EQ1: return eqComponent;
+            case ModuleType.DELAY: return dlComponent;
+            case ModuleType.PH: return phComponent;
+            case ModuleType.FL: return flComponent;
+            case ModuleType.CH: return chComponent;
+            case ModuleType.ER_MONO:
+            case ModuleType.ER_STEREO: return erComponent;
+            case ModuleType.RV: return rvComponent;
+            case ModuleType.TR: return trComponent;
+            default: return null;
+        }
+    }
+
+    Component { id: rfComponent; RF {} }
+    Component { id: ngComponent; NG {} }
+    Component { id: cmComponent; CM {} }
+    Component { id: prComponent; PR {} }
+    Component { id: paComponent; PA {} }
+    Component { id: irComponent; IR {} }
+    Component { id: eqComponent; EQ {} }
+    Component { id: dlComponent; DL {} }
+    Component { id: phComponent; PH {} }
+    Component { id: flComponent; FL {} }
+    Component { id: chComponent; CH {} }
+    Component { id: erComponent; ER {} }
+    Component { id: rvComponent; RV {} }
+    Component { id: trComponent; TR {} }
+    Component { id: meqComponent; MEQ {} }
 
 
     Rectangle{
@@ -207,7 +242,7 @@ ColumnLayout
                             onClicked: {
                                 if(_modulesListView.moduleTypeSelected !== moduleInstance.moduleType)
                                 {
-                                    _moduleLoader.source = ""
+                                    _moduleLoader.sourceComponent = null
                                     _moduleLoader.selectedModuleInstance = moduleInstance
                                     _modulesListView.moduleTypeSelected = moduleInstance.moduleType
 
@@ -239,24 +274,7 @@ ColumnLayout
                  }
 
                 onModuleTypeSelectedChanged:{
-                    switch(_moduleLoader.selectedModuleInstance.moduleType)
-                    {
-                        case ModuleType.RF: _moduleLoader.source = "../ModulesFX/RF.qml"; break;
-                        case ModuleType.NG: _moduleLoader.source = "../ModulesFX/NG.qml"; break;
-                        case ModuleType.CM: _moduleLoader.source = "../ModulesFX/CM.qml"; break;
-                        case ModuleType.PR: _moduleLoader.source = "../ModulesFX/PR.qml"; break;
-                        case ModuleType.PA: _moduleLoader.source = "../ModulesFX/PA.qml"; break;
-                        case ModuleType.IR_STEREO: _moduleLoader.source = "../ModulesFX/IR.qml"; break;
-                        case ModuleType.EQ1: _moduleLoader.source = "../ModulesFX/EQ.qml"; break;
-                        case ModuleType.DELAY: _moduleLoader.source = "../ModulesFX/DL.qml"; break;
-                        case ModuleType.PH: _moduleLoader.source = "../ModulesFX/PH.qml"; break;
-                        case ModuleType.FL: _moduleLoader.source = "../ModulesFX/FL.qml"; break;
-                        case ModuleType.CH: _moduleLoader.source = "../ModulesFX/CH.qml"; break;
-                        case ModuleType.ER_MONO:
-                        case ModuleType.ER_STEREO: _moduleLoader.source = "../ModulesFX/ER.qml"; break;
-                        case ModuleType.RV: _moduleLoader.source = "../ModulesFX/RV.qml"; break;
-                        case ModuleType.TR: _moduleLoader.source = "../ModulesFX/TR.qml"; break;
-                    }
+                    _moduleLoader.sourceComponent = getModuleComponent(_moduleLoader.selectedModuleInstance.moduleType);
                 }
             }
 

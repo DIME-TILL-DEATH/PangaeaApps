@@ -13,6 +13,8 @@
 
 #include "logger.h"
 
+Logger* Logger::currentHandler = nullptr;
+
 Logger::Logger(QObject* parent)
 {
     Q_UNUSED(parent)

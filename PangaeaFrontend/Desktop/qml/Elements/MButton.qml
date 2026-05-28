@@ -107,7 +107,11 @@ Item
             anchors.fill:  parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
-            onClicked: {main.clicked(); material.start(mouseX, mouseY);}
+            onClicked: {
+                main.focus = true
+                main.clicked();
+                material.start(mouseX, mouseY);
+            }
         }
     }
 }

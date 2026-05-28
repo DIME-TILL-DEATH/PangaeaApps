@@ -12,16 +12,10 @@ void LAPreamp::setDeviceType(DeviceType newDeviceType)
 {
     m_deviceType = newDeviceType;
 
-    if(m_minimalFirmware != nullptr)
-    {
-        delete(m_minimalFirmware);
-        m_minimalFirmware = nullptr;
-    }
-
     switch(m_deviceType)
     {
     case DeviceType::LA3:
-        m_minimalFirmware = new Firmware("2.00.13", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3.ble");
+        m_minimalFirmware = Firmware("2.00.13", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3.ble");
         m_maxBankCount = 0;
         m_maxPresetCount = 16;
         m_firmwareName = "LA3";
@@ -29,7 +23,7 @@ void LAPreamp::setDeviceType(DeviceType newDeviceType)
     default:
         qWarning() << Q_FUNC_INFO << "Unknown device type";
 
-        m_minimalFirmware = new Firmware("2.00.01", newDeviceType, FirmwareType::DeviceInternal, "");
+        m_minimalFirmware = Firmware("2.00.01", newDeviceType, FirmwareType::DeviceInternal, "");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "Unknown CP/LA device";

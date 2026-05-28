@@ -1,6 +1,6 @@
 import QtQuick
 
-import CppObjects 1.0
+import PangaeaFrontend 1.0
 import PangaeaBackend
 
 Item

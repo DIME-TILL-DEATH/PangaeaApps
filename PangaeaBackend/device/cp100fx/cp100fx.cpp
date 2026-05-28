@@ -8,10 +8,17 @@
 #include "systemsettingsfx.h"
 #include "controllerfx.h"
 
-Cp100fx::Cp100fx(Core *parent)
-    : AbstractDevice{parent}
+Cp100fx::Cp100fx(Core *parent, Modification modification)
+    : AbstractDevice{parent},
+    m_modification{modification}
 {
     using namespace std::placeholders;
+
+    switch(m_modification)
+    {
+        case MONO_MOD: m_minimalFirmware = Firmware("2.01.05", DeviceType::CP100FX, FirmwareType::DeviceInternal, ""); break;
+        case STEREO_MOD: m_minimalFirmware = Firmware("2.01.05", DeviceType::CP100FX_S, FirmwareType::DeviceInternal, ""); break;
+    }
 
     m_parser.addCommandHandler("amtver", std::bind(&Cp100fx::amtVerCommHandler, this, _1, _2, _3));
 
@@ -56,7 +63,7 @@ Cp100fx::Cp100fx(Core *parent)
 
     for(quint8 i=0; i < ControllersCount; i++)
     {
-        m_actualControllersList.append(new ControllerFx(&actualPresetFx->controller[i], i, this));
+        m_actualControllersList.append(new ControllerFx(this, i));
     }
 }
 
@@ -124,6 +131,7 @@ void Cp100fx::readFullState()
 
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("plist");
+
     emit sgPushCommandToQueue("sys_settings");
 
     pushReadPresetCommands();
@@ -459,45 +467,6 @@ void Cp100fx::setCurrentPresetComment(const QString &newCurrentPresetComment)
     emit sgProcessCommands();
 }
 
-void Cp100fx::setCntrlPcOut(quint8 newCntrlPcOut)
-{
-    if (actualPresetFx->cntrlPcOut() == newCntrlPcOut)
-        return;
-    actualPresetFx->setCntrlPcOut(newCntrlPcOut);
-    emit cntrlPcOutChanged();
-
-    m_deviceParamsModified = true;
-    emit deviceParamsModifiedChanged();
-
-    emit sgWriteToInterface("cntrl_pc " + QByteArray::number(newCntrlPcOut, 16) + "\r\n");
-}
-
-void Cp100fx::setCntrlSet(quint8 newCntrlSet)
-{
-    if(actualPresetFx->cntrlSet() == newCntrlSet)
-        return;
-    actualPresetFx->setCntrlSet(newCntrlSet);
-    emit cntrlSetChanged();
-
-    m_deviceParamsModified = true;
-    emit deviceParamsModifiedChanged();
-
-    emit sgWriteToInterface("cntrl_set " + QByteArray::number(newCntrlSet, 16) + "\r\n");
-}
-
-void Cp100fx::setPresetVolumeControl(quint8 newPresetVolumeControl)
-{
-    if (actualPresetFx->presetData.volume_control == newPresetVolumeControl)
-        return;
-    actualPresetFx->presetData.volume_control = newPresetVolumeControl;
-    emit presetVolumeControlChanged();
-
-    m_deviceParamsModified = true;
-    emit deviceParamsModifiedChanged();
-
-    emit sgWriteToInterface("vl_pr_cntrl " + QByteArray::number(newPresetVolumeControl) + "\r\n");
-}
-
 void Cp100fx::setModulePositions()
 {
     m_moduleList.clear();
@@ -527,6 +496,7 @@ void Cp100fx::setModulePositions()
 
 void Cp100fx::modulesChangedPosition()
 {
+
     quint8 from, to;
 
     QObject* senderObj = QObject::sender();
@@ -536,7 +506,6 @@ void Cp100fx::modulesChangedPosition()
         moduleSender = qobject_cast<AbstractModule*>(senderObj);
     }
     else return;
-
 
     switch(moduleSender->moduleType())
     {
@@ -749,18 +718,32 @@ void Cp100fx::amtVerCommHandler(const QString &command, const QByteArray &argume
 {
     QString firmwareVersion = data;
 
-    m_firmwareName += "CP100FX v." + firmwareVersion;
-    emit firmwareNameChanged();
-
-    m_actualFirmware = new Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
-
-    bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
-
-    if(isCheckUpdatesEnabled)
+    QString deviceName;
+    switch(m_modification)
     {
-        emit sgRequestNewestFirmware(m_actualFirmware);
+        case MONO_MOD: deviceName = "CP100FX"; break;
+        case STEREO_MOD: deviceName = "CP100FX-S"; break;
     }
 
+    m_firmwareName = deviceName + " v." + firmwareVersion;
+    emit firmwareNameChanged();
+
+    m_actualFirmware = Firmware(firmwareVersion, m_deviceType, FirmwareType::DeviceInternal, "device:/internal");
+
+    if(m_actualFirmware >= m_minimalFirmware)
+    {
+        bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable").toBool();
+
+        if(isCheckUpdatesEnabled)
+        {
+            emit sgRequestNewestFirmware(&m_actualFirmware);
+        }
+    }
+    else
+    {
+        qWarning() << "firmware insufficient!";
+        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion()});
+    }
     qInfo() << __FUNCTION__ << firmwareVersion;
 }
 
@@ -770,6 +753,7 @@ void Cp100fx::plistCommHandler(const QString &command, const QByteArray &argumen
 
     QStringList separatedList = fullList.split("\r");
 
+    qDeleteAll(m_presetsList);
     m_presetsList.clear();
 
     QStringList::const_iterator it = separatedList.constBegin();
@@ -910,9 +894,9 @@ void Cp100fx::sysSettingsCommHandler(const QString &command, const QByteArray &a
     m_fswConfirm.setData(sysSettings);
     m_fswUp.setData(sysSettings);
 
-    m_attenuatorVolume.setValue(sysSettings.attenuator, sysSettings.attenuatorMode);
-    m_masterVolume.setValue(sysSettings.masterVolume);
-    m_phonesVolume.setValue(sysSettings.phonesVolume);
+    m_attenuator.setSource(sysSettings.attenuatorMode);
+    m_attenuator.setGlobalValue(sysSettings.attenuator);
+    m_controlsPresetfx.setMasterValues(sysSettings.masterVolume, sysSettings.phonesVolume);
 
     m_masterEq.setValues(sysSettings);
     emit systemSettingsChanged();
@@ -965,8 +949,9 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         m_deviceParamsModified = false;
         emit deviceParamsModifiedChanged();
 
-        m_presetAttenuator.setValue(presetData.attenuator);
-        m_presetVolume.setValue(presetData.preset_volume);
+        m_attenuator.setPresetValue(presetData.attenuator);
+        m_controlsPresetfx.presetVolume()->setControlValue(presetData.preset_volume);
+        m_stereoInputFx.setValues(presetData);
         emit presetVolumeControlChanged();
         emit deviceUpdatingValues(); // for correct update Att. ComboBoxes
 
@@ -1014,8 +999,9 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     default:
     {
-        m_presetAttenuator.setValue(presetData.attenuator);
-        m_presetVolume.setValue(presetData.preset_volume);
+        m_attenuator.setPresetValue(presetData.attenuator);
+        m_stereoInputFx.setValues(presetData);
+        m_controlsPresetfx.presetVolume()->setControlValue(presetData.preset_volume);
         emit presetVolumeControlChanged();
         emit deviceUpdatingValues();
         actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
@@ -1063,9 +1049,10 @@ void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &argume
     controller_fx_t cntrlsData[32];
     memcpy(&cntrlsData, dataBuffer, sizeof(controller_fx_t) * ControllersCount);
 
-    for(int i=0; i<32; i++)
+    for(int i=0; i < ControllersCount; i++)
     {
         actualPresetFx->controller[i] = cntrlsData[i];
+        m_actualControllersList.at(i)->setData(cntrlsData[i]);
     }
 
     emit controllersChanged();
@@ -1073,20 +1060,14 @@ void Cp100fx::cntrlsCommHandler(const QString &command, const QByteArray &argume
 
 void Cp100fx::cntrlPcOutCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    bool ok;
-    quint8 value = data.toInt(&ok, 16);
-
-    actualPresetFx->setCntrlPcOut(value);
-    emit cntrlPcOutChanged();
+    quint8 value = data.toInt(nullptr, 16);
+    m_controlsPresetfx.cntrlPcOut()->setControlValue(value);
 }
 
 void Cp100fx::cntrlSetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    bool ok;
-    quint8 value = data.toInt(&ok, 16);
-
-    actualPresetFx->setCntrlSet(value);
-    emit cntrlSetChanged();
+    quint8 value = data.toInt(nullptr, 16);
+    m_controlsPresetfx.cntrlSet()->setControlValue(value);
 }
 
 void Cp100fx::tunerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

@@ -11,7 +11,7 @@ import ModulesClassic 1.0
 import StyleSettings 1.0
 import Layouts 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Column
@@ -20,6 +20,34 @@ Column
     anchors.fill: parent
     focus: true
     spacing: 2
+
+    function getModuleComponent(moduleType) {
+        switch(moduleType) {
+            case ModuleType.NG: return ngComponent;
+            case ModuleType.CM: return cmComponent;
+            case ModuleType.PR: return prComponent;
+            case ModuleType.PA: return paComponent;
+            case ModuleType.PS: return psComponent;
+            case ModuleType.IR: return irComponent;
+            case ModuleType.HP: return hpComponent;
+            case ModuleType.EQ1: return eqLegacyComponent;
+            case ModuleType.LP: return lpComponent;
+            case ModuleType.ER_MONO:
+            case ModuleType.ER_STEREO: return erComponent;
+            default: return null;
+        }
+    }
+
+    Component { id: ngComponent; Ng {} }
+    Component { id: cmComponent; Cm {} }
+    Component { id: prComponent; Pr {} }
+    Component { id: paComponent; Pa {} }
+    Component { id: psComponent; Ps {} }
+    Component { id: irComponent; Ir {} }
+    Component { id: hpComponent; Hp {} }
+    Component { id: eqLegacyComponent; EqLegacy {} }
+    Component { id: lpComponent; Lp {} }
+    Component { id: erComponent; Er {} }
 
     HeadLegacy
     {
@@ -94,30 +122,21 @@ Column
                 height: _mainRow.height
 
                 Component.onCompleted: function(){
-                    switch(moduleType)
-                    {
-                    case ModuleType.NG: _delegateLoader.source = "../ModulesClassic/Ng.qml"; break;
-                    case ModuleType.CM: _delegateLoader.source = "../ModulesClassic/Cm.qml"; break;
-                    case ModuleType.PR: _delegateLoader.source = "../ModulesClassic/Pr.qml"; break;
-                    case ModuleType.PA: _delegateLoader.source = "../ModulesClassic/Pa.qml"; break;
-                    case ModuleType.PS: _delegateLoader.source = "../ModulesClassic/Ps.qml"; break;
-                    case ModuleType.IR: {
-                        _delegateLoader.source = "../ModulesClassic/Ir.qml";
+                    var widthMultiplier = 1;
+                    
+                    if(moduleType === ModuleType.EQ1) {
+                        widthMultiplier = 5;
+                    }
+                    if(moduleType === ModuleType.IR) {
                         _mainRow.emitIrModule(moduleInstance);
-                        break;
                     }
-                    case ModuleType.HP: _delegateLoader.source = "../ModulesClassic/Hp.qml"; break;
-                    case ModuleType.EQ1: {
-                        _delegateLoader.source = "../ModulesClassic/EqLegacy.qml";
-                        _delegateLoader.widthMult = 5;
-                        break;
+                    
+                    _delegateLoader.widthMult = widthMultiplier;
+                    _delegateLoader.sourceComponent = mainUi.getModuleComponent(moduleType);
+                    
+                    if(_delegateLoader.item) {
+                        _delegateLoader.item.module = moduleInstance;
                     }
-                    case ModuleType.LP: _delegateLoader.source = "../ModulesClassic/Lp.qml"; break;
-                    case ModuleType.ER_MONO:
-                    case ModuleType.ER_STEREO: _delegateLoader.source = "../ModulesClassic/Er.qml"; break;
-                    }
-
-                    _delegateLoader.item.module = moduleInstance;
                 }
             }
         }

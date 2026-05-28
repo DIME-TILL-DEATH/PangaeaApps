@@ -33,7 +33,7 @@ Compressor::Compressor(AbstractDevice *owner, modules_data_fx_t *cmData)
     m_ratio = new ControlValue(this, &cmData->compressor.ratio, "cm_rt", "Ratio", "", 0, 127, 0, 127); //0, 127, 2, 24);
     m_volume = new ControlValue(this, &cmData->compressor.volume, "cm_vl", "Volume", "", 0, 127, 0, 127);
     m_attack = new ControlValue(this, &cmData->compressor.attack, "cm_at", "Attack", "", 0, 127, 0, 127); //"ms", 0, 127, 0, 30);
-    m_knee = new ControlValue(this, &cmData->compressor.knee, "cm_rl", "Release", "", 0, 127, 0, 127);
+    m_knee = new ControlValue(this, &cmData->compressor.knee, "cm_rl", "Knee", "", 0, 127, 0, 127);
 
     m_moduleEnabled = (bool*)&cmData->switches.compressor;
 }

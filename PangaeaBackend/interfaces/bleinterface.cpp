@@ -20,40 +20,25 @@ BleInterface::BleInterface(QObject *parent)
     m_control{nullptr},
     m_service{nullptr}
 {
-    QCoreApplication *app = QGuiApplication::instance();
-    if(app)
-    {
-        app->requestPermission(QBluetoothPermission{}, [this](const QPermission &permission)
-        {
-            if(permission.status() == Qt::PermissionStatus::Granted){
-                qDebug() << "Bluetooth permission granted";
-                startScan();
-            }
-            else{
-                qWarning() << "Bluetooth permission not granted!";
-            }
-        });
-    }
-
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
 
-        appSettings->setFallbacksEnabled(false);
-        appSettings->beginGroup("AutoconnectSettings");
+    appSettings->setFallbacksEnabled(false);
+    appSettings->beginGroup("AutoconnectSettings");
 //        m_autoconnectDevicetMAC = appSettings->value("MAC address", 0).toString();
-        appSettings->endGroup();
+    appSettings->endGroup();
 
-        int size = appSettings->beginReadArray("Unique module names");
-        for(int i=0; i<size; ++i)
-        {
-            appSettings->setArrayIndex(i);
+    int size = appSettings->beginReadArray("Unique module names");
+    for(int i=0; i<size; ++i)
+    {
+        appSettings->setArrayIndex(i);
 
-            QString MACAddress = appSettings->value("MAC address").toString();
-            QString name = appSettings->value("Name").toString();
-            m_moduleUniqueNames.insert(MACAddress, name);
-        }
-        appSettings->endArray();
+        QString MACAddress = appSettings->value("MAC address").toString();
+        QString name = appSettings->value("Name").toString();
+        m_moduleUniqueNames.insert(MACAddress, name);
+    }
+    appSettings->endArray();
 #elif defined(Q_OS_IOS)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                                     + "/settings.plist", QSettings::NativeFormat);
@@ -106,17 +91,70 @@ BleInterface::~BleInterface()
 void BleInterface::startScan()
 {
     QCoreApplication *app = QCoreApplication::instance();
-    if(app){
-       if(app->checkPermission(QBluetoothPermission{}) != Qt::PermissionStatus::Granted){
-           qWarning() << "Bluetooth permission not granted!";
-           return;
-       }
-    }
-    
-    if(state() == InterfaceState::Idle)
+#ifdef Q_OS_ANDROID
+    if(app)
     {
-        startDiscovering();
+        app->requestPermission(QLocationPermission{}, [this, app](const QPermission &permission)
+        {
+            if(permission.status() == Qt::PermissionStatus::Granted)
+            {
+                qDebug() << "Geolocation permission granted";
+                app->requestPermission(QBluetoothPermission{}, [this](const QPermission &permission)
+                {
+                    if(permission.status() == Qt::PermissionStatus::Granted)
+                    {
+                        qDebug() << "Bluetooth permission granted";
+                        if(state() == InterfaceState::Idle)
+                        {
+                           startDiscovering();
+                        }
+                    }
+                    else
+                    {
+                        qWarning() << "Bluetooth permission not granted!";
+                    }
+                });
+            }
+            else
+            {
+                qWarning() << "Geolocation permission not granted!";
+            }
+        });
     }
+#else
+
+    if(app)
+    {
+        app->requestPermission(QBluetoothPermission{}, [this](const QPermission &permission)
+        {
+            if(permission.status() == Qt::PermissionStatus::Granted)
+            {
+                // qDebug() << "Bluetooth permission granted";
+                if(state() == InterfaceState::Idle)
+                {
+                    startDiscovering();
+                }
+
+                if(state() == InterfaceState::PowerOff)
+                {
+                    QBluetoothLocalDevice device;
+                    if(device.hostMode() != QBluetoothLocalDevice::HostPoweredOff)
+                    {
+                        startDiscovering();
+                    }
+                    else
+                    {
+                        QTimer::singleShot(2500, this, &BleInterface::startScan);
+                    }
+                }
+            }
+            else
+            {
+               qWarning() << "Bluetooth permission not granted!";
+            }
+        });
+    }
+#endif
 }
 
 void BleInterface::stopScan()
@@ -137,19 +175,27 @@ void BleInterface::startDiscovering()
     {
         qInfo() << "Bluetooth is not valid";
         emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "Device is unavaliable");
+
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+        setState(InterfaceState::Unavaliable);
+#else
         prevState();
+#endif
         return;
     }
 
     if(device.hostMode() == QBluetoothLocalDevice::HostPoweredOff)
     {
-        prevState();
         isAvaliable = false;
-
         m_qlFoundDevices.clear();
         emit sgDeviceListUpdated(DeviceConnectionType::BLE, m_qlFoundDevices);
         emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
+#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+        setState(InterfaceState::PowerOff);
+#else
         device.powerOn();
+        prevState();
+#endif
         return;
     }
 #endif

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 import Elements 1.0
 
-import CppObjects 1.0
+import PangaeaFrontend 1.0
 import PangaeaBackend
 
 BaseModule{
@@ -117,8 +117,7 @@ BaseModule{
 
             ctrlValInstance: module.tail
 
-            textLeft: "ON"
-            textRight: "OFF"
+            invertedValue: 1
 
             moduleOn: module.moduleEnabled
         }

@@ -12,7 +12,6 @@
 #include "irfile.h"
 #include "presetmodern.h"
 
-// #include "presetvolume.h"
 #include "compressor.h"
 #include "noisegate.h"
 #include "preamp.h"
@@ -31,6 +30,8 @@
 class CPModern : public AbstractDevice
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(CabSim* IR  READ getIR CONSTANT)
     Q_PROPERTY(EarlyReflections* ER  READ getER CONSTANT)

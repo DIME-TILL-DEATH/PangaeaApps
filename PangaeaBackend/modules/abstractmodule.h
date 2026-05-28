@@ -38,12 +38,15 @@ public:
     virtual quint16 processingTime() const {return m_processingTime;};
 
     bool moduleEnabled();
-    virtual void setModuleEnabled(bool newEnabled);
+    void setModuleEnabled(bool newEnabled);
+    void setModuleEnabled(qint32 newEnabled);
 
     QString moduleName() const {return m_moduleName;};
     QString fullModuleName() const {return m_fullModuleName;};
 
     ModuleType moduleType() const {return m_moduleType;};
+
+    AbstractDevice* owner() { return m_owner; };
 
     virtual void sendDataToDevice(QByteArray data);
 

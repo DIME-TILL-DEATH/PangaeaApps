@@ -1,15 +1,15 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import Elements
-import StyleSettings
 
-import CP100FX
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 RowLayout{
+    id: root
+
+    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
 
     MComboVertical{
         id: _comboCtrlChoice
@@ -33,57 +33,45 @@ RowLayout{
         }
     }
 
-    MComboVertical{
+    ParameterComboBox{
         id: _srcCombo
 
         Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
-        text: "Source"
+        model: root.cp100fx.controller[0].avaliableSources
 
-        model: UiCore.currentDevice.controller[0].avaliableSources
-
-        currentIndex: _cntrlsModel.count > 0 ? UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source : 0
-
-        onActivated: {
-            UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].setSource(_srcCombo.comboText)
-        }
+        ctrlValInstance: root.cp100fx.controller[_comboCtrlChoice.currentIndex].source
     }
 
-
-    MComboVertical{
+    ParameterComboBox{
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        text: "Dest."
-
-        model: [/*0*/"Preamp On Off",
-            /*1*/"Amplif On Off", "Amplif Volume", "Amplif Slave ",
-            /*4*/"CabSim On Off", "Equal On Off ",
-            /*6*/"Delay On Off ", "Delay Volume ", "Del. Feedback", "Delay TAP    ",
-            /*10*/"Phaser On Off", "Phaser Volume", "Phaser Rate  ",
-            /*13*/"Flanger OnOff", "Flang  Volume", "Flang  Rate  ",
-            /*16*/"Chorus On Off", "Chorus Volume", "Chorus Rate  ",
-            /*19*/"Reverb On Off", "Reverb Volume", "Reverb Time  ",
-            /*22*/"Tremolo OnOff", "Tremolo Inten", "Tremolo Rate ",
+        model: [
+            /*0*/"PR On Off    ",
+            /*1*/"PA On Off    ", "PA Master    ", "PA Level     ",
+            /*4*/"IR On Off    ", "EQ On Off    ",
+            /*6*/"DL On Off    ",  "DL Mix      ", "DL Feedback  ", "DL TAP       ",
+            /*10*/"PH On Off    ", "PH Mix      ", "PH Rate      ",
+            /*13*/"FL On Off    ", "FL Mix      ", "FL Rate      ",
+            /*16*/"CH On Off    ", "CH Mix      ", "CH Rate      ",
+            /*19*/"RV On Off    ", "RV Mix      ", "RV Time      ",
+            /*22*/"TR On Off    ", "TR Intensity ", "TR Rate      ",
             /*25*/"Preset Level ",
-            /*26*/"Tremolo TAP  ",
-            /*27*/"Compr On Off ", "Compr Thresh ", "Compr Volume ",
-            /*30*/"Filt  On Off ", "Filt LFOrate ", "Filt freq    ",
-            /*33*/"ER On Off    ", "ER Volume    ",
-            /*35*/"Filt LFO TAP ",
+            /*26*/"TR TAP       ",
+            /*27*/"CM On Off    ", "CM Threshold ", "CM Volume    ",
+            /*30*/"RF On Off    ", "RF LFO rate  ", "RF frequency ",
+            /*33*/"ER On Off    ", "ER Mix       ",
+            /*35*/"RF LFO TAP   ",
             /*36*/"Vol Ct On Off",
             /*37*/"Cab1 Volume  ", "Cab2 Volume  ",
-            /*39*/"Gate On Off  ", "Gate Thresh  ",
+            /*39*/"GT On Off    ", "GT Threshold ",
             /*41*/"HPF frequency", "LPF frequency", "Presence val ",
-            /*44*/"Preamp Gain  ", "Preamp Volume", "Preamp Low   ", "Preamp Mid   ", "Preamp High  ",
-            /*49*/"Eq Band1 Lev ", "Eq Band2 Lev ", "Eq Band3 Lev ", "Eq Band4 Lev ", "Eq Band5 Lev ",
-            /*54*/"Reverb Type  "]
-        currentIndex: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].destination
-
-        onActivated: {
-            UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].destination = currentIndex
-        }
+            /*44*/"PR Gain      ", "PR Volume    ", "PR Low       ", "PR Mid       ", "PR High      ",
+            /*49*/"EQ Band1 Lev ", "EQ Band2 Lev ", "EQ Band3 Lev ", "EQ Band4 Lev ", "EQ Band5 Lev ",
+            /*54*/"RV Type      "]
+        ctrlValInstance: root.cp100fx.controller[_comboCtrlChoice.currentIndex].destination
     }
 
     ColumnLayout{
@@ -92,37 +80,19 @@ RowLayout{
 
         spacing: parent.height/7
 
-        MBar{
+        ParameterBar{
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: parent.height * 2/7
             Layout.topMargin: parent.height * 1/7
 
-            textWidth: width*1/4
-            barWidth: width*3/4
-
-            text: "Min:"
-
-            value: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].minValue
-
-            onUserChangedValue: calcVal => {
-                UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].minValue = calcVal
-            }
+            controlValue:root.cp100fx.controller[_comboCtrlChoice.currentIndex].minValue
         }
-        MBar{
+        ParameterBar{
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: parent.height * 2/7
             Layout.bottomMargin: parent.height * 1/7
 
-            textWidth: width*1/4
-            barWidth: width*3/4
-
-            text: "Max "
-
-            value: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].maxValue
-
-            onUserChangedValue: calcVal => {
-                UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].maxValue= calcVal
-            }
+            controlValue: root.cp100fx.controller[_comboCtrlChoice.currentIndex].maxValue
         }
     }
 
@@ -131,34 +101,22 @@ RowLayout{
         Layout.fillHeight: true
     }
 
-    MComboVertical{
+    ParameterComboBox{
         Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
-
-        text: "PC Out"
 
         model: ["MIDI IN", "MAP", "SET"]
 
-        currentIndex: UiCore.currentDevice.cntrlPcOut
-
-        onActivated: {
-            UiCore.currentDevice.cntrlPcOut = currentIndex
-        }
+        ctrlValInstance: root.cp100fx.controlsPresetFx.cntrlPcOut
     }
 
-    MComboVertical{
+    ParameterComboBox{
         Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
-        text: "Set"
-
         model: _setModel
 
-        currentIndex: UiCore.currentDevice.cntrlSet
-
-        onActivated: {
-            UiCore.currentDevice.cntrlSet = currentIndex
-        }
+        ctrlValInstance: root.cp100fx.controlsPresetFx.cntrlSet
 
         ListModel{
             id: _setModel
@@ -182,36 +140,28 @@ RowLayout{
 
         ParameterDial{
             id: vlControl
-            property Volume module: UiCore.currentDevice.presetVolume
-
-            enabled: true
 
             y: parent.height/10
+
+            enabled: true
 
             width: height
             height: parent.height - parent.height/10
 
-            controlValue: UiCore.currentDevice.presetVolume.volume
+            controlValue: root.cp100fx.controlsPresetFx.presetVolume
          }
 
-        MSwitchVertical{
+        ParameterSwitch{
             id: _volCtrlSwitch
-
-            // Layout.preferredWidth: height
-            // Layout.fillHeight: true
 
             width: height
             height: parent.height
 
+            invertedValue: 1
+
             y: parent.height/10
 
-            text: "Control: "
-
-            checked: !UiCore.currentDevice.presetVolumeControl
-
-            onClicked: {
-                UiCore.currentDevice.presetVolumeControl = !checked
-            }
+            ctrlValInstance: root.cp100fx.controlsPresetFx.presetCtrlVolume
         }
     }
 

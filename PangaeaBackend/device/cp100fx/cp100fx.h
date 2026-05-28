@@ -24,39 +24,45 @@
 #include "mastereq.h"
 #include "tuner.h"
 
-#include "volume.h"
+#include "attenuator.h"
 
+#include "controllerfx.h"
 #include "fswfx.h"
 #include "systemsettingsfx.h"
+#include "controlspresetfx.h"
+#include "stereoinputfx.h"
 
 class Cp100fx : public AbstractDevice
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(QString currentPresetName READ currentPresetName WRITE setCurrentPresetName NOTIFY currentPresetNameChanged FINAL)
     Q_PROPERTY(QString currentPresetComment READ currentPresetComment WRITE setCurrentPresetComment NOTIFY currentPresetCommentChanged FINAL)
 
-    Q_PROPERTY(Volume* masterVolume READ masterVolume CONSTANT)
-    Q_PROPERTY(Volume* phonesVolume READ phonesVolume CONSTANT)
-    Q_PROPERTY(Volume* presetVolume READ presetVolume CONSTANT)
-    Q_PROPERTY(Volume* attenuatorVolume READ attenuatorVolume CONSTANT)
-    Q_PROPERTY(Volume* presetAttenuator READ presetAttenuator CONSTANT)
-
+    Q_PROPERTY(Attenuator* attenuator READ attenuator CONSTANT)
     Q_PROPERTY(MasterEq* masterEq READ masterEq CONSTANT)
     Q_PROPERTY(Tuner* tuner READ tuner CONSTANT)
 
     Q_PROPERTY(QObjectList fsw READ fswList CONSTANT)
+    Q_PROPERTY(QList<ControllerFx*> controller READ controller NOTIFY controllersChanged)
     Q_PROPERTY(SystemSettingsFx* systemSettings READ systemSettings CONSTANT)
-    Q_PROPERTY(QObjectList controller READ controller NOTIFY controllersChanged)
-
-    Q_PROPERTY(quint8 cntrlPcOut READ cntrlPcOut WRITE setCntrlPcOut NOTIFY cntrlPcOutChanged FINAL)
-    Q_PROPERTY(quint8 cntrlSet READ cntrlSet WRITE setCntrlSet NOTIFY cntrlSetChanged FINAL)
-    Q_PROPERTY(quint8 presetVolumeControl READ presetVolumeControl WRITE setPresetVolumeControl NOTIFY presetVolumeControlChanged FINAL)
+    Q_PROPERTY(ControlsPresetFx* controlsPresetFx READ controlsPresetFx CONSTANT)
+    Q_PROPERTY(StereoInputFx* stereoInputFx READ stereoInputFx CONSTANT)
 
     Q_PROPERTY(QString ir1Name READ ir1Name NOTIFY irNamesChanged FINAL)
     Q_PROPERTY(QString ir2Name READ ir2Name NOTIFY irNamesChanged FINAL)
+
+    Q_PROPERTY(Modification modification READ modification CONSTANT FINAL)
 public:
-    Cp100fx(Core *parent);
+    enum Modification{
+        MONO_MOD,
+        STEREO_MOD
+    };
+    Q_ENUM(Modification)
+
+    Cp100fx(Core *parent, Modification modification);
     ~Cp100fx();
 
     QStringList strPresetNumbers() override;
@@ -108,20 +114,13 @@ public:
     MasterEq m_masterEq{this};
     Tuner m_tuner{this};
 
-    Volume m_masterVolume{this, Volume::VolumeType::MasterFx};
-    Volume m_phonesVolume{this, Volume::VolumeType::PhonesFx};
-    Volume m_presetVolume{this, Volume::VolumeType::PresetFx}; //, &actualPresetFx->presetData.preset_volume};
-    Volume m_attenuatorVolume{this, Volume::VolumeType::AttenuatorFx};
-    Volume m_presetAttenuator{this, Volume::VolumeType::AttenuatorFx};
 
-    Volume* masterVolume() {return &m_masterVolume;};
-    Volume* phonesVolume() {return &m_phonesVolume;};
-    Volume* presetVolume() {return &m_presetVolume;};
-    Volume* attenuatorVolume() {return &m_attenuatorVolume;};
-    Volume* presetAttenuator() {return &m_presetAttenuator;};
-
+    Attenuator m_attenuator{this};
+    Attenuator* attenuator() {return &m_attenuator;};
     MasterEq* masterEq() {return &m_masterEq;};
-
+    SystemSettingsFx* systemSettings() {return &m_systemSettings;};
+    ControlsPresetFx* controlsPresetFx() {return &m_controlsPresetfx;};
+    StereoInputFx* stereoInputFx() {return &m_stereoInputFx;};
     Tuner* tuner() {return &m_tuner;};
 
     QString currentPresetName() const;
@@ -131,21 +130,13 @@ public:
     void setCurrentPresetComment(const QString &newCurrentPresetComment);
 
     QObjectList fswList() {return m_fswList;};
-    SystemSettingsFx* systemSettings() {return &m_systemSettings;};
 
-    QObjectList controller() {return m_actualControllersList;};
-
-    quint8 cntrlPcOut() const {return actualPresetFx->cntrlPcOut();};
-    void setCntrlPcOut(quint8 newCntrlPcOut);
-
-    quint8 cntrlSet() const {return actualPresetFx->cntrlSet();};
-    void setCntrlSet(quint8 newCntrlSet);
-
-    quint8 presetVolumeControl() const {return actualPresetFx->presetData.volume_control;};
-    void setPresetVolumeControl(quint8 newPresetVolumeControl);
+    QList<ControllerFx*> controller() {return m_actualControllersList;};
 
     QString ir1Name() {return m_ir1Name;}
     QString ir2Name() {return m_ir2Name;}
+    Modification modification() const {return m_modification;}
+
 public slots:
     QList<QByteArray> parseAnswers(QByteArray baAnswer) override;
 
@@ -166,13 +157,15 @@ private:
 
     QList<PresetAbstract*> m_presetsList;
 
+    ControlsPresetFx m_controlsPresetfx{this};
     SystemSettingsFx m_systemSettings{this};
     QObjectList m_fswList;
-    QObjectList m_actualControllersList;
+    QList<ControllerFx*> m_actualControllersList;
 
     FswFx m_fswDown{0, this};
     FswFx m_fswConfirm{1, this};
     FswFx m_fswUp{2, this};
+    StereoInputFx m_stereoInputFx{this};
 
     PresetFx* actualPresetFx;
     PresetFx* savedPresetFx;
@@ -186,6 +179,8 @@ private:
     QByteArray m_previewIrData;
 
     const uint32_t uploadBlockSize = 100;
+
+    Modification m_modification{MONO_MOD};
 
     void pushReadPresetCommands();
 
@@ -217,6 +212,8 @@ private:
     void tunerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 
     void setModulePositions();
+
+
 
 private slots:
     void modulesChangedPosition();
