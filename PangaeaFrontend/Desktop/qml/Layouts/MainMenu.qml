@@ -367,10 +367,10 @@ MenuBar{
         id: aboutDialog
 
         title: qsTr("About...")
-        text: qsTr("AMT Pangaea CP-16/CP-100/CP-100FX")
+        text: qsTr("AMT Pangaea series")
         informativeText: qsTr("Desktop application") + "\n" +
               qsTr("Version: ") + Qt.application.version + "\n"
-              + qsTr("(c) 2025")
+              + "(c) 2026"
 
     }
 
