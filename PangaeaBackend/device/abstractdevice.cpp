@@ -23,9 +23,6 @@ AbstractDevice::~AbstractDevice()
 {
     disconnect(this);
 
-    if(m_actualFirmware) delete(m_actualFirmware);
-    if(m_minimalFirmware) delete(m_minimalFirmware);
-
     qDeleteAll(m_moduleList.begin(), m_moduleList.end());
     m_moduleList.clear();
 }

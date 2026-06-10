@@ -9,10 +9,15 @@
 
 #include "mockcp100fx.h"
 
-MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
-    : AbstractMockDevice{mutex, uartBuffer, parent}
+MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, Cp100fx::Modification modification, QObject *parent)
+    : AbstractMockDevice{mutex, uartBuffer, parent},
+    m_modification{modification}
 {
-    m_mockDeviceType = MockDeviceType::Mock_CP100FX;
+    switch(m_modification)
+    {
+        case Cp100fx::MONO_MOD: m_mockDeviceType = MockDeviceType::Mock_CP100FX; break;
+        case Cp100fx::STEREO_MOD: m_mockDeviceType = MockDeviceType::Mock_CP100FX_S; break;
+    }
 
     initFolders();
     using namespace std::placeholders;
@@ -186,6 +191,11 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     setParamsHandler("tr_ms", &currentPresetData.modules.tremolo.ms);
     setParamsHandler("tr_tp", &currentPresetData.modules.tremolo_tap);
 
+    setParamsHandler("inl_on", &currentPresetData.modules.in_left_en);
+    setParamsHandler("inr_on", &currentPresetData.modules.in_right_en);
+    setParamsHandler("inl_pan", &currentPresetData.modules.in_left_pan);
+    setParamsHandler("inr_pan", &currentPresetData.modules.in_right_pan);
+
     //-------------------------System params handlers---------------
     setSysParamsHandler("sys_cab_mode", &currentSystemData.cabSimDisabled);
     setSysParamsHandler("sys_cab_num", &currentSystemData.cabSimConfig);
@@ -223,6 +233,7 @@ MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, QObject *parent)
     memset(&defaultPresetData, 0, sizeof(preset_data_fx_t));
 
     defaultPresetData.modules.cab1.volume = 82;
+    if(m_modification == Cp100fx::STEREO_MOD) defaultPresetData.modules.cab2.volume = 82;
     defaultPresetData.modules.cab1.pan = 63;
     defaultPresetData.modules.cab2.pan = 63;
 
@@ -513,7 +524,7 @@ void MockCP100fx::parametersByteCommHandler(const QString &command, const QByteA
     {
         *paramPtr = correctedArgs.toInt(nullptr, 16);
     }
-    emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
+    emit answerReady(command.toUtf8() + "\r" + QString().setNum(*paramPtr, 16).toUtf8() + "\n");
 }
 
 void MockCP100fx::parametersWordCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -527,7 +538,7 @@ void MockCP100fx::parametersWordCommHandler(const QString &command, const QByteA
     {
         *paramPtr = correctedArgs.toInt(nullptr, 16);
     }
-    emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
+    emit answerReady(command.toUtf8() + "\r" + QString().setNum(*paramPtr, 16).toUtf8() + "\n");
 }
 
 void MockCP100fx::sysParamsByteCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -542,7 +553,7 @@ void MockCP100fx::sysParamsByteCommHandler(const QString &command, const QByteAr
         *paramPtr = correctedArgs.toInt(nullptr, 16);
         saveSysParameters();
     }
-    emit answerReady(command.toUtf8() + " " + QString().setNum(*paramPtr, 16).toUtf8() + "\r\n");
+    emit answerReady(command.toUtf8() + "\r" + QString().setNum(*paramPtr, 16).toUtf8() + "\n");
 }
 
 void MockCP100fx::eqgCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -554,7 +565,7 @@ void MockCP100fx::eqgCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_gain[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + "\r" + QString().setNum(value, 16).toUtf8() + "\n");
     }
 }
 
@@ -567,7 +578,7 @@ void MockCP100fx::eqfCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_freq[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + "\r" + QString().setNum(value, 16).toUtf8() + "\n");
     }
 }
 
@@ -580,18 +591,22 @@ void MockCP100fx::eqqCommHandler(const QString &command, const QByteArray &argum
         quint8 value = QString(splittedArgs.at(1)).toInt(nullptr, 16);
 
         currentPresetData.modules.eq_q[bandNum] = value;
-        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + " " + QString().setNum(value, 16).toUtf8() + "\r\n");
+        emit answerReady(command.toUtf8() + " " + QString().setNum(bandNum, 16).toUtf8() + "\r" + QString().setNum(value, 16).toUtf8() + "\n");
     }
 }
 
 void MockCP100fx::amtDevCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
-{
-    emit answerReady(QString("amtdev\r5\nEND\n").toUtf8());
+{    
+    switch(m_modification)
+    {
+    case Cp100fx::MONO_MOD: emit answerReady(QString("amtdev\r5\nEND\n").toUtf8()); break;
+    case Cp100fx::STEREO_MOD: emit answerReady(QString("amtdev\r6\nEND\n").toUtf8()); break;
+    }
 }
 
 void MockCP100fx::amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    emit answerReady(QString("amtver\r2.01.00\nEND\n").toUtf8());
+    emit answerReady(QString("amtver\r2.01.05\nEND\n").toUtf8());
 }
 
 void MockCP100fx::sysSettingsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -993,7 +1008,7 @@ void MockCP100fx::cntrlCommHandler(const QString &command, const QByteArray &arg
             currentPresetData.controller[cntrlNum].maxVal = value;
         }
 
-        answer.append(QByteArray::number(cntrlNum, 16) + "\r" + param.toUtf8() + "\r" + QByteArray::number(value, 16));
+        answer.append(QByteArray::number(cntrlNum, 16) + " " + param.toUtf8() + "\r" + QByteArray::number(value, 16));
     }
     else
     {
@@ -1068,7 +1083,7 @@ void MockCP100fx::sysExpr(const QString &command, const QByteArray &arguments, c
     }
 
     saveSysParameters();
-    emit answerReady(command.toUtf8() + " " + arguments + "\r\n");
+    emit answerReady(command.toUtf8() + "\r" + arguments + "\n");
 }
 
 void MockCP100fx::sysTuner(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -1087,7 +1102,7 @@ void MockCP100fx::sysTuner(const QString &command, const QByteArray &arguments, 
     }
 
     saveSysParameters();
-    emit answerReady(command.toUtf8() + " " + arguments + "\r\n");
+    emit answerReady(command.toUtf8() + "\r" + arguments + "\n");
 }
 
 void MockCP100fx::psaveCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -1239,7 +1254,7 @@ void MockCP100fx::meqMf(const QString &command, const QByteArray &arguments, con
     currentSystemData.masterEqFreq = qToBigEndian(val);
     saveSysParameters();
 
-    emit answerReady(command.toUtf8() + " " + arguments + "\r\n");
+    emit answerReady(command.toUtf8() + "\r" + arguments + "\n");
 
 }
 
@@ -1256,14 +1271,14 @@ void MockCP100fx::midiMap(const QString &command, const QByteArray &arguments, c
 
         saveSysParameters();
 
-        emit answerReady((QString("midi_map\r%1\r%2\n").arg(num, 2, 16, QChar('0')).arg(val, 2, 16, QChar('0'))).toUtf8());
+        emit answerReady((QString("midi_map %1\r%2\n").arg(num, 2, 16, QChar('0')).arg(val, 2, 16, QChar('0'))).toUtf8());
     }
 }
 
 void MockCP100fx::fsw(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     QList<QByteArray> separatedArgs = arguments.split(' ');
-    QString answer = command + "\r";
+    QString answer = command + " ";
 
     if(separatedArgs.count() > 2)
     {
@@ -1271,31 +1286,36 @@ void MockCP100fx::fsw(const QString &command, const QByteArray &arguments, const
         QString param = separatedArgs.at(1);
         quint8 value = separatedArgs.at(2).toInt(nullptr, 16);
 
-        answer.append(QByteArray::number(fswNum, 16) + "\r" + param.toUtf8() + "\r" + QByteArray::number(value, 16));
+        answer.append(QByteArray::number(fswNum, 16) + " " + param.toUtf8());
 
         if(param == "mode")
         {
             currentSystemData.fswMode[fswNum] = value;
+            answer.append("\r" + QByteArray::number(value, 16));
         }
 
         if(param == "ptype")
         {
             currentSystemData.fswPressType[fswNum] = value;
+            answer.append("\r" + QByteArray::number(value, 16));
         }
 
         if(param == "htype")
         {
             currentSystemData.fswHoldType[fswNum] = value;
+            answer.append("\r" + QByteArray::number(value, 16));
         }
 
         if(param == "cpressnum")
         {
             currentSystemData.fswControlPressCc[fswNum] = value;
+            answer.append("\r" + QByteArray::number(value, 16));
         }
 
         if(param == "choldnum")
         {
             currentSystemData.fswControlHoldCc[fswNum] = value;
+            answer.append("\r" + QByteArray::number(value, 16));
         }
 
         if(param == "ppressnum")

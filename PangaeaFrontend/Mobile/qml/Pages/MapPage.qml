@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import StyleSettings 1.0
 
 import CustomOverlays 1.0
+import ControlGroups 1.0
 
 import CppObjects
 
@@ -12,39 +13,34 @@ Item
 {
     id: _main
 
-    function setMapContent(){
+    function getMapContentComponent(){
         switch(UiCore.currentDevice.deviceType)
         {
             case DeviceType.LA3:
             case DeviceType.MODERN_CP:
-            {
-                _mapContentLoader.source = "../ControlGroups/MapCPModern.qml";
-                break;
-            }
+                return mapCPModernComponent;
             default:
-            {
-                _mapContentLoader.source = "../ControlGroups/MapCPLegacy.qml";
-                break;
-            }
+                return mapCPLegacyComponent;
         }
     }
 
-    function setConfigContent(){
+    function getConfigContentComponent(){
         switch(UiCore.currentDevice.deviceType)
         {
             case DeviceType.LA3:
             case DeviceType.MODERN_CP:
-            {
-                _mapContentLoader.source = "../ControlGroups/ConfigCP.qml";
-                break;
-            }
+                return configCPComponent;
             default:
-            {
-                _mapContentLoader.source = "../ControlGroups/ConfigUnavaliable.qml";
-                break;
-            }
+                return configUnavaliableComponent;
         }
     }
+
+    Component { id: mapCPModernComponent; MapCPModern {} }
+    Component { id: mapCPLegacyComponent; MapCPLegacy {} }
+    Component { id: configCPComponent; ConfigCP {} }
+    Component { id: configUnavaliableComponent; ConfigUnavaliable {} }
+    Component { id: masterControlsCPComponent; MasterControls_CP {} }
+    Component { id: masterControlsLAComponent; MasterControls_LA {} }
 
     Rectangle
     {
@@ -135,22 +131,26 @@ Item
                 case DeviceType.UNKNOWN_DEVICE:
                 {
                     console.log("MapPage: abstract device")
-                    _masterControlsLoader.source = "";
-                    _mapContentLoader.source = "";
+                    _masterControlsLoader.sourceComponent = null;
+                    _mapContentLoader.sourceComponent = null;
                     break;
                 }
                 case DeviceType.LA3:
                 {
-                    _masterControlsLoader.source = "../ControlGroups/MasterControls_LA.qml";
-                    _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
-                    setMapContent();
+                    _masterControlsLoader.sourceComponent = masterControlsLAComponent;
+                    if(_masterControlsLoader.item) {
+                        _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
+                    }
+                    _mapContentLoader.sourceComponent = getMapContentComponent();
                     break;
                 }
                 default:
                 {
-                    _masterControlsLoader.source = "../ControlGroups/MasterControls_CP.qml";
-                    _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
-                    setMapContent();
+                    _masterControlsLoader.sourceComponent = masterControlsCPComponent;
+                    if(_masterControlsLoader.item) {
+                        _masterControlsLoader.item.openPresetsList.connect(_presetsList.open);
+                    }
+                    _mapContentLoader.sourceComponent = getMapContentComponent();
                     break;
                 }
             }

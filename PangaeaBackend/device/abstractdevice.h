@@ -25,6 +25,8 @@ class Core;
 class AbstractDevice : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
     Q_PROPERTY(DeviceType deviceType READ deviceType CONSTANT)
     Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY firmwareNameChanged FINAL)
@@ -116,6 +118,8 @@ public:
 
     FileBrowserModel *fileBrowser() const;
 
+    Parser* dataInParser() { return &m_parser; }
+
 public slots:
     virtual QList<QByteArray> parseAnswers(QByteArray baAnswer);
 
@@ -176,8 +180,8 @@ protected:
 
     quint16 m_processingBudget{0};
 
-    Firmware* m_actualFirmware{nullptr};
-    Firmware* m_minimalFirmware{nullptr}; 
+    Firmware m_actualFirmware;
+    Firmware m_minimalFirmware;
     QString m_firmwareName;
 
     QStringList m_avaliableOutputModes;

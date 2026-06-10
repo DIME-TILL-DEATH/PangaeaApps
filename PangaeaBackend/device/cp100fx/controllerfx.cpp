@@ -2,13 +2,29 @@
 
 #include "cp100fx.h"
 #include "fswfx.h"
+#include "controlvalue.h"
 
-ControllerFx::ControllerFx(controller_fx_t *controllerData, quint8 num, AbstractDevice* owner)
-    : QObject{owner},
-    m_controllerData{controllerData},
+ControllerFx::ControllerFx(AbstractDevice* owner, quint8 num)
+    : AbstractModule(owner, ModuleType::CONTROLLER, "Controller", ""),
     m_num{num},
-    m_owner{owner}
+    m_destination{nullptr},
+    m_source{nullptr},
+    m_minValue{nullptr},
+    m_maxValue{nullptr}
 {
+    m_destination = new ControlValue(this, nullptr, QString("cntrl %1 dst").arg(QString::number(num, 16)),
+                                     "Destination", "", 0, 31, 0, 31);
+
+    m_source = new ControlValue(this, nullptr, QString("cntrl %1 src").arg(QString::number(num, 16)),
+                                "Source", "", 0, 127, 0, 127);
+    m_source->setDisplaySetter(std::bind(&ControllerFx::srcDisplaySetter, this, std::placeholders::_1));
+    m_source->setControlSetter(std::bind(&ControllerFx::srcControlValueSetter, this, std::placeholders::_1));
+
+    m_minValue = new ControlValue(this, nullptr, QString("cntrl %1 min").arg(QString::number(num, 16)),
+                                  "Min Value", "", 0, 127, 0, 127);
+    m_maxValue = new ControlValue(this, nullptr, QString("cntrl %1 max").arg(QString::number(num, 16)),
+                                  "Max Value", "", 0, 127, 0, 127);
+
     Cp100fx* device = dynamic_cast<Cp100fx*>(m_owner);
     if(device)
     {
@@ -17,98 +33,7 @@ ControllerFx::ControllerFx(controller_fx_t *controllerData, quint8 num, Abstract
             FswFx* fsw = dynamic_cast<FswFx*>(object);
             connect(fsw, &FswFx::fswTypeChanged, this, &ControllerFx::avaliableSourcesChanged);
         }
-
-        connect(this, &ControllerFx::controllerChanged, owner, &AbstractDevice::userModifiedModules);
     }
-}
-
-quint8 ControllerFx::destination() const
-{
-    if(m_controllerData == nullptr) return 0;
-    return m_controllerData->dst;
-}
-
-void ControllerFx::setDestination(quint8 newDestination)
-{
-    if(m_controllerData == nullptr) return;
-
-    if (m_controllerData->dst == newDestination)
-        return;
-    m_controllerData->dst = newDestination;
-    emit controllerChanged();
-
-    sendData((QString("cntrl %1 dst %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerData->dst, 2, 16, QChar('0'))).toUtf8());
-}
-
-quint8 ControllerFx::source()
-{
-    if(m_controllerData == nullptr) return 0;
-
-    QString sourceName;
-    if(sourcesList().size() > m_controllerData->src)
-        sourceName = sourcesList().at(m_controllerData->src);
-    else
-        sourceName = sourcesList().at(0);
-
-    QStringList avaliableSources = avaliableSourcesList();
-
-    for(int i=0; i<avaliableSources.count(); i++)
-    {
-        if(avaliableSources.at(i) == sourceName) return i;
-    }
-
-    return 0;
-}
-
-void ControllerFx::setSource(const QString &srcName)
-{
-    if(m_controllerData == nullptr) return;
-
-    quint8 source = dataFromSourceName(srcName);
-
-    if (m_controllerData->src == source)
-        return;
-
-    m_controllerData->src = source;
-    emit controllerChanged();
-
-    sendData((QString("cntrl %1 src %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerData->src, 2, 16, QChar('0'))).toUtf8());
-}
-
-quint8 ControllerFx::minValue() const
-{
-    if(m_controllerData == nullptr) return 0;
-    return m_controllerData->minVal;
-}
-
-void ControllerFx::setMinValue(quint8 newMinValue)
-{
-    if(m_controllerData == nullptr) return;
-
-    if (m_controllerData->minVal == newMinValue)
-        return;
-    m_controllerData->minVal = newMinValue;
-    emit controllerChanged();
-
-    sendData((QString("cntrl %1 min %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerData->minVal, 2, 16, QChar('0'))).toUtf8());
-}
-
-quint8 ControllerFx::maxValue() const
-{
-    if(m_controllerData == nullptr) return 0;
-    return m_controllerData->maxVal;
-}
-
-void ControllerFx::setMaxValue(quint8 newMaxValue)
-{
-    if(m_controllerData == nullptr) return;
-
-    if (m_controllerData->maxVal == newMaxValue)
-        return;
-    m_controllerData->maxVal = newMaxValue;
-    emit controllerChanged();
-
-    sendData((QString("cntrl %1 max %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerData->maxVal, 2, 16, QChar('0'))).toUtf8());
 }
 
 QStringList ControllerFx::sourcesList()
@@ -116,15 +41,32 @@ QStringList ControllerFx::sourcesList()
     QStringList srcList;
     srcList.append("Off");
     srcList.append("Expression");
-    srcList.append("FSW Up");
-    srcList.append("FSW Confirm");
     srcList.append("FSW Down");
+    srcList.append("FSW Confirm");
+    srcList.append("FSW Up");
 
-    for(quint8 i=0; i<127; i++)
+    for(quint8 i=0; i<128; i++)
     {
         srcList.append("CC# " + QString::number(i));
     }
 
+    const char* note_list[12] =
+        { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+
+    int8_t noteNum;
+
+    for(quint8 i=0; i<120; i++)
+    {
+        if(i < 12)
+            noteNum = -2;
+        else if(i >= 12 && i < 24)
+            noteNum = -1;
+        else
+            noteNum = i / 12 - 2;
+
+        const char* noteChar = note_list[i % 12];
+        srcList.append("Note " + QString(noteChar) + QString::number(noteNum));
+    }
     return srcList;
 }
 
@@ -137,13 +79,16 @@ QStringList ControllerFx::avaliableSourcesList()
     {
         FswFx* fsw;
         fsw = dynamic_cast<FswFx*>(device->fswList().at(0));
-        if(fsw->pressType() != FswFx::Controller && fsw->holdType() != FswFx::Controller) srcList.removeAll("FSW Down");
+        if(static_cast<FswFx::FswType>(fsw->pressType()->displayValue()) != FswFx::Controller
+            && static_cast<FswFx::FswType>(fsw->holdType()->displayValue()) != FswFx::Controller) srcList.removeAll("FSW Down");
 
         fsw = dynamic_cast<FswFx*>(device->fswList().at(1));
-        if(fsw->pressType() != FswFx::Controller && fsw->holdType() != FswFx::Controller) srcList.removeAll("FSW Confirm");
+        if(static_cast<FswFx::FswType>(fsw->pressType()->displayValue()) != FswFx::Controller
+            && static_cast<FswFx::FswType>(fsw->holdType()->displayValue()) != FswFx::Controller) srcList.removeAll("FSW Confirm");
 
         fsw = dynamic_cast<FswFx*>(device->fswList().at(2));
-        if(fsw->pressType() != FswFx::Controller && fsw->holdType() != FswFx::Controller) srcList.removeAll("FSW Up");
+        if(static_cast<FswFx::FswType>(fsw->pressType()->displayValue()) != FswFx::Controller
+            && static_cast<FswFx::FswType>(fsw->holdType()->displayValue()) != FswFx::Controller) srcList.removeAll("FSW Up");
     }
     return srcList;
 }
@@ -163,8 +108,51 @@ quint8 ControllerFx::dataFromSourceName(const QString &source)
     return sourcesMap.key(source);
 }
 
-void ControllerFx::sendData(const QByteArray &data)
+void ControllerFx::setData(const controller_fx_t &m_controllerData)
 {
-    if(m_owner) emit m_owner->sgWriteToInterface(data + "\r\n");
+    m_destination->setControlValue(m_controllerData.dst);
+    m_source->setControlValue(m_controllerData.src);
+    m_minValue->setControlValue(m_controllerData.minVal);
+    m_maxValue->setControlValue(m_controllerData.maxVal);
 }
 
+void ControllerFx::srcDisplaySetter(double value)
+{
+    QStringList avaliableSrcList = avaliableSourcesList();
+    if(value > avaliableSrcList.count()) return;
+
+    QString source = avaliableSrcList.at(value);
+    qDebug() << "Source: " << source;
+
+    QStringList srcList = sourcesList();
+
+    for(quint8 i=0; i < srcList.count(); i++)
+    {
+        if(srcList.at(i) == source)
+        {
+            m_source->modifyDisplayValue(value);
+            emit m_source->displayValueChanged();
+
+            sendDataToDevice(QByteArray(m_source->commandString().toUtf8() + " " + QString::number(i, 16).toUtf8() + "\r\n"));
+            return;
+        }
+    }
+}
+
+void ControllerFx::srcControlValueSetter(qint32 value)
+{
+    QStringList srcList = sourcesList();
+    QString source = srcList.at(value);
+    // qDebug() << "Source: " << source;
+
+    QStringList avaliableSrcList = avaliableSourcesList();
+    for(quint8 i=0; i < avaliableSrcList.count(); i++)
+    {
+        if(avaliableSrcList.at(i) == source)
+        {
+            m_source->modifyDisplayValue(i);
+            emit m_source->displayValueChanged();
+            return;
+        }
+    }
+}

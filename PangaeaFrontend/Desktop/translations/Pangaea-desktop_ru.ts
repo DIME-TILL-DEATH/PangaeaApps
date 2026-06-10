@@ -185,12 +185,12 @@
         <translation>Поиск доступных устройств...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="196"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="178"/>
         <source>Click to connect</source>
         <translation>Нажмите для подсоединения к устройству</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="228"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="210"/>
         <source>Show virtual interfaces</source>
         <translation>Показать виртуальные устройства</translation>
     </message>
@@ -198,22 +198,22 @@
 <context>
     <name>ControlLayoutLegacy</name>
     <message>
-        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="143"/>
+        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="162"/>
         <source>Select IR</source>
         <translation>Выберите импульс</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="179"/>
+        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="198"/>
         <source>Incorrect wav format</source>
         <translation>Некорректный формат файла</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="202"/>
+        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="221"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат файла</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="204"/>
+        <location filename="../qml/CP16/ControlLayoutLegacy.qml" line="223"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Хотите конвертировать файл перед загрузкой?</translation>
     </message>
@@ -438,7 +438,7 @@
         <translation>Имя пресета</translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="191"/>
+        <location filename="../qml/CP100FX/HeadCP100FX.qml" line="195"/>
         <source>Preset comment</source>
         <translation>Комментарий</translation>
     </message>
@@ -471,32 +471,32 @@
         <translation>Имя пресета</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="212"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="216"/>
         <source>IR name</source>
         <translation>Имя импульса</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="229"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="233"/>
         <source>Empty</source>
         <translation>Пусто</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="230"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="234"/>
         <source>IR module not configured</source>
         <translation>IR модуль не сконфигурирован</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="272"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="276"/>
         <source>Add/Remove module</source>
         <translation>Добавить/Убрать модуль</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="383"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="387"/>
         <source>Preset name: </source>
         <translation>Имя пресета: </translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadCPModern.qml" line="383"/>
+        <location filename="../qml/CP16/HeadCPModern.qml" line="387"/>
         <source>IR name: </source>
         <translation>Имя IR: </translation>
     </message>
@@ -529,32 +529,32 @@
         <translation>Имя пресета</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="200"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="204"/>
         <source>IR name</source>
         <translation>Имя импульса</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="217"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="221"/>
         <source>Empty</source>
         <translation>Пусто</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="218"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="222"/>
         <source>IR module not configured</source>
         <translation>IR модуль не сконфигурирован</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="260"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="264"/>
         <source>Add/Remove module</source>
         <translation>Добавить/Убрать модуль</translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="335"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="339"/>
         <source>CLN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/HeadLA3.qml" line="361"/>
+        <location filename="../qml/CP16/HeadLA3.qml" line="365"/>
         <source>DST</source>
         <translation></translation>
     </message>
@@ -716,158 +716,155 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="36"/>
+        <location filename="../qml/Main.qml" line="42"/>
         <source>Connected to </source>
         <translation>Подключено к </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="36"/>
+        <location filename="../qml/Main.qml" line="42"/>
         <source>Disconnected</source>
         <translation>Отключено</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="72"/>
+        <location filename="../qml/Main.qml" line="115"/>
         <source>Do you want to save changes?</source>
         <translation>Вы хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="71"/>
+        <location filename="../qml/Main.qml" line="114"/>
         <source>Save preset</source>
         <translation>Сохранить пресет</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="113"/>
-        <location filename="../qml/Layouts/Main.qml" line="126"/>
-        <location filename="../qml/Layouts/Main.qml" line="244"/>
-        <location filename="../qml/Layouts/Main.qml" line="252"/>
-        <location filename="../qml/Layouts/Main.qml" line="260"/>
-        <location filename="../qml/Layouts/Main.qml" line="281"/>
+        <location filename="../qml/Main.qml" line="156"/>
+        <location filename="../qml/Main.qml" line="169"/>
+        <location filename="../qml/Main.qml" line="262"/>
+        <location filename="../qml/Main.qml" line="270"/>
+        <location filename="../qml/Main.qml" line="278"/>
+        <location filename="../qml/Main.qml" line="299"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="114"/>
-        <location filename="../qml/Layouts/Main.qml" line="127"/>
+        <location filename="../qml/Main.qml" line="157"/>
+        <location filename="../qml/Main.qml" line="170"/>
         <source>Device is disconnected</source>
         <translation>Устройство отключено</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="141"/>
+        <location filename="../qml/Main.qml" line="184"/>
         <source>Operation complete</source>
         <translation>Операция завершена</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="143"/>
+        <location filename="../qml/Main.qml" line="186"/>
         <source>Operation complete. Please, reconnect to device</source>
         <translation>Операция завершена. Пожалуйста, переподключите устройство</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="236"/>
+        <location filename="../qml/Main.qml" line="254"/>
         <source>Device parse error</source>
         <translation>Ошибка разбора команнды</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="245"/>
+        <location filename="../qml/Main.qml" line="263"/>
         <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation>Ошибка при сохранении IR. Пожалуйста, попробуйте загрузить файл ещё раз.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="253"/>
+        <location filename="../qml/Main.qml" line="271"/>
         <source>Not a Pangaea preset file!</source>
         <translation>Файл не является файлом пресета!</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="268"/>
+        <location filename="../qml/Main.qml" line="286"/>
         <source>Warning</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="269"/>
+        <location filename="../qml/Main.qml" line="287"/>
         <source>Version error!</source>
         <translation>Ошибка версии!</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="270"/>
+        <location filename="../qml/Main.qml" line="288"/>
         <source>Firmware version of your device is </source>
         <translation>Версия прошивки Вашего устройства </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="163"/>
-        <location filename="../qml/Layouts/Main.qml" line="172"/>
+        <location filename="../qml/Main.qml" line="289"/>
+        <source>Minimum required version is </source>
+        <translation>Минимальная версия </translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="291"/>
+        <source>Without updating the firmware, some features may not work properly</source>
+        <translation>Без обновления некоторые функции могут работать некорректно.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="206"/>
+        <location filename="../qml/Main.qml" line="215"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="164"/>
+        <location filename="../qml/Main.qml" line="207"/>
         <source>New firmware version(v.</source>
         <translation>Новая версия прошивки(v.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="166"/>
-        <location filename="../qml/Layouts/Main.qml" line="175"/>
+        <location filename="../qml/Main.qml" line="209"/>
+        <location filename="../qml/Main.qml" line="218"/>
         <source>) avaliable on the server</source>
         <translation>) доступна на сервере</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="173"/>
+        <location filename="../qml/Main.qml" line="216"/>
         <source>New application version(v.</source>
         <translation>Новая версия приложения(v.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="261"/>
+        <location filename="../qml/Main.qml" line="279"/>
         <source>You must save preset before export</source>
         <translation>Необходимо сохранить пресет перед экспортом</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="271"/>
-        <source>
-Minimum required version is </source>
-        <translation>Минимальная версия </translation>
-    </message>
-    <message>
-        <location filename="../qml/Layouts/Main.qml" line="273"/>
-        <source>
-Do you want to update firmware now?
-WARNING!!! Updating firmware may take several minutes!</source>
-        <translation>Хотите обновить прошивку? ВНИМАНИЕ!!! Обновление прошивки может занять длительное время.</translation>
-    </message>
-    <message>
-        <location filename="../qml/Layouts/Main.qml" line="282"/>
+        <location filename="../qml/Main.qml" line="300"/>
         <source>IR file copying error.</source>
         <translation>Ошибка при копировании IR файла.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="295"/>
+        <location filename="../qml/Main.qml" line="313"/>
         <source>Preset export finished</source>
         <translation>Экспорт пресета завершён</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="315"/>
+        <location filename="../qml/Main.qml" line="333"/>
         <source>Device is unavaliable</source>
         <translation>Устройство недоступно</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="322"/>
+        <location filename="../qml/Main.qml" line="340"/>
         <source>Command exchange error</source>
         <translation>Ошибка при обмене командами</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="331"/>
+        <location filename="../qml/Main.qml" line="349"/>
         <source>USB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="332"/>
+        <location filename="../qml/Main.qml" line="350"/>
         <source>BLUETOOTH</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="333"/>
+        <location filename="../qml/Main.qml" line="351"/>
         <source>VIRTUAL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/Main.qml" line="334"/>
+        <location filename="../qml/Main.qml" line="352"/>
         <source>Unknown interface</source>
         <translation></translation>
     </message>
@@ -1206,12 +1203,12 @@ WARNING!!! Updating firmware may take several minutes!</source>
 <context>
     <name>SystemViewFx</name>
     <message>
-        <location filename="../qml/CP100FX/SystemViewFx.qml" line="105"/>
+        <location filename="../qml/CP100FX/SystemViewFx.qml" line="100"/>
         <source>Restart device?</source>
         <translation>Перезагрузить устройство?</translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/SystemViewFx.qml" line="106"/>
+        <location filename="../qml/CP100FX/SystemViewFx.qml" line="101"/>
         <source>Changing stereo/mono cab config needs device restart. Do you to do it now?</source>
         <translation>Изменение конфигурации IR между стерео и моно требует перезагрузки устройства. Хотите произвести её сейчас?</translation>
     </message>
@@ -1224,12 +1221,12 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <translation>Тюнер</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="48"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="50"/>
         <source>Note: </source>
         <translation>Нота: </translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="145"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="147"/>
         <source>Ref. freq: </source>
         <translation>Оп.частота: </translation>
     </message>

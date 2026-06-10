@@ -3,13 +3,14 @@ import QtQuick.Controls 2.15
 
 import Elements 1.0
 
-import CppObjects 1.0
+import PangaeaFrontend 1.0
 import PangaeaBackend
 
 BaseModule{
     id: main
 
     property Reverb module: _moduleLoader.selectedModuleInstance
+    property Cp100fx cp100fx: UiCore.currentDevice as cp100fx
 
     contentItem: Row
     {
@@ -29,6 +30,8 @@ BaseModule{
 
             width: main.dialWidth * 2
             height: main.dialHeight
+
+            visible: main.cp100fx.modification === Cp100fx.MONO_MOD
 
             anchors.verticalCenter: parent.verticalCenter
 
@@ -97,7 +100,9 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
-            visible: (module.type.displayValue !== 0) & (module.type.displayValue !== 4)
+            visible: (main.cp100fx.modification === Cp100fx.MONO_MOD) ?
+                ((module.type.displayValue !== Reverb.DEFAULT) & (module.type.displayValue !== Reverb.SPRING))
+                : false
 
             controlValue: module.diffusion
         }
@@ -117,8 +122,7 @@ BaseModule{
 
             ctrlValInstance: module.tail
 
-            textLeft: "ON"
-            textRight: "OFF"
+            invertedValue: 1
 
             moduleOn: module.moduleEnabled
         }

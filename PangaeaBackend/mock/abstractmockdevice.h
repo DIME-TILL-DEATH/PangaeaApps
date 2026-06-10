@@ -12,7 +12,8 @@ enum MockDeviceType
     Mock_CPLegacy,
     Mock_CPModern,
     Mock_LA3,
-    Mock_CP100FX
+    Mock_CP100FX,
+    Mock_CP100FX_S
 };
 
 #define FIRMWARE_STRING_SIZE 20

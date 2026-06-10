@@ -4,10 +4,10 @@ import Qt5Compat.GraphicalEffects
 
 import QtQml.Models
 
-import ModulesClassic
+import ModulesClassic 1.0
 import StyleSettings
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Flickable{
@@ -25,6 +25,41 @@ Flickable{
     }
 
     boundsBehavior: Flickable.StopAtBounds
+
+    function getModuleComponent(moduleType) {
+        switch(moduleType) {
+            case ModuleType.NG: return ngComponent;
+            case ModuleType.CM: return cmComponent;
+            case ModuleType.PR: return prComponent;
+            case ModuleType.PA: return paComponent;
+            case ModuleType.TR: return trComponent;
+            case ModuleType.CH: return chComponent;
+            case ModuleType.IR: return irCpModernComponent;
+            case ModuleType.EQ1:
+            case ModuleType.EQ2: return eqModernComponent;
+            case ModuleType.PH: return phComponent;
+            default: return null;
+        }
+    }
+
+    function getModuleWidthMultiplier(moduleType) {
+        switch(moduleType) {
+            case ModuleType.EQ1:
+            case ModuleType.EQ2: return 5;
+            case ModuleType.PH: return 2;
+            default: return 1;
+        }
+    }
+
+    Component { id: ngComponent; Ng {} }
+    Component { id: cmComponent; Cm {} }
+    Component { id: prComponent; Pr {} }
+    Component { id: paComponent; Pa {} }
+    Component { id: trComponent; Tr {} }
+    Component { id: chComponent; Ch {} }
+    Component { id: irCpModernComponent; IrCpModern {} }
+    Component { id: eqModernComponent; EqModern {} }
+    Component { id: phComponent; Ph {} }
 
     Row{
         id: _mainRow
@@ -80,7 +115,7 @@ Flickable{
                     }
 
                     onDropped: function (drag) {
-                        var from = modelIndex;
+                        var from = (drag.source as Item).dragParent.modelIndex;
                         var to = (drag.source as Item).visualIndex;
                         UiCore.currentDevice.modulesListModel.moveModule(from, to);
                     }
@@ -108,29 +143,12 @@ Flickable{
                             width: parent.width
 
                             Component.onCompleted: function(){
-                                switch(moduleType)
-                                {
-                                case ModuleType.NG: _delegateLoader.source = "../ModulesClassic/Ng.qml"; break;
-                                case ModuleType.CM: _delegateLoader.source = "../ModulesClassic/Cm.qml"; break;
-                                case ModuleType.PR: _delegateLoader.source = "../ModulesClassic/Pr.qml"; break;
-                                case ModuleType.PA: _delegateLoader.source = "../ModulesClassic/Pa.qml"; break;
-                                case ModuleType.TR: _delegateLoader.source = "../ModulesClassic/Tr.qml"; break;
-                                case ModuleType.CH: _delegateLoader.source = "../ModulesClassic/Ch.qml"; break;
-                                case ModuleType.IR: _delegateLoader.source = "../ModulesClassic/IrCpModern.qml"; break;
-                                case ModuleType.EQ1:
-                                case ModuleType.EQ2:{
-                                    _delegateLoader.source = "../ModulesClassic/EqModern.qml";
-                                    _delegateRoot.widthMult = 5
-                                    break;
+                                _delegateRoot.widthMult = _mainFlickable.getModuleWidthMultiplier(moduleType);
+                                _delegateLoader.sourceComponent = _mainFlickable.getModuleComponent(moduleType);
+                                
+                                if(_delegateLoader.item) {
+                                    _delegateLoader.item.module = moduleInstance;
                                 }
-
-                                case ModuleType.PH:{
-                                    _delegateLoader.source = "../ModulesClassic/Ph.qml";
-                                    _delegateRoot.widthMult = 2
-                                    break;
-                                }
-                                }
-                                _delegateLoader.item.module = moduleInstance;
                             }
 
                         }
@@ -158,7 +176,7 @@ Flickable{
                                 // drag.minimumX: 0//_listViewModules.x
                                 // drag.maximumX: _listViewModules.x + _listViewModules.width
 
-                                onPressed: _delegateRoot.modelIndex = visualIndex
+                                onPressed: _delegateRoot.modelIndex = _thing.visualIndex
                                 onReleased: _thing.Drag.drop()
                             }
 

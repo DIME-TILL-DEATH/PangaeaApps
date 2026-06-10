@@ -4,51 +4,60 @@ import StyleSettings
 
 import Qt5Compat.GraphicalEffects
 
-RowLayout{
+Item {
     id: root
 
     property url sourceImage
     property string indicatorText
-    property bool isOk    
+    property bool isOk
+    
+    implicitHeight: 40
+    implicitWidth: 300
 
-    Item{
-        Layout.preferredHeight: root.height
-        Layout.preferredWidth: height
-        Image
-        {
-            id: image
-            source: root.sourceImage
-            anchors.fill: parent
+    Row {
+        anchors.fill: parent
+        spacing: 8
 
-            fillMode: Image.PreserveAspectFit
-            transformOrigin: Item.Center
+        Item {
+            width: root.height
+            height: root.height
+
+            Image {
+                id: image
+                source: root.sourceImage
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                transformOrigin: Item.Center
+            }
+
+            ColorOverlay {
+                anchors.fill: image
+                source: image
+                color: Style.currentTheme.textEnabled
+            }
         }
 
-        ColorOverlay {
-            anchors.fill: image
-            source: image
-            color: Style.currentTheme.textEnabled
+        Rectangle {
+            id: indicator
+            width: root.height
+            height: root.height
+            radius: width / 2
+
+            border.width: 2
+            border.color: Style.currentTheme.backgroundColor
+
+            color: root.isOk ? "green" : "red"
         }
-    }
 
-    Rectangle{
-        id: indicator
-        Layout.preferredHeight: root.height
-        Layout.preferredWidth: height
-        radius: width
+        Item {
+            width: parent.width - root.height * 2 - 16
+            height: root.height
 
-        border.width: 2
-        border.color: Style.currentTheme.backgroundColor
-
-        color: root.isOk ? "green" : "red"
-    }
-    Item{
-        Layout.preferredHeight: root.height
-        Layout.preferredWidth: root.width * 0.6
-        MText{
-            anchors.verticalCenter: parent.verticalCenter
-            verticalAlignment: Text.AlignVCenter
-            text: root.indicatorText
+            MText {
+                anchors.verticalCenter: parent.verticalCenter
+                verticalAlignment: Text.AlignVCenter
+                text: root.indicatorText
+            }
         }
     }
 }

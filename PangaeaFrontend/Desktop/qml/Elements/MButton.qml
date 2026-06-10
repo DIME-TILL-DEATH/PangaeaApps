@@ -110,6 +110,7 @@ Item
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor
             onClicked: {
+                main.focus = true
                 main.clicked();
                 material.start(mouseX, mouseY);
             }

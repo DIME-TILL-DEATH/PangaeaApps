@@ -11,7 +11,7 @@ import StyleSettings 1.0
 import Layouts
 import Elements 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Window{
@@ -24,6 +24,8 @@ Window{
                                                          : "bank_" + UiCore.currentDevice.bank + "/preset_" + UiCore.currentDevice.preset+ "/"
 
     // signal uploadFileReq();
+
+    property CPModern cpmodern: UiCore.currentDevice as CPModern
 
 
     title: qsTr("IR management")
@@ -83,6 +85,8 @@ Window{
 
                 snapMode: ListView.SnapToItem
 
+                property int irCurrentIndex: -1
+
                 delegate: Item{
                     id: _item
 
@@ -118,6 +122,7 @@ Window{
 
                         onClicked: {
                             UiCore.currentDevice.currentIrFile = modelData
+                            console.log(modelData)
                         }
 
                         onReleased: _item.Drag.drop()
@@ -152,6 +157,56 @@ Window{
                         {
                             return (UiCore.currentDevice.currentIrFile.irName === modelData.irName) & (UiCore.currentDevice.currentIrFile.irLinkPath === modelData.irLinkPath)
                         }
+                    }
+                }
+
+                function updateIrIndexes(){
+                    _irListView.irCurrentIndex = -1
+
+                    for(var i=0; i<_irListView.count; i++){
+                        var delegate = _irListView.itemAtIndex(i)
+                        if(delegate.isCurrentIr()) _irListView.irCurrentIndex = i
+                    }
+                }
+
+                Shortcut {
+                    sequence: "Up"
+                    onActivated: {
+                        if(_irListView.irCurrentIndex !== -1 && _irListView.irCurrentIndex > 0){
+                            _irListView.irCurrentIndex--;
+                            var irName = _irListView.model[_irListView.irCurrentIndex]
+                            _irListView.positionViewAtIndex(_irListView.irCurrentIndex, ListView.Center)
+                            _root.cpmodern.currentIrFile = irName
+                        }
+
+                    }
+                }
+
+                Shortcut {
+                    sequence: "Down"
+                    onActivated: {
+                        if(_irListView.irCurrentIndex !== -1 && _irListView.irCurrentIndex < _irListView.count){
+                            _irListView.irCurrentIndex++;
+                            var irName = _irListView.model[_irListView.irCurrentIndex]
+                            _irListView.positionViewAtIndex(_irListView.irCurrentIndex, ListView.Center)
+                            _root.cpmodern.currentIrFile = irName
+                        }
+
+                    }
+                }
+
+                onModelChanged: {
+                    updateIrIndexes()
+                }
+
+                Connections{
+                    target: _root.cpmodern
+                    function onIrsListChanged() {
+                        _irListView.updateIrIndexes()
+                    }
+
+                    function onCurrentIrFileChanged(){
+                        _irListView.updateIrIndexes()
                     }
                 }
             }

@@ -1,10 +1,29 @@
+
 #include "fswfx.h"
+#include "modules/controlvalue.h"
 
 FswFx::FswFx(quint8 num, AbstractDevice *owner)
-    : QObject{owner},
-    m_num{num},
-    m_owner{owner}
-{}
+    : AbstractModule(owner, ModuleType::SYSTEM, QString("Footswitch %1").arg(num), ""),
+    m_num{num}
+{
+    m_mode = new ControlValue(this, nullptr, QString("fsw %1 mode").arg(m_num), "Mode");
+
+    m_pressType = new ControlValue(this, nullptr, QString("fsw %1 ptype").arg(m_num), "Press type:");
+    m_holdType = new ControlValue(this, nullptr, QString("fsw %1 htype").arg(m_num), "Hold type:");
+
+    m_controllerPressNum = new ControlValue(this, nullptr, QString("fsw %1 cpressnum").arg(m_num), "Press CC#:", "", 0, 127, 0, 127);
+    m_controllerHoldNum = new ControlValue(this, nullptr, QString("fsw %1 choldnum").arg(m_num), "Hold CC#:", "", 0, 127, 0, 127);
+
+    for(int i=0; i<4; ++i)
+    {
+        m_pressPreset[i] = new ControlValue(this, nullptr, QString("fsw %1 ppressnum %2").arg(m_num).arg(i), "", "", 0, 98, 0, 98);
+    }
+
+    for(int i=0; i<4; ++i)
+    {
+        m_holdPreset[i] = new ControlValue(this, nullptr, QString("fsw %1 pholdnum %2").arg(m_num).arg(i), "", "", 0, 98, 0, 98);
+    }
+}
 
 QStringList FswFx::ccNames()
 {
@@ -19,143 +38,31 @@ QStringList FswFx::ccNames()
     return names;
 }
 
-void FswFx::sendData(const QByteArray &data)
-{
-    if(m_owner) emit m_owner->sgWriteToInterface(data + "\r\n");
-}
-
 void FswFx::setData(const TSystemSettingsFx &data)
 {
-    m_mode = static_cast<FswMode>(data.fswMode[m_num]);
-    m_pressType = static_cast<FswType>(data.fswPressType[m_num]);
-    m_holdType = static_cast<FswType>(data.fswHoldType[m_num]);
-
-    m_controllerPressNum = data.fswControlPressCc[m_num];
-    m_controllerHoldNum = data.fswControlHoldCc[m_num];
-
-    for(int i=0; i<4; i++)
-    {
-        m_pressPreset[i] = data.fswPressPreset[m_num][i];
-        m_holdPreset[i] = data.fswHoldPreset[m_num][i];
+    m_mode->setControlValue(data.fswMode[m_num]);
+    m_pressType->setControlValue(data.fswPressType[m_num]);
+    m_holdType->setControlValue(data.fswHoldType[m_num]);
+    m_controllerPressNum->setControlValue(data.fswControlPressCc[m_num]);
+    m_controllerHoldNum->setControlValue(data.fswControlHoldCc[m_num]);
+    for(int i=0; i<4; i++) {
+        m_pressPreset[i]->setControlValue(data.fswPressPreset[m_num][i]);
+        m_holdPreset[i]->setControlValue(data.fswHoldPreset[m_num][i]);
     }
-
-    emit paramsChanged();
+    emit dataChanged();
     emit fswTypeChanged();
 }
 
-void FswFx::setMode(FswMode newMode)
-{
-    if (m_mode == newMode)
-        return;
-    m_mode = newMode;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 mode %2").arg(m_num, 2, 16, QChar('0')).arg(m_mode, 2, 16, QChar('0'))).toUtf8());
-}
-
-
-void FswFx::setPressType(FswType newPressType)
-{
-    if (m_pressType == newPressType)
-        return;
-    m_pressType = newPressType;
-    emit paramsChanged();
-    emit fswTypeChanged();
-
-    sendData((QString("fsw %1 ptype %2").arg(m_num, 2, 16, QChar('0')).arg(m_pressType, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setHoldType(FswType newHoldType)
-{
-    if (m_holdType == newHoldType)
-        return;
-    m_holdType = newHoldType;
-    emit paramsChanged();
-    emit fswTypeChanged();
-
-    sendData((QString("fsw %1 htype %2").arg(m_num, 2, 16, QChar('0')).arg(m_holdType, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setControllerPressNum(uint8_t newControllerNum)
-{
-    if (m_controllerPressNum == newControllerNum)
-        return;
-    m_controllerPressNum = newControllerNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 cpressnum %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerPressNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setControllerHoldNum(uint8_t newControllerHoldNum)
-{
-    if (m_controllerHoldNum == newControllerHoldNum)
-        return;
-    m_controllerHoldNum = newControllerHoldNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 choldnum %2").arg(m_num, 2, 16, QChar('0')).arg(m_controllerHoldNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setPressPreset1(quint8 presetNum)
-{
-    m_pressPreset[0] = presetNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 ppressnum 0 %2").arg(m_num, 2, 16, QChar('0')).arg(presetNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setPressPreset2(quint8 presetNum)
-{
-    m_pressPreset[1] = presetNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 ppressnum 1 %2").arg(m_num, 2, 16, QChar('0')).arg(presetNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setPressPreset3(quint8 presetNum)
-{
-    m_pressPreset[2] = presetNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 ppressnum 2 %2").arg(m_num, 2, 16, QChar('0')).arg(presetNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setPressPreset4(quint8 presetNum)
-{
-    m_pressPreset[3] = presetNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 ppressnum 3 %2").arg(m_num, 2, 16, QChar('0')).arg(presetNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setHoldPreset1(quint8 presetNum)
-{
-    m_holdPreset[0] = presetNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 pholdnum 0 %2").arg(m_num, 2, 16, QChar('0')).arg(presetNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setHoldPreset2(quint8 presetNum)
-{
-    m_holdPreset[1] = presetNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 pholdnum 1 %2").arg(m_num, 2, 16, QChar('0')).arg(presetNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setHoldPreset3(quint8 presetNum)
-{
-    m_holdPreset[2] = presetNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 pholdnum 2 %2").arg(m_num, 2, 16, QChar('0')).arg(presetNum, 2, 16, QChar('0'))).toUtf8());
-}
-
-void FswFx::setHoldPreset4(quint8 presetNum)
-{
-    m_holdPreset[3] = presetNum;
-    emit paramsChanged();
-
-    sendData((QString("fsw %1 pholdnum 3 %2").arg(m_num, 2, 16, QChar('0')).arg(presetNum, 2, 16, QChar('0'))).toUtf8());
-}
+ControlValue* FswFx::mode() const { return m_mode; }
+ControlValue* FswFx::pressType() const { return m_pressType; }
+ControlValue* FswFx::holdType() const { return m_holdType; }
+ControlValue* FswFx::controllerPressNum() const { return m_controllerPressNum; }
+ControlValue* FswFx::controllerHoldNum() const { return m_controllerHoldNum; }
+ControlValue* FswFx::pressPreset1() const { return m_pressPreset[0]; }
+ControlValue* FswFx::pressPreset2() const { return m_pressPreset[1]; }
+ControlValue* FswFx::pressPreset3() const { return m_pressPreset[2]; }
+ControlValue* FswFx::pressPreset4() const { return m_pressPreset[3]; }
+ControlValue* FswFx::holdPreset1() const { return m_holdPreset[0]; }
+ControlValue* FswFx::holdPreset2() const { return m_holdPreset[1]; }
+ControlValue* FswFx::holdPreset3() const { return m_holdPreset[2]; }
+ControlValue* FswFx::holdPreset4() const { return m_holdPreset[3]; }

@@ -39,10 +39,6 @@ ApplicationWindow
     {
         UiCore.setupApplication();
 
-        if (Qt.platform.os === "android") {
-            console.log("Android os version", UiCore.apiVersion)
-        }
-
         InterfaceManager.startScanning(DeviceConnectionType.BLE);
         InterfaceManager.startScanning(DeviceConnectionType.USB)
     }

@@ -11,12 +11,15 @@ import Layouts 1.0
 import CP100FX 1.0
 import CP16 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 ApplicationWindow
 {
     id: main
+
+
+
     visible: true
 
     width: Screen.width * 0.75
@@ -28,6 +31,9 @@ ApplicationWindow
     maximumHeight: Screen.width * 0.75 * 0.4 * 1.25
 
     color: Style.currentTheme.backgroundColor
+
+    property var globalRoot: main
+    signal globalClick(var mouse);
 
     property string markEdit: UiCore.currentDevice.deviceParamsModified ? " * ":" "
     property string devName: UiCore.currentDevice.firmwareName
@@ -42,7 +48,6 @@ ApplicationWindow
     title: connected ? Qt.application.name +  " v." + Qt.application.version + " "
                 + markConnect + devName + " (" + interfaceType + ")" + markEdit
                 : Qt.application.name + " v." + Qt.application.version + " " + markConnect
-
 
     header: MainMenu{
         id: _mainMenu
@@ -60,6 +65,45 @@ ApplicationWindow
         id: controlLayoutLoader
 
         anchors.fill: parent
+    }
+
+    function loadLayoutComponent() {
+        if(UiCore.currentDevice.deviceType === DeviceType.UNKNOWN_DEVICE) {
+            controlLayoutLoader.sourceComponent = null;
+            return;
+        }
+
+        startUi.visible = false;
+        
+        var component;
+        switch(UiCore.currentDevice.deviceType){
+            case DeviceType.LA3:
+            case DeviceType.MODERN_CP:
+                component = controlLayoutCPModernComponent;
+                break;
+            case DeviceType.CP100FX:
+            case DeviceType.CP100FX_S:
+                component = controlLayoutCP100FXComponent;
+                break;
+            default:
+                component = controlLayoutLegacyComponent;
+        }
+        controlLayoutLoader.sourceComponent = component;
+    }
+
+    Component {
+        id: controlLayoutCPModernComponent
+        ControlLayoutCPModern {}
+    }
+
+    Component {
+        id: controlLayoutLegacyComponent
+        ControlLayoutLegacy {}
+    }
+
+    Component {
+        id: controlLayoutCP100FXComponent
+        ControlLayoutCP100FX {}
     }
 
     NativeMessageDialog{
@@ -195,32 +239,7 @@ ApplicationWindow
         }
 
         function onCurrentDeviceChanged(){
-
-            switch(UiCore.currentDevice.deviceType){
-            case DeviceType.UNKNOWN_DEVICE:{
-                controlLayoutLoader.source = "";
-                break;
-            }
-
-            case DeviceType.LA3:
-            case DeviceType.MODERN_CP:{
-                startUi.visible = false;
-                controlLayoutLoader.source = "/CP16/ControlLayoutCPModern.qml";
-                break;
-            }
-
-            case DeviceType.CP100FX:{
-                startUi.visible = false;
-                controlLayoutLoader.source = "/CP100FX/ControlLayoutCP100FX.qml";
-                break;
-            }
-
-            default:{
-                startUi.visible = false;
-                controlLayoutLoader.source = "/CP16/ControlLayoutLegacy.qml";
-            }
-            }
-
+            loadLayoutComponent();
         }
     }
 
@@ -267,10 +286,10 @@ ApplicationWindow
                 {
                     _msgVersionInform.title = qsTr("Warning")
                     _msgVersionInform.text = qsTr("Version error!")
-                    _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0]
-                            + qsTr("\nMinimum required version is ")
-                            + params[1]
-                            + qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
+                    _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0] + "\n"
+                            + qsTr("Minimum required version is ")
+                            + params[1] + "\n"
+                            + qsTr("Without updating the firmware, some features may not work properly")
 
                     _msgVersionInform.visible = true;
                     break;
@@ -318,7 +337,7 @@ ApplicationWindow
 
         function onSgExchangeError()
         {
-            controlLayoutLoader.source = "";
+            controlLayoutLoader.sourceComponent = null;
             msgExchangeError.text = qsTr("Command exchange error")
             msgExchangeError.open();
         }

@@ -10,7 +10,7 @@ import Elements
 import Layouts
 
 import CP100FX
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Window{

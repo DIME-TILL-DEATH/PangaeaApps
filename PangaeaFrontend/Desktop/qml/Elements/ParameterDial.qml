@@ -3,7 +3,7 @@ import QtQuick.Controls
 
 import StyleSettings
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Item{
@@ -139,15 +139,11 @@ Item{
                 focusPolicy: Qt.StrongFocus
 
                 onWheel: wheel => {
-                    var step = (_root.controlValue.maxDisplayValue - _root.controlValue.minDisplayValue)/120/100;
-                    // if(control.stepSize === 1) step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100
-                    // else step = control.stepSize
-                    var finalValue = control.value + wheel.angleDelta.y * step;
+                    _txtInput.focus = true;
+                    var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100;
+                    var resultValue = control.value + wheel.angleDelta.y * step;
 
-                    if(finalValue > _root.controlValue.maxDisplayValue) finalValue = _root.controlValue.maxDisplayValue;
-                    if(finalValue < _root.controlValue.minDisplayValue) finalValue = _root.controlValue.minDisplayValue;
-
-                    _root.controlValue.displayValue = finalValue;
+                    controlValue.displayValue = resultValue;
                 }
 
                 onClicked: mouse => {

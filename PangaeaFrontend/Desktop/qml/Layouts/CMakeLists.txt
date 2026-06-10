@@ -14,7 +14,6 @@ qt_add_qml_module(qml_layouts
         DialogCheckBox.qml
         DialogTextInput.qml
         EqWindow.qml
-        Main.qml
         MainMenu.qml
         MBusy.qml
         MapList.qml

@@ -12,13 +12,14 @@ Row{
     property alias model: _combo.model
 
     property alias indicator: _combo.indicator
+    property alias focusPolicy: _combo.focusPolicy
 
     signal activated(index: int)
 
     MLabel{
         id: _label
         width: _label.text !== "" ? parent.width/2 : 0
-        // height: parent.height
+        height: parent.height
         anchors.verticalCenter: parent.verticalCenter
 
 
@@ -28,7 +29,7 @@ Row{
         id: _combo
 
         width: _label.text !== "" ? parent.width/2 : parent.width
-        // height: parent.height * 0.75
+        height: parent.height
 
         anchors.verticalCenter: parent.verticalCenter
 

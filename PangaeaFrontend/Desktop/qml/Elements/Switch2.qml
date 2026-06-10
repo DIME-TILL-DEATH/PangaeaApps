@@ -11,15 +11,23 @@ Item
 
     property int invertedValue: 0
 
+    property bool isHorizontal: false
+
     Rectangle
     {
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenter: main.isHorizontal ? undefined : parent.horizontalCenter
         anchors.verticalCenter:  parent.verticalCenter
+
         width: parent.width/1.5
         height: width/2
+
         radius: height/2
-        color: Style.currentTheme.borderOff
+
+        color: invertedValue ? (main.value ? Style.currentTheme.borderOff : Style.currentTheme.barHigh)
+                             : (main.value  ? Style.currentTheme.barHigh : Style.currentTheme.borderOff)
         border.color: Style.currentTheme.borderOn
+
+        Behavior on color{ColorAnimation {duration: 200}}
         Rectangle
         {
             color: Style.currentTheme.borderOn

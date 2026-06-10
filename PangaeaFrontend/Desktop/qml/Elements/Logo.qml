@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Item
@@ -29,6 +29,7 @@ Item
                 case DeviceType.MODERN_CP: return "qrc:/Images/cp_16m_modern.svg";
                 case DeviceType.LA3: return "qrc:/Images/cp_16m_la3_light.svg";
                 case DeviceType.CP100FX: return "qrc:/Images/cp_100_fx.svg";
+                case DeviceType.CP100FX_S: return "qrc:/Images/cp_100_fx_s.svg";
                 default: ""
             }
         }

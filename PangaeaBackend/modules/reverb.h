@@ -33,6 +33,17 @@ public:
 
     void setValues(const modules_data_fx_t &rvData) override;
 
+    enum TypeFx{
+        DEFAULT,
+        HALL,
+        ROOM,
+        PLATE,
+        SPRING,
+        GATE,
+        REVERSE
+    };
+    Q_ENUM(TypeFx)
+
     ControlValue *mix() const {return m_mix;};
     ControlValue *type() const {return m_type;};
     ControlValue *time() const {return m_time;};

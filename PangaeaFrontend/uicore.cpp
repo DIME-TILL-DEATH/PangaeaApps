@@ -27,6 +27,8 @@ ActivityResultManager activityResultHandler;
 #include "Mobile/ios/src/iosutils.hpp"
 #endif
 
+UiCore* UiCore::instance = nullptr;
+
 UiCore::UiCore(QObject *parent)
     : QObject{parent}
 {

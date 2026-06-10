@@ -8,8 +8,8 @@ import QtQuick.Controls.impl 2.15
 
 import Elements
 import StyleSettings
-import CppObjects 1.0
 
+import PangaeaFrontend
 import PangaeaBackend
 
 Column{
@@ -157,24 +157,6 @@ Column{
             }
         }
     }
-
-    // MButton{
-    //     id: connectButton
-
-    //     width: parent.width
-    //     height: parent.height*12/100
-
-    //     enabled: (listView.count > 0)
-
-
-    //     text: qsTr("Click to connect")
-
-
-    //     onClicked: {
-    //         InterfaceManager.connectToDevice(listView.currentItem.data.deviceDescription,)
-    //     }
-
-    // }
 
     Rectangle{
         id: connectButton

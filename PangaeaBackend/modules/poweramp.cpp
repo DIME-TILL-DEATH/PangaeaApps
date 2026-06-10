@@ -41,9 +41,9 @@ PowerAmp::PowerAmp(AbstractDevice *owner, modules_data_fx_t *paData)
 
     m_commandOnOff = "pa_on";
 
-    m_volume = new ControlValue(this, &paData->pa.master, "pa_ms", "Volume", "", 0, 127, 0, 127); //VOLUME-Master
+    m_volume = new ControlValue(this, &paData->pa.master, "pa_ms", "Master", "", 0, 127, 0, 127); //VOLUME-Master
     m_presence = new ControlValue(this, &paData->presence, "pa_ps", "Presence", "", 0, 127, 0, 127);
-    m_slave = new ControlValue(this, &paData->pa.level, "pa_lv", "Slave", "", 0, 127, 0, 127); //SLAVE-Level
+    m_slave = new ControlValue(this, &paData->pa.level, "pa_lv", "Level", "", 0, 127, 0, 127); //SLAVE-Level
     m_ampType = new ControlValue(this, &paData->pa.type, "pa_tp", "Amp type", "", 0, 127, 0, 127);
 
     m_moduleEnabled = (bool*)&paData->switches.amp;

@@ -2,7 +2,6 @@ import QtQuick 2.15
 
 import CP100FX 1.0
 
-import CppObjects
 
 Column
 {

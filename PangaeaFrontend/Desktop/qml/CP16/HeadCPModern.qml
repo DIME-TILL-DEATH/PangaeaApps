@@ -6,7 +6,7 @@ import StyleSettings
 
 import Layouts
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Item
@@ -157,9 +157,13 @@ Item
                         font.family: "Arial Black"
                         font.pixelSize: Math.min(parent.height/2, parent.width/15)
 
-                        onAccepted:{
+                        onEditingFinished:{
                             focus = false
                             UiCore.currentDevice.currentPresetName = _presetNameEdit.text
+                        }
+
+                        onTextEdited: {
+                            UiCore.currentDevice.userModifiedModules();
                         }
                     }
                 }
