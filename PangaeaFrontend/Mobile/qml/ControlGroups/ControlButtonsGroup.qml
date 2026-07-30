@@ -7,10 +7,10 @@ import QtCore
 import StyleSettings 1.0
 
 import Elements 1.0
-import Modules 1.0
+import ModulesClassic 1.0
 import CustomOverlays
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 GridLayout

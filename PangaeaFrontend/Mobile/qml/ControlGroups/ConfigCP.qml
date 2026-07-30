@@ -8,7 +8,7 @@ import Elements
 import StyleSettings
 import CustomOverlays
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Item {

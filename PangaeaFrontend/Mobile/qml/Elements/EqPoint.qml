@@ -2,7 +2,7 @@ import QtQuick
 
 import StyleSettings
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Rectangle{

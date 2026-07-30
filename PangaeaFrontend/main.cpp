@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtQml>
+// #include <QtQml>
 
 #include <qicon.h>
 #include <signal.h>
@@ -165,14 +165,7 @@ int main(int argc, char *argv[])
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
         &app, []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
 
-#ifdef Q_OS_IOS
-    engine.addImportPath(":/");
-    engine.loadFromModule("Pages", "Main");
-#elif defined(Q_OS_ANDROID)
-    engine.loadFromModule("Pages", "Main");
-#else
     engine.loadFromModule("PangaeaFrontend", "Main");
-#endif
 
 #ifdef Q_OS_ANDROID
     //-----------------------------------------------------------------------

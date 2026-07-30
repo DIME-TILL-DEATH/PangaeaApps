@@ -142,13 +142,14 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     PangaeaBackendplugin
     converter-lib
 
-    qml_cp16plugin
-    qml_cp100fxplugin
     qml_elementsplugin
+    qml_styleplugin
+
     qml_layoutsplugin
     qml_modules_classicplugin
     qml_modules_fxplugin
-    qml_styleplugin
+    qml_cp16plugin
+    qml_cp100fxplugin
 )
 
 
@@ -176,6 +177,12 @@ qt_add_qml_module(${PROJECT_NAME}
 
 if(ANDROID OR IOS)
     add_subdirectory(Mobile)
+
+    if(ANDROID)
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            QT_ANDROID_TARGET_SDK_VERSION 33
+            QT_ANDROID_MIN_SDK_VERSION 28)
+    endif()
 
     if(IOS)
         set_target_properties(${PROJECT_NAME} PROPERTIES

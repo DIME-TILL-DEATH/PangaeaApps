@@ -4,10 +4,10 @@ import QtCore
 import StyleSettings 1.0
 
 import CustomOverlays 1.0
-import Modules 1.0
+import ModulesClassic 1.0
 import Elements 1.0
 
-import CppObjects
+import PangaeaFrontend
 import PangaeaBackend
 
 Item{
@@ -84,10 +84,6 @@ Item{
 
                 inputMethodHints: Qt.ImhUrlCharactersOnly
 
-                // validator: RegularExpressionValidator{
-                //     regularExpression: /[A-za-z0-9_- ]{0,255}/
-                // }
-
                 onAccepted:
                 {
                     UiCore.currentDevice.currentPresetName = contentText;
@@ -103,12 +99,10 @@ Item{
         {
             id: listViewModules
             width: parent.width
-            // height: (parent.height/_mapContent.countElements) * 20 - _moduleColumn.spacing * 4
             height: _mapContent.height - _presetNameContainer.height
                     - _reverbSectionConatiner.height - _clipIndContainer.height - _moduleColumn.spacing * 4
             spacing: 2
 
-            // interactive: false
             orientation: ListView.Vertical
 
             clip: true
@@ -131,56 +125,56 @@ Item{
                     {
                     case ModuleType.NG:
                     {
-                        _delegateLoader.source = "../Modules/NG.qml";
+                        _delegateLoader.source = "../ModulesClassic/NG.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.CM:
                     {
-                        _delegateLoader.source = "../Modules/CM.qml";
+                        _delegateLoader.source = "../ModulesClassic/CM.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PR:
                     {
-                        _delegateLoader.source = "../Modules/PR.qml";
+                        _delegateLoader.source = "../ModulesClassic/PR.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PA:
                     {
-                        _delegateLoader.source = "../Modules/PA.qml";
+                        _delegateLoader.source = "../ModulesClassic/PA.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.TR:
                     {
-                        _delegateLoader.source = "../Modules/TR.qml";
+                        _delegateLoader.source = "../ModulesClassic/TR.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.CH:
                     {
-                        _delegateLoader.source = "../Modules/CH.qml";
+                        _delegateLoader.source = "../ModulesClassic/CH.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PH:
                     {
-                        _delegateLoader.source = "../Modules/PH.qml";
+                        _delegateLoader.source = "../ModulesClassic/PH.qml";
                         _delegateLoader.height = _main.height*7/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.IR:
                     {
-                        _delegateLoader.source = "../Modules/IRCPModern.qml";
+                        _delegateLoader.source = "../ModulesClassic/IRCPModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.openIrManagementWindow.connect(_mapContent.showIrManagementWindow);
                         break;
@@ -188,20 +182,17 @@ Item{
 
                     case ModuleType.EQ1:
                     {
-                        _delegateLoader.source = "../Modules/EQPreviewModern.qml";
+                        _delegateLoader.source = "../ModulesClassic/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq1);
-                        // _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
 
-                        // _eqExtLoader.eq1Instance = moduleInstace
-                        // _eqExtLoader.source = "../Modules/EQExtModern.qml";
                         _eqExtLoader.eq1Instance = moduleInstance;
                         break;
                     }
 
                     case ModuleType.EQ2:
                     {
-                        _delegateLoader.source = "../Modules/EQPreviewModern.qml";
+                        _delegateLoader.source = "../ModulesClassic/EQPreviewModern.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq2);
                         // _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
@@ -365,7 +356,7 @@ Item{
 
         property EqParametric eqModule
 
-        source: "../Modules/EQExtModern.qml";
+        source: "../ModulesClassic/EQExtModern.qml";
 
         anchors.centerIn: parent
 
