@@ -35,6 +35,14 @@ Item
         }
     }
 
+    function setMapContent(){
+        _mapContentLoader.sourceComponent = getMapContentComponent();
+    }
+
+    function setConfigContent(){
+        _mapContentLoader.sourceComponent = getConfigContentComponent();
+    }
+
     Component { id: mapCPModernComponent; MapCPModern {} }
     Component { id: mapCPLegacyComponent; MapCPLegacy {} }
     Component { id: configCPComponent; ConfigCP {} }
