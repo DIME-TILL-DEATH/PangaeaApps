@@ -18,7 +18,7 @@ ApplicationWindow
     visible: true
     visibility: (Qt.platform.os === "android" & UiCore.apiVersion > 34) ? Window.FullScreen : Window.AutomaticVisibility
 
-    color: "#EBECEC"
+    color: "#000000"
 
     Material.theme: Material.Dark
     Material.accent: Style.currentTheme.materialAccent
@@ -93,9 +93,7 @@ ApplicationWindow
 
         enabled: _connectPage.isConnected
 
-        height: _main.height/20
-        // currentIndex: _swipeView.currentIndex
-
+        height: _main.height / 20
         TabButton {
             height: parent.height
             anchors.top: parent.top
