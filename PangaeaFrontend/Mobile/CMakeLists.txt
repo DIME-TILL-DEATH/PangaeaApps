@@ -22,6 +22,7 @@ if(ANDROID)
             "/"
         FILES
             android/src/JavaFile.java
+            android/src/MainActivity.java
             android/src/org/jniusbserial/JniUsbSerial.java
             android/src/org/jniusbserial/SerialInputOutputManager.java
 
