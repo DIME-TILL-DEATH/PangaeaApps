@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -18,16 +19,17 @@ public class MainActivity extends QtActivity {
         super.onCreate(savedInstanceState);
 
         Window window = getWindow();
-        WindowCompat.setDecorFitsSystemWindows(window, false);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         window.setStatusBarColor(Color.BLACK);
         window.setNavigationBarColor(Color.BLACK);
+
+        WindowCompat.setDecorFitsSystemWindows(window, false);
 
         View decorView = window.getDecorView();
         enableImmersiveMode(decorView);
 
         WindowInsetsControllerCompat controller = new WindowInsetsControllerCompat(window, decorView);
-        controller.setSystemBarsBehavior(
-                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         controller.hide(WindowInsetsCompat.Type.systemBars());
 
         decorView.setOnSystemUiVisibilityChangeListener(visibility -> {

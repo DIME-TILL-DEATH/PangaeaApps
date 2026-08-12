@@ -166,32 +166,6 @@ int main(int argc, char *argv[])
         &app, []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
 
     engine.loadFromModule("PangaeaFrontend", "Main");
-
-#ifdef Q_OS_ANDROID
-    //-----------------------------------------------------------------------
-    // keep screen always on
-    // also WAKE_LOCK permision in manifest
-        qt5RunOnAndroidMainThread([]
-        {
-            QJniObject activity = QNativeInterface::QAndroidApplication::context();
-            if (activity.isValid())
-            {
-                QJniObject window = activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
-
-                if (window.isValid())
-                {
-                    const int FLAG_KEEP_SCREEN_ON = 128;
-                    window.callMethod<void>("addFlags", "(I)V", FLAG_KEEP_SCREEN_ON);
-                }
-
-                QJniEnvironment env;
-                if (env->ExceptionCheck())
-                {
-                    env->ExceptionClear();
-                }
-            }
-        });
-#endif
     //----------------------------------------------------------------------
     return app.exec();
 }
