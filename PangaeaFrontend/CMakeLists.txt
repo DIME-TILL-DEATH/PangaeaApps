@@ -180,7 +180,7 @@ if(ANDROID OR IOS)
 
     if(ANDROID)
         set_target_properties(${PROJECT_NAME} PROPERTIES
-            QT_ANDROID_TARGET_SDK_VERSION 35
+            QT_ANDROID_TARGET_SDK_VERSION 36
             QT_ANDROID_MIN_SDK_VERSION 28)
     endif()
 

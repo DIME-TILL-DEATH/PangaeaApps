@@ -1,10 +1,8 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.12
 
 import StyleSettings 1.0
 import Elements 1.0
 
-import PangaeaFrontend
 import PangaeaBackend
 
 Column
@@ -16,8 +14,8 @@ Column
 
     CustomLogSlider
     {
-        ctrlValInstance: eqBand.Fc
-        moduleOn: eqBand.enabled
+        ctrlValInstance: _root.eqBand.Fc
+        moduleOn: _root.eqBand.enabled
         fontSize: 8 * Style.dip
 
         height: parent.height/4
@@ -30,13 +28,13 @@ Column
         anchors.horizontalCenter: parent.horizontalCenter
 
         textButton: qsTr("CUT ON")
-        textColor: eqBand.enabled ? Style.colorText : Style.currentTheme.colorTextDisabled
+        textColor: _root.eqBand.enabled ? Style.colorText : Style.currentTheme.colorTextDisabled
 
-        highlighted: eqBand.enabled
+        highlighted: _root.eqBand.enabled
 
         onMbPressed:
         {
-            eqBand.enabled = !eqBand.enabled
+            _root.eqBand.enabled = !_root.eqBand.enabled
         }
     }
 }

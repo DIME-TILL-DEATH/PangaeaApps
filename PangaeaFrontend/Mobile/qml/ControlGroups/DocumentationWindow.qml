@@ -1,13 +1,10 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 
 import CustomOverlays 1.0
-import ControlGroups 1.0
-import ModulesClassic 1.0
 import Elements 1.0
 
 import PangaeaFrontend
@@ -49,7 +46,7 @@ CustomMessageDialog {
         id: _dialogButtonBox
 
         width: _root.width
-        height: parentHeight*0.2
+        height: _root.parentHeight*0.2
         color: "transparent"
         radius: Style.baseRadius
         border.color: Style.currentTheme.colorBorderOn
@@ -85,7 +82,7 @@ CustomMessageDialog {
             textButton: qsTr("Web site")
             onMbPressed:
             {
-               Qt.openUrlExternally("https://amtelectronics.com/");
+               Qt.openUrlExternally("https://amtelectronics.ru/");
             }
         }
 
@@ -99,7 +96,7 @@ CustomMessageDialog {
             textButton: qsTr("Media center")
             onMbPressed:
             {
-               Qt.openUrlExternally("https://media.amt-sales.com/cat/cab-emulation/pangaea-series/");
+               Qt.openUrlExternally("https://media.amtelectronics.ru/cat/cab-emulation/pangaea-series/");
             }
         }
 

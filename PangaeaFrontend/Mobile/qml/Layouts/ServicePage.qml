@@ -252,7 +252,7 @@ Item
         property string appString: (Qt.platform.os === "android") ? qsTr("AMT Pangaea CP-16/CP-100\nAndroid application\nVersion: ")
                                                                : qsTr("AMT Pangaea CP-16/CP-100\niOS application\nVersion: ")
         text: appString + Qt.application.version + "\n"
-              + "(c) 2025\nwebsite: https://amtelectronics.com"
+              + "(c) 2026\nwebsite: https://amtelectronics.ru"
 
         closeOnDisconnect: true
 
