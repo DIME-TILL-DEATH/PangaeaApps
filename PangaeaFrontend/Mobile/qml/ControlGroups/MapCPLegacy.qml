@@ -62,7 +62,7 @@ Item{
                     {
                     case ModuleType.NG:
                     {
-                        _delegateLoader.source = "/ModulesClassic/NG.qml";
+                        _delegateLoader.source = "../ModulesClassic/NG.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }

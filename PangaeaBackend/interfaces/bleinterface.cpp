@@ -9,6 +9,7 @@
 
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
+#include "../utils/androidutils.h"
 #endif
 
 #include "bleinterface.h"
@@ -127,22 +128,48 @@ void BleInterface::startScan()
         }
         else
         {
-            app->requestPermission(QBluetoothPermission{}, [this](const QPermission &permission)
-            {
-                if(permission.status() == Qt::PermissionStatus::Granted)
-                {
-                    qInfo() << "Bluetooth permission granted";
-                    if(state() == InterfaceState::Idle)
-                    {
+            auto checkAndRequestBluetoothPermissions = [this, app]() {
+                bool scanGranted = AndroidUtils::checkPermission("android.permission.BLUETOOTH_SCAN");
+                bool connectGranted = AndroidUtils::checkPermission("android.permission.BLUETOOTH_CONNECT");
+                
+                qInfo() << "BLUETOOTH_SCAN granted: " << scanGranted;
+                qInfo() << "BLUETOOTH_CONNECT granted: " << connectGranted;
+                
+                if (scanGranted && connectGranted) {
+                    qInfo() << "Bluetooth permissions granted";
+                    if(state() == InterfaceState::Idle) {
                         startDiscovering();
                     }
+                } else {
+                    // Request missing permissions
+                    if (!scanGranted) {
+                        qInfo() << "Requesting BLUETOOTH_SCAN permission";
+                        AndroidUtils::requestPermission("android.permission.BLUETOOTH_SCAN");
+                    }
+                    if (!connectGranted) {
+                        qInfo() << "Requesting BLUETOOTH_CONNECT permission";
+                        AndroidUtils::requestPermission("android.permission.BLUETOOTH_CONNECT");
+                    }
+                    
+                    // Re-check after request
+                    QTimer::singleShot(500, this, [this]() {
+                        bool scanGranted = AndroidUtils::checkPermission("android.permission.BLUETOOTH_SCAN");
+                        bool connectGranted = AndroidUtils::checkPermission("android.permission.BLUETOOTH_CONNECT");
+                        
+                        if (scanGranted && connectGranted) {
+                            qInfo() << "Bluetooth permissions now granted";
+                            if(state() == InterfaceState::Idle) {
+                                startDiscovering();
+                            }
+                        } else {
+                            qWarning() << "Bluetooth permission not granted!";
+                            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "UnknownBleError");
+                        }
+                    });
                 }
-                else
-                {
-                    qWarning() << "Bluetooth permission not granted!";
-                    emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "UnknownBleError");
-                }
-            });
+            };
+            
+            checkAndRequestBluetoothPermissions();
         }
     }
 #else
