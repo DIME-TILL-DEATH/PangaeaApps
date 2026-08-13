@@ -62,58 +62,58 @@ Item{
                     {
                     case ModuleType.NG:
                     {
-                        _delegateLoader.source = "/Modules/NG.qml";
+                        _delegateLoader.source = "/ModulesClassic/NG.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.CM:
                     {
-                        _delegateLoader.source = "../Modules/CM.qml";
+                        _delegateLoader.source = "../ModulesClassic/CM.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PR:
                     {
-                        _delegateLoader.source = "../Modules/PR.qml";
+                        _delegateLoader.source = "../ModulesClassic/PR.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PA:
                     {
-                        _delegateLoader.source = "../Modules/PA.qml";
+                        _delegateLoader.source = "../ModulesClassic/PA.qml";
                         _delegateLoader.height = _main.height*4/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.PS:
                     {
-                        _delegateLoader.source = "../Modules/PS.qml";
+                        _delegateLoader.source = "../ModulesClassic/PS.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.IR:
                     {
-                        _delegateLoader.source = "../Modules/IRCPLegacy.qml";
+                        _delegateLoader.source = "../ModulesClassic/IRCPLegacy.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
 
                     case ModuleType.HP:
                     {
-                        _delegateLoader.source = "../Modules/HP.qml";
+                        _delegateLoader.source = "../ModulesClassic/HP.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
                     case ModuleType.EQ1:
                     {
-                        _delegateLoader.source = "../Modules/EQPreviewLegacy.qml";
+                        _delegateLoader.source = "../ModulesClassic/EQPreviewLegacy.qml";
                         _delegateLoader.height = _main.height*3/countElements - _moduleColumn.spacing;
 
-                        _eqExtLoader.source = "../Modules/EQExtLegacy.qml";
+                        _eqExtLoader.source = "../ModulesClassic/EQExtLegacy.qml";
                         _delegateLoader.item.extVisible.connect(_mapContent.showFullEq);
                         _eqExtLoader.item.hide.connect(_mapContent.hideFullEq);
                         _eqExtLoader.item.eqModule = moduleInstance;
@@ -121,7 +121,7 @@ Item{
                     }
                     case ModuleType.LP:
                     {
-                        _delegateLoader.source = "../Modules/LP.qml";
+                        _delegateLoader.source = "../ModulesClassic/LP.qml";
                         _delegateLoader.height = _main.height*1/countElements - _moduleColumn.spacing;
                         break;
                     }
@@ -129,7 +129,7 @@ Item{
                     case ModuleType.ER_MONO:
                     case ModuleType.ER_STEREO:
                     {
-                        _delegateLoader.source = "../Modules/ER.qml";
+                        _delegateLoader.source = "../ModulesClassic/ER.qml";
                         _delegateLoader.height = _main.height*2/countElements - _moduleColumn.spacing;
                         break;
                     }
