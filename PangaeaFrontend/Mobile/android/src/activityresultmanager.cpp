@@ -135,13 +135,6 @@ void ActivityResultManager::processUri(JUri uriObject)
 
 void ActivityResultManager::takeReadUriPermission(JUri uriObject)
 {
-    bool result = AndroidUtils::checkPermission("android.permission.READ_EXTERNAL_STORAGE");
-    if(!result)
-    {
-        qDebug() << "READ_EXTERNAL_STORAGE permission denied, trying to request";
-        AndroidUtils::requestPermission("android.permission.READ_EXTERNAL_STORAGE");
-    }
-
     QJniObject::callStaticMethod<void>(
             "com.amtelectronics/JavaFile", "takeReadUriPermission",
             "(Landroid/net/Uri;Landroid/content/Context;)V",
