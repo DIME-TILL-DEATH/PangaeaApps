@@ -12,7 +12,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
-    set(VERSION_CODE 52)
+    set(VERSION_CODE 55)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
