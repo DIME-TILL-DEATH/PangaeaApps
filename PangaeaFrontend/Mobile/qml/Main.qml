@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls.Material
-import QtCore
 
 import CustomOverlays 1.0
 import Elements 1.0
@@ -16,9 +15,6 @@ ApplicationWindow
     id: _main
 
     visible: true
-    visibility: (Qt.platform.os === "android" & UiCore.apiVersion > 34) ? Window.FullScreen : Window.AutomaticVisibility
-
-    color: "#000000"
 
     Material.theme: Material.Dark
     Material.accent: Style.currentTheme.materialAccent
@@ -26,9 +22,7 @@ ApplicationWindow
     Material.elevation: 4
 
     property bool connected: false
-
     property bool swipeEn: true
-
     property int curView: 0
 
     function openConnectPage()    {
@@ -43,92 +37,83 @@ ApplicationWindow
         InterfaceManager.startScanning(DeviceConnectionType.USB)
     }
 
-    header: ApplicationHeader
-    {
-    }
-
     Rectangle
     {
         anchors.fill: parent
         color: "#2B2A29"
     }
 
-    SwipeView
-    {
-        id: _swipeView
+    Column{
+        anchors{
+            fill: parent
+            // bottomMargin: _main.bottomInset
+        }
 
-        width: parent.width
-        height: parent.height//*0.98
-
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        currentIndex: _bar.currentIndex
-        interactive: false
-
-        ConnectPage
+        ApplicationHeader
         {
-            id: _connectPage
+            id: _header
 
         }
 
-        MapPage
+        SwipeView
         {
-            id: _mapPage
+            id: _swipeView
+
+            width: parent.width
+            height: parent.height -  _header.height - _bar.height
+
+            currentIndex: _bar.currentIndex
+            interactive: false
+
+            ConnectPage{ id: _connectPage }
+            MapPage{ id: _mapPage }
+            ServicePage{ id: _servicePage }
+            SettingsPage{id: _settingsPage }
         }
 
-        ServicePage
-        {
-            id: _servicePage
+       TabBar{
+            id: _bar
 
-        }
+            enabled: _connectPage.isConnected
+            height: _main.height / 20
+            width: parent.width
 
-        SettingsPage
-        {
-            id: _settingsPage
-        }
-    }
-
-    footer: TabBar{
-        id: _bar
-
-        enabled: _connectPage.isConnected
-
-        height: _main.height / 20
-        TabButton {
-            height: parent.height
-            anchors.top: parent.top
-            text: qsTr("Connect")
-            onClicked: {
-                _main.openConnectPage();
-            }
-         }
-         TabButton {
-             height: parent.height
-             anchors.top: parent.top
-             text: qsTr("Controls")
-             onClicked: {
-                 _mapPage.setMapContent()
-                 _swipeView.currentIndex=1
+            TabButton {
+                height: parent.height
+                anchors.top: parent.top
+                text: qsTr("Connect")
+                onClicked: {
+                    _main.openConnectPage();
+                }
              }
-         }
-         TabButton {
-             height: parent.height
-             anchors.top: parent.top
-             text: qsTr("Config")
-             onClicked: {
-                 _mapPage.setConfigContent()
-                 _swipeView.currentIndex=1
+             TabButton {
+                 height: parent.height
+                 anchors.top: parent.top
+                 text: qsTr("Controls")
+                 onClicked: {
+                     _mapPage.setMapContent()
+                     _swipeView.currentIndex=1
+                 }
+             }
+             TabButton {
+                 height: parent.height
+                 anchors.top: parent.top
+                 text: qsTr("Config")
+                 onClicked: {
+                     _mapPage.setConfigContent()
+                     _swipeView.currentIndex=1
 
+                 }
              }
-         }
-         TabButton {
-             height: parent.height
-             anchors.top: parent.top
-             text: qsTr("Service")
-             onClicked: {
-                 _swipeView.currentIndex=2
+             TabButton {
+                 height: parent.height
+                 anchors.top: parent.top
+                 text: qsTr("Service")
+                 onClicked: {
+                     _swipeView.currentIndex=2
+                 }
              }
-         }
+        }
     }
 
     BusyScreen

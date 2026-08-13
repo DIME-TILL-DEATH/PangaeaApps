@@ -21,35 +21,6 @@
 #include "uicore.h"
 #include "uisettings.h"
 
-
-#ifdef Q_OS_ANDROID
-#include <QtCore/private/qandroidextras_p.h>
-
-using QtJniObject = QJniObject;
-
-inline QtJniObject qtAndroidContext()
-{
-    return QJniObject(QCoreApplication::instance()
-                          ->nativeInterface<QNativeInterface::QAndroidApplication>()
-                          ->context());
-}
-
-inline int qtAndroidSdkVersion()
-{
-    return QCoreApplication::instance()
-        ->nativeInterface<QNativeInterface::QAndroidApplication>()
-        ->sdkVersion();
-}
-
-inline void qt5RunOnAndroidMainThread(const std::function<void()> &runnable)
-{
-    QCoreApplication::instance()
-        ->nativeInterface<QNativeInterface::QAndroidApplication>()
-        ->runOnAndroidMainThread([runnable]() {runnable(); return
-QVariant();});
-}
-#endif
-
 void manageSegFailure(int signalCode);
 
 int main(int argc, char *argv[])

@@ -6,16 +6,15 @@ import StyleSettings 1.0
 
 import PangaeaFrontend
 
-ToolBar
+Item
 {
     id: _root
 
     property string appVersionStr: Qt.application.version == "" ? "" : "Application ver: " + Qt.application.version
-    property string  poVersion: (connected ? UiCore.currentDevice.firmwareName : "") + "/" + appVersionStr
+    property string poVersion: (connected ? UiCore.currentDevice.firmwareName : "") + "/" + appVersionStr
 
-    height:  Screen.desktopAvailableHeight / 75
-
-    signal menuClicked()
+    width: parent.width
+    height: parent.height/75 //Screen.desktopAvailableHeight / 75
 
     Rectangle
     {
