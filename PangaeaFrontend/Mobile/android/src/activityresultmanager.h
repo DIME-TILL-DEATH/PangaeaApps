@@ -13,7 +13,7 @@
 Q_DECLARE_JNI_CLASS(JClipData, "android/content/ClipData")
 Q_DECLARE_JNI_CLASS(JItem, "android/content/ClipData$Item")
 Q_DECLARE_JNI_CLASS(JUri, "android/net/Uri")
-Q_DECLARE_JNI_CLASS(JFile, "com.amtelectronics.utils/JavaFile")
+Q_DECLARE_JNI_CLASS(JFile, "com.amtelectronics/JavaFile")
 
 enum ActivityType
 {

@@ -127,7 +127,7 @@ void ActivityResultManager::processUri(JUri uriObject)
 
     QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
     m_fileName= QJniObject::callStaticObjectMethod(
-            "com.amtelectronics.utils/JavaFile", "getFileName",
+            "com.amtelectronics/JavaFile", "getFileName",
             "(Landroid/net/Uri;Landroid/content/Context;)Ljava/lang/String;",
             uriObject.object(),
             androidContext.object()).toString();
@@ -135,15 +135,8 @@ void ActivityResultManager::processUri(JUri uriObject)
 
 void ActivityResultManager::takeReadUriPermission(JUri uriObject)
 {
-    bool result = AndroidUtils::checkPermission("android.permission.READ_EXTERNAL_STORAGE");
-    if(!result)
-    {
-        qDebug() << "READ_EXTERNAL_STORAGE permission denied, trying to request";
-        AndroidUtils::requestPermission("android.permission.READ_EXTERNAL_STORAGE");
-    }
-
     QJniObject::callStaticMethod<void>(
-            "com.amtelectronics.utils/JavaFile", "takeReadUriPermission",
+            "com.amtelectronics/JavaFile", "takeReadUriPermission",
             "(Landroid/net/Uri;Landroid/content/Context;)V",
             uriObject.object(),
             QNativeInterface::QAndroidApplication::context());
@@ -167,7 +160,7 @@ void ActivityResultManager::takeWriteUriPermission(JUri uriObject)
     }
 
     QJniObject::callStaticMethod<void>(
-            "com.amtelectronics.utils/JavaFile", "takeWriteUriPermission",
+            "com.amtelectronics/JavaFile", "takeWriteUriPermission",
             "(Landroid/net/Uri;Landroid/content/Context;)V",
             uriObject.object(),
             QNativeInterface::QAndroidApplication::context());
@@ -190,7 +183,7 @@ QString ActivityResultManager::getFileNameFromUri(QString uri)
 
         QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
         QString fileName = QJniObject::callStaticObjectMethod(
-                               "com.amtelectronics.utils/JavaFile", "getFileName",
+                               "com.amtelectronics/JavaFile", "getFileName",
                                "(Landroid/net/Uri;Landroid/content/Context;)Ljava/lang/String;",
                                uriJni.object(), androidContext.object()).toString();
         return fileName;

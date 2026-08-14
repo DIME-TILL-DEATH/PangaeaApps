@@ -7,10 +7,9 @@
 
 #include <QThread>
 
-
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
-#include "androidutils.h"
+#include "../utils/androidutils.h"
 #endif
 
 #include "bleinterface.h"
@@ -94,32 +93,84 @@ void BleInterface::startScan()
 #ifdef Q_OS_ANDROID
     if(app)
     {
-        app->requestPermission(QLocationPermission{}, [this, app](const QPermission &permission)
+        constexpr int ANDROID_12_API_LEVEL = 31;
+        qInfo() << "Android SDK version: " << QNativeInterface::QAndroidApplication::sdkVersion();
+        if (QNativeInterface::QAndroidApplication::sdkVersion() < ANDROID_12_API_LEVEL)
         {
-            if(permission.status() == Qt::PermissionStatus::Granted)
+            app->requestPermission(QLocationPermission{}, [this, app](const QPermission &permission)
             {
-                qDebug() << "Geolocation permission granted";
-                app->requestPermission(QBluetoothPermission{}, [this](const QPermission &permission)
+                if(permission.status() == Qt::PermissionStatus::Granted)
                 {
-                    if(permission.status() == Qt::PermissionStatus::Granted)
+                    qInfo() << "Geolocation permission granted";
+                    app->requestPermission(QBluetoothPermission{}, [this](const QPermission &permission)
                     {
-                        qDebug() << "Bluetooth permission granted";
-                        if(state() == InterfaceState::Idle)
+                        if(permission.status() == Qt::PermissionStatus::Granted)
                         {
-                           startDiscovering();
+                            qInfo() << "Bluetooth permission granted";
+                            if(state() == InterfaceState::Idle)
+                            {
+                               startDiscovering();
+                            }
                         }
+                        else
+                        {
+                            qWarning() << "Bluetooth permission not granted!";
+                            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "UnknownBleError");
+                        }
+                    });
+                }
+                else
+                {
+                    qWarning() << "Geolocation permission not granted!";
+                    emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "GeolocationPermissionDenied");
+                }
+            });
+        }
+        else
+        {
+            auto checkAndRequestBluetoothPermissions = [this, app]() {
+                bool scanGranted = AndroidUtils::checkPermission("android.permission.BLUETOOTH_SCAN");
+                bool connectGranted = AndroidUtils::checkPermission("android.permission.BLUETOOTH_CONNECT");
+                
+                qInfo() << "BLUETOOTH_SCAN granted: " << scanGranted;
+                qInfo() << "BLUETOOTH_CONNECT granted: " << connectGranted;
+                
+                if (scanGranted && connectGranted) {
+                    qInfo() << "Bluetooth permissions granted";
+                    if(state() == InterfaceState::Idle) {
+                        startDiscovering();
                     }
-                    else
-                    {
-                        qWarning() << "Bluetooth permission not granted!";
+                } else {
+                    // Request missing permissions
+                    if (!scanGranted) {
+                        qInfo() << "Requesting BLUETOOTH_SCAN permission";
+                        AndroidUtils::requestPermission("android.permission.BLUETOOTH_SCAN");
                     }
-                });
-            }
-            else
-            {
-                qWarning() << "Geolocation permission not granted!";
-            }
-        });
+                    if (!connectGranted) {
+                        qInfo() << "Requesting BLUETOOTH_CONNECT permission";
+                        AndroidUtils::requestPermission("android.permission.BLUETOOTH_CONNECT");
+                    }
+                    
+                    // Re-check after request
+                    QTimer::singleShot(500, this, [this]() {
+                        bool scanGranted = AndroidUtils::checkPermission("android.permission.BLUETOOTH_SCAN");
+                        bool connectGranted = AndroidUtils::checkPermission("android.permission.BLUETOOTH_CONNECT");
+                        
+                        if (scanGranted && connectGranted) {
+                            qInfo() << "Bluetooth permissions now granted";
+                            if(state() == InterfaceState::Idle) {
+                                startDiscovering();
+                            }
+                        } else {
+                            qWarning() << "Bluetooth permission not granted!";
+                            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "UnknownBleError");
+                        }
+                    });
+                }
+            };
+            
+            checkAndRequestBluetoothPermissions();
+        }
     }
 #else
 
@@ -150,7 +201,8 @@ void BleInterface::startScan()
             }
             else
             {
-               qWarning() << "Bluetooth permission not granted!";
+                qWarning() << "Bluetooth permission not granted!";
+                sgInterfaceError(QObject::tr("Bluetooth permission not granted!"));
             }
         });
     }
@@ -190,7 +242,7 @@ void BleInterface::startDiscovering()
         m_qlFoundDevices.clear();
         emit sgDeviceListUpdated(DeviceConnectionType::BLE, m_qlFoundDevices);
         emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+#if (defined(Q_OS_LINUX) || defined(Q_OS_MACOS) || defined(Q_OS_WIN)) && not defined(Q_OS_ANDROID)
         setState(InterfaceState::PowerOff);
 #else
         device.powerOn();
@@ -295,7 +347,7 @@ void BleInterface::deviceScanError(QBluetoothDeviceDiscoveryAgent::Error error)
     {
         case QBluetoothDeviceDiscoveryAgent::PoweredOffError:
         {
-            qDebug() << __FUNCTION__ << "The Bluetooth adapter is powered off, power it on before doing discovery.";
+            qWarning() << __FUNCTION__ << "The Bluetooth adapter is powered off, power it on before doing discovery.";
             emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "HostPoweredOff");
             break;
         }
@@ -303,6 +355,12 @@ void BleInterface::deviceScanError(QBluetoothDeviceDiscoveryAgent::Error error)
         {
             qDebug() << __FUNCTION__ << "An unknown error has occurred.";
             emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "UnknownBleError");
+            break;
+        }
+        case QBluetoothDeviceDiscoveryAgent::LocationServiceTurnedOffError:
+        {
+            qWarning() << __FUNCTION__ << "Location services turned off";
+            emit sgInterfaceUnavaliable(DeviceConnectionType::BLE, "GeolocationIsOff");
             break;
         }
         default:

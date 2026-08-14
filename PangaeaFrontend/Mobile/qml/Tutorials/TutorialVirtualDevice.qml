@@ -1,17 +1,7 @@
 import QtQuick 2.15
-import QtCore
-
-
 import QtQuick.Controls.Material
-//import QtQuick.Controls 2.12
 
-import Elements 1.0
-import Pages 1.0
-
-import StyleSettings 1.0
-
-import CppObjects
-
+import PangaeaFrontend
 import PangaeaBackend
 
 Item {
@@ -23,10 +13,6 @@ Item {
     {
         _tutorialDialog.open()
     }
-
-    // Settings{
-
-    // }
 
     SimpleTutorialMessage
     {

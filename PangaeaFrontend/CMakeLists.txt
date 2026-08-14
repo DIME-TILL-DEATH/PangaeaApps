@@ -12,7 +12,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
-    set(VERSION_CODE 52)
+    set(VERSION_CODE 55)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -142,13 +142,14 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     PangaeaBackendplugin
     converter-lib
 
-    qml_cp16plugin
-    qml_cp100fxplugin
     qml_elementsplugin
+    qml_styleplugin
+
     qml_layoutsplugin
     qml_modules_classicplugin
     qml_modules_fxplugin
-    qml_styleplugin
+    qml_cp16plugin
+    qml_cp100fxplugin
 )
 
 
@@ -176,6 +177,12 @@ qt_add_qml_module(${PROJECT_NAME}
 
 if(ANDROID OR IOS)
     add_subdirectory(Mobile)
+
+    if(ANDROID)
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            QT_ANDROID_TARGET_SDK_VERSION 36
+            QT_ANDROID_MIN_SDK_VERSION 28)
+    endif()
 
     if(IOS)
         set_target_properties(${PROJECT_NAME} PROPERTIES

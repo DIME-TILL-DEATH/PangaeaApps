@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QtQml>
+// #include <QtQml>
 
 #include <qicon.h>
 #include <signal.h>
@@ -20,35 +20,6 @@
 
 #include "uicore.h"
 #include "uisettings.h"
-
-
-#ifdef Q_OS_ANDROID
-#include <QtCore/private/qandroidextras_p.h>
-
-using QtJniObject = QJniObject;
-
-inline QtJniObject qtAndroidContext()
-{
-    return QJniObject(QCoreApplication::instance()
-                          ->nativeInterface<QNativeInterface::QAndroidApplication>()
-                          ->context());
-}
-
-inline int qtAndroidSdkVersion()
-{
-    return QCoreApplication::instance()
-        ->nativeInterface<QNativeInterface::QAndroidApplication>()
-        ->sdkVersion();
-}
-
-inline void qt5RunOnAndroidMainThread(const std::function<void()> &runnable)
-{
-    QCoreApplication::instance()
-        ->nativeInterface<QNativeInterface::QAndroidApplication>()
-        ->runOnAndroidMainThread([runnable]() {runnable(); return
-QVariant();});
-}
-#endif
 
 void manageSegFailure(int signalCode);
 
@@ -165,58 +136,7 @@ int main(int argc, char *argv[])
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
         &app, []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
 
-#ifdef Q_OS_IOS
-    engine.addImportPath(":/");
-    engine.loadFromModule("Pages", "Main");
-#elif defined(Q_OS_ANDROID)
-    engine.loadFromModule("Pages", "Main");
-#else
     engine.loadFromModule("PangaeaFrontend", "Main");
-#endif
-
-#ifdef Q_OS_ANDROID
-    //-----------------------------------------------------------------------
-    // keep screen always on
-    // also WAKE_LOCK permision in manifest
-        qt5RunOnAndroidMainThread([]
-        {
-            QJniObject activity = QNativeInterface::QAndroidApplication::context();
-            if (activity.isValid())
-            {
-                QJniObject window = activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
-
-                if (window.isValid())
-                {
-                    const int FLAG_KEEP_SCREEN_ON = 128;
-                    window.callMethod<void>("addFlags", "(I)V", FLAG_KEEP_SCREEN_ON);
-
-                    // deprecated in API level 30
-                    // https://developer.android.com/develop/ui/views/layout/immersive
-                    const int SYSTEM_UI_FLAG_HIDE_NAVIGATION = 0x00000002;
-                    const int SYSTEM_UI_FLAG_FULLSCREEN = 0x00000004;
-                    const int SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION = 0x00000200;
-                    const int SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN = 0x00000400;
-                    const int SYSTEM_UI_FLAG_LAYOUT_STABLE = 0x00000100;
-                    const int SYSTEM_UI_FLAG_IMMERSIVE_STICKY = 0x00001000;
-
-                    int flags = SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                                SYSTEM_UI_FLAG_FULLSCREEN |
-                                SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                                SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                                SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                                SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-                    QJniObject decorView = window.callObjectMethod("getDecorView", "()Landroid/view/View;");
-                    decorView.callMethod<void>("setSystemUiVisibility", "(I)V", flags);
-                }
-
-                QJniEnvironment env;
-                if (env->ExceptionCheck())
-                {
-                    env->ExceptionClear();
-                }
-            }
-        });
-#endif
     //----------------------------------------------------------------------
     return app.exec();
 }

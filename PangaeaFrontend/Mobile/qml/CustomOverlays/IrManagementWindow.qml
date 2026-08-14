@@ -11,7 +11,7 @@ import StyleSettings 1.0
 import Elements 1.0
 
 import PangaeaBackend
-import CppObjects
+import PangaeaFrontend
 
 Item{
     id: _root
