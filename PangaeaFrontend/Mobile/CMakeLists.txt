@@ -27,6 +27,9 @@ if(ANDROID)
             android/src/org/jniusbserial/SerialInputOutputManager.java
 
             android/AndroidManifest.xml
+            android/res/values/splashscreentheme.xml
+            android/res/values/libs.xml
+
             android/build.gradle
     )
 endif()
