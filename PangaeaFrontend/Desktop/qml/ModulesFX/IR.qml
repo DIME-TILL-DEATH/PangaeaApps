@@ -13,7 +13,6 @@ BaseModule{
     id: main
 
     property DualCabSim module: _moduleLoader.selectedModuleInstance
-    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
 
     FileBrowserWindow{
         id: _fileBrowser
@@ -48,14 +47,14 @@ BaseModule{
 
             text: qsTr("Cab")
 
-            visible: (main.cp100fx.modification === Cp100fx.MONO_MOD) ? (main.cp100fx.systemSettings.cabNumber === 2)
+            visible: (UiCore.currentDevice.modification === Cp100fx.MONO_MOD) ? (UiCore.currentDevice.systemSettings.cabNumber === 2)
                                                                       : true
             width: main.dialWidth
             height: main.dialHeight
 
             opacity: module.moduleEnabled ? 1.0 : 0.5
 
-            model: (main.cp100fx.modification === Cp100fx.MONO_MOD) ? ["1", "2"] : ["R", "L"]
+            model: (UiCore.currentDevice.modification === Cp100fx.MONO_MOD) ? ["1", "2"] : ["R", "L"]
 
             currentIndex: 0
 
@@ -69,7 +68,7 @@ BaseModule{
             width: 1
             height: parent.height
 
-            visible: (main.cp100fx.modification === Cp100fx.MONO_MOD) ? (main.cp100fx.systemSettings.cabNumber === 2)
+            visible: (UiCore.currentDevice.modification === Cp100fx.MONO_MOD) ? (UiCore.currentDevice.systemSettings.cabNumber === 2)
                                                                       : true
         }
 
@@ -85,7 +84,7 @@ BaseModule{
             width: main.dialWidth
             height: main.dialHeight
 
-            visible: (main.cp100fx.modification === Cp100fx.MONO_MOD) && (UiCore.currentDevice.systemSettings.cabNumber === 2)
+            visible: (UiCore.currentDevice.modification === Cp100fx.MONO_MOD) && (UiCore.currentDevice.systemSettings.cabNumber === 2)
 
             controlValue: (_chooseCabCombo.currentIndex === 0) ? module.firstCabPan : module.secondCabPan
         }

@@ -1,5 +1,4 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.11
 
 import Elements 1.0
@@ -33,7 +32,7 @@ Rectangle {
         anchors.fill: _main
 
         opacity: 0.25
-        visible: disabled
+        visible: _main.disabled
         z: _mainRow.z + 1
 
         SequentialAnimation on color{
@@ -47,7 +46,7 @@ Rectangle {
     Row {
         id: _mainRow
 
-        enabled: !disabled
+        enabled: !_main.disabled
 
         width: _main.width
         height: _main.height
@@ -120,7 +119,7 @@ Rectangle {
 
             visible: _contentItem.contentWidth > _contentItem.width
 
-            width: dialWidth/3
+            width: _main.dialWidth/3
             height: parent.height
 
             text: "<"
@@ -129,7 +128,7 @@ Rectangle {
             onClicked: {
                 if(_contentItem.contentX > 0)
                 {
-                    _contentItem.contentX = _contentItem.contentX - dialWidth;
+                    _contentItem.contentX = _contentItem.contentX - _main.dialWidth;
                     _contentItem.returnToBounds();
                 }
             }
@@ -173,7 +172,7 @@ Rectangle {
                     // width: _contentItem.width
                     height: _contentItem.height
 
-                    sourceComponent: contentItem
+                    sourceComponent: _main.contentItem
                 }
             }
         }
@@ -183,7 +182,7 @@ Rectangle {
 
             visible: _contentItem.contentWidth > _contentItem.width
 
-            width: dialWidth/3
+            width: _main.dialWidth/3
             height: parent.height
 
             text: ">"
@@ -192,7 +191,7 @@ Rectangle {
             onClicked: {
                 if(_contentItem.contentX < _contentItem.contentWidth - _contentItem.width)
                 {
-                    _contentItem.contentX = _contentItem.contentX + dialWidth
+                    _contentItem.contentX = _contentItem.contentX + _main.dialWidth
                     _contentItem.returnToBounds();
                 }
             }

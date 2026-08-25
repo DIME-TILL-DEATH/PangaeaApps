@@ -2,14 +2,13 @@ import QtQuick 2.15
 
 import Elements 1.0
 
-import PangaeaFrontend 1.0
+import PangaeaFrontend
 import PangaeaBackend
 
 BaseModule{
     id: main
 
     property PowerAmp module: _moduleLoader.selectedModuleInstance
-    property Cp100fx cp100fx: UiCore.currentDevice as cp100fx
 
     contentItem: Row
     {
@@ -47,7 +46,7 @@ BaseModule{
 
             moduleOn: module.moduleEnabled
 
-            model: main.cp100fx.modification === Cp100fx.MONO_MOD ? ["1. Push-pull 6L6",
+            model: UiCore.currentDevice.modification === Cp100fx.MONO_MOD ? ["1. Push-pull 6L6",
                 "2. Push-pull EL34",
                 "3. Single-ended 6L6",
                 "4. Single-ended EL34",

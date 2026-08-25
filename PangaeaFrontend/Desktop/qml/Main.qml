@@ -8,8 +8,9 @@ import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 import Layouts 1.0
-import CP100FX 1.0
-import CP16 1.0
+
+import CP16
+import CP100FX
 
 import PangaeaFrontend
 import PangaeaBackend

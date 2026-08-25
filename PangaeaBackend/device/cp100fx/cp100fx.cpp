@@ -61,6 +61,8 @@ Cp100fx::Cp100fx(Core *parent, Modification modification)
     copiedPreset = new PresetFx{this};
     copiedPresetFx = dynamic_cast<PresetFx*>(copiedPreset);
 
+    comparePresetFx = new PresetFx{this};
+
     for(quint8 i=0; i < ControllersCount; i++)
     {
         m_actualControllersList.append(new ControllerFx(this, i));
@@ -75,6 +77,7 @@ Cp100fx::~Cp100fx()
     delete(actualPreset);
     delete(savedPreset);
     delete(copiedPreset);
+    delete(comparePresetFx);
 }
 
 QStringList Cp100fx::strPresetNumbers()
@@ -972,13 +975,14 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     case PresetState::SetCompare:
     {
-        actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
+        *comparePresetFx = *actualPresetFx;
+        comparePresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
         // setPresetData(savedPreset);
 
         emit sgPushCommandToQueue("state get");
         m_presetManager.returnToPreviousState();
         m_presetManager.setCurrentState(PresetState::Compare);
-        // emit currentPresetNameChanged(); // Меняется только отображаемое имя. В устройство писать не обязательно
+
         emit sgProcessCommands();
         break;
     }
@@ -991,9 +995,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     case PresetState::Compare:
     {
-        // configModules(savedPreset);
         m_presetListModel.updatePreset(savedPreset);
-        // Необходимая заглушка. Не удалять
         break;
     }
 
