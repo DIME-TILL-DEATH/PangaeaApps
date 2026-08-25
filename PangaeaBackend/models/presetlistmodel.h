@@ -38,6 +38,7 @@ private:
         Impulse2nameRole,
         ActiveModulesRole
     };
+    Q_ENUM(ListRoles)
 };
 
 #endif // PRESETLISTMODEL_H

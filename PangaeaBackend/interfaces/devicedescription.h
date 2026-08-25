@@ -30,7 +30,7 @@ Q_DECLARE_METATYPE(DeviceConnectionType)
 class DeviceDescription
 {
     Q_GADGET
-    QML_ELEMENT
+    QML_NAMED_ELEMENT(deviceDescription)
 
     Q_PROPERTY(QString name READ name CONSTANT)
     Q_PROPERTY(QString address READ address CONSTANT)
@@ -51,7 +51,5 @@ private:
     DeviceConnectionType m_connectionType{DeviceConnectionType::Unknown};
 };
 Q_DECLARE_METATYPE(DeviceDescription)
-
-
 
 #endif // DEVICEDESCRIPTION_H

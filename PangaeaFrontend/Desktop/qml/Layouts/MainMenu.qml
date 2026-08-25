@@ -9,14 +9,13 @@ import StyleSettings 1.0
 import Qt.labs.platform 1.1 as Labs
 import QtQml
 
-import PangaeaFrontend 1.0
-import PangaeaBackend 1.0
+import PangaeaFrontend
+import PangaeaBackend
 
 MenuBar{
     id: mainMenu
 
     property bool presetEdited: UiCore.currentDevice.deviceParamsModified
-
 
     Menu{
         title: qsTr("File")
@@ -24,6 +23,7 @@ MenuBar{
             id: _importPreset
 
             text: qsTr("Import preset")
+            visible: (UiCore.currentDevice !== DeviceType.CP100FX_S) && (UiCore.currentDevice !== DeviceType.CP100FX)
 
             onTriggered: importPresetDialog.open();
         }
@@ -31,6 +31,7 @@ MenuBar{
             id: _exportPreset
 
             text: qsTr("Export preset")
+            visible: (UiCore.currentDevice !== DeviceType.CP100FX_S) && (UiCore.currentDevice !== DeviceType.CP100FX)
 
             onTriggered:
             {

@@ -1,15 +1,5 @@
 import QtQuick 2.15
-import QtQuick.Controls.Fusion
-import QtQuick.Dialogs
-import QtCore
-
-import Qt.labs.platform 1.1 as Labs
-
 import QtQuick.Window 2.15
-
-import ModulesClassic 1.0
-import StyleSettings 1.0
-import Layouts 1.0
 
 import PangaeaFrontend
 import PangaeaBackend
@@ -20,8 +10,6 @@ Column
     anchors.fill: parent
     focus: true
     spacing: 2
-
-    property bool isLA3Mode: UiCore.currentDevice.deviceType === DeviceType.LA3
 
     ModulesConfigWindow{
         id: _modulesConfigWindow
@@ -36,44 +24,31 @@ Column
         height: mainUi.height
     }
 
-    HeadCPModern
-    {
-        id: headCP
+    Loader{
+        id: _headLoader
 
-        width:  parent.width
-        height: parent.height/1000*150
+        source: UiCore.currentDevice.deviceType === DeviceType.LA3 ?
+                    "HeadLA3.qml" : "HeadCPModern.qml"
 
-        visible: !isLA3Mode
-
-        onOpenIrManagerWindow: {
-            _irManagerWindow.show();
+        onLoaded: {
+            _headLoader.item.width = Qt.binding(function() { return parent.width })
+            _headLoader.item.height = Qt.binding(function() { return parent.height/1000*150 })
         }
 
-        onOpenModulesConfigWindow: {
-            _modulesConfigWindow.show();
-        }
-    }
+        Connections{
+            target: _headLoader.item
 
-    HeadLA3
-    {
-        id: headLA3
+            function onOpenIrManagerWindow(){
+                _irManagerWindow.show();
+            }
 
-        width:  parent.width
-        height: parent.height/1000*150
-
-        visible: isLA3Mode
-
-        onOpenIrManagerWindow: {
-            _irManagerWindow.show();
-        }
-
-        onOpenModulesConfigWindow: {
-            _modulesConfigWindow.show();
+            function onOpenModulesConfigWindow(){
+                _modulesConfigWindow.show();
+            }
         }
     }
 
-    ModulesListModern
-    {
+    ModulesListModern{
         id: _mainRow
 
         width: parent.width

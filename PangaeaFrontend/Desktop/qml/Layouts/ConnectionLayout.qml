@@ -135,10 +135,10 @@ Column{
             clip: true
 
             delegate: ILDelegate{
-                property variant data: model
+                // property variant data: model
 
-                width: listView.width
-                height: listView.height/6
+                width: ListView.view.width
+                height: ListView.view.height/6
             }
 
             highlight: ILHighlight{}

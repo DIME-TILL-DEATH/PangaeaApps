@@ -125,7 +125,7 @@ Window{
             Layout.leftMargin: width/10
             Layout.rightMargin: width/20
 
-            focusPolicy: Qt.NoFocus
+            combofocusPolicy: Qt.NoFocus
 
             text: "Cab num:"
 

@@ -11,7 +11,7 @@ Item{
     width:  parent.width
     height: parent.height/1000*165
 
-    enabled: module.moduleEnabled
+    enabled: (module === undefined) ? true : module.moduleEnabled
 
 
     required property ControlValue controlValue

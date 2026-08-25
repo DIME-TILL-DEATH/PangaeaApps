@@ -90,8 +90,8 @@ Window{
                 delegate: Item{
                     id: _item
 
-                    width: _irListView.width
-                    height: _irListView.height/25
+                    width: ListView.view.width
+                    height: ListView.view.height/25
 
                     property var irFile: modelData
 
@@ -163,9 +163,10 @@ Window{
                 function updateIrIndexes(){
                     _irListView.irCurrentIndex = -1
 
-                    for(var i=0; i<_irListView.count; i++){
-                        var delegate = _irListView.itemAtIndex(i)
-                        if(delegate.isCurrentIr()) _irListView.irCurrentIndex = i
+                    for(let i=0; i<_irListView.count; i++){
+                        let delegate = _irListView.itemAtIndex(i)
+                        if(delegate)
+                            if((delegate).isCurrentIr()) _irListView.irCurrentIndex = i
                     }
                 }
 
@@ -174,7 +175,7 @@ Window{
                     onActivated: {
                         if(_irListView.irCurrentIndex !== -1 && _irListView.irCurrentIndex > 0){
                             _irListView.irCurrentIndex--;
-                            var irName = _irListView.model[_irListView.irCurrentIndex]
+                            let irName = _irListView.model[_irListView.irCurrentIndex]
                             _irListView.positionViewAtIndex(_irListView.irCurrentIndex, ListView.Center)
                             _root.cpmodern.currentIrFile = irName
                         }

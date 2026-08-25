@@ -1,6 +1,5 @@
 import QtQuick
 
-import PangaeaFrontend 1.0
 import PangaeaBackend
 
 Item
@@ -8,7 +7,6 @@ Item
     id: main
 
     property ControlValue controlValue
-    property bool enabled
 
     Column
     {
@@ -21,10 +19,10 @@ Item
             height: parent.height/100*50
             opacity: module.moduleEnabled ? 1 : 0.5
 
-            value: controlValue.displayValue
+            value: main.controlValue.displayValue
 
             onChValue: function changeValue(value){
-                controlValue.displayValue = value
+                main.controlValue.displayValue = value
             }
         }
 
@@ -43,7 +41,7 @@ Item
                 font.pixelSize: height/1.4
                 horizontalAlignment: Text.AlignLeft
 
-                onClicked: controlValue.displayValue = 0
+                onClicked: main.controlValue.displayValue = 0
             }
 
             CheckText
@@ -55,7 +53,7 @@ Item
                 enabled: main.enabled
                 font.pixelSize: height/1.4
 
-                onClicked: controlValue.displayValue = 1
+                onClicked: main.controlValue.displayValue = 1
             }
 
             CheckText
@@ -68,7 +66,7 @@ Item
                 font.pixelSize: height/1.4
                 horizontalAlignment: Text.AlignRight
 
-                onClicked: controlValue.displayValue = 2
+                onClicked: main.controlValue.displayValue = 2
             }
         }
     }

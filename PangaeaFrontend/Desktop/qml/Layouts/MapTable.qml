@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 
 import Elements
 import StyleSettings
@@ -74,12 +73,12 @@ Window
                     width: parent.width
                     height: parent.height/11*10
 
-                    cellWidth: width/maxMapRow
-                    cellHeight: height/maxMapRow
+                    cellWidth: width/main.maxMapRow
+                    cellHeight: height/main.maxMapRow
 
                     interactive: false
 
-                    currentIndex: UiCore.currentDevice.bank*maxMapRow + UiCore.currentDevice.preset
+                    currentIndex: UiCore.currentDevice.bank*main.maxMapRow + UiCore.currentDevice.preset
 
                     highlight: Rectangle{
                         color: "gray"
