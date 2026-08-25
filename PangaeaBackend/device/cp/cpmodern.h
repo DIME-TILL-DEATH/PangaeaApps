@@ -137,6 +137,7 @@ protected:
     QList<PresetAbstract*> m_presetsList;
     PresetModern* actualPresetModern;
     PresetModern* savedPresetModern; // TODO используется из листа
+    PresetModern* comparePresetModern;
     PresetModern* copiedPresetModern;
 
     QList<IrFile> m_irsInLibrary;

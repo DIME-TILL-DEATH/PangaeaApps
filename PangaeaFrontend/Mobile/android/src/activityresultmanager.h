@@ -31,7 +31,7 @@ public:
     ActivityResultManager();
     void handleActivityResult(int receiverRequestCode, int resultCode, const QJniObject &data) override;
 
-    static QString getFileNameFromUri(QString uri);
+    // static QString getFileNameFromUri(QString uri);
     static void takeReadUriPermission(QtJniTypes::JUri uriObject);
     static void takeWriteUriPermission(QtJniTypes::JUri uriObject);
 private:

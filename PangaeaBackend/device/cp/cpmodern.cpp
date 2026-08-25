@@ -47,6 +47,8 @@ CPModern::CPModern(Core *parent)
     copiedPreset = new PresetModern{this};
     copiedPresetModern = dynamic_cast<PresetModern*>(copiedPreset);
 
+    comparePresetModern = new PresetModern{this};
+
     connect(&m_modulesListModel, &ModulesListModel::sgModulesReconfigured, this, &CPModern::setModules);
     connect(&m_modulesListModel, &ModulesListModel::sgModulesReconfigured, this, &AbstractDevice::processingUsedChanged);
 }
@@ -58,6 +60,7 @@ CPModern::~CPModern()
     delete(actualPreset);
     delete(savedPreset);
     delete(copiedPreset);
+    delete(comparePresetModern);
 }
 
 void CPModern::updateOutputModeNames()
@@ -256,10 +259,8 @@ void CPModern::comparePreset()
     }
     else
     {
+        setPresetData(*comparePresetModern);
         m_presetManager.returnToPreviousState();
-        emit currentPresetNameChanged();
-        setPresetData(*actualPresetModern);
-        emit sgPushCommandToQueue("state get\r\n");
     }
     emit sgProcessCommands();
 }
@@ -293,10 +294,10 @@ void CPModern::pastePreset()
     quint8 currentBankNumber = actualPreset->bankNumber();
     quint8 currentPresetNumber = actualPreset->presetNumber();
 
-    *actualPresetModern = *copiedPresetModern;
-    actualPreset->setBankPreset(currentBankNumber, currentPresetNumber);
-    setPresetData(*actualPresetModern);
-    m_presetListModel.updatePreset(actualPreset);
+    // *actualPresetModern = *copiedPresetModern;
+    copiedPresetModern->setBankPreset(currentBankNumber, currentPresetNumber);
+    setPresetData(*copiedPresetModern);
+    m_presetListModel.updatePreset(copiedPresetModern);
 
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
@@ -322,7 +323,7 @@ void CPModern::importPreset(QString filePath, QString fileName)
     else
     {
         setPresetData(*actualPresetModern);
-        emit sgPushCommandToQueue("state get\r\n");
+        // emit sgPushCommandToQueue("state get\r\n");
     }
 
     m_deviceParamsModified = true;
@@ -509,26 +510,31 @@ QString CPModern::currentPresetName() const
 
 void CPModern::setPresetData(const PresetModern &preset)
 {
+    QByteArray ba;
+    ba.append("state set\r");
+    ba.append(PresetModern::presetDataToChars(preset.presetData));
+    emit sgPushCommandToQueue(ba + "\n", false);
+
+    emit sgPushCommandToQueue("state get");
+
+    configModules(preset);
+    setModules();
+
     IR->setImpulseName(preset.irFile.irName());
     emit sgPushCommandToQueue("ir link\r" + preset.irFile.irName().toUtf8() + "\r" +
                                   preset.irFile.irLinkPath().toUtf8() + "\n", false);
     emit sgPushCommandToQueue("pname set\r" + preset.presetName().toUtf8() + "\n");
 
-    QByteArray ba;
-    ba.append("state set\r");
-    ba.append(PresetModern::presetDataToChars(preset.presetData));
-    emit sgPushCommandToQueue(ba + "\n", false);
     emit sgProcessCommands();
-
-    configModules(preset);
+    emit currentPresetNameChanged();
 }
 
 void CPModern::setFirmware(QString fullFilePath)
 {
-    qDebug()<< __FUNCTION__ << "fullFilePath" << fullFilePath;
-
-    QUrl url(fullFilePath);
+    QUrl url = QUrl::fromLocalFile(fullFilePath);
     emit sgDeviceMessage(DeviceMessageType::FirmwareFilePath, url.path());
+
+    qInfo()<< __FUNCTION__ << "fullFilePath" << fullFilePath;
 
     if(!Firmware::isFirmwareFile(fullFilePath))
     {
@@ -836,14 +842,12 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
 
     case PresetState::SetCompare:
     {
-        actualPresetModern->presetData = PresetModern::charsToPresetData(baPresetData);
-        setPresetData(*savedPresetModern);
+        *comparePresetModern = *actualPresetModern; // name, ir, bank-preset
+        comparePresetModern->presetData = PresetModern::charsToPresetData(baPresetData);
 
-        emit sgPushCommandToQueue("state get");
         m_presetManager.returnToPreviousState();
         m_presetManager.setCurrentState(PresetState::Compare);
-        emit currentPresetNameChanged(); // Меняется только отображаемое имя. В устройство писать не обязательно
-        emit sgProcessCommands();
+        setPresetData(*savedPresetModern);
         break;
     }
 
@@ -855,9 +859,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
 
     case PresetState::Compare:
     {
-        // configModules(savedPreset);
         m_presetListModel.updatePreset(savedPreset);
-        // Необходимая заглушка. Не удалять
         break;
     }
 
@@ -868,7 +870,6 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
     }
     }
     m_presetListModel.updatePreset(actualPreset);
-    // configModules(actualPreset);
 }
 
 
@@ -895,22 +896,19 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
 
     if(arguments == "link")
     {
-        switch(m_presetManager.currentState())
+        QList<QByteArray> dataList = data.split('\r');
+        if(dataList.length()==2)
         {
-        case PresetState::Compare:
+            actualPresetModern->irFile.setIrName(dataList.at(0));
+            actualPresetModern->irFile.setIrLinkPath(dataList.at(1));
+        }
+        else
         {
-            break;
+            actualPresetModern->irFile.clear();
+            IR->setImpulseName("INVALID LINK");
+            // qWarning() << __FUNCTION__ << "IR File invalid link";
         }
-        default:
-        {
-            QList<QByteArray> dataList = data.split('\r');
-            if(dataList.length()==2)
-            {
-                actualPresetModern->irFile.setIrName(dataList.at(0));
-                actualPresetModern->irFile.setIrLinkPath(dataList.at(1));
-            }
-        }
-        }
+        emit currentIrFileChanged();
     }
 
     if(arguments == "request_part")
@@ -933,7 +931,7 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
             case PresetState::Importing:
             {
                 setPresetData(*actualPresetModern);
-                emit sgPushCommandToQueue("state get\r\n");
+                // emit sgPushCommandToQueue("state get\r\n");
                 break;
             }
             default:
@@ -951,7 +949,8 @@ void CPModern::irCommHandler(const QString &command, const QByteArray &arguments
         emit sgProcessCommands();
     }
 
-    if(arguments == "preview"){
+    if(arguments == "preview")
+    {
         if(data == "APPLIED")
             m_presetManager.returnToPreviousState();
     }
@@ -982,6 +981,8 @@ void CPModern::recieveIrInfo(const QByteArray &data)
         case PresetState::SetCompare:
         case PresetState::Compare:
         {
+            actualPresetModern->irFile.setIrName(wavName);
+            actualPresetModern->irFile.setIrLinkPath(irLinkPath);
             IR->setImpulseName(wavName);
             break;
         }

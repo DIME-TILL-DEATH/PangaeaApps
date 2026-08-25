@@ -117,6 +117,8 @@ void LAPreamp::la3MapCommHandler(const QString &command, const QByteArray &argum
             m_clnPresetMap = ((hex & 0xF0) >> 4) * 4 + hex & 0x0F;
             hex = data.right(2).toShort(nullptr, 16);
             m_drvPresetMap  = ((hex & 0xF0) >> 4) * 4 + hex & 0x0F;
+
+            qDebug() << m_clnPresetMap << m_drvPresetMap;
             emit presetMapChanged();
         }
         else

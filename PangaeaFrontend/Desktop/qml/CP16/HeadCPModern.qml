@@ -230,7 +230,7 @@ Item
 
                             anchors.horizontalCenter: parent.horizontalCenter
 
-                            text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
+                            text: impuls.enabled ? (main.irModule.impulseName === "" ? qsTr("Empty") : main.irModule.impulseName)
                                                  : qsTr("IR module not configured")
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment:   Text.AlignVCenter
@@ -245,7 +245,7 @@ Item
                                 id: _maIrSelect
 
                                 anchors.fill: parent
-                                onClicked: openIrManagerWindow();
+                                onClicked: main.openIrManagerWindow();
 
                                 cursorShape: Qt.PointingHandCursor
 
@@ -284,7 +284,7 @@ Item
                     id: mA
 
                     anchors.fill: parent
-                    onClicked: openModulesConfigWindow();
+                    onClicked: main.openModulesConfigWindow();
                 }
             }
         }

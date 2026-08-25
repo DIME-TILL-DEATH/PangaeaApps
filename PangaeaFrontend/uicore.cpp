@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QCoreApplication>
 #include <QUrl>
+#include <QQmlFile>
 
 #include <QSettings>
 
@@ -37,7 +38,7 @@ UiCore::UiCore(QObject *parent)
 #if defined(Q_OS_ANDROID)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                        + "/settings.conf", QSettings::NativeFormat);
-    
+
     connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, qOverload<QString, QString>(&UiCore::uploadIr));
     connect(&activityResultHandler, &ActivityResultManager::sgIrFileListPicked, this, qOverload<QList<QUrl>, QUrl>(&UiCore::uploadIr));
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::slImportPreset);
@@ -111,11 +112,6 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 #ifndef Q_OS_ANDROID
     m_dstIrPath = dstFilePath;
 #endif
-// #ifdef Q_OS_ANDROID
-//     Q_UNUSED(srcFilePath)
-//     pickFile(ActivityType::PICK_IR, "audio/*");
-//     return;
-// #endif
 
 #ifdef Q_OS_IOS
     IosUtils::copyFileToTmp(srcFilePath, m_pickedIrPath);
@@ -232,7 +228,7 @@ void UiCore::importPreset(QString filePath)
 #ifdef Q_OS_ANDROID
     Q_UNUSED(filePath)
 
-    pickFile(ActivityType::PICK_PRESET, "*/*");
+    pickFile(ActivityType::PICK_PRESET, "*/*", false);
 #elif defined(Q_OS_IOS)
     QString tmpFilePath;
     IosUtils::copyFileToTmp(filePath, tmpFilePath);
@@ -277,12 +273,6 @@ void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
 #endif
 
     emit sgSetUIText("firmware_file_picked", filePath + ',' + fileName);
-}
-
-void UiCore::setFirmware(QString fullFilePath)
-{
-    emit sgSetFirmware(fullFilePath);
-    //m_currentDevice->setFirmware(fullFilePath);
 }
 
 void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
@@ -457,26 +447,29 @@ void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
 #ifdef Q_OS_ANDROID
 void UiCore::pickFirmwareFile()
 {
-    pickFile(ActivityType::PICK_FIRMWARE, "*/*");
+    pickFile(ActivityType::PICK_FIRMWARE, "*/*", false);
 }
 
-void UiCore::pickFile(ActivityType fileType, QString filter)
+void UiCore::pickFile(ActivityType fileType, QString filter, bool allowMultiple)
 {
     QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "ACTION_OPEN_DOCUMENT");
-
-    jint FLAG_READ_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
-    jint FLAG_PERSISTABLE_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
-    QJniObject EXTRA_ALLOW_MULTIPLE =  QJniObject::getStaticField<jstring>("android/content/Intent", "EXTRA_ALLOW_MULTIPLE");
-
     QJniObject intent("android/content/Intent");
-    if (ACTION_OPEN_DOCUMENT.isValid() && intent.isValid())
+
+    if(ACTION_OPEN_DOCUMENT.isValid() && intent.isValid())
     {
         intent.callObjectMethod("setAction", "(Ljava/lang/String;)Landroid/content/Intent;", ACTION_OPEN_DOCUMENT.object<jstring>());
         intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString(filter).object<jstring>());
 
-        // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.callObjectMethod("putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", EXTRA_ALLOW_MULTIPLE.object<jstring>(), true);
+        if(allowMultiple)
+        {
+            QJniObject EXTRA_ALLOW_MULTIPLE =  QJniObject::getStaticField<jstring>("android/content/Intent", "EXTRA_ALLOW_MULTIPLE");
+            intent.callObjectMethod("putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", EXTRA_ALLOW_MULTIPLE.object<jstring>(), true);
+        }
+
+        jint FLAG_READ_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
         intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_READ_PERMISSION);
+
+        jint FLAG_PERSISTABLE_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
         intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_PERSISTABLE_PERMISSION);
 
         QtAndroidPrivate::startActivity(intent, fileType, &activityResultHandler);

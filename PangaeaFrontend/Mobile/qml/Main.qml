@@ -156,7 +156,7 @@ ApplicationWindow
         buttons: Dialog.Ok|Dialog.No
 
         onAccepted: {
-            UiCore.setFirmware(firmwareLocalPath);
+            UiCore.currentDevice.setFirmware(firmwareLocalPath);
             _msgVersionError.close();
         }
 

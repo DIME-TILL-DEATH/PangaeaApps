@@ -44,7 +44,6 @@ public:
 #ifdef Q_OS_ANDROID
     Q_INVOKABLE void pickFirmwareFile();
 #endif
-    Q_INVOKABLE void setFirmware(QString fullFilePath);
     Q_INVOKABLE void doOnlineFirmwareUpdate();
 
     Q_INVOKABLE void setLanguage(QString languageCode);
@@ -146,7 +145,7 @@ private:
 
     void uploadIr(QString srcFilePath, QString dstFilePath = "");
 #ifdef Q_OS_ANDROID
-    void pickFile(ActivityType fileType, QString filter);
+    void pickFile(ActivityType fileType, QString filter, bool allowMultiple = true);
 #endif
 
     AbstractDevice *m_currentDevice = nullptr;
