@@ -86,6 +86,8 @@ protected:
     std::function<void (qint32)> m_customControlSetter;
     std::function<void (float)> m_customDisplaySetter;
 
+    static constexpr quint8 timerPeriod = 100;
+
 private slots:
     void sendFrame();
 };

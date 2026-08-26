@@ -346,6 +346,7 @@ void CPLegacy::pastePreset()
     uploadImpulseData(copiedPresetLegacy->waveData(), true, copiedPreset->irName());
     *actualPresetLegacy = *copiedPresetLegacy;
     actualPreset->setBankPreset(currentBankNumber, currentPresetNumber);
+    IR->setImpulseName(actualPresetLegacy->irName());
 
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
@@ -743,7 +744,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         if(actualPresetLegacy->wavSize() != 0)
             *copiedPreset = *actualPreset;
 
-        actualPresetLegacy->setRawData(baPresetData);
+        copiedPresetLegacy->setRawData(baPresetData);
         m_presetManager.returnToPreviousState();
         emit presetCopied();
         break;
