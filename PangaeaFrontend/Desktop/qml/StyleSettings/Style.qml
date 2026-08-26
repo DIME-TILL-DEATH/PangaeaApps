@@ -1,10 +1,6 @@
 pragma Singleton
 
 import QtQuick
-import QtQuick.Controls
-import QtCore
-
-import QtQuick.Controls.Material 2.12
 
 QtObject {
     id: root

@@ -1,13 +1,16 @@
+#include "mockcp100fx.h"
+
 #include <QDebug>
 #include <QStandardPaths>
 
 #include <qendian.h>
 #include <qthread.h>
 
+#include <windows.h>
+
 #include "irworker.h"
 #include "presetfx.h"
 
-#include "mockcp100fx.h"
 
 MockCP100fx::MockCP100fx(QMutex *mutex, QByteArray *uartBuffer, Cp100fx::Modification modification, QObject *parent)
     : AbstractMockDevice{mutex, uartBuffer, parent},
@@ -334,7 +337,13 @@ void MockCP100fx::initFolders()
     m_basePath += "AMT/Pangaea-desktop/";
 #endif
 #endif
-    m_basePath += "virtual_CP100FX";
+
+
+    switch(m_modification)
+    {
+    case Cp100fx::MONO_MOD: m_basePath += "virtual_CP100FX"; break;
+    case Cp100fx::STEREO_MOD: m_basePath += "virtual_CP100FX-S"; break;
+    }
 
     if(!loadSysParameters())
     {
@@ -823,7 +832,7 @@ void MockCP100fx::removeCommHandler(const QString &command, const QByteArray &ar
     if(fileInfo.isFile())
     {
         QFile file(objPath);
-        file.remove(objPath);
+        if(!file.remove(objPath)) qWarning() << "Remove error: " << file.errorString() << GetLastError();
     }
     else if(fileInfo.isDir())
     {
