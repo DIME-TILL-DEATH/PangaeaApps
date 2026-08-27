@@ -236,6 +236,8 @@ Item
 
                 anchors.verticalCenter: parent.verticalCenter
 
+                checked: UiSettings.autoConnectEnabled
+
                 contentItem: MText{
                     id: _contentText
 
@@ -308,20 +310,6 @@ Item
             isConnected = false;
         }
     }
-
-    Connections
-    {
-        target: UiCore
-
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam === "autoconnect_enable")
-            {
-                _checkBox.checked = inValue;
-            }
-        }
-    }
-
 
     Connections
     {

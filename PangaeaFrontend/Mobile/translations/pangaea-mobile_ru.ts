@@ -308,22 +308,22 @@
         <translation>ДВАЖДЫ КОСНИТЕСЬ для подключения:</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectPage.qml" line="243"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="245"/>
         <source>Autoconnect</source>
         <translation>Автоподключение</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectPage.qml" line="301"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="303"/>
         <source>Continue?</source>
         <translation>Продолжить?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectPage.qml" line="302"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="304"/>
         <source>Do you want to disconnect from AMT PANGAEA?</source>
         <translation>Вы хотите отключиться от этого устройства AMT PANGAEA?</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectPage.qml" line="279"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="281"/>
         <source>Show offline(virtual) devices</source>
         <translation>Показать виртуальные устройства</translation>
     </message>
@@ -1320,14 +1320,14 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <translation>О приложении...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ServicePage.qml" line="329"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="324"/>
         <source>The Firmware file has been transmitted
 Please, reconnect to device</source>
         <translation>Файл прошивки был передан
 Пожалуйста, переподключитесь к устройству заново.</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ServicePage.qml" line="302"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="298"/>
         <source>Do you want to load firmware file:
 </source>
         <translation>Вы хотите загрузить следующий 
@@ -1353,8 +1353,8 @@ Please, reconnect to device</source>
     </message>
     <message>
         <location filename="../qml/Layouts/ServicePage.qml" line="221"/>
-        <location filename="../qml/Layouts/ServicePage.qml" line="328"/>
-        <location filename="../qml/Layouts/ServicePage.qml" line="338"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="323"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="333"/>
         <source>Operation complete</source>
         <extracomment>Complete formatting operation</extracomment>
         <translation>Операция завершена</translation>
@@ -1366,7 +1366,7 @@ Please, reconnect to device</source>
     </message>
     <message>
         <location filename="../qml/Layouts/ServicePage.qml" line="237"/>
-        <location filename="../qml/Layouts/ServicePage.qml" line="353"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="348"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -1411,7 +1411,7 @@ website: https://amtelectronics.com</source>
         <translation>Уникальное имя для данного модуля:</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ServicePage.qml" line="339"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="334"/>
         <source>Formatting is complete
 Please reset the device power and reconnect</source>
         <translation>Форматирование завершено.
@@ -1424,7 +1424,7 @@ Please reset the device power and reconnect</source>
 Пожалуйста, перезагрузите питание Вашего девайса AMT PANGAEA, а затем снова подключитесь к нему через это приложение</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ServicePage.qml" line="354"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="349"/>
         <source>Format error</source>
         <translation>Ошибка форматирования</translation>
     </message>
@@ -1485,52 +1485,57 @@ Version: </source>
 <context>
     <name>SettingsPage</name>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="60"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="71"/>
         <source>Color theme</source>
         <translation>Цветовая схема</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="70"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="83"/>
         <source>Dark orange</source>
         <translation>Тёмно-оранжевая</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="78"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="93"/>
         <source>Dark green</source>
         <translation>Тёмно-зелёная</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="86"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="103"/>
         <source>Dark blue</source>
         <translation>Тёмно-синяя</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="125"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="142"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="132"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="149"/>
         <source>Autoselect</source>
         <translation>Автовыбор</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="185"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="210"/>
+        <source>Autoconnect</source>
+        <translation>Автоподключение</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="229"/>
         <source>Auto convert WAV</source>
         <translation>Всегда конвертировать WAV</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="205"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="249"/>
         <source>Auto trim WAV</source>
         <translation>Всегда укорачивать WAV</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="224"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="267"/>
         <source>Auto check updates</source>
         <translation>Автопроверка обновлений</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/SettingsPage.qml" line="248"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="291"/>
         <source>Back</source>
         <extracomment>Back to the previous page</extracomment>
         <translation>Вернуться</translation>

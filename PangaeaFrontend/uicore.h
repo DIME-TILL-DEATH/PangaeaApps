@@ -66,7 +66,6 @@ signals:
     void sgQmlRequestChangePreset(quint8 bank, quint8 preset);
 
     void sgSetUIParameter(QString nameParam, qint32 inValue);
-    void sgSetUIText(QString nameParam, QString value); // в desktop версии больше не испольуется вообще
 
     void sgUiMessage(UiMessageTypeEnum::Value messageType, QString message = "", QVariantList params = {});
 

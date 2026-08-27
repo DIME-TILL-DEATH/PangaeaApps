@@ -191,7 +191,7 @@ Item {
             id: _boxCheckUpdates
 
             width: parent.width*0.98
-            height: parent.height*0.25
+            height: parent.height*0.3
             border.color: Style.currentTheme.colorBorderOn
             radius: Style.baseRadius
 
@@ -202,6 +202,25 @@ Item {
 
             Column{
                 anchors.fill: parent
+
+                CheckBox{
+                    id: _checkBoxAutoconnect
+
+                    checked: UiSettings.autoConnectEnabled
+                    text: qsTr("Autoconnect")
+
+                    contentItem: MText{
+                        text: _checkBoxAutoconnect.text
+
+                        color: Style.colorText
+                        anchors.left: _checkBoxAutoconnect.indicator.right
+                    //     verticalAlignment: Text.AlignVCenter
+                        leftPadding: _checkBoxAutoconnect.indicator.width/5
+                    }
+                    onCheckStateChanged: {
+                        UiSettings.saveSetting("autoconnect_enable", _checkBoxAutoconnect.checked);
+                    }
+                }
 
                 CheckBox{
                     id: _checkBoxConvert
@@ -233,7 +252,6 @@ Item {
 
                         color: Style.colorText
                         anchors.left: _checkBoxTrim.indicator.right
-                        // verticalAlignment: Text.AlignVCenter
                         leftPadding: _checkBoxTrim.indicator.width/5
                     }
                     onCheckStateChanged: {
