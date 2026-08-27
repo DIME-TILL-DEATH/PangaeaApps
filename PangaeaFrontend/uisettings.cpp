@@ -23,6 +23,8 @@ UiSettings::UiSettings(QObject *parent)
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
+
+    loadDefaultTranslator();
 }
 
 void UiSettings::setupApplication()
@@ -30,8 +32,6 @@ void UiSettings::setupApplication()
     m_windowWidth = appSettings->value("window_width", 0).toUInt();
     m_windowHeight = appSettings->value("window_height", 0).toUInt();
 
-    //    QString colorTheme = appSettings->value("color_theme", "dark_orange").toString();
-    //    emit sgSetUIText("color_theme", colorTheme);
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();
 
     if(appLanguage=="autoselect")

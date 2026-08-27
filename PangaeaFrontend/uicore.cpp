@@ -52,8 +52,6 @@ UiCore::UiCore(QObject *parent)
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
-
-    loadDefaultTranslator();
 }
 
 UiCore::~UiCore()
@@ -70,30 +68,6 @@ UiCore::~UiCore()
 
     QDir tmpDir(outFolder);
     tmpDir.removeRecursively();
-}
-
-void UiCore::setupApplication()
-{
-    QString appLanguage = appSettings->value("application_language", "autoselect").toString();
-
-    emit sgSetUIText("application_language", appLanguage);
-
-    QString colorTheme = appSettings->value("color_theme", "dark_orange").toString();
-    emit sgSetUIText("color_theme", colorTheme);
-
-    bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
-    emit sgSetUIParameter("autoconnect_enable", isAutoconnectEnabled);
-
-    bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable", false).toBool();
-    emit sgSetUIParameter("check_updates_enable", isCheckUpdatesEnabled);
-    if(isCheckUpdatesEnabled)
-    {
-        emit sgCheckAppUpdates();
-    }
-
-    bool firstRun = !appSettings->value("first_run", true).toBool();
-    emit sgSetUIParameter("first_run", firstRun);
-    appSettings->setValue("first_run", false);
 }
 
 void UiCore::disconnectFromDevice()
@@ -272,7 +246,7 @@ void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
     fileName = fileInfo.fileName();
 #endif
 
-    emit sgSetUIText("firmware_file_picked", filePath + ',' + fileName);
+    emit sgFirmwareFilePicked(filePath, fileName);
 }
 
 void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
@@ -284,57 +258,6 @@ void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldF
 void UiCore::doOnlineFirmwareUpdate()
 {
     emit sgDoOnlineFirmwareUpdate();
-}
-
-void UiCore::saveSetting(QString settingName, QVariant settingValue)
-{
-    appSettings->setValue(settingName, settingValue);
-    appSettings->sync();
-
-    qInfo() << __FUNCTION__ << "Setting name: " << settingName << "Setting value:" << settingValue;
-}
-
-void UiCore::setLanguage(QString languageCode)
-{
-    appSettings->setValue("application_language", languageCode);
-    appSettings->sync();
-
-    loadTranslator(languageCode);
-}
-
-void UiCore::loadTranslator(QString languageCode)
-{
-    if(QCoreApplication::removeTranslator(&m_translator)) qDebug() << "Old translator removed";
-
-    if(languageCode=="autoselect")
-    {
-        loadDefaultTranslator();
-        return;
-    }
-
-    if (m_translator.load(pathFromCode.value(languageCode)))
-    {
-        qDebug() << "Translator loaded. Language: " << m_translator.language();
-        QCoreApplication::installTranslator(&m_translator);
-
-        emit sgTranslatorChanged(languageCode);
-        if(m_currentDevice)
-        {
-            m_currentDevice->updateOutputModeNames();
-        }
-    }
-    else qDebug() << "Translator not found. Using english";
-}
-
-void UiCore::loadDefaultTranslator()
-{
-    if (m_translator.load(QLocale(), QLatin1String("pangaea-mobile"), QLatin1String("_"), ":/translations/"))
-    {
-        qDebug() << "Default translator loaded. Locale: " << QLocale();
-        QCoreApplication::installTranslator(&m_translator);
-
-        emit sgTranslatorChanged(QLocale().nativeLanguageName());
-    }
 }
 
 void UiCore::openManualExternally(QString fileName)

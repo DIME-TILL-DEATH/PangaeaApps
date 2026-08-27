@@ -402,7 +402,6 @@ ApplicationWindow
     }
 
     Component.onCompleted: {
-        UiCore.setupApplication();
         UiSettings.setupApplication();
         InterfaceManager.startScanning(DeviceConnectionType.BLE);
         InterfaceManager.startScanning(DeviceConnectionType.USB);

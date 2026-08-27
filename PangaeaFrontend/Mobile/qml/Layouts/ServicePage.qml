@@ -293,17 +293,12 @@ Item
     {
         target: UiCore
 
-        function onSgSetUIText(nameParam, value)
+        function onSgFirmwareFilePicked(filePath, fileName)
         {
-            if(nameParam === "firmware_file_picked")
-            {
-                var dataArray = value.split(',');
-
-                messageAcceptFile.text = qsTr("Do you want to load firmware file:\n") + dataArray[1];
-                messageAcceptFile.filePath = dataArray[0];
-                rssiNotificationDialog.open()
-                InterfaceManager.rssiMeasuring(true);
-            }
+            messageAcceptFile.text = qsTr("Do you want to load firmware file:\n") + fileName;
+            messageAcceptFile.filePath = filePath;
+            rssiNotificationDialog.open();
+            InterfaceManager.rssiMeasuring(true);
         }
     }
 

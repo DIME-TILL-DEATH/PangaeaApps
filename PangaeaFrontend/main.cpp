@@ -87,8 +87,6 @@ int main(int argc, char *argv[])
     //-------------------------------------------------------------------------------
     // QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
     // QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
-
-    UiCore::connect(uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
     UiSettings::connect(uiSettings, &UiSettings::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
     QObject::connect(core, &Core::sgSetUIParameter, uiCore, &UiCore::sgSetUIParameter, Qt::QueuedConnection);

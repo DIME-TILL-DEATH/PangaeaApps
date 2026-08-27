@@ -246,7 +246,7 @@ Item
                     leftPadding: _checkBox.indicator.width/5
                 }
                 onCheckStateChanged: {
-                    UiCore.saveSetting("autoconnect_enable", _checkBox.checked);
+                    UiSettings.saveSetting("autoconnect_enable", _checkBox.checked);
                 }
             }
 
