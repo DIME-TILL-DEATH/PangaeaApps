@@ -237,11 +237,10 @@ void Cp100fx::exportPreset(QString filePath, QString fileName)
 
 void Cp100fx::erasePreset()
 {
-
     emit sgPushCommandToQueue("erase_preset");
     emit sgProcessCommands();
 
-    m_presetManager.returnToPreviousState(); // for correct hardware changing
+    // m_presetManager.returnToPreviousState(); // for correct hardware changing
     m_presetManager.setCurrentState(PresetState::Changing); // preset changed
     pushReadPresetCommands();
     emit sgProcessCommands();
@@ -585,7 +584,7 @@ qint8 Cp100fx::getModulePosition(ModuleType moduleType)
 //=======================================================================================
 void Cp100fx::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    m_presetManager.returnToPreviousState(); // for correct hardware changing
+    // m_presetManager.returnToPreviousState(); // for correct hardware changing
     m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
@@ -980,7 +979,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
         // setPresetData(savedPreset);
 
         emit sgPushCommandToQueue("state get");
-        m_presetManager.returnToPreviousState();
+        // m_presetManager.returnToPreviousState();
         m_presetManager.setCurrentState(PresetState::Compare);
 
         emit sgProcessCommands();

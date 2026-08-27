@@ -573,7 +573,7 @@ void CPModern::uploadFirmware(const QByteArray &firmware)
         emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateStarted);
         emit sgDisableTimeoutTimer();
 
-        fwUpdate = true;
+        m_presetManager.setCurrentState(PresetState::FirmwareUpdate);
 
         QByteArray baTmp, baSend;
         baSend.append("fwu\r");
@@ -593,7 +593,7 @@ void CPModern::formatMemory()
 {
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryStarted);
 
-    isFormatting = true;
+    m_presetManager.setCurrentState(PresetState::MemoryFormatting);
     emit sgDisableTimeoutTimer();
     emit sgSendWithoutConfirmation(QString("fsf\r\n").toUtf8());
     emit sgProcessCommands();
@@ -845,7 +845,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
         *comparePresetModern = *actualPresetModern; // name, ir, bank-preset
         comparePresetModern->presetData = PresetModern::charsToPresetData(baPresetData);
 
-        m_presetManager.returnToPreviousState();
+        // m_presetManager.returnToPreviousState();
         m_presetManager.setCurrentState(PresetState::Compare);
         setPresetData(*savedPresetModern);
         break;
@@ -1152,7 +1152,7 @@ void CPModern::requestNextChunkCommHandler(const QString &command, const QByteAr
 void CPModern::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     // actualPreset.clearWavData();
-    m_presetManager.returnToPreviousState(); // for correct hardware changing
+    // m_presetManager.returnToPreviousState(); // for correct hardware changing
     m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
@@ -1199,10 +1199,10 @@ void CPModern::clipCommHandler(const QString &command, const QByteArray &argumen
 
 void CPModern::fwuFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(fwUpdate)
+    if(m_presetManager.currentState() == PresetState::FirmwareUpdate)
     {
         emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateFinished);
-        fwUpdate = false;
+        m_presetManager.returnToPreviousState();
     }
 }
 
@@ -1210,5 +1210,5 @@ void CPModern::formatFinishedCommHandler(const QString &command, const QByteArra
 {
     qDebug() << __FUNCTION__;
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryFinished);
-    isFormatting = false;
+    m_presetManager.returnToPreviousState();
 }

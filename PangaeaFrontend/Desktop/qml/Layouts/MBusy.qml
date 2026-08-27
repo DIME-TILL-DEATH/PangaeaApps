@@ -118,11 +118,11 @@ Item
 
                 switch(UiCore.currentDevice.presetManager.currentState)
                 {
-                    case PresetState.UploadingIr:
-                    {
-                        txt.text = qsTr("Uploading file data to device");
-                        break;
-                    }
+                    // case PresetState.UploadingIr:
+                    // {
+                    //     txt.text = qsTr("Uploading file data to device");
+                    //     break;
+                    // }
 
                     default: txt.text = qsTr("Sending commands to device");
                 }
@@ -166,6 +166,14 @@ Item
                 {
                     rWait.visible = true;
                     txt.text = qsTr("Applying impulse to device. Please wait...");
+                    progressBar.visible = false
+                    break;
+                }
+
+                case PresetState.FirmwareUpdate:
+                {
+                    rWait.visible = true;
+                    txt.text = qsTr("Updating device firmware...");
                     progressBar.visible = false
                     break;
                 }

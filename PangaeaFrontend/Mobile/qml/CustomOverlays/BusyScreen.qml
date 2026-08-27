@@ -131,11 +131,6 @@ Item
 
                 switch(UiCore.currentDevice.presetManager.currentState)
                 {
-                    case PresetState.UploadingIr:
-                    {
-                        txt.text = qsTr("Uploading file data to device");
-                        break;
-                    }
 
                     default: txt.text = qsTr("Sending commands to device");
                 }

@@ -217,25 +217,21 @@ void Core::processCommands()
         {
             if(currentDevice)
             {
-                if(!currentDevice->isUpdatingFirmware())
+                for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
                 {
-                    for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
-                    {
-                        emit sgSetUIParameter("wait", true);
-                        timeoutTimer->stop();
-                        sendCommand(commandToSend.mid(sendPosition, chunckSize));
-                        // QCoreApplication::processEvents();
-                        QThread::msleep(sleepTime);
-                        timeoutTimer->start();
-                    }
+                    timeoutTimer->stop();
+                    sendCommand(commandToSend.mid(sendPosition, chunckSize));
+                    // QCoreApplication::processEvents();
+                    QThread::msleep(sleepTime);
+                    timeoutTimer->start();
                 }
             }
         }
         else
         {
-            emit sgSetUIParameter("wait", true);
             sendCommand(commandToSend);
         }
+        emit sgSetUIParameter("wait", true);
         commandsSended.append(commandToSend);
     }
     else

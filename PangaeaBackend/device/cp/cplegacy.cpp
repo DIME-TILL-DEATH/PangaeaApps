@@ -570,7 +570,7 @@ void CPLegacy::uploadFirmware(const QByteArray& firmware)
         emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateStarted);
         emit sgDisableTimeoutTimer();
 
-        fwUpdate = true;
+        m_presetManager.setCurrentState(PresetState::FirmwareUpdate);
 
         QByteArray baTmp, baSend;
         baSend.append("fwu\r");
@@ -610,7 +610,7 @@ void CPLegacy::formatMemory()
 {
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryStarted);
 
-    isFormatting = true;
+    m_presetManager.setCurrentState(PresetState::MemoryFormatting);
     emit sgDisableTimeoutTimer();
     emit sgSendWithoutConfirmation(QString("fsf\r\n").toUtf8());
     emit sgProcessCommands();
@@ -976,17 +976,17 @@ void CPLegacy::requestNextChunkCommHandler(const QString &command, const QByteAr
 
 void CPLegacy::fwuFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(fwUpdate)
+    if(m_presetManager.currentState() == PresetState::FirmwareUpdate)
     {
         emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateFinished);
-        fwUpdate = false;
+        m_presetManager.returnToPreviousState();
     }
 }
 
 void CPLegacy::formatFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryFinished);
-    isFormatting = false;
+    m_presetManager.returnToPreviousState();
 }
 //-------------------------------------acknowledegs------------------------------------------
 void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -1013,7 +1013,7 @@ void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArr
 
 void CPLegacy::ackCCCommHandler(const QList<QByteArray> &arguments)
 {
-    m_presetManager.returnToPreviousState();
+    // m_presetManager.returnToPreviousState();
     m_presetManager.setCurrentState(PresetState::SavingIr);
     emit sgDisableTimeoutTimer(); // wait for impulse saving (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
 }

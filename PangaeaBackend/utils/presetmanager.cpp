@@ -11,27 +11,27 @@ PresetManager::PresetManager(QObject *parent)
 
 PresetState PresetManager::currentState() const
 {
-    return m_currentState;
+    if(m_stateStack.isEmpty()) return PresetState::Idle;
+    else return m_stateStack.top();
 }
 
 void PresetManager::setCurrentState(PresetState newCurrentState)
 {
-    if(newCurrentState != m_currentState)
+    if(newCurrentState != m_stateStack.top())
     {
-        m_previousState = m_currentState;
-        m_currentState = newCurrentState;
+        m_stateStack.push(newCurrentState);
 
         QMetaEnum enumDescription = QMetaEnum::fromType<PresetState>();
-        qDebug() << "Set new preset manager state:" << enumDescription.valueToKey(m_currentState);
+        qDebug() << "Set new preset manager state:" << enumDescription.valueToKey(newCurrentState);
         emit currentStateChanged();
     }
 }
 
 void PresetManager::returnToPreviousState()
 {
-    m_currentState = m_previousState;
+    PresetState state = m_stateStack.pop();
 
     QMetaEnum enumDescription = QMetaEnum::fromType<PresetState>();
-    qDebug() << "Return to previous preset manager state:" << enumDescription.valueToKey(m_currentState);
+    qDebug() << "Return to previous preset manager state:" << enumDescription.valueToKey(state);
     emit currentStateChanged();
 }

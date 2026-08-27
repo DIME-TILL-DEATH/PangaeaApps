@@ -37,7 +37,7 @@ UiCore::UiCore(QObject *parent)
 
 #if defined(Q_OS_ANDROID)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                       + "/settings.conf", QSettings::NativeFormat);
+                       + "/settings.conf", QSettings::NativeFormat, this);
 
     connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, qOverload<QString, QString>(&UiCore::uploadIr));
     connect(&activityResultHandler, &ActivityResultManager::sgIrFileListPicked, this, qOverload<QList<QUrl>, QUrl>(&UiCore::uploadIr));
@@ -46,7 +46,7 @@ UiCore::UiCore(QObject *parent)
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::slExportPreset);
 #elif defined(Q_OS_IOS)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.plist", QSettings::NativeFormat);
+                                    + "/settings.plist", QSettings::NativeFormat, this);
 
     IosUtils::wakeLockDisable();
 #else

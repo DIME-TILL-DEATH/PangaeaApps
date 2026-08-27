@@ -113,9 +113,6 @@ public:
 
     qint64 symbolsToRecieve() {return m_symbolsToRecieve;};
 
-    bool isUpdatingFirmware() {return fwUpdate;};
-    bool isMemoryFormatting() {return isFormatting;};
-
     FileBrowserModel *fileBrowser() const;
 
     Parser* dataInParser() { return &m_parser; }
@@ -203,9 +200,6 @@ protected:
     QList<AbstractModule*> m_moduleList;
     QList<QObject*> m_avaliableModulesList;
     ModulesListModel m_modulesListModel{this};
-
-    bool fwUpdate{false};
-    bool isFormatting{false};
 
     bool m_deviceParamsModified{false};
     qint64 m_symbolsToRecieve{0};

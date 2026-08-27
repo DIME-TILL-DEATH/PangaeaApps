@@ -16,10 +16,10 @@ UiSettings::UiSettings(QObject *parent)
 {
 #if defined(Q_OS_ANDROID)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.conf", QSettings::NativeFormat);
+                                    + "/settings.conf", QSettings::NativeFormat, this);
 #elif defined(Q_OS_IOS)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.plist", QSettings::NativeFormat);
+                                    + "/settings.plist", QSettings::NativeFormat, this);
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
