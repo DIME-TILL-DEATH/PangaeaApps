@@ -34,7 +34,6 @@ signals:
     void sgCurrentDeviceChanged(AbstractDevice* device);
 
     void sgSetUIParameter(QString nameParam, qint32 value);
-    // void sgSetUIText(QString nameParam, QString value);
 
     void sgSetProgress(float val, QString extText);
 

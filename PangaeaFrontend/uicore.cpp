@@ -277,8 +277,6 @@ void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
 
 void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
 {
-   // emit sgSetUIText("firmware_local_path", updateFirmware->path()); //path to firmware
-
     emit sgNewFirmwareAvaliable(updateFirmware->firmwareVersion());
 }
 

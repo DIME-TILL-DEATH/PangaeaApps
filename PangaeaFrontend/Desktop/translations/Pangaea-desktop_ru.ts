@@ -998,6 +998,16 @@
         <translation>Вы уверены что хотите загрузить следующую прошивку</translation>
     </message>
     <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="346"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="347"/>
+        <source>Not a firwmare file!</source>
+        <translation>Не является файлом прошивки!</translation>
+    </message>
+    <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="353"/>
         <source>Disconnect?</source>
         <translation>Отключить?</translation>

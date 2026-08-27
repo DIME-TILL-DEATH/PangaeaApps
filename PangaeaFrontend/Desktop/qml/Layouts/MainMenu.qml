@@ -340,12 +340,12 @@ MenuBar{
         }
     }
 
-    // MessageDialog{
-    //     id: notFwFileDialog
+    MessageDialog{
+        id: notFwFileDialog
 
-    //     title: qsTr("Error")
-    //     text: qsTr("Not a fiwmare file!")
-    // }
+        title: qsTr("Error")
+        text: qsTr("Not a firwmare file!")
+    }
 
     MessageDialog{
         id: disconnectDialog
@@ -437,14 +437,13 @@ MenuBar{
                 }
             }
         }
-
-        function onSgSetUIText(nameParam, auxText)
-        {
-            if(nameParam === "not_fw_file_error")
-            {
-                notFwFileDialog.open();
-            }
-        }
     }
 
+    Connections{
+        target: UiCore.currentDevice
+
+        function onSgDeviceError(){
+            notFwFileDialog.open();
+        }
+    }
 }

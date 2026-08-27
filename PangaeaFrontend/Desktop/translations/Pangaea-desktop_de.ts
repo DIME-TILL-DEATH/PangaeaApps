@@ -995,6 +995,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="346"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="347"/>
+        <source>Not a firwmare file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="353"/>
         <source>Disconnect?</source>
         <translation type="unfinished"></translation>
