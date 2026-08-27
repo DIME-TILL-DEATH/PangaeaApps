@@ -1,8 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Controls.Fusion
-import QtQuick.Dialogs
-import QtQuick.Controls as CTRLS
-import QtCore
 
 import QtQuick.Window 2.15
 
@@ -18,8 +15,6 @@ import PangaeaBackend
 ApplicationWindow
 {
     id: main
-
-
 
     visible: true
 
@@ -175,7 +170,30 @@ ApplicationWindow
 
     NativeMessageDialog
     {
-        id: _msgVersionInform        
+        id: _msgVersionInform
+
+        property string firmwareLocalPath
+        property bool offlineUpdate: true
+
+        buttons: DialogButtonBox.Yes | DialogButtonBox.No
+
+        onButtonClicked: function(button){
+            switch(button.DialogButtonBox.buttonRole)
+            {
+                case DialogButtonBox.YesRole:
+                {
+                    if(offlineUpdate) UiCore.currentDevice.setFirmware(firmwareLocalPath);
+                    _msgVersionInform.close();
+                    break;
+                }
+
+                case DialogButtonBox.RejectRole:
+                {
+                    _msgVersionInform.close();
+                    break;
+                }
+            }
+        }
     }
 
     // modality works only in Labs
@@ -209,6 +227,8 @@ ApplicationWindow
             _msgVersionInform.text = qsTr("New firmware version(v.") +
                     firmwareVersionString +
                     qsTr(") avaliable on the server")
+
+            _msgVersionInform.offlineUpdate = false;
             _msgVersionInform.open()
         }
 
@@ -290,9 +310,12 @@ ApplicationWindow
                     _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0] + "\n"
                             + qsTr("Minimum required version is ")
                             + params[1] + "\n"
-                            + qsTr("Without updating the firmware, some features may not work properly")
+                            + qsTr("Without updating the firmware, some features may not work properly.\n")
+                            + qsTr("Do you want to update firmware now?");
 
-                    _msgVersionInform.visible = true;
+                    _msgVersionInform.offlineUpdate = true;
+                    _msgVersionInform.firmwareLocalPath = params[2];
+                    _msgVersionInform.open();
                     break;
                 }
 

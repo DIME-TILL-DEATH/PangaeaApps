@@ -15,7 +15,7 @@ void LAPreamp::setDeviceType(DeviceType newDeviceType)
     switch(m_deviceType)
     {
     case DeviceType::LA3:
-        m_minimalFirmware = Firmware("2.00.13", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3.ble");
+        m_minimalFirmware = Firmware("2.00.18", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmware_LA3_2.00.18.ble");
         m_maxBankCount = 0;
         m_maxPresetCount = 16;
         m_firmwareName = "LA3";

@@ -442,8 +442,16 @@ MenuBar{
     Connections{
         target: UiCore.currentDevice
 
-        function onSgDeviceError(){
-            notFwFileDialog.open();
+        function onSgDeviceError(type, description, params){
+
+            switch(type)
+            {
+                case DeviceErrorType.FirmwareFileError:
+                {
+                    notFwFileDialog.open();
+                    break;
+                }
+            }
         }
     }
 }

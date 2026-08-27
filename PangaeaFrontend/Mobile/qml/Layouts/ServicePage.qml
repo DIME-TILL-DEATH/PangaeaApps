@@ -139,8 +139,6 @@ Item
         id: rssiNotificationDialog
 
         headerText: qsTr("Attention!")
-        // text: qsTr("Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)\n\nCurrent RSSI: ") + InterfaceManager.bleRssi + " dBm"
-        // wrapMode: Text.WordWrap
         standardButtons: Dialog.Ok
 
         height: (_text1.textHeight +3 )*_text1.font.pixelSize*0.6
@@ -303,7 +301,6 @@ Item
 
                 messageAcceptFile.text = qsTr("Do you want to load firmware file:\n") + dataArray[1];
                 messageAcceptFile.filePath = dataArray[0];
-                // messageAcceptFile.open()
                 rssiNotificationDialog.open()
                 InterfaceManager.rssiMeasuring(true);
             }

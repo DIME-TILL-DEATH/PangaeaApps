@@ -6,8 +6,6 @@
 #include <qendian.h>
 #include <qthread.h>
 
-#include <windows.h>
-
 #include "irworker.h"
 #include "presetfx.h"
 
@@ -832,7 +830,7 @@ void MockCP100fx::removeCommHandler(const QString &command, const QByteArray &ar
     if(fileInfo.isFile())
     {
         QFile file(objPath);
-        if(!file.remove(objPath)) qWarning() << "Remove error: " << file.errorString() << GetLastError();
+        if(!file.remove(objPath)) qWarning() << "Remove error: " << file.errorString();
     }
     else if(fileInfo.isDir())
     {

@@ -228,36 +228,14 @@ ApplicationWindow
     {
         target: UiCore
 
-        function onSgSetUIText(nameParam, value)
+        function onSgNewFirmwareAvaliable(firmwareVersionString)
         {
-            var versionArray;
-
-            if(nameParam===("firmware_local_path"))
-            {
-                _msgVersionError.firmwareLocalPath = value;
-            }
-
-            if(nameParam===("firmware_version_error"))
-            {
-                versionArray = value.split(',');
-                _msgVersionError.text = qsTr("Firmware version of your device is ") + versionArray[0]
-                        + qsTr("\nMinimum required version is ")
-                        + versionArray[1]
-                        + qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
-
-                _msgVersionError.visible = true;
-            }
-
-            if(nameParam===("new_firmware_avaliable"))
-            {
-                versionArray = value.split(',');
-                _msgNetUpdateFirmware.text = qsTr("New firmware avaliable on the server.\nFirmware version of your device is: ") + versionArray[0]
-                        + qsTr("\nNew firmware version is: ")
-                        + versionArray[1]
-                        + qsTr("\nDo you want to download and update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
-
-                _msgNetUpdateFirmware.visible = true;
-            }
+            _msgNetUpdateFirmware.title = qsTr("Info")
+            _msgNetUpdateFirmware.text = qsTr("New firmware version(v.") +
+                    firmwareVersionString +
+                    qsTr(") avaliable on the server.") +
+                    qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
+            _msgNetUpdateFirmware.open()
         }
     }
 
@@ -307,6 +285,7 @@ ApplicationWindow
                             + params[1]
                             + qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
 
+                    _msgVersionError.firmwareLocalPath = params[2];
                     _msgVersionError.visible = true;
                     break;
                 }

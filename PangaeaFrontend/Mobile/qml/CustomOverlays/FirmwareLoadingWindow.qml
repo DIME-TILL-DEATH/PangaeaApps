@@ -116,24 +116,6 @@ CustomMessageDialog {
     Connections{
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam===("update_firmware_mode"))
-            {
-                _root.isOnlineUpload = inValue;
-            }
-        }
-
-        function onSgSetUIText(nameParam, value)
-        {
-
-            if(nameParam===("new_firmware_avaliable"))
-            {
-                var versionArray = value.split(',');
-                _root.firmwareText = qsTr("Updating to firmware version ") + versionArray[1];
-            }
-        }
-
         function onSgDownloadProgress(bytesReceived, bytesTotal)
         {
             console.log("Firmware download " + bytesReceived + " from " + bytesTotal);

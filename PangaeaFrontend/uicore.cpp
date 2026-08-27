@@ -280,13 +280,6 @@ void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldF
     emit sgNewFirmwareAvaliable(updateFirmware->firmwareVersion());
 }
 
-void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware)
-{
-    emit sgSetUIText("firmware_version_error",
-                     actualFirmware->firmwareVersion()+","+minimalFirmware->firmwareVersion());
-    emit sgSetUIText("firmware_local_path", minimalFirmware->path());
-}
-
 // TODO прямой запуск сигнала из QML
 void UiCore::doOnlineFirmwareUpdate()
 {

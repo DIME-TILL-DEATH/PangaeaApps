@@ -73,7 +73,7 @@ signals:
     void sgSetUIParameter(QString nameParam, qint32 inValue);
     void sgSetUIText(QString nameParam, QString value); // в desktop версии больше не испольуется вообще
 
-    void sgUiMessage(UiMessageType messageType, QString message = "", QVariantList params = {});
+    void sgUiMessage(UiMessageTypeEnum::Value messageType, QString message = "", QVariantList params = {});
 
     void sgUpdateAppSetting(QString settingName, QVariant settingValue);
 
@@ -104,7 +104,6 @@ public slots:
     void slFirmwareFilePicked(QString filePath, QString fileName);
 
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
-    void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
 
     void slCurrentDeviceChanged(AbstractDevice* newDevice);
 

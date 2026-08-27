@@ -153,7 +153,7 @@ void CPModern::setDeviceType(DeviceType newDeviceType)
     switch(m_deviceType)
     {
     case DeviceType::MODERN_CP:
-        m_minimalFirmware = Firmware("2.00.02", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareCP16Modern.ble");
+        m_minimalFirmware = Firmware("2.00.18", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmware_CP16_2.00.18.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP16 Modern";
@@ -667,7 +667,7 @@ void CPModern::amtVerCommHandler(const QString &command, const QByteArray &argum
     else
     {
         qWarning() << "firmware insufficient!";
-        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion()});
+        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion(), m_minimalFirmware.path()});
     }
 }
 

@@ -666,7 +666,7 @@ void CPLegacy::amtVerCommHandler(const QString &command, const QByteArray &argum
     else
     {
         qWarning() << "firmware insufficient!";
-        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion()});
+        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion(), m_minimalFirmware.path()});
     }
 
     m_parser.enableFullEndMode(); // next comm rns

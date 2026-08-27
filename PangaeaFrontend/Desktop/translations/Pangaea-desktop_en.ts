@@ -713,155 +713,161 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="43"/>
+        <location filename="../qml/Main.qml" line="38"/>
         <source>Connected to </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="43"/>
+        <location filename="../qml/Main.qml" line="38"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="117"/>
+        <location filename="../qml/Main.qml" line="112"/>
         <source>Do you want to save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="116"/>
+        <location filename="../qml/Main.qml" line="111"/>
         <source>Save preset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="158"/>
-        <location filename="../qml/Main.qml" line="171"/>
-        <location filename="../qml/Main.qml" line="264"/>
-        <location filename="../qml/Main.qml" line="272"/>
-        <location filename="../qml/Main.qml" line="280"/>
-        <location filename="../qml/Main.qml" line="301"/>
+        <location filename="../qml/Main.qml" line="153"/>
+        <location filename="../qml/Main.qml" line="166"/>
+        <location filename="../qml/Main.qml" line="284"/>
+        <location filename="../qml/Main.qml" line="292"/>
+        <location filename="../qml/Main.qml" line="300"/>
+        <location filename="../qml/Main.qml" line="324"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="159"/>
-        <location filename="../qml/Main.qml" line="172"/>
+        <location filename="../qml/Main.qml" line="154"/>
+        <location filename="../qml/Main.qml" line="167"/>
         <source>Device is disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="186"/>
+        <location filename="../qml/Main.qml" line="204"/>
         <source>Operation complete</source>
         <translation type="unfinished">The operation is completed</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="188"/>
+        <location filename="../qml/Main.qml" line="206"/>
         <source>Operation complete. Please, reconnect to device</source>
         <translation type="unfinished">The operation is completed. Please, reconnect to the device</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="256"/>
+        <location filename="../qml/Main.qml" line="276"/>
         <source>Device parse error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="265"/>
+        <location filename="../qml/Main.qml" line="285"/>
         <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="273"/>
+        <location filename="../qml/Main.qml" line="293"/>
         <source>Not a Pangaea preset file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="288"/>
+        <location filename="../qml/Main.qml" line="308"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="289"/>
+        <location filename="../qml/Main.qml" line="309"/>
         <source>Version error!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="290"/>
+        <location filename="../qml/Main.qml" line="310"/>
         <source>Firmware version of your device is </source>
         <translation type="unfinished">The firmware version of your device is </translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="291"/>
+        <location filename="../qml/Main.qml" line="311"/>
         <source>Minimum required version is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="293"/>
-        <source>Without updating the firmware, some features may not work properly</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/Main.qml" line="208"/>
-        <location filename="../qml/Main.qml" line="217"/>
+        <location filename="../qml/Main.qml" line="226"/>
+        <location filename="../qml/Main.qml" line="237"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="209"/>
+        <location filename="../qml/Main.qml" line="227"/>
         <source>New firmware version(v.</source>
         <translation type="unfinished">Newest firmware version (v.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="211"/>
-        <location filename="../qml/Main.qml" line="220"/>
+        <location filename="../qml/Main.qml" line="229"/>
+        <location filename="../qml/Main.qml" line="240"/>
         <source>) avaliable on the server</source>
         <translation type="unfinished">) is available on the server</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="218"/>
+        <location filename="../qml/Main.qml" line="238"/>
         <source>New application version(v.</source>
         <translation type="unfinished">New application version (v.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="281"/>
+        <location filename="../qml/Main.qml" line="301"/>
         <source>You must save preset before export</source>
         <translation type="unfinished">You must save the preset before export</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="302"/>
+        <location filename="../qml/Main.qml" line="313"/>
+        <source>Without updating the firmware, some features may not work properly.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="314"/>
+        <source>Do you want to update firmware now?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="325"/>
         <source>IR file copying error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="315"/>
+        <location filename="../qml/Main.qml" line="338"/>
         <source>Preset export finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="335"/>
+        <location filename="../qml/Main.qml" line="358"/>
         <source>Device is unavaliable</source>
         <translation type="unfinished">The device is unavailable</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="342"/>
+        <location filename="../qml/Main.qml" line="365"/>
         <source>Command exchange error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="351"/>
+        <location filename="../qml/Main.qml" line="374"/>
         <source>USB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="352"/>
+        <location filename="../qml/Main.qml" line="375"/>
         <source>BLUETOOTH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="353"/>
+        <location filename="../qml/Main.qml" line="376"/>
         <source>VIRTUAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="354"/>
+        <location filename="../qml/Main.qml" line="377"/>
         <source>Unknown interface</source>
         <translation type="unfinished"></translation>
     </message>
