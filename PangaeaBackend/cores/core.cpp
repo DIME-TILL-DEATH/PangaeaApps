@@ -56,18 +56,14 @@ void Core::parseInputData(QByteArray ba)
 
     updateProgressBar();
 
-    // QList<QByteArray> recievedAnswer;
     if(currentDevice)
     {
-        // recievedAnswer = currentDevice->parseAnswers(ba);
         emit sgReadFromInterface(ba);
     }
 
     QList<QByteArray> parseResult;
     if(amtDevParser.getParse(ba, &parseResult))
     {
-
-
         if(currentDevice)
         {
             delete(currentDevice);
@@ -89,9 +85,7 @@ void Core::parseInputData(QByteArray ba)
         currentDevice->initDevice(deviceType);
         timeoutTimer->setInterval(10000);
 
-        // currentDevice->moveToThread(QGuiApplication::instance()->thread());
         if(commandsSended.size()>0) commandsSended.removeFirst();
-        processCommands();
     }
 }
 
@@ -234,14 +228,15 @@ void Core::processCommands()
         {
             sendCommand(commandToSend);
         }
-        emit sgSetUIParameter("wait", true);
+
+        emit sgInterfaceTransmittingData();
         commandsSended.append(commandToSend);
     }
     else
     {
         if(symbolsSended >= symbolsToSend)
         {
-            emit sgSetUIParameter("wait", false);
+            emit sgInterfaceTransmittingDataFinished();
         }
     }
 }

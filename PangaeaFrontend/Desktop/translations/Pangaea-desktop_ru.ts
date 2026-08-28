@@ -572,7 +572,7 @@
     <message>
         <location filename="../qml/ModulesFX/IR.qml" line="48"/>
         <source>Cab</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/ModulesFX/IR.qml" line="133"/>
@@ -687,28 +687,37 @@
         <translation>Загрузка приложения</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="127"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="164"/>
         <source>Sending commands to device</source>
         <translation>Отправка команд устройству</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="123"/>
-        <location filename="../qml/Layouts/MBusy.qml" line="151"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="131"/>
         <source>Uploading file data to device</source>
         <translation>Загрузка файла в устройство</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="160"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="124"/>
+        <source>Getting data from device</source>
+        <translation>Получение данных из устройства</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MBusy.qml" line="140"/>
         <source>Downloading impulse data from device</source>
         <translation>Загрузка файла импульса из устройства</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="168"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="148"/>
         <source>Applying impulse to device. Please wait...</source>
         <translation>Применение импульса в устройстве. Пожалуйста, ждите...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="188"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="156"/>
+        <source>Updating device firmware...</source>
+        <translation>Обновление прошивки...</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MBusy.qml" line="177"/>
         <source>Connecting to device...</source>
         <translation>Подключение к устройству...</translation>
     </message>
@@ -1026,7 +1035,7 @@
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="371"/>
         <source>AMT Pangaea series</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="372"/>

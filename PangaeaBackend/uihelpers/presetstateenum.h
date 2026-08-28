@@ -24,6 +24,7 @@ public:
         UploadingIr,
         SavingIr,
         Changing,
+        DataTransmitting,
         FirmwareUpdate,
         MemoryFormatting
     };

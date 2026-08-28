@@ -33,7 +33,8 @@ signals:
 
     void sgCurrentDeviceChanged(AbstractDevice* device);
 
-    void sgSetUIParameter(QString nameParam, qint32 value);
+    void sgInterfaceTransmittingData();
+    void sgInterfaceTransmittingDataFinished();
 
     void sgSetProgress(float val, QString extText);
 

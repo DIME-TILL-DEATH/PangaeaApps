@@ -161,28 +161,32 @@
 <context>
     <name>BusyScreen</name>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="140"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="170"/>
         <source>Sending commands to device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="136"/>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="164"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="145"/>
         <source>Uploading file data to device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="173"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="138"/>
+        <source>Getting data from device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="154"/>
         <source>Downloading impulse data from device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="181"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="162"/>
         <source>Applying impulse to device. Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="201"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="183"/>
         <source>Connecting to device...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -684,28 +684,37 @@
         <translation>Loading an application</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="127"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="164"/>
         <source>Sending commands to device</source>
         <translation>Sending commands to the device</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="123"/>
-        <location filename="../qml/Layouts/MBusy.qml" line="151"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="131"/>
         <source>Uploading file data to device</source>
         <translation>Uploading file data to the device</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="160"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="124"/>
+        <source>Getting data from device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MBusy.qml" line="140"/>
         <source>Downloading impulse data from device</source>
         <translation>Downloading IR data from the device</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="168"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="148"/>
         <source>Applying impulse to device. Please wait...</source>
         <translation>Applying IR to the device. Please wait...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="188"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="156"/>
+        <source>Updating device firmware...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MBusy.qml" line="177"/>
         <source>Connecting to device...</source>
         <translation>Connecting to the device...</translation>
     </message>
