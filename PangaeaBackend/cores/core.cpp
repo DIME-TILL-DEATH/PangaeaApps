@@ -66,6 +66,8 @@ void Core::parseInputData(QByteArray ba)
     QList<QByteArray> parseResult;
     if(amtDevParser.getParse(ba, &parseResult))
     {
+
+
         if(currentDevice)
         {
             delete(currentDevice);
@@ -83,10 +85,11 @@ void Core::parseInputData(QByteArray ba)
         default: currentDevice = new CPLegacy(this);
         }
 
-        connect(currentDevice, &AbstractDevice::sgDeviceInstanciated, this, &Core::slDeviceInstanciated);
+        connect(currentDevice, &AbstractDevice::sgDeviceInstanciated, this, &Core::slDeviceInstanciated, Qt::QueuedConnection);
         currentDevice->initDevice(deviceType);
         timeoutTimer->setInterval(10000);
 
+        // currentDevice->moveToThread(QGuiApplication::instance()->thread());
         if(commandsSended.size()>0) commandsSended.removeFirst();
         processCommands();
     }

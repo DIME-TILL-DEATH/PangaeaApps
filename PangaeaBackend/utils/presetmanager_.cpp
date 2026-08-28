@@ -1,6 +1,5 @@
 #include <QMetaEnum>
 #include <QDebug>
-#include <QThread>
 
 #include "presetmanager.h"
 
@@ -12,29 +11,27 @@ PresetManager::PresetManager(QObject *parent)
 
 PresetState PresetManager::currentState() const
 {
-    if(m_stateStack.isEmpty()) return PresetState::Idle;
-    else return m_stateStack.top();
+    return m_currentState;
 }
 
 void PresetManager::setCurrentState(PresetState newCurrentState)
 {
-    if(newCurrentState != currentState())
+    if(newCurrentState != m_currentState)
     {
-        m_stateStack.push(newCurrentState);
+        m_previousState = m_currentState;
+        m_currentState = newCurrentState;
 
         QMetaEnum enumDescription = QMetaEnum::fromType<PresetState>();
-        qDebug() << "Set new preset manager state:" << enumDescription.valueToKey(newCurrentState);
+        qDebug() << "Set new preset manager state:" << enumDescription.valueToKey(m_currentState);
         emit currentStateChanged();
     }
 }
 
 void PresetManager::returnToPreviousState()
 {
-    if(m_stateStack.isEmpty()) return;
-
-    PresetState state = m_stateStack.pop();
+    m_currentState = m_previousState;
 
     QMetaEnum enumDescription = QMetaEnum::fromType<PresetState>();
-    qDebug() << "Return to previous preset manager state:" << enumDescription.valueToKey(state);
+    qDebug() << "Return to previous preset manager state:" << enumDescription.valueToKey(m_currentState);
     emit currentStateChanged();
 }

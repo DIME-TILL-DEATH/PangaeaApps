@@ -45,7 +45,7 @@ class CPModern : public AbstractDevice
 
     Q_PROPERTY(Volume* MV READ getMV CONSTANT)
 public:
-    CPModern(Core *parent);
+    CPModern(Core *owner);
     ~CPModern();
 
     void updateOutputModeNames() override;

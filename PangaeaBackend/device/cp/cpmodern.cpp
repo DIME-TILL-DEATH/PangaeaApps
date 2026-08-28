@@ -8,8 +8,8 @@
 
 #include "eqband.h"
 
-CPModern::CPModern(Core *parent)
-    :AbstractDevice{parent}
+CPModern::CPModern(Core *owner)
+    :AbstractDevice{owner}
 {
     CPModern::updateOutputModeNames();
 
@@ -172,12 +172,11 @@ void CPModern::setDeviceType(DeviceType newDeviceType)
 
 void CPModern::readFullState()
 {
-    m_presetManager.setCurrentState(PresetState::Changing);
-
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("plist");
     emit sgPushCommandToQueue("ls ir_library");
     emit sgPushCommandToQueue("gm");
+
     pushReadPresetCommands();
 
     emit sgProcessCommands();
@@ -185,6 +184,8 @@ void CPModern::readFullState()
 
 void CPModern::pushReadPresetCommands()
 {
+    m_presetManager.setCurrentState(PresetState::Changing);
+
     emit sgPushCommandToQueue("gb");
     emit sgPushCommandToQueue("ir info");
     emit sgPushCommandToQueue("pname get");
@@ -845,7 +846,7 @@ void CPModern::stateCommHandler(const QString &command, const QByteArray &argume
         *comparePresetModern = *actualPresetModern; // name, ir, bank-preset
         comparePresetModern->presetData = PresetModern::charsToPresetData(baPresetData);
 
-        // m_presetManager.returnToPreviousState();
+        m_presetManager.returnToPreviousState();
         m_presetManager.setCurrentState(PresetState::Compare);
         setPresetData(*savedPresetModern);
         break;
@@ -1153,6 +1154,7 @@ void CPModern::ackPresetChangeCommHandler(const QString &command, const QByteArr
 {
     // actualPreset.clearWavData();
     // m_presetManager.returnToPreviousState(); // for correct hardware changing
+
     m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
@@ -1168,7 +1170,8 @@ void CPModern::copyCommHandler(const QString &command, const QByteArray &argumen
     if(arguments == "complete")
     {
         emit sgPushCommandToQueue("ls ir_library\r\n", false);
-        pushReadPresetCommands();
+        emit sgPushCommandToQueue("ir info");
+        // pushReadPresetCommands();
     }
     else
     {

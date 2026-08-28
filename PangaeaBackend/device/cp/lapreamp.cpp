@@ -1,7 +1,7 @@
 #include "lapreamp.h"
 
-LAPreamp::LAPreamp(Core *parent)
-    : CPModern{parent}
+LAPreamp::LAPreamp(Core *owner)
+    : CPModern{owner}
 {
     using namespace std::placeholders;
     m_parser.addCommandHandler("gb", std::bind(&LAPreamp::getBankPresetLa3CommHandler, this, _1, _2, _3));
@@ -132,7 +132,6 @@ void LAPreamp::la3MapCommHandler(const QString &command, const QByteArray &argum
         if(argList.size() > 1)
         {
             // m_presetManager.returnToPreviousState(); // for correct hardware changing
-            m_presetManager.setCurrentState(PresetState::Changing);
             emit presetSwitched();
 
             setLa3Channel(argList.at(1).toInt());

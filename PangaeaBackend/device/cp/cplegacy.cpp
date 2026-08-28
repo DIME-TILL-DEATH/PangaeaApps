@@ -182,8 +182,6 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
 
 void CPLegacy::readFullState()
 {
-    m_presetManager.setCurrentState(PresetState::Changing);
-
     if(m_deviceType == DeviceType::LEGACY_CP16 || m_deviceType == DeviceType::LEGACY_CP16PA)
         m_parser.enableFullEndMode();
 
@@ -199,6 +197,8 @@ void CPLegacy::readFullState()
 
 void CPLegacy::pushReadPresetCommands()
 {
+    m_presetManager.setCurrentState(PresetState::Changing);
+
     emit sgPushCommandToQueue("gb");
     emit sgPushCommandToQueue("rn");
     emit sgPushCommandToQueue("gs");
@@ -1006,7 +1006,6 @@ void CPLegacy::ackSaveChanges(const QString &command, const QByteArray &argument
 void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     actualPresetLegacy->clearWavData();
-    m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
 }

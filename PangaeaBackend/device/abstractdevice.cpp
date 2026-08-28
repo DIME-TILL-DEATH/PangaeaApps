@@ -7,15 +7,15 @@ AbstractDevice::AbstractDevice(Core *owner)
 {
     if(owner)
     {
-        connect(this, &AbstractDevice::sgEnableTimeoutTimer, owner->timeoutTimer, qOverload<>(&QTimer::start));
-        connect(this, &AbstractDevice::sgDisableTimeoutTimer, owner->timeoutTimer, &QTimer::stop);
+        connect(this, &AbstractDevice::sgEnableTimeoutTimer, owner->timeoutTimer, qOverload<>(&QTimer::start), Qt::QueuedConnection);
+        connect(this, &AbstractDevice::sgDisableTimeoutTimer, owner->timeoutTimer, &QTimer::stop, Qt::QueuedConnection);
     }
 
 #ifdef Q_OS_ANDROID
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.conf", QSettings::NativeFormat);
+                                    + "/settings.conf", QSettings::NativeFormat, this);
 #else
-    appSettings = new QSettings();
+    appSettings = new QSettings(this);
 #endif
 }
 

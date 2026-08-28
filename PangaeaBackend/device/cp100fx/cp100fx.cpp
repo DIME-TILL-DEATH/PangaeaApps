@@ -130,7 +130,7 @@ QList<QByteArray> Cp100fx::parseAnswers(QByteArray baAnswer)
 
 void Cp100fx::readFullState()
 {
-    m_presetManager.setCurrentState(PresetState::Changing);
+    // m_presetManager.setCurrentState(PresetState::Changing);
 
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("plist");
@@ -153,12 +153,13 @@ void Cp100fx::restartDevice()
 
 void Cp100fx::pushReadPresetCommands()
 {
+    m_presetManager.setCurrentState(PresetState::Changing);
+
     emit sgPushCommandToQueue("ir info");
     emit sgPushCommandToQueue("pnum");
     emit sgPushCommandToQueue("pname");
     emit sgPushCommandToQueue("pcomment");
 
-    emit sgPushCommandToQueue("state get");
     emit sgPushCommandToQueue("ir 0");
     emit sgPushCommandToQueue("ir 1");
 
@@ -166,6 +167,7 @@ void Cp100fx::pushReadPresetCommands()
     emit sgPushCommandToQueue("cntrl_pc");
     emit sgPushCommandToQueue("cntrl_set");
 
+    emit sgPushCommandToQueue("state get");
 
     // m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_cpmodern_t) * 2;
 }
@@ -240,8 +242,6 @@ void Cp100fx::erasePreset()
     emit sgPushCommandToQueue("erase_preset");
     emit sgProcessCommands();
 
-    // m_presetManager.returnToPreviousState(); // for correct hardware changing
-    m_presetManager.setCurrentState(PresetState::Changing); // preset changed
     pushReadPresetCommands();
     emit sgProcessCommands();
 }
@@ -584,8 +584,6 @@ qint8 Cp100fx::getModulePosition(ModuleType moduleType)
 //=======================================================================================
 void Cp100fx::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    // m_presetManager.returnToPreviousState(); // for correct hardware changing
-    m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
 }
@@ -976,13 +974,10 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
     {
         *comparePresetFx = *actualPresetFx;
         comparePresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
-        // setPresetData(savedPreset);
 
-        emit sgPushCommandToQueue("state get");
-        // m_presetManager.returnToPreviousState();
+        m_presetManager.returnToPreviousState();
         m_presetManager.setCurrentState(PresetState::Compare);
-
-        emit sgProcessCommands();
+        // setPresetData(*savedPresetFX);
         break;
     }
 
