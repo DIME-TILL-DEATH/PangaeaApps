@@ -42,7 +42,6 @@ public:
 #ifdef Q_OS_ANDROID
     Q_INVOKABLE void pickFirmwareFile();
 #endif
-    Q_INVOKABLE void doOnlineFirmwareUpdate();
 
     Q_INVOKABLE void openManualExternally(QString fileName);
     Q_INVOKABLE void runIrConvertor();

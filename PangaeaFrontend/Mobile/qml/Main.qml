@@ -153,7 +153,7 @@ ApplicationWindow
 
         headerText: qsTr("Warning")
         text: qsTr("Firmware version error!")
-        buttons: Dialog.Ok|Dialog.No
+        buttons: Dialog.Yes|Dialog.No
 
         onAccepted: {
             UiCore.currentDevice.setFirmware(firmwareLocalPath);
@@ -171,12 +171,12 @@ ApplicationWindow
 
         headerText: qsTr("Update firmware")
         text: qsTr("Newest firmware avaliable on the server.")
-        buttons: Dialog.Ok|Dialog.No
+        buttons: Dialog.Yes|Dialog.No
 
         onAccepted: {
             _swipeView.currentIndex=2;
             _bar.currentIndex=3
-            UiCore.doOnlineFirmwareUpdate();
+            UiCore.sgDoOnlineFirmwareUpdate();
         }
 
         onRejected: {

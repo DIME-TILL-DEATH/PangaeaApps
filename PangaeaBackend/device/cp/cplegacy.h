@@ -58,6 +58,7 @@ public:
     Q_INVOKABLE void escImpulse();
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
+    Q_INVOKABLE void uploadFirmware(const QByteArray& fwData) override;
     Q_INVOKABLE void formatMemory() override;
 
     quint64 maxIrSize() override {return 984 * 3 + 44;};
@@ -111,8 +112,6 @@ private:
 
     void setPresetData(const PresetLegacy &preset);
     void uploadImpulseData(const QByteArray& impulseData, bool isPreview, QString impulseName = "");
-
-    void uploadFirmware(const QByteArray& fwData);
 
     void arrangePrePost();
 

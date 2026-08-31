@@ -54,6 +54,8 @@ public slots:
     void sendWithoutConfirmation(QByteArray data, qint32 dataSizeToSend = -1, qint32 dataSizeTorecieve = -1);
     void processCommands();
 
+    void uploadFirmware(Firmware* newFirmware);
+
 private slots:
     void recieveTimeout();
 

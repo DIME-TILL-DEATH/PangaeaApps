@@ -24,6 +24,11 @@ NetCore::NetCore(QObject *parent)
 #endif
 }
 
+NetCore::~NetCore()
+{
+
+}
+
 void NetCore::requestAppUpdates()
 {
     if(appSettings->value("check_updates_enable", false).toBool())
@@ -72,7 +77,7 @@ void NetCore::requestNewestFirmware(Firmware *actualFirmware)
         default: qDebug() << __FUNCTION__ << "Unknown device"; break;
     }
 
-    deviceFirmware = actualFirmware;
+    deviceFirmware = *actualFirmware;
 
     if(appSettings->value("check_updates_enable", false).toBool())
     {
@@ -90,12 +95,12 @@ void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
     {
         if(parseFirmwareJsonAnswer(reply))
         {
-            qInfo() << "actual: " << deviceFirmware->firmwareVersion() << " avaliable: " << newestFirmware->firmwareVersion();
+            qInfo() << "actual: " << deviceFirmware.firmwareVersion() << " avaliable: " << newestFirmware.firmwareVersion();
 
-            if(*newestFirmware > *deviceFirmware)
+            if(newestFirmware > deviceFirmware)
             {
                 qInfo() << "New firmware avaliable on server";
-                emit sgNewFirmwareAvaliable(newestFirmware, deviceFirmware);
+                emit sgNewFirmwareAvaliable(&newestFirmware, &deviceFirmware);
             }
         }
         else
@@ -114,6 +119,7 @@ void NetCore::slOnFirmwareVersionReqResult(QNetworkReply *reply)
 
 void NetCore::requestFirmwareFile()
 {
+    qDebug() << __FUNCTION__ << firmwareFileRequest.url();
     QNetworkReply* reply = m_networkManager->get(firmwareFileRequest);
     connect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFileReqResult);
     connect(reply, &QNetworkReply::downloadProgress, this, &NetCore::sgDownloadProgress);
@@ -123,8 +129,8 @@ void NetCore::slOnFileReqResult(QNetworkReply *reply)
 {
     qInfo() << "Server answer for firmware file request recieved";
 
-    newestFirmware->setRawData(reply->readAll());
-    emit sgFirmwareDownloaded(newestFirmware->rawData());
+    newestFirmware.setRawData(reply->readAll());
+    emit sgFirmwareDownloaded(&newestFirmware);
 
     disconnect(m_networkManager, &QNetworkAccessManager::finished, this, &NetCore::slOnFileReqResult);
     disconnect(reply, &QNetworkReply::downloadProgress, this, &NetCore::sgDownloadProgress);
@@ -158,10 +164,7 @@ bool NetCore::parseFirmwareJsonAnswer(QNetworkReply* reply)
     }
     else return false;
 
-    if(newestFirmware != nullptr)
-        delete newestFirmware;
-
-    newestFirmware = new Firmware(newestFirmwareVersionString, deviceFirmware->deviceType(), FirmwareType::NetworkUpdate, "net:/rawByteArray");
+    newestFirmware = Firmware(newestFirmwareVersionString, deviceFirmware.deviceType(), FirmwareType::NetworkUpdate, "net:/rawByteArray");
 
     return true;
 }

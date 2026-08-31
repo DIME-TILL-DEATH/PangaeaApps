@@ -86,6 +86,7 @@ public:
     void setCurrentPresetName(const QString &newCurrentPresetName);
 
     Q_INVOKABLE void setFirmware(QString fullFilePath) override;
+    Q_INVOKABLE void uploadFirmware(const QByteArray& fwData) override;
     Q_INVOKABLE void formatMemory() override;
 
     quint64 maxIrSize() override {return 984 * 3 + 44;};
@@ -156,8 +157,6 @@ protected:
 
     void setPresetData(const PresetModern &preset);
     void uploadIrData(const QString &irName, const QString &dstPath, const QByteArray& irData);
-
-    void uploadFirmware(const QByteArray& fwData);
 
     void amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data);
 

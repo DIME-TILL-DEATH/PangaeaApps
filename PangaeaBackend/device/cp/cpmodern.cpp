@@ -153,7 +153,7 @@ void CPModern::setDeviceType(DeviceType newDeviceType)
     switch(m_deviceType)
     {
     case DeviceType::MODERN_CP:
-        m_minimalFirmware = Firmware("2.00.18", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmware_CP16_2.00.18.ble");
+        m_minimalFirmware = Firmware("2.00.00", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmware_CP16_2.00.18.ble");
         m_maxBankCount = 4;
         m_maxPresetCount = 4;
         m_firmwareName = "CP16 Modern";

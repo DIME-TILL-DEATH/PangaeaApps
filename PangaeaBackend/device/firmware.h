@@ -53,7 +53,8 @@ public:
     void setRawData(const QByteArray &newRawData);
 
     static bool isFirmwareFile(QString filePath);
-
+    static bool checkData(const QByteArray& data);
+    bool checkData();
 
 private:
     QString m_firmwareVersionString{""};

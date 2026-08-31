@@ -127,26 +127,8 @@ bool Firmware::operator>=(const Firmware &compareFirmware)
     return true;
 }
 
-// bool Firmware::compareVersion(strVersion requestedVesrion, strVersion devVersion)
-// {
-//     if(requestedVesrion.global > devVersion.global) return false;
-//     if(requestedVesrion.global < devVersion.global) return true;
-
-//     if(requestedVesrion.major > devVersion.major) return false;
-//     if(requestedVesrion.major < devVersion.major) return true;
-
-//     if(requestedVesrion.minor > devVersion.minor) return false;
-//     if(requestedVesrion.minor < devVersion.minor) return true;
-
-//     return true;
-// }
-
 QString Firmware::firmwareVersion() const
 {
-    // QString isPaStr;
-    // if(m_firmwareVersion.isPA) isPaStr = "PA";
-    // else isPaStr = "RV";
-
     return QString().setNum(m_firmwareVersion.global) + "." +
            QString().setNum(m_firmwareVersion.major) + "." +
            QString().setNum(m_firmwareVersion.minor);
@@ -181,18 +163,29 @@ bool Firmware::isFirmwareFile(QString filePath)
         QByteArray magicNumber = file.read(4);
         file.close();
 
-        if(magicNumber.at(0) == 0x78 &&
-           magicNumber.at(1) == 0x56 &&
-           magicNumber.at(2) == 0x34 &&
-           magicNumber.at(3) == 0x12) return true;
-        else return false;
-
+        return checkData(magicNumber);
     }
     else
     {
         qDebug() << __FUNCTION__ << __LINE__ << "Can not open file " << filePath;
         return false;
     }
+}
+
+bool Firmware::checkData(const QByteArray &data)
+{
+    if(data.size() < 4) return false;
+
+    if(data.at(0) == 0x78 &&
+        data.at(1) == 0x56 &&
+        data.at(2) == 0x34 &&
+        data.at(3) == 0x12) return true;
+    else return false;
+}
+
+bool Firmware::checkData()
+{
+    return checkData(m_rawData);
 }
 
 DeviceType Firmware::deviceType() const

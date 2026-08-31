@@ -290,3 +290,18 @@ void Core::recieveTimeout()
         sendCount = 0;
     }
 }
+
+void Core::uploadFirmware(Firmware *newFirmware)
+{
+    if(currentDevice)
+    {
+        if(!newFirmware->checkData())
+        {
+            emit currentDevice->sgDeviceError(DeviceErrorType::FirmwareFileError, QObject::tr("data corrupted"));
+            return;
+        }
+
+        emit currentDevice->sgDeviceMessage(DeviceMessageType::FirmwareFilePath, "Firmware ver.: " + newFirmware->firmwareVersion());
+        currentDevice->uploadFirmware(newFirmware->rawData());
+    }
+}

@@ -92,6 +92,7 @@ public:
     Q_INVOKABLE virtual void previewIr(QString srcFilePath) {};
     Q_INVOKABLE virtual void startIrUpload(QString srcFilePath, QString dstFilePath = "", bool trimFile = false) {};
     Q_INVOKABLE virtual void setFirmware(QString fullFilePath) {};
+    Q_INVOKABLE virtual void uploadFirmware(const QByteArray& data) {};
     Q_INVOKABLE virtual void formatMemory() {};
 
     virtual void updateOutputModeNames() {};

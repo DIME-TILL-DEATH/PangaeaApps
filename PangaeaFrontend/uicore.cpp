@@ -254,12 +254,6 @@ void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldF
     emit sgNewFirmwareAvaliable(updateFirmware->firmwareVersion());
 }
 
-// TODO прямой запуск сигнала из QML
-void UiCore::doOnlineFirmwareUpdate()
-{
-    emit sgDoOnlineFirmwareUpdate();
-}
-
 void UiCore::openManualExternally(QString fileName)
 {
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();

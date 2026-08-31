@@ -162,12 +162,6 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
         m_isPaFw = true;
         break;
 
-    // case DeviceType::LA3:
-    //     m_minimalFirmware = new Firmware("1.05.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
-    //     m_maxBankCount = 0;
-    //     m_maxPresetCount = 16;
-    //     m_firmwareName = "LA3";
-    //     break;
     default:
         qWarning() << __FUNCTION__ << "Unknown device type";
 

@@ -300,6 +300,11 @@ Item
             rssiNotificationDialog.open();
             InterfaceManager.rssiMeasuring(true);
         }
+
+        function onSgDoOnlineFirmwareUpdate()
+        {
+            mLoadFirmwareScreen.open();
+        }
     }
 
     Connections
@@ -354,8 +359,10 @@ Item
 
                 case DeviceErrorType.FirmwareFileError:
                 {
+                    mLoadFirmwareScreen.close()
                     mesNoFW.text = qsTr("Firmware file error:  " + description)
                     mesNoFW.open()
+                    break;
                 }
             }
         }
