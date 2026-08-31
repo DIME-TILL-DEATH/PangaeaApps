@@ -613,7 +613,7 @@ void MockCP100fx::amtDevCommHandler(const QString &command, const QByteArray &ar
 
 void MockCP100fx::amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    emit answerReady(QString("amtver\r2.01.05\nEND\n").toUtf8());
+    emit answerReady(QString("amtver\r2.01.07\nEND\n").toUtf8());
 }
 
 void MockCP100fx::sysSettingsCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

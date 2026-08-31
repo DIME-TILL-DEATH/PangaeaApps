@@ -6,9 +6,6 @@ import QtQuick.Window 2.15
 import StyleSettings 1.0
 import Layouts 1.0
 
-import CP16
-import CP100FX
-
 import PangaeaFrontend
 import PangaeaBackend
 
@@ -160,15 +157,24 @@ ApplicationWindow
         property string firmwareLocalPath
         property bool offlineUpdate: true
 
-        buttons: DialogButtonBox.Yes | DialogButtonBox.No
+        property bool deviceCanAutoupdate: (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16) ||
+                                           (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16PA) ||
+                                           (UiCore.currentDevice.deviceType === DeviceType.LA3) ||
+                                           (UiCore.currentDevice.deviceType === DeviceType.MODERN_CP)
+
+        buttons: deviceCanAutoupdate? (DialogButtonBox.Yes | DialogButtonBox.No)
+                                    : DialogButtonBox.Ok
 
         onButtonClicked: function(button){
             switch(button.DialogButtonBox.buttonRole)
             {
                 case DialogButtonBox.YesRole:
                 {
-                    if(offlineUpdate) UiCore.currentDevice.setFirmware(firmwareLocalPath);
-                    else UiCore.sgDoOnlineFirmwareUpdate();
+                    if(_msgVersionInform.deviceCanAutoupdate)
+                    {
+                        if(offlineUpdate) UiCore.currentDevice.setFirmware(firmwareLocalPath);
+                        else UiCore.sgDoOnlineFirmwareUpdate();
+                    }
 
                     _msgVersionInform.close();
                     break;
@@ -213,8 +219,9 @@ ApplicationWindow
             _msgVersionInform.title = qsTr("Info")
             _msgVersionInform.text = qsTr("New firmware version(v.") +
                     firmwareVersionString +
-                    qsTr(") avaliable on the server.") +
-                    qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
+                    qsTr(") avaliable on the server.")
+
+            if(_msgVersionInform.deviceCanAutoupdate) _msgVersionInform.text += qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!");
 
             _msgVersionInform.offlineUpdate = false;
             _msgVersionInform.open()
@@ -293,16 +300,20 @@ ApplicationWindow
 
                 case DeviceErrorType.FimrmwareVersionInsufficient:
                 {
+                    console.log("FW version innsufficient")
                     _msgVersionInform.title = qsTr("Warning")
                     _msgVersionInform.text = qsTr("Version error!")
                     _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0] + "\n"
                             + qsTr("Minimum required version is ")
                             + params[1] + "\n"
                             + qsTr("Without updating the firmware, some features may not work properly.\n")
-                            + qsTr("Do you want to update firmware now?");
 
-                    _msgVersionInform.offlineUpdate = true;
-                    _msgVersionInform.firmwareLocalPath = params[2];
+                    if(_msgVersionInform.deviceCanAutoupdate)
+                    {
+                        _msgVersionInform.offlineUpdate = true;
+                        _msgVersionInform.text += qsTr("Do you want to update firmware now?");
+                        if(_msgVersionInform.deviceCanAutoupdate)_msgVersionInform.firmwareLocalPath = params[2];
+                    }
                     _msgVersionInform.open();
                     break;
                 }

@@ -174,7 +174,7 @@ void UiCore::exportPreset(QUrl dstPath)
         intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString("audio/*").object<jstring>());
 
 
-        intent.callObjectMethod("putExtra", "(Ljava/lang/String;[Ljava/lang/String;)Landroid/content/Intent;",
+        intent.callObjectMethod("putExtra", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
                                 EXTRA_TITLE.object<jstring>(),
                                 QJniObject::fromString("Pangaea_preset.pst").object<jstring>());
 
