@@ -180,17 +180,17 @@
 <context>
     <name>ConnectionLayout</name>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="95"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="89"/>
         <source>Searching for devices...</source>
         <translation>Поиск доступных устройств...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="178"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="172"/>
         <source>Click to connect</source>
         <translation>Нажмите для подсоединения к устройству</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="210"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="204"/>
         <source>Show virtual interfaces</source>
         <translation>Показать виртуальные устройства</translation>
     </message>
@@ -682,42 +682,38 @@
 <context>
     <name>MBusy</name>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="21"/>
-        <source>Loading application</source>
-        <translation>Загрузка приложения</translation>
-    </message>
-    <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="164"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="163"/>
         <source>Sending commands to device</source>
         <translation>Отправка команд устройству</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="131"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="130"/>
         <source>Uploading file data to device</source>
         <translation>Загрузка файла в устройство</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="124"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="123"/>
         <source>Getting data from device</source>
         <translation>Получение данных из устройства</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="140"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="139"/>
         <source>Downloading impulse data from device</source>
         <translation>Загрузка файла импульса из устройства</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="148"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="147"/>
         <source>Applying impulse to device. Please wait...</source>
         <translation>Применение импульса в устройстве. Пожалуйста, ждите...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="156"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="155"/>
         <source>Updating device firmware...</source>
         <translation>Обновление прошивки...</translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="177"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="93"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="176"/>
         <source>Connecting to device...</source>
         <translation>Подключение к устройству...</translation>
     </message>
@@ -735,151 +731,164 @@
         <translation>Отключено</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="112"/>
+        <location filename="../qml/Main.qml" line="97"/>
         <source>Do you want to save changes?</source>
         <translation>Вы хотите сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="111"/>
+        <location filename="../qml/Main.qml" line="96"/>
         <source>Save preset</source>
         <translation>Сохранить пресет</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="153"/>
-        <location filename="../qml/Main.qml" line="166"/>
-        <location filename="../qml/Main.qml" line="284"/>
-        <location filename="../qml/Main.qml" line="292"/>
-        <location filename="../qml/Main.qml" line="300"/>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="138"/>
+        <location filename="../qml/Main.qml" line="151"/>
+        <location filename="../qml/Main.qml" line="272"/>
+        <location filename="../qml/Main.qml" line="280"/>
+        <location filename="../qml/Main.qml" line="288"/>
+        <location filename="../qml/Main.qml" line="312"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="154"/>
-        <location filename="../qml/Main.qml" line="167"/>
+        <location filename="../qml/Main.qml" line="139"/>
+        <location filename="../qml/Main.qml" line="152"/>
         <source>Device is disconnected</source>
         <translation>Устройство отключено</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="204"/>
+        <location filename="../qml/Main.qml" line="191"/>
         <source>Operation complete</source>
         <translation>Операция завершена</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="206"/>
+        <location filename="../qml/Main.qml" line="193"/>
         <source>Operation complete. Please, reconnect to device</source>
         <translation>Операция завершена. Пожалуйста, переподключите устройство</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="276"/>
+        <location filename="../qml/Main.qml" line="216"/>
+        <source>) avaliable on the server.</source>
+        <translation>) доступна на сервере.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="217"/>
+        <source>
+Do you want to update firmware now?
+WARNING!!! Updating firmware may take several minutes!</source>
+        <translation>
+Вы желаете обновить устройство сейчас?
+ВНИМАНИЕ!!! Обновление прошивки может занять продолжительное время!</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="264"/>
         <source>Device parse error</source>
         <translation>Ошибка разбора команнды</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="285"/>
+        <location filename="../qml/Main.qml" line="273"/>
         <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation>Ошибка при сохранении IR. Пожалуйста, попробуйте загрузить файл ещё раз.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="293"/>
+        <location filename="../qml/Main.qml" line="281"/>
         <source>Not a Pangaea preset file!</source>
         <translation>Файл не является файлом пресета!</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="308"/>
+        <location filename="../qml/Main.qml" line="296"/>
         <source>Warning</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="309"/>
+        <location filename="../qml/Main.qml" line="297"/>
         <source>Version error!</source>
         <translation>Ошибка версии!</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="310"/>
+        <location filename="../qml/Main.qml" line="298"/>
         <source>Firmware version of your device is </source>
         <translation>Версия прошивки Вашего устройства </translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="311"/>
+        <location filename="../qml/Main.qml" line="299"/>
         <source>Minimum required version is </source>
         <translation>Минимальная версия </translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="226"/>
-        <location filename="../qml/Main.qml" line="237"/>
+        <location filename="../qml/Main.qml" line="213"/>
+        <location filename="../qml/Main.qml" line="225"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="227"/>
+        <location filename="../qml/Main.qml" line="214"/>
         <source>New firmware version(v.</source>
         <translation>Новая версия прошивки(v.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="229"/>
-        <location filename="../qml/Main.qml" line="240"/>
+        <location filename="../qml/Main.qml" line="228"/>
         <source>) avaliable on the server</source>
         <translation>) доступна на сервере</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="238"/>
+        <location filename="../qml/Main.qml" line="226"/>
         <source>New application version(v.</source>
         <translation>Новая версия приложения(v.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="301"/>
+        <location filename="../qml/Main.qml" line="289"/>
         <source>You must save preset before export</source>
         <translation>Необходимо сохранить пресет перед экспортом</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="313"/>
+        <location filename="../qml/Main.qml" line="301"/>
         <source>Without updating the firmware, some features may not work properly.
 </source>
         <translation>Часть функций приложения могут работать некорректно.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="314"/>
+        <location filename="../qml/Main.qml" line="302"/>
         <source>Do you want to update firmware now?</source>
         <translation>Хотите обновить прошивку сейчас?</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="325"/>
+        <location filename="../qml/Main.qml" line="313"/>
         <source>IR file copying error.</source>
         <translation>Ошибка при копировании IR файлаю</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="338"/>
+        <location filename="../qml/Main.qml" line="326"/>
         <source>Preset export finished</source>
         <translation>Экспорт пресета завершён</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="358"/>
+        <location filename="../qml/Main.qml" line="346"/>
         <source>Device is unavaliable</source>
         <translation>Устройство недоступно</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="365"/>
+        <location filename="../qml/Main.qml" line="353"/>
         <source>Command exchange error</source>
         <translation>Ошибка при обмене командами</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="374"/>
+        <location filename="../qml/Main.qml" line="362"/>
         <source>USB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="375"/>
+        <location filename="../qml/Main.qml" line="363"/>
         <source>BLUETOOTH</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="376"/>
+        <location filename="../qml/Main.qml" line="364"/>
         <source>VIRTUAL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="377"/>
+        <location filename="../qml/Main.qml" line="365"/>
         <source>Unknown interface</source>
         <translation></translation>
     </message>
@@ -1173,6 +1182,11 @@
         <location filename="../../../PangaeaBackend/interfaces/bleinterface.cpp" line="205"/>
         <source>Bluetooth permission not granted!</source>
         <translation>Не получено разрешение Bluetooth!</translation>
+    </message>
+    <message>
+        <location filename="../../../PangaeaBackend/cores/core.cpp" line="300"/>
+        <source>data corrupted</source>
+        <translation>данные повреждены</translation>
     </message>
 </context>
 <context>

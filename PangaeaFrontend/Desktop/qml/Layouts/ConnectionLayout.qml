@@ -1,10 +1,4 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-
-import QtQuick.Controls.impl 2.15
-
 
 import Elements
 import StyleSettings

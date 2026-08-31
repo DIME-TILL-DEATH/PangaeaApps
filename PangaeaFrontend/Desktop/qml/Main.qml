@@ -75,31 +75,16 @@ ApplicationWindow
         switch(UiCore.currentDevice.deviceType){
             case DeviceType.LA3:
             case DeviceType.MODERN_CP:
-                component = controlLayoutCPModernComponent;
+                // component = controlLayoutCPModernComponent;
+                controlLayoutLoader.source = "qrc:/qt/qml/CP16/ControlLayoutCPModern.qml";
                 break;
             case DeviceType.CP100FX:
             case DeviceType.CP100FX_S:
-                component = controlLayoutCP100FXComponent;
+                controlLayoutLoader.source = "qrc:/qt/qml/CP100FX/ControlLayoutCP100FX.qml";
                 break;
             default:
-                component = controlLayoutLegacyComponent;
+                controlLayoutLoader.source = "qrc:/qt/qml/CP16/ControlLayoutLegacy.qml";
         }
-        controlLayoutLoader.sourceComponent = component;
-    }
-
-    Component {
-        id: controlLayoutCPModernComponent
-        ControlLayoutCPModern {}
-    }
-
-    Component {
-        id: controlLayoutLegacyComponent
-        ControlLayoutLegacy {}
-    }
-
-    Component {
-        id: controlLayoutCP100FXComponent
-        ControlLayoutCP100FX {}
     }
 
     NativeMessageDialog{
@@ -183,6 +168,8 @@ ApplicationWindow
                 case DialogButtonBox.YesRole:
                 {
                     if(offlineUpdate) UiCore.currentDevice.setFirmware(firmwareLocalPath);
+                    else UiCore.sgDoOnlineFirmwareUpdate();
+
                     _msgVersionInform.close();
                     break;
                 }
@@ -226,7 +213,8 @@ ApplicationWindow
             _msgVersionInform.title = qsTr("Info")
             _msgVersionInform.text = qsTr("New firmware version(v.") +
                     firmwareVersionString +
-                    qsTr(") avaliable on the server")
+                    qsTr(") avaliable on the server.") +
+                    qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!")
 
             _msgVersionInform.offlineUpdate = false;
             _msgVersionInform.open()
@@ -382,7 +370,7 @@ ApplicationWindow
 
         function onSgInterfaceError(errorDescription)
         {
-            connected = false;
+            main.connected = false;
             startUi.visible = true;;
             msgInfo.text = qsTr("Device disconnected\n" + errorDescription)
             msgInfo.open();
