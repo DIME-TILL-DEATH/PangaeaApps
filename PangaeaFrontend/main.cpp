@@ -2,6 +2,10 @@
 #include <QQmlApplicationEngine>
 // #include <QtQml>
 
+#ifdef Q_OS_ANDROID
+#include <QJniObject>
+#endif
+
 #include <qicon.h>
 #include <signal.h>
 
@@ -138,6 +142,7 @@ int main(int argc, char *argv[])
         &app, []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
 
     engine.loadFromModule("PangaeaFrontend", "Main");
+
     //----------------------------------------------------------------------
     return app.exec();
 }
