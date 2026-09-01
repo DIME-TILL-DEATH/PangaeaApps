@@ -31,6 +31,8 @@ if(ANDROID)
             android/res/values/libs.xml
 
             android/build.gradle
+            android/gradle.properties
+            android/proguard-rules.pro
     )
 endif()
 
