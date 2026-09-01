@@ -105,34 +105,35 @@ public class JniUsbSerial
 
             UsbSerialDriver driverL = usbDefaultProber.probeDevice(deviceL);
             tempL = deviceL.getDeviceName() + ":";
+            tempL += "serial";
 
-            if (driverL == null) {
-                tempL = tempL + "Unknown:";
-            }
-            else if (driverL instanceof CdcAcmSerialDriver)
-            {
-                tempL = tempL + "Cdc Acm:";
-            }
-            else if (driverL instanceof Ch34xSerialDriver)
-            {
-                tempL = tempL + "Ch34x:";
-            }
-            else if (driverL instanceof CommonUsbSerialPort)
-            {
-                tempL = tempL + "CommonUsb:";
-            }
-            else if (driverL instanceof Cp21xxSerialDriver)
-            {
-                tempL = tempL + "Cp21xx:";
-            }
-            else if (driverL instanceof FtdiSerialDriver)
-            {
-                tempL = tempL + "Ftdi:";
-            }
-            else if (driverL instanceof ProlificSerialDriver)
-            {
-                tempL = tempL + "Prolific:";
-            }
+            // if (driverL == null) {
+            //     tempL = tempL + "Unknown:";
+            // }
+            // else if (driverL instanceof CdcAcmSerialDriver)
+            // {
+            //     tempL = tempL + "Cdc Acm:";
+            // }
+            // else if (driverL instanceof Ch34xSerialDriver)
+            // {
+            //     tempL = tempL + "Ch34x:";
+            // }
+            // else if (driverL instanceof CommonUsbSerialPort)
+            // {
+            //     tempL = tempL + "CommonUsb:";
+            // }
+            // else if (driverL instanceof Cp21xxSerialDriver)
+            // {
+            //     tempL = tempL + "Cp21xx:";
+            // }
+            // else if (driverL instanceof FtdiSerialDriver)
+            // {
+            //     tempL = tempL + "Ftdi:";
+            // }
+            // else if (driverL instanceof ProlificSerialDriver)
+            // {
+            //     tempL = tempL + "Prolific:";
+            // }
 
             tempL = tempL + deviceL.getManufacturerName() + ":";
 

@@ -12,11 +12,8 @@ public class SplashActivity extends Activity {
 
     private static final String TAG = "SplashActivity";
 
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = this;
-
         // Set up an OnPreDrawListener to the root view.
         final View content = findViewById(android.R.id.content);
                 content.getViewTreeObserver().addOnPreDrawListener(
