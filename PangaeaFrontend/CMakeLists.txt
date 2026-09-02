@@ -2,17 +2,17 @@ cmake_minimum_required(VERSION 3.21.1)
 
 set(MY_PRODUCT_NUMBER 1)
 set(MY_PRODUCT_VERSION 1)
-set(MY_BUILD_NUMBER 2608)
+set(MY_BUILD_NUMBER 2609)
 
 set(MOBILE_VERSION_MAJOR 1)
 set(MOBILE_VERSION_MINOR 2)
-set(MOBILE_VERSION_BUILD 13)
+set(MOBILE_VERSION_BUILD 14)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
-    set(VERSION_CODE 57)
+    set(VERSION_CODE 58)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -359,11 +359,14 @@ else()
                                     -targetDir "${DEPLOY_PATH}/app/"
                                     -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
                                     -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
-                                    -qmake "~/Qt/6.8.1/gcc_64/bin/qmake")
+                                    -qmake "~/Qt/6.11.1/gcc_64/bin/qmake")
 
             # make tarball archive
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND tar -czvf "${DEPLOY_PATH}/Pangaea-desktop.tar.gz" "${DEPLOY_PATH}/app/")
+                    COMMAND tar -czvf "${DEPLOY_PATH}/AMT_PANGAEA_DESK_APP_(LINUX)_(${PROJECT_VERSION}).tar.gz"
+                    "${DEPLOY_PATH}/app/"
+                    VERBATIM
+                )
 
             # make .deb package
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -382,7 +385,9 @@ else()
                 "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/usr/")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/")
+                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/"
+                "${DEPLOY_PATH}/AMT_PANGAEA_DESK_APP_(LINUX)_(${PROJECT_VERSION}).deb"
+                VERBATIM)
         endif()
     endif()
 
