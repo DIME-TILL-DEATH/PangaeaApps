@@ -14,6 +14,8 @@ void IosUtils::copyFileToTmp(const QUrl &url, QString& pathToCopiedFile)
 
   if([iosURL startAccessingSecurityScopedResource])
     qDebug() << "access to resource granted";
+  else
+    qWarning() << "access to resource not granted";
 
   QString localPath = url.toLocalFile();
 
@@ -42,7 +44,7 @@ void IosUtils::copyFileToTmp(const QUrl &url, QString& pathToCopiedFile)
   }
   else
   {
-    qWarning() << "Can't open file" << localPath;
+    qWarning() << __FUNCTION__ << "Can't open file" << localPath;
   }
 
   [iosURL stopAccessingSecurityScopedResource];

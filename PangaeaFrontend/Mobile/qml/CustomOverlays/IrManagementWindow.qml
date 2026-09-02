@@ -296,9 +296,11 @@ Item{
     FileDialog{
         id: _iosFileDialog
 
+        fileMode: FileDialog.OpenFiles
+
         onAccepted:
         {            
-            UiCore.uploadIr(_iosFileDialog.currentFile, _root.dstIrPath);
+            UiCore.uploadIr(_iosFileDialog.selectedFiles, _root.dstIrPath);
 
         }
     }
