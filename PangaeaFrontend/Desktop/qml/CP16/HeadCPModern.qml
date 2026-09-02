@@ -13,7 +13,7 @@ Item
 {
     id: main
 
-    property CabSim irModule: UiCore.currentDevice.IR
+    property CabSim irModule: (UiCore.currentDevice as CPModern).IR
 
     signal openModulesConfigWindow()
     signal openIrManagerWindow()
@@ -144,7 +144,7 @@ Item
 
                     TextInput{
                         id: _presetNameEdit
-                        text: UiCore.currentDevice.currentPresetName
+                        text: (UiCore.currentDevice as CPModern).currentPresetName
 
                         height: parent.height
                         width: parent.width*4/5
@@ -159,7 +159,7 @@ Item
 
                         onEditingFinished:{
                             focus = false
-                            UiCore.currentDevice.currentPresetName = _presetNameEdit.text
+                            (UiCore.currentDevice as CPModern).currentPresetName = _presetNameEdit.text
                         }
 
                         onTextEdited: {
@@ -177,7 +177,7 @@ Item
                 width: parent.width
                 height: parent.height/3
 
-                enabled: UiCore.currentDevice.IR.used
+                enabled: main.irModule.used
 
                 color: enabled ? Style.currentTheme.headColor : Style.currentTheme.borderOff
 
@@ -230,7 +230,7 @@ Item
 
                             anchors.horizontalCenter: parent.horizontalCenter
 
-                            text: impuls.enabled ? (irModule.impulseName === "" ? qsTr("Empty") : irModule.impulseName)
+                            text: impuls.enabled ? (main.irModule.impulseName === "" ? qsTr("Empty") : main.irModule.impulseName)
                                                  : qsTr("IR module not configured")
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment:   Text.AlignVCenter
@@ -245,7 +245,7 @@ Item
                                 id: _maIrSelect
 
                                 anchors.fill: parent
-                                onClicked: openIrManagerWindow();
+                                onClicked: main.openIrManagerWindow();
 
                                 cursorShape: Qt.PointingHandCursor
 
@@ -284,7 +284,7 @@ Item
                     id: mA
 
                     anchors.fill: parent
-                    onClicked: openModulesConfigWindow();
+                    onClicked: main.openModulesConfigWindow();
                 }
             }
         }
@@ -305,12 +305,12 @@ Item
 
             ParameterDial{
                 id: vlControl
-                property Volume module: UiCore.currentDevice.MV
+                property Volume module: (UiCore.currentDevice as CPModern).MV
 
                 width:  parent.width * 0.9
                 height: parent.height * 0.9
 
-                controlValue: UiCore.currentDevice.MV.volume
+                controlValue: module.volume
 
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -345,10 +345,10 @@ Item
         delegate: Item{
             id: _root
 
-            width: map.cellWidth
-            height: map.cellHeight
+            width: GridView.view.cellWidth
+            height: GridView.view.cellHeight
 
-            property int currentIndex: map.currentIndex
+            property int currentIndex: GridView.view.currentIndex
 
             property bool currentImpulseEnabled
             property string currentImpulseName
@@ -361,9 +361,9 @@ Item
 
                 radius: width/2
 
-                color: isImpulseEmpty ? "transparent" : Style.currentTheme.highlightColor
+                color: model.isImpulseEmpty ? "transparent" : Style.currentTheme.highlightColor
 
-                opacity: isImpulseEnabled ? 1 : 0.5
+                opacity: model.isImpulseEnabled ? 1 : 0.5
                 border.width: Math.max(2, width/20)
                 border.color: currentIndex === presetMapIndex ? Style.currentTheme.highlightColor : Style.currentTheme.backgroundColor
 

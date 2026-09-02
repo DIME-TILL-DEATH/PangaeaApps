@@ -7,6 +7,7 @@
 #include <QProcess>
 #include <QCoreApplication>
 #include <QUrl>
+#include <QQmlFile>
 
 #include <QSettings>
 
@@ -36,8 +37,8 @@ UiCore::UiCore(QObject *parent)
 
 #if defined(Q_OS_ANDROID)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                       + "/settings.conf", QSettings::NativeFormat);
-    
+                       + "/settings.conf", QSettings::NativeFormat, this);
+
     connect(&activityResultHandler, &ActivityResultManager::sgIrFilePicked, this, qOverload<QString, QString>(&UiCore::uploadIr));
     connect(&activityResultHandler, &ActivityResultManager::sgIrFileListPicked, this, qOverload<QList<QUrl>, QUrl>(&UiCore::uploadIr));
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFilePicked, this, &UiCore::slImportPreset);
@@ -45,14 +46,12 @@ UiCore::UiCore(QObject *parent)
     connect(&activityResultHandler, &ActivityResultManager::sgPresetFileCreated, this, &UiCore::slExportPreset);
 #elif defined(Q_OS_IOS)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.plist", QSettings::NativeFormat);
+                                    + "/settings.plist", QSettings::NativeFormat, this);
 
     IosUtils::wakeLockDisable();
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
-
-    loadDefaultTranslator();
 }
 
 UiCore::~UiCore()
@@ -71,30 +70,6 @@ UiCore::~UiCore()
     tmpDir.removeRecursively();
 }
 
-void UiCore::setupApplication()
-{
-    QString appLanguage = appSettings->value("application_language", "autoselect").toString();
-
-    emit sgSetUIText("application_language", appLanguage);
-
-    QString colorTheme = appSettings->value("color_theme", "dark_orange").toString();
-    emit sgSetUIText("color_theme", colorTheme);
-
-    bool isAutoconnectEnabled = appSettings->value("autoconnect_enable").toBool();
-    emit sgSetUIParameter("autoconnect_enable", isAutoconnectEnabled);
-
-    bool isCheckUpdatesEnabled = appSettings->value("check_updates_enable", false).toBool();
-    emit sgSetUIParameter("check_updates_enable", isCheckUpdatesEnabled);
-    if(isCheckUpdatesEnabled)
-    {
-        emit sgCheckAppUpdates();
-    }
-
-    bool firstRun = !appSettings->value("first_run", true).toBool();
-    emit sgSetUIParameter("first_run", firstRun);
-    appSettings->setValue("first_run", false);
-}
-
 void UiCore::disconnectFromDevice()
 {
     disconnect(m_currentDevice);
@@ -111,11 +86,6 @@ void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 #ifndef Q_OS_ANDROID
     m_dstIrPath = dstFilePath;
 #endif
-// #ifdef Q_OS_ANDROID
-//     Q_UNUSED(srcFilePath)
-//     pickFile(ActivityType::PICK_IR, "audio/*");
-//     return;
-// #endif
 
 #ifdef Q_OS_IOS
     IosUtils::copyFileToTmp(srcFilePath, m_pickedIrPath);
@@ -204,7 +174,7 @@ void UiCore::exportPreset(QUrl dstPath)
         intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString("audio/*").object<jstring>());
 
 
-        intent.callObjectMethod("putExtra", "(Ljava/lang/String;[Ljava/lang/String;)Landroid/content/Intent;",
+        intent.callObjectMethod("putExtra", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
                                 EXTRA_TITLE.object<jstring>(),
                                 QJniObject::fromString("Pangaea_preset.pst").object<jstring>());
 
@@ -232,7 +202,7 @@ void UiCore::importPreset(QString filePath)
 #ifdef Q_OS_ANDROID
     Q_UNUSED(filePath)
 
-    pickFile(ActivityType::PICK_PRESET, "*/*");
+    pickFile(ActivityType::PICK_PRESET, "*/*", false);
 #elif defined(Q_OS_IOS)
     QString tmpFilePath;
     IosUtils::copyFileToTmp(filePath, tmpFilePath);
@@ -276,84 +246,12 @@ void UiCore::slFirmwareFilePicked(QString filePath, QString fileName)
     fileName = fileInfo.fileName();
 #endif
 
-    emit sgSetUIText("firmware_file_picked", filePath + ',' + fileName);
-}
-
-void UiCore::setFirmware(QString fullFilePath)
-{
-    emit sgSetFirmware(fullFilePath);
-    //m_currentDevice->setFirmware(fullFilePath);
+    emit sgFirmwareFilePicked(filePath, fileName);
 }
 
 void UiCore::slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware)
 {
-   // emit sgSetUIText("firmware_local_path", updateFirmware->path()); //path to firmware
-
     emit sgNewFirmwareAvaliable(updateFirmware->firmwareVersion());
-}
-
-void UiCore::slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware)
-{
-    emit sgSetUIText("firmware_version_error",
-                     actualFirmware->firmwareVersion()+","+minimalFirmware->firmwareVersion());
-    emit sgSetUIText("firmware_local_path", minimalFirmware->path());
-}
-
-// TODO прямой запуск сигнала из QML
-void UiCore::doOnlineFirmwareUpdate()
-{
-    emit sgDoOnlineFirmwareUpdate();
-}
-
-void UiCore::saveSetting(QString settingName, QVariant settingValue)
-{
-    appSettings->setValue(settingName, settingValue);
-    appSettings->sync();
-
-    qInfo() << __FUNCTION__ << "Setting name: " << settingName << "Setting value:" << settingValue;
-}
-
-void UiCore::setLanguage(QString languageCode)
-{
-    appSettings->setValue("application_language", languageCode);
-    appSettings->sync();
-
-    loadTranslator(languageCode);
-}
-
-void UiCore::loadTranslator(QString languageCode)
-{
-    if(QCoreApplication::removeTranslator(&m_translator)) qDebug() << "Old translator removed";
-
-    if(languageCode=="autoselect")
-    {
-        loadDefaultTranslator();
-        return;
-    }
-
-    if (m_translator.load(pathFromCode.value(languageCode)))
-    {
-        qDebug() << "Translator loaded. Language: " << m_translator.language();
-        QCoreApplication::installTranslator(&m_translator);
-
-        emit sgTranslatorChanged(languageCode);
-        if(m_currentDevice)
-        {
-            m_currentDevice->updateOutputModeNames();
-        }
-    }
-    else qDebug() << "Translator not found. Using english";
-}
-
-void UiCore::loadDefaultTranslator()
-{
-    if (m_translator.load(QLocale(), QLatin1String("pangaea-mobile"), QLatin1String("_"), ":/translations/"))
-    {
-        qDebug() << "Default translator loaded. Locale: " << QLocale();
-        QCoreApplication::installTranslator(&m_translator);
-
-        emit sgTranslatorChanged(QLocale().nativeLanguageName());
-    }
 }
 
 void UiCore::openManualExternally(QString fileName)
@@ -457,26 +355,29 @@ void UiCore::slCurrentDeviceChanged(AbstractDevice *newDevice)
 #ifdef Q_OS_ANDROID
 void UiCore::pickFirmwareFile()
 {
-    pickFile(ActivityType::PICK_FIRMWARE, "*/*");
+    pickFile(ActivityType::PICK_FIRMWARE, "*/*", false);
 }
 
-void UiCore::pickFile(ActivityType fileType, QString filter)
+void UiCore::pickFile(ActivityType fileType, QString filter, bool allowMultiple)
 {
     QJniObject ACTION_OPEN_DOCUMENT = QJniObject::getStaticObjectField<jstring>("android/content/Intent", "ACTION_OPEN_DOCUMENT");
-
-    jint FLAG_READ_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
-    jint FLAG_PERSISTABLE_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
-    QJniObject EXTRA_ALLOW_MULTIPLE =  QJniObject::getStaticField<jstring>("android/content/Intent", "EXTRA_ALLOW_MULTIPLE");
-
     QJniObject intent("android/content/Intent");
-    if (ACTION_OPEN_DOCUMENT.isValid() && intent.isValid())
+
+    if(ACTION_OPEN_DOCUMENT.isValid() && intent.isValid())
     {
         intent.callObjectMethod("setAction", "(Ljava/lang/String;)Landroid/content/Intent;", ACTION_OPEN_DOCUMENT.object<jstring>());
         intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJniObject::fromString(filter).object<jstring>());
 
-        // intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.callObjectMethod("putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", EXTRA_ALLOW_MULTIPLE.object<jstring>(), true);
+        if(allowMultiple)
+        {
+            QJniObject EXTRA_ALLOW_MULTIPLE =  QJniObject::getStaticField<jstring>("android/content/Intent", "EXTRA_ALLOW_MULTIPLE");
+            intent.callObjectMethod("putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;", EXTRA_ALLOW_MULTIPLE.object<jstring>(), true);
+        }
+
+        jint FLAG_READ_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
         intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_READ_PERMISSION);
+
+        jint FLAG_PERSISTABLE_PERMISSION = QJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
         intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", FLAG_PERSISTABLE_PERMISSION);
 
         QtAndroidPrivate::startActivity(intent, fileType, &activityResultHandler);

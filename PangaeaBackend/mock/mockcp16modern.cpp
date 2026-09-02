@@ -375,7 +375,7 @@ void MockCP16Modern::amtDevCommHandler(const QString &command, const QByteArray 
 
 void MockCP16Modern::amtVerCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    emit answerReady(QString("amtver\r2.01.00\nEND\n").toUtf8());
+    emit answerReady(QString("amtver\r2.00.18\nEND\n").toUtf8());
 }
 
 void MockCP16Modern::bankPresetCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)

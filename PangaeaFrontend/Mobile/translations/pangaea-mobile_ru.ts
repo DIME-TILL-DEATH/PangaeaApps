@@ -5,24 +5,24 @@
     <name>AbstractDevice</name>
     <message>
         <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="76"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="66"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="69"/>
         <source>Phones</source>
         <translation>Наушники</translation>
     </message>
     <message>
         <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="77"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="67"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="70"/>
         <source>Line</source>
         <translation>Линейный</translation>
     </message>
     <message>
         <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="78"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="68"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="71"/>
         <source>Balanced</source>
         <translation>Балансный</translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="69"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="72"/>
         <source>L: Processed/R: Monitor</source>
         <translation>L: Обраб./R: Мониторн.</translation>
     </message>
@@ -140,7 +140,7 @@
 <context>
     <name>BCutControl</name>
     <message>
-        <location filename="../qml/ControlGroups/BCutControl.qml" line="32"/>
+        <location filename="../qml/ControlGroups/BCutControl.qml" line="30"/>
         <source>CUT ON</source>
         <translation>СРЕЗ ВКЛ.</translation>
     </message>
@@ -161,28 +161,32 @@
 <context>
     <name>BusyScreen</name>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="140"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="170"/>
         <source>Sending commands to device</source>
         <translation>Отправка команд устройству</translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="136"/>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="164"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="145"/>
         <source>Uploading file data to device</source>
         <translation>Загрузка файла WAV импульса в устройство</translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="173"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="138"/>
+        <source>Getting data from device</source>
+        <translation>Получение данных из устройства</translation>
+    </message>
+    <message>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="154"/>
         <source>Downloading impulse data from device</source>
         <translation>Выгрузка WAV данных из устройства</translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="181"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="162"/>
         <source>Applying impulse to device. Please wait...</source>
         <translation>Применение WAV импульса. Пожалуйста, подождите...</translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="201"/>
+        <location filename="../qml/CustomOverlays/BusyScreen.qml" line="183"/>
         <source>Connecting to device...</source>
         <translation>Подключение к устройству...</translation>
     </message>
@@ -194,17 +198,17 @@
         <translation type="vanished">ИМП.</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/ClipIndicator.qml" line="79"/>
+        <location filename="../qml/ModulesClassic/ClipIndicator.qml" line="79"/>
         <source>CLIPPING</source>
         <translation>ОГРАНИЧЕНИЕ</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/ClipIndicator.qml" line="92"/>
+        <location filename="../qml/ModulesClassic/ClipIndicator.qml" line="92"/>
         <source>OUT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Modules/ClipIndicator.qml" line="66"/>
+        <location filename="../qml/ModulesClassic/ClipIndicator.qml" line="66"/>
         <source>IN</source>
         <translation></translation>
     </message>
@@ -283,47 +287,47 @@
 <context>
     <name>ConnectPage</name>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="109"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="109"/>
         <source>CONNECTED</source>
         <translation>ПОДКЛЮЧЕНО</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="109"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="109"/>
         <source>SCANNING...</source>
         <translation>ПОИСК...</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="117"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="117"/>
         <source>(TAP to disconnect)</source>
         <translation>(КОСНИТЕСЬ для отключения)</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="141"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="141"/>
         <source>All avaliable AMT PANGAEA devices:</source>
         <translation>Все доступные устройства AMT PANGAEA:</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="142"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="142"/>
         <source>TAP TWICE to connect your AMT PANGAEA:</source>
         <translation>ДВАЖДЫ КОСНИТЕСЬ для подключения:</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="243"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="245"/>
         <source>Autoconnect</source>
         <translation>Автоподключение</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="301"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="303"/>
         <source>Continue?</source>
         <translation>Продолжить?</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="302"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="304"/>
         <source>Do you want to disconnect from AMT PANGAEA?</source>
         <translation>Вы хотите отключиться от этого устройства AMT PANGAEA?</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ConnectPage.qml" line="279"/>
+        <location filename="../qml/Layouts/ConnectPage.qml" line="281"/>
         <source>Show offline(virtual) devices</source>
         <translation>Показать виртуальные устройства</translation>
     </message>
@@ -395,35 +399,35 @@
 <context>
     <name>DocumentationWindow</name>
     <message>
-        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="46"/>
+        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="43"/>
         <source>Documentation</source>
         <translation>Документация</translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="59"/>
+        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="56"/>
         <source>BACK</source>
         <translation>НАЗАД</translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="85"/>
+        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="82"/>
         <source>Web site</source>
         <extracomment>Button text. Format device</extracomment>
         <translation>Веб-сайт</translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="99"/>
+        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="96"/>
         <source>Media center</source>
         <extracomment>Button text. Format device</extracomment>
         <translation>Медиацентр AMT</translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="115"/>
+        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="112"/>
         <source>Application manual</source>
         <extracomment>Button text. Format device</extracomment>
         <translation>Мануал к приложению</translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="131"/>
+        <location filename="../qml/ControlGroups/DocumentationWindow.qml" line="128"/>
         <source>Device manual</source>
         <extracomment>Button text. Format device</extracomment>
         <translation>Мануал к прибору</translation>
@@ -432,12 +436,12 @@
 <context>
     <name>EQExtLegacy</name>
     <message>
-        <location filename="../qml/Modules/EQExtLegacy.qml" line="294"/>
+        <location filename="../qml/ModulesClassic/EQExtLegacy.qml" line="294"/>
         <source>HIDE</source>
         <translation>ЗАКРЫТЬ</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/EQExtLegacy.qml" line="67"/>
+        <location filename="../qml/ModulesClassic/EQExtLegacy.qml" line="67"/>
         <source>RESET</source>
         <translation>СБРОС</translation>
     </message>
@@ -445,12 +449,12 @@
 <context>
     <name>EQExtModern</name>
     <message>
-        <location filename="../qml/Modules/EQExtModern.qml" line="71"/>
+        <location filename="../qml/ModulesClassic/EQExtModern.qml" line="71"/>
         <source>RESET</source>
         <translation>СБРОС</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/EQExtModern.qml" line="372"/>
+        <location filename="../qml/ModulesClassic/EQExtModern.qml" line="372"/>
         <source>HIDE</source>
         <translation>ЗАКРЫТЬ</translation>
     </message>
@@ -458,12 +462,12 @@
 <context>
     <name>EQPreviewLegacy</name>
     <message>
-        <location filename="../qml/Modules/EQPreviewLegacy.qml" line="186"/>
+        <location filename="../qml/ModulesClassic/EQPreviewLegacy.qml" line="186"/>
         <source>PRE</source>
         <translation>PRE</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/EQPreviewLegacy.qml" line="200"/>
+        <location filename="../qml/ModulesClassic/EQPreviewLegacy.qml" line="200"/>
         <source>POST</source>
         <translation>POST</translation>
     </message>
@@ -542,12 +546,11 @@
         <translation>Файл прошивки: </translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/FirmwareLoadingWindow.qml" line="133"/>
         <source>Updating to firmware version </source>
-        <translation>Обновление до прошивки версии </translation>
+        <translation type="vanished">Обновление до прошивки версии </translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/FirmwareLoadingWindow.qml" line="141"/>
+        <location filename="../qml/CustomOverlays/FirmwareLoadingWindow.qml" line="123"/>
         <source>kB from </source>
         <translation>kB из </translation>
     </message>
@@ -555,12 +558,12 @@
 <context>
     <name>HP</name>
     <message>
-        <location filename="../qml/Modules/HP.qml" line="42"/>
+        <location filename="../qml/ModulesClassic/HP.qml" line="42"/>
         <source>High pass filter</source>
         <translation>High-pass filter</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/HP.qml" line="44"/>
+        <location filename="../qml/ModulesClassic/HP.qml" line="44"/>
         <source>High-pass filter passes through frequencies above the cutoff frequency and attenuates everything below that point.</source>
         <translation>High-pass filter — фильтр высоких частот. Пропускает все составляющие выше частоты среза и подавляет остальные частоты, расположенные ниже.</translation>
     </message>
@@ -611,57 +614,57 @@
 <context>
     <name>IRCPLegacy</name>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="27"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="27"/>
         <source>empty</source>
         <translation>пусто</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="67"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="67"/>
         <source>Not supported format</source>
         <translation>Неподдерживаемый формат</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="72"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="72"/>
         <source>Always convert</source>
         <translation>Всегда конвертировать</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="85"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="85"/>
         <source>Trim IR file</source>
         <translation>Редактирование импульса</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="93"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="93"/>
         <source>Always trim</source>
         <translation>Всегда укорачивать</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="110"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="110"/>
         <source>IR file exists</source>
         <translation>Импульс уже загружен</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="126"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="126"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат:</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="128"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="128"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="135"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="135"/>
         <source>File </source>
         <translation>Файл </translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="135"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="135"/>
         <source> already on device.</source>
         <translation> уже загружен на устройство.</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPLegacy.qml" line="151"/>
+        <location filename="../qml/ModulesClassic/IRCPLegacy.qml" line="151"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation>Длительность выбранного файла больше чем длительность, используемая при обработке. Желаете ли Вы укоротить файл для ускорения загрузки и экономии памяти в устройстве?</translation>
     </message>
@@ -669,57 +672,57 @@
 <context>
     <name>IRCPModern</name>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="42"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="42"/>
         <source>empty</source>
         <translation>пусто</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="103"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="103"/>
         <source>Not supported format</source>
         <translation>Неподдерживаемый формат</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="108"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="108"/>
         <source>Always convert</source>
         <translation>Всегда конвертировать</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="124"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="124"/>
         <source>Trim IR file</source>
         <translation>Редактирование импульса</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="132"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="132"/>
         <source>Always trim</source>
         <translation>Всегда укорачивать</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="151"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="151"/>
         <source>IR file exists</source>
         <translation>Импульс уже загружен</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="166"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="171"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation>Pangaea не поддерживает данный формат:</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="168"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="173"/>
         <source>Do you want to convert it before upload?</source>
         <translation>Конвертировать файл перед загрузкой?</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="175"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="180"/>
         <source>File </source>
         <translation>Файл </translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="175"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="180"/>
         <source> already on device.</source>
         <translation> уже загружен на устройство.</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/IRCPModern.qml" line="191"/>
+        <location filename="../qml/ModulesClassic/IRCPModern.qml" line="196"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation>Длительность выбранного файла больше чем длительность, используемая при обработке. Желаете ли Вы укоротить файл для ускорения загрузки и экономии памяти в устройстве?</translation>
     </message>
@@ -756,17 +759,17 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
 <context>
     <name>IrManagementWindow</name>
     <message>
-        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="71"/>
+        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="70"/>
         <source>IR management</source>
         <translation>Файл-менеджер WAV импульсов</translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="97"/>
+        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="96"/>
         <source>UPLOAD IR</source>
         <translation>ЗАГРУЗИТЬ ИМПУЛЬС</translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="259"/>
+        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="269"/>
         <source>Library</source>
         <translation>Библиотека</translation>
     </message>
@@ -775,12 +778,12 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
         <translation type="vanished">Папка</translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="269"/>
+        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="279"/>
         <source>HIDE</source>
         <translation>ЗАКРЫТЬ</translation>
     </message>
     <message>
-        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="264"/>
+        <location filename="../qml/CustomOverlays/IrManagementWindow.qml" line="274"/>
         <source>Preset folder</source>
         <translation>Папка пресета</translation>
     </message>
@@ -788,12 +791,12 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
 <context>
     <name>LP</name>
     <message>
-        <location filename="../qml/Modules/LP.qml" line="52"/>
+        <location filename="../qml/ModulesClassic/LP.qml" line="52"/>
         <source>Low pass filter</source>
         <translation>Low-pass filter</translation>
     </message>
     <message>
-        <location filename="../qml/Modules/LP.qml" line="54"/>
+        <location filename="../qml/ModulesClassic/LP.qml" line="54"/>
         <source>Low-pass filter passes through frequencies below the cutoff frequency and attenuates everything above that point</source>
         <translation>Low-pass filter — фильтр низких частот. Пропускает все составляющие ниже частоты среза и подавляет остальные частоты, расположенные выше.</translation>
     </message>
@@ -808,81 +811,100 @@ PANGAEA поддерживает только wav файлы 48kHz/24bits/мон
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="92"/>
+        <location filename="../qml/Layouts/Main.qml" line="102"/>
+        <location filename="../qml/Main.qml" line="84"/>
         <source>Connect</source>
         <translation>Соед.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="100"/>
+        <location filename="../qml/Layouts/Main.qml" line="110"/>
+        <location filename="../qml/Main.qml" line="92"/>
         <source>Controls</source>
         <translation>Управл.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="109"/>
+        <location filename="../qml/Layouts/Main.qml" line="119"/>
+        <location filename="../qml/Main.qml" line="101"/>
         <source>Config</source>
         <translation>Конф.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="119"/>
+        <location filename="../qml/Layouts/Main.qml" line="129"/>
+        <location filename="../qml/Main.qml" line="111"/>
         <source>Service</source>
         <translation>Сервис</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="146"/>
+        <location filename="../qml/Layouts/Main.qml" line="156"/>
+        <location filename="../qml/Main.qml" line="139"/>
         <source>Exchange error between the BLE module and the PANGAEA device has occurred. Please check the firmware and connections.</source>
         <translation>Произошла ошибка обмена данными между модулем BLE и устройством PANGAEA. Пожалуйста, проверьте прошивку и подключения.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="148"/>
+        <location filename="../qml/Layouts/Main.qml" line="158"/>
+        <location filename="../qml/Main.qml" line="141"/>
         <source>Exchange error</source>
         <translation>Ошибка связи</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="161"/>
-        <location filename="../qml/Pages/Main.qml" line="201"/>
-        <location filename="../qml/Pages/Main.qml" line="305"/>
-        <location filename="../qml/Pages/Main.qml" line="313"/>
+        <location filename="../qml/Layouts/Main.qml" line="171"/>
+        <location filename="../qml/Layouts/Main.qml" line="211"/>
+        <location filename="../qml/Layouts/Main.qml" line="308"/>
+        <location filename="../qml/Layouts/Main.qml" line="316"/>
+        <location filename="../qml/Main.qml" line="154"/>
+        <location filename="../qml/Main.qml" line="192"/>
+        <location filename="../qml/Main.qml" line="267"/>
+        <location filename="../qml/Main.qml" line="275"/>
         <source>Warning</source>
         <translation>ВНИМАНИЕ</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="162"/>
+        <location filename="../qml/Layouts/Main.qml" line="172"/>
+        <location filename="../qml/Main.qml" line="155"/>
         <source>Firmware version error!</source>
         <translation>Ошибка версии прошивки!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="181"/>
+        <location filename="../qml/Layouts/Main.qml" line="191"/>
+        <location filename="../qml/Main.qml" line="172"/>
         <source>Update firmware</source>
         <translation>Обновить прошивку</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="182"/>
+        <location filename="../qml/Layouts/Main.qml" line="192"/>
+        <location filename="../qml/Main.qml" line="173"/>
         <source>Newest firmware avaliable on the server.</source>
         <translation>Более свежая версия прошивки доступна на сервере.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="202"/>
-        <location filename="../qml/Pages/Main.qml" line="375"/>
+        <location filename="../qml/Layouts/Main.qml" line="212"/>
+        <location filename="../qml/Layouts/Main.qml" line="378"/>
+        <location filename="../qml/Main.qml" line="193"/>
+        <location filename="../qml/Main.qml" line="338"/>
         <source>Bluetooth module is off! Please turn on bluetooth module on your device and click ok</source>
         <translation>Модуль Bluetooth выключен! Пожалуйста, включите модуль Bluetooth на Вашем мобильном устройстве и нажмите ОК</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="259"/>
-        <location filename="../qml/Pages/Main.qml" line="321"/>
+        <location filename="../qml/Layouts/Main.qml" line="262"/>
+        <location filename="../qml/Layouts/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="283"/>
         <source>Firmware version of your device is </source>
         <translation>Текущая версия прошивки Вашего устройства </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="260"/>
-        <location filename="../qml/Pages/Main.qml" line="322"/>
+        <location filename="../qml/Layouts/Main.qml" line="263"/>
+        <location filename="../qml/Layouts/Main.qml" line="325"/>
+        <location filename="../qml/Main.qml" line="284"/>
         <source>
 Minimum required version is </source>
         <translation>
 Минимальная требуемая версия </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="262"/>
-        <location filename="../qml/Pages/Main.qml" line="324"/>
+        <location filename="../qml/Layouts/Main.qml" line="265"/>
+        <location filename="../qml/Layouts/Main.qml" line="327"/>
+        <location filename="../qml/Main.qml" line="237"/>
+        <location filename="../qml/Main.qml" line="286"/>
         <source>
 Do you want to update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
@@ -891,21 +913,21 @@ WARNING!!! Updating firmware may take several minutes!</source>
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="270"/>
+        <location filename="../qml/Layouts/Main.qml" line="273"/>
         <source>New firmware avaliable on the server.
 Firmware version of your device is: </source>
         <translation>Новая прошивка доступна на сервере.
 Текущая версия прошивки Вашего устройства: </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="271"/>
+        <location filename="../qml/Layouts/Main.qml" line="274"/>
         <source>
 New firmware version is: </source>
         <translation>
 Новая версия прошивки: </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="273"/>
+        <location filename="../qml/Layouts/Main.qml" line="276"/>
         <source>
 Do you want to download and update firmware now?
 WARNING!!! Updating firmware may take several minutes!</source>
@@ -914,64 +936,78 @@ WARNING!!! Updating firmware may take several minutes!</source>
 ВНИМАНИЕ!!! Обновление прошивки может занять несколько минут!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="289"/>
+        <location filename="../qml/Layouts/Main.qml" line="292"/>
+        <location filename="../qml/Main.qml" line="251"/>
         <source>Device parse error</source>
         <translation>Ошибка разбора команды</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="297"/>
-        <location filename="../qml/Pages/Main.qml" line="332"/>
+        <location filename="../qml/Layouts/Main.qml" line="300"/>
+        <location filename="../qml/Layouts/Main.qml" line="335"/>
+        <location filename="../qml/Main.qml" line="259"/>
+        <location filename="../qml/Main.qml" line="295"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="298"/>
+        <location filename="../qml/Layouts/Main.qml" line="301"/>
+        <location filename="../qml/Main.qml" line="260"/>
         <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation>Ошибка при сохранении импульса. Пожалуйста, попробуйте пересохранить импульс.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="306"/>
+        <location filename="../qml/Layouts/Main.qml" line="309"/>
+        <location filename="../qml/Main.qml" line="268"/>
         <source>Preset import error!</source>
         <translation>Ошибка импорта пресета!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="314"/>
+        <location filename="../qml/Layouts/Main.qml" line="317"/>
+        <location filename="../qml/Main.qml" line="276"/>
         <source>You must save preset before export</source>
         <translation>Вы должны схранить пресет перед экспортом</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="333"/>
+        <location filename="../qml/Layouts/Main.qml" line="336"/>
+        <location filename="../qml/Main.qml" line="296"/>
         <source>IR file copying error.</source>
         <translation>Ошибка копирования файла импульса.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="346"/>
+        <location filename="../qml/Layouts/Main.qml" line="349"/>
+        <location filename="../qml/Main.qml" line="309"/>
         <source>Preset export finished</source>
         <translation>Экспорт пресета завершён</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="379"/>
+        <location filename="../qml/Layouts/Main.qml" line="382"/>
+        <location filename="../qml/Main.qml" line="342"/>
         <source>Geolocation is required by Android to scan Bluetooth LE devices. Please turn on geolocation module and click ok</source>
         <translation>ОС Android требуется Геолокация для возможности поиска устройств Bluetooth LE. Пожалуйста, включите модуль Геолокации на Вашем мобильном устройстве и нажмите кнопку ОК</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="383"/>
+        <location filename="../qml/Layouts/Main.qml" line="386"/>
+        <location filename="../qml/Main.qml" line="346"/>
         <source>Application needs geolocation permission to scan Bluetooth LE devices. Please give app permissions and click ok</source>
         <translation>Приложению требуется разрешение на использование геолокации для поиска устройств Bluetooth LE. Пожалуйста, предоставьте приложению требуемые разрешения и нажмите ОК</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="387"/>
-        <location filename="../qml/Pages/Main.qml" line="403"/>
+        <location filename="../qml/Layouts/Main.qml" line="390"/>
+        <location filename="../qml/Layouts/Main.qml" line="406"/>
+        <location filename="../qml/Main.qml" line="350"/>
+        <location filename="../qml/Main.qml" line="366"/>
         <source>Unknown bluetooth error occured. Check if bluetooth and geolocation modules are enabled and click ok.</source>
         <translation>Произошла неизвестная ошибка Bluetooth. Проверьте, включены ли модуль Bluetooth и геолокации, и нажмите &quot;ОК&quot;.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="399"/>
+        <location filename="../qml/Layouts/Main.qml" line="402"/>
+        <location filename="../qml/Main.qml" line="362"/>
         <source>Device is unavaliable</source>
         <translation>Устройство недоступно</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/Main.qml" line="415"/>
+        <location filename="../qml/Layouts/Main.qml" line="418"/>
+        <location filename="../qml/Main.qml" line="378"/>
         <source>Device disconnected. 
 </source>
         <translation>Устройство отключено. 
@@ -981,6 +1017,21 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <source>Device disconnected
 </source>
         <translation type="vanished">Устройство отключено</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="233"/>
+        <source>Info</source>
+        <translation>Информация</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="234"/>
+        <source>New firmware version(v.</source>
+        <translation>Новая версия прошивки(v.</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="236"/>
+        <source>) avaliable on the server.</source>
+        <translation>) доступная на сервере.</translation>
     </message>
 </context>
 <context>
@@ -1005,7 +1056,7 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <translation type="vanished">Укажите имя для пресета:</translation>
     </message>
     <message>
-        <location filename="../qml/ControlGroups/MapCPModern.qml" line="247"/>
+        <location filename="../qml/ControlGroups/MapCPModern.qml" line="238"/>
         <source>Delay/Reverb</source>
         <translation>Модули Дилея/Реверберации</translation>
     </message>
@@ -1021,12 +1072,12 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <translation type="vanished"> Версия прошивки: </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/MapPage.qml" line="103"/>
+        <location filename="../qml/Layouts/MapPage.qml" line="107"/>
         <source>Save preset</source>
         <translation>Сохранение пресета</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/MapPage.qml" line="104"/>
+        <location filename="../qml/Layouts/MapPage.qml" line="108"/>
         <source>Do you want to save your changes?</source>
         <translation>Вы хотите сохранить изменения?</translation>
     </message>
@@ -1124,13 +1175,13 @@ WARNING!!! Updating firmware may take several minutes!</source>
 <context>
     <name>PS</name>
     <message>
-        <location filename="../qml/Modules/PS.qml" line="18"/>
-        <location filename="../qml/Modules/PS.qml" line="49"/>
+        <location filename="../qml/ModulesClassic/PS.qml" line="18"/>
+        <location filename="../qml/ModulesClassic/PS.qml" line="49"/>
         <source>Presence</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Modules/PS.qml" line="51"/>
+        <location filename="../qml/ModulesClassic/PS.qml" line="51"/>
         <source>Just like a real power amp this effect block has a Presence control. Use it to add some extra brightness to the tone.</source>
         <translation>Как и в реальном усилителе, данный регулятор PRESENCE позволяет добавить дополнительной яркости вашему тону.</translation>
     </message>
@@ -1233,49 +1284,54 @@ WARNING!!! Updating firmware may take several minutes!</source>
         <source>L: Processed/R: Monitor</source>
         <translation type="vanished">Л: Обраб./П: Мониторн.</translation>
     </message>
+    <message>
+        <location filename="../../../PangaeaBackend/interfaces/bleinterface.cpp" line="205"/>
+        <source>Bluetooth permission not granted!</source>
+        <translation>Разрешение bluetootj не получено!</translation>
+    </message>
 </context>
 <context>
     <name>ServicePage</name>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="41"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="41"/>
         <source>Format</source>
         <extracomment>Button text. Format device</extracomment>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="55"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="55"/>
         <source>Update Firmware</source>
         <extracomment>Button text</extracomment>
         <translation>Обновление прошивки</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="72"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="72"/>
         <source>Set unique name</source>
         <extracomment>Button text</extracomment>
         <translation>Присвоить уникальное имя</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="86"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="86"/>
         <source>Application settings</source>
         <extracomment>Button text</extracomment>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="114"/>
-        <location filename="../qml/Pages/ServicePage.qml" line="250"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="114"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="248"/>
         <source>About...</source>
         <extracomment>Button text</extracomment>
         <translation>О приложении...</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="332"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="324"/>
         <source>The Firmware file has been transmitted
 Please, reconnect to device</source>
         <translation>Файл прошивки был передан
 Пожалуйста, переподключитесь к устройству заново.</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="304"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="298"/>
         <source>Do you want to load firmware file:
 </source>
         <translation>Вы хотите загрузить следующий 
@@ -1283,48 +1339,48 @@ Please, reconnect to device</source>
 </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="194"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="192"/>
         <source>Continue?</source>
         <translation>Желаете продолжить?</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="100"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="100"/>
         <source>Documentation</source>
         <extracomment>Button text</extracomment>
         <translation>Документация</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="195"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="193"/>
         <source>Do you want to load firmware file:</source>
         <translation>Вы хотите загрузить следующий 
 файл прошивки:</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="223"/>
-        <location filename="../qml/Pages/ServicePage.qml" line="331"/>
-        <location filename="../qml/Pages/ServicePage.qml" line="341"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="221"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="323"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="333"/>
         <source>Operation complete</source>
         <extracomment>Complete formatting operation</extracomment>
         <translation>Операция завершена</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="224"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="222"/>
         <source>Format complete</source>
         <translation>Форматирование завершено</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="239"/>
-        <location filename="../qml/Pages/ServicePage.qml" line="356"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="237"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="348"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="240"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="238"/>
         <source>This file is not a firmware file</source>
         <translation>Этот файл не является файлом прошивки!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="252"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="250"/>
         <source>AMT Pangaea CP-16/CP-100
 Android application
 Version: </source>
@@ -1339,27 +1395,27 @@ website: https://amtelectronics.com</source>
 Веб-сайт: https://amt-sales.ru</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="266"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="264"/>
         <source>Formatting</source>
         <translation>Форматирование</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="267"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="265"/>
         <source>Formatting! User data will be lost!</source>
         <translation>Сейчас будет произведено форматирование! Все пользовательские данные будут утеряны!</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="281"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="279"/>
         <source>Set module name</source>
         <translation>Назначить имя модуля BLE-1</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="282"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="280"/>
         <source>Set unique name for current module:</source>
         <translation>Уникальное имя для данного модуля:</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="342"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="334"/>
         <source>Formatting is complete
 Please reset the device power and reconnect</source>
         <translation>Форматирование завершено.
@@ -1372,7 +1428,7 @@ Please reset the device power and reconnect</source>
 Пожалуйста, перезагрузите питание Вашего девайса AMT PANGAEA, а затем снова подключитесь к нему через это приложение</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="357"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="349"/>
         <source>Format error</source>
         <translation>Ошибка форматирования</translation>
     </message>
@@ -1383,7 +1439,7 @@ website: https://amtelectronics.com</source>
 Веб-сайт: https://amt-sales.ru</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="141"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="141"/>
         <source>Attention!</source>
         <translation>Внимание!</translation>
     </message>
@@ -1410,18 +1466,18 @@ website: https://amtelectronics.com</source>
 Веб-сайт: https://amt-sales.ru </translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="163"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="161"/>
         <source>Firmware upload process requires a stable connection. Please place your phone as close to the device as possible. Make sure the signal level is greater than -75 dBm. (RSSI -35...-75 dBm)
 </source>
         <translation>Обновление прошивки требует устойчивого соединения. Пожалуйста, положите Ваш мобильный телефон (или планшет) как можно ближе к устройству. Убедитесь, что уровень сигнала больше чем -75 dBm.(RSSI -35...-75 dBm)</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="174"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="172"/>
         <source>Current RSSI: </source>
         <translation>Измеренный RSSI:</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/ServicePage.qml" line="253"/>
+        <location filename="../qml/Layouts/ServicePage.qml" line="251"/>
         <source>AMT Pangaea CP-16/CP-100
 iOS application
 Version: </source>
@@ -1433,52 +1489,57 @@ Version: </source>
 <context>
     <name>SettingsPage</name>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="60"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="71"/>
         <source>Color theme</source>
         <translation>Цветовая схема</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="70"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="83"/>
         <source>Dark orange</source>
         <translation>Тёмно-оранжевая</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="78"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="93"/>
         <source>Dark green</source>
         <translation>Тёмно-зелёная</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="86"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="103"/>
         <source>Dark blue</source>
         <translation>Тёмно-синяя</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="125"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="142"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="132"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="149"/>
         <source>Autoselect</source>
         <translation>Автовыбор</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="185"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="210"/>
+        <source>Autoconnect</source>
+        <translation>Автоподключение</translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="229"/>
         <source>Auto convert WAV</source>
         <translation>Всегда конвертировать WAV</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="205"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="249"/>
         <source>Auto trim WAV</source>
         <translation>Всегда укорачивать WAV</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="224"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="267"/>
         <source>Auto check updates</source>
         <translation>Автопроверка обновлений</translation>
     </message>
     <message>
-        <location filename="../qml/Pages/SettingsPage.qml" line="248"/>
+        <location filename="../qml/Layouts/SettingsPage.qml" line="291"/>
         <source>Back</source>
         <extracomment>Back to the previous page</extracomment>
         <translation>Вернуться</translation>
@@ -1755,7 +1816,7 @@ DEPTH: how strong volume attenuates on each period.</source>
 <context>
     <name>TutorialVirtualDevice</name>
     <message>
-        <location filename="../qml/Tutorials/TutorialVirtualDevice.qml" line="37"/>
+        <location filename="../qml/Tutorials/TutorialVirtualDevice.qml" line="23"/>
         <source>This option appends virtual(offline) devices to the list. These devices completely simulate the interaction of the application with a real Pangea device.
 On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created in which the file structure corresponding to the real device. After editing offline, you can copy it to your device.
 (And vice versa, by copying files from the device to the desired folders, you can view all the presets).</source>
@@ -1766,7 +1827,7 @@ On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created i
 После редактирования пресетов в виртуальном устройстве Вы можете скопировать содержимое данной директории на своё устройство (и наоборот: содержимое устройства — в созданную директорию, чтобы просмотреть и редактировать пресеты, не подключаясь к устройству).</translation>
     </message>
     <message>
-        <location filename="../qml/Tutorials/TutorialVirtualDevice.qml" line="41"/>
+        <location filename="../qml/Tutorials/TutorialVirtualDevice.qml" line="27"/>
         <source>Virtual device</source>
         <translation>Виртуальное устройство</translation>
     </message>
@@ -1774,12 +1835,12 @@ On the phone/tablet, along the path AMT/pangae-mobile/, a directory is created i
 <context>
     <name>VL</name>
     <message>
-        <location filename="../qml/Modules/VL.qml" line="15"/>
+        <location filename="../qml/ModulesClassic/VL.qml" line="15"/>
         <source>VL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/Modules/VL.qml" line="18"/>
+        <location filename="../qml/ModulesClassic/VL.qml" line="18"/>
         <source>Preset volume</source>
         <translation>Громкость пресета</translation>
     </message>

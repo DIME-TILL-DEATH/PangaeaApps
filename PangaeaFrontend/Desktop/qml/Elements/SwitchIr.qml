@@ -1,12 +1,8 @@
 import QtQuick
 
-import PangaeaFrontend 1.0
-
 Item
 {
     id: main
-
-    property bool enabled
 
     Column
     {

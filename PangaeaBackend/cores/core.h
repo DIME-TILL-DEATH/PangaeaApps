@@ -33,8 +33,8 @@ signals:
 
     void sgCurrentDeviceChanged(AbstractDevice* device);
 
-    void sgSetUIParameter(QString nameParam, qint32 value);
-    // void sgSetUIText(QString nameParam, QString value);
+    void sgInterfaceTransmittingData();
+    void sgInterfaceTransmittingDataFinished();
 
     void sgSetProgress(float val, QString extText);
 
@@ -53,6 +53,8 @@ public slots:
     void pushCommandToQueue(QByteArray command, bool finalize = true);
     void sendWithoutConfirmation(QByteArray data, qint32 dataSizeToSend = -1, qint32 dataSizeTorecieve = -1);
     void processCommands();
+
+    void uploadFirmware(Firmware* newFirmware);
 
 private slots:
     void recieveTimeout();

@@ -172,7 +172,7 @@ void MockCP16Legacy::initFolders()
     m_basePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation).at(0) + "/";
 
 #ifndef Q_OS_IOS
-    m_basePath += "AMT/AMT/Pangaea-desktop/";
+    m_basePath += "AMT/Pangaea-desktop/";
 #endif
 #endif
     m_basePath += "virtual_CP16Legacy";

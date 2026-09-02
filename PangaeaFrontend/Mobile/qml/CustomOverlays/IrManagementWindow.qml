@@ -7,7 +7,6 @@ import QtQuick.Dialogs
 
 import StyleSettings 1.0
 
-
 import Elements 1.0
 
 import PangaeaBackend
@@ -21,9 +20,9 @@ Item{
 
     z: parent.z+10
 
+    // property CPModern device: UiCore.currentDevice as CPModern
     property url dstIrPath: (_bar.currentIndex === 0) ? "ir_library/"
                                                          : "bank_" + UiCore.currentDevice.bank + "/preset_" + UiCore.currentDevice.preset+ "/"
-
 
     MouseArea{
         z: _irListView.z-5
@@ -99,7 +98,7 @@ Item{
                 onClicked: {
                     if(Qt.platform.os === "android")
                     {
-                        UiCore.uploadIr("", dstIrPath);
+                        UiCore.uploadIr("", _root.dstIrPath);
 
                     }
                     else
@@ -113,6 +112,8 @@ Item{
 
                 width: parent.width * 0.95
                 height: parent.height * 0.6
+
+                property var draggingItem
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -137,7 +138,7 @@ Item{
 
                 snapMode: ListView.SnapToItem
 
-                delegate: Item{
+                delegate: Rectangle{
                     id: _item
 
                     width: _irListView.width*0.75
@@ -146,6 +147,9 @@ Item{
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     property var irFile: modelData
+
+                    color: Drag.active ? "#805B5B5B" : "transparent"
+                    radius: Style.baseRadius
 
                     MText{
                         text: modelData.irName
@@ -209,6 +213,11 @@ Item{
                             return (UiCore.currentDevice.currentIrFile.irName === modelData.irName) & (UiCore.currentDevice.currentIrFile.irLinkPath === modelData.irLinkPath)
                         }
                     }
+
+                    Drag.onActiveChanged: {
+                        if(Drag.active) _irListView.draggingItem = _item
+                        else _irListView.draggingItem = undefined
+                    }
                 }
             }
 
@@ -220,7 +229,8 @@ Item{
                 border.width: 1
                 border.color: Style.currentTheme.colorBorderOn
 
-                color: _dropDelete.containsDrag ? "#60FFFFFF" : "transparent"
+                color: _dropDelete.containsDrag ? "#90FFFFFF"
+                                                : (_irListView.draggingItem ? "#90000fff" : "transparent")
 
                 Image
                 {

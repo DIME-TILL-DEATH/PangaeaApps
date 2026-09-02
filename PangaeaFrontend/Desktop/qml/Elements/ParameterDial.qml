@@ -3,7 +3,6 @@ import QtQuick.Controls
 
 import StyleSettings
 
-import PangaeaFrontend
 import PangaeaBackend
 
 Item{
@@ -12,7 +11,7 @@ Item{
     width:  parent.width
     height: parent.height/1000*165
 
-    enabled: module.moduleEnabled
+    enabled: (module === undefined) ? true : module.moduleEnabled
 
     required property ControlValue controlValue
     opacity: _root.enabled ? 1:0.5
@@ -140,10 +139,10 @@ Item{
 
                 onWheel: wheel => {
                     _txtInput.focus = true;
-                    var step = (controlValue.maxDisplayValue - controlValue.minDisplayValue)/120/100;
+                    var step = (_root.controlValue.maxDisplayValue - _root.controlValue.minDisplayValue)/120/100;
                     var resultValue = control.value + wheel.angleDelta.y * step;
 
-                    controlValue.displayValue = resultValue;
+                    _root.controlValue.displayValue = resultValue;
                 }
 
                 onClicked: mouse => {

@@ -5,6 +5,7 @@ import StyleSettings 1.0
 import Elements 1.0
 
 import PangaeaFrontend
+import PangaeaBackend
 
 Item {
 
@@ -39,11 +40,21 @@ Item {
                 buttons: columnThemes.children
                 exclusive: true
                 onCheckedButtonChanged: {
-                    if(_darkGreen.checked) Style.currentTheme = Style.themeGreen
-                    if(_darkBlue.checked) Style.currentTheme = Style.themeBlue
-                    if(_darkOrange.checked) Style.currentTheme = Style.themeOrange
-
-                    UiCore.saveSetting("color_theme" ,_btnGroupTheme.checkedButton.themeName);
+                    if(_darkOrange.checked)
+                    {
+                        UiSettings.colorTheme = UiSettings.DarkOrange
+                        Style.currentTheme = Style.themeOrange;
+                    }
+                    if(_darkGreen.checked)
+                    {
+                        UiSettings.colorTheme = UiSettings.DarkGreen
+                        Style.currentTheme = Style.themeGreen;
+                    }
+                    if(_darkBlue.checked)
+                    {
+                        UiSettings.colorTheme = UiSettings.DarkBlue;
+                        Style.currentTheme = Style.themeBlue;
+                    }
                 }
             }
 
@@ -64,7 +75,9 @@ Item {
 
                 MRadioButton {
                     id: _darkOrange
-                    property string themeName: "dark_orange"
+                    property var themeType: UiSettings.DarkOrange
+
+                    checked: UiSettings.colorTheme === UiSettings.DarkOrange
 
                     colorCheck: Style.themeOrange.colorModulOn
                     text: qsTr("Dark orange")
@@ -72,7 +85,9 @@ Item {
 
                 MRadioButton {
                     id: _darkGreen
-                    property string themeName: "dark_green"
+                    property var themeType: UiSettings.DarkGreen
+
+                    checked: UiSettings.colorTheme === UiSettings.DarkGreen
 
                     colorCheck: Style.themeGreen.colorTextEnabled
                     text: qsTr("Dark green")
@@ -80,7 +95,9 @@ Item {
 
                 MRadioButton {
                     id: _darkBlue
-                    property string themeName: "dark_blue"
+                    property var themeType: UiSettings.DarkBlue
+
+                    checked: UiSettings.colorTheme === UiSettings.DarkBlue
 
                     colorCheck: Style.themeBlue.colorTextEnabled
                     text: qsTr("Dark blue")
@@ -103,11 +120,11 @@ Item {
                 buttons: columnLanguages.children
                 exclusive: true
                 onCheckedButtonChanged: {
-                    if(_autoselect.checked) UiCore.setLanguage("autoselect");
-                    if(_english.checked) UiCore.setLanguage("en");
-                    if(_russian.checked) UiCore.setLanguage("ru");
-                    if(_italian.checked) UiCore.setLanguage("it");
-                    if(_deutch.checked)  UiCore.setLanguage("de");
+                    if(_autoselect.checked) UiSettings.setLanguage("autoselect");
+                    if(_english.checked) UiSettings.setLanguage("en");
+                    if(_russian.checked) UiSettings.setLanguage("ru");
+                    if(_italian.checked) UiSettings.setLanguage("it");
+                    if(_deutch.checked)  UiSettings.setLanguage("de");
                 }
             }
 
@@ -137,11 +154,15 @@ Item {
                     id: _english
                     text: "English"
 
+                    checked: UiSettings.appLanguageCode === "en"
+
                     height: parent.height/6
                }
                 MRadioButton {
                     id: _russian
                     text: "Русский"
+
+                    checked: UiSettings.appLanguageCode === "ru"
 
                     height: parent.height/6
                 }
@@ -149,11 +170,15 @@ Item {
                     id: _italian
                     text: "Italiano" //Italiana
 
+                    checked: UiSettings.appLanguageCode === "it"
+
                     height: parent.height/6
                 }
                 MRadioButton {
                     id: _deutch
                     text: "Deutsch" //Deutsche
+
+                    checked: UiSettings.appLanguageCode === "de"
 
                     height: parent.height/6
                }
@@ -166,7 +191,7 @@ Item {
             id: _boxCheckUpdates
 
             width: parent.width*0.98
-            height: parent.height*0.25
+            height: parent.height*0.3
             border.color: Style.currentTheme.colorBorderOn
             radius: Style.baseRadius
 
@@ -177,6 +202,25 @@ Item {
 
             Column{
                 anchors.fill: parent
+
+                CheckBox{
+                    id: _checkBoxAutoconnect
+
+                    checked: UiSettings.autoConnectEnabled
+                    text: qsTr("Autoconnect")
+
+                    contentItem: MText{
+                        text: _checkBoxAutoconnect.text
+
+                        color: Style.colorText
+                        anchors.left: _checkBoxAutoconnect.indicator.right
+                    //     verticalAlignment: Text.AlignVCenter
+                        leftPadding: _checkBoxAutoconnect.indicator.width/5
+                    }
+                    onCheckStateChanged: {
+                        UiSettings.saveSetting("autoconnect_enable", _checkBoxAutoconnect.checked);
+                    }
+                }
 
                 CheckBox{
                     id: _checkBoxConvert
@@ -193,7 +237,7 @@ Item {
                         leftPadding: _checkBoxConvert.indicator.width/5
                     }
                     onCheckStateChanged: {
-                        UiCore.saveSetting("auto_convert_wav", _checkBoxConvert.checked);
+                        UiSettings.saveSetting("auto_convert_wav", _checkBoxConvert.checked);
                     }
                 }
 
@@ -208,11 +252,10 @@ Item {
 
                         color: Style.colorText
                         anchors.left: _checkBoxTrim.indicator.right
-                        // verticalAlignment: Text.AlignVCenter
                         leftPadding: _checkBoxTrim.indicator.width/5
                     }
                     onCheckStateChanged: {
-                        UiCore.saveSetting("auto_trim_wav", _checkBoxTrim.checked);
+                        UiSettings.saveSetting("auto_trim_wav", _checkBoxTrim.checked);
                     }
                 }
 
@@ -231,7 +274,7 @@ Item {
                         leftPadding: _checkBoxUpdates.indicator.width/5
                     }
                     onCheckStateChanged: {
-                        UiCore.saveSetting("check_updates_enable", _checkBoxUpdates.checked);
+                        UiSettings.saveSetting("check_updates_enable", _checkBoxUpdates.checked);
                     }
                 }
             }
@@ -252,33 +295,6 @@ Item {
             onMbPressed:
             {
                 _root.closeSettingsWindow()
-            }
-        }
-    }
-
-    Connections
-    {
-        target: UiCore
-
-
-        function onSgSetUIText(nameParam, inText)
-        {
-            if(nameParam === "color_theme")
-            {
-                if(inText === "dark_orange") _darkOrange.checked = true
-                if(inText === "dark_green") _darkGreen.checked = true
-                if(inText === "dark_blue") _darkBlue.checked = true
-            }
-
-
-            // TODO UiSettings???? Сделать также как в Desktop
-            if(nameParam === "application_language")
-            {
-                if(inText === "autoselect") _autoselect.checked = true;
-                if(inText === "en") _english.checked = true;
-                if(inText === "ru") _russian.checked = true;
-                if(inText === "it") _italian.checked = true;
-                if(inText === "de") _deutch.checked = true;
             }
         }
     }

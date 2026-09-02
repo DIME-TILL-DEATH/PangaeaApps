@@ -31,7 +31,7 @@ ControlValue::ControlValue(AbstractModule *owner, void *valuePtr, QString comman
     value_ptr = valuePtr;
 
     connect(&frameTimer, &QTimer::timeout, this, &ControlValue::sendFrame);
-    frameTimer.start(100);
+    // frameTimer.start(timerPeriod);
 }
 
 ControlValue::~ControlValue()
@@ -96,6 +96,7 @@ void ControlValue::setDisplayValue(double newDisplayValue)
                     buffer.append(fullCommand.toUtf8());
                 }
             }
+            frameTimer.start(timerPeriod);
         }
         else
         {
@@ -163,6 +164,10 @@ void ControlValue::sendFrame()
             m_owner->sendDataToDevice(resultBa);
         }
         buffer.clear();
+    }
+    else
+    {
+        frameTimer.stop();
     }
 }
 

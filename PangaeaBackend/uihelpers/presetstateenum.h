@@ -23,7 +23,10 @@ public:
         Exporting,
         UploadingIr,
         SavingIr,
-        Changing
+        Changing,
+        DataTransmitting,
+        FirmwareUpdate,
+        MemoryFormatting
     };
     Q_ENUM(Value)
 };

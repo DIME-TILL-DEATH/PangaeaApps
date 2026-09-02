@@ -1,15 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls.Fusion
-import QtQuick.Dialogs
-import QtQuick.Controls as CTRLS
-import QtCore
 
 import QtQuick.Window 2.15
 
 import StyleSettings 1.0
 import Layouts 1.0
-import CP100FX 1.0
-import CP16 1.0
 
 import PangaeaFrontend
 import PangaeaBackend
@@ -17,8 +12,6 @@ import PangaeaBackend
 ApplicationWindow
 {
     id: main
-
-
 
     visible: true
 
@@ -79,31 +72,16 @@ ApplicationWindow
         switch(UiCore.currentDevice.deviceType){
             case DeviceType.LA3:
             case DeviceType.MODERN_CP:
-                component = controlLayoutCPModernComponent;
+                // component = controlLayoutCPModernComponent;
+                controlLayoutLoader.source = "qrc:/qt/qml/CP16/ControlLayoutCPModern.qml";
                 break;
             case DeviceType.CP100FX:
             case DeviceType.CP100FX_S:
-                component = controlLayoutCP100FXComponent;
+                controlLayoutLoader.source = "qrc:/qt/qml/CP100FX/ControlLayoutCP100FX.qml";
                 break;
             default:
-                component = controlLayoutLegacyComponent;
+                controlLayoutLoader.source = "qrc:/qt/qml/CP16/ControlLayoutLegacy.qml";
         }
-        controlLayoutLoader.sourceComponent = component;
-    }
-
-    Component {
-        id: controlLayoutCPModernComponent
-        ControlLayoutCPModern {}
-    }
-
-    Component {
-        id: controlLayoutLegacyComponent
-        ControlLayoutLegacy {}
-    }
-
-    Component {
-        id: controlLayoutCP100FXComponent
-        ControlLayoutCP100FX {}
     }
 
     NativeMessageDialog{
@@ -174,7 +152,41 @@ ApplicationWindow
 
     NativeMessageDialog
     {
-        id: _msgVersionInform        
+        id: _msgVersionInform
+
+        property string firmwareLocalPath
+        property bool offlineUpdate: true
+
+        property bool deviceCanAutoupdate: (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16) ||
+                                           (UiCore.currentDevice.deviceType === DeviceType.LEGACY_CP16PA) ||
+                                           (UiCore.currentDevice.deviceType === DeviceType.LA3) ||
+                                           (UiCore.currentDevice.deviceType === DeviceType.MODERN_CP)
+
+        buttons: deviceCanAutoupdate? (DialogButtonBox.Yes | DialogButtonBox.No)
+                                    : DialogButtonBox.Ok
+
+        onButtonClicked: function(button){
+            switch(button.DialogButtonBox.buttonRole)
+            {
+                case DialogButtonBox.YesRole:
+                {
+                    if(_msgVersionInform.deviceCanAutoupdate)
+                    {
+                        if(offlineUpdate) UiCore.currentDevice.setFirmware(firmwareLocalPath);
+                        else UiCore.sgDoOnlineFirmwareUpdate();
+                    }
+
+                    _msgVersionInform.close();
+                    break;
+                }
+
+                case DialogButtonBox.RejectRole:
+                {
+                    _msgVersionInform.close();
+                    break;
+                }
+            }
+        }
     }
 
     // modality works only in Labs
@@ -207,7 +219,11 @@ ApplicationWindow
             _msgVersionInform.title = qsTr("Info")
             _msgVersionInform.text = qsTr("New firmware version(v.") +
                     firmwareVersionString +
-                    qsTr(") avaliable on the server")
+                    qsTr(") avaliable on the server.")
+
+            if(_msgVersionInform.deviceCanAutoupdate) _msgVersionInform.text += qsTr("\nDo you want to update firmware now?\nWARNING!!! Updating firmware may take several minutes!");
+
+            _msgVersionInform.offlineUpdate = false;
             _msgVersionInform.open()
         }
 
@@ -284,14 +300,21 @@ ApplicationWindow
 
                 case DeviceErrorType.FimrmwareVersionInsufficient:
                 {
+                    console.log("FW version innsufficient")
                     _msgVersionInform.title = qsTr("Warning")
                     _msgVersionInform.text = qsTr("Version error!")
                     _msgVersionInform.text = qsTr("Firmware version of your device is ") + params[0] + "\n"
                             + qsTr("Minimum required version is ")
                             + params[1] + "\n"
-                            + qsTr("Without updating the firmware, some features may not work properly")
+                            + qsTr("Without updating the firmware, some features may not work properly.\n")
 
-                    _msgVersionInform.visible = true;
+                    if(_msgVersionInform.deviceCanAutoupdate)
+                    {
+                        _msgVersionInform.offlineUpdate = true;
+                        _msgVersionInform.text += qsTr("Do you want to update firmware now?");
+                        if(_msgVersionInform.deviceCanAutoupdate)_msgVersionInform.firmwareLocalPath = params[2];
+                    }
+                    _msgVersionInform.open();
                     break;
                 }
 
@@ -358,7 +381,7 @@ ApplicationWindow
 
         function onSgInterfaceError(errorDescription)
         {
-            connected = false;
+            main.connected = false;
             startUi.visible = true;;
             msgInfo.text = qsTr("Device disconnected\n" + errorDescription)
             msgInfo.open();
@@ -378,7 +401,6 @@ ApplicationWindow
     }
 
     Component.onCompleted: {
-        UiCore.setupApplication();
         UiSettings.setupApplication();
         InterfaceManager.startScanning(DeviceConnectionType.BLE);
         InterfaceManager.startScanning(DeviceConnectionType.USB);

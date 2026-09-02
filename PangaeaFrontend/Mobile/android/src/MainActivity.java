@@ -21,8 +21,6 @@ public class MainActivity extends QtActivity {
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         window.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-        window.setStatusBarColor(Color.BLACK);
-        window.setNavigationBarColor(Color.BLACK);
 
         WindowCompat.setDecorFitsSystemWindows(window, false);
 

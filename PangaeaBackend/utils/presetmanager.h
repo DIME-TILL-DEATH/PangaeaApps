@@ -2,6 +2,7 @@
 #define PRESETMANAGER_H
 
 #include <QObject>
+#include <QStack>
 
 #include "presetstateenum.h"
 
@@ -21,8 +22,7 @@ signals:
 
     void currentStateChanged();
 private:
-    PresetState m_currentState{PresetState::Idle};
-    PresetState m_previousState{PresetState::Idle};
+    QStack<PresetState> m_stateStack;
 
 };
 

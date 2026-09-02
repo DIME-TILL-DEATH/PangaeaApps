@@ -1,7 +1,7 @@
 #include "lapreamp.h"
 
-LAPreamp::LAPreamp(Core *parent)
-    : CPModern{parent}
+LAPreamp::LAPreamp(Core *owner)
+    : CPModern{owner}
 {
     using namespace std::placeholders;
     m_parser.addCommandHandler("gb", std::bind(&LAPreamp::getBankPresetLa3CommHandler, this, _1, _2, _3));
@@ -15,7 +15,7 @@ void LAPreamp::setDeviceType(DeviceType newDeviceType)
     switch(m_deviceType)
     {
     case DeviceType::LA3:
-        m_minimalFirmware = Firmware("2.00.13", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3.ble");
+        m_minimalFirmware = Firmware("2.00.18", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmware_LA3_2.00.18.ble");
         m_maxBankCount = 0;
         m_maxPresetCount = 16;
         m_firmwareName = "LA3";
@@ -117,6 +117,8 @@ void LAPreamp::la3MapCommHandler(const QString &command, const QByteArray &argum
             m_clnPresetMap = ((hex & 0xF0) >> 4) * 4 + hex & 0x0F;
             hex = data.right(2).toShort(nullptr, 16);
             m_drvPresetMap  = ((hex & 0xF0) >> 4) * 4 + hex & 0x0F;
+
+            qDebug() << m_clnPresetMap << m_drvPresetMap;
             emit presetMapChanged();
         }
         else
@@ -129,8 +131,7 @@ void LAPreamp::la3MapCommHandler(const QString &command, const QByteArray &argum
     {
         if(argList.size() > 1)
         {
-            m_presetManager.returnToPreviousState(); // for correct hardware changing
-            m_presetManager.setCurrentState(PresetState::Changing);
+            // m_presetManager.returnToPreviousState(); // for correct hardware changing
             emit presetSwitched();
 
             setLa3Channel(argList.at(1).toInt());

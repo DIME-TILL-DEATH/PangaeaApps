@@ -56,7 +56,7 @@ public slots:
     void slInterfaceConnected(DeviceDescription device);
 
 signals:
-    void startScanning(DeviceConnectionType);
+    void startScanning(DeviceConnectionTypeEnum::Value);
 
     void sgConnectToDevice(DeviceDescription device);
     // void disconnectFromDevice();
@@ -68,6 +68,9 @@ signals:
     void sgInterfaceConnected(DeviceDescription device);
     void sgInterfaceDisconnected(DeviceDescription device);
     void sgInterfaceError(QString errorDescription);
+
+    void sgInterfaceTransmittingData();
+    void sgInterfaceTransmittingDataFinished();
 
     void isBleAvaliableChanged();
 

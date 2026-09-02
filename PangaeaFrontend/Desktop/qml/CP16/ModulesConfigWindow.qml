@@ -81,8 +81,8 @@ Window
                 delegate: Rectangle{
                     id: _rectDelegate
 
-                    width: _moduleListView.width
-                    height: _moduleListView.height/11
+                    width: ListView.view.width
+                    height: ListView.view.height/11
 
                     color: Style.currentTheme.mainEnabledColor
 
@@ -212,9 +212,9 @@ Window
                 height: _moduleListView.height * 1/8 * 0.9
 
                 model: [qsTr("Delay(DL) disabled"),
-                        qsTr("Delay(DL) enabled(cost ") + UiCore.currentDevice.DL.processingTime + ")"]
+                        qsTr("Delay(DL) enabled(cost ") + (UiCore.currentDevice as CPModern).DL.processingTime + ")"]
 
-                currentIndex: UiCore.currentDevice.DL.used
+                currentIndex: (UiCore.currentDevice as CPModern).DL.used
 
                 onActivated:
                 {
@@ -228,8 +228,8 @@ Window
                             _delayCombo.currentIndex = 0;
                         }
 
-                        UiCore.currentDevice.DL.used = _delayCombo.currentIndex;
-                        UiCore.currentDevice.modulesListModel.sgModulesReconfigured()
+                       (UiCore.currentDevice as CPModern).DL.used = _delayCombo.currentIndex;
+                       (UiCore.currentDevice as CPModern).modulesListModel.sgModulesReconfigured()
                     }
                 }
             }

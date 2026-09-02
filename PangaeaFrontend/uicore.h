@@ -29,8 +29,6 @@ public:
     explicit UiCore(QObject *parent = nullptr);
     ~UiCore();
 
-    Q_INVOKABLE void setupApplication();
-
     Q_INVOKABLE void disconnectFromDevice();
 
     Q_INVOKABLE void uploadIr(QUrl srcFilePath, QUrl dstFilePath = QUrl());
@@ -44,11 +42,6 @@ public:
 #ifdef Q_OS_ANDROID
     Q_INVOKABLE void pickFirmwareFile();
 #endif
-    Q_INVOKABLE void setFirmware(QString fullFilePath);
-    Q_INVOKABLE void doOnlineFirmwareUpdate();
-
-    Q_INVOKABLE void setLanguage(QString languageCode);
-    Q_INVOKABLE void saveSetting(QString settingName, QVariant settingValue);
 
     Q_INVOKABLE void openManualExternally(QString fileName);
     Q_INVOKABLE void runIrConvertor();
@@ -71,10 +64,7 @@ signals:
 
     void sgQmlRequestChangePreset(quint8 bank, quint8 preset);
 
-    void sgSetUIParameter(QString nameParam, qint32 inValue);
-    void sgSetUIText(QString nameParam, QString value); // в desktop версии больше не испольуется вообще
-
-    void sgUiMessage(UiMessageType messageType, QString message = "", QVariantList params = {});
+    void sgUiMessage(UiMessageTypeEnum::Value messageType, QString message = "", QVariantList params = {});
 
     void sgUpdateAppSetting(QString settingName, QVariant settingValue);
 
@@ -96,16 +86,16 @@ signals:
     void sgNewAppVersionAvaliable(QString appVersion);
     void sgNewFirmwareAvaliable(QString firmwareVersion);
 
-    void sgTranslatorChanged(QString langauageCode);
     void currentDeviceChanged();
 
     void sgCheckAppUpdates();
+
+    void sgFirmwareFilePicked(QString filePath, QString fileName);
 
 public slots:
     void slFirmwareFilePicked(QString filePath, QString fileName);
 
     void slProposeNetFirmwareUpdate(Firmware* updateFirmware, Firmware* oldFirmware);
-    void slProposeOfflineFirmwareUpdate(Firmware *minimalFirmware, Firmware *actualFirmware);
 
     void slCurrentDeviceChanged(AbstractDevice* newDevice);
 
@@ -113,40 +103,26 @@ public slots:
     void slImportPreset(QString fullFilePath, QString fileName);
 
     Q_INVOKABLE void impulseUploaded();
-// #ifdef Q_OS_ANDROID
-//     void slImpulseFilePicked(QString filePath, QString fileName);
-// #endif
 
 private:
 
     QQmlApplicationEngine* m_qmlEngine;
-
-    QTranslator m_translator;
 
     QString m_moduleName;
 
     QSettings* appSettings;
 
     QList<QUrl> m_uploadFileList;
-    QMap<QString, QString> pathFromCode
-        {
-            {"en", ":/translations/pangaea-mobile_en.qm"},
-            {"ru", ":/translations/pangaea-mobile_ru.qm"},
-            {"it", ":/translations/pangaea-mobile_it.qm"},
-            {"de", ":/translations/pangaea-mobile_de.qm"}
-        };
+
 
     QString m_pickedIrPath;
     QString m_dstIrPath;
 
     AbstractDevice dummyDevice{nullptr};
 
-    void loadTranslator(QString languageCode);
-    void loadDefaultTranslator();
-
     void uploadIr(QString srcFilePath, QString dstFilePath = "");
 #ifdef Q_OS_ANDROID
-    void pickFile(ActivityType fileType, QString filter);
+    void pickFile(ActivityType fileType, QString filter, bool allowMultiple = true);
 #endif
 
     AbstractDevice *m_currentDevice = nullptr;

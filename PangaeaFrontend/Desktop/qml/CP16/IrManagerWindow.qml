@@ -68,6 +68,8 @@ Window{
                 width: parent.width * 0.9
                 height: parent.height * 0.7
 
+                property var draggingItem
+
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 model: (_bar.currentIndex === 0) ? UiCore.currentDevice.irsInLibrary
@@ -87,13 +89,18 @@ Window{
 
                 property int irCurrentIndex: -1
 
-                delegate: Item{
+                delegate: Rectangle{
                     id: _item
 
-                    width: _irListView.width
-                    height: _irListView.height/25
+                    width: ListView.view.width
+                    height: ListView.view.height/25
 
                     property var irFile: modelData
+
+                    color: Drag.active ? "#805B5B5B" : "transparent"
+                    radius: 5
+                    border.color: Style.currentTheme.textEnabled
+                    border.width: Drag.active ? 1 : 0
 
                     MText{
                         text: modelData.irName
@@ -122,7 +129,6 @@ Window{
 
                         onClicked: {
                             UiCore.currentDevice.currentIrFile = modelData
-                            console.log(modelData)
                         }
 
                         onReleased: _item.Drag.drop()
@@ -158,14 +164,20 @@ Window{
                             return (UiCore.currentDevice.currentIrFile.irName === modelData.irName) & (UiCore.currentDevice.currentIrFile.irLinkPath === modelData.irLinkPath)
                         }
                     }
+
+                    Drag.onActiveChanged: {
+                        if(Drag.active) _irListView.draggingItem = _item
+                        else _irListView.draggingItem = undefined
+                    }
                 }
 
                 function updateIrIndexes(){
                     _irListView.irCurrentIndex = -1
 
-                    for(var i=0; i<_irListView.count; i++){
-                        var delegate = _irListView.itemAtIndex(i)
-                        if(delegate.isCurrentIr()) _irListView.irCurrentIndex = i
+                    for(let i=0; i<_irListView.count; i++){
+                        let delegate = _irListView.itemAtIndex(i)
+                        if(delegate)
+                            if((delegate).isCurrentIr()) _irListView.irCurrentIndex = i
                     }
                 }
 
@@ -174,7 +186,7 @@ Window{
                     onActivated: {
                         if(_irListView.irCurrentIndex !== -1 && _irListView.irCurrentIndex > 0){
                             _irListView.irCurrentIndex--;
-                            var irName = _irListView.model[_irListView.irCurrentIndex]
+                            let irName = _irListView.model[_irListView.irCurrentIndex]
                             _irListView.positionViewAtIndex(_irListView.irCurrentIndex, ListView.Center)
                             _root.cpmodern.currentIrFile = irName
                         }
@@ -218,7 +230,10 @@ Window{
                 border.width: 1
                 border.color: Style.currentTheme.borderOn
 
-                color: _dropDelete.containsDrag ? "#60FFFFFF" : "transparent"
+                // color: _dropDelete.containsDrag ? "#60FFFFFF" : "transparent"
+
+                color: _dropDelete.containsDrag ? "#90FFFFFF"
+                                                : (_irListView.draggingItem ? "#90000fff" : "transparent")
 
                 ColorImage
                 {
@@ -346,6 +361,10 @@ Window{
         id: _msgInfo
 
         title: qsTr("File already on device")
+
+        onAccepted: {
+            UiCore.impulseUploaded();
+        }
     }
 
     Connections{

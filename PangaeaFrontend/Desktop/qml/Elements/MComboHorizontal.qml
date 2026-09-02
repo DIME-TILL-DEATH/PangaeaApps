@@ -12,7 +12,7 @@ Row{
     property alias model: _combo.model
 
     property alias indicator: _combo.indicator
-    property alias focusPolicy: _combo.focusPolicy
+    property alias combofocusPolicy: _combo.focusPolicy
 
     signal activated(index: int)
 
@@ -21,8 +21,6 @@ Row{
         width: _label.text !== "" ? parent.width/2 : 0
         height: parent.height
         anchors.verticalCenter: parent.verticalCenter
-
-
     }
 
     ComboBox{
@@ -84,7 +82,7 @@ Row{
                  implicitWidth: 100
                  implicitHeight: 40
 
-                 color: highlighted ? Style.currentTheme.highlightColor :  Style.currentTheme.backgroundColor
+                 color: delegate.highlighted ? Style.currentTheme.highlightColor :  Style.currentTheme.backgroundColor
 
              }
              highlighted: _combo.highlightedIndex === index

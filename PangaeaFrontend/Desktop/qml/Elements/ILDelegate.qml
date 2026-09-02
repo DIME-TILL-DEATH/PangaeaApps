@@ -1,11 +1,10 @@
 import QtQuick
-import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
 import Elements
 import StyleSettings
-import PangaeaFrontend 1.0
 
+import PangaeaFrontend
 import PangaeaBackend
 
 Item{
@@ -25,7 +24,7 @@ Item{
             Image
             {
                 id: image
-                source: (modelData.connectionType === DeviceDescription.BLE) ? "qrc:/Images/bluetooth-icon.svg"
+                source: (modelData.connectionType === DeviceConnectionType.BLE) ? "qrc:/Images/bluetooth-icon.svg"
                                                                              : "qrc:/Images/usb-icon.svg"
 
                 anchors.fill: parent

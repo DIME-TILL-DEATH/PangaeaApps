@@ -1,10 +1,4 @@
 import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import Qt5Compat.GraphicalEffects
-
-import QtQuick.Controls.impl 2.15
-
 
 import Elements
 import StyleSettings
@@ -135,10 +129,10 @@ Column{
             clip: true
 
             delegate: ILDelegate{
-                property variant data: model
+                // property variant data: model
 
-                width: listView.width
-                height: listView.height/6
+                width: ListView.view.width
+                height: ListView.view.height/6
             }
 
             highlight: ILHighlight{}

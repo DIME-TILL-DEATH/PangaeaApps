@@ -61,6 +61,8 @@ Cp100fx::Cp100fx(Core *parent, Modification modification)
     copiedPreset = new PresetFx{this};
     copiedPresetFx = dynamic_cast<PresetFx*>(copiedPreset);
 
+    comparePresetFx = new PresetFx{this};
+
     for(quint8 i=0; i < ControllersCount; i++)
     {
         m_actualControllersList.append(new ControllerFx(this, i));
@@ -75,6 +77,7 @@ Cp100fx::~Cp100fx()
     delete(actualPreset);
     delete(savedPreset);
     delete(copiedPreset);
+    delete(comparePresetFx);
 }
 
 QStringList Cp100fx::strPresetNumbers()
@@ -127,7 +130,7 @@ QList<QByteArray> Cp100fx::parseAnswers(QByteArray baAnswer)
 
 void Cp100fx::readFullState()
 {
-    m_presetManager.setCurrentState(PresetState::Changing);
+    // m_presetManager.setCurrentState(PresetState::Changing);
 
     emit sgPushCommandToQueue("amtver");
     emit sgPushCommandToQueue("plist");
@@ -150,12 +153,13 @@ void Cp100fx::restartDevice()
 
 void Cp100fx::pushReadPresetCommands()
 {
+    m_presetManager.setCurrentState(PresetState::Changing);
+
     emit sgPushCommandToQueue("ir info");
     emit sgPushCommandToQueue("pnum");
     emit sgPushCommandToQueue("pname");
     emit sgPushCommandToQueue("pcomment");
 
-    emit sgPushCommandToQueue("state get");
     emit sgPushCommandToQueue("ir 0");
     emit sgPushCommandToQueue("ir 1");
 
@@ -163,6 +167,7 @@ void Cp100fx::pushReadPresetCommands()
     emit sgPushCommandToQueue("cntrl_pc");
     emit sgPushCommandToQueue("cntrl_set");
 
+    emit sgPushCommandToQueue("state get");
 
     // m_symbolsToRecieve = 27 + 8 + sizeof(preset_data_cpmodern_t) * 2;
 }
@@ -234,12 +239,9 @@ void Cp100fx::exportPreset(QString filePath, QString fileName)
 
 void Cp100fx::erasePreset()
 {
-
     emit sgPushCommandToQueue("erase_preset");
     emit sgProcessCommands();
 
-    m_presetManager.returnToPreviousState(); // for correct hardware changing
-    m_presetManager.setCurrentState(PresetState::Changing); // preset changed
     pushReadPresetCommands();
     emit sgProcessCommands();
 }
@@ -582,8 +584,6 @@ qint8 Cp100fx::getModulePosition(ModuleType moduleType)
 //=======================================================================================
 void Cp100fx::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    m_presetManager.returnToPreviousState(); // for correct hardware changing
-    m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
 }
@@ -972,14 +972,12 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     case PresetState::SetCompare:
     {
-        actualPresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
-        // setPresetData(savedPreset);
+        *comparePresetFx = *actualPresetFx;
+        comparePresetFx->setPresetData(PresetFx::charsToPresetData(baPresetData));
 
-        emit sgPushCommandToQueue("state get");
         m_presetManager.returnToPreviousState();
         m_presetManager.setCurrentState(PresetState::Compare);
-        // emit currentPresetNameChanged(); // Меняется только отображаемое имя. В устройство писать не обязательно
-        emit sgProcessCommands();
+        // setPresetData(*savedPresetFX);
         break;
     }
 
@@ -991,9 +989,7 @@ void Cp100fx::stateCommHandler(const QString &command, const QByteArray &argumen
 
     case PresetState::Compare:
     {
-        // configModules(savedPreset);
         m_presetListModel.updatePreset(savedPreset);
-        // Необходимая заглушка. Не удалять
         break;
     }
 

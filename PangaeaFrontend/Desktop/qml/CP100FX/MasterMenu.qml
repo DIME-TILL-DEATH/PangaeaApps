@@ -1,13 +1,10 @@
 import QtQuick 2.15
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import Elements 1.0
 import ModulesFX 1.0
-import StyleSettings 1.0
-import Layouts 1.0
 
-import CP100FX 1.0
+import CP100FX
 
 import PangaeaFrontend
 import PangaeaBackend
@@ -15,17 +12,15 @@ import PangaeaBackend
 RowLayout{
     id: root
 
-    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
-
     ParameterComboBox{
         id: _attenuatorSrc
 
-        visible: root.cp100fx.modification === Cp100fx.MONO_MOD
+        visible: UiCore.currentDevice.modification === Cp100fx.MONO_MOD
 
         Layout.preferredWidth: height
         Layout.fillHeight: true
 
-        ctrlValInstance: root.cp100fx.attenuator.source
+        ctrlValInstance: UiCore.currentDevice.attenuator.source
 
         model: ["Global", "Preset"]
     }
@@ -36,9 +31,9 @@ RowLayout{
         Layout.preferredWidth: height
         Layout.fillHeight: true
 
-        visible: root.cp100fx.modification === Cp100fx.MONO_MOD
+        visible: UiCore.currentDevice.modification === Cp100fx.MONO_MOD
 
-        ctrlValInstance: root.cp100fx.attenuator.value
+        ctrlValInstance: UiCore.currentDevice.attenuator.value
 
         model: [" +4 dB", " +3 dB", " +2 dB", " +1 dB", "  0 dB", " -1 dB", " -2 dB", " -3 dB",
             " -4 dB", " -5 dB", " -6 dB", " -7 dB", " -8 dB", " -9 dB", "-10 dB", "-11 dB", "-12 dB",
@@ -54,7 +49,7 @@ RowLayout{
         Layout.fillHeight: true
         Layout.margins: 4
 
-        visible: root.cp100fx.modification === Cp100fx.STEREO_MOD
+        visible: UiCore.currentDevice.modification === Cp100fx.STEREO_MOD
 
         ParameterSwitch{
             width: height
@@ -63,7 +58,7 @@ RowLayout{
 
             invertedValue: 1
 
-            ctrlValInstance: root.cp100fx.stereoInputFx.inlEnable
+            ctrlValInstance: UiCore.currentDevice.stereoInputFx.inlEnable
         }
 
         ParameterDial{
@@ -71,7 +66,7 @@ RowLayout{
             height: parent.height
             y: parent.height/10
 
-            controlValue: root.cp100fx.stereoInputFx.inlPan
+            controlValue: UiCore.currentDevice.stereoInputFx.inlPan
         }
 
         ParameterSwitch{
@@ -81,7 +76,7 @@ RowLayout{
 
             invertedValue: 1
 
-            ctrlValInstance: root.cp100fx.stereoInputFx.inrEnable
+            ctrlValInstance: UiCore.currentDevice.stereoInputFx.inrEnable
         }
 
         ParameterDial{
@@ -89,7 +84,7 @@ RowLayout{
             height: parent.height
             y: parent.height/10
 
-            controlValue: root.cp100fx.stereoInputFx.inrPan
+            controlValue: UiCore.currentDevice.stereoInputFx.inrPan
         }
     }
 
@@ -120,7 +115,7 @@ RowLayout{
             width: height
             height: parent.height
 
-            controlValue: root.cp100fx.controlsPresetFx.masterVolume
+            controlValue: UiCore.currentDevice.controlsPresetFx.masterVolume
          }
 
 
@@ -134,7 +129,7 @@ RowLayout{
             width: height
             height: parent.height
 
-            controlValue: root.cp100fx.controlsPresetFx.phonesVolume
+            controlValue: UiCore.currentDevice.controlsPresetFx.phonesVolume
         }
     }
 

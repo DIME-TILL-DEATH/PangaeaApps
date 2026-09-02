@@ -81,7 +81,15 @@ private:
 
     QTranslator m_translator;
 
-    // TODO only CPPA, not mobile!
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+    QMap<QString, QString> pathFromCode
+    {
+        {"en", ":/translations/pangaea-mobile_en.qm"},
+        {"ru", ":/translations/pangaea-mobile_ru.qm"},
+        {"it", ":/translations/pangaea-mobile_it.qm"},
+        {"de", ":/translations/pangaea-mobile_de.qm"}
+    };
+#else
     QMap<QString, QString> pathFromCode
     {
         {"en", ":/translations/Pangaea-desktop_en.qm"},
@@ -89,6 +97,7 @@ private:
         {"it", ":/translations/Pangaea-desktop_it.qm"},
         {"de", ":/translations/Pangaea-desktop_de.qm"}
     };
+#endif
     void loadTranslator(QString languageCode);
     void loadDefaultTranslator();
 };

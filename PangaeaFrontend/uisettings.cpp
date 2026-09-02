@@ -16,13 +16,15 @@ UiSettings::UiSettings(QObject *parent)
 {
 #if defined(Q_OS_ANDROID)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.conf", QSettings::NativeFormat);
+                                    + "/settings.conf", QSettings::NativeFormat, this);
 #elif defined(Q_OS_IOS)
     appSettings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                    + "/settings.plist", QSettings::NativeFormat);
+                                    + "/settings.plist", QSettings::NativeFormat, this);
 #else
     appSettings = new QSettings(QSettings::UserScope);
 #endif
+
+    loadDefaultTranslator();
 }
 
 void UiSettings::setupApplication()
@@ -30,8 +32,6 @@ void UiSettings::setupApplication()
     m_windowWidth = appSettings->value("window_width", 0).toUInt();
     m_windowHeight = appSettings->value("window_height", 0).toUInt();
 
-    //    QString colorTheme = appSettings->value("color_theme", "dark_orange").toString();
-    //    emit sgSetUIText("color_theme", colorTheme);
     QString appLanguage = appSettings->value("application_language", "autoselect").toString();
 
     if(appLanguage=="autoselect")

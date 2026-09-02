@@ -116,24 +116,6 @@ CustomMessageDialog {
     Connections{
         target: UiCore
 
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam===("update_firmware_mode"))
-            {
-                _root.isOnlineUpload = inValue;
-            }
-        }
-
-        function onSgSetUIText(nameParam, value)
-        {
-
-            if(nameParam===("new_firmware_avaliable"))
-            {
-                var versionArray = value.split(',');
-                _root.firmwareText = qsTr("Updating to firmware version ") + versionArray[1];
-            }
-        }
-
         function onSgDownloadProgress(bytesReceived, bytesTotal)
         {
             console.log("Firmware download " + bytesReceived + " from " + bytesTotal);
@@ -157,9 +139,7 @@ CustomMessageDialog {
             {
                 case DeviceMessageType.FirmwareFilePath:
                 {
-                    console.log("firmware path:" + value)
                     _root.firmwareFile = value
-                    //decodeURIComponent(value.replace(/^(file:\/{2})|(qrc:\/{2})|(content:\/{2})|(http:\/{2})|(:)/,""));
                 }
             }
         }

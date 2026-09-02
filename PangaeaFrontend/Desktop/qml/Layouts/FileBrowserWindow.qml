@@ -30,8 +30,6 @@ Window{
 
     property alias currentCabNum: _chooseCabCombo.currentIndex
 
-    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
-
     signal cabNumChanged(var cabNum)
 
     DialogTextInput{
@@ -117,7 +115,7 @@ Window{
         MComboHorizontal{
             id: _chooseCabCombo
 
-            visible: _root.cp100fx.modification === Cp100fx.MONO_MOD ? _root.cp100fx.systemSettings.cabNumber === 2
+            visible: UiCore.currentDevice.modification === Cp100fx.MONO_MOD ? UiCore.currentDevice.systemSettings.cabNumber === 2
                                                                      : true
 
             Layout.preferredHeight: parent.height/14
@@ -125,11 +123,11 @@ Window{
             Layout.leftMargin: width/10
             Layout.rightMargin: width/20
 
-            focusPolicy: Qt.NoFocus
+            combofocusPolicy: Qt.NoFocus
 
             text: "Cab num:"
 
-            model: (_root.cp100fx.modification === Cp100fx.MONO_MOD) ? ["1", "2"] : ["R", "L"]
+            model: (UiCore.currentDevice.modification === Cp100fx.MONO_MOD) ? ["1", "2"] : ["R", "L"]
 
             onActivated: {
                 _root.cabNumChanged(_chooseCabCombo.currentIndex)
@@ -218,8 +216,8 @@ Window{
                     var index = _fsObjectList.model.index(i, 0)
                     var itemData = model.data(index, Qt.UserRole + 1)
 
-                    if(itemData === _root.cp100fx.ir1Name) _fsObjectList.indexIr1 = i
-                    if(itemData === _root.cp100fx.ir2Name) _fsObjectList.indexIr2 = i
+                    if(itemData === UiCore.currentDevice.ir1Name) _fsObjectList.indexIr1 = i
+                    if(itemData === UiCore.currentDevice.ir2Name) _fsObjectList.indexIr2 = i
                 }
 
                 _fsObjectList.positionViewAtIndex((_chooseCabCombo.currentIndex === 0 ) ? _fsObjectList.indexIr1 : _fsObjectList.indexIr2,
@@ -227,14 +225,14 @@ Window{
             }
 
             Connections{
-                target: _root.cp100fx
+                target: UiCore.currentDevice
                 function onIrNamesChanged() {
                     _fsObjectList.updateIrIndexes()
                 }
             }
 
             Connections{
-                target: _root.cp100fx.fileBrowser
+                target: UiCore.currentDevice.fileBrowser
                 function onModelReset() {
                     _fsObjectList.updateIrIndexes()
                 }
@@ -257,7 +255,7 @@ Window{
                             workIndex++;
                         else
                         {
-                            _root.cp100fx.selectFsObject(itemName, itemType, _chooseCabCombo.currentIndex);
+                            UiCore.currentDevice.selectFsObject(itemName, itemType, _chooseCabCombo.currentIndex);
                             // _fsObjectList.positionViewAtIndex(workIndex, ListView.Center)
                         }
 
@@ -282,7 +280,7 @@ Window{
                             workIndex--;
                         else
                         {
-                            _root.cp100fx.selectFsObject(itemName, itemType, _chooseCabCombo.currentIndex);
+                            UiCore.currentDevice.selectFsObject(itemName, itemType, _chooseCabCombo.currentIndex);
                             // _fsObjectList.positionViewAtIndex(workIndex, ListView.Center)
                         }
 

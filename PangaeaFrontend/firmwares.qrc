@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>firmwares/firmwareCP16PA.ble</file>
         <file>firmwares/firmwareCP16.ble</file>
+        <file>firmwares/firmware_CP16_2.00.18.ble</file>
+        <file>firmwares/firmware_LA3_2.00.18.ble</file>
     </qresource>
 </RCC>

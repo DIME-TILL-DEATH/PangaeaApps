@@ -123,25 +123,6 @@ Item
             rWait.pbValue = val;
         }
 
-        function onSgSetUIParameter(nameParam, inValue)
-        {
-            if(nameParam === ("wait"))
-            {
-                rWait.visible = inValue;
-
-                switch(UiCore.currentDevice.presetManager.currentState)
-                {
-                    case PresetState.UploadingIr:
-                    {
-                        txt.text = qsTr("Uploading file data to device");
-                        break;
-                    }
-
-                    default: txt.text = qsTr("Sending commands to device");
-                }
-                progressBar.visible = true
-            }
-        }
     }
 
     Connections{
@@ -151,13 +132,13 @@ Item
         {
             switch(UiCore.currentDevice.presetManager.currentState)
             {
-                // case PresetState.Changing:
-                // {
-                //     rWait.visible = inValue;
-                //     txt.text = qsTr("Sending commands to device");
-                //     progressBar.visible = true
-                //     break;
-                // }
+                case PresetState.Changing:
+                {
+                    rWait.visible = true;
+                    txt.text = qsTr("Getting data from device");
+                    progressBar.visible = true
+                    break;
+                }
                 case PresetState.UploadingIr:
                 {
                     rWait.visible = true;
@@ -183,11 +164,12 @@ Item
                     break;
                 }
 
-                // case PresetState.Idle:
-                // {
-                //     rWait.visible = false;
-                //     break;
-                // }
+                case PresetState.Idle:
+                {
+                    // rWait.visible = false;
+                    txt.text = qsTr("Sending commands to device");
+                    break;
+                }
             }
         }
     }
@@ -208,6 +190,17 @@ Item
         }
 
         function onSgInterfaceDisconnected(deviceDescription)
+        {
+            rWait.visible = false;
+        }
+
+        function onSgInterfaceTransmittingData()
+        {
+            rWait.visible = true;
+            progressBar.visible = true
+        }
+
+        function onSgInterfaceTransmittingDataFinished()
         {
             rWait.visible = false;
         }

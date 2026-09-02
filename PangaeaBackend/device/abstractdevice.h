@@ -92,6 +92,7 @@ public:
     Q_INVOKABLE virtual void previewIr(QString srcFilePath) {};
     Q_INVOKABLE virtual void startIrUpload(QString srcFilePath, QString dstFilePath = "", bool trimFile = false) {};
     Q_INVOKABLE virtual void setFirmware(QString fullFilePath) {};
+    Q_INVOKABLE virtual void uploadFirmware(const QByteArray& data) {};
     Q_INVOKABLE virtual void formatMemory() {};
 
     virtual void updateOutputModeNames() {};
@@ -112,9 +113,6 @@ public:
     FileBrowserModel* fileBrowser() {return &m_fileBrowser;};
 
     qint64 symbolsToRecieve() {return m_symbolsToRecieve;};
-
-    bool isUpdatingFirmware() {return fwUpdate;};
-    bool isMemoryFormatting() {return isFormatting;};
 
     FileBrowserModel *fileBrowser() const;
 
@@ -203,9 +201,6 @@ protected:
     QList<AbstractModule*> m_moduleList;
     QList<QObject*> m_avaliableModulesList;
     ModulesListModel m_modulesListModel{this};
-
-    bool fwUpdate{false};
-    bool isFormatting{false};
 
     bool m_deviceParamsModified{false};
     qint64 m_symbolsToRecieve{0};

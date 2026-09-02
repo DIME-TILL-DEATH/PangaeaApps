@@ -56,10 +56,8 @@ void Core::parseInputData(QByteArray ba)
 
     updateProgressBar();
 
-    // QList<QByteArray> recievedAnswer;
     if(currentDevice)
     {
-        // recievedAnswer = currentDevice->parseAnswers(ba);
         emit sgReadFromInterface(ba);
     }
 
@@ -83,12 +81,11 @@ void Core::parseInputData(QByteArray ba)
         default: currentDevice = new CPLegacy(this);
         }
 
-        connect(currentDevice, &AbstractDevice::sgDeviceInstanciated, this, &Core::slDeviceInstanciated);
+        connect(currentDevice, &AbstractDevice::sgDeviceInstanciated, this, &Core::slDeviceInstanciated, Qt::QueuedConnection);
         currentDevice->initDevice(deviceType);
         timeoutTimer->setInterval(10000);
 
         if(commandsSended.size()>0) commandsSended.removeFirst();
-        processCommands();
     }
 }
 
@@ -217,32 +214,29 @@ void Core::processCommands()
         {
             if(currentDevice)
             {
-                if(!currentDevice->isUpdatingFirmware())
+                for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
                 {
-                    for(int sendPosition=0; sendPosition < commandToSend.length(); sendPosition += chunckSize)
-                    {
-                        emit sgSetUIParameter("wait", true);
-                        timeoutTimer->stop();
-                        sendCommand(commandToSend.mid(sendPosition, chunckSize));
-                        // QCoreApplication::processEvents();
-                        QThread::msleep(sleepTime);
-                        timeoutTimer->start();
-                    }
+                    timeoutTimer->stop();
+                    sendCommand(commandToSend.mid(sendPosition, chunckSize));
+                    // QCoreApplication::processEvents();
+                    QThread::msleep(sleepTime);
+                    timeoutTimer->start();
                 }
             }
         }
         else
         {
-            emit sgSetUIParameter("wait", true);
             sendCommand(commandToSend);
         }
+
+        emit sgInterfaceTransmittingData();
         commandsSended.append(commandToSend);
     }
     else
     {
         if(symbolsSended >= symbolsToSend)
         {
-            emit sgSetUIParameter("wait", false);
+            emit sgInterfaceTransmittingDataFinished();
         }
     }
 }
@@ -294,5 +288,20 @@ void Core::recieveTimeout()
     else
     {
         sendCount = 0;
+    }
+}
+
+void Core::uploadFirmware(Firmware *newFirmware)
+{
+    if(currentDevice)
+    {
+        if(!newFirmware->checkData())
+        {
+            emit currentDevice->sgDeviceError(DeviceErrorType::FirmwareFileError, QObject::tr("data corrupted"));
+            return;
+        }
+
+        emit currentDevice->sgDeviceMessage(DeviceMessageType::FirmwareFilePath, "Firmware ver.: " + newFirmware->firmwareVersion());
+        currentDevice->uploadFirmware(newFirmware->rawData());
     }
 }

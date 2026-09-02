@@ -37,16 +37,16 @@ BaseModule{
             }
 
             ParameterDial{
-                controlValue: module.time
+                controlValue: main.module.time
             }
 
             ParameterDial{
-                controlValue: module.feedback
+                controlValue: main.module.feedback
             }
 
 
             ParameterDial{
-                controlValue: module.mix
+                controlValue: main.module.mix
             }
 
             Item{

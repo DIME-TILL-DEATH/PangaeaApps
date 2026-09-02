@@ -5,24 +5,24 @@
     <name>AbstractDevice</name>
     <message>
         <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="76"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="66"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="69"/>
         <source>Phones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="77"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="67"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="70"/>
         <source>Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../PangaeaBackend/device/cp/cplegacy.cpp" line="78"/>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="68"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="71"/>
         <source>Balanced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="69"/>
+        <location filename="../../../PangaeaBackend/device/cp/cpmodern.cpp" line="72"/>
         <source>L: Processed/R: Monitor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -180,17 +180,17 @@
 <context>
     <name>ConnectionLayout</name>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="95"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="89"/>
         <source>Searching for devices...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="178"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="172"/>
         <source>Click to connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/ConnectionLayout.qml" line="210"/>
+        <location filename="../qml/Layouts/ConnectionLayout.qml" line="204"/>
         <source>Show virtual interfaces</source>
         <translation type="unfinished"></translation>
     </message>
@@ -357,62 +357,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="208"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="300"/>
         <source>Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="215"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="307"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="224"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="316"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="267"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="357"/>
         <source>Upload IR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="283"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="373"/>
         <source>New folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="302"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="392"/>
         <source>Always convert WAV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="319"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="409"/>
         <source>Always trim WAV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="295"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="385"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="343"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="433"/>
         <source>Select IR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="385"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="475"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="387"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="477"/>
         <source>Do you want to convert it before upload?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="410"/>
+        <location filename="../qml/Layouts/FileBrowserWindow.qml" line="500"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -568,16 +568,16 @@
     <name>IR</name>
     <message>
         <location filename="../qml/ModulesFX/IR.qml" line="48"/>
-        <source>Cab num</source>
+        <source>Cab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ModulesFX/IR.qml" line="132"/>
+        <location filename="../qml/ModulesFX/IR.qml" line="133"/>
         <source>Current IR: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/ModulesFX/IR.qml" line="132"/>
+        <location filename="../qml/ModulesFX/IR.qml" line="133"/>
         <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -611,67 +611,67 @@
 <context>
     <name>IrManagerWindow</name>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="29"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="31"/>
         <source>IR management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="55"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="57"/>
         <source>UPLOAD IR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="204"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="274"/>
         <source>Library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="209"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="279"/>
         <source>Preset folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="219"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="289"/>
         <source>Select IR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="252"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="322"/>
         <source>Always convert WAV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="269"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="339"/>
         <source>Always trim WAV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="293"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="363"/>
         <source>File already on device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="305"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="379"/>
         <source>Pangaea doesn&apos;t support this wav format:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="307"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="381"/>
         <source>Do you want to convert it before upload?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="314"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="388"/>
         <source>File </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="314"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="388"/>
         <source> already on device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP16/IrManagerWindow.qml" line="330"/>
+        <location filename="../qml/CP16/IrManagerWindow.qml" line="404"/>
         <source>The length of the selected file is greater than what is used when processing the signal. Would you like to trim impulse to speed up uploading and save space in device memory?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -679,33 +679,38 @@
 <context>
     <name>MBusy</name>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="21"/>
-        <source>Loading application</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="127"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="163"/>
         <source>Sending commands to device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="123"/>
-        <location filename="../qml/Layouts/MBusy.qml" line="151"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="130"/>
         <source>Uploading file data to device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="160"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="123"/>
+        <source>Getting data from device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MBusy.qml" line="139"/>
         <source>Downloading impulse data from device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="168"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="147"/>
         <source>Applying impulse to device. Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MBusy.qml" line="188"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="155"/>
+        <source>Updating device firmware...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MBusy.qml" line="93"/>
+        <location filename="../qml/Layouts/MBusy.qml" line="176"/>
         <source>Connecting to device...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -713,155 +718,172 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="42"/>
+        <location filename="../qml/Main.qml" line="38"/>
         <source>Connected to </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="42"/>
+        <location filename="../qml/Main.qml" line="38"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="115"/>
+        <location filename="../qml/Main.qml" line="97"/>
         <source>Do you want to save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="114"/>
+        <location filename="../qml/Main.qml" line="96"/>
         <source>Save preset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="156"/>
-        <location filename="../qml/Main.qml" line="169"/>
-        <location filename="../qml/Main.qml" line="262"/>
-        <location filename="../qml/Main.qml" line="270"/>
-        <location filename="../qml/Main.qml" line="278"/>
-        <location filename="../qml/Main.qml" line="299"/>
+        <location filename="../qml/Main.qml" line="138"/>
+        <location filename="../qml/Main.qml" line="151"/>
+        <location filename="../qml/Main.qml" line="272"/>
+        <location filename="../qml/Main.qml" line="280"/>
+        <location filename="../qml/Main.qml" line="288"/>
+        <location filename="../qml/Main.qml" line="312"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="157"/>
-        <location filename="../qml/Main.qml" line="170"/>
+        <location filename="../qml/Main.qml" line="139"/>
+        <location filename="../qml/Main.qml" line="152"/>
         <source>Device is disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="184"/>
+        <location filename="../qml/Main.qml" line="191"/>
         <source>Operation complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="186"/>
+        <location filename="../qml/Main.qml" line="193"/>
         <source>Operation complete. Please, reconnect to device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="254"/>
+        <location filename="../qml/Main.qml" line="216"/>
+        <source>) avaliable on the server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="217"/>
+        <source>
+Do you want to update firmware now?
+WARNING!!! Updating firmware may take several minutes!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="264"/>
         <source>Device parse error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="263"/>
+        <location filename="../qml/Main.qml" line="273"/>
         <source>Error while saving IR. Please, try to reload impulse.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="271"/>
+        <location filename="../qml/Main.qml" line="281"/>
         <source>Not a Pangaea preset file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="286"/>
+        <location filename="../qml/Main.qml" line="296"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="287"/>
+        <location filename="../qml/Main.qml" line="297"/>
         <source>Version error!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="288"/>
+        <location filename="../qml/Main.qml" line="298"/>
         <source>Firmware version of your device is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="289"/>
+        <location filename="../qml/Main.qml" line="299"/>
         <source>Minimum required version is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="291"/>
-        <source>Without updating the firmware, some features may not work properly</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/Main.qml" line="206"/>
-        <location filename="../qml/Main.qml" line="215"/>
+        <location filename="../qml/Main.qml" line="213"/>
+        <location filename="../qml/Main.qml" line="225"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="207"/>
+        <location filename="../qml/Main.qml" line="214"/>
         <source>New firmware version(v.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="209"/>
-        <location filename="../qml/Main.qml" line="218"/>
+        <location filename="../qml/Main.qml" line="228"/>
         <source>) avaliable on the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="216"/>
+        <location filename="../qml/Main.qml" line="226"/>
         <source>New application version(v.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="279"/>
+        <location filename="../qml/Main.qml" line="289"/>
         <source>You must save preset before export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="300"/>
-        <source>IR file copying error.</source>
+        <location filename="../qml/Main.qml" line="301"/>
+        <source>Without updating the firmware, some features may not work properly.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="302"/>
+        <source>Do you want to update firmware now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="313"/>
+        <source>IR file copying error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="326"/>
         <source>Preset export finished</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="333"/>
+        <location filename="../qml/Main.qml" line="346"/>
         <source>Device is unavaliable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="340"/>
+        <location filename="../qml/Main.qml" line="353"/>
         <source>Command exchange error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="349"/>
+        <location filename="../qml/Main.qml" line="362"/>
         <source>USB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="350"/>
+        <location filename="../qml/Main.qml" line="363"/>
         <source>BLUETOOTH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="351"/>
+        <location filename="../qml/Main.qml" line="364"/>
         <source>VIRTUAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="352"/>
+        <location filename="../qml/Main.qml" line="365"/>
         <source>Unknown interface</source>
         <translation type="unfinished"></translation>
     </message>
@@ -869,12 +891,12 @@
 <context>
     <name>MainMenu</name>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="22"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="21"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="26"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="25"/>
         <source>Import preset</source>
         <translation type="unfinished"></translation>
     </message>
@@ -884,144 +906,149 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="45"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="46"/>
         <source>Disconnect from device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="51"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="52"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="57"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="58"/>
         <source>Interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="61"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="62"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="113"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="114"/>
         <source>Color theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="182"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="183"/>
         <source>Autoconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="192"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="193"/>
         <source>Always convert WAV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="202"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="203"/>
         <source>Always trim WAV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="212"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="213"/>
         <source>Check updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="221"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="222"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="223"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="224"/>
         <source>IR convertor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="231"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="232"/>
         <source>Update firmware</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="239"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="240"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="242"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="243"/>
         <source>AMT web site</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="248"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="249"/>
         <source>Pangaea web page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="258"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="259"/>
         <source>Device manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="267"/>
-        <location filename="../qml/Layouts/MainMenu.qml" line="369"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="268"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="370"/>
         <source>About...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="282"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="283"/>
         <source>Import preset file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="297"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="298"/>
         <source>Export preset file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="312"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="313"/>
         <source>Pick firmware file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="328"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="329"/>
         <source>Load firmware file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="329"/>
+        <location filename="../qml/Layouts/MainMenu.qml" line="330"/>
         <source>Are you sure want to upload firmware file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="370"/>
-        <source>AMT Pangaea CP-16/CP-100/CP-100FX</source>
+        <location filename="../qml/Layouts/MainMenu.qml" line="346"/>
+        <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/MainMenu.qml" line="352"/>
-        <source>Disconnect?</source>
+        <location filename="../qml/Layouts/MainMenu.qml" line="347"/>
+        <source>Not a firwmare file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="353"/>
+        <source>Disconnect?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Layouts/MainMenu.qml" line="354"/>
         <source>Are you sure want to disconnect?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="371"/>
-        <source>Desktop application</source>
+        <source>AMT Pangaea series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="372"/>
-        <source>Version: </source>
+        <source>Desktop application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qml/Layouts/MainMenu.qml" line="373"/>
-        <source>(c) 2025</source>
+        <source>Version: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1049,7 +1076,7 @@
 <context>
     <name>MapTable</name>
     <message>
-        <location filename="../qml/Layouts/MapTable.qml" line="24"/>
+        <location filename="../qml/Layouts/MapTable.qml" line="23"/>
         <source>Preset map</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1145,6 +1172,19 @@
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../../PangaeaBackend/interfaces/bleinterface.cpp" line="205"/>
+        <source>Bluetooth permission not granted!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../PangaeaBackend/cores/core.cpp" line="300"/>
+        <source>data corrupted</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>StartLayout</name>
     <message>
         <location filename="../qml/Layouts/StartLayout.qml" line="57"/>
@@ -1200,12 +1240,12 @@
 <context>
     <name>SystemViewFx</name>
     <message>
-        <location filename="../qml/CP100FX/SystemViewFx.qml" line="100"/>
+        <location filename="../qml/CP100FX/SystemViewFx.qml" line="99"/>
         <source>Restart device?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/CP100FX/SystemViewFx.qml" line="101"/>
+        <location filename="../qml/CP100FX/SystemViewFx.qml" line="100"/>
         <source>Changing stereo/mono cab config needs device restart. Do you to do it now?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1218,12 +1258,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="50"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="48"/>
         <source>Note: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/Layouts/TunerWindow.qml" line="147"/>
+        <location filename="../qml/Layouts/TunerWindow.qml" line="145"/>
         <source>Ref. freq: </source>
         <translation type="unfinished"></translation>
     </message>

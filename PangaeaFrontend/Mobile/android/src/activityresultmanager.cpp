@@ -61,8 +61,8 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
                     takeReadUriPermission(uriObject);
                     processUri(uriObject);
 
-                    qDebug() << "IR file path: " << m_filePath;
-                    qDebug() << "IR file name: " << m_fileName;
+                    qInfo() << "IR file path: " << m_filePath;
+                    qInfo() << "IR file name: " << m_fileName;
 
                     emit sgIrFilePicked(m_filePath, m_fileName);
                 }
@@ -75,8 +75,8 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
                 takeReadUriPermission(uriObject);
                 processUri(uriObject);
 
-                qDebug() << "Preset file path: " << m_filePath;
-                qDebug() << "Preset file name: " << m_fileName;
+                qInfo() << "Preset file path: " << m_filePath;
+                qInfo() << "Preset file name: " << m_fileName;
 
                 emit sgPresetFilePicked(m_filePath, m_fileName);
                 break;
@@ -88,8 +88,8 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
                 takeReadUriPermission(uriObject);
                 processUri(uriObject);
 
-                qDebug() << "Firmware file path: " << m_filePath;
-                qDebug() << "Firmware file name: " << m_fileName;
+                qInfo() << "Firmware file path: " << m_filePath;
+                qInfo() << "Firmware file name: " << m_fileName;
 
                 emit sgFirmwareFilePicked(m_filePath, m_fileName);
                 break;
@@ -103,7 +103,7 @@ void ActivityResultManager::handleActivityResult(int receiverRequestCode, int re
                 processUri(uriObject);
 
 
-                qDebug() << "Preset file created: " << m_fileName << " path: " << m_filePath;
+                qInfo() << "Preset file created: " << m_fileName << " path: " << m_filePath;
 
                 emit sgPresetFileCreated(m_filePath, m_fileName);
                 break;
@@ -127,7 +127,7 @@ void ActivityResultManager::processUri(JUri uriObject)
 
     QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
     m_fileName= QJniObject::callStaticObjectMethod(
-            "com.amtelectronics/JavaFile", "getFileName",
+            "com.amtelectronics.utils/JavaFile", "getFileName",
             "(Landroid/net/Uri;Landroid/content/Context;)Ljava/lang/String;",
             uriObject.object(),
             androidContext.object()).toString();
@@ -136,7 +136,7 @@ void ActivityResultManager::processUri(JUri uriObject)
 void ActivityResultManager::takeReadUriPermission(JUri uriObject)
 {
     QJniObject::callStaticMethod<void>(
-            "com.amtelectronics/JavaFile", "takeReadUriPermission",
+            "com.amtelectronics.utils/JavaFile", "takeReadUriPermission",
             "(Landroid/net/Uri;Landroid/content/Context;)V",
             uriObject.object(),
             QNativeInterface::QAndroidApplication::context());
@@ -160,7 +160,7 @@ void ActivityResultManager::takeWriteUriPermission(JUri uriObject)
     }
 
     QJniObject::callStaticMethod<void>(
-            "com.amtelectronics/JavaFile", "takeWriteUriPermission",
+            "com.amtelectronics.utils/JavaFile", "takeWriteUriPermission",
             "(Landroid/net/Uri;Landroid/content/Context;)V",
             uriObject.object(),
             QNativeInterface::QAndroidApplication::context());
@@ -172,20 +172,5 @@ void ActivityResultManager::takeWriteUriPermission(JUri uriObject)
     }
 
     qDebug() << "Write URI permission taken";
-}
-
-//TODO: move to AndroidUtils
-QString ActivityResultManager::getFileNameFromUri(QString uri)
-{
-        QJniObject uriJni = QJniObject::callStaticObjectMethod(
-            "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
-            QJniObject::fromString(uri).object<jstring>());
-
-        QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
-        QString fileName = QJniObject::callStaticObjectMethod(
-                               "com.amtelectronics/JavaFile", "getFileName",
-                               "(Landroid/net/Uri;Landroid/content/Context;)Ljava/lang/String;",
-                               uriJni.object(), androidContext.object()).toString();
-        return fileName;
 }
 #endif

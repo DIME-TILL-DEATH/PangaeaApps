@@ -9,8 +9,6 @@ import PangaeaBackend
 RowLayout{
     id: root
 
-    property Cp100fx cp100fx: UiCore.currentDevice as Cp100fx
-
     MComboVertical{
         id: _comboCtrlChoice
 
@@ -39,9 +37,9 @@ RowLayout{
         Layout.preferredWidth: parent.width/10
         Layout.fillHeight: true
 
-        model: root.cp100fx.controller[0].avaliableSources
+        model: UiCore.currentDevice.controller[0].avaliableSources
 
-        ctrlValInstance: root.cp100fx.controller[_comboCtrlChoice.currentIndex].source
+        ctrlValInstance: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].source
     }
 
     ParameterComboBox{
@@ -71,7 +69,7 @@ RowLayout{
             /*44*/"PR Gain      ", "PR Volume    ", "PR Low       ", "PR Mid       ", "PR High      ",
             /*49*/"EQ Band1 Lev ", "EQ Band2 Lev ", "EQ Band3 Lev ", "EQ Band4 Lev ", "EQ Band5 Lev ",
             /*54*/"RV Type      "]
-        ctrlValInstance: root.cp100fx.controller[_comboCtrlChoice.currentIndex].destination
+        ctrlValInstance: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].destination
     }
 
     ColumnLayout{
@@ -85,14 +83,14 @@ RowLayout{
             Layout.preferredHeight: parent.height * 2/7
             Layout.topMargin: parent.height * 1/7
 
-            controlValue:root.cp100fx.controller[_comboCtrlChoice.currentIndex].minValue
+            controlValue: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].minValue
         }
         ParameterBar{
             Layout.preferredWidth: parent.width
             Layout.preferredHeight: parent.height * 2/7
             Layout.bottomMargin: parent.height * 1/7
 
-            controlValue: root.cp100fx.controller[_comboCtrlChoice.currentIndex].maxValue
+            controlValue: UiCore.currentDevice.controller[_comboCtrlChoice.currentIndex].maxValue
         }
     }
 
@@ -107,7 +105,7 @@ RowLayout{
 
         model: ["MIDI IN", "MAP", "SET"]
 
-        ctrlValInstance: root.cp100fx.controlsPresetFx.cntrlPcOut
+        ctrlValInstance: UiCore.currentDevice.controlsPresetFx.cntrlPcOut
     }
 
     ParameterComboBox{
@@ -116,7 +114,7 @@ RowLayout{
 
         model: _setModel
 
-        ctrlValInstance: root.cp100fx.controlsPresetFx.cntrlSet
+        ctrlValInstance: UiCore.currentDevice.controlsPresetFx.cntrlSet
 
         ListModel{
             id: _setModel
@@ -148,7 +146,7 @@ RowLayout{
             width: height
             height: parent.height - parent.height/10
 
-            controlValue: root.cp100fx.controlsPresetFx.presetVolume
+            controlValue: UiCore.currentDevice.controlsPresetFx.presetVolume
          }
 
         ParameterSwitch{
@@ -161,7 +159,7 @@ RowLayout{
 
             y: parent.height/10
 
-            ctrlValInstance: root.cp100fx.controlsPresetFx.presetCtrlVolume
+            ctrlValInstance: UiCore.currentDevice.controlsPresetFx.presetCtrlVolume
         }
     }
 

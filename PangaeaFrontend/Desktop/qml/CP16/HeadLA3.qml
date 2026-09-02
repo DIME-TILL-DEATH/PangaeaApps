@@ -341,7 +341,7 @@ Item
                 }
 
                 ComboBox{
-                    id: clnCombo
+                    id: _clnCombo
 
                     width: parent.width/2
                     height: parent.height/2
@@ -350,7 +350,7 @@ Item
 
                     onActivated: {
                         if(!_laModeSelector.isDeviceUpdatingValues){
-                            UiCore.currentDevice.setLa3Mappings(clnCombo.currentIndex, _dstCombo.currentIndex);
+                            UiCore.currentDevice.setLa3Mappings(_clnCombo.currentIndex, _dstCombo.currentIndex);
                         }
                     }
                 }
@@ -375,7 +375,7 @@ Item
 
                     onActivated: {
                         if(!_laModeSelector.isDeviceUpdatingValues){
-                            UiCore.currentDevice.setLa3Mappings(clnCombo.currentIndex, _dstCombo.currentIndex);
+                            UiCore.currentDevice.setLa3Mappings(_clnCombo.currentIndex, _dstCombo.currentIndex);
                         }
                     }
                 }
@@ -386,7 +386,7 @@ Item
                     function onPresetMapChanged()
                     {
                         _laModeSelector.isDeviceUpdatingValues = true;
-                        clnCombo.currentIndex = UiCore.currentDevice.clnPresetMap
+                        _clnCombo.currentIndex = UiCore.currentDevice.clnPresetMap
                         _dstCombo.currentIndex = UiCore.currentDevice.drvPresetMap
                         _laModeSelector.isDeviceUpdatingValues = false;
                     }

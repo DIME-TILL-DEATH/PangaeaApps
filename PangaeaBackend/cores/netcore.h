@@ -19,13 +19,14 @@ class NetCore : public QObject
     Q_OBJECT
 public:
     explicit NetCore(QObject *parent = nullptr);
+    ~NetCore();
 
     void requestAppUpdates();
     void requestNewestFirmware(Firmware* actualFirmware);
     void requestFirmwareFile();
 
 signals:
-    void sgFirmwareDownloaded(const QByteArray& firmware);
+    void sgFirmwareDownloaded(Firmware* firmware);
     void sgNewFirmwareAvaliable(Firmware* newFirmware, Firmware* oldFirmware);
     void sgNewAppVersionAvaliable(QString newAppVersion);
     void sgDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
@@ -45,8 +46,8 @@ private:
 
     QString m_deviceTypeString{"CP16"};
 
-    Firmware* deviceFirmware{nullptr};
-    Firmware* newestFirmware{nullptr};
+    Firmware deviceFirmware;
+    Firmware newestFirmware;
 
     bool parseFirmwareJsonAnswer(QNetworkReply *reply);
     bool parseApplicationJsonAnswer(QNetworkReply *reply);

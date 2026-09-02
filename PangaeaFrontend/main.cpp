@@ -2,6 +2,10 @@
 #include <QQmlApplicationEngine>
 // #include <QtQml>
 
+#ifdef Q_OS_ANDROID
+#include <QJniObject>
+#endif
+
 #include <qicon.h>
 #include <signal.h>
 
@@ -86,12 +90,9 @@ int main(int argc, char *argv[])
     // connections
     //-------------------------------------------------------------------------------
     // QObject::connect(core, &Core::sgFirmwareVersionInsufficient, &uiCore, &UiCore::slProposeOfflineFirmwareUpdate, Qt::QueuedConnection);
-    // QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
-
-    UiCore::connect(uiCore, &UiCore::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
+    QObject::connect(netCore, &NetCore::sgFirmwareDownloaded, core, &Core::uploadFirmware);
     UiSettings::connect(uiSettings, &UiSettings::sgTranslatorChanged, &engine, &QQmlApplicationEngine::retranslate);
 
-    QObject::connect(core, &Core::sgSetUIParameter, uiCore, &UiCore::sgSetUIParameter, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgCurrentDeviceChanged, uiCore, &UiCore::slCurrentDeviceChanged, Qt::QueuedConnection);
     QObject::connect(core, &Core::sgSetProgress, uiCore, &UiCore::sgSetProgress, Qt::QueuedConnection);
 
@@ -101,6 +102,7 @@ int main(int argc, char *argv[])
     QObject::connect(uiCore, &UiCore::sgDoOnlineFirmwareUpdate, netCore, &NetCore::requestFirmwareFile);
     QObject::connect(uiCore, &UiCore::sgCheckAppUpdates, netCore, &NetCore::requestAppUpdates);
     QObject::connect(netCore, &NetCore::sgDownloadProgress, uiCore, &UiCore::sgDownloadProgress, Qt::QueuedConnection);
+
 
     Core::connect(interfaceManager, &InterfaceManager::sgNewData, core, &Core::parseInputData, Qt::QueuedConnection);
     Core::connect(interfaceManager, &InterfaceManager::sgInterfaceConnected, core, &Core::slInterfaceConnected, Qt::QueuedConnection);
@@ -113,6 +115,9 @@ int main(int argc, char *argv[])
     Core::connect(core, &Core::sgExchangeError, uiInterfaceManager, &UiInterfaceManager::sgExchangeError, Qt::QueuedConnection);
 
     Core::connect(core, &Core::sgWriteToInterface, interfaceManager, &InterfaceManager::writeToDevice, Qt::QueuedConnection);
+
+    Core::connect(core, &Core::sgInterfaceTransmittingData, uiInterfaceManager, &UiInterfaceManager::sgInterfaceTransmittingData, Qt::QueuedConnection);
+    Core::connect(core, &Core::sgInterfaceTransmittingDataFinished, uiInterfaceManager, &UiInterfaceManager::sgInterfaceTransmittingDataFinished, Qt::QueuedConnection);
 
     UiInterfaceManager::connect(uiInterfaceManager, &UiInterfaceManager::startScanning, interfaceManager, &InterfaceManager::startScanning);
     UiInterfaceManager::connect(uiInterfaceManager, &UiInterfaceManager::sgConnectToDevice, interfaceManager, &InterfaceManager::connectToDevice);
@@ -137,6 +142,7 @@ int main(int argc, char *argv[])
         &app, []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
 
     engine.loadFromModule("PangaeaFrontend", "Main");
+
     //----------------------------------------------------------------------
     return app.exec();
 }

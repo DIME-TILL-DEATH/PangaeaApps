@@ -170,6 +170,7 @@ private:
     PresetFx* actualPresetFx;
     PresetFx* savedPresetFx;
     PresetFx* copiedPresetFx;
+    PresetFx* comparePresetFx;
 
     QString m_ir1Name;
     QString m_ir2Name;

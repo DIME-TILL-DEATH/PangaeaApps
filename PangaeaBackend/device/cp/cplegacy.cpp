@@ -162,12 +162,6 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
         m_isPaFw = true;
         break;
 
-    // case DeviceType::LA3:
-    //     m_minimalFirmware = new Firmware("1.05.03", newDeviceType, FirmwareType::ApplicationPackage, ":/firmwares/firmwareLA3RV.ble");
-    //     m_maxBankCount = 0;
-    //     m_maxPresetCount = 16;
-    //     m_firmwareName = "LA3";
-    //     break;
     default:
         qWarning() << __FUNCTION__ << "Unknown device type";
 
@@ -182,8 +176,6 @@ void CPLegacy::setDeviceType(DeviceType newDeviceType)
 
 void CPLegacy::readFullState()
 {
-    m_presetManager.setCurrentState(PresetState::Changing);
-
     if(m_deviceType == DeviceType::LEGACY_CP16 || m_deviceType == DeviceType::LEGACY_CP16PA)
         m_parser.enableFullEndMode();
 
@@ -199,6 +191,8 @@ void CPLegacy::readFullState()
 
 void CPLegacy::pushReadPresetCommands()
 {
+    m_presetManager.setCurrentState(PresetState::Changing);
+
     emit sgPushCommandToQueue("gb");
     emit sgPushCommandToQueue("rn");
     emit sgPushCommandToQueue("gs");
@@ -346,6 +340,7 @@ void CPLegacy::pastePreset()
     uploadImpulseData(copiedPresetLegacy->waveData(), true, copiedPreset->irName());
     *actualPresetLegacy = *copiedPresetLegacy;
     actualPreset->setBankPreset(currentBankNumber, currentPresetNumber);
+    IR->setImpulseName(actualPresetLegacy->irName());
 
     m_deviceParamsModified = true;
     emit deviceParamsModifiedChanged();
@@ -569,7 +564,7 @@ void CPLegacy::uploadFirmware(const QByteArray& firmware)
         emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateStarted);
         emit sgDisableTimeoutTimer();
 
-        fwUpdate = true;
+        m_presetManager.setCurrentState(PresetState::FirmwareUpdate);
 
         QByteArray baTmp, baSend;
         baSend.append("fwu\r");
@@ -609,7 +604,7 @@ void CPLegacy::formatMemory()
 {
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryStarted);
 
-    isFormatting = true;
+    m_presetManager.setCurrentState(PresetState::MemoryFormatting);
     emit sgDisableTimeoutTimer();
     emit sgSendWithoutConfirmation(QString("fsf\r\n").toUtf8());
     emit sgProcessCommands();
@@ -665,7 +660,7 @@ void CPLegacy::amtVerCommHandler(const QString &command, const QByteArray &argum
     else
     {
         qWarning() << "firmware insufficient!";
-        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion()});
+        emit sgDeviceError(DeviceErrorType::FimrmwareVersionInsufficient, "", {m_actualFirmware.firmwareVersion(), m_minimalFirmware.firmwareVersion(), m_minimalFirmware.path()});
     }
 
     m_parser.enableFullEndMode(); // next comm rns
@@ -743,7 +738,7 @@ void CPLegacy::getStateCommHandler(const QString &command, const QByteArray &arg
         if(actualPresetLegacy->wavSize() != 0)
             *copiedPreset = *actualPreset;
 
-        actualPresetLegacy->setRawData(baPresetData);
+        copiedPresetLegacy->setRawData(baPresetData);
         m_presetManager.returnToPreviousState();
         emit presetCopied();
         break;
@@ -975,17 +970,17 @@ void CPLegacy::requestNextChunkCommHandler(const QString &command, const QByteAr
 
 void CPLegacy::fwuFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
-    if(fwUpdate)
+    if(m_presetManager.currentState() == PresetState::FirmwareUpdate)
     {
         emit sgDeviceMessage(DeviceMessageType::FirmwareUpdateFinished);
-        fwUpdate = false;
+        m_presetManager.returnToPreviousState();
     }
 }
 
 void CPLegacy::formatFinishedCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     emit sgDeviceMessage(DeviceMessageType::FormatMemoryFinished);
-    isFormatting = false;
+    m_presetManager.returnToPreviousState();
 }
 //-------------------------------------acknowledegs------------------------------------------
 void CPLegacy::ackEscCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
@@ -1005,14 +1000,13 @@ void CPLegacy::ackSaveChanges(const QString &command, const QByteArray &argument
 void CPLegacy::ackPresetChangeCommHandler(const QString &command, const QByteArray &arguments, const QByteArray &data)
 {
     actualPresetLegacy->clearWavData();
-    m_presetManager.setCurrentState(PresetState::Changing);
     pushReadPresetCommands();
     emit sgProcessCommands();
 }
 
 void CPLegacy::ackCCCommHandler(const QList<QByteArray> &arguments)
 {
-    m_presetManager.returnToPreviousState();
+    // m_presetManager.returnToPreviousState();
     m_presetManager.setCurrentState(PresetState::SavingIr);
     emit sgDisableTimeoutTimer(); // wait for impulse saving (TODO возможно по размеру импульса посчитать время сохранения в устройстве)
 }
