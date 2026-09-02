@@ -65,12 +65,21 @@ if(WIN32)
             "${PROJECT_SOURCE_DIR}/../deploy_windows/release/WavConverterLib.dll")
 endif()
 
-if(APPLE)
-    target_link_libraries(converter-lib PUBLIC
-        Qt6::Core
 
-        ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.mac/libsox.a
-    )
+if(APPLE)
+    if(IOS)
+        target_link_libraries(converter-lib PUBLIC
+            Qt6::Core
+
+            ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.ios/libsox.a
+        )
+    else()
+        target_link_libraries(converter-lib PUBLIC
+            Qt6::Core
+
+            ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.mac/libsox.a
+        )
+    endif()
 endif()
 
 target_include_directories(converter-lib PUBLIC

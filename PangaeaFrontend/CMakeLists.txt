@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.21.1)
 
 set(MY_PRODUCT_NUMBER 1)
 set(MY_PRODUCT_VERSION 1)
-set(MY_BUILD_NUMBER 2609)
+set(MY_BUILD_NUMBER 2608)
 
 set(MOBILE_VERSION_MAJOR 1)
 set(MOBILE_VERSION_MINOR 2)
-set(MOBILE_VERSION_BUILD 14)
+set(MOBILE_VERSION_BUILD 13)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
@@ -152,7 +152,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     qml_cp100fxplugin
 )
 
-
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0002 NEW)
 
@@ -191,6 +190,7 @@ if(ANDROID OR IOS)
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist"
             QT_IOS_LAUNCH_SCREEN "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/LaunchScreen.storyboard"
             XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon
+            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.amtelectronics.pangaea"
             MACOSX_BUNDLE TRUE
             WIN32_EXECUTABLE TRUE
         )
@@ -245,7 +245,8 @@ else()
         set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
             MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING ${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER})
+            MACOSX_BUNDLE_SHORT_VERSION_STRING ${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}
+            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.amtelectronics.pangaea")
 
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
             set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/pangaea-desktop.app)
