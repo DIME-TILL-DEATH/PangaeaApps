@@ -173,19 +173,4 @@ void ActivityResultManager::takeWriteUriPermission(JUri uriObject)
 
     qDebug() << "Write URI permission taken";
 }
-
-// //TODO: move to AndroidUtils
-// QString ActivityResultManager::getFileNameFromUri(QString uri)
-// {
-//         QJniObject uriJni = QJniObject::callStaticObjectMethod(
-//             "android/net/Uri", "parse", "(Ljava/lang/String;)Landroid/net/Uri;",
-//             QJniObject::fromString(uri).object<jstring>());
-
-//         QtJniTypes::Context androidContext = QNativeInterface::QAndroidApplication::context();
-//         QString fileName = QJniObject::callStaticObjectMethod(
-//                                "com.amtelectronics.utils/JavaFile", "getFileName",
-//                                "(Landroid/net/Uri;Landroid/content/Context;)Ljava/lang/String;",
-//                                uriJni.object(), androidContext.object()).toString();
-//         return fileName;
-// }
 #endif

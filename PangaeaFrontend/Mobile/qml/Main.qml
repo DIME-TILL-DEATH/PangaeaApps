@@ -200,6 +200,15 @@ ApplicationWindow
     }
 
     Connections{
+        target: Screen
+
+        // TODO: Отследить альбомную/портреттную ориентацию и поправить страницы
+        function onOrientationChanged(){
+            console.log("orientation changed")
+        }
+    }
+
+    Connections{
         target: _servicePage
 
         function onOpenSettingsWindow()
