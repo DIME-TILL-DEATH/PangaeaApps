@@ -21,9 +21,6 @@ public:
 
     void updatePreset(PresetAbstract *newPreset);
 
-private:
-    QList<PresetAbstract*>* m_presetList;
-
     enum ListRoles{
         PresetNameRole = Qt::UserRole + 1,
         PresetCommentRole,
@@ -39,6 +36,9 @@ private:
         ActiveModulesRole
     };
     Q_ENUM(ListRoles)
+private:
+    QList<PresetAbstract*>* m_presetList;
+
 };
 
 #endif // PRESETLISTMODEL_H

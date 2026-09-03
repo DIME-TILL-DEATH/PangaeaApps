@@ -77,6 +77,7 @@ elseif(APPLE) # MacOS
     project(pangaea-desktop VERSION ${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER} LANGUAGES CXX)
 
     set(QML_START_PAGE "Desktop/qml/Main.qml")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS version to target" FORCE)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
