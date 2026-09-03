@@ -12,7 +12,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 
 if(ANDROID)
     project(Pangaea-mobile VERSION ${MOBILE_VERSION_MAJOR}.${MOBILE_VERSION_MINOR}.${MOBILE_VERSION_BUILD} LANGUAGES CXX)
-    set(VERSION_CODE 57)
+    set(VERSION_CODE 58)
 
     set(PLATFORM_SPECIFIC_SOURCES
         Mobile/android/src/activityresultmanager.cpp Mobile/android/src/activityresultmanager.h
@@ -152,7 +152,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     qml_cp100fxplugin
 )
 
-
 qt_policy(SET QTP0001 NEW)
 qt_policy(SET QTP0002 NEW)
 
@@ -191,6 +190,7 @@ if(ANDROID OR IOS)
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/Info.plist"
             QT_IOS_LAUNCH_SCREEN "${CMAKE_CURRENT_SOURCE_DIR}/Mobile/ios/LaunchScreen.storyboard"
             XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon
+            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.amtelectronics.pangaea"
             MACOSX_BUNDLE TRUE
             WIN32_EXECUTABLE TRUE
         )
@@ -245,7 +245,8 @@ else()
         set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
             MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}"
-            MACOSX_BUNDLE_SHORT_VERSION_STRING ${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER})
+            MACOSX_BUNDLE_SHORT_VERSION_STRING ${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}
+            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.amtelectronics.pangaea")
 
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
             set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/pangaea-desktop.app)
@@ -359,11 +360,14 @@ else()
                                     -targetDir "${DEPLOY_PATH}/app/"
                                     -libDir "${PROJECT_SOURCE_DIR}/sox_lib/lib.linux"
                                     -qmlDir "${PROJECT_SOURCE_DIR}/Desktop/qml"
-                                    -qmake "~/Qt/6.8.1/gcc_64/bin/qmake")
+                                    -qmake "~/Qt/6.11.1/gcc_64/bin/qmake")
 
             # make tarball archive
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                    COMMAND tar -czvf "${DEPLOY_PATH}/Pangaea-desktop.tar.gz" "${DEPLOY_PATH}/app/")
+                    COMMAND tar -czvf "${DEPLOY_PATH}/AMT_PANGAEA_DESK_APP_(LINUX)_(${PROJECT_VERSION}).tar.gz"
+                    "${DEPLOY_PATH}/app/"
+                    VERBATIM
+                )
 
             # make .deb package
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -382,7 +386,9 @@ else()
                 "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/usr/")
 
             add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/")
+                COMMAND dpkg-deb --build "${DEPLOY_PATH}/debian_deploy/Pangaea-desktop/"
+                "${DEPLOY_PATH}/AMT_PANGAEA_DESK_APP_(LINUX)_(${PROJECT_VERSION}).deb"
+                VERBATIM)
         endif()
     endif()
 

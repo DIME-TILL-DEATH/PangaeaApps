@@ -81,7 +81,7 @@ void UiCore::disconnectFromDevice()
 
 void UiCore::uploadIr(QString srcFilePath, QString dstFilePath)
 {
-    qDebug() << __FUNCTION__ << "QString, QString";
+    qDebug() << __FUNCTION__ << "QString, QString" << srcFilePath << m_pickedIrPath;
 
 #ifndef Q_OS_ANDROID
     m_dstIrPath = dstFilePath;
@@ -129,6 +129,11 @@ void UiCore::uploadIr(QUrl srcFilePath, QUrl dstFilePath)
 #else
 
     QString filePath =  srcFilePath.path();
+
+#ifdef Q_OS_IOS
+    filePath.prepend("file://");
+#endif
+
 #ifdef Q_OS_WINDOWS
     filePath.remove(0, 1); // remove first absolute '/' symbol
 #endif

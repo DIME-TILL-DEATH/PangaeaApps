@@ -7,17 +7,17 @@ shared_libs/*
 deploy_android/*
 deploy_linux/debian_deploy/*
 deploy_linux/app/*
-deploy_linux/PangaeaCPPA.tar.gz
 deploy_windows/release/*
 deploy_windows/installer_script.iss
 deploy_mac/dmg_content/*
 WavConverterShell/output_bin/*
 *.exe
 *.zip
+*.deb
 *.tar.gz
 *.pkg
 
-*.qmlls.ini
+.qmlls.ini
 **/.qmlls.ini
 
 # C++ objects and libs

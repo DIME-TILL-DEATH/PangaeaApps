@@ -21,9 +21,9 @@ void OfflineInterface::startScan()
     m_discoveredDevicesList.append({DeviceDescription(MockCP16Legacy::mockName(), "virtual", DeviceConnectionType::Offline)});
     m_discoveredDevicesList.append({DeviceDescription(MockCP16Modern::mockName(), "virtual", DeviceConnectionType::Offline)});
     m_discoveredDevicesList.append({DeviceDescription(MockLa3::mockName(), "virtual", DeviceConnectionType::Offline)});
-#ifndef Q_OS_ANDROID
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     m_discoveredDevicesList.append({DeviceDescription(MockCP100fx::mockName(), "virtual", DeviceConnectionType::Offline)});
-m_discoveredDevicesList.append({DeviceDescription(MockCP100fx::mockName() + "-S", "virtual", DeviceConnectionType::Offline)});
+    m_discoveredDevicesList.append({DeviceDescription(MockCP100fx::mockName() + "-S", "virtual", DeviceConnectionType::Offline)});
 #endif
     emit sgDeviceListUpdated(DeviceConnectionType::Offline, m_discoveredDevicesList);
 }
