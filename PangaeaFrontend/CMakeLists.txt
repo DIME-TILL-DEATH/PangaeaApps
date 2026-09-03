@@ -152,8 +152,13 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     qml_cp100fxplugin
 )
 
-qt_policy(SET QTP0001 NEW)
-qt_policy(SET QTP0002 NEW)
+if(QT_KNOWN_POLICY_QTP0001)
+    qt_policy(SET QTP0001 NEW)
+endif()
+
+if(QT_KNOWN_POLICY_QTP0002)
+    qt_policy(SET QTP0002 NEW)
+endif()
 
 set(QT_QML_GENERATE_QMLLS_INI ON)
 set(QML_IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY} CACHE STRING "Import paths for Qt Creator's code model" FORCE)

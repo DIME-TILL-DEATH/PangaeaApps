@@ -145,10 +145,10 @@ if(NOT IOS)
     find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning SerialPort Concurrent)
     target_link_libraries(PangaeaBackend PUBLIC
         Qt6::Core
-        Qt6::Bluetooth
+        Bluetooth
         Qt6::Network
         Qt6::Positioning
-        Qt6::SerialPort
+        SerialPort
         Qt6::Concurrent
         Qt6::Quick
     )
