@@ -74,9 +74,23 @@ if(APPLE)
             ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.ios/libsox.a
         )
     else()
+        find_library(COREAUDIO CoreAudio)
+            find_library(AUDIOUNIT AudioUnit)
+            find_library(AUDIOTOOLBOX AudioToolbox)
+            find_library(IOKIT IOKit)
+            find_library(DISKARBITRATION DiskArbitration)
+            find_library(UTI UniformTypeIdentifiers)
+
+
         target_link_libraries(converter-lib PUBLIC
             Qt6::Core
 
+            ${COREAUDIO}
+            ${AUDIOUNIT}
+            ${AUDIOTOOLBOX}
+            ${IOKIT}
+            ${DISKARBITRATION}
+            ${UTI}
             ${CMAKE_CURRENT_SOURCE_DIR}/../sox_lib/lib.mac/libsox.a
         )
     endif()
