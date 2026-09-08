@@ -30,12 +30,6 @@
 						<key>BundleOverwriteAction</key>
 						<string></string>
 						<key>RootRelativeBundlePath</key>
-						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtVirtualKeyboardQml.framework</string>
-					</dict>
-					<dict>
-						<key>BundleOverwriteAction</key>
-						<string></string>
-						<key>RootRelativeBundlePath</key>
 						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtQuickTimeline.framework</string>
 					</dict>
 					<dict>
@@ -79,12 +73,6 @@
 						<string></string>
 						<key>RootRelativeBundlePath</key>
 						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtQuickControls2FusionStyleImpl.framework</string>
-					</dict>
-					<dict>
-						<key>BundleOverwriteAction</key>
-						<string></string>
-						<key>RootRelativeBundlePath</key>
-						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtQuickShapesDesignHelpers.framework</string>
 					</dict>
 					<dict>
 						<key>BundleOverwriteAction</key>
@@ -222,12 +210,6 @@
 						<key>BundleOverwriteAction</key>
 						<string></string>
 						<key>RootRelativeBundlePath</key>
-						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtMultimedia.framework</string>
-					</dict>
-					<dict>
-						<key>BundleOverwriteAction</key>
-						<string></string>
-						<key>RootRelativeBundlePath</key>
 						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtQmlCore.framework</string>
 					</dict>
 					<dict>
@@ -259,12 +241,6 @@
 						<string></string>
 						<key>RootRelativeBundlePath</key>
 						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtOpenGL.framework</string>
-					</dict>
-					<dict>
-						<key>BundleOverwriteAction</key>
-						<string></string>
-						<key>RootRelativeBundlePath</key>
-						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtLabsQmlModels.framework</string>
 					</dict>
 					<dict>
 						<key>BundleOverwriteAction</key>
@@ -360,12 +336,6 @@
 						<key>BundleOverwriteAction</key>
 						<string></string>
 						<key>RootRelativeBundlePath</key>
-						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtQuickVectorImageHelpers.framework</string>
-					</dict>
-					<dict>
-						<key>BundleOverwriteAction</key>
-						<string></string>
-						<key>RootRelativeBundlePath</key>
 						<string>Pangaea-desktop.app/Contents/MacOS/irconverter.app/Contents/Frameworks/QtQmlModels.framework</string>
 					</dict>
 					<dict>
@@ -424,12 +394,6 @@
 				<key>BundleOverwriteAction</key>
 				<string></string>
 				<key>RootRelativeBundlePath</key>
-				<string>Pangaea-desktop.app/Contents/Frameworks/QtVirtualKeyboardQml.framework</string>
-			</dict>
-			<dict>
-				<key>BundleOverwriteAction</key>
-				<string></string>
-				<key>RootRelativeBundlePath</key>
 				<string>Pangaea-desktop.app/Contents/Frameworks/QtQuickTimeline.framework</string>
 			</dict>
 			<dict>
@@ -473,12 +437,6 @@
 				<string></string>
 				<key>RootRelativeBundlePath</key>
 				<string>Pangaea-desktop.app/Contents/Frameworks/QtQuickControls2FusionStyleImpl.framework</string>
-			</dict>
-			<dict>
-				<key>BundleOverwriteAction</key>
-				<string></string>
-				<key>RootRelativeBundlePath</key>
-				<string>Pangaea-desktop.app/Contents/Frameworks/QtQuickShapesDesignHelpers.framework</string>
 			</dict>
 			<dict>
 				<key>BundleOverwriteAction</key>
@@ -622,12 +580,6 @@
 				<key>BundleOverwriteAction</key>
 				<string></string>
 				<key>RootRelativeBundlePath</key>
-				<string>Pangaea-desktop.app/Contents/Frameworks/QtMultimedia.framework</string>
-			</dict>
-			<dict>
-				<key>BundleOverwriteAction</key>
-				<string></string>
-				<key>RootRelativeBundlePath</key>
 				<string>Pangaea-desktop.app/Contents/Frameworks/QtQmlCore.framework</string>
 			</dict>
 			<dict>
@@ -659,12 +611,6 @@
 				<string></string>
 				<key>RootRelativeBundlePath</key>
 				<string>Pangaea-desktop.app/Contents/Frameworks/QtOpenGL.framework</string>
-			</dict>
-			<dict>
-				<key>BundleOverwriteAction</key>
-				<string></string>
-				<key>RootRelativeBundlePath</key>
-				<string>Pangaea-desktop.app/Contents/Frameworks/QtLabsQmlModels.framework</string>
 			</dict>
 			<dict>
 				<key>BundleOverwriteAction</key>
@@ -767,12 +713,6 @@
 				<string></string>
 				<key>RootRelativeBundlePath</key>
 				<string>Pangaea-desktop.app/Contents/Frameworks/QtQuickControls2Imagine.framework</string>
-			</dict>
-			<dict>
-				<key>BundleOverwriteAction</key>
-				<string></string>
-				<key>RootRelativeBundlePath</key>
-				<string>Pangaea-desktop.app/Contents/Frameworks/QtQuickVectorImageHelpers.framework</string>
 			</dict>
 			<dict>
 				<key>BundleOverwriteAction</key>

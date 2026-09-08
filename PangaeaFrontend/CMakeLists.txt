@@ -78,6 +78,7 @@ elseif(APPLE) # MacOS
 
     set(QML_START_PAGE "Desktop/qml/Main.qml")
     set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS version to target" FORCE)
+    set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "Universal binary" FORCE)
 
     qt6_add_resources(RCC_FILES
         "Desktop/images.qrc"
@@ -250,9 +251,12 @@ else()
     if(APPLE)
         set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Desktop/MacOS/Info.plist"
+            MACOSX_BUNDLE_ICON_FILE pangaea.icns
             MACOSX_BUNDLE_BUNDLE_VERSION "${MY_PRODUCT_NUMBER}.${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}"
             MACOSX_BUNDLE_SHORT_VERSION_STRING ${MY_PRODUCT_VERSION}.${MY_BUILD_NUMBER}
-            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.amtelectronics.pangaea")
+            XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.amtelectronics.pangaea"
+            MACOSX_BUNDLE TRUE
+        )
 
         if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
             set(RELEASE_APP_PATH ${CMAKE_BINARY_DIR}/PangaeaFrontend/pangaea-desktop.app)
