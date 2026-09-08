@@ -83,7 +83,12 @@ if(APPLE)
                 COMMAND ${MACDEPLOYQT_EXECUTABLE} "${RELEASE_APP_PATH}"
                     "-qmldir=${PROJECT_SOURCE_DIR}/"
                     "-libpath=${CMAKE_BINARY_DIR}/../WavConverterLib/"
-                    "-appstore-compliant")
+                    "-appstore-compliant"
+                    # "-no-plugins"                  # не копировать плагины (но они могут быть нужны)
+                    # "-verbose=2"                   # посмотреть, что именно он копирует
+                    # COMMAND ${CMAKE_COMMAND} -E remove -f
+                            # "${RELEASE_APP_PATH}/Contents/Frameworks/QtQuickControls2FluentWinUI3StyleImpl.framework"  # удалить вручную лишнее для qt6.7
+                        )
     endif()
 endif()
 

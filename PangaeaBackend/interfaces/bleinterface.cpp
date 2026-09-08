@@ -3,11 +3,11 @@
 #include <QPermission>
 
 #include <QGuiApplication>
-#include <QGeoPositionInfoSource>
 
 #include <QThread>
 
 #ifdef Q_OS_ANDROID
+#include <QGeoPositionInfoSource>
 #include <QtCore/private/qandroidextras_p.h>
 #include "../utils/androidutils.h"
 #endif

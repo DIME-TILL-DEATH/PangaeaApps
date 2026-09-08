@@ -148,10 +148,11 @@ if(NOT IOS)
         Qt6::Core
         Qt6::Bluetooth
         Qt6::Network
-        Qt6::Positioning
-        Qt6::SerialPort
         Qt6::Concurrent
         Qt6::Quick
+
+        Qt6::SerialPort
+        Qt6::Positioning
     )
 else()
     find_package(Qt6 REQUIRED COMPONENTS Bluetooth Network Positioning Concurrent)
