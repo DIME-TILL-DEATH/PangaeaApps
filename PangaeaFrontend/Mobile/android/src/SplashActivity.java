@@ -12,6 +12,7 @@ public class SplashActivity extends Activity {
 
     private static final String TAG = "SplashActivity";
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set up an OnPreDrawListener to the root view.
