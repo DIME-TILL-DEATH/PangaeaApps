@@ -287,7 +287,7 @@ void UiCore::openManualExternally(QString fileName)
     qDebug() << "Final manual path: " << temporallyPath;
 
     QJniObject::callStaticMethod<void>(
-        "com.amtelectronics/JavaFile", "openFileExternally",
+        "com.amtelectronics.utils/JavaFile", "openFileExternally",
         "(Ljava/lang/String;Landroid/content/Context;)V",
         QJniObject::fromString(fullFileName).object<jstring>(),
         QNativeInterface::QAndroidApplication::context());
