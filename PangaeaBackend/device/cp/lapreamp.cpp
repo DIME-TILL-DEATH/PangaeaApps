@@ -109,7 +109,7 @@ void LAPreamp::la3MapCommHandler(const QString &command, const QByteArray &argum
         return;
     }
 
-    if(argList.at(0) == "get")
+    if(argList.at(0) == "get" || argList.at(0) == "set")
     {
         if(data.size() == 4)
         {
