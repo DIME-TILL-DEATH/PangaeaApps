@@ -65,7 +65,6 @@ Rectangle
             height: (Screen.orientation ===  Qt.LandscapeOrientation) ? parent.height*5/10 : parent.height*6/10
 
             model: UiCore.currentDevice.maxPresetCount
-            // currentIndex: DeviceProperties.bank*4 + DeviceProperties.preset
 
 
             visibleItemCount: 1
@@ -158,6 +157,11 @@ Rectangle
             main.deviceUpdatingValues = true;
             _tumbler.currentIndex = UiCore.currentDevice.preset
             main.deviceUpdatingValues = false;
+            _tumbler.setTumblerColor();
+        }
+
+        function onPresetMapChanged()
+        {
             _tumbler.setTumblerColor();
         }
     }

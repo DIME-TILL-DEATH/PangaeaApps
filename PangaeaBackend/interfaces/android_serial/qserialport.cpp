@@ -48,7 +48,7 @@ QSerialPort::QSerialPort(QObject *parent)
     m_stopBits = OneStop;
 
     JNINativeMethod methodsL[] {{"nativeDeviceNewData", "(J[B)V", reinterpret_cast<void *>(jniDeviceNewData)},
-                                        {"nativeDeviceException", "(ILjava/lang/String;)V", reinterpret_cast<void *>(jniDeviceException)}};
+                                        {"nativeDeviceException", "(JLjava/lang/String;)V", reinterpret_cast<void *>(jniDeviceException)}};
 
     QJniEnvironment envL;
     QJniObject javaClassL(UsbSerial_jniClassName);

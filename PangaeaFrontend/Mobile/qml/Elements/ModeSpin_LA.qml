@@ -15,8 +15,7 @@ Rectangle
 
     property string text
 
-    // property bool isModified: false
-    property bool isDeviceUpdatingValues: false
+    property bool isDeviceUpdatingValues: true // first run block update
 
     color: "transparent"
     border.width: 1
@@ -52,17 +51,6 @@ Rectangle
                 font.bold: true
                 font.pixelSize: main.width/5
             }
-
-            // MouseArea{
-            //     id: _mapBtnMa
-
-
-            //     anchors.fill: parent
-            //     onClicked: {
-            //         main.isModified = false;
-            //         UiCore.currentDevice.setLa3Mappings(_tumblerCln.currentIndex, _tumblerDst.currentIndex);
-            //     }
-            // }
         }
 
         Row{
@@ -88,7 +76,6 @@ Rectangle
                 height: parent.height
 
                 model: UiCore.currentDevice.maxPresetCount
-                currentIndex: UiCore.currentDevice.clnPresetMap
 
                 visibleItemCount: 1
 
@@ -137,7 +124,6 @@ Rectangle
                 height: parent.height
 
                 model: UiCore.currentDevice.maxPresetCount
-                currentIndex: UiCore.currentDevice.drvPresetMap
 
                 visibleItemCount: 1
 

@@ -2,13 +2,14 @@
 # Keep the exact Java entry points used by native/Qt JNI calls and the launcher activity.
 
 -keep class org.qtproject.qt.android.** { *; }
--keep class org.qtproject.qt5.android.** { *; }
+# -keep class org.qtproject.qt5.android.** { *; }
 -keep class org.qtproject.qt6.android.** { *; }
 -keep class qt.android.** { *; }
 -keep class qml.** { *; }
 -keep class qt.qml.** { *; }
 
 # Launcher activity must stay present for Android manifest resolution.
+-keep class org.jniusbserial.** { *; }
 -keep class com.amtelectronics.MainActivity { *; }
 -keep class com.amtelectronics.** { *; }
 
@@ -22,8 +23,8 @@
 
 # Keep Android classes referenced by the manifest / file provider / activity startup.
 -keep class androidx.core.content.FileProvider { *; }
--keep class android.app.Activity { *; }
--keep class android.content.Intent { *; }
+# -keep class android.app.Activity { *; }
+# -keep class android.content.Intent { *; }
 
 # Native
 -keepclasseswithmembernames class * {
@@ -40,7 +41,7 @@
 -optimizations !class/merging/*,!code/simplification/arithmetic,!code/simplification/cast,!field/*,!method/*
 -optimizationpasses 5
 -dontwarn org.qtproject.qt.android.bindings.**
--dontwarn org.qtproject.qt5.android.bindings.**
+# -dontwarn org.qtproject.qt5.android.bindings.**
 -dontwarn org.qtproject.qt6.android.bindings.**
 
 # Keep JNI bridge entry points visible to the runtime.
