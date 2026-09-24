@@ -69,14 +69,25 @@ void ControlFCutLegacy::setDisplayValue(double newDisplayValue)
 
     QString fullCommand = m_commandString + " " + strValue + "\r\n"; //\r
 
-    if(buffer.isEmpty())
+    if(delayedSend)
     {
-        buffer.append(fullCommand.toUtf8());
+        if(buffer.isEmpty())
+        {
+            buffer.append(fullCommand.toUtf8());
+        }
+        else
+        {
+            // drop same values
+            if(buffer.last().indexOf(fullCommand.toUtf8()) == -1)
+            {
+                buffer.append(fullCommand.toUtf8());
+            }
+        }
+        frameTimer.start(timerPeriod);
     }
     else
     {
-        // drop same values
-        if(buffer.last() != fullCommand.toUtf8()) buffer.append(fullCommand.toUtf8());
+        if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
     }
 
     emit userModifiedValue();
