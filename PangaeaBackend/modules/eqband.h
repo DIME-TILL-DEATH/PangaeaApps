@@ -112,6 +112,9 @@ private:
     bool* m_enabled;
 
     void makeDefaultConnections();
+
+    void qControlValueSetter(qint32 value);
+    void qDisplaySetter(double value);
 };
 
 #endif // EQBAND_H

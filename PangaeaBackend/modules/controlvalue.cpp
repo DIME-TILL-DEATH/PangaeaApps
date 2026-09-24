@@ -47,6 +47,8 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     if(newDisplayValue > m_maxDisplayValue) newDisplayValue = m_maxDisplayValue;
     if(newDisplayValue < m_minDisplayValue) newDisplayValue = m_minDisplayValue;
 
+    m_isModified = true;
+
     if(m_customDisplaySetter)
     {
         m_customDisplaySetter(newDisplayValue);
@@ -54,8 +56,6 @@ void ControlValue::setDisplayValue(double newDisplayValue)
     else
     {
         m_displayValue = newDisplayValue;
-
-        m_isModified = true;
 
         double k2 = (m_minDisplayValue-m_maxDisplayValue)/(m_minControlValue-m_maxControlValue);
         double k1 = m_minDisplayValue-(m_minControlValue*k2);
@@ -82,26 +82,7 @@ void ControlValue::setDisplayValue(double newDisplayValue)
         }
         fullCommand = m_commandString + " " + strValue + "\r\n";
 
-        if(delayedSend)
-        {
-            if(buffer.isEmpty())
-            {
-                buffer.append(fullCommand.toUtf8());
-            }
-            else
-            {
-                // drop same values
-                if(buffer.last().indexOf(fullCommand.toUtf8()) == -1)
-                {
-                    buffer.append(fullCommand.toUtf8());
-                }
-            }
-            frameTimer.start(timerPeriod);
-        }
-        else
-        {
-            if(m_owner) m_owner->sendDataToDevice(fullCommand.toUtf8());
-        }
+        sendData(fullCommand);
     }
 
     emit isModifiedChanged();
@@ -192,6 +173,30 @@ void ControlValue::setDisplaySetter(std::function<void (qint32)> setter)
 QString ControlValue::commandString() const
 {
     return m_commandString;
+}
+
+void ControlValue::sendData(QString data)
+{
+    if(delayedSend)
+    {
+        if(buffer.isEmpty())
+        {
+            buffer.append(data.toUtf8());
+        }
+        else
+        {
+            // drop same values
+            if(buffer.last().indexOf(data.toUtf8()) == -1)
+            {
+                buffer.append(data.toUtf8());
+            }
+        }
+        frameTimer.start(timerPeriod);
+    }
+    else
+    {
+        if(m_owner) m_owner->sendDataToDevice(data.toUtf8());
+    }
 }
 
 void ControlValue::setIsModified(bool newIsModified)
