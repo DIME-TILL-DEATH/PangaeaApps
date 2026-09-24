@@ -7,6 +7,8 @@
 #include "eqparametric.h"
 #include "eqband.h"
 
+#include "controlfcutlegacy.h"
+
 EqBand::EqBand(EqParametric *ownerModule, preset_data_cplegacy_t *data, FilterType bandType, double fStart, double fStop, int bandNum, qint32 fControlStart, qint32 fControlStop)
     :QObject{ownerModule},
     m_filterType{bandType},
@@ -109,7 +111,8 @@ EqBand::EqBand(EqParametric *ownerModule, modules_data_fx_t *data, FilterType ba
     {
     case FilterType::LOW_CUT:
     {
-        m_Fc = new ControlValue(ownerModule, &data->hpf, "hp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
+        m_Fc = new ControlFCutLegacy(ownerModule, &data->hpf, bandType);
+        // m_Fc = new ControlValue(ownerModule, &data->hpf, "hp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
         m_gain = new ControlValue(ownerModule, nullptr, "");
         m_Q = new ControlQLegacy(ownerModule, nullptr, "");
         break;
@@ -117,7 +120,8 @@ EqBand::EqBand(EqParametric *ownerModule, modules_data_fx_t *data, FilterType ba
 
     case FilterType::HIGH_CUT:
     {
-        m_Fc = new ControlValue(ownerModule, &data->lpf, "lp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
+        m_Fc = new ControlFCutLegacy(ownerModule, &data->lpf, bandType);
+        // m_Fc = new ControlValue(ownerModule, &data->lpf, "lp_f", "Cut freq.", "Hz", fControlStart, fControlStop, fStart, fStop);
         m_gain = new ControlValue(ownerModule, nullptr, "");
         m_Q = new ControlQLegacy(ownerModule, nullptr, "");
         break;
@@ -154,6 +158,7 @@ void EqBand::makeDefaultConnections()
 
     if(m_ownerModule) connect(this, &EqBand::userModifiedBandParameters, m_ownerModule, &AbstractModule::userModifiedModuleParameters);
 }
+
 
 EqBand::~EqBand()
 {
@@ -337,4 +342,63 @@ void EqBand::setFilterType(FilterType newFilterType)
     emit userModifiedBandParameters();
 
     calcFilterCoefs();
+}
+
+// TODO: use and test
+void EqBand::qControlValueSetter(qint32 value)
+{
+    double resultValue = 0;
+
+    switch (m_ownerModule->eqMode())
+    {
+
+    case EqParametric::Legacy:
+    case EqParametric::Modern:
+        resultValue = powf((200 - (value+100)), 3) * (5/powf(200, 3)) + 0.225;
+        break;
+    case EqParametric::Fx:
+    {
+        if(value <= 30)
+            resultValue = value * 0.01 + 0.701;
+        else
+            resultValue = (value - 20) * 0.1 + 0.001;
+        break;
+    }
+    default: resultValue = 0;
+    }
+
+    if(resultValue == m_Q->displayValue()) return;
+
+    m_Q->modifyDisplayValue(resultValue);
+}
+
+void EqBand::qDisplaySetter(double value)
+{
+    m_Q->modifyDisplayValue(value);
+
+    quint8 controlValue;
+    switch (m_ownerModule->eqMode())
+    {
+
+    case EqParametric::Legacy:
+    case EqParametric::Modern:
+        controlValue = static_cast<qint8>(100 - powf((value-0.225) * powf(200, 3)/5, 1.0/3.0));
+        break;
+    case EqParametric::Fx:
+    {
+        if(value <= 1)
+            controlValue = static_cast<qint8>((value-0.701) / 0.1);
+        else
+            controlValue = static_cast<qint8>((value-0.001) / 0.1 + 20);
+        break;
+    }
+    }
+
+    QString strValue;
+    strValue.setNum(controlValue, 16);
+    if(strValue.size() > 2) strValue = strValue.right(2);
+
+    QString fullCommand = m_Q->commandString() + " " + strValue + "\r\n"; //\r
+
+    m_Q->sendData(fullCommand);
 }

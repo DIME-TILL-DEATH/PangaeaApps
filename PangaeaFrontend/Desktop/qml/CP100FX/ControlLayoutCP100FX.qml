@@ -10,6 +10,7 @@ Column
     focus: true
     spacing: 2
 
+
     HeadCP100FX
     {
         id: _headCP100FX

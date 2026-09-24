@@ -104,6 +104,8 @@ Item
         }
         MouseArea
         {
+            focusPolicy: Qt.StrongFocus
+
             anchors.fill:  parent
             hoverEnabled: true
             cursorShape: Qt.PointingHandCursor

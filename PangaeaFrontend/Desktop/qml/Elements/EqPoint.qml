@@ -54,6 +54,8 @@ Rectangle{
         anchors.fill: parent
         cursorShape: Qt.SizeAllCursor
 
+        focusPolicy: Qt.StrongFocus
+
         drag.target: root
 
         property real xmin: module.points[0].x;

@@ -107,6 +107,7 @@ Rectangle {
             MouseArea{
                 anchors.fill: parent
                 z: 5
+                focusPolicy: Qt.StrongFocus
 
                 onClicked: {
                     module.moduleEnabled = !module.moduleEnabled
@@ -126,6 +127,8 @@ Rectangle {
             scaleText: 3
 
             onClicked: {
+                focusPolicy: Qt.StrongFocus
+
                 if(_contentItem.contentX > 0)
                 {
                     _contentItem.contentX = _contentItem.contentX - _main.dialWidth;

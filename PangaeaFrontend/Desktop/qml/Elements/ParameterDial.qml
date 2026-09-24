@@ -13,7 +13,6 @@ Item{
 
     enabled: (module === undefined) ? true : module.moduleEnabled
 
-
     required property ControlValue controlValue
     opacity: _root.enabled ? 1:0.5
 
@@ -40,6 +39,8 @@ Item{
 
             height: parent.height * 0.7
             width: height
+
+            focusPolicy: Qt.StrongFocus
 
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -82,6 +83,10 @@ Item{
                     _root.controlValue.displayValue = text
 
                     focus = false
+                }
+
+                onFocusChanged: {
+                    if(!focus) editingFinished();
                 }
             }
 
@@ -130,6 +135,7 @@ Item{
             MouseArea {
                 anchors.fill: parent
                 acceptedButtons: Qt.RightButton//Qt.NoButton
+                focusPolicy: Qt.StrongFocus
 
                 onWheel: wheel => {
                     _txtInput.focus = true;

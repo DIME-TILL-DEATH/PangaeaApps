@@ -52,6 +52,7 @@ public:
     void setDisplaySetter(std::function<void (qint32)> setter);
 
     QString commandString() const;
+    void sendData(QString data);
 
     static bool delayedSend;
 

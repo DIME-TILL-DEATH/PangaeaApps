@@ -146,13 +146,13 @@ QList<ControlValue*> SystemSettingsFx::midiPcMap() const
 void SystemSettingsFx::exprOnControlSetter(qint32 value)
 {
     m_exprOn->modifyDisplayValue((value & 0x80) ? 1 : 0);
-    emit m_exprOn->displayValueChanged();
+    emit m_exprOn->displayValueChanged();   //TODO: лишнее, уже выполняется в сеттере
 }
 
 void SystemSettingsFx::exprOnDisplaySetter(double value)
 {
     m_exprOn->modifyDisplayValue(value);
-    emit m_exprOn->displayValueChanged();
+    emit m_exprOn->displayValueChanged(); //TODO: лишнее, уже выполняется в сеттере
 
     sendDataToDevice(QByteArray(m_exprOn->commandString().toUtf8() + " " + (value ? "80" : "00")) + "\r\n");
 }
@@ -160,19 +160,19 @@ void SystemSettingsFx::exprOnDisplaySetter(double value)
 void SystemSettingsFx::exprTypeControlSetter(qint32 value)
 {
     m_exprType->modifyDisplayValue((value & 0x7F) - 1);
-    emit m_exprType->displayValueChanged();
+    emit m_exprType->displayValueChanged(); //TODO: лишнее, уже выполняется в сеттере
 }
 
 void SystemSettingsFx::tunerCtrlValueSetter(qint32 value)
 {
     m_tunerControl->modifyDisplayValue((value & 0x80) ? 1 : 0);
-    emit m_tunerControl->displayValueChanged();
+    emit m_tunerControl->displayValueChanged(); //TODO: лишнее, уже выполняется в сеттере
 }
 
 void SystemSettingsFx::tunerCtrlDisplaySetter(double value)
 {
     m_tunerControl->modifyDisplayValue(value);
-    emit m_tunerControl->displayValueChanged();
+    emit m_tunerControl->displayValueChanged(); //TODO: лишнее, уже выполняется в сеттере
 
     sendDataToDevice(QByteArray(m_tunerControl->commandString().toUtf8() + " " + (value ? "80" : "00")) + "\r\n");
 }
@@ -180,5 +180,5 @@ void SystemSettingsFx::tunerCtrlDisplaySetter(double value)
 void SystemSettingsFx::tunerCcSetter(qint32 value)
 {
     m_tunerCC->modifyDisplayValue((value & 0x7F));
-    emit m_tunerCC->displayValueChanged();
+    emit m_tunerCC->displayValueChanged(); //TODO: лишнее, уже выполняется в сеттере
 }
