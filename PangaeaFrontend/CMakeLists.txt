@@ -274,14 +274,14 @@ else()
                                         "-appstore-compliant")
 
             add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
-                COMMAND ditto #cp "-a"
+                COMMAND ditto --rsrc #cp "-a"
                 "${CMAKE_BINARY_DIR}/WavConverterShell/irconverter.app"
                 "${RELEASE_APP_PATH}/Contents/MacOS/irconverter.app")
 
             ################ App store #####################
             set(DEPLOY_PATH /Applications/)
             add_custom_command(TARGET ${PROJECT_NAME}  POST_BUILD
-                COMMAND ditto #cp "-a"
+                COMMAND ditto --rsrc #cp "-a"
                 "${RELEASE_APP_PATH}"
                 "${DEPLOY_PATH}/Pangaea-desktop.app")
 
